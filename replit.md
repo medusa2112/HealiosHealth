@@ -27,6 +27,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Added pregnancy & new mother section with image grid and CTA
 ✓ Updated navbar to solid black background with white text/icons
 ✓ Replaced logo with Healios branding (logo-only, no text)
+✓ Replaced hero background image with compressed video (MP4/WebM formats)
+✓ Optimized video for instant loading and auto-play
 
 ## Advanced SEO Implementation (January 2025)
 
