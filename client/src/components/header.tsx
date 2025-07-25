@@ -316,14 +316,20 @@ export function Header() {
       
       {/* Shop Dropdown Menu */}
       <div 
-        className={`absolute top-full left-0 w-full bg-black border-t border-gray-800 transition-all duration-300 ${
+        className={`absolute top-full bg-black border border-gray-800 shadow-2xl transition-all duration-300 ${
           isShopDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
+        style={{
+          left: '20%',
+          transform: 'translateX(-50%)',
+          width: '800px',
+          maxWidth: '90vw'
+        }}
         onMouseEnter={() => setIsShopDropdownOpen(true)}
         onMouseLeave={() => setIsShopDropdownOpen(false)}
       >
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="px-8 py-8">
+          <div className="grid grid-cols-4 gap-8">
             {shopSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
@@ -345,16 +351,16 @@ export function Header() {
           </div>
           
           {/* CTA Section */}
-          <div className="mt-12 pt-8 border-t border-gray-800">
-            <div className="bg-healios-gradient-2 p-6 text-center">
-              <h3 className="text-lg font-medium text-white mb-2">
+          <div className="mt-8 pt-6 border-t border-gray-800">
+            <div className="bg-healios-gradient-2 p-4 text-center">
+              <h3 className="text-base font-medium text-white mb-2">
                 Not sure where to start?
               </h3>
-              <p className="text-sm text-white/80 mb-4">
+              <p className="text-xs text-white/80 mb-3">
                 Take our 60-second quiz for personalized recommendations
               </p>
               <Link href="/quiz">
-                <button className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors">
+                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:bg-gray-100 transition-colors">
                   Take the Quiz →
                 </button>
               </Link>
@@ -365,14 +371,20 @@ export function Header() {
 
       {/* Learn Dropdown Menu */}
       <div 
-        className={`absolute top-full left-0 w-full bg-black border-t border-gray-800 transition-all duration-300 ${
+        className={`absolute top-full bg-black border border-gray-800 shadow-2xl transition-all duration-300 ${
           isLearnDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
+        style={{
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '900px',
+          maxWidth: '95vw'
+        }}
         onMouseEnter={() => setIsLearnDropdownOpen(true)}
         onMouseLeave={() => setIsLearnDropdownOpen(false)}
       >
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        <div className="px-8 py-8">
+          <div className="grid grid-cols-6 gap-6">
             {learnSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
@@ -394,23 +406,23 @@ export function Header() {
           </div>
           
           {/* Featured Content with Images */}
-          <div className="mt-12 pt-8 border-t border-gray-800">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="mt-8 pt-6 border-t border-gray-800">
+            <div className="grid grid-cols-2 gap-6">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
                   alt="Need more support?" 
-                  className="w-full h-40 object-cover"
+                  className="w-full h-24 object-cover"
                 />
-                <div className="p-6">
-                  <h3 className="text-lg font-medium text-white mb-2">
+                <div className="p-4">
+                  <h3 className="text-sm font-medium text-white mb-2">
                     Need more support?
                   </h3>
-                  <p className="text-sm text-gray-300 mb-4">
+                  <p className="text-xs text-gray-300 mb-3">
                     Book a free 15 min consultation
                   </p>
                   <Link href="/consultation">
-                    <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Book Now →
                     </button>
                   </Link>
@@ -421,17 +433,17 @@ export function Header() {
                 <img 
                   src="https://images.unsplash.com/photo-1584467735871-8b730d628b3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
                   alt="A new journey" 
-                  className="w-full h-40 object-cover"
+                  className="w-full h-24 object-cover"
                 />
-                <div className="p-6">
-                  <h3 className="text-lg font-medium text-white mb-2">
+                <div className="p-4">
+                  <h3 className="text-sm font-medium text-white mb-2">
                     A new journey
                   </h3>
-                  <p className="text-sm text-gray-300 mb-4">
+                  <p className="text-xs text-gray-300 mb-3">
                     Visit our pregnancy hub
                   </p>
                   <Link href="/pregnancy">
-                    <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Explore →
                     </button>
                   </Link>
