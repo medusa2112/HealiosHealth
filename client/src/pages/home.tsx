@@ -408,7 +408,7 @@ export default function HomePage() {
                   </button>
                 </Link>
                 <Link href="/science">
-                  <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-3 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                  <button className="border border-healios-cyan text-healios-cyan px-6 py-3 text-sm font-medium hover:bg-healios-cyan hover:text-white transition-colors w-full sm:w-auto">
                     Learn more about Food-Grown® →
                   </button>
                 </Link>

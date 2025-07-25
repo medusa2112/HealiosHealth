@@ -3,54 +3,70 @@
 @tailwind utilities;
 
 :root {
-  /* Modern minimal design system */
+  /* Healios Brand Design System - Black Primary */
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(0, 0%, 3.9%);
+  --foreground: hsl(0, 0%, 0%);
   --muted: hsl(0, 0%, 96.1%);
   --muted-foreground: hsl(0, 0%, 45.1%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(0, 0%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 0%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(0, 0%, 3.9%);
+  --card-foreground: hsl(0, 0%, 0%);
   --border: hsl(0, 0%, 89.8%);
   --input: hsl(0, 0%, 89.8%);
-  --primary: hsl(0, 0%, 9%);
-  --primary-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(0, 0%, 0%);
+  --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(0, 0%, 96.1%);
-  --secondary-foreground: hsl(0, 0%, 9%);
-  --accent: hsl(51, 100%, 50%);
-  --accent-foreground: hsl(0, 0%, 9%);
+  --secondary-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(180, 100%, 40%);
+  --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(0, 0%, 3.9%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(0, 0%, 0%);
   --radius: 0.375rem;
   
-  /* Minimal brand colors */
+  /* Healios Gradient Colors from Brand Image */
+  --healios-purple: hsl(280, 100%, 35%);        /* Deep purple */
+  --healios-magenta: hsl(320, 100%, 50%);       /* Bright magenta */
+  --healios-blue: hsl(220, 100%, 40%);          /* Deep blue */
+  --healios-cyan: hsl(180, 100%, 40%);          /* Cyan/teal */
+  --healios-teal: hsl(160, 100%, 35%);          /* Deep teal */
+  --healios-violet: hsl(260, 100%, 60%);        /* Light violet */
+  
+  /* Legacy support */
   --brand-yellow: hsl(51, 100%, 50%);
-  --dark-text: hsl(0, 0%, 3.9%);
+  --dark-text: hsl(0, 0%, 0%);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
+  --background: hsl(0, 0%, 7%);
+  --foreground: hsl(0, 0%, 100%);
   --muted: hsl(240, 3.7%, 15.9%);
   --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(0, 0%, 7%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 7%);
+  --card-foreground: hsl(0, 0%, 100%);
   --border: hsl(240, 3.7%, 15.9%);
   --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(51, 100%, 50%);
-  --primary-foreground: hsl(46, 9%, 18%);
+  --primary: hsl(0, 0%, 100%);
+  --primary-foreground: hsl(0, 0%, 0%);
   --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(180, 100%, 50%);
+  --accent-foreground: hsl(0, 0%, 0%);
   --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(0, 0%, 100%);
   --radius: 0.5rem;
+  
+  /* Dark mode Healios colors - slightly brighter */
+  --healios-purple: hsl(280, 100%, 45%);
+  --healios-magenta: hsl(320, 100%, 60%);
+  --healios-blue: hsl(220, 100%, 50%);
+  --healios-cyan: hsl(180, 100%, 50%);
+  --healios-teal: hsl(160, 100%, 45%);
+  --healios-violet: hsl(260, 100%, 70%);
 }
 
 @layer base {
@@ -72,6 +88,7 @@
 }
 
 @layer components {
+  /* Legacy brand colors */
   .brand-yellow {
     background-color: var(--brand-yellow);
   }
@@ -87,4 +104,47 @@
   .hover\:bg-brand-yellow-dark:hover {
     background-color: hsl(45, 100%, 45%);
   }
+  
+  /* Healios Brand Gradient Utilities */
+  .bg-healios-gradient-1 {
+    background: linear-gradient(135deg, var(--healios-purple), var(--healios-magenta));
+  }
+
+  .bg-healios-gradient-2 {
+    background: linear-gradient(135deg, var(--healios-teal), var(--healios-cyan));
+  }
+
+  .bg-healios-gradient-3 {
+    background: linear-gradient(135deg, var(--healios-blue), var(--healios-violet));
+  }
+
+  .bg-healios-gradient-4 {
+    background: linear-gradient(135deg, var(--healios-magenta), var(--healios-blue));
+  }
+
+  .bg-healios-gradient-5 {
+    background: linear-gradient(135deg, var(--healios-cyan), var(--healios-purple));
+  }
+  
+  /* Healios Brand Colors */
+  .text-healios-purple { color: var(--healios-purple); }
+  .text-healios-magenta { color: var(--healios-magenta); }
+  .text-healios-blue { color: var(--healios-blue); }
+  .text-healios-cyan { color: var(--healios-cyan); }
+  .text-healios-teal { color: var(--healios-teal); }
+  .text-healios-violet { color: var(--healios-violet); }
+
+  .bg-healios-purple { background-color: var(--healios-purple); }
+  .bg-healios-magenta { background-color: var(--healios-magenta); }
+  .bg-healios-blue { background-color: var(--healios-blue); }
+  .bg-healios-cyan { background-color: var(--healios-cyan); }
+  .bg-healios-teal { background-color: var(--healios-teal); }
+  .bg-healios-violet { background-color: var(--healios-violet); }
+
+  .border-healios-purple { border-color: var(--healios-purple); }
+  .border-healios-magenta { border-color: var(--healios-magenta); }
+  .border-healios-blue { border-color: var(--healios-blue); }
+  .border-healios-cyan { border-color: var(--healios-cyan); }
+  .border-healios-teal { border-color: var(--healios-teal); }
+  .border-healios-violet { border-color: var(--healios-violet); }
 }
