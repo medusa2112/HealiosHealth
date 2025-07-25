@@ -494,7 +494,7 @@ export default function HomePage() {
       {/* Expert Consultation Section */}
       <section className="bg-white dark:bg-gray-900">
         {/* Icons Header */}
-        <div className="bg-black py-8">
+        <div className="bg-healios-gradient-2 py-8">
           <div className="max-w-4xl mx-auto px-6">
             <div className="grid grid-cols-3 gap-8 text-center">
               <div className="text-white">
