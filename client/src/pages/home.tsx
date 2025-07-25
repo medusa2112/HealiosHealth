@@ -209,14 +209,14 @@ export default function HomePage() {
               {/* Product 1 - Apple Cider Vinegar & Ginger */}
               <Link href="/products/apple-cider-vinegar">
                 <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
                     <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                       BESTSELLER
                     </div>
                     <img
                       src={appleCiderVinegarImg}
                       alt="Apple Cider Vinegar & Ginger Gummies"
-                      className="w-32 h-40 object-contain"
+                      className="w-full h-full object-cover"
                       itemProp="image"
                     />
                     <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
@@ -242,14 +242,14 @@ export default function HomePage() {
               {/* Product 2 - Vitamin D3 Gummies */}
               <Link href="/products/vitamin-d3">
                 <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
                     <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                       SALE
                     </div>
                     <img
                       src={vitaminD3Img}
                       alt="Vitamin D3 4000 IU Gummies"
-                      className="w-32 h-40 object-contain"
+                      className="w-full h-full object-cover"
                       itemProp="image"
                     />
                     <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
@@ -275,14 +275,14 @@ export default function HomePage() {
               {/* Product 3 - KSM-66 Ashwagandha */}
               <Link href="/products/ashwagandha">
                 <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-green-100 to-teal-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="relative bg-gradient-to-br from-green-100 to-teal-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
                     <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                       ADAPTOGEN
                     </div>
                     <img
                       src={ashwagandhaImg}
                       alt="KSM-66 Ashwagandha Capsules"
-                      className="w-32 h-40 object-contain"
+                      className="w-full h-full object-cover"
                       itemProp="image"
                     />
                     <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
@@ -308,14 +308,14 @@ export default function HomePage() {
               {/* Product 4 - Probiotic Complex */}
               <Link href="/products/probiotics">
                 <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
                     <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                       GUT HEALTH
                     </div>
                     <img
                       src={probioticsImg}
                       alt="10 Billion CFU Probiotic Complex"
-                      className="w-32 h-40 object-contain"
+                      className="w-full h-full object-cover"
                       itemProp="image"
                     />
                     <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
@@ -341,14 +341,14 @@ export default function HomePage() {
               {/* Product 5 - Magnesium Complex */}
               <Link href="/products/magnesium">
                 <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                  <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
                     <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                       SLEEP
                     </div>
                     <img
                       src={magnesiumImg}
                       alt="Magnesium Complex Capsules"
-                      className="w-32 h-40 object-contain"
+                      className="w-full h-full object-cover"
                       itemProp="image"
                     />
                     <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
