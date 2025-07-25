@@ -26,14 +26,14 @@ export function Header() {
   const isActiveLink = (href: string) => location === href;
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700">
-      <nav className="max-w-screen-xl mx-auto px-6 py-4">
+    <header className="bg-white dark:bg-gray-900 sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
+      <nav className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo */}
+          {/* Minimal Logo */}
           <div className="flex-shrink-0">
             <Link href="/">
               <h1 
-                className="font-heading text-xl font-bold text-darkText dark:text-white hover:text-brandYellow dark:hover:text-brandYellow transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow rounded"
+                className="text-xl font-semibold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 rounded tracking-tight"
                 aria-label="WildClone Home"
               >
                 WildClone
@@ -47,10 +47,10 @@ export function Header() {
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <span 
-                    className={`text-sm font-medium transition-colors duration-200 hover:text-brandYellow focus:outline-none focus:ring-2 focus:ring-brandYellow rounded px-2 py-1 ${
+                    className={`text-sm font-medium transition-colors duration-200 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 rounded px-2 py-1 ${
                       isActiveLink(item.href)
-                        ? "text-brandYellow"
-                        : "text-darkText dark:text-gray-300"
+                        ? "text-gray-900 dark:text-white"
+                        : "text-gray-600 dark:text-gray-400"
                     }`}
                     aria-label={`Navigate to ${item.label}`}
                   >
