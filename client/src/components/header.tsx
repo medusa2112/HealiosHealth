@@ -135,10 +135,23 @@ export function Header() {
     <header className="bg-black sticky top-0 z-50 transition-all duration-300">
       {/* Main Navigation Bar */}
       <nav className={`max-w-7xl mx-auto px-6 transition-all duration-300 ${
-        isScrolled ? 'py-2' : 'py-4'
+        isScrolled ? 'py-1' : 'py-2'
       }`}>
         <div className="flex justify-between items-center">
-          {/* Desktop Navigation - Left */}
+          {/* Left Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/">
+              <img 
+                src={healiosLogo}
+                alt="Healios"
+                className={`w-auto hover:opacity-80 transition-all duration-300 ${
+                  isScrolled ? 'h-5' : 'h-6'
+                }`}
+              />
+            </Link>
+          </div>
+          
+          {/* Center Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {/* Shop Dropdown */}
             <div 
@@ -154,7 +167,20 @@ export function Header() {
               </button>
             </div>
             
-            {/* Other Navigation Items */}
+            {/* Learn Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsLearnDropdownOpen(true)}
+              onMouseLeave={() => setIsLearnDropdownOpen(false)}
+            >
+              <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
+                LEARN
+                <ChevronDown className="h-3 w-3" />
+              </button>
+            </div>
+            
             <Link href="/quiz">
               <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
                 isScrolled ? 'text-xs' : 'text-sm'
@@ -169,33 +195,6 @@ export function Header() {
               }`}>
                 BOOK A CONSULTATION
               </span>
-            </Link>
-            
-            {/* Learn Dropdown */}
-            <div 
-              className="relative"
-              onMouseEnter={() => setIsLearnDropdownOpen(true)}
-              onMouseLeave={() => setIsLearnDropdownOpen(false)}
-            >
-              <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
-                isScrolled ? 'text-xs' : 'text-sm'
-              }`}>
-                LEARN
-                <ChevronDown className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
-          
-          {/* Healios Logo - Centered */}
-          <div className="flex-shrink-0 absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/">
-              <img 
-                src={healiosLogo}
-                alt="Healios"
-                className={`w-auto hover:opacity-80 transition-all duration-300 ${
-                  isScrolled ? 'h-6' : 'h-8'
-                }`}
-              />
             </Link>
           </div>
           
