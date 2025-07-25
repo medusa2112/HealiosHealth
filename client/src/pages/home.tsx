@@ -682,9 +682,9 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
                   <div className="flex items-center gap-2">
-                    <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Food-Grown® Magnesium" className="w-8 h-10 object-contain" />
+                    <img src="/attached_assets/Magnesium-X_1753469577641.png" alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
                     <div>
-                      <p className="text-xs font-medium text-gray-900 dark:text-white">Food-Grown® Magnesium</p>
+                      <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
                     </div>
                   </div>
@@ -719,9 +719,9 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
                   <div className="flex items-center gap-2">
-                    <img src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Food-Grown® Energy Support" className="w-8 h-10 object-contain" />
+                    <img src="/attached_assets/Ashwagandha-X-2_1753469577639.webp" alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
                     <div>
-                      <p className="text-xs font-medium text-gray-900 dark:text-white">Food-Grown® Energy Support</p>
+                      <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
                     </div>
                   </div>
@@ -760,10 +760,10 @@ export default function HomePage() {
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
-            Join our Wild community
+            Join the Healios community
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Be part of 300,000+ enjoying the Food-Grown® difference
+            Be part of 300,000+ enjoying science-backed wellness
           </p>
 
           <form className="space-y-4 max-w-md mx-auto">
@@ -885,7 +885,7 @@ export default function HomePage() {
             </div>
 
             <p className="text-sm text-gray-400">
-              © 2025 Wild Nutrition® Ltd
+              © 2025 Healios Ltd
             </p>
           </div>
         </div>
