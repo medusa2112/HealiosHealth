@@ -6,6 +6,7 @@ import { useTheme } from "./theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import healiosLogo from "@assets/healios-logo (1)_1753466737582.png";
 
 export function Header() {
   const [location] = useLocation();
@@ -26,18 +27,18 @@ export function Header() {
   const isActiveLink = (href: string) => location === href;
 
   return (
-    <header className="bg-white dark:bg-gray-900 sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
+    <header className="bg-black sticky top-0 z-50">
       <nav className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Minimal Logo */}
+          {/* Healios Logo */}
           <div className="flex-shrink-0">
             <Link href="/">
-              <h1 
-                className="text-xl font-semibold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 rounded tracking-tight"
-                aria-label="WildClone Home"
-              >
-                WildClone
-              </h1>
+              <img 
+                src={healiosLogo}
+                alt="Healios"
+                className="h-8 w-auto hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-white rounded"
+                aria-label="Healios Home"
+              />
             </Link>
           </div>
           
@@ -47,10 +48,10 @@ export function Header() {
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <span 
-                    className={`text-sm font-medium transition-colors duration-200 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 rounded px-2 py-1 ${
+                    className={`text-sm font-medium transition-colors duration-200 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white rounded px-2 py-1 ${
                       isActiveLink(item.href)
-                        ? "text-gray-900 dark:text-white"
-                        : "text-gray-600 dark:text-gray-400"
+                        ? "text-white"
+                        : "text-gray-300"
                     }`}
                     aria-label={`Navigate to ${item.label}`}
                   >
@@ -69,7 +70,7 @@ export function Header() {
                 <Input
                   type="search"
                   placeholder="Search products..."
-                  className="w-48 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-darkText dark:text-white"
+                  className="w-48 bg-gray-800 border-gray-600 text-white placeholder:text-gray-300"
                   autoFocus
                   onBlur={() => setIsSearchOpen(false)}
                   aria-label="Search products"
@@ -78,7 +79,7 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(false)}
-                  className="text-darkText dark:text-gray-300 hover:text-brandYellow"
+                  className="text-white hover:text-gray-300"
                   aria-label="Close search"
                 >
                   <X className="h-4 w-4" />
@@ -89,7 +90,7 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="text-darkText dark:text-gray-300 hover:text-brandYellow focus:ring-2 focus:ring-brandYellow"
+                className="text-white hover:text-gray-300 focus:ring-2 focus:ring-white"
                 aria-label="Open search"
               >
                 <Search className="h-5 w-5" />
@@ -101,7 +102,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="text-darkText dark:text-gray-300 hover:text-brandYellow focus:ring-2 focus:ring-brandYellow"
+              className="text-white hover:text-gray-300 focus:ring-2 focus:ring-white"
               aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
               {theme === 'light' ? (
@@ -116,12 +117,12 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className="text-darkText dark:text-gray-300 hover:text-brandYellow relative focus:ring-2 focus:ring-brandYellow"
+              className="text-white hover:text-gray-300 relative focus:ring-2 focus:ring-white"
               aria-label={`Shopping cart with ${totalItems} items`}
             >
               <ShoppingBag className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-brandYellow text-darkText text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                <span className="absolute -top-2 -right-2 bg-brandYellow text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
                   {totalItems}
                 </span>
               )}
@@ -133,21 +134,21 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="md:hidden text-darkText dark:text-gray-300 hover:text-brandYellow focus:ring-2 focus:ring-brandYellow"
+                  className="md:hidden text-white hover:text-gray-300 focus:ring-2 focus:ring-white"
                   aria-label="Open navigation menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+              <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-black border-gray-700">
                 <nav className="flex flex-col space-y-4 mt-6">
                   {navItems.map((item) => (
                     <Link key={item.href} href={item.href}>
                       <span 
-                        className={`block px-3 py-2 text-base font-medium transition-colors duration-200 hover:text-brandYellow focus:outline-none focus:ring-2 focus:ring-brandYellow rounded ${
+                        className={`block px-3 py-2 text-base font-medium transition-colors duration-200 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white rounded ${
                           isActiveLink(item.href)
-                            ? "text-brandYellow"
-                            : "text-darkText dark:text-gray-300"
+                            ? "text-white"
+                            : "text-gray-300"
                         }`}
                         aria-label={`Navigate to ${item.label}`}
                       >
