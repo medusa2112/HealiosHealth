@@ -343,6 +343,95 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* The Food-Grown® Difference Section */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+            {/* Content */}
+            <div className="mb-12 lg:mb-0">
+              <div className="mb-8">
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                  THE FOOD-GROWN® DIFFERENCE
+                </p>
+                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                  Your DNA is wired to absorb nutrients from food.<br />
+                  That's why we keep Food-Grown® ingredients<br />
+                  as close to their <em className="italic">original</em> food form as possible.
+                </h2>
+              </div>
+              
+              {/* Statistics Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">99%</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                    ACTIVE INGREDIENTS, NO<br />
+                    ADDED BINDERS OR FILLERS
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">113%</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                    SUPERIOR ABSORPTION OF<br />
+                    FOOD-GROWN® VITAMIN<br />
+                    D3*
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">5</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                    GOLD STANDARD<br />
+                    SCIENTIFIC ABSORPTION<br />
+                    STUDIES*
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">25</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                    ACTIVE COMPOUNDS IN<br />
+                    OUR SCIENTIFICALLY-<br />
+                    STUDIED SAFFRONIC™<br />
+                    SAFFRON
+                  </p>
+                </div>
+              </div>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/products">
+                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                    Shop Food-Grown® supplements →
+                  </button>
+                </Link>
+                <Link href="/science">
+                  <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-3 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                    Learn more about Food-Grown® →
+                  </button>
+                </Link>
+              </div>
+              
+              {/* Disclaimer */}
+              <div className="mt-8 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mb-1">*Data from five published scientific absorption studies on Food-Grown® ingredients: Vitamin C, Zinc, Selenium and Vitamin D.</p>
+                <p>**Not tested daily. International Journal of Functional Nutrition 6, 3 2014</p>
+              </div>
+            </div>
+            
+            {/* Image */}
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
+                alt="Microscopic view of Food-Grown® nutrients showing cellular structure and bioavailability"
+                className="w-full rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
