@@ -69,6 +69,94 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Product Section Block */}
+      <section className="py-20 bg-white">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Product Card 1 */}
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="aspect-square w-full bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Premium Multivitamin"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                  Premium Multivitamin
+                </h3>
+                <p className="font-body text-sm text-gray-600 mb-4">
+                  Complete daily nutrition with 25 essential vitamins and minerals
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="font-heading text-xl font-bold text-darkText">
+                    $45.00
+                  </span>
+                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
+                    Add to Bag
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Product Card 2 */}
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="aspect-square w-full bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Omega-3 Complex"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                  Omega-3 Complex
+                </h3>
+                <p className="font-body text-sm text-gray-600 mb-4">
+                  Pure fish oil with EPA & DHA for heart and brain health
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="font-heading text-xl font-bold text-darkText">
+                    $38.00
+                  </span>
+                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
+                    Add to Bag
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Product Card 3 */}
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <div className="aspect-square w-full bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1609501676725-7186f734cd16?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Greens Superfood"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                  Greens Superfood
+                </h3>
+                <p className="font-body text-sm text-gray-600 mb-4">
+                  Organic blend of 20+ superfoods for daily vitality
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="font-heading text-xl font-bold text-darkText">
+                    $52.00
+                  </span>
+                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
+                    Add to Bag
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Products */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
