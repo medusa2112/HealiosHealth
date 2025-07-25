@@ -87,9 +87,9 @@ export default function HomePage() {
           
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-8">
-            Find balance.
+            Feel Better.
             <br />
-            <em className="font-light italic">Stay wild</em>
+            <em className="font-light italic">Every day</em>
           </h1>
           
           {/* CTA Button */}
