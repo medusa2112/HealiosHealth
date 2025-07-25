@@ -63,18 +63,56 @@ export function Header() {
       title: "ABOUT HEALIOS",
       items: [
         { href: "/about", label: "Our Story" },
-        { href: "/science", label: "The Science" },
+        { href: "/science", label: "The Food-Grown® difference" },
         { href: "/sustainability", label: "Sustainability" },
-        { href: "/careers", label: "Careers" },
+        { href: "/awards", label: "Our Award Winning supplements" },
+        { href: "/planet", label: "Subscribe to spare the planet + save 20%" },
       ]
     },
     {
-      title: "RESOURCES",
+      title: "THE SCIENCE",
       items: [
-        { href: "/blog", label: "Health Blog" },
-        { href: "/guides", label: "Nutrition Guides" },
-        { href: "/faq", label: "FAQ" },
-        { href: "/contact", label: "Contact Us" },
+        { href: "/science/research", label: "Research & Clinical Studies" },
+        { href: "/science/nutrition", label: "Nutrition Science" },
+        { href: "/science/bioavailability", label: "Bioavailability Studies" },
+      ]
+    },
+    {
+      title: "FOR PRACTITIONERS",
+      items: [
+        { href: "/practitioners", label: "Our Practitioner Community" },
+        { href: "/practitioners/events", label: "Practitioner Events" },
+        { href: "/practitioners/resources", label: "Professional Resources" },
+      ]
+    },
+    {
+      title: "WOMEN'S HEALTH HUBS",
+      items: [
+        { href: "/womens-health", label: "Fertility hub" },
+        { href: "/pregnancy", label: "Pregnancy & New Mother hub" },
+        { href: "/menopause", label: "Perimenopause & Menopause hub" },
+        { href: "/womens-blog", label: "Women's health blogs" },
+        { href: "/beauty", label: "Beauty blogs" },
+        { href: "/family", label: "Family health guides" },
+      ]
+    },
+    {
+      title: "HEALIOS JOURNAL",
+      items: [
+        { href: "/journal", label: "Longevity & why nutrition is key" },
+        { href: "/journal/collagen", label: "Collagen 500 Plus Q+A with Henrietta Norton" },
+        { href: "/journal/weight", label: "Weight Management at every lifestage" },
+        { href: "/journal/ashwagandha", label: "5 healthy benefits of Ashwagandha" },
+        { href: "/journal/recipes", label: "The Wild Kitchen recipes" },
+        { href: "/journal/all", label: "All blog posts" },
+      ]
+    },
+    {
+      title: "HEALIOS SESSIONS PODCAST",
+      items: [
+        { href: "/podcast", label: "The Perimenopause Series" },
+        { href: "/podcast/episodes", label: "All Episodes" },
+        { href: "/podcast/subscribe", label: "Subscribe & Listen" },
       ]
     }
   ];
@@ -301,7 +339,7 @@ export function Header() {
         onMouseLeave={() => setIsLearnDropdownOpen(false)}
       >
         <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
             {learnSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
@@ -311,7 +349,7 @@ export function Header() {
                   {section.items.map((item, itemIndex) => (
                     <li key={itemIndex}>
                       <Link href={item.href}>
-                        <span className="text-sm text-white hover:text-healios-cyan transition-colors duration-200">
+                        <span className="text-sm text-white hover:text-healios-cyan transition-colors duration-200 leading-relaxed">
                           {item.label}
                         </span>
                       </Link>
@@ -322,35 +360,49 @@ export function Header() {
             ))}
           </div>
           
-          {/* Featured Content */}
+          {/* Featured Content with Images */}
           <div className="mt-12 pt-8 border-t border-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-900 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-white mb-2">
-                  The Science Behind Healios
-                </h3>
-                <p className="text-sm text-gray-300 mb-4">
-                  Discover our evidence-based approach to nutrition and wellness
-                </p>
-                <Link href="/science">
-                  <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
-                    Learn More →
-                  </button>
-                </Link>
+              <div className="bg-gray-900 rounded-lg overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                  alt="Need more support?" 
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    Need more support?
+                  </h3>
+                  <p className="text-sm text-gray-300 mb-4">
+                    Book a free 15 min consultation
+                  </p>
+                  <Link href="/consultation">
+                    <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
+                      Book Now →
+                    </button>
+                  </Link>
+                </div>
               </div>
               
-              <div className="bg-gray-900 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-white mb-2">
-                  Book a Free Consultation
-                </h3>
-                <p className="text-sm text-gray-300 mb-4">
-                  Get personalized nutrition advice from our expert team
-                </p>
-                <Link href="/consultation">
-                  <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
-                    Book Now →
-                  </button>
-                </Link>
+              <div className="bg-gray-900 rounded-lg overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1584467735871-8b730d628b3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                  alt="A new journey" 
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    A new journey
+                  </h3>
+                  <p className="text-sm text-gray-300 mb-4">
+                    Visit our pregnancy hub
+                  </p>
+                  <Link href="/pregnancy">
+                    <button className="text-healios-cyan text-sm font-medium hover:text-healios-cyan/80 transition-colors">
+                      Explore →
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
