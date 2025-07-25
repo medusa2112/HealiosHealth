@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, ShoppingBag, Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
@@ -15,8 +15,20 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   
   const totalItems = getTotalItems();
+
+  // Handle scroll to shrink header
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Healios-specific navigation structure
   const shopSections = [
@@ -120,9 +132,11 @@ export function Header() {
   const isActiveLink = (href: string) => location === href;
 
   return (
-    <header className="bg-black sticky top-0 z-50">
+    <header className="bg-black sticky top-0 z-50 transition-all duration-300">
       {/* Main Navigation Bar */}
-      <nav className="max-w-7xl mx-auto px-6 py-4">
+      <nav className={`max-w-7xl mx-auto px-6 transition-all duration-300 ${
+        isScrolled ? 'py-2' : 'py-4'
+      }`}>
         <div className="flex justify-between items-center">
           {/* Desktop Navigation - Left */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -132,7 +146,9 @@ export function Header() {
               onMouseEnter={() => setIsShopDropdownOpen(true)}
               onMouseLeave={() => setIsShopDropdownOpen(false)}
             >
-              <button className="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200 flex items-center gap-1">
+              <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
                 SHOP
                 <ChevronDown className="h-3 w-3" />
               </button>
@@ -140,13 +156,17 @@ export function Header() {
             
             {/* Other Navigation Items */}
             <Link href="/quiz">
-              <span className="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200">
+              <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
                 SUPPLEMENT QUIZ
               </span>
             </Link>
             
             <Link href="/consultation">
-              <span className="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200">
+              <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
                 BOOK A CONSULTATION
               </span>
             </Link>
@@ -157,7 +177,9 @@ export function Header() {
               onMouseEnter={() => setIsLearnDropdownOpen(true)}
               onMouseLeave={() => setIsLearnDropdownOpen(false)}
             >
-              <button className="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200 flex items-center gap-1">
+              <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
                 LEARN
                 <ChevronDown className="h-3 w-3" />
               </button>
@@ -170,7 +192,9 @@ export function Header() {
               <img 
                 src={healiosLogo}
                 alt="Healios"
-                className="h-8 w-auto hover:opacity-80 transition-opacity"
+                className={`w-auto hover:opacity-80 transition-all duration-300 ${
+                  isScrolled ? 'h-6' : 'h-8'
+                }`}
               />
             </Link>
           </div>
@@ -203,7 +227,9 @@ export function Header() {
                 onClick={() => setIsSearchOpen(true)}
                 className="text-white hover:text-gray-300"
               >
-                <Search className="h-5 w-5" />
+                <Search className={`transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`} />
               </Button>
             )}
             
@@ -215,9 +241,13 @@ export function Header() {
               className="text-white hover:text-gray-300"
             >
               {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
+                <Moon className={`transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`} />
               ) : (
-                <Sun className="h-5 w-5" />
+                <Sun className={`transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`} />
               )}
             </Button>
             
@@ -228,9 +258,13 @@ export function Header() {
               onClick={toggleCart}
               className="text-white hover:text-gray-300 relative"
             >
-              <ShoppingBag className="h-5 w-5" />
+              <ShoppingBag className={`transition-all duration-300 ${
+                isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+              }`} />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-healios-cyan text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                <span className={`absolute -top-2 -right-2 bg-healios-cyan text-white text-xs rounded-full flex items-center justify-center font-medium transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`}>
                   {totalItems}
                 </span>
               )}
