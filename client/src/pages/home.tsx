@@ -181,7 +181,7 @@ export default function HomePage() {
                     BESTSELLER
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    src="/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png"
                     alt="Apple Cider Vinegar & Ginger Gummies"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
@@ -212,7 +212,7 @@ export default function HomePage() {
                     SALE
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    src="/attached_assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
                     alt="Vitamin D3 4000 IU Gummies"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
@@ -243,7 +243,7 @@ export default function HomePage() {
                     ADAPTOGEN
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    src="/attached_assets/Ashwagandha-X-2_1753469577639.webp"
                     alt="KSM-66 Ashwagandha Capsules"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
@@ -274,7 +274,7 @@ export default function HomePage() {
                     GUT HEALTH
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    src="/attached_assets/Probiotics10Bil-X_1753469577640.png"
                     alt="10 Billion CFU Probiotic Complex"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
@@ -305,7 +305,7 @@ export default function HomePage() {
                     SLEEP
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    src="/attached_assets/Magnesium-X_1753469577641.png"
                     alt="Magnesium Complex Capsules"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
