@@ -373,50 +373,14 @@ export default function HomePage() {
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Image Grid */}
+            {/* Single Image */}
             <div className="relative mb-12 lg:mb-0">
-              <div className="grid grid-cols-2 gap-4">
-                {/* Top left - Pregnant woman with supplement */}
-                <div className="aspect-square bg-amber-100 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
-                    alt="Pregnant woman holding Wild Nutrition supplement bottle"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Supplement bottle overlay */}
-                  <div className="absolute top-4 left-4">
-                    <div className="w-16 h-20 bg-amber-800 flex items-center justify-center">
-                      <div className="w-12 h-16 bg-amber-900 opacity-80"></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Top right - Baby hair close-up */}
-                <div className="aspect-square bg-amber-50 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
-                    alt="Beautiful newborn baby hair texture"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Bottom left - Belly/bump */}
-                <div className="aspect-square bg-peach-100 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
-                    alt="Expecting mother's belly bump"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Bottom right - More baby hair */}
-                <div className="aspect-square bg-amber-50 overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&fit=facearea&facepad=2"
-                    alt="Soft baby hair close-up detail"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+              <div className="aspect-video bg-amber-50 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
+                  alt="Pregnant woman with natural supplements for maternal health"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
