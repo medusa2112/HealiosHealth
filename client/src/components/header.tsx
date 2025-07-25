@@ -320,7 +320,7 @@ export function Header() {
           isShopDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
         style={{
-          left: '20%',
+          left: '50%',
           transform: 'translateX(-50%)',
           width: '800px',
           maxWidth: '90vw'
