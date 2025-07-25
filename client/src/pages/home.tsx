@@ -405,7 +405,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* The Food-Grown® Difference Section */}
+      {/* The Healios Science Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
@@ -413,12 +413,12 @@ export default function HomePage() {
             <div className="mb-12 lg:mb-0">
               <div className="mb-8">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-                  THE FOOD-GROWN® DIFFERENCE
+                  THE HEALIOS DIFFERENCE
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Your DNA is wired to absorb nutrients from food.<br />
-                  That's why we keep Food-Grown® ingredients<br />
-                  as close to their <em className="italic">original</em> food form as possible.
+                  Science-backed wellness solutions<br />
+                  designed for optimal <em className="italic">bioavailability</em><br />
+                  and maximum health impact.
                 </h2>
               </div>
 
@@ -427,36 +427,33 @@ export default function HomePage() {
                 <div>
                   <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">99%</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    ACTIVE INGREDIENTS, NO<br />
-                    ADDED BINDERS OR FILLERS
+                    PURE ACTIVE INGREDIENTS<br />
+                    NO UNNECESSARY FILLERS
                   </p>
                 </div>
 
                 <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">113%</div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">300K+</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    SUPERIOR ABSORPTION OF<br />
-                    FOOD-GROWN® VITAMIN<br />
-                    D3*
+                    SATISFIED CUSTOMERS<br />
+                    WORLDWIDE
                   </p>
                 </div>
 
                 <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">5</div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">15+</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    GOLD STANDARD<br />
-                    SCIENTIFIC ABSORPTION<br />
-                    STUDIES*
+                    YEARS OF RESEARCH<br />
+                    & DEVELOPMENT
                   </p>
                 </div>
 
                 <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">25</div>
+                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">600mg</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    ACTIVE COMPOUNDS IN<br />
-                    OUR SCIENTIFICALLY-<br />
-                    STUDIED SAFFRONIC™<br />
-                    SAFFRON
+                    CLINICALLY EFFECTIVE<br />
+                    ASHWAGANDHA DOSAGE<br />
+                    (KSM-66®)
                   </p>
                 </div>
               </div>
@@ -465,28 +462,28 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/products">
                   <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
-                    Shop Food-Grown® supplements →
+                    Shop Healios supplements →
                   </button>
                 </Link>
                 <Link href="/science">
                   <button className="border border-healios-cyan text-healios-cyan px-6 py-3 text-sm font-medium hover:bg-healios-cyan hover:text-white transition-colors w-full sm:w-auto">
-                    Learn more about Food-Grown® →
+                    Learn about our science →
                   </button>
                 </Link>
               </div>
 
               {/* Disclaimer */}
               <div className="mt-8 text-xs text-gray-500 dark:text-gray-400">
-                <p className="mb-1">*Data from five published scientific absorption studies on Food-Grown® ingredients: Vitamin C, Zinc, Selenium and Vitamin D.</p>
-                <p>**Not tested daily. International Journal of Functional Nutrition 6, 3 2014</p>
+                <p className="mb-1">*Based on clinical research and customer satisfaction data. Individual results may vary.</p>
+                <p>**KSM-66® is a registered trademark of Ixoreal Biomed Inc.</p>
               </div>
             </div>
 
             {/* Image */}
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
-                alt="Microscopic view of Food-Grown® nutrients showing cellular structure and bioavailability"
+                src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
+                alt="Scientific research and development of premium wellness supplements"
                 className="w-full"
               />
             </div>
@@ -497,7 +494,7 @@ export default function HomePage() {
       {/* Expert Consultation Section */}
       <section className="bg-white dark:bg-gray-900">
         {/* Icons Header */}
-        <div className="bg-amber-800 py-8">
+        <div className="bg-black py-8">
           <div className="max-w-4xl mx-auto px-6">
             <div className="grid grid-cols-3 gap-8 text-center">
               <div className="text-white">
@@ -507,7 +504,7 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <p className="text-xs uppercase tracking-wide">
-                  FOOD-GROWN<br />
+                  PREMIUM<br />
                   INGREDIENTS
                 </p>
               </div>
@@ -519,7 +516,8 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <p className="text-xs uppercase tracking-wide">
-                  AS RETAINED
+                  THIRD-PARTY<br />
+                  TESTED
                 </p>
               </div>
 
@@ -530,8 +528,8 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <p className="text-xs uppercase tracking-wide">
-                  SCIENTIFICALLY<br />
-                  STUDIED
+                  CLINICALLY<br />
+                  RESEARCHED
                 </p>
               </div>
             </div>
