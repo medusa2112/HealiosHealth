@@ -157,6 +157,111 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Why It Works Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-3xl font-bold text-darkText mb-4">
+              Why It Works
+            </h2>
+            <p className="max-w-prose mx-auto text-base text-gray-600">
+              Our supplements are backed by rigorous scientific research and manufactured to the highest quality standards. 
+              Every ingredient is carefully selected for its proven efficacy and bioavailability.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <ul className="space-y-6">
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    Third-Party Tested
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Every batch undergoes independent laboratory testing for purity, potency, and safety to ensure you get exactly what's on the label.
+                  </p>
+                </div>
+              </li>
+              
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    Science-Backed Formulas
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Our formulations are based on peer-reviewed research and clinical studies, ensuring optimal dosages and ingredient combinations.
+                  </p>
+                </div>
+              </li>
+              
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    Pure Ingredients
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    No artificial fillers, colors, or preservatives. Just pure, bioavailable nutrients your body can actually use.
+                  </p>
+                </div>
+              </li>
+            </ul>
+            
+            <ul className="space-y-6">
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    FDA Registered Facility
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Manufactured in FDA-registered facilities following Good Manufacturing Practice (GMP) guidelines.
+                  </p>
+                </div>
+              </li>
+              
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    Sustainable Sourcing
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    We partner with trusted suppliers who share our commitment to environmental responsibility and ethical practices.
+                  </p>
+                </div>
+              </li>
+              
+              <li className="flex items-start space-x-4">
+                <div className="w-6 h-6 bg-brandYellow rounded-full flex-shrink-0 mt-1 flex items-center justify-center">
+                  <span className="text-darkText text-sm font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
+                    Transparent Labeling
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Complete ingredient transparency with no proprietary blends - you know exactly what you're putting in your body.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Featured Products */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
