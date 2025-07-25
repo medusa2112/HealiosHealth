@@ -112,82 +112,68 @@ export default function Home() {
         keywords="food grown supplements, natural vitamins, magnesium supplement, fertility support, vitamin D, collagen, organic supplements, better absorption vitamins, wild nutrition alternative, vegan supplements, third party tested vitamins"
         structuredData={[homeStructuredData, faqStructuredData]}
       />
-      {/* Hero Section */}
-      <section className="bg-white dark:bg-gray-900 py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col items-center text-center">
-            {/* Minimal Hero Badge */}
-            <div className="inline-flex items-center bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-xs font-medium mb-8 tracking-wide uppercase">
-              Food-Grown® Supplements
+      {/* Wild Nutrition Hero Section */}
+      <section className="relative min-h-screen bg-black dark:bg-black overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1494790108755-2616c78746a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&h=1200&q=80"
+            alt="Woman with peaceful expression in nature"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 min-h-screen flex flex-col justify-center px-6 lg:px-12">
+          <div className="max-w-2xl">
+            {/* Badge */}
+            <div className="text-white text-xs font-medium tracking-widest uppercase mb-8">
+              Food-Grown® Supplements - Better absorbed, Better retained
             </div>
             
-            {/* Minimal Rating */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex text-gray-900 dark:text-white">
-                {"★★★★★".split("").map((star, i) => (
-                  <span key={i} className="text-sm">{star}</span>
-                ))}
-              </div>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">4.84</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">300,000+ reviews</span>
+            {/* Main Heading */}
+            <h1 className="text-white text-5xl lg:text-7xl font-light leading-tight mb-8">
+              Find balance. Stay <em className="italic font-light">wild</em>
+            </h1>
+            
+            {/* CTA Button */}
+            <div className="mb-12">
+              <Link href="/products">
+                <button className="bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black">
+                  Shop Food-Grown® supplements →
+                </button>
+              </Link>
             </div>
             
-            {/* Press Logos */}
-            <div className="flex flex-wrap justify-center items-center gap-8 mb-16 opacity-60">
-              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Grazia</div>
-              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">The Telegraph</div>
-              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Vogue</div>
-              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Women's Health</div>
-            </div>
-            
-            {/* Main Hero Content */}
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-gray-900 dark:text-white leading-[0.9] mb-6 tracking-tight">
-                Supplements that
-                <br />
-                <span className="text-gray-500 dark:text-gray-400">actually work</span>
-              </h1>
-              
-              {/* SEO-Rich Subtitle */}
-              <h2 className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto font-normal leading-relaxed">
-                Food-Grown® supplements with 113% better absorption. Natural vitamins for every life stage and health goal.
-              </h2>
-              
-              {/* Minimal Trust Signals */}
-              <div className="flex flex-wrap justify-center items-center gap-8 mb-12 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                <span>Third-Party Tested</span>
-                <span>Certified Vegan</span>
-                <span>Free Shipping $50+</span>
-                <span>30-Day Guarantee</span>
+            {/* Rating and Reviews */}
+            <div className="text-white text-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="flex text-white">
+                  {"★★★★★".split("").map((star, i) => (
+                    <span key={i} className="text-sm">{star}</span>
+                  ))}
+                </div>
+                <span className="font-medium">4.84 RATING</span>
               </div>
-              
-              {/* Minimal Category Pills */}
-              <div className="flex flex-wrap justify-center gap-2 mb-16">
-                {[
-                  "Bestsellers", "Fertility", "Energy", "Sleep", "Immunity"
-                ].map((category) => (
-                  <span 
-                    key={category}
-                    className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link href="/products">
-                  <button className="bg-black dark:bg-white text-white dark:text-black px-8 py-3 rounded-full font-medium text-sm hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900">
-                    Shop Now
-                  </button>
-                </Link>
-                <Link href="/quiz">
-                  <button className="border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 px-8 py-3 rounded-full font-medium text-sm hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Take Quiz
-                  </button>
-                </Link>
+              <div className="text-xs opacity-80">
+                LOVED BY 300,000+ CUSTOMERS
               </div>
             </div>
+          </div>
+        </div>
+        
+        {/* Press Mentions Footer */}
+        <div className="absolute bottom-8 left-6 right-6 lg:left-12 lg:right-12">
+          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
+            <span>The Telegraph</span>
+            <span>VOGUE</span>
+            <span>Women's Health</span>
+            <span>GRAZIA</span>
+            <span>The Telegraph</span>
+            <span>VOGUE</span>
+            <span>Women's Health</span>
+            <span>GRAZIA</span>
           </div>
         </div>
       </section>
@@ -544,138 +530,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="font-heading text-3xl font-bold text-dark-text sm:text-4xl">
-              Featured Products
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Our most popular supplements, trusted by thousands of health-conscious individuals worldwide.
-            </p>
-          </div>
-          
-          {isLoading ? (
-            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-md h-96 animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {featuredProducts?.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-          
-          <div className="mt-12 text-center">
-            <Link href="/products">
-              <Button className="bg-dark-text text-white px-8 py-3 rounded-md font-medium hover:bg-gray-800 transition-colors duration-200">
-                View All Products
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Benefits Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            <div>
-              <h2 className="font-heading text-3xl font-bold text-dark-text sm:text-4xl">
-                Why Choose Wild Nutrition?
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                We're committed to providing the highest quality supplements that support your health journey with science-backed formulations.
-              </p>
-              
-              <div className="mt-8 space-y-6">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md brand-yellow text-dark-text">
-                      <Leaf className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="font-heading text-lg font-semibold text-dark-text">100% Natural Ingredients</h3>
-                    <p className="mt-2 text-gray-600">Sourced from the finest organic farms and sustainable suppliers worldwide.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md brand-yellow text-dark-text">
-                      <Microscope className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="font-heading text-lg font-semibold text-dark-text">Science-Backed Formulas</h3>
-                    <p className="mt-2 text-gray-600">Every product is formulated based on the latest nutritional research and clinical studies.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-md brand-yellow text-dark-text">
-                      <Award className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="font-heading text-lg font-semibold text-dark-text">Third-Party Tested</h3>
-                    <p className="mt-2 text-gray-600">All supplements undergo rigorous testing for purity, potency, and safety.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-12 lg:mt-0">
-              <img 
-                src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=500" 
-                alt="Clean eating ingredients" 
-                className="w-full rounded-xl shadow-lg" 
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Signup */}
-      <section className="bg-dark-text py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="font-heading text-3xl font-bold text-white sm:text-4xl">
-              Stay Updated
-            </h2>
-            <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
-              Get the latest health tips, exclusive offers, and product updates delivered to your inbox.
-            </p>
-          </div>
-          
-          <div className="mt-8 max-w-md mx-auto">
-            <form className="flex" onSubmit={handleNewsletterSubmit}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-l-md border-0 text-dark-text focus:ring-2 focus:ring-brand-yellow focus:outline-none"
-                required
-              />
-              <Button
-                type="submit"
-                className="brand-yellow hover:bg-brand-yellow-dark text-dark-text px-6 py-3 rounded-r-md font-medium transition-colors duration-200"
-              >
-                Subscribe
-              </Button>
-            </form>
-            <p className="mt-3 text-sm text-gray-400 text-center">
-              No spam, unsubscribe at any time.
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
