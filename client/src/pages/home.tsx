@@ -5,6 +5,12 @@ import { Star, Leaf, Award, Microscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
+import appleCiderVinegarImg from '@assets/Apple-Cider-Vinegar-X_1753469577640.png';
+import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
+import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
+import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
+import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
+import wellnessVideoSrc from '@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -208,7 +214,7 @@ export default function HomePage() {
                       BESTSELLER
                     </div>
                     <img
-                      src="@assets/Apple-Cider-Vinegar-X_1753469577640.png"
+                      src={appleCiderVinegarImg}
                       alt="Apple Cider Vinegar & Ginger Gummies"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -241,7 +247,7 @@ export default function HomePage() {
                       SALE
                     </div>
                     <img
-                      src="@assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
+                      src={vitaminD3Img}
                       alt="Vitamin D3 4000 IU Gummies"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -274,7 +280,7 @@ export default function HomePage() {
                       ADAPTOGEN
                     </div>
                     <img
-                      src="@assets/Ashwagandha-X-2_1753469577639.webp"
+                      src={ashwagandhaImg}
                       alt="KSM-66 Ashwagandha Capsules"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -307,7 +313,7 @@ export default function HomePage() {
                       GUT HEALTH
                     </div>
                     <img
-                      src="@assets/Probiotics10Bil-X_1753469577640.png"
+                      src={probioticsImg}
                       alt="10 Billion CFU Probiotic Complex"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -340,7 +346,7 @@ export default function HomePage() {
                       SLEEP
                     </div>
                     <img
-                      src="@assets/Magnesium-X_1753469577641.png"
+                      src={magnesiumImg}
                       alt="Magnesium Complex Capsules"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -386,9 +392,7 @@ export default function HomePage() {
                   onLoadStart={() => console.log('Secondary video loading started')}
                   onCanPlay={() => console.log('Secondary video can play')}
                 >
-                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov" type="video/quicktime" />
-                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.webm" type="video/webm" />
-                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mp4" type="video/mp4" />
+                  <source src={wellnessVideoSrc} type="video/quicktime" />
                   {/* Fallback image if video doesn't load */}
                   <img
                     src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
@@ -695,7 +699,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
                   <div className="flex items-center gap-2">
-                    <img src="@assets/Magnesium-X_1753469577641.png" alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
+                    <img src={magnesiumImg} alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
                     <div>
                       <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
@@ -732,7 +736,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
                   <div className="flex items-center gap-2">
-                    <img src="@assets/Ashwagandha-X-2_1753469577639.webp" alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
+                    <img src={ashwagandhaImg} alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
                     <div>
                       <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
