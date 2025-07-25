@@ -2,11 +2,21 @@
 
 ## Overview
 
-This is a full-stack e-commerce application for Wild Nutrition, a premium supplement company. The application is built with a React frontend using TypeScript and Vite, an Express.js backend, and uses Drizzle ORM with PostgreSQL for data persistence. The application features a modern design system built with shadcn/ui components and Tailwind CSS.
+This is a full-stack e-commerce application for Wild Nutrition, a premium supplement company. The application is built with a React frontend using TypeScript and Vite, an Express.js backend, and uses Drizzle ORM with PostgreSQL for data persistence. The application features a modern design system built with shadcn/ui components and Tailwind CSS, including dark mode support and full accessibility compliance.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+
+## Recent Changes (January 2025)
+
+✓ Updated homepage to match current Wild Nutrition design aesthetic
+✓ Implemented dark/light mode toggle with ThemeProvider
+✓ Added accessibility features (aria-labels, keyboard navigation, focus states)
+✓ Modernized hero section with rating display, category pills, and press mentions
+✓ Updated product cards to match Wild Nutrition's style with pricing, badges, and reviews
+✓ Revised "Why It Works" section to focus on Food-Grown® messaging
+✓ Enhanced footer with dark mode support and improved accessibility
 
 ## System Architecture
 

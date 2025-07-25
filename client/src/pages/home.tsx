@@ -38,135 +38,227 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-white py-16 px-6">
+      <section className="bg-white dark:bg-gray-900 py-16 px-6">
         <div className="max-w-screen-xl mx-auto">
-          <div className="flex flex-col-reverse md:flex-row md:items-center md:gap-12">
-            {/* Left Content */}
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="font-heading text-4xl md:text-5xl font-bold text-darkText mb-6">
-                Premium Nutrition Made Simple
-              </h1>
-              <p className="font-body text-lg text-gray-600 mb-8 max-w-2xl">
-                Discover scientifically-backed supplements crafted from the finest natural ingredients. 
-                Fuel your body with what it deserves.
-              </p>
-              <Link href="/products">
-                <button className="bg-brandYellow text-darkText rounded px-6 py-3 hover:bg-yellow-500 transition-colors font-semibold">
-                  Shop Now
-                </button>
-              </Link>
+          <div className="flex flex-col items-center text-center">
+            {/* Hero Badge */}
+            <div className="inline-flex items-center bg-brandYellow/10 dark:bg-brandYellow/20 text-darkText dark:text-brandYellow px-4 py-2 rounded-full text-sm font-medium mb-6">
+              Shop Food-Grown® supplements
             </div>
             
-            {/* Right Image */}
-            <div className="flex-1 mb-8 md:mb-0">
-              <img 
-                src="https://via.placeholder.com/400" 
-                alt="Premium nutrition supplements" 
-                className="w-full h-auto object-cover rounded-xl shadow-lg"
-              />
+            {/* Rating */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex text-brandYellow">
+                {"★★★★★".split("").map((star, i) => (
+                  <span key={i} className="text-lg">{star}</span>
+                ))}
+              </div>
+              <span className="font-heading text-lg font-bold text-darkText dark:text-white">4.84</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Rating</span>
+            </div>
+            
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-12">
+              Loved by 300,000+ customers
+            </p>
+            
+            {/* Press Logos */}
+            <div className="flex flex-wrap justify-center items-center gap-8 mb-16 opacity-60">
+              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Grazia</div>
+              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">The Telegraph</div>
+              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Vogue</div>
+              <div className="text-gray-500 dark:text-gray-400 font-medium text-sm">Women's Health</div>
+            </div>
+            
+            {/* Main Hero Content */}
+            <div className="max-w-4xl mx-auto">
+              <h1 className="font-heading text-3xl md:text-5xl lg:text-6xl font-bold text-darkText dark:text-white leading-tight mb-8">
+                EVERY LIFE STAGE,
+                <br />
+                <span className="text-brandYellow">EVERY HEALTH GOAL</span>
+              </h1>
+              
+              {/* Category Pills */}
+              <div className="flex flex-wrap justify-center gap-3 mb-12">
+                {[
+                  "Bestsellers", "Fertility", "Energy", "Pregnancy", "Hormones", 
+                  "Gut Health", "Sleep", "Perimenopause", "Beauty", "Stress", 
+                  "Immunity", "Menopause"
+                ].map((category) => (
+                  <span 
+                    key={category}
+                    className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-darkText dark:text-gray-300 rounded-full text-sm font-medium hover:bg-brandYellow hover:text-darkText transition-colors cursor-pointer"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/products">
+                  <button className="bg-brandYellow text-darkText px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                    Shop Now
+                  </button>
+                </Link>
+                <Link href="/science">
+                  <button className="border-2 border-darkText dark:border-white text-darkText dark:text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-darkText hover:text-white dark:hover:bg-white dark:hover:text-darkText transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                    Learn More
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Product Section Block */}
-      <section className="py-20 bg-white">
+      {/* Featured Products Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-screen-xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Product Card 1 */}
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-square w-full bg-gray-100">
-                <img
-                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
-                  alt="Premium Multivitamin"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                  Premium Multivitamin
-                </h3>
-                <p className="font-body text-sm text-gray-600 mb-4">
-                  Complete daily nutrition with 25 essential vitamins and minerals
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-heading text-xl font-bold text-darkText">
-                    $45.00
-                  </span>
-                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                    Add to Bag
-                  </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Product Card 1 - Food-Grown® Magnesium */}
+            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="relative aspect-square bg-gray-50 dark:bg-gray-700">
+                <div className="absolute top-3 left-3 bg-brandYellow text-darkText text-xs font-bold px-2 py-1 rounded-full">
+                  Bestseller
                 </div>
-              </div>
-            </div>
-
-            {/* Product Card 2 */}
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-square w-full bg-gray-100">
                 <img
                   src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
-                  alt="Omega-3 Complex"
-                  className="w-full h-full object-cover"
+                  alt="Food-Grown® Magnesium supplement bottle for better sleep and reduced fatigue"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                  Omega-3 Complex
+              <div className="p-4">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">(305 Reviews)</div>
+                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2">
+                  Food-Grown® Magnesium
                 </h3>
-                <p className="font-body text-sm text-gray-600 mb-4">
-                  Pure fish oil with EPA & DHA for heart and brain health
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-heading text-xl font-bold text-darkText">
-                    $38.00
-                  </span>
-                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                    Add to Bag
-                  </button>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">$27.00</span>
+                  <span className="font-bold text-darkText dark:text-white">From $21.60</span>
+                  <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded">-20%</span>
                 </div>
+                <ul className="space-y-1 mb-4">
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• 42 minutes extra sleep</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Reduction of tiredness + fatigue</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Psychological function</li>
+                </ul>
+                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                  +Add
+                </button>
               </div>
             </div>
 
-            {/* Product Card 3 */}
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <div className="aspect-square w-full bg-gray-100">
+            {/* Product Card 2 - Collagen 500 Plus */}
+            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="relative aspect-square bg-gray-50 dark:bg-gray-700">
+                <div className="absolute top-3 left-3 bg-brandYellow text-darkText text-xs font-bold px-2 py-1 rounded-full">
+                  Bestseller
+                </div>
                 <img
-                  src="https://images.unsplash.com/photo-1609501676725-7186f734cd16?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
-                  alt="Greens Superfood"
-                  className="w-full h-full object-cover"
+                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Collagen 500 Plus supplement for women's collagen support and skin health"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                  Greens Superfood
+              <div className="p-4">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">(276 Reviews)</div>
+                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2">
+                  Collagen 500 Plus
                 </h3>
-                <p className="font-body text-sm text-gray-600 mb-4">
-                  Organic blend of 20+ superfoods for daily vitality
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-heading text-xl font-bold text-darkText">
-                    $52.00
-                  </span>
-                  <button className="bg-brandYellow text-darkText px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-colors">
-                    Add to Bag
-                  </button>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">$48.00</span>
+                  <span className="font-bold text-darkText dark:text-white">From $38.40</span>
+                  <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded">-20%</span>
                 </div>
+                <ul className="space-y-1 mb-4">
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Collagen formation</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Decreases appearance of wrinkles</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Optimally-absorbed 500 Daltons</li>
+                </ul>
+                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                  +Add
+                </button>
+              </div>
+            </div>
+
+            {/* Product Card 3 - Food-Grown® Fertility Support */}
+            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="relative aspect-square bg-gray-50 dark:bg-gray-700">
+                <div className="absolute top-3 left-3 bg-brandYellow text-darkText text-xs font-bold px-2 py-1 rounded-full">
+                  Bestseller
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1609501676725-7186f734cd16?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Food-Grown® Fertility Support for Women supplement for hormone support"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">(115 Reviews)</div>
+                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2">
+                  Food-Grown® Fertility Support for Women
+                </h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">$55.00</span>
+                  <span className="font-bold text-darkText dark:text-white">From $44.00</span>
+                  <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded">-20%</span>
+                </div>
+                <ul className="space-y-1 mb-4">
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Hormone support</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Supports fertility & reproduction</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Mental resilience</li>
+                </ul>
+                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                  +Add
+                </button>
+              </div>
+            </div>
+
+            {/* Product Card 4 - Food-Grown® Vitamin D */}
+            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="relative aspect-square bg-gray-50 dark:bg-gray-700">
+                <div className="absolute top-3 left-3 bg-brandYellow text-darkText text-xs font-bold px-2 py-1 rounded-full">
+                  Bestseller
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Food-Grown® Vitamin D supplement for immune support and bone health"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">(102 Reviews)</div>
+                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2">
+                  Food-Grown® Vitamin D
+                </h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">$24.00</span>
+                  <span className="font-bold text-darkText dark:text-white">From $19.20</span>
+                  <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded">-20%</span>
+                </div>
+                <ul className="space-y-1 mb-4">
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Immune support</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• Supports bones & teeth</li>
+                  <li className="text-sm text-gray-600 dark:text-gray-400">• 113% better absorbed</li>
+                </ul>
+                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                  +Add
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why It Works Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Why Food-Grown® Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-screen-xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl font-bold text-darkText mb-4">
-              Why It Works
+            <h2 className="font-heading text-3xl font-bold text-darkText dark:text-white mb-4">
+              Why Food-Grown®?
             </h2>
-            <p className="max-w-prose mx-auto text-base text-gray-600">
-              Our supplements are backed by rigorous scientific research and manufactured to the highest quality standards. 
-              Every ingredient is carefully selected for its proven efficacy and bioavailability.
+            <p className="max-w-prose mx-auto text-base text-gray-600 dark:text-gray-400">
+              Our revolutionary Food-Grown® process creates nutrients that your body recognizes and absorbs more effectively. 
+              It's not just what we put in, it's how your body takes it out.
             </p>
           </div>
           
@@ -177,11 +269,11 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    Third-Party Tested
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    113% Better Absorbed*
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Every batch undergoes independent laboratory testing for purity, potency, and safety to ensure you get exactly what's on the label.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Our Food-Grown® vitamins are proven to be significantly better absorbed than synthetic alternatives, meaning more nutrition for your body.
                   </p>
                 </div>
               </li>
@@ -191,11 +283,11 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    Science-Backed Formulas
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    Gentle on Your Stomach
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Our formulations are based on peer-reviewed research and clinical studies, ensuring optimal dosages and ingredient combinations.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Unlike synthetic vitamins that can cause nausea, our Food-Grown® nutrients are gentle and can be taken on an empty stomach.
                   </p>
                 </div>
               </li>
@@ -205,11 +297,11 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    Pure Ingredients
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    Scientifically Proven Process
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    No artificial fillers, colors, or preservatives. Just pure, bioavailable nutrients your body can actually use.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Our unique fermentation process creates vitamins in their most bioactive form, complete with natural cofactors and enzymes.
                   </p>
                 </div>
               </li>
@@ -221,11 +313,11 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    FDA Registered Facility
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    Third-Party Tested
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Manufactured in FDA-registered facilities following Good Manufacturing Practice (GMP) guidelines.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Every batch is independently tested for purity, potency and heavy metals to ensure the highest quality and safety standards.
                   </p>
                 </div>
               </li>
@@ -235,11 +327,11 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    Sustainable Sourcing
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    Certified Vegan & Organic
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    We partner with trusted suppliers who share our commitment to environmental responsibility and ethical practices.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Many of our supplements are certified organic and suitable for vegans, made without artificial additives or preservatives.
                   </p>
                 </div>
               </li>
@@ -249,15 +341,21 @@ export default function Home() {
                   <span className="text-darkText text-sm font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-heading text-lg font-semibold text-darkText mb-2">
-                    Transparent Labeling
+                  <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-2">
+                    Trusted by Practitioners
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    Complete ingredient transparency with no proprietary blends - you know exactly what you're putting in your body.
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    Recommended by nutritionists, naturopaths and healthcare professionals for over 30 years of expertise in natural health.
                   </p>
                 </div>
               </li>
             </ul>
+          </div>
+          
+          <div className="text-center mt-8">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              *Based on independent studies comparing Food-Grown® vitamins to synthetic alternatives
+            </p>
           </div>
         </div>
       </section>
