@@ -148,186 +148,222 @@ export default function HomePage() {
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-black text-white px-3 py-1 text-xs font-medium">BESTSELLERS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">FERTILITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PREGNANCY</span>
+                  <button className="bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors">
+                    BESTSELLERS
+                  </button>
+                  <Link href="/products/apple-cider-vinegar">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      DIGESTIVE
+                    </button>
+                  </Link>
+                  <Link href="/products/vitamin-d3">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      IMMUNITY
+                    </button>
+                  </Link>
+                  <Link href="/products/ashwagandha">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      STRESS
+                    </button>
+                  </Link>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">HORMONES</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GUT HEALTH</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">SLEEP</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PERIMENOPAUSE</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">BEAUTY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">MENOPAUSE</span>
+                  <Link href="/products/probiotics">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      GUT HEALTH
+                    </button>
+                  </Link>
+                  <Link href="/products/magnesium">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      SLEEP
+                    </button>
+                  </Link>
+                  <Link href="/products/ashwagandha">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      ADAPTOGENS
+                    </button>
+                  </Link>
+                  <Link href="/products/vitamin-d3">
+                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      ENERGY
+                    </button>
+                  </Link>
                 </div>
               </div>
 
-              <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                See full collection →
-              </button>
+              <Link href="/products">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                  See full collection →
+                </button>
+              </Link>
             </div>
 
             {/* Product Grid */}
             <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Product 1 - Apple Cider Vinegar & Ginger */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    BESTSELLER
+              <Link href="/products/apple-cider-vinegar">
+                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                  <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                      BESTSELLER
+                    </div>
+                    <img
+                      src="/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png"
+                      alt="Apple Cider Vinegar & Ginger Gummies"
+                      className="w-32 h-40 object-contain"
+                      itemProp="image"
+                    />
+                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      +Add
+                    </button>
                   </div>
-                  <img
-                    src="/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png"
-                    alt="Apple Cider Vinegar & Ginger Gummies"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                    Apple Cider Vinegar & Ginger (60 Gummies)
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span className="line-through text-gray-400">£29.99</span> <span itemProp="price" content="16.99">£16.99</span>
+                    <meta itemProp="priceCurrency" content="GBP" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </div>
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                    <li>✓ Digestive support</li>
+                    <li>✓ Metabolic wellness</li>
+                    <li>✓ Anti-inflammatory properties</li>
+                  </ul>
                 </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Apple Cider Vinegar & Ginger (60 Gummies)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£29.99</span> <span itemProp="price" content="16.99">£16.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Digestive support</li>
-                  <li>✓ Metabolic wellness</li>
-                  <li>✓ Anti-inflammatory properties</li>
-                </ul>
-              </div>
+              </Link>
 
               {/* Product 2 - Vitamin D3 Gummies */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    SALE
+              <Link href="/products/vitamin-d3">
+                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                  <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                      SALE
+                    </div>
+                    <img
+                      src="/attached_assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
+                      alt="Vitamin D3 4000 IU Gummies"
+                      className="w-32 h-40 object-contain"
+                      itemProp="image"
+                    />
+                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      +Add
+                    </button>
                   </div>
-                  <img
-                    src="/attached_assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
-                    alt="Vitamin D3 4000 IU Gummies"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                    Vitamin D3 (60 Gummies)
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span className="line-through text-gray-400">£26.99</span> <span itemProp="price" content="15.99">£15.99</span>
+                    <meta itemProp="priceCurrency" content="GBP" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </div>
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                    <li>✓ Immunity support</li>
+                    <li>✓ Bone health</li>
+                    <li>✓ Mood support</li>
+                  </ul>
                 </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Vitamin D3 (60 Gummies)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£26.99</span> <span itemProp="price" content="15.99">£15.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Immunity support</li>
-                  <li>✓ Bone health</li>
-                  <li>✓ Mood support</li>
-                </ul>
-              </div>
+              </Link>
 
               {/* Product 3 - KSM-66 Ashwagandha */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-green-100 to-teal-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    ADAPTOGEN
+              <Link href="/products/ashwagandha">
+                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                  <div className="relative bg-gradient-to-br from-green-100 to-teal-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                      ADAPTOGEN
+                    </div>
+                    <img
+                      src="/attached_assets/Ashwagandha-X-2_1753469577639.webp"
+                      alt="KSM-66 Ashwagandha Capsules"
+                      className="w-32 h-40 object-contain"
+                      itemProp="image"
+                    />
+                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      +Add
+                    </button>
                   </div>
-                  <img
-                    src="/attached_assets/Ashwagandha-X-2_1753469577639.webp"
-                    alt="KSM-66 Ashwagandha Capsules"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                    KSM-66 Ashwagandha® (90 Capsules)
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
+                    <meta itemProp="priceCurrency" content="GBP" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </div>
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                    <li>✓ Stress reduction</li>
+                    <li>✓ Cortisol balance</li>
+                    <li>✓ Mental focus</li>
+                  </ul>
                 </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  KSM-66 Ashwagandha® (90 Capsules)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Stress reduction</li>
-                  <li>✓ Cortisol balance</li>
-                  <li>✓ Mental focus</li>
-                </ul>
-              </div>
+              </Link>
 
               {/* Product 4 - Probiotic Complex */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    GUT HEALTH
+              <Link href="/products/probiotics">
+                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                  <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                      GUT HEALTH
+                    </div>
+                    <img
+                      src="/attached_assets/Probiotics10Bil-X_1753469577640.png"
+                      alt="10 Billion CFU Probiotic Complex"
+                      className="w-32 h-40 object-contain"
+                      itemProp="image"
+                    />
+                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      +Add
+                    </button>
                   </div>
-                  <img
-                    src="/attached_assets/Probiotics10Bil-X_1753469577640.png"
-                    alt="10 Billion CFU Probiotic Complex"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                    10 Billion CFU Probiotic Complex (60 Capsules)
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
+                    <meta itemProp="priceCurrency" content="GBP" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </div>
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                    <li>✓ Gut health</li>
+                    <li>✓ Immunity support</li>
+                    <li>✓ Digestive balance</li>
+                  </ul>
                 </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  10 Billion CFU Probiotic Complex (60 Capsules)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Gut health</li>
-                  <li>✓ Immunity support</li>
-                  <li>✓ Digestive balance</li>
-                </ul>
-              </div>
+              </Link>
 
               {/* Product 5 - Magnesium Complex */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    SLEEP
+              <Link href="/products/magnesium">
+                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                  <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 p-8 mb-4 aspect-square flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                      SLEEP
+                    </div>
+                    <img
+                      src="/attached_assets/Magnesium-X_1753469577641.png"
+                      alt="Magnesium Complex Capsules"
+                      className="w-32 h-40 object-contain"
+                      itemProp="image"
+                    />
+                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      +Add
+                    </button>
                   </div>
-                  <img
-                    src="/attached_assets/Magnesium-X_1753469577641.png"
-                    alt="Magnesium Complex Capsules"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                    Magnesium Complex (120 Capsules)
+                  </h3>
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span className="line-through text-gray-400">£24.99</span> <span itemProp="price" content="14.99">£14.99</span>
+                    <meta itemProp="priceCurrency" content="GBP" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </div>
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                    <li>✓ Sleep regulation</li>
+                    <li>✓ Muscle function</li>
+                    <li>✓ Nervous system balance</li>
+                  </ul>
                 </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Magnesium Complex (120 Capsules)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£24.99</span> <span itemProp="price" content="14.99">£14.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Sleep regulation</li>
-                  <li>✓ Muscle function</li>
-                  <li>✓ Nervous system balance</li>
-                </ul>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
