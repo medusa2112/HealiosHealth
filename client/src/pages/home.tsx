@@ -820,55 +820,56 @@ export default function HomePage() {
       <footer className="bg-black text-white">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            {/* Company Column */}
-            <div>
-              <h3 className="text-white font-medium mb-6">Company</h3>
-              <ul className="space-y-3 text-sm text-gray-300">
-                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">What is Food-Grown®</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">Why Subscribe?</Link></li>
-                <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">Sustainability</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">Careers</Link></li>
-              </ul>
-            </div>
-
-            {/* Help & Information Column */}
-            <div>
-              <h3 className="text-white font-medium mb-6">Help & Information</h3>
-              <ul className="space-y-3 text-sm text-gray-300">
-                <li><Link href="/contact" className="hover:text-white transition-colors">Shipping & Delivery</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Refunds & Returns</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">FAQs</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Store Finder</Link></li>
-              </ul>
-            </div>
-
             {/* Shop Column */}
             <div>
               <h3 className="text-white font-medium mb-6">Shop</h3>
               <ul className="space-y-3 text-sm text-gray-300">
-                <li><Link href="/products" className="hover:text-white transition-colors">Bestsellers</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Increase Energy</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Better Sleep</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Immunity Support</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Pregnancy Supplements</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Vegan Supplements</Link></li>
-                <li><Link href="/products" className="hover:text-white transition-colors">Shop All</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">All Products</Link></li>
+                <li><Link href="/products?category=bestsellers" className="hover:text-white transition-colors">Bestsellers</Link></li>
+                <li><Link href="/products?category=energy" className="hover:text-white transition-colors">Energy & Focus</Link></li>
+                <li><Link href="/products?category=sleep" className="hover:text-white transition-colors">Sleep & Recovery</Link></li>
+                <li><Link href="/products?category=immunity" className="hover:text-white transition-colors">Immune Support</Link></li>
+                <li><Link href="/products?category=digestive" className="hover:text-white transition-colors">Digestive Health</Link></li>
+                <li><Link href="/products?category=stress" className="hover:text-white transition-colors">Stress Management</Link></li>
               </ul>
             </div>
 
-            {/* Get Involved Column */}
+            {/* Learn Column */}
             <div>
-              <h3 className="text-white font-medium mb-6">Get Involved</h3>
+              <h3 className="text-white font-medium mb-6">Learn</h3>
               <ul className="space-y-3 text-sm text-gray-300">
-                <li><Link href="/contact" className="hover:text-white transition-colors">Sign up to our newsletter</Link></li>
-                <li><Link href="/consultation" className="hover:text-white transition-colors">Join our Practitioner Community</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Follow us on Instagram</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Read the Wild Journal</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">About Healios</Link></li>
+                <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
+                <li><Link href="/practitioners" className="hover:text-white transition-colors">For Practitioners</Link></li>
+                <li><Link href="/womens-health" className="hover:text-white transition-colors">Women's Health</Link></li>
+                <li><Link href="/journal" className="hover:text-white transition-colors">Healios Journal</Link></li>
+                <li><Link href="/podcast" className="hover:text-white transition-colors">Healios Sessions Podcast</Link></li>
+              </ul>
+            </div>
+
+            {/* Support Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Support</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link href="/consultation" className="hover:text-white transition-colors">Book Consultation</Link></li>
+                <li><Link href="/quiz" className="hover:text-white transition-colors">Supplement Quiz</Link></li>
+                <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+                <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping & Returns</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+              </ul>
+            </div>
+
+            {/* Company Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Company</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
+                <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+                <li><Link href="/sustainability" className="hover:text-white transition-colors">Sustainability</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
+                <li><Link href="/affiliate" className="hover:text-white transition-colors">Affiliate Program</Link></li>
               </ul>
             </div>
           </div>
