@@ -347,7 +347,7 @@ export function Header() {
           
           {/* CTA Section */}
           <div className="mt-12 pt-8 border-t border-gray-800">
-            <div className="bg-healios-gradient-2 rounded-lg p-6 text-center">
+            <div className="bg-healios-gradient-2 p-6 text-center">
               <h3 className="text-lg font-medium text-white mb-2">
                 Not sure where to start?
               </h3>
@@ -355,7 +355,7 @@ export function Header() {
                 Take our 60-second quiz for personalized recommendations
               </p>
               <Link href="/quiz">
-                <button className="bg-white text-black px-6 py-2 text-sm font-medium rounded hover:bg-gray-100 transition-colors">
+                <button className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors">
                   Take the Quiz →
                 </button>
               </Link>
@@ -397,7 +397,7 @@ export function Header() {
           {/* Featured Content with Images */}
           <div className="mt-12 pt-8 border-t border-gray-800">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-900 rounded-lg overflow-hidden">
+              <div className="bg-gray-900 overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
                   alt="Need more support?" 
@@ -418,7 +418,7 @@ export function Header() {
                 </div>
               </div>
               
-              <div className="bg-gray-900 rounded-lg overflow-hidden">
+              <div className="bg-gray-900 overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1584467735871-8b730d628b3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
                   alt="A new journey" 

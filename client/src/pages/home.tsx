@@ -95,7 +95,7 @@ export default function HomePage() {
           {/* CTA Button */}
           <div className="mb-12">
             <Link href="/products">
-              <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-medium text-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+              <button className="bg-white text-gray-900 px-8 py-4 font-medium text-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
                 Shop Food-Grown® supplements →
               </button>
             </Link>
@@ -177,7 +177,7 @@ export default function HomePage() {
             <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Product 1 - Vitamin D Gummies */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-pink-100 to-red-200 rounded-lg p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-gradient-to-br from-pink-100 to-red-200 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                     NEW FORMULA
                   </div>
@@ -208,7 +208,7 @@ export default function HomePage() {
 
               {/* Product 2 - Adult Vitamin D */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gray-100 rounded-lg p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-gray-100 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
                     NEW FORMULA
                   </div>
@@ -239,7 +239,7 @@ export default function HomePage() {
 
               {/* Product 3 - Weight Management (Sold Out) */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-amber-50 rounded-lg p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-amber-50 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-black text-white px-2 py-1 text-xs font-medium">
                     SOLD OUT
                   </div>
@@ -280,7 +280,7 @@ export default function HomePage() {
             <div className="relative mb-12 lg:mb-0">
               <div className="grid grid-cols-2 gap-4">
                 {/* Top left - Pregnant woman with supplement */}
-                <div className="aspect-square bg-amber-100 rounded-lg overflow-hidden">
+                <div className="aspect-square bg-amber-100 overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
                     alt="Pregnant woman holding Wild Nutrition supplement bottle"
@@ -288,14 +288,14 @@ export default function HomePage() {
                   />
                   {/* Supplement bottle overlay */}
                   <div className="absolute top-4 left-4">
-                    <div className="w-16 h-20 bg-amber-800 rounded-lg flex items-center justify-center">
-                      <div className="w-12 h-16 bg-amber-900 rounded opacity-80"></div>
+                    <div className="w-16 h-20 bg-amber-800 flex items-center justify-center">
+                      <div className="w-12 h-16 bg-amber-900 opacity-80"></div>
                     </div>
                   </div>
                 </div>
                 
                 {/* Top right - Baby hair close-up */}
-                <div className="aspect-square bg-amber-50 rounded-lg overflow-hidden">
+                <div className="aspect-square bg-amber-50 overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
                     alt="Beautiful newborn baby hair texture"
@@ -304,7 +304,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Bottom left - Belly/bump */}
-                <div className="aspect-square bg-peach-100 rounded-lg overflow-hidden">
+                <div className="aspect-square bg-peach-100 overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
                     alt="Expecting mother's belly bump"
@@ -313,7 +313,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Bottom right - More baby hair */}
-                <div className="aspect-square bg-amber-50 rounded-lg overflow-hidden">
+                <div className="aspect-square bg-amber-50 overflow-hidden">
                   <img
                     src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&fit=facearea&facepad=2"
                     alt="Soft baby hair close-up detail"
@@ -426,7 +426,7 @@ export default function HomePage() {
               <img
                 src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
                 alt="Microscopic view of Food-Grown® nutrients showing cellular structure and bioavailability"
-                className="w-full rounded-lg"
+                className="w-full"
               />
             </div>
           </div>
@@ -495,7 +495,7 @@ export default function HomePage() {
                 {/* Benefits List */}
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                       </svg>
@@ -504,7 +504,7 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                       </svg>
@@ -513,7 +513,7 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                       </svg>
@@ -522,7 +522,7 @@ export default function HomePage() {
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                       </svg>
@@ -552,7 +552,7 @@ export default function HomePage() {
                 <img
                   src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
                   alt="Three professional nutritionists ready to provide expert 1:1 consultation"
-                  className="w-full rounded-lg"
+                  className="w-full"
                 />
               </div>
             </div>
@@ -609,7 +609,7 @@ export default function HomePage() {
             {/* Reviews Grid */}
             <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Review 1 */}
-              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+              <div className="bg-white dark:bg-gray-700 p-6">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -631,7 +631,7 @@ export default function HomePage() {
               </div>
 
               {/* Review 2 */}
-              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+              <div className="bg-white dark:bg-gray-700 p-6">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -646,7 +646,7 @@ export default function HomePage() {
               </div>
 
               {/* Review 3 */}
-              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+              <div className="bg-white dark:bg-gray-700 p-6">
                 <div className="flex items-center gap-1 mb-3">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -686,7 +686,7 @@ export default function HomePage() {
                   <img
                     src={src}
                     alt={`Happy customer ${index + 1}`}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-white dark:border-gray-600"
+                    className="w-16 h-16 object-cover border-2 border-white dark:border-gray-600"
                   />
                 </div>
               ))}
@@ -711,10 +711,10 @@ export default function HomePage() {
                 <input
                   type="text"
                   placeholder="First name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-teal-500"></div>
                 </div>
               </div>
               
@@ -722,10 +722,10 @@ export default function HomePage() {
                 <input
                   type="text"
                   placeholder="Last name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-teal-500"></div>
                 </div>
               </div>
             </div>
@@ -734,17 +734,17 @@ export default function HomePage() {
               <input
                 type="email"
                 placeholder="Email address"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-teal-500"></div>
               </div>
             </div>
             
             <input
               type="text"
               placeholder="Your Birthday"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-gray-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-gray-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             />
             
             <button
