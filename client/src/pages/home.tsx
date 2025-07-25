@@ -132,48 +132,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Wild Nutrition Bestsellers Section */}
+      {/* Healios Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-4 lg:gap-12">
+          <div className="lg:grid lg:grid-cols-6 lg:gap-8">
             {/* Sidebar */}
-            <div className="lg:col-span-1 mb-12 lg:mb-0">
+            <div className="lg:col-span-2 mb-12 lg:mb-0">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-4">
-                Supplements That Don't Pretend.
+                Science-backed<br />
+                wellness supplements
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-wide">
-                EVERY LIFE STAGE, EVERY HEALTH GOAL
+                HIGH-POTENCY, BIOAVAILABLE FORMULAS
               </p>
               
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
                   <span className="bg-black text-white px-3 py-1 text-xs font-medium">BESTSELLERS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">FERTILITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PREGNANCY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">DIGESTIVE</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">HORMONES</span>
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GUT HEALTH</span>
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">SLEEP</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PERIMENOPAUSE</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">BEAUTY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">MENOPAUSE</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ADAPTOGENS</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
                 </div>
               </div>
               
               <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                See full collection →
+                Shop all supplements →
               </button>
             </div>
             
             {/* Product Grid */}
-            <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Product 1 - Apple Cider Vinegar & Ginger */}
               <div className="group" itemScope itemType="https://schema.org/Product">
                 <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center">
