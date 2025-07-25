@@ -139,8 +139,7 @@ export default function HomePage() {
             {/* Sidebar */}
             <div className="lg:col-span-1 mb-12 lg:mb-0">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-4">
-                Award-winning<br />
-                women's supplements
+                Supplements That Don't Pretend.
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-wide">
                 EVERY LIFE STAGE, EVERY HEALTH GOAL
