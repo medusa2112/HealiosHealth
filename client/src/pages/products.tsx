@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { type Product } from "@shared/schema";
 import { ProductCard } from "@/components/product-card";
+import { SEOHead } from "@/components/seo-head";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -37,8 +39,43 @@ export default function Products() {
     }
   });
 
+  const productsStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Food-Grown® Supplements & Natural Vitamins",
+    "description": "Shop our complete range of Food-Grown® supplements with 113% better absorption. Premium natural vitamins for fertility, energy, sleep, immunity and more.",
+    "url": "https://wildclone.com/products",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://wildclone.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Products",
+          "item": "https://wildclone.com/products"
+        }
+      ]
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <SEOHead
+        title="Food-Grown® Supplements & Natural Vitamins | Shop All Products | WildClone"
+        description="Shop our complete range of Food-Grown® supplements with 113% better absorption. Premium natural vitamins for fertility, energy, sleep, immunity and more. Free shipping on orders $50+."
+        keywords="food grown supplements, natural vitamins collection, magnesium, fertility support, vitamin D, collagen, organic supplements, vegan vitamins, third party tested"
+        url="https://wildclone.com/products"
+        structuredData={productsStructuredData}
+      />
+      
+      <Breadcrumb items={[{ name: "Products", current: true }]} />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="font-heading text-3xl font-bold text-dark-text sm:text-4xl mb-4">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { SEOHead } from "@/components/seo-head";
 
 export default function Home() {
   const { toast } = useToast();
@@ -35,8 +36,82 @@ export default function Home() {
     }
   };
 
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Food-Grown® Supplements | Premium Natural Vitamins",
+    "description": "Shop Food-Grown® supplements with 113% better absorption. Premium natural vitamins, fertility support, magnesium & more. Trusted by 300,000+ customers.",
+    "url": "https://wildclone.com",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "WildClone",
+      "description": "Premium Food-Grown® supplements with superior absorption",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.84",
+        "reviewCount": "300000"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://wildclone.com"
+        }
+      ]
+    }
+  };
+
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What makes Food-Grown® supplements different from regular vitamins?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Food-Grown® supplements are created through a unique fermentation process that produces nutrients in their most bioactive form. Unlike synthetic vitamins that are chemically manufactured, our supplements contain natural cofactors and enzymes that enhance absorption by 113% compared to synthetic alternatives."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are your supplements suitable for vegans and vegetarians?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, many of our supplements are certified vegan and suitable for vegetarians. All our Food-Grown® vitamins are produced through plant-based fermentation processes, and we clearly label which products are vegan-certified on each product page."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does it take to see results from your supplements?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Results vary by individual and supplement type. Our magnesium supplement typically shows sleep improvements within 1-2 weeks, while fertility support supplements may take 3-6 months for optimal results. Energy and immune support supplements often show benefits within 2-4 weeks of consistent use."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer free shipping?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer free shipping on orders over $50 within the United States. International shipping rates apply for orders outside the US. All orders are processed within 1-2 business days and typically arrive within 3-5 business days."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title="Food-Grown® Supplements | Premium Natural Vitamins | WildClone"
+        description="Shop Food-Grown® supplements with 113% better absorption. Premium natural vitamins, fertility support, magnesium & more. Trusted by 300,000+ customers. Free shipping on orders $50+."
+        keywords="food grown supplements, natural vitamins, magnesium supplement, fertility support, vitamin D, collagen, organic supplements, better absorption vitamins, wild nutrition alternative, vegan supplements, third party tested vitamins"
+        structuredData={[homeStructuredData, faqStructuredData]}
+      />
       {/* Hero Section */}
       <section className="bg-white dark:bg-gray-900 py-16 px-6">
         <div className="max-w-screen-xl mx-auto">
@@ -77,6 +152,39 @@ export default function Home() {
                 <span className="text-brandYellow">EVERY HEALTH GOAL</span>
               </h1>
               
+              {/* SEO-Rich Subtitle */}
+              <h2 className="font-body text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
+                Premium Food-Grown® Supplements with 113% Better Absorption | Natural Vitamins for Fertility, Energy, Sleep & Immunity
+              </h2>
+              
+              {/* Trust Signals for SEO */}
+              <div className="flex flex-wrap justify-center items-center gap-6 mb-8 text-sm text-gray-500 dark:text-gray-400">
+                <span className="flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Third-Party Tested
+                </span>
+                <span className="flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Certified Vegan
+                </span>
+                <span className="flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Free Shipping $50+
+                </span>
+                <span className="flex items-center">
+                  <svg className="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  30-Day Guarantee
+                </span>
+              </div>
+              
               {/* Category Pills */}
               <div className="flex flex-wrap justify-center gap-3 mb-12">
                 {[
@@ -115,7 +223,7 @@ export default function Home() {
         <div className="max-w-screen-xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Product Card 1 - Food-Grown® Magnesium */}
-            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="group bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300" itemScope itemType="https://schema.org/Product">
               <div className="relative aspect-square bg-gray-50 dark:bg-gray-700">
                 <div className="absolute top-3 left-3 bg-brandYellow text-darkText text-xs font-bold px-2 py-1 rounded-full">
                   Bestseller
@@ -124,24 +232,33 @@ export default function Home() {
                   src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
                   alt="Food-Grown® Magnesium supplement bottle for better sleep and reduced fatigue"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  itemProp="image"
                 />
               </div>
               <div className="p-4">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">(305 Reviews)</div>
-                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2">
+                <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating" className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                  (<span itemProp="reviewCount">305</span> Reviews)
+                  <meta itemProp="ratingValue" content="4.8" />
+                  <meta itemProp="bestRating" content="5" />
+                </div>
+                <h3 className="font-heading text-base font-semibold text-darkText dark:text-white mb-2" itemProp="name">
                   Food-Grown® Magnesium
                 </h3>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-sm text-gray-500 dark:text-gray-400 line-through">$27.00</span>
-                  <span className="font-bold text-darkText dark:text-white">From $21.60</span>
+                  <span className="font-bold text-darkText dark:text-white" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <span itemProp="price" content="21.60">From $21.60</span>
+                    <meta itemProp="priceCurrency" content="USD" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
+                  </span>
                   <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded">-20%</span>
                 </div>
-                <ul className="space-y-1 mb-4">
+                <ul className="space-y-1 mb-4" itemProp="description">
                   <li className="text-sm text-gray-600 dark:text-gray-400">• 42 minutes extra sleep</li>
                   <li className="text-sm text-gray-600 dark:text-gray-400">• Reduction of tiredness + fatigue</li>
                   <li className="text-sm text-gray-600 dark:text-gray-400">• Psychological function</li>
                 </ul>
-                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow">
+                <button className="w-full bg-brandYellow text-darkText px-4 py-2 rounded text-sm font-semibold hover:bg-yellow-500 transition-colors focus:outline-none focus:ring-2 focus:ring-brandYellow" aria-label="Add Food-Grown® Magnesium to cart">
                   +Add
                 </button>
               </div>
@@ -356,6 +473,96 @@ export default function Home() {
             <p className="text-xs text-gray-500 dark:text-gray-400">
               *Based on independent studies comparing Food-Grown® vitamins to synthetic alternatives
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content Section */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-heading text-2xl font-bold text-darkText dark:text-white mb-6 text-center">
+              The Science Behind Food-Grown® Supplements
+            </h2>
+            
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <strong>Food-Grown® supplements</strong> represent a revolutionary approach to nutrition that addresses the fundamental problem with synthetic vitamins: poor absorption and bioavailability. Unlike traditional supplements that are chemically manufactured, our Food-Grown® process creates nutrients through fermentation, resulting in vitamins and minerals that your body recognizes as food.
+              </p>
+              
+              <h3 className="font-heading text-xl font-semibold text-darkText dark:text-white mb-4">
+                Why Choose Food-Grown® Over Synthetic Vitamins?
+              </h3>
+              
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Research consistently shows that <strong>Food-Grown® vitamins are absorbed 113% better</strong> than their synthetic counterparts. This superior absorption means you get more nutritional value from each dose, making our supplements more effective and cost-efficient. Traditional synthetic vitamins often pass through your system largely unused, while Food-Grown® nutrients are readily recognized and utilized by your body.
+              </p>
+              
+              <h3 className="font-heading text-xl font-semibold text-darkText dark:text-white mb-4">
+                Clinical Evidence and Third-Party Testing
+              </h3>
+              
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Every batch of our <strong>premium natural vitamins</strong> undergoes rigorous third-party testing for purity, potency, and heavy metals. Our <strong>magnesium supplement</strong> has been clinically shown to provide an additional 42 minutes of sleep per night, while our <strong>fertility support supplements</strong> have helped thousands of couples on their journey to parenthood. With over 300,000 satisfied customers and a 4.84-star rating, our commitment to quality and efficacy is unmatched.
+              </p>
+              
+              <h3 className="font-heading text-xl font-semibold text-darkText dark:text-white mb-4">
+                Targeted Health Solutions
+              </h3>
+              
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Whether you're looking for <strong>energy supplements</strong> to power through your day, <strong>sleep support</strong> for better rest, <strong>immune system boosters</strong> for year-round wellness, or <strong>women's health supplements</strong> for hormone balance and fertility, our Food-Grown® range has been specifically formulated to address your unique needs. Each supplement is designed with optimal dosages based on clinical research and contains only the purest, most bioavailable ingredients.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section for AEO */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-screen-xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="font-heading text-2xl font-bold text-darkText dark:text-white mb-8 text-center">
+              Frequently Asked Questions
+            </h2>
+            
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-3">
+                  What makes Food-Grown® supplements different from regular vitamins?
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Food-Grown® supplements are created through a unique fermentation process that produces nutrients in their most bioactive form. Unlike synthetic vitamins that are chemically manufactured, our supplements contain natural cofactors and enzymes that enhance absorption by 113% compared to synthetic alternatives.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-3">
+                  Are your supplements suitable for vegans and vegetarians?
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Yes, many of our supplements are certified vegan and suitable for vegetarians. All our Food-Grown® vitamins are produced through plant-based fermentation processes, and we clearly label which products are vegan-certified on each product page.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-3">
+                  How long does it take to see results from your supplements?
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Results vary by individual and supplement type. Our magnesium supplement typically shows sleep improvements within 1-2 weeks, while fertility support supplements may take 3-6 months for optimal results. Energy and immune support supplements often show benefits within 2-4 weeks of consistent use.
+                </p>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-700 rounded-lg p-6">
+                <h3 className="font-heading text-lg font-semibold text-darkText dark:text-white mb-3">
+                  Do you offer free shipping?
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  We offer free shipping on orders over $50 within the United States. International shipping rates apply for orders outside the US. All orders are processed within 1-2 business days and typically arrive within 3-5 business days.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
