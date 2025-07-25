@@ -5,6 +5,10 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ['Optima', 'sans-serif'],
+        body: ['Proxima Nova', 'sans-serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -44,6 +48,9 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
+        // Custom brand colors
+        brandYellow: "#FFD700",
+        darkText: "#2D2D2D",
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",

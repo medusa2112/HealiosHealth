@@ -12,6 +12,9 @@ import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
+import Science from "@/pages/science";
+import Consultation from "@/pages/consultation";
+import Quiz from "@/pages/quiz";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +25,9 @@ function Router() {
       <Route path="/products/:id" component={ProductDetail} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/science" component={Science} />
+      <Route path="/consultation" component={Consultation} />
+      <Route path="/quiz" component={Quiz} />
       <Route component={NotFound} />
     </Switch>
   );
