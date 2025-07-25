@@ -599,7 +599,7 @@ export default function HomePage() {
                   </Link>
 
                   <Link href="/quiz">
-                    <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors pt-[10px]">
                       Take our 60-second supplement quiz →
                     </button>
                   </Link>
