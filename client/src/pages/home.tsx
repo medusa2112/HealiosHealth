@@ -132,176 +132,57 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Healios Bestsellers Section */}
+      {/* Wild Nutrition Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-6 lg:gap-8">
+          <div className="lg:grid lg:grid-cols-4 lg:gap-12">
             {/* Sidebar */}
-            <div className="lg:col-span-2 mb-12 lg:mb-0">
+            <div className="lg:col-span-1 mb-12 lg:mb-0">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-4">
-                Science-backed<br />
-                wellness supplements
+                Supplements That Don't Pretend.
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-wide">
-                HIGH-POTENCY, BIOAVAILABLE FORMULAS
+                EVERY LIFE STAGE, EVERY HEALTH GOAL
               </p>
               
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
                   <span className="bg-black text-white px-3 py-1 text-xs font-medium">BESTSELLERS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">DIGESTIVE</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">FERTILITY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PREGNANCY</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">HORMONES</span>
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GUT HEALTH</span>
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">SLEEP</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ADAPTOGENS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PERIMENOPAUSE</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">BEAUTY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">MENOPAUSE</span>
                 </div>
               </div>
               
               <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                Shop all supplements →
+                See full collection →
               </button>
             </div>
             
             {/* Product Grid */}
-            <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {/* Product 1 - Apple Cider Vinegar & Ginger */}
+            <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Product 1 - Vitamin D Gummies */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-gradient-to-br from-pink-100 to-red-200 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    BESTSELLER
-                  </div>
-                  <img
-                    src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Apple Cider Vinegar & Ginger Gummies"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
-                </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Apple Cider Vinegar & Ginger (60 Gummies)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£29.99</span> <span itemProp="price" content="16.99">£16.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Digestive support</li>
-                  <li>✓ Metabolic wellness</li>
-                  <li>✓ Anti-inflammatory properties</li>
-                </ul>
-              </div>
-
-              {/* Product 2 - Vitamin D3 Gummies */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    SALE
-                  </div>
-                  <img
-                    src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Vitamin D3 4000 IU Gummies"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
-                </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Vitamin D3 (60 Gummies)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£26.99</span> <span itemProp="price" content="15.99">£15.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Immunity support</li>
-                  <li>✓ Bone health</li>
-                  <li>✓ Mood support</li>
-                </ul>
-              </div>
-
-              {/* Product 3 - KSM-66 Ashwagandha */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-green-100 to-teal-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    ADAPTOGEN
-                  </div>
-                  <img
-                    src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="KSM-66 Ashwagandha Capsules"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
-                </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  KSM-66 Ashwagandha® (90 Capsules)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Stress reduction</li>
-                  <li>✓ Cortisol balance</li>
-                  <li>✓ Mental focus</li>
-                </ul>
-              </div>
-
-              {/* Product 4 - Probiotic Complex */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    GUT HEALTH
-                  </div>
-                  <img
-                    src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="10 Billion CFU Probiotic Complex"
-                    className="w-32 h-40 object-contain"
-                    itemProp="image"
-                  />
-                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                    +Add
-                  </button>
-                </div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  10 Billion CFU Probiotic Complex (60 Capsules)
-                </h3>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                  <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/InStock" />
-                </div>
-                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Gut health</li>
-                  <li>✓ Immunity support</li>
-                  <li>✓ Digestive balance</li>
-                </ul>
-              </div>
-
-              {/* Product 5 - Magnesium Complex */}
-              <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    SLEEP
+                    NEW FORMULA
                   </div>
                   <img
                     src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Magnesium Complex Capsules"
+                    alt="Children's Food-Grown® Vitamin D Gummies"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
                   />
@@ -310,17 +191,79 @@ export default function HomePage() {
                   </button>
                 </div>
                 <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Magnesium Complex (120 Capsules)
+                  Children's Food-Grown® Vitamin D Gummies
                 </h3>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span className="line-through text-gray-400">£24.99</span> <span itemProp="price" content="14.99">£14.99</span>
+                  From <span itemProp="price" content="16.00">£16.00</span>
                   <meta itemProp="priceCurrency" content="GBP" />
                   <meta itemProp="availability" content="https://schema.org/InStock" />
                 </div>
                 <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Sleep regulation</li>
-                  <li>✓ Muscle function</li>
-                  <li>✓ Nervous system balance</li>
+                  <li>✓ Immune support</li>
+                  <li>✓ Bone, muscles + teeth</li>
+                  <li>✓ Certified Vegan</li>
+                </ul>
+              </div>
+
+              {/* Product 2 - Adult Vitamin D */}
+              <div className="group" itemScope itemType="https://schema.org/Product">
+                <div className="relative bg-gray-100 p-8 mb-4 aspect-square flex items-center justify-center">
+                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                    NEW FORMULA
+                  </div>
+                  <img
+                    src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="Food-Grown® Vitamin D Gummies"
+                    className="w-32 h-40 object-contain"
+                    itemProp="image"
+                  />
+                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                    +Add
+                  </button>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
+                  Food-Grown® Vitamin D Gummies
+                </h3>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                  From <span itemProp="price" content="16.00">£16.00</span>
+                  <meta itemProp="priceCurrency" content="GBP" />
+                  <meta itemProp="availability" content="https://schema.org/InStock" />
+                </div>
+                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                  <li>✓ Immune support</li>
+                  <li>✓ Bone, muscles + teeth</li>
+                  <li>✓ Certified vegan</li>
+                </ul>
+              </div>
+
+              {/* Product 3 - Weight Management (Sold Out) */}
+              <div className="group" itemScope itemType="https://schema.org/Product">
+                <div className="relative bg-amber-50 p-8 mb-4 aspect-square flex items-center justify-center">
+                  <div className="absolute top-4 right-4 bg-black text-white px-2 py-1 text-xs font-medium">
+                    SOLD OUT
+                  </div>
+                  <img
+                    src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="Weight Management Support"
+                    className="w-24 h-32 object-contain opacity-75"
+                    itemProp="image"
+                  />
+                  <button className="absolute bottom-4 right-4 bg-gray-600 text-white px-4 py-2 text-sm font-medium cursor-not-allowed">
+                    Join The Wait List
+                  </button>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
+                  Weight Management Support
+                </h3>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                  <span itemProp="price" content="45.00">£45.00</span>
+                  <meta itemProp="priceCurrency" content="GBP" />
+                  <meta itemProp="availability" content="https://schema.org/OutOfStock" />
+                </div>
+                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                  <li>✓ Metabolic function*</li>
+                  <li>✓ Fibre 24.5g per sachette*</li>
+                  <li>✓ Blood glucose levels*</li>
                 </ul>
               </div>
             </div>
@@ -382,7 +325,7 @@ export default function HomePage() {
             {/* Content */}
             <div className="lg:pl-8">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                For the roots of <em className="italic">new</em> life
+                Built Like a System. Taken Like a Ritual.
               </h2>
               
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
