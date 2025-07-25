@@ -432,6 +432,133 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Expert Consultation Section */}
+      <section className="bg-white dark:bg-gray-900">
+        {/* Icons Header */}
+        <div className="bg-amber-800 py-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="grid grid-cols-3 gap-8 text-center">
+              <div className="text-white">
+                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+                  </svg>
+                </div>
+                <p className="text-xs uppercase tracking-wide">
+                  FOOD-GROWN<br />
+                  INGREDIENTS
+                </p>
+              </div>
+              
+              <div className="text-white">
+                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                </div>
+                <p className="text-xs uppercase tracking-wide">
+                  AS RETAINED
+                </p>
+              </div>
+              
+              <div className="text-white">
+                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H15V1h-2v1H7V1H5v1H.5C-.13 2-.13 3.87.5 4H19c.63-.13.63-1.87 0-2z"/>
+                  </svg>
+                </div>
+                <p className="text-xs uppercase tracking-wide">
+                  SCIENTIFICALLY<br />
+                  STUDIED
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Main Consultation Content */}
+        <div className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+              {/* Consultation Form */}
+              <div className="mb-12 lg:mb-0">
+                <div className="mb-8">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                    BOOK YOUR COMPLIMENTARY CONSULTATION TODAY
+                  </p>
+                  <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                    Expert 1:1 nutritional advice
+                  </h2>
+                </div>
+                
+                {/* Benefits List */}
+                <div className="space-y-3 mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">Bespoke advice tailored to you</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">Health goals & symptom support</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">Phone or video call</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300">99% would recommend to a friend</span>
+                  </div>
+                </div>
+                
+                {/* CTA Buttons */}
+                <div className="space-y-4">
+                  <Link href="/consultation">
+                    <button className="w-full bg-black text-white px-6 py-4 text-sm font-medium hover:bg-gray-800 transition-colors">
+                      Book your free 1:1 consultation →
+                    </button>
+                  </Link>
+                  
+                  <Link href="/quiz">
+                    <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                      Take our 60-second supplement quiz →
+                    </button>
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Nutritionists Image */}
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
+                  alt="Three professional nutritionists ready to provide expert 1:1 consultation"
+                  className="w-full rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

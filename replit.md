@@ -30,6 +30,7 @@ Preferred communication style: Simple, everyday language.
 ✓ Replaced hero background image with compressed video (MP4/WebM formats)
 ✓ Optimized video for instant loading and auto-play
 ✓ Added "The Food-Grown® Difference" section with statistics and scientific messaging
+✓ Added expert consultation section with nutritionist image and booking CTAs
 
 ## Advanced SEO Implementation (January 2025)
 
