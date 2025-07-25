@@ -387,17 +387,17 @@ export default function HomePage() {
             {/* Content */}
             <div className="lg:pl-8">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                For the roots of <em className="italic">new</em> life
+                Supporting <em className="italic">every</em> wellness journey
               </h2>
 
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                Science-backed, nutritionist formulated Food-Grown® supplements to 
-                nourish your body's mind so you can nourish your baby's.
+                Science-backed, clinically researched supplements designed to support 
+                your health goals at every stage of life, from foundational wellness to specialized needs.
               </p>
 
-              <Link href="/products?category=pregnancy">
+              <Link href="/products">
                 <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                  Shop Pregnancy + New Mother range →
+                  Explore Healios wellness range →
                 </button>
               </Link>
             </div>
