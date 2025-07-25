@@ -74,24 +74,24 @@ export default function HomePage() {
             className="w-full h-full object-cover"
           />
         </video>
-        
+
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/30" />
-        
+
         {/* Content */}
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
           {/* Food-Grown Badge */}
           <div className="inline-flex items-center bg-white/90 text-gray-900 px-4 py-2 text-sm font-medium mb-8">
             Food-Grown® Supplements - Better absorbed, Better retained
           </div>
-          
+
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-8">
             Feel Better.
             <br />
             <em className="font-light italic">Every day</em>
           </h1>
-          
+
           {/* CTA Button */}
           <div className="mb-12">
             <Link href="/products">
@@ -100,7 +100,7 @@ export default function HomePage() {
               </button>
             </Link>
           </div>
-          
+
           {/* Rating and Customer Count */}
           <div className="mb-8">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -116,7 +116,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        
+
         {/* Press Mentions Footer */}
         <div className="absolute bottom-8 left-6 right-6 lg:left-12 lg:right-12">
           <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
@@ -144,7 +144,7 @@ export default function HomePage() {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-wide">
                 EVERY LIFE STAGE, EVERY HEALTH GOAL
               </p>
-              
+
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
@@ -166,23 +166,23 @@ export default function HomePage() {
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">MENOPAUSE</span>
                 </div>
               </div>
-              
+
               <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
                 See full collection →
               </button>
             </div>
-            
+
             {/* Product Grid */}
             <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Product 1 - Vitamin D Gummies */}
+              {/* Product 1 - Apple Cider Vinegar & Ginger */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gradient-to-br from-pink-100 to-red-200 p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    NEW FORMULA
+                    BESTSELLER
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Children's Food-Grown® Vitamin D Gummies"
+                    src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="Apple Cider Vinegar & Ginger Gummies"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
                   />
@@ -191,29 +191,29 @@ export default function HomePage() {
                   </button>
                 </div>
                 <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Children's Food-Grown® Vitamin D Gummies
+                  Apple Cider Vinegar & Ginger (60 Gummies)
                 </h3>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  From <span itemProp="price" content="16.00">£16.00</span>
+                  <span className="line-through text-gray-400">£29.99</span> <span itemProp="price" content="16.99">£16.99</span>
                   <meta itemProp="priceCurrency" content="GBP" />
                   <meta itemProp="availability" content="https://schema.org/InStock" />
                 </div>
                 <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Immune support</li>
-                  <li>✓ Bone, muscles + teeth</li>
-                  <li>✓ Certified Vegan</li>
+                  <li>✓ Digestive support</li>
+                  <li>✓ Metabolic wellness</li>
+                  <li>✓ Anti-inflammatory properties</li>
                 </ul>
               </div>
 
-              {/* Product 2 - Adult Vitamin D */}
+              {/* Product 2 - Vitamin D3 Gummies */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-gray-100 p-8 mb-4 aspect-square flex items-center justify-center">
+                <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 p-8 mb-4 aspect-square flex items-center justify-center">
                   <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                    NEW FORMULA
+                    SALE
                   </div>
                   <img
-                    src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Food-Grown® Vitamin D Gummies"
+                    src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="Vitamin D3 4000 IU Gummies"
                     className="w-32 h-40 object-contain"
                     itemProp="image"
                   />
@@ -222,48 +222,110 @@ export default function HomePage() {
                   </button>
                 </div>
                 <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Food-Grown® Vitamin D Gummies
+                  Vitamin D3 (60 Gummies)
                 </h3>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  From <span itemProp="price" content="16.00">£16.00</span>
+                  <span className="line-through text-gray-400">£26.99</span> <span itemProp="price" content="15.99">£15.99</span>
                   <meta itemProp="priceCurrency" content="GBP" />
                   <meta itemProp="availability" content="https://schema.org/InStock" />
                 </div>
                 <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Immune support</li>
-                  <li>✓ Bone, muscles + teeth</li>
-                  <li>✓ Certified vegan</li>
+                  <li>✓ Immunity support</li>
+                  <li>✓ Bone health</li>
+                  <li>✓ Mood support</li>
                 </ul>
               </div>
 
-              {/* Product 3 - Weight Management (Sold Out) */}
+              {/* Product 3 - KSM-66 Ashwagandha */}
               <div className="group" itemScope itemType="https://schema.org/Product">
-                <div className="relative bg-amber-50 p-8 mb-4 aspect-square flex items-center justify-center">
-                  <div className="absolute top-4 right-4 bg-black text-white px-2 py-1 text-xs font-medium">
-                    SOLD OUT
+                <div className="relative bg-gradient-to-br from-green-100 to-teal-200 p-8 mb-4 aspect-square flex items-center justify-center">
+                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                    ADAPTOGEN
+                  </div>
+                  <img
+                    src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="KSM-66 Ashwagandha Capsules"
+                    className="w-32 h-40 object-contain"
+                    itemProp="image"
+                  />
+                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                    +Add
+                  </button>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
+                  KSM-66 Ashwagandha® (90 Capsules)
+                </h3>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
+                  <meta itemProp="priceCurrency" content="GBP" />
+                  <meta itemProp="availability" content="https://schema.org/InStock" />
+                </div>
+                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                  <li>✓ Stress reduction</li>
+                  <li>✓ Cortisol balance</li>
+                  <li>✓ Mental focus</li>
+                </ul>
+              </div>
+
+              {/* Product 4 - Probiotic Complex */}
+              <div className="group" itemScope itemType="https://schema.org/Product">
+                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-8 mb-4 aspect-square flex items-center justify-center">
+                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                    GUT HEALTH
                   </div>
                   <img
                     src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
-                    alt="Weight Management Support"
-                    className="w-24 h-32 object-contain opacity-75"
+                    alt="10 Billion CFU Probiotic Complex"
+                    className="w-32 h-40 object-contain"
                     itemProp="image"
                   />
-                  <button className="absolute bottom-4 right-4 bg-gray-600 text-white px-4 py-2 text-sm font-medium cursor-not-allowed">
-                    Join The Wait List
+                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                    +Add
                   </button>
                 </div>
                 <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
-                  Weight Management Support
+                  10 Billion CFU Probiotic Complex (60 Capsules)
                 </h3>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <span itemProp="price" content="45.00">£45.00</span>
+                  <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
                   <meta itemProp="priceCurrency" content="GBP" />
-                  <meta itemProp="availability" content="https://schema.org/OutOfStock" />
+                  <meta itemProp="availability" content="https://schema.org/InStock" />
                 </div>
                 <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                  <li>✓ Metabolic function*</li>
-                  <li>✓ Fibre 24.5g per sachette*</li>
-                  <li>✓ Blood glucose levels*</li>
+                  <li>✓ Gut health</li>
+                  <li>✓ Immunity support</li>
+                  <li>✓ Digestive balance</li>
+                </ul>
+              </div>
+
+              {/* Product 5 - Magnesium Complex */}
+              <div className="group" itemScope itemType="https://schema.org/Product">
+                <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 p-8 mb-4 aspect-square flex items-center justify-center">
+                  <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                    SLEEP
+                  </div>
+                  <img
+                    src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300"
+                    alt="Magnesium Complex Capsules"
+                    className="w-32 h-40 object-contain"
+                    itemProp="image"
+                  />
+                  <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                    +Add
+                  </button>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1" itemProp="name">
+                  Magnesium Complex (120 Capsules)
+                </h3>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                  <span className="line-through text-gray-400">£24.99</span> <span itemProp="price" content="14.99">£14.99</span>
+                  <meta itemProp="priceCurrency" content="GBP" />
+                  <meta itemProp="availability" content="https://schema.org/InStock" />
+                </div>
+                <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                  <li>✓ Sleep regulation</li>
+                  <li>✓ Muscle function</li>
+                  <li>✓ Nervous system balance</li>
                 </ul>
               </div>
             </div>
@@ -292,7 +354,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Top right - Baby hair close-up */}
                 <div className="aspect-square bg-amber-50 overflow-hidden">
                   <img
@@ -301,7 +363,7 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 {/* Bottom left - Belly/bump */}
                 <div className="aspect-square bg-peach-100 overflow-hidden">
                   <img
@@ -310,7 +372,7 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 {/* Bottom right - More baby hair */}
                 <div className="aspect-square bg-amber-50 overflow-hidden">
                   <img
@@ -321,18 +383,18 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Content */}
             <div className="lg:pl-8">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                Built Like a System. Taken Like a Ritual.
+                For the roots of <em className="italic">new</em> life
               </h2>
-              
+
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
                 Science-backed, nutritionist formulated Food-Grown® supplements to 
                 nourish your body's mind so you can nourish your baby's.
               </p>
-              
+
               <Link href="/products?category=pregnancy">
                 <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
                   Shop Pregnancy + New Mother range →
@@ -359,7 +421,7 @@ export default function HomePage() {
                   as close to their <em className="italic">original</em> food form as possible.
                 </h2>
               </div>
-              
+
               {/* Statistics Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                 <div>
@@ -369,7 +431,7 @@ export default function HomePage() {
                     ADDED BINDERS OR FILLERS
                   </p>
                 </div>
-                
+
                 <div>
                   <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">113%</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
@@ -378,7 +440,7 @@ export default function HomePage() {
                     D3*
                   </p>
                 </div>
-                
+
                 <div>
                   <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">5</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
@@ -387,7 +449,7 @@ export default function HomePage() {
                     STUDIES*
                   </p>
                 </div>
-                
+
                 <div>
                   <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">25</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
@@ -398,7 +460,7 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-              
+
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/products">
@@ -412,14 +474,14 @@ export default function HomePage() {
                   </button>
                 </Link>
               </div>
-              
+
               {/* Disclaimer */}
               <div className="mt-8 text-xs text-gray-500 dark:text-gray-400">
                 <p className="mb-1">*Data from five published scientific absorption studies on Food-Grown® ingredients: Vitamin C, Zinc, Selenium and Vitamin D.</p>
                 <p>**Not tested daily. International Journal of Functional Nutrition 6, 3 2014</p>
               </div>
             </div>
-            
+
             {/* Image */}
             <div className="relative">
               <img
@@ -449,7 +511,7 @@ export default function HomePage() {
                   INGREDIENTS
                 </p>
               </div>
-              
+
               <div className="text-white">
                 <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -460,7 +522,7 @@ export default function HomePage() {
                   AS RETAINED
                 </p>
               </div>
-              
+
               <div className="text-white">
                 <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -475,7 +537,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        
+
         {/* Main Consultation Content */}
         <div className="py-24">
           <div className="max-w-7xl mx-auto px-6">
@@ -490,7 +552,7 @@ export default function HomePage() {
                     Expert 1:1 nutritional advice
                   </h2>
                 </div>
-                
+
                 {/* Benefits List */}
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center gap-3">
@@ -501,7 +563,7 @@ export default function HomePage() {
                     </div>
                     <span className="text-gray-700 dark:text-gray-300">Bespoke advice tailored to you</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -510,7 +572,7 @@ export default function HomePage() {
                     </div>
                     <span className="text-gray-700 dark:text-gray-300">Health goals & symptom support</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -519,7 +581,7 @@ export default function HomePage() {
                     </div>
                     <span className="text-gray-700 dark:text-gray-300">Phone or video call</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -529,7 +591,7 @@ export default function HomePage() {
                     <span className="text-gray-700 dark:text-gray-300">99% would recommend to a friend</span>
                   </div>
                 </div>
-                
+
                 {/* CTA Buttons */}
                 <div className="space-y-6">
                   <Link href="/consultation">
@@ -537,7 +599,7 @@ export default function HomePage() {
                       Book your free 1:1 consultation →
                     </button>
                   </Link>
-                  
+
                   <Link href="/quiz">
                     <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-6 py-4 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                       Take our 60-second supplement quiz →
@@ -545,7 +607,7 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
-              
+
               {/* Nutritionists Image */}
               <div className="relative">
                 <img
@@ -573,13 +635,13 @@ export default function HomePage() {
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">4.84 RATING</span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">EXCELLENT</p>
-                
+
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
                   Loved by over<br />
                   300,000 customers
                 </h2>
               </div>
-              
+
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
@@ -599,12 +661,12 @@ export default function HomePage() {
                   <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GENERAL WELLBEING</span>
                 </div>
               </div>
-              
+
               <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
                 Shop bestsellers →
               </button>
             </div>
-            
+
             {/* Reviews Grid */}
             <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Review 1 */}
@@ -667,7 +729,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          
+
           {/* Customer Photos */}
           <div className="mt-16">
             <div className="flex items-center justify-center gap-4 overflow-x-auto">
@@ -703,7 +765,7 @@ export default function HomePage() {
           <p className="text-gray-600 dark:text-gray-400 mb-8">
             Be part of 300,000+ enjoying the Food-Grown® difference
           </p>
-          
+
           <form className="space-y-4 max-w-md mx-auto">
             <div className="grid grid-cols-2 gap-4">
               <div className="relative">
@@ -716,7 +778,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-teal-500"></div>
                 </div>
               </div>
-              
+
               <div className="relative">
                 <input
                   type="text"
@@ -728,7 +790,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="relative">
               <input
                 type="email"
@@ -739,13 +801,13 @@ export default function HomePage() {
                 <div className="w-3 h-3 bg-teal-500"></div>
               </div>
             </div>
-            
+
             <input
               type="text"
               placeholder="Your Birthday"
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-gray-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             />
-            
+
             <button
               type="submit"
               className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-gray-800 transition-colors"
@@ -821,7 +883,7 @@ export default function HomePage() {
                 CHANGE
               </button>
             </div>
-            
+
             <p className="text-sm text-gray-400">
               © 2025 Wild Nutrition® Ltd
             </p>
