@@ -694,6 +694,141 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Signup Section */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
+            Join our Wild community
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            Be part of 300,000+ enjoying the Food-Grown® difference
+          </p>
+          
+          <form className="space-y-4 max-w-md mx-auto">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="First name"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                </div>
+              </div>
+              
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Last name"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email address"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+              </div>
+            </div>
+            
+            <input
+              type="text"
+              placeholder="Your Birthday"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-none focus:outline-none focus:border-gray-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
+            
+            <button
+              type="submit"
+              className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-gray-800 transition-colors"
+            >
+              Sign up now
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-white">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            {/* Company Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Company</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">What is Food-Grown®</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">Why Subscribe?</Link></li>
+                <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">Sustainability</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">Careers</Link></li>
+              </ul>
+            </div>
+
+            {/* Help & Information Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Help & Information</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/contact" className="hover:text-white transition-colors">Shipping & Delivery</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Refunds & Returns</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">FAQs</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Store Finder</Link></li>
+              </ul>
+            </div>
+
+            {/* Shop Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Shop</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/products" className="hover:text-white transition-colors">Bestsellers</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Increase Energy</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Better Sleep</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Immunity Support</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Pregnancy Supplements</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Vegan Supplements</Link></li>
+                <li><Link href="/products" className="hover:text-white transition-colors">Shop All</Link></li>
+              </ul>
+            </div>
+
+            {/* Get Involved Column */}
+            <div>
+              <h3 className="text-white font-medium mb-6">Get Involved</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li><Link href="/contact" className="hover:text-white transition-colors">Sign up to our newsletter</Link></li>
+                <li><Link href="/consultation" className="hover:text-white transition-colors">Join our Practitioner Community</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Follow us on Instagram</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Read the Wild Journal</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Footer */}
+          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-4 mb-4 md:mb-0">
+              <span className="text-sm text-gray-400">🇬🇧 UNITED KINGDOM (GBP £)</span>
+              <button className="text-xs text-gray-400 uppercase tracking-wide hover:text-white transition-colors">
+                CHANGE
+              </button>
+            </div>
+            
+            <p className="text-sm text-gray-400">
+              © 2025 Wild Nutrition® Ltd
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
