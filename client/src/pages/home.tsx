@@ -532,7 +532,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* CTA Buttons */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <Link href="/consultation">
                     <button className="w-full bg-black text-white px-6 py-4 text-sm font-medium hover:bg-gray-800 transition-colors">
                       Book your free 1:1 consultation →
