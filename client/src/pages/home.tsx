@@ -255,6 +255,78 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Pregnancy & New Mother Section */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+            {/* Image Grid */}
+            <div className="relative mb-12 lg:mb-0">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Top left - Pregnant woman with supplement */}
+                <div className="aspect-square bg-amber-100 rounded-lg overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
+                    alt="Pregnant woman holding Wild Nutrition supplement bottle"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Supplement bottle overlay */}
+                  <div className="absolute top-4 left-4">
+                    <div className="w-16 h-20 bg-amber-800 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-16 bg-amber-900 rounded opacity-80"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Top right - Baby hair close-up */}
+                <div className="aspect-square bg-amber-50 rounded-lg overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
+                    alt="Beautiful newborn baby hair texture"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                {/* Bottom left - Belly/bump */}
+                <div className="aspect-square bg-peach-100 rounded-lg overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
+                    alt="Expecting mother's belly bump"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                {/* Bottom right - More baby hair */}
+                <div className="aspect-square bg-amber-50 rounded-lg overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600&fit=facearea&facepad=2"
+                    alt="Soft baby hair close-up detail"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="lg:pl-8">
+              <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                For the roots of <em className="italic">new</em> life
+              </h2>
+              
+              <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                Science-backed, nutritionist formulated Food-Grown® supplements to 
+                nourish your body's mind so you can nourish your baby's.
+              </p>
+              
+              <Link href="/products?category=pregnancy">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                  Shop Pregnancy + New Mother range →
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
