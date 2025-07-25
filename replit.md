@@ -1,0 +1,90 @@
+# Wild Nutrition E-commerce Application
+
+## Overview
+
+This is a full-stack e-commerce application for Wild Nutrition, a premium supplement company. The application is built with a React frontend using TypeScript and Vite, an Express.js backend, and uses Drizzle ORM with PostgreSQL for data persistence. The application features a modern design system built with shadcn/ui components and Tailwind CSS.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+The application follows a monorepo structure with clear separation between client, server, and shared code:
+
+- **Frontend**: React with TypeScript, using Vite as the build tool
+- **Backend**: Express.js server with TypeScript
+- **Database**: PostgreSQL with Drizzle ORM for type-safe database operations
+- **Styling**: Tailwind CSS with shadcn/ui component library
+- **State Management**: React Query for server state, React Context for cart management
+- **Routing**: Wouter for client-side routing
+
+## Key Components
+
+### Frontend Architecture
+- **Component Library**: Built on shadcn/ui with Radix UI primitives for accessibility
+- **State Management**: 
+  - React Query for API data fetching and caching
+  - Custom React Context for shopping cart state
+- **Routing**: File-based routing using Wouter
+- **Styling**: Tailwind CSS with custom CSS variables for consistent theming
+
+### Backend Architecture
+- **API Structure**: RESTful API with Express.js
+- **Data Layer**: Drizzle ORM with PostgreSQL for type-safe database operations
+- **In-Memory Storage**: Fallback storage implementation for development/testing
+- **Middleware**: Request logging, JSON parsing, and error handling
+
+### Database Schema
+The application uses two main entities:
+- **Products**: Core product information including pricing, descriptions, categories, and inventory
+- **Newsletter Subscriptions**: Email subscriptions for marketing
+
+### UI Components
+- Comprehensive component library based on shadcn/ui
+- Accessible components using Radix UI primitives
+- Consistent design system with custom theming
+- Mobile-responsive design patterns
+
+## Data Flow
+
+1. **Product Display**: Frontend fetches product data via React Query from REST endpoints
+2. **Shopping Cart**: Local state management with persistent cart functionality
+3. **Newsletter**: Form submissions processed through API endpoints
+4. **Database Operations**: All data persistence handled through Drizzle ORM with type safety
+
+## External Dependencies
+
+### Frontend Dependencies
+- React ecosystem (React, React DOM)
+- Vite for build tooling and development server
+- React Query for server state management
+- Wouter for routing
+- Radix UI for accessible component primitives
+- Tailwind CSS for styling
+- TypeScript for type safety
+
+### Backend Dependencies
+- Express.js for server framework
+- Drizzle ORM for database operations
+- @neondatabase/serverless for PostgreSQL connection
+- Zod for runtime type validation
+- Various utility libraries for development
+
+### Development Tools
+- TypeScript compiler for type checking
+- ESBuild for server-side bundling
+- PostCSS for CSS processing
+- Drizzle Kit for database migrations
+
+## Deployment Strategy
+
+The application is configured for deployment with:
+
+- **Build Process**: Vite builds the frontend to `dist/public`, ESBuild bundles the server to `dist/`
+- **Environment Variables**: Database connection via `DATABASE_URL`
+- **Database Migrations**: Managed through Drizzle Kit with schema in `shared/schema.ts`
+- **Static Assets**: Served through Express in production
+- **Development**: Hot reload via Vite dev server with Express API proxy
+
+The architecture supports both development and production environments, with the server conditionally setting up Vite middleware in development mode for hot reloading while serving static files in production.
