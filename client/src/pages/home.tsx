@@ -373,14 +373,29 @@ export default function HomePage() {
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Single Image */}
+            {/* Video Section */}
             <div className="relative mb-12 lg:mb-0">
               <div className="aspect-video bg-amber-50 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
-                  alt="Pregnant woman with natural supplements for maternal health"
+                <video
                   className="w-full h-full object-cover"
-                />
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onLoadStart={() => console.log('Secondary video loading started')}
+                  onCanPlay={() => console.log('Secondary video can play')}
+                >
+                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov" type="video/quicktime" />
+                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.webm" type="video/webm" />
+                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mp4" type="video/mp4" />
+                  {/* Fallback image if video doesn't load */}
+                  <img
+                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
+                    alt="Wellness journey - active lifestyle and natural supplements"
+                    className="w-full h-full object-cover"
+                  />
+                </video>
               </div>
             </div>
 
