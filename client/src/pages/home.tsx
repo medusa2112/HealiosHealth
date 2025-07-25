@@ -559,6 +559,141 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Customer Reviews Section */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-4 lg:gap-12">
+            {/* Left Sidebar */}
+            <div className="lg:col-span-1 mb-12 lg:mb-0">
+              <div className="mb-6">
+                <div className="flex items-center gap-1 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">4.84 RATING</span>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">EXCELLENT</p>
+                
+                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                  Loved by over<br />
+                  300,000 customers
+                </h2>
+              </div>
+              
+              {/* Category Pills */}
+              <div className="space-y-2 mb-8">
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-black text-white px-3 py-1 text-xs font-medium">ALL</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">SLEEP</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">BEAUTY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">FERTILITY</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PREGNANCY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GUT HEALTH</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GENERAL WELLBEING</span>
+                </div>
+              </div>
+              
+              <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                Shop bestsellers →
+              </button>
+            </div>
+            
+            {/* Reviews Grid */}
+            <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Review 1 */}
+              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                  I am so surprised by this product. I take an hour before bed and fall asleep with such ease. I wake up refreshed and I cannot say enough about how grateful I am for having good sleep sleep. Highly recommended!
+                </p>
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
+                  <div className="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Food-Grown® Magnesium" className="w-8 h-10 object-contain" />
+                    <div>
+                      <p className="text-xs font-medium text-gray-900 dark:text-white">Food-Grown® Magnesium</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Review 2 */}
+              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                  Excellent customer service. Very prompt reply and Lizzie went out of her way to assist. Really good products too, top quality ingredients. Would recommend!
+                </p>
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">CATHERINE</p>
+                </div>
+              </div>
+
+              {/* Review 3 */}
+              <div className="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                  Really pleased with these excellent quality supplements that have made a big difference to my energy levels which have lowered significantly due to the peri menopause.
+                </p>
+                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
+                  <div className="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=60&h=60" alt="Food-Grown® Energy Support" className="w-8 h-10 object-contain" />
+                    <div>
+                      <p className="text-xs font-medium text-gray-900 dark:text-white">Food-Grown® Energy Support</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Customer Photos */}
+          <div className="mt-16">
+            <div className="flex items-center justify-center gap-4 overflow-x-auto">
+              {[
+                "https://images.unsplash.com/photo-1494790108755-2616b612b637?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
+                "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2"
+              ].map((src, index) => (
+                <div key={index} className="flex-shrink-0">
+                  <img
+                    src={src}
+                    alt={`Happy customer ${index + 1}`}
+                    className="w-16 h-16 rounded-full object-cover border-2 border-white dark:border-gray-600"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
