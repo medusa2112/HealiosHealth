@@ -6,8 +6,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['Optima', 'sans-serif'],
-        body: ['Proxima Nova', 'sans-serif'],
+        heading: ['Optima', 'serif'],
+        body: ['Inter', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
