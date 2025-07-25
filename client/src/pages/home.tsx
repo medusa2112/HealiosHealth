@@ -49,7 +49,7 @@ export default function HomePage() {
         title="Wild Nutrition - Premium Food-Grown® Supplements | Better Absorbed, Better Retained"
         description="Discover award-winning Food-Grown® supplements with 113% better absorption. Premium vitamins for women's health, fertility, energy, and wellness. Free shipping over $50."
         keywords="food-grown supplements, natural vitamins, women's health, fertility supplements, Wild Nutrition, better absorption, premium supplements"
-        ogImage="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630"
+        image="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630"
       />
 
       {/* Wild Nutrition Hero Section */}
@@ -208,7 +208,7 @@ export default function HomePage() {
                       BESTSELLER
                     </div>
                     <img
-                      src="/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png"
+                      src="@assets/Apple-Cider-Vinegar-X_1753469577640.png"
                       alt="Apple Cider Vinegar & Ginger Gummies"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -241,7 +241,7 @@ export default function HomePage() {
                       SALE
                     </div>
                     <img
-                      src="/attached_assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
+                      src="@assets/Vitamin-D3-4000iu-X-1_1753469577640.png"
                       alt="Vitamin D3 4000 IU Gummies"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -274,7 +274,7 @@ export default function HomePage() {
                       ADAPTOGEN
                     </div>
                     <img
-                      src="/attached_assets/Ashwagandha-X-2_1753469577639.webp"
+                      src="@assets/Ashwagandha-X-2_1753469577639.webp"
                       alt="KSM-66 Ashwagandha Capsules"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -307,7 +307,7 @@ export default function HomePage() {
                       GUT HEALTH
                     </div>
                     <img
-                      src="/attached_assets/Probiotics10Bil-X_1753469577640.png"
+                      src="@assets/Probiotics10Bil-X_1753469577640.png"
                       alt="10 Billion CFU Probiotic Complex"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -340,7 +340,7 @@ export default function HomePage() {
                       SLEEP
                     </div>
                     <img
-                      src="/attached_assets/Magnesium-X_1753469577641.png"
+                      src="@assets/Magnesium-X_1753469577641.png"
                       alt="Magnesium Complex Capsules"
                       className="w-32 h-40 object-contain"
                       itemProp="image"
@@ -386,9 +386,9 @@ export default function HomePage() {
                   onLoadStart={() => console.log('Secondary video loading started')}
                   onCanPlay={() => console.log('Secondary video can play')}
                 >
-                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov" type="video/quicktime" />
-                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.webm" type="video/webm" />
-                  <source src="/attached_assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mp4" type="video/mp4" />
+                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov" type="video/quicktime" />
+                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.webm" type="video/webm" />
+                  <source src="@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mp4" type="video/mp4" />
                   {/* Fallback image if video doesn't load */}
                   <img
                     src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
@@ -695,7 +695,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
                   <div className="flex items-center gap-2">
-                    <img src="/attached_assets/Magnesium-X_1753469577641.png" alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
+                    <img src="@assets/Magnesium-X_1753469577641.png" alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
                     <div>
                       <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
@@ -732,7 +732,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
                   <div className="flex items-center gap-2">
-                    <img src="/attached_assets/Ashwagandha-X-2_1753469577639.webp" alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
+                    <img src="@assets/Ashwagandha-X-2_1753469577639.webp" alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
                     <div>
                       <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
