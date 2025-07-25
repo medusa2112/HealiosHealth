@@ -38,50 +38,33 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-                <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-                  <h1 className="font-heading">
-                    <span className="block text-4xl tracking-tight font-bold text-dark-text sm:text-5xl md:text-6xl">
-                      Premium Nutrition
-                    </span>
-                    <span className="block text-brand-yellow text-4xl tracking-tight font-bold sm:text-5xl md:text-6xl">
-                      Made Simple
-                    </span>
-                  </h1>
-                  <p className="mt-6 text-base text-gray-600 sm:text-lg md:mt-8 md:text-xl md:max-w-3xl">
-                    Discover scientifically-backed supplements crafted from the finest natural ingredients. 
-                    Fuel your body with what it deserves.
-                  </p>
-                  <div className="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start">
-                    <div className="rounded-md shadow">
-                      <Link href="/products">
-                        <Button className="w-full flex items-center justify-center px-8 py-3 brand-yellow hover:bg-brand-yellow-dark text-dark-text rounded-md md:py-4 md:text-lg md:px-10">
-                          Shop Now
-                        </Button>
-                      </Link>
-                    </div>
-                    <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                      <Link href="/about">
-                        <Button variant="outline" className="w-full flex items-center justify-center px-8 py-3 text-dark-text bg-white hover:bg-gray-50 rounded-md md:py-4 md:text-lg md:px-10">
-                          Learn More
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-                  <img 
-                    src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                    alt="Woman preparing healthy nutrition" 
-                    className="w-full rounded-xl shadow-xl" 
-                  />
-                </div>
-              </div>
-            </main>
+      <section className="bg-white py-16 px-6">
+        <div className="max-w-screen-xl mx-auto">
+          <div className="flex flex-col-reverse md:flex-row md:items-center md:gap-12">
+            {/* Left Content */}
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="font-heading text-4xl md:text-5xl font-bold text-darkText mb-6">
+                Premium Nutrition Made Simple
+              </h1>
+              <p className="font-body text-lg text-gray-600 mb-8 max-w-2xl">
+                Discover scientifically-backed supplements crafted from the finest natural ingredients. 
+                Fuel your body with what it deserves.
+              </p>
+              <Link href="/products">
+                <button className="bg-brandYellow text-darkText rounded px-6 py-3 hover:bg-yellow-500 transition-colors font-semibold">
+                  Shop Now
+                </button>
+              </Link>
+            </div>
+            
+            {/* Right Image */}
+            <div className="flex-1 mb-8 md:mb-0">
+              <img 
+                src="https://via.placeholder.com/400" 
+                alt="Premium nutrition supplements" 
+                className="w-full h-auto object-cover rounded-xl shadow-lg"
+              />
+            </div>
           </div>
         </div>
       </section>
