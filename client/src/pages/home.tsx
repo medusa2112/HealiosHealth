@@ -140,11 +140,16 @@ export default function HomePage() {
             <em className="font-light italic">Every day</em>
           </h1>
 
-          {/* CTA Button */}
-          <div className="mb-12">
+          {/* CTA Buttons */}
+          <div className="mb-12 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/products">
               <button className="bg-black text-white px-8 py-4 font-medium text-lg border border-black hover:bg-white hover:text-black hover:border-black transition-colors focus:outline-none focus:ring-2 focus:ring-white">
                 Explore The Range
+              </button>
+            </Link>
+            <Link href="/quiz">
+              <button className="border border-white text-white px-8 py-4 font-medium text-lg hover:bg-white hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+                Take a Quiz
               </button>
             </Link>
           </div>
