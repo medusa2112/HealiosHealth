@@ -397,29 +397,13 @@ export default function HomePage() {
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Video Section */}
+            {/* Image Section */}
             <div className="relative mb-12 lg:mb-0">
-              <div className="aspect-video bg-amber-50 overflow-hidden">
-                <video
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  onLoadStart={() => console.log('Secondary video loading started')}
-                  onCanPlay={() => console.log('Secondary video can play')}
-                >
-                  <source src="/videos/healios-hero.mp4" type="video/mp4" />
-                  <source src="/videos/healios-hero.webm" type="video/webm" />
-                  {/* Fallback image if video doesn't load */}
-                  <img
-                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
-                    alt="Wellness journey - active lifestyle and natural supplements"
-                    className="w-full h-full object-cover"
-                  />
-                </video>
-              </div>
+              <img
+                src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
+                alt="Scientific research and premium supplement development"
+                className="w-full"
+              />
             </div>
 
             {/* Content */}
