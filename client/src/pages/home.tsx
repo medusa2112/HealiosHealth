@@ -436,54 +436,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* The Healios Science Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Video Section */}
-            <div className="relative mb-12 lg:mb-0">
-              <div className="aspect-video bg-amber-50 overflow-hidden">
-                <video
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  onLoadStart={() => console.log('Secondary video loading started')}
-                  onCanPlay={() => console.log('Secondary video can play')}
-                >
-                  <source src={wellnessVideoSrc} type="video/quicktime" />
-                  {/* Fallback image if video doesn't load */}
-                  <img
-                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
-                    alt="Wellness journey - active lifestyle and natural supplements"
-                    className="w-full h-full object-cover"
-                  />
-                </video>
-              </div>
-            </div>
 
-            {/* Content */}
-            <div className="lg:pl-8">
-              <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                Supporting <em className="italic">every</em> wellness journey
-              </h2>
-
-              <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                Science-backed, clinically researched supplements designed to support 
-                your health goals at every stage of life, from foundational wellness to specialized needs.
-              </p>
-
-              <Link href="/products">
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                  Explore Healios wellness range →
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* The Healios Science Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
