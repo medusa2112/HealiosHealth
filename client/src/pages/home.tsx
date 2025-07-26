@@ -148,7 +148,7 @@ export default function HomePage() {
               </button>
             </Link>
             <Link href="/quiz">
-              <button className="border border-white text-white px-8 py-4 font-medium text-lg hover:bg-white hover:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+              <button className="border border-white/30 text-white px-8 py-4 font-medium text-lg bg-white/10 backdrop-blur-md hover:bg-white/20 hover:border-white/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50">
                 Take a Quiz
               </button>
             </Link>
