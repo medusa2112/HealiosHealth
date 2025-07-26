@@ -13,6 +13,7 @@ import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
+import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -523,8 +524,8 @@ export default function HomePage() {
             {/* Image */}
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1559181567-c3190ca9959b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
-                alt="Scientific research and development of premium wellness supplements"
+                src={healiosGummiesImg}
+                alt="Healios Apple Cider Vinegar & Ginger Gummies - premium supplement showcasing natural ingredients and professional packaging"
                 className="w-full"
               />
             </div>
