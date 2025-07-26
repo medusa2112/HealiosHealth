@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { Star, Leaf, Award, Microscope } from 'lucide-react';
+import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
@@ -421,19 +421,19 @@ export default function HomePage() {
               {/* Key Benefits List */}
               <div className="space-y-3 mb-8">
                 <div className="flex items-start gap-3">
-                  <span className="text-lg leading-tight">🔬</span>
+                  <Microscope className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     Clinically validated dosages, not marketing blends.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-lg leading-tight">🧪</span>
+                  <TestTube className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     Lab-tested, WADA-safe, UK-manufactured.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-lg leading-tight">💡</span>
+                  <Lightbulb className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     Designed by nutritional scientists, not influencers.
                   </span>
