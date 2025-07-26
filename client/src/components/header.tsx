@@ -261,9 +261,7 @@ export function Header() {
                 isScrolled ? 'h-4 w-4' : 'h-5 w-5'
               }`} />
               {totalItems > 0 && (
-                <span className={`absolute -top-2 -right-2 bg-healios-cyan text-white text-xs rounded-full flex items-center justify-center font-medium transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                }`}>
+                <span className={`absolute -top-1 -right-1 bg-healios-cyan text-black text-xs font-bold min-w-5 h-5 flex items-center justify-center px-1 transition-all duration-300`}>
                   {totalItems}
                 </span>
               )}
