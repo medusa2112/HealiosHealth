@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
-import ProductDetail from "@/pages/product-detail";
+import Product from "@/pages/product";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Science from "@/pages/science";
@@ -23,7 +23,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
-      <Route path="/products/:id" component={ProductDetail} />
+      <Route path="/products/:id" component={Product} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/science" component={Science} />
