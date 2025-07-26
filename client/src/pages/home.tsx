@@ -551,11 +551,7 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* Disclaimer */}
-              <div className="mt-8 text-xs text-gray-500 dark:text-gray-400">
-                <p className="mb-1">*Based on clinical research and customer satisfaction data. Individual results may vary.</p>
-                <p>**KSM-66® is a registered trademark of Ixoreal Biomed Inc.</p>
-              </div>
+
             </div>
 
             {/* Image */}
