@@ -120,7 +120,7 @@ export default function ProductPage() {
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-healios-cyan text-black px-2 py-1 text-xs font-medium">
+                  <span className="bg-healios-cyan text-white px-2 py-1 text-xs font-medium">
                     {product.category.toUpperCase()}
                   </span>
                   {product.featured && (
