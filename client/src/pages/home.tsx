@@ -427,9 +427,31 @@ export default function HomePage() {
                 Why Choose Healios Supplements?
               </h2>
 
-              <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                 We don't promise miracles. We fix what's missing — with the nutrients your body's begging for.
               </p>
+
+              {/* Key Benefits List */}
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start gap-3">
+                  <span className="text-lg leading-tight">🔬</span>
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    Clinically validated dosages, not marketing blends.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-lg leading-tight">🧪</span>
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    Lab-tested, WADA-safe, UK-manufactured.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-lg leading-tight">💡</span>
+                  <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                    Designed by nutritional scientists, not influencers.
+                  </span>
+                </div>
+              </div>
 
               <Link href="/products">
                 <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
