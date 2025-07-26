@@ -48,44 +48,76 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.id}`}>
-      <Card className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer">
-        <div className="aspect-square w-full bg-gray-200 overflow-hidden">
+      <div className="group cursor-pointer">
+        {/* Product Image */}
+        <div className="relative aspect-square bg-gray-100 mb-4 overflow-hidden">
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
-        </div>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-heading text-lg font-semibold text-dark-text">
-              {product.name}
-            </h3>
-            {renderStars(product.rating || "5")}
-          </div>
-          <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-            {product.description}
-          </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <span className="font-heading text-xl font-bold text-dark-text">
-                £{product.price}
+          
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-1">
+            {product.featured && (
+              <span className="bg-black text-white px-2 py-1 text-xs font-medium">
+                BESTSELLER
               </span>
-              {product.originalPrice && (
-                <span className="text-sm text-gray-500 line-through">
-                  £{product.originalPrice}
-                </span>
-              )}
-            </div>
+            )}
+            {product.originalPrice && (
+              <span className="bg-red-600 text-white px-2 py-1 text-xs font-medium">
+                SAVE £{(parseFloat(product.originalPrice) - parseFloat(product.price)).toFixed(0)}
+              </span>
+            )}
+          </div>
+
+          {/* Add to Cart Button - appears on hover */}
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
             <Button
               onClick={handleAddToCart}
-              className="bg-black hover:bg-gray-800 text-white px-4 py-2 font-medium transition-colors duration-200"
+              className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
             >
               Add to Cart
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Product Info */}
+        <div className="space-y-2">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
+            {product.name}
+          </h3>
+          
+          {/* Rating */}
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-3 h-3 ${
+                  i < Math.floor(parseFloat(product.rating || "5"))
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+            <span className="text-xs text-gray-500 ml-1">
+              ({product.reviewCount})
+            </span>
+          </div>
+
+          {/* Price */}
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              £{product.price}
+            </span>
+            {product.originalPrice && (
+              <span className="text-sm text-gray-500 line-through">
+                £{product.originalPrice}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
     </Link>
   );
 }
