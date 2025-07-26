@@ -10,7 +10,7 @@ import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
 import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
 import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
-import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
+// Video is now served from public/videos/
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
 export default function HomePage() {
@@ -113,8 +113,8 @@ export default function HomePage() {
           onLoadStart={() => console.log('Video loading started')}
           onCanPlay={() => console.log('Video can play')}
         >
-          <source src="/hero-video.webm" type="video/webm" />
-          <source src="/hero-video.mp4" type="video/mp4" />
+          <source src="/videos/healios-hero.webm" type="video/webm" />
+          <source src="/videos/healios-hero.mp4" type="video/mp4" />
           {/* Fallback image if video fails to load */}
           <img 
             src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
@@ -410,7 +410,8 @@ export default function HomePage() {
                   onLoadStart={() => console.log('Secondary video loading started')}
                   onCanPlay={() => console.log('Secondary video can play')}
                 >
-                  <source src={wellnessVideoSrc} type="video/quicktime" />
+                  <source src="/videos/healios-hero.mp4" type="video/mp4" />
+                  <source src="/videos/healios-hero.webm" type="video/webm" />
                   {/* Fallback image if video doesn't load */}
                   <img
                     src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
