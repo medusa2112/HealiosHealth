@@ -12,6 +12,7 @@ import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
+import healiosNatureImg from '@assets/Healios_1753559079971.png';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -397,28 +398,13 @@ export default function HomePage() {
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Video Section */}
+            {/* Image Section */}
             <div className="relative mb-12 lg:mb-0">
-              <div className="aspect-video bg-amber-50 overflow-hidden">
-                <video
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  onLoadStart={() => console.log('Secondary video loading started')}
-                  onCanPlay={() => console.log('Secondary video can play')}
-                >
-                  <source src={wellnessVideoSrc} type="video/quicktime" />
-                  {/* Fallback image if video doesn't load */}
-                  <img
-                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
-                    alt="Wellness journey - active lifestyle and natural supplements"
-                    className="w-full h-full object-cover"
-                  />
-                </video>
-              </div>
+              <img
+                src={healiosNatureImg}
+                alt="Pure natural wellness - pristine mountain lake representing the purity and natural origins of Healios supplements"
+                className="w-full aspect-video object-cover"
+              />
             </div>
 
             {/* Content */}
