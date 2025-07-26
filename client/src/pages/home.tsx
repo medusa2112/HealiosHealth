@@ -92,7 +92,7 @@ export default function HomePage() {
         {/* Content */}
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
           {/* Food-Grown Badge */}
-          <div className="inline-flex items-center bg-white/90 text-gray-900 px-4 py-2 text-sm font-medium mb-8">
+          <div className="inline-flex items-center bg-transparent text-white border border-white px-4 py-2 text-sm font-medium mb-8">
             Engineered for tired bodies, broken sleep, and stressed systems.
           </div>
 
