@@ -107,7 +107,7 @@ export default function HomePage() {
           <div className="mb-12">
             <Link href="/products">
               <button className="bg-white text-gray-900 px-8 py-4 font-medium text-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
-                Shop Food-Grown® supplements →
+                Explore The Range
               </button>
             </Link>
           </div>
