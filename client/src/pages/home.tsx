@@ -424,7 +424,7 @@ export default function HomePage() {
             {/* Content */}
             <div className="lg:pl-8">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                Supporting <em className="italic">every</em> wellness journey
+                Why Choose Healios Supplements?
               </h2>
 
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
