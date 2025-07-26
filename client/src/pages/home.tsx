@@ -10,7 +10,7 @@ import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
 import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
 import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
-import wellnessVideoSrc from '@assets/motocycle-rider-crosses-mountain-river-2023-11-27-05-34-00-utc(1)_1753470719417.mov';
+import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 
 export default function HomePage() {
   const { toast } = useToast();
