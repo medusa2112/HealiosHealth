@@ -11,6 +11,7 @@ import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
 import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
+import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -637,8 +638,8 @@ export default function HomePage() {
               {/* Nutritionists Image */}
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
-                  alt="Three professional nutritionists ready to provide expert 1:1 consultation"
+                  src={nutritionistImg}
+                  alt="Professional nutritionist providing expert consultation and sharing valuable health information"
                   className="w-full"
                 />
               </div>
