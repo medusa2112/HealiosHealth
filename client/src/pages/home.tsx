@@ -428,8 +428,7 @@ export default function HomePage() {
               </h2>
 
               <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                Science-backed, clinically researched supplements designed to support 
-                your health goals at every stage of life, from foundational wellness to specialized needs.
+                We don't promise miracles. We fix what's missing — with the nutrients your body's begging for.
               </p>
 
               <Link href="/products">
