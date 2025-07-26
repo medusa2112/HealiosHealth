@@ -33,7 +33,7 @@ export function Header() {
   // Healios-specific navigation structure
   const shopSections = [
     {
-      title: "BESTSELLERS",
+      title: "Bestsellers",
       items: [
         { href: "/products/multivitamin", label: "Daily Multivitamin" },
         { href: "/products/omega-3", label: "Omega-3 Complex" },
@@ -42,7 +42,7 @@ export function Header() {
       ]
     },
     {
-      title: "VITAMINS & MINERALS",
+      title: "Vitamins & Minerals",
       items: [
         { href: "/products/vitamin-c", label: "Vitamin C" },
         { href: "/products/b-complex", label: "B-Complex" },
@@ -51,7 +51,7 @@ export function Header() {
       ]
     },
     {
-      title: "BY HEALTH GOAL",
+      title: "By Health Goal",
       items: [
         { href: "/products/energy", label: "Energy Support" },
         { href: "/products/sleep", label: "Sleep & Recovery" },
@@ -60,7 +60,7 @@ export function Header() {
       ]
     },
     {
-      title: "SPECIALTY",
+      title: "Specialty",
       items: [
         { href: "/products/prenatal", label: "Prenatal Support" },
         { href: "/products/men", label: "Men's Health" },
@@ -72,17 +72,17 @@ export function Header() {
 
   const learnSections = [
     {
-      title: "ABOUT HEALIOS",
+      title: "About Healios",
       items: [
         { href: "/about", label: "Our Story" },
-        { href: "/science", label: "The Food-Grown® difference" },
+        { href: "/science", label: "The Science-Backed difference" },
         { href: "/sustainability", label: "Sustainability" },
         { href: "/awards", label: "Our Award Winning supplements" },
         { href: "/planet", label: "Subscribe to spare the planet + save 20%" },
       ]
     },
     {
-      title: "THE SCIENCE",
+      title: "The Science",
       items: [
         { href: "/science/research", label: "Research & Clinical Studies" },
         { href: "/science/nutrition", label: "Nutrition Science" },
@@ -90,7 +90,7 @@ export function Header() {
       ]
     },
     {
-      title: "FOR PRACTITIONERS",
+      title: "For Practitioners",
       items: [
         { href: "/practitioners", label: "Our Practitioner Community" },
         { href: "/practitioners/events", label: "Practitioner Events" },
@@ -98,7 +98,7 @@ export function Header() {
       ]
     },
     {
-      title: "WOMEN'S HEALTH HUBS",
+      title: "Women's Health Hubs",
       items: [
         { href: "/womens-health", label: "Fertility hub" },
         { href: "/pregnancy", label: "Pregnancy & New Mother hub" },
@@ -109,7 +109,7 @@ export function Header() {
       ]
     },
     {
-      title: "HEALIOS JOURNAL",
+      title: "Healios Journal",
       items: [
         { href: "/journal", label: "Longevity & why nutrition is key" },
         { href: "/journal/collagen", label: "Collagen 500 Plus Q+A with Henrietta Norton" },
@@ -120,7 +120,7 @@ export function Header() {
       ]
     },
     {
-      title: "HEALIOS SESSIONS PODCAST",
+      title: "Healios Sessions Podcast",
       items: [
         { href: "/podcast", label: "The Perimenopause Series" },
         { href: "/podcast/episodes", label: "All Episodes" },
@@ -162,7 +162,7 @@ export function Header() {
               <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
                 isScrolled ? 'text-xs' : 'text-sm'
               }`}>
-                SHOP
+                Shop
                 <ChevronDown className="h-3 w-3" />
               </button>
             </div>
@@ -176,7 +176,7 @@ export function Header() {
               <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
                 isScrolled ? 'text-xs' : 'text-sm'
               }`}>
-                LEARN
+                Learn
                 <ChevronDown className="h-3 w-3" />
               </button>
             </div>
@@ -185,7 +185,7 @@ export function Header() {
               <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
                 isScrolled ? 'text-xs' : 'text-sm'
               }`}>
-                SUPPLEMENT QUIZ
+                Supplement Quiz
               </span>
             </Link>
             
@@ -193,7 +193,7 @@ export function Header() {
               <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
                 isScrolled ? 'text-xs' : 'text-sm'
               }`}>
-                BOOK A CONSULTATION
+                Book a Consultation
               </span>
             </Link>
           </div>

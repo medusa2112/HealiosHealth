@@ -37,6 +37,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Updated color palette to Healios brand colors with black as primary
 ✓ Added gradient utilities and brand color system from Healios design
 ✓ Updated healios-cyan accent color to Mocha Mousse 2025 - Pantone's Color of the Year
+✓ Removed all caps from navigation menu text for more natural, professional appearance
+✓ Updated shop products to look more like Wild Nutrition style
 ✓ Implemented full dropdown navigation system styled like Wild Nutrition
 ✓ Created comprehensive shop and learn dropdown menus with Healios-relevant pages
 ✓ Added hover animations and smooth transitions to navigation dropdowns

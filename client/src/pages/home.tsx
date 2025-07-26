@@ -213,7 +213,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    DIGESTIVE
+                    Digestive
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('IMMUNITY')}
@@ -223,7 +223,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    IMMUNITY
+                    Immunity
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('STRESS')}
@@ -233,7 +233,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    STRESS
+                    Stress
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -245,7 +245,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    GUT HEALTH
+                    Gut Health
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('SLEEP')}
@@ -255,7 +255,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    SLEEP
+                    Sleep
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('ADAPTOGENS')}
@@ -265,7 +265,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    ADAPTOGENS
+                    Adaptogens
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('ENERGY')}
@@ -275,7 +275,7 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    ENERGY
+                    Energy
                   </button>
                 </div>
               </div>
@@ -322,43 +322,61 @@ export default function HomePage() {
                   };
 
                   const productBadges = {
-                    'apple-cider-vinegar': 'BESTSELLER',
-                    'vitamin-d3': 'SALE',
-                    'ashwagandha': 'ADAPTOGEN',
-                    'probiotics': 'GUT HEALTH',
-                    'magnesium': 'SLEEP'
+                    'apple-cider-vinegar': 'Bestseller',
+                    'vitamin-d3': 'Sale',
+                    'ashwagandha': 'Adaptogen',
+                    'probiotics': 'Gut Health',
+                    'magnesium': 'Sleep'
                   };
 
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
                       <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                        <div className={`relative bg-gradient-to-br ${productGradients[product.id as keyof typeof productGradients]} mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200`}>
-                          <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                        {/* Clean White Background for Products - Wild Nutrition Style */}
+                        <div className="relative bg-gray-50 dark:bg-gray-800 mb-6 aspect-square overflow-hidden group-hover:shadow-lg transition-all duration-300">
+                          {/* Product Badge - Top Left */}
+                          <div className="absolute top-3 left-3 bg-white dark:bg-gray-700 text-black dark:text-white px-2 py-1 text-xs font-medium z-10 shadow-sm">
                             {productBadges[product.id as keyof typeof productBadges]}
                           </div>
+                          
+                          {/* Product Image */}
                           <img
                             src={productImages[product.id as keyof typeof productImages]}
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             itemProp="image"
                           />
-                          <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                            +Add
+                          
+                          {/* Add to Cart Button - Bottom Right */}
+                          <button className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100">
+                            Add
                           </button>
                         </div>
-                        <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                          {product.name}
-                        </h3>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                          <span className="line-through text-gray-400">£{product.originalPrice}</span> <span itemProp="price" content={product.price}>£{product.price}</span>
-                          <meta itemProp="priceCurrency" content="GBP" />
-                          <meta itemProp="availability" content="https://schema.org/InStock" />
+                        
+                        {/* Product Info - Wild Nutrition Clean Style */}
+                        <div className="space-y-2">
+                          <h3 className="font-normal text-gray-900 dark:text-white text-sm group-hover:text-healios-cyan transition-colors" itemProp="name">
+                            {product.name}
+                          </h3>
+                          
+                          {/* Price */}
+                          <div className="text-sm text-gray-800 dark:text-gray-200 font-medium" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                            <span className="line-through text-gray-400 mr-2 text-xs">£{product.originalPrice}</span>
+                            <span itemProp="price" content={product.price}>£{product.price}</span>
+                            <meta itemProp="priceCurrency" content="GBP" />
+                            <meta itemProp="availability" content="https://schema.org/InStock" />
+                          </div>
+                          
+                          {/* Benefits - More Minimal */}
+                          <div className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed" itemProp="description">
+                            {product.benefits?.slice(0, 2).map((benefit: string, index: number) => (
+                              <div key={index} className="flex items-start gap-1">
+                                <span className="text-healios-cyan mt-1">•</span>
+                                <span>{benefit}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                          {product.benefits?.slice(0, 3).map((benefit: string, index: number) => (
-                            <li key={index}>✓ {benefit}</li>
-                          ))}
-                        </ul>
                       </div>
                     </Link>
                   );
