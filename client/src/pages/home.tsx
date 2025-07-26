@@ -106,7 +106,7 @@ export default function HomePage() {
           {/* CTA Button */}
           <div className="mb-12">
             <Link href="/products">
-              <button className="bg-black text-white px-8 py-4 font-medium text-lg border border-transparent hover:bg-black hover:border-white transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+              <button className="bg-black text-white px-8 py-4 font-medium text-lg border border-black hover:bg-white hover:text-black hover:border-black transition-colors focus:outline-none focus:ring-2 focus:ring-white">
                 Explore The Range
               </button>
             </Link>
