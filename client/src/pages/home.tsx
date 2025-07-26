@@ -503,37 +503,36 @@ export default function HomePage() {
               </div>
 
               {/* Statistics Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">99%</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    PURE ACTIVE INGREDIENTS<br />
-                    NO UNNECESSARY FILLERS
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">99%</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                    Pure Active<br />
+                    Ingredients
                   </p>
                 </div>
 
-                <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">300K+</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    SATISFIED CUSTOMERS<br />
-                    WORLDWIDE
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">300K+</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                    Satisfied<br />
+                    Customers
                   </p>
                 </div>
 
-                <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">15+</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    YEARS OF RESEARCH<br />
-                    & DEVELOPMENT
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">15+</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                    Years of<br />
+                    Research
                   </p>
                 </div>
 
-                <div>
-                  <div className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-2">600mg</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    CLINICALLY EFFECTIVE<br />
-                    ASHWAGANDHA DOSAGE<br />
-                    (KSM-66®)
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">600mg</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                    Clinical<br />
+                    Dosage
                   </p>
                 </div>
               </div>
@@ -722,21 +721,21 @@ export default function HomePage() {
 
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
-                <div className="flex flex-wrap gap-2">
-                  <span className="bg-black text-white px-3 py-1 text-xs font-medium">ALL</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">SLEEP</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">ENERGY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">BEAUTY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">FERTILITY</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-black text-white px-2 py-1 text-xs font-medium">All</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Sleep</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Energy</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Beauty</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">PREGNANCY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">IMMUNITY</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">STRESS</span>
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GUT HEALTH</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Fertility</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Pregnancy</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Immunity</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="border border-gray-300 text-gray-700 px-3 py-1 text-xs font-medium">GENERAL WELLBEING</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Stress</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Gut Health</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Wellbeing</span>
                 </div>
               </div>
 
