@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import { Star, Leaf, Award, Microscope } from 'lucide-react';
@@ -14,6 +14,11 @@ import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 
 export default function HomePage() {
   const { toast } = useToast();
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['/api/products/featured'],

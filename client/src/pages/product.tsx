@@ -1,5 +1,6 @@
 import { useParams } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Star, ShoppingCart, Heart, Share2, ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,11 @@ const productImages: Record<string, string> = {
 export default function ProductPage() {
   const { id } = useParams();
   const { toast } = useToast();
+
+  // Scroll to top when component mounts or ID changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
 
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['/api/products', id],
