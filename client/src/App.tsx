@@ -11,6 +11,8 @@ import { CartSidebar } from "@/components/cart-sidebar";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import Product from "@/pages/product";
+import Checkout from "@/pages/checkout";
+import OrderConfirmation from "@/pages/order-confirmation";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Science from "@/pages/science";
@@ -24,6 +26,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
       <Route path="/products/:id" component={Product} />
+      <Route path="/checkout" component={Checkout} />
+      <Route path="/order-confirmation" component={OrderConfirmation} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/science" component={Science} />

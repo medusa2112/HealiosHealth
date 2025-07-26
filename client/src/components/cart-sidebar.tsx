@@ -1,4 +1,5 @@
 import { X, Trash2 } from "lucide-react";
+import { Link } from "wouter";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -92,9 +93,11 @@ export function CartSidebar() {
                   £{totalPrice.toFixed(2)}
                 </span>
               </div>
-              <Button className="w-full bg-black hover:bg-gray-800 text-white py-3 font-medium transition-colors duration-200">
-                Checkout
-              </Button>
+              <Link href="/checkout">
+                <Button className="w-full bg-black hover:bg-gray-800 text-white py-3 font-medium transition-colors duration-200">
+                  Checkout
+                </Button>
+              </Link>
             </div>
           )}
         </div>
