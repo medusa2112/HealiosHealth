@@ -14,6 +14,8 @@ import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 
 export default function HomePage() {
   const { toast } = useToast();
+  const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -23,6 +25,40 @@ export default function HomePage() {
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['/api/products/featured'],
   });
+
+  // Category filtering logic
+  const categories = {
+    BESTSELLERS: 'all',
+    DIGESTIVE: ['apple-cider-vinegar'],
+    IMMUNITY: ['vitamin-d3'],
+    STRESS: ['ashwagandha'],
+    'GUT HEALTH': ['probiotics'],
+    SLEEP: ['magnesium'],
+    ADAPTOGENS: ['ashwagandha'],
+    ENERGY: ['vitamin-d3']
+  };
+
+  const handleCategoryChange = async (category: string) => {
+    if (category === selectedCategory) return;
+    
+    setIsFilterLoading(true);
+    setSelectedCategory(category);
+    
+    // Simulate loading for smooth UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setIsFilterLoading(false);
+  };
+
+  const getFilteredProducts = () => {
+    if (!featuredProducts) return [];
+    
+    const categoryFilter = categories[selectedCategory as keyof typeof categories];
+    if (categoryFilter === 'all') return featuredProducts;
+    
+    return featuredProducts.filter((product: any) => 
+      categoryFilter.includes(product.id)
+    );
+  };
 
   const handleNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -159,46 +195,88 @@ export default function HomePage() {
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-2">
-                  <button className="bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors">
+                  <button 
+                    onClick={() => handleCategoryChange('BESTSELLERS')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'BESTSELLERS' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
                     BESTSELLERS
                   </button>
-                  <Link href="/products/apple-cider-vinegar">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      DIGESTIVE
-                    </button>
-                  </Link>
-                  <Link href="/products/vitamin-d3">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      IMMUNITY
-                    </button>
-                  </Link>
-                  <Link href="/products/ashwagandha">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      STRESS
-                    </button>
-                  </Link>
+                  <button 
+                    onClick={() => handleCategoryChange('DIGESTIVE')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'DIGESTIVE' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    DIGESTIVE
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('IMMUNITY')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'IMMUNITY' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    IMMUNITY
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('STRESS')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'STRESS' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    STRESS
+                  </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Link href="/products/probiotics">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      GUT HEALTH
-                    </button>
-                  </Link>
-                  <Link href="/products/magnesium">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      SLEEP
-                    </button>
-                  </Link>
-                  <Link href="/products/ashwagandha">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      ADAPTOGENS
-                    </button>
-                  </Link>
-                  <Link href="/products/vitamin-d3">
-                    <button className="border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 px-3 py-1 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                      ENERGY
-                    </button>
-                  </Link>
+                  <button 
+                    onClick={() => handleCategoryChange('GUT HEALTH')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'GUT HEALTH' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    GUT HEALTH
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('SLEEP')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'SLEEP' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    SLEEP
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('ADAPTOGENS')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'ADAPTOGENS' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    ADAPTOGENS
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('ENERGY')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'ENERGY' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    ENERGY
+                  </button>
                 </div>
               </div>
 
@@ -210,171 +288,82 @@ export default function HomePage() {
             </div>
 
             {/* Product Grid */}
-            <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Product 1 - Apple Cider Vinegar & Ginger */}
-              <Link href="/products/apple-cider-vinegar">
-                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-orange-100 to-yellow-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
-                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                      BESTSELLER
-                    </div>
-                    <img
-                      src={appleCiderVinegarImg}
-                      alt="Apple Cider Vinegar & Ginger Gummies"
-                      className="w-full h-full object-cover"
-                      itemProp="image"
-                    />
-                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                      +Add
-                    </button>
+            <div className="lg:col-span-3 relative">
+              {/* Loading Overlay */}
+              {isFilterLoading && (
+                <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-8 h-8 border-4 border-gray-200 border-t-black animate-spin mb-3"></div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                      Loading {selectedCategory.toLowerCase()} products...
+                    </p>
                   </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                    Apple Cider Vinegar & Ginger (60 Gummies)
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                    <span className="line-through text-gray-400">£29.99</span> <span itemProp="price" content="16.99">£16.99</span>
-                    <meta itemProp="priceCurrency" content="GBP" />
-                    <meta itemProp="availability" content="https://schema.org/InStock" />
-                  </div>
-                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                    <li>✓ Digestive support</li>
-                    <li>✓ Metabolic wellness</li>
-                    <li>✓ Anti-inflammatory properties</li>
-                  </ul>
                 </div>
-              </Link>
+              )}
+              
+              <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-300 ${
+                isFilterLoading ? 'opacity-50' : 'opacity-100'
+              }`}>
+                {getFilteredProducts().map((product: any) => {
+                  const productImages = {
+                    'apple-cider-vinegar': appleCiderVinegarImg,
+                    'vitamin-d3': vitaminD3Img,
+                    'ashwagandha': ashwagandhaImg,
+                    'probiotics': probioticsImg,
+                    'magnesium': magnesiumImg
+                  };
 
-              {/* Product 2 - Vitamin D3 Gummies */}
-              <Link href="/products/vitamin-d3">
-                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-yellow-100 to-orange-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
-                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                      SALE
-                    </div>
-                    <img
-                      src={vitaminD3Img}
-                      alt="Vitamin D3 4000 IU Gummies"
-                      className="w-full h-full object-cover"
-                      itemProp="image"
-                    />
-                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                      +Add
-                    </button>
-                  </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                    Vitamin D3 (60 Gummies)
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                    <span className="line-through text-gray-400">£26.99</span> <span itemProp="price" content="15.99">£15.99</span>
-                    <meta itemProp="priceCurrency" content="GBP" />
-                    <meta itemProp="availability" content="https://schema.org/InStock" />
-                  </div>
-                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                    <li>✓ Immunity support</li>
-                    <li>✓ Bone health</li>
-                    <li>✓ Mood support</li>
-                  </ul>
-                </div>
-              </Link>
+                  const productGradients = {
+                    'apple-cider-vinegar': 'from-orange-100 to-yellow-200',
+                    'vitamin-d3': 'from-yellow-100 to-orange-200',
+                    'ashwagandha': 'from-green-100 to-teal-200',
+                    'probiotics': 'from-blue-100 to-purple-200',
+                    'magnesium': 'from-purple-100 to-pink-200'
+                  };
 
-              {/* Product 3 - KSM-66 Ashwagandha */}
-              <Link href="/products/ashwagandha">
-                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-green-100 to-teal-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
-                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                      ADAPTOGEN
-                    </div>
-                    <img
-                      src={ashwagandhaImg}
-                      alt="KSM-66 Ashwagandha Capsules"
-                      className="w-full h-full object-cover"
-                      itemProp="image"
-                    />
-                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                      +Add
-                    </button>
-                  </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                    KSM-66 Ashwagandha® (90 Capsules)
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                    <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                    <meta itemProp="priceCurrency" content="GBP" />
-                    <meta itemProp="availability" content="https://schema.org/InStock" />
-                  </div>
-                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                    <li>✓ Stress reduction</li>
-                    <li>✓ Cortisol balance</li>
-                    <li>✓ Mental focus</li>
-                  </ul>
-                </div>
-              </Link>
+                  const productBadges = {
+                    'apple-cider-vinegar': 'BESTSELLER',
+                    'vitamin-d3': 'SALE',
+                    'ashwagandha': 'ADAPTOGEN',
+                    'probiotics': 'GUT HEALTH',
+                    'magnesium': 'SLEEP'
+                  };
 
-              {/* Product 4 - Probiotic Complex */}
-              <Link href="/products/probiotics">
-                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
-                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                      GUT HEALTH
-                    </div>
-                    <img
-                      src={probioticsImg}
-                      alt="10 Billion CFU Probiotic Complex"
-                      className="w-full h-full object-cover"
-                      itemProp="image"
-                    />
-                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                      +Add
-                    </button>
-                  </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                    10 Billion CFU Probiotic Complex (60 Capsules)
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                    <span className="line-through text-gray-400">£37.99</span> <span itemProp="price" content="18.99">£18.99</span>
-                    <meta itemProp="priceCurrency" content="GBP" />
-                    <meta itemProp="availability" content="https://schema.org/InStock" />
-                  </div>
-                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                    <li>✓ Gut health</li>
-                    <li>✓ Immunity support</li>
-                    <li>✓ Digestive balance</li>
-                  </ul>
-                </div>
-              </Link>
-
-              {/* Product 5 - Magnesium Complex */}
-              <Link href="/products/magnesium">
-                <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
-                  <div className="relative bg-gradient-to-br from-purple-100 to-pink-200 mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200">
-                    <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
-                      SLEEP
-                    </div>
-                    <img
-                      src={magnesiumImg}
-                      alt="Magnesium Complex Capsules"
-                      className="w-full h-full object-cover"
-                      itemProp="image"
-                    />
-                    <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
-                      +Add
-                    </button>
-                  </div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
-                    Magnesium Complex (120 Capsules)
-                  </h3>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                    <span className="line-through text-gray-400">£24.99</span> <span itemProp="price" content="14.99">£14.99</span>
-                    <meta itemProp="priceCurrency" content="GBP" />
-                    <meta itemProp="availability" content="https://schema.org/InStock" />
-                  </div>
-                  <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
-                    <li>✓ Sleep regulation</li>
-                    <li>✓ Muscle function</li>
-                    <li>✓ Nervous system balance</li>
-                  </ul>
-                </div>
-              </Link>
+                  return (
+                    <Link key={product.id} href={`/products/${product.id}`}>
+                      <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                        <div className={`relative bg-gradient-to-br ${productGradients[product.id as keyof typeof productGradients]} mb-4 aspect-square overflow-hidden group-hover:scale-105 transition-transform duration-200`}>
+                          <div className="absolute top-4 right-4 bg-white text-black px-2 py-1 text-xs font-medium">
+                            {productBadges[product.id as keyof typeof productBadges]}
+                          </div>
+                          <img
+                            src={productImages[product.id as keyof typeof productImages]}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            itemProp="image"
+                          />
+                          <button className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors">
+                            +Add
+                          </button>
+                        </div>
+                        <h3 className="font-medium text-gray-900 dark:text-white mb-1 group-hover:text-healios-cyan transition-colors" itemProp="name">
+                          {product.name}
+                        </h3>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                          <span className="line-through text-gray-400">£{product.originalPrice}</span> <span itemProp="price" content={product.price}>£{product.price}</span>
+                          <meta itemProp="priceCurrency" content="GBP" />
+                          <meta itemProp="availability" content="https://schema.org/InStock" />
+                        </div>
+                        <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1" itemProp="description">
+                          {product.benefits?.slice(0, 3).map((benefit: string, index: number) => (
+                            <li key={index}>✓ {benefit}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -382,6 +371,55 @@ export default function HomePage() {
 
       {/* Pregnancy & New Mother Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+            {/* Video Section */}
+            <div className="relative mb-12 lg:mb-0">
+              <div className="aspect-video bg-amber-50 overflow-hidden">
+                <video
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onLoadStart={() => console.log('Secondary video loading started')}
+                  onCanPlay={() => console.log('Secondary video can play')}
+                >
+                  <source src={wellnessVideoSrc} type="video/quicktime" />
+                  {/* Fallback image if video doesn't load */}
+                  <img
+                    src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450"
+                    alt="Wellness journey - active lifestyle and natural supplements"
+                    className="w-full h-full object-cover"
+                  />
+                </video>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="lg:pl-8">
+              <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                Supporting <em className="italic">every</em> wellness journey
+              </h2>
+
+              <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                Science-backed, clinically researched supplements designed to support 
+                your health goals at every stage of life, from foundational wellness to specialized needs.
+              </p>
+
+              <Link href="/products">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                  Explore Healios wellness range →
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Healios Science Section */}
+      <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
             {/* Video Section */}
