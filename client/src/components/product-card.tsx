@@ -3,6 +3,7 @@ import { type Product } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 
 interface ProductCardProps {
@@ -11,11 +12,16 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
+  const { toast } = useToast();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product);
+    toast({
+      title: "Added to cart!",
+      description: `${product.name} has been added to your cart.`,
+    });
   };
 
   const renderStars = (rating: string) => {
@@ -55,7 +61,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <h3 className="font-heading text-lg font-semibold text-dark-text">
               {product.name}
             </h3>
-            {renderStars(product.rating)}
+            {renderStars(product.rating || "5")}
           </div>
           <p className="text-sm text-gray-600 mb-4 line-clamp-2">
             {product.description}
@@ -63,17 +69,17 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span className="font-heading text-xl font-bold text-dark-text">
-                ${product.price}
+                £{product.price}
               </span>
               {product.originalPrice && (
                 <span className="text-sm text-gray-500 line-through">
-                  ${product.originalPrice}
+                  £{product.originalPrice}
                 </span>
               )}
             </div>
             <Button
               onClick={handleAddToCart}
-              className="brand-yellow hover:bg-brand-yellow-dark text-dark-text px-4 py-2 rounded-md font-medium transition-colors duration-200"
+              className="bg-black hover:bg-gray-800 text-white px-4 py-2 font-medium transition-colors duration-200"
             >
               Add to Cart
             </Button>

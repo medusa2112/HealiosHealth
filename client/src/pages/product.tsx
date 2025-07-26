@@ -5,6 +5,7 @@ import { Star, ShoppingCart, Heart, Share2, ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/hooks/use-cart';
 import { SEOHead } from '@/components/seo-head';
 import appleCiderVinegarImg from '@assets/Apple-Cider-Vinegar-X_1753469577640.png';
 import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
@@ -23,6 +24,7 @@ const productImages: Record<string, string> = {
 export default function ProductPage() {
   const { id } = useParams();
   const { toast } = useToast();
+  const { addToCart, toggleCart } = useCart();
 
   // Scroll to top when component mounts or ID changes
   useEffect(() => {
@@ -39,10 +41,14 @@ export default function ProductPage() {
   });
 
   const handleAddToCart = () => {
-    toast({
-      title: "Added to cart!",
-      description: `${product?.name} has been added to your cart.`,
-    });
+    if (product) {
+      addToCart(product);
+      toggleCart(); // Open the cart sidebar to show the added item
+      toast({
+        title: "Added to cart!",
+        description: `${product.name} has been added to your cart.`,
+      });
+    }
   };
 
   if (isLoading) {

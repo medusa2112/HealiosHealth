@@ -48,7 +48,7 @@ export function CartSidebar() {
                         {item.product.name}
                       </h4>
                       <p className="text-sm text-gray-600">
-                        ${item.product.price} × {item.quantity}
+                        £{item.product.price} × {item.quantity}
                       </p>
                       <div className="flex items-center space-x-2 mt-2">
                         <Button
@@ -89,10 +89,10 @@ export function CartSidebar() {
               <div className="flex items-center justify-between mb-4">
                 <span className="font-heading font-semibold text-dark-text">Total:</span>
                 <span className="font-heading font-bold text-xl text-dark-text">
-                  ${totalPrice.toFixed(2)}
+                  £{totalPrice.toFixed(2)}
                 </span>
               </div>
-              <Button className="w-full brand-yellow hover:bg-brand-yellow-dark text-dark-text py-3 rounded-md font-medium transition-colors duration-200">
+              <Button className="w-full bg-black hover:bg-gray-800 text-white py-3 font-medium transition-colors duration-200">
                 Checkout
               </Button>
             </div>
