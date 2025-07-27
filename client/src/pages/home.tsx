@@ -313,24 +313,7 @@ export default function HomePage() {
                 isFilterLoading ? 'opacity-50' : 'opacity-100'
               }`}>
                 {getFilteredProducts().map((product: any) => {
-                  const productImages = {
-                    'apple-cider-vinegar': appleCiderVinegarImg,
-                    'vitamin-d3': vitaminD3Img,
-                    'ashwagandha': ashwagandhaImg,
-                    'probiotics': '/assets/Probiotics10Bil-X_1753615874344.png',
-                    'magnesium': magnesiumImg,
-                    'children-multivitamin': childrenMultivitaminImg,
-                    'childrens-multivitamin': childrenMultivitaminImg,
-                    'probiotic-vitamins': probioticsImg,
-                    'collagen-complex': collagenComplexImg,
-                    'biotin-5000': '/assets/Biotin  5000µg_1753615890295.png',
-                    'iron-vitamin-c': '/assets/Iron + Vitamin C_1753615899091.png',
-                    'folic-acid-400': '/assets/Folic Acid 400µg_1753615927607.png',
-                    'healios-jumper-men': '/images/healios-jumper-men.svg',
-                    'healios-jumper-women': '/images/healios-jumper-women.svg',
-                    'healios-tshirt-men': '/images/healios-tshirt-men.svg',
-                    'healios-tshirt-women': '/images/healios-tshirt-women.svg'
-                  };
+
 
                   const productGradients = {
                     'apple-cider-vinegar': 'from-orange-100 to-yellow-200',
@@ -386,7 +369,7 @@ export default function HomePage() {
                           
                           {/* Product Image */}
                           <img
-                            src={productImages[product.id as keyof typeof productImages]}
+                            src={product.imageUrl}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             itemProp="image"

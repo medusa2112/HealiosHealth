@@ -7,28 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/hooks/use-cart';
 import { SEOHead } from '@/components/seo-head';
-import appleCiderVinegarImg from '@assets/Apple Cider Vinegar_1753615197742.png';
-import vitaminD3Img from '@assets/Vitamin D3  1000 IU_1753615197740.png';
-import ashwagandhaImg from '@assets/Ashwagandha 600mg_1753615197741.png';
-import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
-import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 
-import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 
-const productImages: Record<string, string> = {
-  'apple-cider-vinegar': appleCiderVinegarImg,
-  'vitamin-d3': vitaminD3Img,
-  'ashwagandha': ashwagandhaImg,
-  'probiotics': '/images/probiotics-complex.svg',
-  'magnesium': magnesiumImg,
-  'children-multivitamin': childrenMultivitaminImg,
-  'childrens-multivitamin': childrenMultivitaminImg,
-  'probiotic-vitamins': probioticsImg,
-  'collagen-complex': '/assets/Collagen Complex__1753615197742.png',
-  'biotin-5000': '/assets/Biton_1753615197741.png',
-  'iron-vitamin-c': '/assets/Iron + Vitamin C_1753615197739.png',
-  'folic-acid': '/assets/Folic Acid 400µg_1753615197741.png',
-};
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -96,7 +76,7 @@ export default function ProductPage() {
     );
   }
 
-  const productImage = productImages[id as string] || product.imageUrl;
+  const productImage = product.imageUrl;
 
   return (
     <>
