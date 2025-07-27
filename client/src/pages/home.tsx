@@ -538,7 +538,7 @@ export default function HomePage() {
           {/* Image Section - Full height, no padding, extends to left edge */}
           <div 
             ref={imageRef}
-            className="relative overflow-hidden"
+            className="relative overflow-hidden aspect-square"
             style={{
               transform: imageTransform,
               transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
@@ -551,7 +551,12 @@ export default function HomePage() {
               loop
               playsInline
               preload="metadata"
-              className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+              className="w-full h-full object-cover"
+              style={{
+                aspectRatio: '1/1',
+                objectPosition: 'center center',
+                minHeight: '400px'
+              }}
               onLoadStart={() => console.log('Fitness video loading started')}
               onCanPlay={() => console.log('Fitness video can play')}
             >
@@ -561,7 +566,12 @@ export default function HomePage() {
               <img 
                 src={pharmacistsImg}
                 alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
-                className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+                className="w-full h-full object-cover"
+                style={{
+                  aspectRatio: '1/1',
+                  objectPosition: 'center center',
+                  minHeight: '400px'
+                }}
               />
             </video>
           </div>
