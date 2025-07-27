@@ -90,7 +90,7 @@ export function Header() {
       items: [
         { href: "/about", label: "Our Story" },
         { href: "/science", label: "The Science-Backed difference" },
-        { href: "/planet", label: "Subscribe to spare the planet + save 20%" },
+        { href: "/planet", label: "Healing our Planet Partnerships" },
       ]
     },
     {
