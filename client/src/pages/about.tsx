@@ -128,7 +128,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left side - Image */}
-            <div className="order-2 lg:order-1">
+            <div className="order-2 lg:order-1 -mx-6">
               <div className="relative h-96 overflow-hidden">
                 <img
                   src={teamCelebrationImg}
