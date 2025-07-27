@@ -135,7 +135,7 @@ export default function Products() {
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
               onClick={() => setSelectedCategory(category)}
-              className={selectedCategory === category ? "brand-yellow text-dark-text" : ""}
+              className={selectedCategory === category ? "bg-black text-white hover:bg-gray-800" : "border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-colors"}
             >
               {category}
             </Button>
