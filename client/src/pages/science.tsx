@@ -252,7 +252,7 @@ export default function Science() {
         </div>
       </section>
       {/* Sourcing Excellence - Streamlined approach */}
-      <section className="py-24 bg-white dark:bg-gray-900">
+      <section className="pt-24 pb-0 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
