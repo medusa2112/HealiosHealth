@@ -113,21 +113,21 @@ export default function ProductComprehensive() {
         };
       case 'ashwagandha':
         return {
-          bundleWith: 'Magnesium Complex',
-          bundlePrice: '£72.00',
-          bundleOriginalPrice: '£80.00',
-          statisticNumber: '32%',
-          statisticText: '32% reduction in stress levels in clinical studies',
-          testimonial: '"Ashwagandha has been a game-changer for managing my daily stress and improving my focus."',
-          testimonialAuthor: 'EMILY CARTER',
-          testimonialTitle: 'Business Executive',
-          benefitTitle: 'Stress management support',
-          benefitDescription: 'KSM-66 Ashwagandha is clinically studied to help manage stress and support cognitive function.',
-          ingredientSource: 'KSM-66 Ashwagandha Root Extract',
-          ingredientForm: 'Capsules with standardized withanolides',
-          ingredientOrigin: 'Organic farms, India',
-          sleepBenefit: false,
-          primaryBenefit: 'Helps manage stress and supports cognitive function'
+          bundleWith: 'Magnesium Gummies',
+          bundlePrice: '£42.00',
+          bundleOriginalPrice: '£58.00',
+          statisticNumber: '3,000',
+          statisticText: 'years of traditional use in Ayurvedic medicine for stress support and mental wellbeing',
+          testimonial: '"Ashwagandha has been a cornerstone of Ayurvedic wellness for millennia. The 300mg dose in gummy form provides convenient daily support for natural balance and wellbeing."',
+          testimonialAuthor: 'DR. ANISHA PATEL',
+          testimonialTitle: 'Integrative Wellness & Herbal Medicine Specialist',
+          benefitTitle: 'Adaptogenic stress relief & mood support',
+          benefitDescription: '300mg Ashwagandha root extract supports mental calm, natural balance, and overall wellbeing through traditional adaptogenic properties.',
+          ingredientSource: 'Ashwagandha root extract (Withania somnifera)',
+          ingredientForm: 'Strawberry-flavored chewable gummies',
+          ingredientOrigin: 'Standardized 5% withanolides extract',
+          sleepBenefit: true,
+          primaryBenefit: 'Supports natural stress response, mental calm, and overall wellness'
         };
       case 'probiotics':
         return {
@@ -529,6 +529,15 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. This is the gold-standard dose recommended by NHS and global maternity guidelines.</p>
                             </div>
+                          ) : product.id === 'ashwagandha' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Ashwagandha Root Extract: 300mg</div>
+                                <div className="text-xs text-gray-600">(Withania somnifera, standardized to 5% withanolides)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">Traditional adaptogenic herb. No EFSA health claims authorized for ashwagandha - general wellbeing support only.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -644,6 +653,18 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Vegetarian formulation specifically designed for prenatal safety. High compliance gummy format vs traditional tablets.</p>
                             </div>
+                          ) : product.id === 'ashwagandha' ? (
+                            <div>
+                              <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Ashwagandha root extract (Withania somnifera) - 300mg standardized to 5% withanolides</li>
+                                <li>• Natural strawberry flavoring</li>
+                                <li>• Pectin (vegan gelling agent)</li>
+                                <li>• Natural colors and sweeteners</li>
+                                <li>• Gluten-free, gelatin-free formulation</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Vegan formulation suitable for daily use. Traditional Ayurvedic herb with 3,000+ years of traditional wellness use.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -737,6 +758,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Women aged 18-40 planning pregnancy. If pregnant, consult doctor before taking new supplements. Do not exceed 1000µg daily unless advised.</p>
                             </div>
+                          ) : product.id === 'ashwagandha' ? (
+                            <div>
+                              <p className="font-medium mb-2">Adult dosing (18+ years only):</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 1 gummy daily</strong> - consistent timing recommended</li>
+                                <li>• Best taken in morning or early evening with food</li>
+                                <li>• Effects may take 2-4 weeks to manifest</li>
+                                <li>• Safe for long-term daily use up to 3 months, then cycle if needed</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable during pregnancy/breastfeeding. Consult doctor if taking thyroid, blood pressure, or psychoactive medications.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -822,6 +854,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this if I'm not planning pregnancy?</strong> Yes, folic acid supports normal blood formation and psychological function in all women of reproductive age.</li>
                                 <li>• <strong>Is 400µg the right dose for everyone?</strong> This is the NHS-recommended standard dose. Women with MTHFR gene variants or previous neural tube defects may need higher doses under medical supervision.</li>
                                 <li>• <strong>Can I continue this throughout pregnancy?</strong> Yes for the first trimester, but consult your healthcare provider about comprehensive prenatal vitamins after 12 weeks.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'ashwagandha' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Ashwagandha Gummies:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>How long before I notice effects?</strong> Most people notice benefits after 2-4 weeks of consistent daily use, especially for stress resilience and sleep quality.</li>
+                                <li>• <strong>Can I take this with other supplements?</strong> Generally yes, but avoid taking with sedatives or blood pressure medications without medical supervision.</li>
+                                <li>• <strong>Is ashwagandha safe for long-term use?</strong> Studies show safe use up to 3 months continuously. Many people cycle on/off or take breaks every few months.</li>
+                                <li>• <strong>Will this make me drowsy?</strong> No, ashwagandha is non-sedative. It supports natural calm and balance without causing drowsiness during the day.</li>
                               </ul>
                             </div>
                           ) : (

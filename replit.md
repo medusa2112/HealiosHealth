@@ -133,6 +133,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Created NHS-recommended dose supplement with comprehensive maternal tissue growth messaging
 ✓ Implemented EFSA-compliant claims for folate status and pregnancy support without birth defect prevention claims
 ✓ Added new Prenatal category to navigation and product filtering system with pre-conception timing guidance
+✓ Updated Ashwagandha to Strawberry Gummies with 300mg standardized root extract (5% withanolides)
+✓ Enhanced adaptogenic stress relief product with regulatory-compliant wellness messaging
+✓ Added comprehensive dosing guidelines (adults only, 2-4 week onset, 3-month cycling recommendations)
+✓ Implemented traditional Ayurvedic positioning with 3,000+ years historical use context
 
 ## Advanced SEO Implementation (January 2025)
 

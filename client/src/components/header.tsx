@@ -39,7 +39,7 @@ export function Header() {
         { href: "/products/vitamin-d3", label: "Vitamin D3 1000 IU Gummies" },
         { href: "/products/iron-vitamin-c", label: "Iron + Vitamin C Gummies" },
         { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
-        { href: "/products/ashwagandha", label: "KSM-66 Ashwagandha" },
+        { href: "/products/ashwagandha", label: "Ashwagandha Gummies" },
         { href: "/products/probiotic-vitamins", label: "Probiotic + Vitamins Gummies" },
       ]
     },
