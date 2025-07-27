@@ -41,6 +41,8 @@ export function Header() {
         { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
         { href: "/products/ashwagandha", label: "Ashwagandha Gummies" },
         { href: "/products/probiotic-vitamins", label: "Probiotic + Vitamins Gummies" },
+        { href: "/products/magnesium", label: "Magnesium Gummies" },
+        { href: "/products/collagen-complex", label: "Collagen Complex Gummies" },
       ]
     },
     {
@@ -67,6 +69,9 @@ export function Header() {
         { href: "/products/magnesium", label: "Sleep & Muscle Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
         { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
+        { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
+        { href: "/products/childrens-multivitamin", label: "Children's Development" },
+        { href: "/products/apple-cider-vinegar", label: "Metabolic Support" },
       ]
     },
     {
