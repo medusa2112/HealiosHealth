@@ -13,12 +13,17 @@ import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
 import probioticsImg from '@assets/Porbiotic_Vitamins_1753613149126.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 
+import childrenMultivitaminImg from '@assets/Multivitamin & Mineral for Children_1753612563199.png';
+
 const productImages: Record<string, string> = {
   'apple-cider-vinegar': appleCiderVinegarImg,
   'vitamin-d3': vitaminD3Img,
   'ashwagandha': ashwagandhaImg,
   'probiotics': probioticsImg,
   'magnesium': magnesiumImg,
+  'children-multivitamin': childrenMultivitaminImg,
+  'childrens-multivitamin': childrenMultivitaminImg,
+  'probiotic-vitamins': probioticsImg,
 };
 
 export default function ProductPage() {
