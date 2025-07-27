@@ -14,6 +14,7 @@ export const products = pgTable("products", {
   rating: decimal("rating", { precision: 2, scale: 1 }).default("5.0"),
   reviewCount: integer("review_count").default(0),
   inStock: boolean("in_stock").default(true),
+  stockQuantity: integer("stock_quantity").default(0),
   featured: boolean("featured").default(false),
   sizes: text("sizes").array(),
   colors: text("colors").array(),
