@@ -62,7 +62,7 @@ export default function About() {
               <img
                 src={teamFitnessImg}
                 alt="Diverse team of athletes celebrating together, representing the Healios community spirit and high-performance lifestyle"
-                className="w-full h-full object-cover object-left-top min-h-[500px]"
+                className="w-full h-full object-cover object-center min-h-[500px]"
               />
             </div>
           </div>
