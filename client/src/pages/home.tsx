@@ -14,6 +14,7 @@ import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
+import childrenMultivitaminImg from '@assets/Multivitamin & Mineral for Children_1753612563199.png';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -32,8 +33,8 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3'],
-    VITAMINS: ['vitamin-d3'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin'],
+    VITAMINS: ['vitamin-d3', 'children-multivitamin'],
     ADAPTOGENS: ['ashwagandha'],
     PROBIOTICS: ['probiotics'],
     MINERALS: ['magnesium']
@@ -296,7 +297,8 @@ export default function HomePage() {
                     'vitamin-d3': vitaminD3Img,
                     'ashwagandha': ashwagandhaImg,
                     'probiotics': probioticsImg,
-                    'magnesium': magnesiumImg
+                    'magnesium': magnesiumImg,
+                    'children-multivitamin': childrenMultivitaminImg
                   };
 
                   const productGradients = {
@@ -304,7 +306,8 @@ export default function HomePage() {
                     'vitamin-d3': 'from-yellow-100 to-orange-200',
                     'ashwagandha': 'from-green-100 to-teal-200',
                     'probiotics': 'from-blue-100 to-purple-200',
-                    'magnesium': 'from-purple-100 to-pink-200'
+                    'magnesium': 'from-purple-100 to-pink-200',
+                    'children-multivitamin': 'from-pink-100 to-purple-200'
                   };
 
                   const productBadges = {
@@ -312,7 +315,8 @@ export default function HomePage() {
                     'vitamin-d3': 'Sale',
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
-                    'magnesium': 'Sleep'
+                    'magnesium': 'Sleep',
+                    'children-multivitamin': 'Kids'
                   };
 
                   return (
