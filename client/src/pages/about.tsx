@@ -98,9 +98,9 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+          <div className="grid lg:grid-cols-3 gap-0">
+            <div className="text-center bg-gray-50 dark:bg-gray-800">
+              <div className="p-6">
                 <Microscope className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Ingredient Bioavailability
@@ -111,8 +111,8 @@ export default function About() {
               </div>
             </div>
 
-            <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+            <div className="text-center bg-gray-50 dark:bg-gray-800 border-l border-r border-gray-200 dark:border-gray-700">
+              <div className="p-6">
                 <TestTube className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Therapeutic Dosages
@@ -123,8 +123,8 @@ export default function About() {
               </div>
             </div>
 
-            <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+            <div className="text-center bg-gray-50 dark:bg-gray-800">
+              <div className="p-6">
                 <Target className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Zero Fillers & Additives

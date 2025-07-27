@@ -246,6 +246,7 @@ Preferred communication style: Simple, everyday language.
 ✓ Completely redesigned Research Foundation section with clean minimal aesthetic removing all colorful elements
 ✓ Replaced colorful borders and badges with subtle gray dividers and inline dosage display
 ✓ Enhanced professional appearance with grayscale color scheme and larger product images (80x80px)
+✓ Updated about page core principles section with full-height gray column backgrounds for seamless visual connection to next section
 
 ## Advanced SEO Implementation (January 2025)
 
