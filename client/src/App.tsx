@@ -17,6 +17,7 @@ import OrderConfirmation from "@/pages/order-confirmation";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Science from "@/pages/science";
+import ScienceResearch from "@/pages/science-research";
 import Consultation from "@/pages/consultation";
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/science" component={Science} />
+      <Route path="/science/research" component={ScienceResearch} />
       <Route path="/consultation" component={Consultation} />
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
