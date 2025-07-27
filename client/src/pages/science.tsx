@@ -379,54 +379,7 @@ export default function Science() {
           </div>
         </div>
       </section>
-      {/* Market Position - Stats style */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              Market Position
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Positioned at the intersection of science-backed wellness and functional convenience.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">R179-R285</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                  Price Range (SA Market)
-                </p>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Premium</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                  Market Segment
-                </p>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Science</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                  Positioning
-                </p>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Gummy</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                  Format
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       {/* Regulatory & Ethics - Background image style */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
