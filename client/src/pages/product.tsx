@@ -137,7 +137,7 @@ export default function ProductPage() {
                 {/* Price */}
                 <div className="flex items-center gap-3 mb-8">
                   <span className="text-3xl font-semibold text-gray-900 dark:text-white">
-                    £{product.price}
+                    R{product.price}
                   </span>
                 </div>
 
@@ -250,7 +250,7 @@ export default function ProductPage() {
                     className="w-full bg-black hover:bg-gray-800 text-white py-4 text-lg font-medium transition-colors"
                   >
                     <ShoppingCart className="w-5 h-5 mr-2" />
-                    Add to Cart - £{product.price}
+                    Add to Cart - R{product.price}
                   </Button>
                   
                   <div className="flex gap-4">
@@ -270,7 +270,7 @@ export default function ProductPage() {
                   <h4 className="font-medium text-gray-900 dark:text-white">Our Promise</h4>
                   <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
                     <p>✓ 30-day money-back guarantee</p>
-                    <p>✓ Free UK shipping on orders over £25</p>
+                    <p>✓ Free UK shipping on orders over R25</p>
                     <p>✓ Third-party tested for purity</p>
                     <p>✓ Made with premium, sustainably sourced ingredients</p>
                   </div>

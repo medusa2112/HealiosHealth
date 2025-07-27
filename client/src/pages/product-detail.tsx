@@ -261,7 +261,7 @@ export default function ProductDetail() {
               <div className="mb-6">
                 <div className="flex items-baseline gap-4 mb-4">
                   <span className="text-3xl font-light text-gray-900 dark:text-white">
-                    £{product.price}
+                    R{product.price}
                   </span>
                 </div>
 
@@ -273,7 +273,7 @@ export default function ProductDetail() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">One-time purchase</div>
-                        <div className="text-sm text-gray-600">£{product.price}</div>
+                        <div className="text-sm text-gray-600">R{product.price}</div>
                       </div>
                       <div className={`w-4 h-4 border-2 ${
                         !subscriptionMode ? 'border-black bg-black' : 'border-gray-300'
@@ -287,7 +287,7 @@ export default function ProductDetail() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-medium">Subscribe & save 20%</div>
-                        <div className="text-sm text-gray-600">£{(parseFloat(product.price) * 0.8).toFixed(2)}</div>
+                        <div className="text-sm text-gray-600">R{(parseFloat(product.price) * 0.8).toFixed(2)}</div>
                         <div className="text-xs text-gray-500 mt-1">Delivery every 30 days</div>
                       </div>
                       <div className={`w-4 h-4 border-2 ${
@@ -467,13 +467,13 @@ export default function ProductDetail() {
                 </h3>
                 <div className="flex items-baseline gap-4 mb-4">
                   <span className="text-2xl font-light text-gray-900 dark:text-white">
-                    £{(parseFloat(product.price) + 14.99).toFixed(2)}
+                    R{(parseFloat(product.price) + 14.99).toFixed(2)}
                   </span>
                   <span className="text-lg text-gray-500 line-through">
-                    £{(parseFloat(product.price) + 24.99).toFixed(2)}
+                    R{(parseFloat(product.price) + 24.99).toFixed(2)}
                   </span>
                   <Badge variant="secondary" className="bg-red-100 text-red-800">
-                    Save £10.00
+                    Save R10.00
                   </Badge>
                 </div>
                 <ul className="space-y-2 mb-6">

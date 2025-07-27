@@ -639,7 +639,7 @@ export default function HomePage() {
                           
                           {/* Price */}
                           <div className="text-sm text-gray-800 dark:text-gray-200 font-medium" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                            <span itemProp="price" content={product.price}>£{product.price}</span>
+                            <span itemProp="price" content={product.price}>R{product.price}</span>
                             <meta itemProp="priceCurrency" content="GBP" />
                             <meta itemProp="availability" content="https://schema.org/InStock" />
                           </div>

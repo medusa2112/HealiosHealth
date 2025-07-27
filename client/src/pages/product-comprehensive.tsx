@@ -82,8 +82,8 @@ export default function ProductComprehensive() {
     if (!product || !bundleAdded) return null;
     
     const productContent = getProductContent(product.id);
-    const bundlePrice = parseFloat(productContent.bundlePrice.replace('£', ''));
-    const originalPrice = parseFloat(productContent.bundleOriginalPrice.replace('£', ''));
+    const bundlePrice = parseFloat(productContent.bundlePrice.replace('R', ''));
+    const originalPrice = parseFloat(productContent.bundleOriginalPrice.replace('R', ''));
     const discount = originalPrice - bundlePrice;
     
     // The bundle price is for both products combined, so we need to calculate the discounted price per main product
@@ -144,8 +144,8 @@ export default function ProductComprehensive() {
       case 'apple-cider-vinegar':
         return {
           bundleWith: 'Probiotic + Vitamins Gummies',
-          bundlePrice: '£40.00',
-          bundleOriginalPrice: '£54.00',
+          bundlePrice: 'R905.43',
+          bundleOriginalPrice: 'R1289.76',
           statisticNumber: '3',
           statisticText: 'pH level of liquid ACV - about the same as battery acid, which can erode tooth enamel',
           testimonial: '"These gummies give me all the benefits of ACV without the harsh taste or stomach burn. Perfect for my daily wellness routine."',
@@ -162,8 +162,8 @@ export default function ProductComprehensive() {
       case 'vitamin-d3':
         return {
           bundleWith: 'Magnesium Complex',
-          bundlePrice: '£65.00',
-          bundleOriginalPrice: '£73.00',
+          bundlePrice: 'R1552.85',
+          bundleOriginalPrice: 'R1743.97',
           statisticNumber: '42%',
           statisticText: 'of UK adults are vitamin D deficient, especially during winter months',
           testimonial: '"Vitamin D levels in the UK fall dramatically between October and March. This 1000 IU dose supports optimal serum levels without needing sunlight."',
@@ -180,8 +180,8 @@ export default function ProductComprehensive() {
       case 'ashwagandha':
         return {
           bundleWith: 'Magnesium Gummies',
-          bundlePrice: '£42.00',
-          bundleOriginalPrice: '£58.00',
+          bundlePrice: 'R1003.38',
+          bundleOriginalPrice: 'R1385.62',
           statisticNumber: '3,000',
           statisticText: 'years of traditional use in Ayurvedic medicine for stress support and mental wellbeing',
           testimonial: '"Ashwagandha has been a cornerstone of Ayurvedic wellness for millennia. The 300mg dose in gummy form provides convenient daily support for natural balance and wellbeing."',
@@ -198,8 +198,8 @@ export default function ProductComprehensive() {
       case 'probiotics':
         return {
           bundleWith: 'Apple Cider Vinegar Gummies',
-          bundlePrice: '£58.00',
-          bundleOriginalPrice: '£66.00',
+          bundlePrice: 'R1385.62',
+          bundleOriginalPrice: 'R1576.74',
           statisticNumber: '70%',
           statisticText: '70% of immune system function is located in the gut',
           testimonial: '"These probiotics have completely transformed my digestive health and overall wellbeing."',
@@ -216,8 +216,8 @@ export default function ProductComprehensive() {
       case 'magnesium':
         return {
           bundleWith: 'KSM-66 Ashwagandha',
-          bundlePrice: '£42.00',
-          bundleOriginalPrice: '£58.00',
+          bundlePrice: 'R1003.38',
+          bundleOriginalPrice: 'R1385.62',
           statisticNumber: '60%',
           statisticText: 'of Western diets fall short on magnesium - stress, caffeine, and exercise deplete stores faster',
           testimonial: '"Magnesium citrate in gummy form has transformed my recovery routine. I sleep better and my muscles feel less tense after training."',
@@ -234,8 +234,8 @@ export default function ProductComprehensive() {
       case 'childrens-multivitamin':
         return {
           bundleWith: 'Vitamin D3 Gummies',
-          bundlePrice: '£32.00',
-          bundleOriginalPrice: '£46.00',
+          bundlePrice: 'R764.48',
+          bundleOriginalPrice: 'R1098.94',
           statisticNumber: '85%',
           statisticText: 'of children don\'t get adequate vitamins from diet alone',
           testimonial: '"These gummies are a game-changer for busy parents. My children actually look forward to taking their vitamins now!"',
@@ -252,8 +252,8 @@ export default function ProductComprehensive() {
       case 'probiotic-vitamins':
         return {
           bundleWith: 'Apple Cider Vinegar Gummies',
-          bundlePrice: '£36.00',
-          bundleOriginalPrice: '£49.00',
+          bundlePrice: 'R860.04',
+          bundleOriginalPrice: 'R1170.61',
           statisticNumber: '70%',
           statisticText: 'of your immune cells are housed in your gut',
           testimonial: '"This all-in-one formula has transformed my daily wellness routine. I love getting digestive support and vitamins in one delicious gummy."',
@@ -270,8 +270,8 @@ export default function ProductComprehensive() {
       case 'collagen-complex':
         return {
           bundleWith: 'Vitamin C Gummies',
-          bundlePrice: '£39.00',
-          bundleOriginalPrice: '£52.00',
+          bundlePrice: 'R931.71',
+          bundleOriginalPrice: 'R1242.28',
           statisticNumber: '25',
           statisticText: 'years - when collagen production begins to naturally decline',
           testimonial: '"Consistent collagen supplementation with vitamin C supports the body\'s natural ability to build and maintain healthy skin structure."',
@@ -288,8 +288,8 @@ export default function ProductComprehensive() {
       case 'biotin-5000':
         return {
           bundleWith: 'Collagen Complex Gummies',
-          bundlePrice: '£42.00',
-          bundleOriginalPrice: '£54.00',
+          bundlePrice: 'R1003.38',
+          bundleOriginalPrice: 'R1290.06',
           statisticNumber: '10,000%',
           statisticText: 'NRV - delivering therapeutic-level biotin in just one gummy',
           testimonial: '"High-strength biotin supports keratin production for healthy hair and nails. Consistency is key for visible results within 8-12 weeks."',
@@ -306,8 +306,8 @@ export default function ProductComprehensive() {
       case 'iron-vitamin-c':
         return {
           bundleWith: 'Vitamin D3 Gummies',
-          bundlePrice: '£32.00',
-          bundleOriginalPrice: '£44.00',
+          bundlePrice: 'R764.48',
+          bundleOriginalPrice: 'R1051.16',
           statisticNumber: '50%',
           statisticText: 'better iron absorption when taken with vitamin C compared to iron alone',
           testimonial: '"Iron deficiency is incredibly common, especially in women. This gentle formula with vitamin C enhances absorption while minimizing digestive discomfort."',
@@ -449,7 +449,7 @@ export default function ProductComprehensive() {
                   <img src={product.imageUrl} alt={product.name} className="w-10 h-10 object-cover" />
                   <div className="flex-1">
                     <p className="text-xs font-medium">{product.name}</p>
-                    <p className="text-xs text-gray-600">£{product.price}</p>
+                    <p className="text-xs text-gray-600">R{product.price}</p>
                   </div>
                   <div className="text-xs text-gray-500">✓ Added</div>
                 </div>
@@ -501,7 +501,7 @@ export default function ProductComprehensive() {
                     <p className="text-gray-600 line-through">{productContent.bundleOriginalPrice}</p>
                   </div>
                   <div className="text-xs font-medium text-green-600">
-                    Save £{(parseFloat(productContent.bundleOriginalPrice.replace('£', '')) - parseFloat(productContent.bundlePrice.replace('£', ''))).toFixed(2)}
+                    Save R{(parseFloat(productContent.bundleOriginalPrice.replace('R', '')) - parseFloat(productContent.bundlePrice.replace('R', ''))).toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -536,11 +536,11 @@ export default function ProductComprehensive() {
                 >
                   {bundleAdded && getBundleDiscountPrice() ? (
                     <>
-                      ADD TO BASKET - £{(getBundleDiscountPrice()!.bundlePrice * quantity).toFixed(2)} 
-                      <span className="text-xs ml-2 opacity-75">(Save £{(getBundleDiscountPrice()!.discount * quantity).toFixed(2)})</span>
+                      ADD TO BASKET - R{(getBundleDiscountPrice()!.bundlePrice * quantity).toFixed(2)} 
+                      <span className="text-xs ml-2 opacity-75">(Save R{(getBundleDiscountPrice()!.discount * quantity).toFixed(2)})</span>
                     </>
                   ) : (
-                    `ADD TO BASKET - £${(parseFloat(subscriptionPrice) * quantity).toFixed(2)}`
+                    `ADD TO BASKET - R${(parseFloat(subscriptionPrice) * quantity).toFixed(2)}`
                   )}
                 </Button>
               </div>
@@ -1511,7 +1511,7 @@ export default function ProductComprehensive() {
                       <p className="text-sm text-gray-600 mb-3">{bundleProduct.description}</p>
                       
                       <div className="flex items-center justify-between mb-4">
-                        <div className="text-xl font-semibold">£{bundleProduct.price}</div>
+                        <div className="text-xl font-semibold">R{bundleProduct.price}</div>
                         <div className="text-sm text-gray-500">
                           {bundleProduct.inStock ? 'In Stock' : 'Out of Stock'}
                         </div>

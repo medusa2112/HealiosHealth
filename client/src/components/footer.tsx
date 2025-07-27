@@ -61,7 +61,7 @@ export function Footer() {
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center gap-4 mb-4 md:mb-0">
-            <span className="text-sm text-gray-400">🇬🇧 UNITED KINGDOM (GBP £)</span>
+            <span className="text-sm text-gray-400">🇬🇧 UNITED KINGDOM (GBP R)</span>
             <button className="text-xs text-gray-400 uppercase tracking-wide hover:text-white transition-colors">
               CHANGE
             </button>

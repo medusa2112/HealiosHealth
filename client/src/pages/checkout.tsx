@@ -84,7 +84,7 @@ const CheckoutForm = () => {
                   <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                 </div>
               </div>
-              <p className="font-medium">£{(parseFloat(item.product.price) * item.quantity).toFixed(2)}</p>
+              <p className="font-medium">R{(parseFloat(item.product.price) * item.quantity).toFixed(2)}</p>
             </div>
           ))}
           
@@ -92,7 +92,7 @@ const CheckoutForm = () => {
           
           <div className="flex items-center justify-between text-lg font-bold">
             <span>Total:</span>
-            <span>£{total.toFixed(2)}</span>
+            <span>R{total.toFixed(2)}</span>
           </div>
         </CardContent>
       </Card>
@@ -110,7 +110,7 @@ const CheckoutForm = () => {
               disabled={!stripe || isProcessing}
               className="w-full bg-black hover:bg-gray-800 text-white py-3 text-lg font-medium"
             >
-              {isProcessing ? "Processing..." : `Pay £${total.toFixed(2)}`}
+              {isProcessing ? "Processing..." : `Pay R${total.toFixed(2)}`}
             </Button>
           </form>
         </CardContent>

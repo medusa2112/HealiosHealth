@@ -58,7 +58,7 @@ export default function OrderConfirmationPage() {
                   <div>
                     <h3 className="font-medium text-gray-900 dark:text-white">Shipping</h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      Free UK delivery on orders over £25. Your package will arrive within 2-3 business days.
+                      Free UK delivery on orders over R25. Your package will arrive within 2-3 business days.
                     </p>
                   </div>
                 </div>

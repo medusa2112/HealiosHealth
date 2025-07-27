@@ -68,7 +68,7 @@ export default function Products() {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEOHead
         title="Premium Supplements & Natural Vitamins | Shop All Products | Healios"
-        description="Shop our complete range of science-backed supplements designed for optimal wellness. Premium natural vitamins and supplements for daily wellness support. Free shipping on orders £25+."
+        description="Shop our complete range of science-backed supplements designed for optimal wellness. Premium natural vitamins and supplements for daily wellness support. Free shipping on orders R25+."
         keywords="healios supplements, natural vitamins collection, magnesium, ashwagandha, vitamin D, probiotics, science-backed supplements, premium wellness"
         url="https://healios.com/products"
         structuredData={productsStructuredData}

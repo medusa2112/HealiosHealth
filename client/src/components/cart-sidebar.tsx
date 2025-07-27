@@ -49,7 +49,7 @@ export function CartSidebar() {
                         {item.product.name}
                       </h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        £{item.product.price} each
+                        R{item.product.price} each
                       </p>
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center space-x-2">
@@ -73,7 +73,7 @@ export function CartSidebar() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className="font-medium text-gray-900 dark:text-white text-sm">
-                            £{(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+                            R{(parseFloat(item.product.price) * item.quantity).toFixed(2)}
                           </span>
                           <Button
                             variant="ghost"
@@ -97,7 +97,7 @@ export function CartSidebar() {
               <div className="flex items-center justify-between mb-4">
                 <span className="font-semibold text-gray-900 dark:text-white">Total:</span>
                 <span className="font-bold text-xl text-gray-900 dark:text-white">
-                  £{totalPrice.toFixed(2)}
+                  R{totalPrice.toFixed(2)}
                 </span>
               </div>
               <Link href="/checkout">
