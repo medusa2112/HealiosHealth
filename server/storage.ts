@@ -78,7 +78,7 @@ export class MemStorage implements IStorage {
         description: "10 billion CFU probiotic supplement complex",
         price: "21.99",
         originalPrice: "29.99",
-        imageUrl: "/images/probiotics-gummies.svg",
+        imageUrl: "/assets/Porbiotic_Vitamins_1753613149126.png",
         category: "Probiotics",
         rating: "4.7",
         reviewCount: 203,

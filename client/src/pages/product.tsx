@@ -10,7 +10,7 @@ import { SEOHead } from '@/components/seo-head';
 import appleCiderVinegarImg from '@assets/Apple-Cider-Vinegar-X_1753469577640.png';
 import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
 import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
-import probioticsImg from '@assets/Probiotics10Bil-X_1753469577640.png';
+import probioticsImg from '@assets/Porbiotic_Vitamins_1753613149126.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 
 const productImages: Record<string, string> = {
