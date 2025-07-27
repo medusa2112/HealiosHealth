@@ -475,14 +475,14 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Video Section - Full height, extends to left edge */}
-          <div className="relative overflow-hidden aspect-square lg:aspect-auto lg:h-full">
+          <div className="relative overflow-hidden min-h-[600px] lg:h-full">
             <video
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover"
               onLoadStart={() => console.log('Fitness video loading started')}
               onCanPlay={() => console.log('Fitness video can play')}
             >
@@ -493,9 +493,6 @@ export default function HomePage() {
                 src={pharmacistsImg}
                 alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
                 className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  objectPosition: 'center center'
-                }}
               />
             </video>
           </div>
