@@ -116,67 +116,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              Meet the team
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Nutritional scientists, not marketing experts. PhD researchers, not social media influencers.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="text-center">
-              <img 
-                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
-                alt="Dr. Sarah Chen - Lead Nutritional Scientist" 
-                className="w-32 h-32 mx-auto mb-6 object-cover" 
-              />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Dr. Sarah Chen
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">Lead Nutritional Scientist</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
-                PhD Nutritional Biochemistry, Cambridge. 18 years researching micronutrient bioavailability and supplement efficacy.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <img 
-                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
-                alt="Dr. James Wilson - Research Director" 
-                className="w-32 h-32 mx-auto mb-6 object-cover" 
-              />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Dr. James Wilson
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">Research Director</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
-                Former senior researcher at leading pharmaceutical companies. Specializes in clinical trial design and nutrient interactions.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <img 
-                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
-                alt="Dr. Maria Rodriguez - Quality Director" 
-                className="w-32 h-32 mx-auto mb-6 object-cover" 
-              />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Dr. Maria Rodriguez
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-3 text-sm">Quality Director</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
-                20+ years in pharmaceutical quality assurance. Ensures every batch meets pharmaceutical-grade standards.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Standards & Certifications */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
