@@ -78,11 +78,11 @@ export default function About() {
               What We Refused to Compromise On
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Four simple principles that guide every decision we make.
+              Three simple principles that guide every decision we make.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-6">
+          <div className="grid lg:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="bg-gray-50 dark:bg-gray-800 p-6">
                 <Microscope className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
@@ -115,18 +115,6 @@ export default function About() {
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
-                </p>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-6">
-                <Brain className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Formulated With Medical Logic
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
-                  All inputs follow guidance from human data, not anecdote. We reference endocrine panels, micronutrient studies, and clinical outcome data. No AI guesses. No bro-science.
                 </p>
               </div>
             </div>
