@@ -12,7 +12,7 @@ import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
 import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
-import healiosNatureImg from '@assets/Healios_1753559079971.png';
+import pharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618338989.jpg';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
@@ -408,8 +408,8 @@ export default function HomePage() {
           {/* Image Section - Full height, no padding, extends to left edge */}
           <div className="relative">
             <img
-              src={healiosNatureImg}
-              alt="Pure natural wellness - pristine mountain lake representing the purity and natural origins of Healios supplements"
+              src={pharmacistsImg}
+              alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
