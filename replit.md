@@ -127,6 +127,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Created gentle iron supplement with ferric pyrophosphate and vitamin C for enhanced absorption
 ✓ Implemented EFSA-compliant messaging for red blood cell formation and fatigue reduction
 ✓ Added age-specific dosing (12+: 1-2 gummies) with calcium spacing recommendations and safety warnings
+✓ Implemented automatic scroll-to-top behavior for all page navigation
+✓ Created custom useScrollToTop hook integrated with Wouter router for seamless page transitions
 
 ## Advanced SEO Implementation (January 2025)
 

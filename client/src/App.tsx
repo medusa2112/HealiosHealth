@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/use-cart";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -21,6 +22,9 @@ import Quiz from "@/pages/quiz";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  // Automatically scroll to top on page navigation
+  useScrollToTop();
+  
   return (
     <Switch>
       <Route path="/" component={Home} />
