@@ -80,8 +80,12 @@ export default function Science() {
             {/* Vitamin D3 Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-yellow-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center text-white text-xl font-bold">
-                  D3
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Vitamin D3  1000 IU_1753615197740.png" 
+                    alt="Vitamin D3 1000 IU Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -110,8 +114,12 @@ export default function Science() {
             {/* Iron + Vitamin C Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-red-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-orange-400 flex items-center justify-center text-white text-xl font-bold">
-                  Fe
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Iron + Vitamin C_1753615197739.png" 
+                    alt="Iron + Vitamin C Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -140,8 +148,12 @@ export default function Science() {
             {/* Folic Acid Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-green-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-400 flex items-center justify-center text-white text-xl font-bold">
-                  B9
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Folic Acid 400µg_1753615197741.png" 
+                    alt="Folic Acid 400µg Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -170,8 +182,12 @@ export default function Science() {
             {/* Biotin Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-purple-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xl font-bold">
-                  B7
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Biton_1753615197741.png" 
+                    alt="Biotin 5000µg Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -200,8 +216,12 @@ export default function Science() {
             {/* Magnesium Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-blue-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white text-xl font-bold">
-                  Mg
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Magnesium_1753615197741.png" 
+                    alt="Magnesium Citrate Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -220,8 +240,12 @@ export default function Science() {
             {/* Ashwagandha Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-amber-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center text-white text-sm font-bold">
-                  ASH
+                <div className="w-12 h-12 flex-shrink-0">
+                  <img 
+                    src="/assets/Ashwagandha 600mg_1753615197741.png" 
+                    alt="Ashwagandha 600mg Gummies"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
