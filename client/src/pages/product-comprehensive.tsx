@@ -24,6 +24,8 @@ export default function ProductComprehensive() {
   const [subscriptionMode, setSubscriptionMode] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
+  const [showBundleModal, setShowBundleModal] = useState(false);
+  const [bundleAdded, setBundleAdded] = useState(false);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
@@ -54,11 +56,34 @@ export default function ProductComprehensive() {
     
     if (bundleProduct) {
       addToCart(bundleProduct);
+      setBundleAdded(true);
       toast({
         title: "Bundle product added!",
         description: `${bundleProduct.name} has been added to your cart.`,
       });
     }
+  };
+
+  const getBundleDiscountPrice = () => {
+    if (!product || !bundleAdded) return null;
+    
+    const productContent = getProductContent(product.id);
+    const bundlePrice = parseFloat(productContent.bundlePrice.replace('£', ''));
+    const originalPrice = parseFloat(productContent.bundleOriginalPrice.replace('£', ''));
+    const discount = originalPrice - bundlePrice;
+    
+    return {
+      bundlePrice: bundlePrice,
+      originalPrice: originalPrice,
+      discount: discount
+    };
+  };
+
+  const getBundleProduct = () => {
+    if (!product || !allProducts) return null;
+    
+    const productContent = getProductContent(product.id);
+    return allProducts.find(p => p.name === productContent.bundleWith);
   };
 
   if (isLoading) {
@@ -405,10 +430,10 @@ export default function ProductComprehensive() {
 
                 {/* Recommended Product */}
                 <div className="flex items-center gap-3 p-3 border border-gray-200">
-                  <div className="w-10 h-10 bg-gray-100 flex items-center justify-center">
-                    <Plus className="w-4 h-4 text-gray-400" />
+                  <div className="w-10 h-10 bg-gray-100 flex items-center justify-center cursor-pointer" onClick={() => setShowBundleModal(true)}>
+                    {bundleAdded ? <Check className="w-4 h-4 text-green-600" /> : <Plus className="w-4 h-4 text-gray-400" />}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 cursor-pointer" onClick={() => setShowBundleModal(true)}>
                     <p className="text-xs font-medium">{productContent.bundleWith}</p>
                     <p className="text-xs text-gray-600">Recommended for enhanced benefits</p>
                   </div>
@@ -416,8 +441,9 @@ export default function ProductComprehensive() {
                     size="sm" 
                     className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
                     onClick={handleAddBundleProduct}
+                    disabled={bundleAdded}
                   >
-                    Add
+                    {bundleAdded ? 'Added' : 'Add'}
                   </Button>
                 </div>
 
@@ -482,7 +508,14 @@ export default function ProductComprehensive() {
                   onClick={handleAddToCart}
                   className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
                 >
-                  ADD TO BASKET - £{(parseFloat(subscriptionPrice) * quantity).toFixed(2)}
+                  {bundleAdded && getBundleDiscountPrice() ? (
+                    <>
+                      ADD TO BASKET - £{(getBundleDiscountPrice()!.bundlePrice * quantity).toFixed(2)} 
+                      <span className="text-xs ml-2 opacity-75">(Save £{getBundleDiscountPrice()!.discount.toFixed(2)})</span>
+                    </>
+                  ) : (
+                    `ADD TO BASKET - £${(parseFloat(subscriptionPrice) * quantity).toFixed(2)}`
+                  )}
                 </Button>
               </div>
             ) : (
@@ -1417,6 +1450,74 @@ export default function ProductComprehensive() {
         productName={product.name}
         productId={product.id}
       />
+
+      {/* Bundle Product Modal */}
+      {showBundleModal && getBundleProduct() && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Bundle Product Details</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowBundleModal(false)}
+                  className="p-2"
+                >
+                  <Plus className="w-4 h-4 rotate-45" />
+                </Button>
+              </div>
+              
+              {(() => {
+                const bundleProduct = getBundleProduct()!;
+                return (
+                  <div className="space-y-4">
+                    <div className="aspect-square bg-gray-50 flex items-center justify-center">
+                      <img 
+                        src={bundleProduct.imageUrl} 
+                        alt={bundleProduct.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    <div>
+                      <h3 className="font-medium text-lg mb-2">{bundleProduct.name}</h3>
+                      <p className="text-sm text-gray-600 mb-3">{bundleProduct.description}</p>
+                      
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-xl font-semibold">£{bundleProduct.price}</div>
+                        <div className="text-sm text-gray-500">
+                          {bundleProduct.inStock ? 'In Stock' : 'Out of Stock'}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2 mb-4">
+                        <h4 className="text-sm font-medium">Key Benefits:</h4>
+                        <ul className="text-xs text-gray-600 space-y-1">
+                          <li>• Premium quality formulation</li>
+                          <li>• Third-party tested for purity</li>
+                          <li>• Complements your current selection</li>
+                        </ul>
+                      </div>
+                      
+                      <Button
+                        onClick={() => {
+                          handleAddBundleProduct();
+                          setShowBundleModal(false);
+                        }}
+                        className="w-full"
+                        disabled={bundleAdded}
+                      >
+                        {bundleAdded ? 'Already Added to Cart' : 'Add to Cart'}
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
