@@ -26,7 +26,7 @@ export default function About() {
                   We built Healios because we needed it.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  We're committed to providing quality supplements designed to support your daily wellness routine with carefully selected ingredients.
+                  At 15, we started supplementing seriously — not casually. Not reactively. But as a core part of training, recovery, and performance. We tested everything: ketogenic, carb-cycling, fasted training, CrossFit, hypertrophy splits, marathons, meditation, nootropics, stimulants. We optimised every input we could.
                 </p>
               </div>
 
