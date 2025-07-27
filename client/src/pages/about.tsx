@@ -31,21 +31,21 @@ export default function About() {
               </div>
 
               {/* Key Stats */}
-              <div className="grid grid-cols-3 gap-8 mb-8">
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">2019</div>
+              <div className="grid grid-cols-3 gap-6 mb-8">
+                <div className="text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">2019</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                     Founded
                   </p>
                 </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">300K+</div>
+                <div className="text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">300K+</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                     Customers
                   </p>
                 </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">15+</div>
+                <div className="text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">15+</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                     Scientists
                   </p>
