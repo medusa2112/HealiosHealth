@@ -601,43 +601,43 @@ export default function HomePage() {
                   THE HEALIOS DIFFERENCE
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Quality wellness supplements<br />
-                  designed to support your<br />
-                  daily wellness routine.
+                  Premium gummy supplements<br />
+                  manufactured to GMP standards<br />
+                  for optimal wellness support.
                 </h2>
               </div>
 
               {/* Statistics Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">99%</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">GMP</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Pure Active<br />
-                    Ingredients
+                    Certified<br />
+                    Manufacturing
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">300K+</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">12</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Satisfied<br />
-                    Customers
+                    Premium<br />
+                    Formulations
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">15+</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">UK</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Years of<br />
-                    Research
+                    Quality<br />
+                    Standards
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">600mg</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">100%</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Clinical<br />
-                    Dosage
+                    Third-Party<br />
+                    Tested
                   </p>
                 </div>
               </div>
@@ -693,8 +693,8 @@ export default function HomePage() {
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">EXCELLENT</p>
 
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Loved by over<br />
-                  300,000 customers
+                  Trusted by our<br />
+                  growing community
                 </h2>
               </div>
 
@@ -834,7 +834,7 @@ export default function HomePage() {
             Join the Healios community
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Be part of 300,000+ enjoying science-backed wellness
+            Join our community for wellness tips and exclusive offers
           </p>
 
           <form className="space-y-4 max-w-md mx-auto">
