@@ -887,49 +887,33 @@ export default function HomePage() {
 
           <form className="space-y-4 max-w-md mx-auto">
             <div className="grid grid-cols-2 gap-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="w-3 h-3 bg-teal-500"></div>
-                </div>
-              </div>
-
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Last name"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="w-3 h-3 bg-teal-500"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
               <input
-                type="email"
-                placeholder="Email address"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-teal-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                type="text"
+                placeholder="First name"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <div className="w-3 h-3 bg-teal-500"></div>
-              </div>
+              <input
+                type="text"
+                placeholder="Last name"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
             </div>
+
+            <input
+              type="email"
+              placeholder="Email address"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
 
             <input
               type="text"
               placeholder="Your Birthday"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-gray-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             />
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-gray-800 transition-colors"
+              className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-colors"
             >
               Sign up now
             </button>
