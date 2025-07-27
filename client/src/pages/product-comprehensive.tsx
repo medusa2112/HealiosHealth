@@ -508,7 +508,7 @@ export default function ProductComprehensive() {
                   </div>
                   <Button 
                     size="sm" 
-                    className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
+                    className="bg-black text-white px-3 py-1 text-xs hover:text-[#07a88a]"
                     onClick={handleToggleBundleProduct}
                   >
                     {bundleAdded ? 'Remove' : 'Add'}
@@ -574,7 +574,7 @@ export default function ProductComprehensive() {
 
                 <Button 
                   onClick={handleAddToCart}
-                  className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
+                  className="w-full bg-black text-white py-3 text-sm font-medium hover:text-[#07a88a]"
                 >
                   {bundleAdded && getBundleDiscountPrice() ? (
                     <>
@@ -595,7 +595,7 @@ export default function ProductComprehensive() {
                 
                 <Button 
                   onClick={() => setShowPreOrderModal(true)}
-                  className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:bg-healios-cyan/90"
+                  className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:text-[#07a88a]"
                 >
                   PRE-ORDER & GET 10% OFF
                 </Button>
@@ -1129,7 +1129,7 @@ export default function ProductComprehensive() {
             Through personalised nutrition<br />
             advice, we support the whole you
           </h2>
-          <Button className="bg-black text-white px-6 py-3 font-medium hover:bg-gray-800">
+          <Button className="bg-black text-white px-6 py-3 font-medium hover:text-[#07a88a]">
             <Link href="/consultation" className="flex items-center whitespace-nowrap">
               Book your free consultation <ArrowRight className="w-4 h-4 ml-2" />
             </Link>

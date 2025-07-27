@@ -386,7 +386,7 @@ export function Header() {
                 Take our 60-second quiz for personalized recommendations
               </p>
               <Link href="/quiz">
-                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">
+                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
                   Take the Quiz →
                 </button>
               </Link>
