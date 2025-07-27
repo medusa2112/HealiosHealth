@@ -134,7 +134,7 @@ export default function Planet() {
                     <div className="w-8 h-8 bg-blue-600 text-white font-medium flex items-center justify-center text-sm">2</div>
                     <div>
                       <h4 className="font-medium text-gray-900 dark:text-white mb-1">Monthly Contribution</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">We donate R15,000+ monthly to The Ocean Cleanup's operations</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">We make regular monthly donations to support The Ocean Cleanup's operations</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -215,7 +215,7 @@ export default function Planet() {
               <Waves className="w-10 h-10 text-indigo-600 dark:text-indigo-400 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Ocean Conservation Focus</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Our primary environmental commitment is supporting ocean cleanup through our monthly contributions to The Ocean Cleanup organization.
+                Our primary environmental commitment is supporting ocean cleanup through our partnership with The Ocean Cleanup organization.
               </p>
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function Planet() {
               <div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2024: Partnership Launch</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Established monthly contribution program with The Ocean Cleanup, committing R15,000+ monthly to ocean plastic removal efforts.
+                  Established monthly contribution program with The Ocean Cleanup to support ocean plastic removal efforts.
                 </p>
               </div>
             </div>
