@@ -29,9 +29,9 @@ export class MemStorage implements IStorage {
       // Healios Products matching frontend
       {
         id: "apple-cider-vinegar",
-        name: "Apple Cider Vinegar & Ginger (60 Gummies)",
-        description: "Apple cider vinegar and ginger supplement gummies",
-        price: "16.99",
+        name: "Apple Cider Vinegar Gummies (Strawberry Flavour)",
+        description: "Daily metabolic & gut support with 500mg concentrated Apple Cider Vinegar powder per gummy. Stomach-friendly format without the burn or enamel erosion.",
+        price: "21.99",
         originalPrice: "29.99",
         imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png",
         category: "Gummies",

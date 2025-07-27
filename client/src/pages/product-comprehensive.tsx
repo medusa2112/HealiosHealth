@@ -77,21 +77,21 @@ export default function ProductComprehensive() {
     switch (productId) {
       case 'apple-cider-vinegar':
         return {
-          bundleWith: 'KSM-66 Ashwagandha Plus',
-          bundlePrice: '£68.00',
-          bundleOriginalPrice: '£76.00',
-          statisticNumber: '75%',
-          statisticText: 'Today\'s apples contain 75% less nutrients than in 1940',
-          testimonial: '"Apple Cider Vinegar has transformed my digestive health. I feel more balanced and energetic every day."',
-          testimonialAuthor: 'SARAH MITCHELL',
-          testimonialTitle: 'Wellness Coach',
-          benefitTitle: 'Digestive wellness support',
-          benefitDescription: 'Apple Cider Vinegar with Ginger supports healthy digestion and may help with nutrient absorption.',
-          ingredientSource: 'Organic Apple Cider Vinegar',
-          ingredientForm: 'Gummies with natural apple flavor',
-          ingredientOrigin: 'Organic orchards, USA',
+          bundleWith: 'Probiotic + Vitamins Gummies',
+          bundlePrice: '£40.00',
+          bundleOriginalPrice: '£54.00',
+          statisticNumber: '3',
+          statisticText: 'pH level of liquid ACV - about the same as battery acid, which can erode tooth enamel',
+          testimonial: '"These gummies give me all the benefits of ACV without the harsh taste or stomach burn. Perfect for my daily wellness routine."',
+          testimonialAuthor: 'EMMA THOMPSON',
+          testimonialTitle: 'Fitness & Wellness Enthusiast',
+          benefitTitle: 'Daily metabolic & gut support',
+          benefitDescription: '500mg concentrated Apple Cider Vinegar powder supports digestion and energy metabolism in a stomach-friendly, enamel-safe format.',
+          ingredientSource: 'Apple Cider Vinegar powder (concentrated)',
+          ingredientForm: 'Strawberry-flavored chewable gummies',
+          ingredientOrigin: 'Traditional vinegar benefits without acetic acid harshness',
           sleepBenefit: false,
-          primaryBenefit: 'Supports healthy digestion and gut wellness'
+          primaryBenefit: 'Supports digestion, energy metabolism, and appetite management'
         };
       case 'vitamin-d3':
         return {
@@ -538,6 +538,15 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">Traditional adaptogenic herb. No EFSA health claims authorized for ashwagandha - general wellbeing support only.</p>
                             </div>
+                          ) : product.id === 'apple-cider-vinegar' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Apple Cider Vinegar (powder): 500mg</div>
+                                <div className="text-xs text-gray-600">(Concentrated equivalent without harsh acetic acid)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">No EFSA health claims authorized for ACV. Traditional wellness use only. Enamel-safe format vs liquid vinegar.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -665,6 +674,18 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Vegan formulation suitable for daily use. Traditional Ayurvedic herb with 3,000+ years of traditional wellness use.</p>
                             </div>
+                          ) : product.id === 'apple-cider-vinegar' ? (
+                            <div>
+                              <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Apple Cider Vinegar powder (concentrated) - 500mg</li>
+                                <li>• Natural strawberry flavoring</li>
+                                <li>• Pectin (vegan gelling agent)</li>
+                                <li>• Natural fruit colors</li>
+                                <li>• Natural sweeteners (no artificial sugars)</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Vegan, enamel-safe formulation. Delivers traditional ACV benefits without stomach burn or tooth erosion.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -769,6 +790,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable during pregnancy/breastfeeding. Consult doctor if taking thyroid, blood pressure, or psychoactive medications.</p>
                             </div>
+                          ) : product.id === 'apple-cider-vinegar' ? (
+                            <div>
+                              <p className="font-medium mb-2">Pre-meal dosing for optimal support:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 1-2 gummies daily</strong> preferably 15-30 minutes before meals</li>
+                                <li>• Do not exceed 3 gummies per day</li>
+                                <li>• Best taken with water to aid digestion</li>
+                                <li>• Can be taken on empty stomach (unlike liquid ACV)</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12. May cause mild digestive upset if taken in excess. Start with 1 gummy to assess tolerance.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -864,6 +896,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this with other supplements?</strong> Generally yes, but avoid taking with sedatives or blood pressure medications without medical supervision.</li>
                                 <li>• <strong>Is ashwagandha safe for long-term use?</strong> Studies show safe use up to 3 months continuously. Many people cycle on/off or take breaks every few months.</li>
                                 <li>• <strong>Will this make me drowsy?</strong> No, ashwagandha is non-sedative. It supports natural calm and balance without causing drowsiness during the day.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'apple-cider-vinegar' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Apple Cider Vinegar Gummies:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Are these as effective as liquid ACV?</strong> These gummies provide 500mg concentrated ACV powder equivalent to traditional liquid, but in a stomach-friendly format without enamel erosion.</li>
+                                <li>• <strong>When is the best time to take them?</strong> 15-30 minutes before meals for optimal digestive support and appetite management.</li>
+                                <li>• <strong>Can I take these on an empty stomach?</strong> Yes, unlike harsh liquid ACV, these gummies are gentle enough for empty stomach use.</li>
+                                <li>• <strong>Will these help with weight management?</strong> ACV may support appetite control and post-meal satisfaction, but it's not a weight loss product and should be combined with healthy diet and exercise.</li>
                               </ul>
                             </div>
                           ) : (
