@@ -201,6 +201,24 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports digestive wellness, immune function, and energy metabolism'
         };
+      case 'collagen-complex':
+        return {
+          bundleWith: 'Vitamin C Gummies',
+          bundlePrice: '£39.00',
+          bundleOriginalPrice: '£52.00',
+          statisticNumber: '25',
+          statisticText: 'years - when collagen production begins to naturally decline',
+          testimonial: '"Consistent collagen supplementation with vitamin C supports the body\'s natural ability to build and maintain healthy skin structure."',
+          testimonialAuthor: 'DR. ELENA RODRIGUEZ',
+          testimonialTitle: 'Dermatology Nutritionist',
+          benefitTitle: 'Beauty from within support',
+          benefitDescription: '500mg hydrolysed collagen peptides with vitamin C for collagen formation, plus biotin and selenium for healthy hair, skin, and nails.',
+          ingredientSource: 'Hydrolysed bovine collagen + beauty vitamins',
+          ingredientForm: 'Orange-flavored chewable gummies',
+          ingredientOrigin: 'Premium collagen peptides with EFSA-approved cofactors',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports healthy skin, hair, nails, and connective tissues'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -409,6 +427,21 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Probiotic efficacy may vary between individuals.</p>
                             </div>
+                          ) : product.id === 'collagen-complex' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy (Take 2 daily for full dose):</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Collagen (hydrolysed bovine): 500mg per gummy</div>
+                                <div className="font-medium">Vitamin C: 40mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin A: 400μg (50% NRV)</div>
+                                <div className="font-medium">Vitamin E: 6mg (50% NRV)</div>
+                                <div className="font-medium">Biotin: 25μg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B6: 0.7mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B12: 1.25μg (50% NRV)</div>
+                                <div className="font-medium">Selenium: 27.5μg (50% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -463,6 +496,21 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Gelatin-free, vegetarian formulation. Probiotic cultures are shelf-stable in low-water gummy matrix.</p>
                             </div>
+                          ) : product.id === 'collagen-complex' ? (
+                            <div>
+                              <p className="font-medium mb-2">Orange-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Hydrolysed bovine collagen peptides (500mg per gummy)</li>
+                                <li>• Vitamin C (ascorbic acid) - for collagen formation</li>
+                                <li>• Vitamin A (retinyl acetate) - for skin maintenance</li>
+                                <li>• Vitamin E (d-alpha tocopherol) - antioxidant protection</li>
+                                <li>• Biotin - for hair and skin health</li>
+                                <li>• Selenium - cellular antioxidant defence</li>
+                                <li>• B-vitamins (B6, B12) - energy metabolism</li>
+                                <li>• Natural orange flavoring</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -501,6 +549,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Not suitable for children under 4 years. Consult healthcare provider if taking antibiotics or have compromised immune system.</p>
                             </div>
+                          ) : product.id === 'collagen-complex' ? (
+                            <div>
+                              <p className="font-medium mb-2">Adult dosing (18+ years):</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 2 gummies daily</strong> for full 1000mg collagen dose</li>
+                                <li>• Can be taken at any time with or without food</li>
+                                <li>• Allow minimum 60 days consistent use for visible results</li>
+                                <li>• Store below 25°C in dry conditions</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for pregnant or breastfeeding unless advised by healthcare provider. Contains bovine collagen.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -536,6 +595,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this with antibiotics?</strong> Yes, but space doses 2-3 hours apart from antibiotic medication. Continue taking for several weeks after antibiotic course.</li>
                                 <li>• <strong>Will I notice digestive benefits immediately?</strong> Individual responses vary. Some people notice changes within days, while others may take 2-4 weeks of consistent use.</li>
                                 <li>• <strong>Is this suitable for travel?</strong> Yes, the shelf-stable format makes it ideal for travel when your normal routine and diet may be disrupted.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'collagen-complex' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Collagen Complex:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>How long before I see results?</strong> Collagen benefits are cumulative and require consistent use. Allow minimum 60 days for visible changes to skin, hair, and nails.</li>
+                                <li>• <strong>Is this suitable for vegans?</strong> No, the collagen is bovine-derived. However, the formulation is non-gelatin and suitable for vegetarians.</li>
+                                <li>• <strong>Why is vitamin C included?</strong> Vitamin C is essential for natural collagen formation in the body and enhances the effectiveness of supplemental collagen.</li>
+                                <li>• <strong>Can I take this with other beauty supplements?</strong> Yes, but check total vitamin intake to avoid exceeding recommended daily amounts, especially for vitamins A and E.</li>
                               </ul>
                             </div>
                           ) : (

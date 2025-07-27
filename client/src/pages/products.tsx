@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children"];
+const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children", "Beauty"];
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");

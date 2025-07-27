@@ -118,6 +118,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "collagen-complex",
+        name: "Collagen Complex Gummies (Orange Flavour)",
+        description: "Daily skin, hair & nail support with 500mg hydrolysed collagen peptides plus antioxidant vitamins C, E, biotin and selenium in delicious orange-flavored gummies.",
+        price: "26.99",
+        originalPrice: "36.99",
+        imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png", // Using gummy product image as placeholder
+        category: "Beauty",
+        rating: "4.6",
+        reviewCount: 267,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

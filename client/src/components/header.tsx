@@ -52,6 +52,7 @@ export function Header() {
         { href: "/products?category=probiotics", label: "Probiotics" },
         { href: "/products?category=minerals", label: "Minerals" },
         { href: "/products?category=children", label: "Children's Health" },
+        { href: "/products?category=beauty", label: "Beauty & Wellness" },
       ]
     },
     {
@@ -62,6 +63,7 @@ export function Header() {
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
+        { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
         { href: "/products/childrens-multivitamin", label: "Children's Development" },
       ]
     },
