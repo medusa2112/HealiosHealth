@@ -386,7 +386,7 @@ export function Header() {
                 Take our 60-second quiz for personalized recommendations
               </p>
               <Link href="/quiz">
-                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:bg-gray-100 transition-colors">
+                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">
                   Take the Quiz →
                 </button>
               </Link>
@@ -448,7 +448,7 @@ export function Header() {
                     Book a free 15 min consultation
                   </p>
                   <Link href="/consultation">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors whitespace-nowrap">
                       Book Now →
                     </button>
                   </Link>
@@ -469,7 +469,7 @@ export function Header() {
                     Visit our pregnancy hub
                   </p>
                   <Link href="/pregnancy">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors whitespace-nowrap">
                       Explore →
                     </button>
                   </Link>

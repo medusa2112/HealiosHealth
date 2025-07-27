@@ -542,7 +542,7 @@ export default function HomePage() {
               </div>
 
               <Link href="/products">
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors whitespace-nowrap">
                   See full collection →
                 </button>
               </Link>
@@ -721,7 +721,7 @@ export default function HomePage() {
               </div>
 
               <Link href="/products">
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors whitespace-nowrap">
                   Explore Healios wellness range →
                 </button>
               </Link>
@@ -799,12 +799,12 @@ export default function HomePage() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/products">
-                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto whitespace-nowrap">
                     Shop Healios supplements →
                   </button>
                 </Link>
                 <Link href="/science">
-                  <button className="border border-healios-cyan text-healios-cyan px-6 py-3 text-sm font-medium hover:bg-healios-cyan hover:text-white transition-colors w-full sm:w-auto">
+                  <button className="border border-healios-cyan text-healios-cyan px-6 py-3 text-sm font-medium hover:bg-healios-cyan hover:text-white transition-colors w-full sm:w-auto whitespace-nowrap">
                     Learn about our science →
                   </button>
                 </Link>
@@ -902,7 +902,7 @@ export default function HomePage() {
               </div>
 
               <Link href="/products">
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors whitespace-nowrap">
                   Shop bestsellers →
                 </button>
               </Link>
