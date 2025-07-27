@@ -737,13 +737,15 @@ export default function HomePage() {
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
-                  <div className="flex items-center gap-2">
-                    <img src={magnesiumImg} alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
-                    <div>
-                      <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                  <Link href="/products/magnesium">
+                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                      <img src={magnesiumImg} alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
+                      <div>
+                        <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
 
@@ -759,6 +761,15 @@ export default function HomePage() {
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">CATHERINE</p>
+                  <Link href="/products/collagen-complex">
+                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                      <img src={collagenComplexImg} alt="Healios Collagen Complex" className="w-8 h-10 object-contain" />
+                      <div>
+                        <p className="text-xs font-medium text-gray-900 dark:text-white">Collagen Complex</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
               </div>
 
@@ -774,13 +785,15 @@ export default function HomePage() {
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
-                  <div className="flex items-center gap-2">
-                    <img src={ashwagandhaImg} alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
-                    <div>
-                      <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                  <Link href="/products/ashwagandha">
+                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                      <img src={ashwagandhaImg} alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
+                      <div>
+                        <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
