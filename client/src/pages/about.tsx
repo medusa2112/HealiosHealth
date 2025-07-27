@@ -164,7 +164,7 @@ export default function About() {
           <div className="grid lg:grid-cols-3 gap-12">
             <div className="text-center">
               <img 
-                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300" 
+                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
                 alt="Dr. Sarah Chen - Lead Nutritional Scientist" 
                 className="w-32 h-32 mx-auto mb-6 object-cover" 
               />
@@ -179,7 +179,7 @@ export default function About() {
 
             <div className="text-center">
               <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300" 
+                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
                 alt="Dr. James Wilson - Research Director" 
                 className="w-32 h-32 mx-auto mb-6 object-cover" 
               />
@@ -194,7 +194,7 @@ export default function About() {
 
             <div className="text-center">
               <img 
-                src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300" 
+                src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
                 alt="Dr. Maria Rodriguez - Quality Director" 
                 className="w-32 h-32 mx-auto mb-6 object-cover" 
               />

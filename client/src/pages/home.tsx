@@ -53,13 +53,13 @@ export default function HomePage() {
   };
 
   const getFilteredProducts = () => {
-    if (!featuredProducts) return [];
+    if (!featuredProducts || !Array.isArray(featuredProducts)) return [];
     
     const categoryFilter = categories[selectedCategory as keyof typeof categories];
     if (categoryFilter === 'all') return featuredProducts;
     
     return featuredProducts.filter((product: any) => 
-      categoryFilter.includes(product.id)
+      Array.isArray(categoryFilter) && categoryFilter.includes(product.id)
     );
   };
 
@@ -99,7 +99,7 @@ export default function HomePage() {
         title="Healios - Premium Wellness Supplements | Quality Ingredients, Third-Party Tested"
         description="Discover Healios premium wellness supplements made with quality ingredients. Carefully formulated to support your daily wellness routine. Third-party tested for purity."
         keywords="wellness supplements, natural vitamins, daily wellness, premium supplements, Healios, quality ingredients, third-party tested"
-        image="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630"
+        image="/attached_assets/Healios_1753559079971.png"
       />
 
       {/* Wild Nutrition Hero Section */}
@@ -119,7 +119,7 @@ export default function HomePage() {
           <source src="/hero-video.mp4" type="video/mp4" />
           {/* Fallback image if video fails to load */}
           <img 
-            src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+            src={healiosGummiesImg}
             alt="Hero background"
             className="w-full h-full object-cover"
           />
@@ -774,14 +774,14 @@ export default function HomePage() {
           <div className="mt-16">
             <div className="flex items-center justify-center gap-4 overflow-x-auto">
               {[
-                "https://images.unsplash.com/photo-1494790108755-2616b612b637?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2",
-                "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&fit=facearea&facepad=2"
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg"
               ].map((src, index) => (
                 <div key={index} className="flex-shrink-0">
                   <img

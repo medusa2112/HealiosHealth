@@ -408,7 +408,7 @@ export function Header() {
             <div className="grid grid-cols-2 gap-6">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                  src="/attached_assets/Healios_1753559079971.png" 
                   alt="Need more support?" 
                   className="w-full h-24 object-cover"
                 />
@@ -429,7 +429,7 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1584467735871-8b730d628b3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200" 
+                  src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
                   alt="A new journey" 
                   className="w-full h-24 object-cover"
                 />
