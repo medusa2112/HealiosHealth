@@ -239,28 +239,6 @@ export default function Science() {
           </div>
         </div>
       </section>
-      
-
-      {/* Full-Width Video Section */}
-      <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          onLoadStart={() => console.log('Title video loading started')}
-          onCanPlay={() => console.log('Title video can play')}
-          onLoadedData={() => console.log('Title video loaded')}
-        >
-          <source src="/assets/title-video.webm" type="video/webm" />
-          <source src="/assets/title-video.mp4" type="video/mp4" />
-          <source src="/assets/title-video.mov" type="video/quicktime" />
-          Your browser does not support the video tag.
-        </video>
-        
-        
-      </section>
 
       {/* Sourcing Excellence - Streamlined approach */}
       <section className="py-24 bg-white dark:bg-gray-900">
@@ -351,11 +329,26 @@ export default function Science() {
               </div>
             </div>
           </div>
-
-          
-
-            
         </div>
+      </section>
+
+      {/* Full-Width Video Section */}
+      <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadStart={() => console.log('Title video loading started')}
+          onCanPlay={() => console.log('Title video can play')}
+          onLoadedData={() => console.log('Title video loaded')}
+        >
+          <source src="/assets/title-video.webm" type="video/webm" />
+          <source src="/assets/title-video.mp4" type="video/mp4" />
+          <source src="/assets/title-video.mov" type="video/quicktime" />
+          Your browser does not support the video tag.
+        </video>
       </section>
       {/* Quality Standards - Ticked list style */}
       <section className="py-24 bg-white dark:bg-gray-900">
