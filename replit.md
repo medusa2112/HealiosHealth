@@ -119,6 +119,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Created therapeutic-level biotin supplement page with 10,000% NRV dosing and blood test interference warnings
 ✓ Implemented EFSA-compliant messaging for hair and skin maintenance with realistic timeline expectations
 ✓ Added one-daily dosing convenience with 8-12 week consistency recommendations for visible results
+✓ Updated Magnesium product to Berry Flavour Gummies with 90mg citrate for optimal absorption
+✓ Enhanced magnesium product with comprehensive muscle, mind & energy support specifications
+✓ Added age-specific dosing (9-18: 1 gummy, adults: 1-2 gummies) with evening timing recommendations
+✓ Implemented EFSA-compliant claims for fatigue reduction, muscle function, and electrolyte balance
 
 ## Advanced SEO Implementation (January 2025)
 

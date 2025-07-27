@@ -150,20 +150,20 @@ export default function ProductComprehensive() {
       case 'magnesium':
         return {
           bundleWith: 'KSM-66 Ashwagandha',
-          bundlePrice: '£68.00',
-          bundleOriginalPrice: '£76.00',
-          statisticNumber: '75%',
-          statisticText: 'Today\'s carrots contain 75% less magnesium than in 1940',
-          testimonial: '"Magnesium is a game-changer for so many. I have chosen to use our Magnesium because I have never found a more effective source."',
-          testimonialAuthor: 'HENRIETTA NORTON',
-          testimonialTitle: 'Founder & Nutritionist',
-          benefitTitle: 'Sleep and relaxation support',
-          benefitDescription: 'Magnesium supports muscle relaxation and may help improve sleep quality.',
-          ingredientSource: 'Magnesium Glycinate & Magnesium Taurate',
-          ingredientForm: 'Capsules with high bioavailability',
-          ingredientOrigin: 'Premium chelated forms',
+          bundlePrice: '£42.00',
+          bundleOriginalPrice: '£58.00',
+          statisticNumber: '60%',
+          statisticText: 'of Western diets fall short on magnesium - stress, caffeine, and exercise deplete stores faster',
+          testimonial: '"Magnesium citrate in gummy form has transformed my recovery routine. I sleep better and my muscles feel less tense after training."',
+          testimonialAuthor: 'DR. JAMES THORNTON',
+          testimonialTitle: 'Sports Medicine Specialist',
+          benefitTitle: 'Muscles, mind & energy support',
+          benefitDescription: '90mg bioavailable magnesium citrate reduces fatigue, supports muscle function, and maintains electrolyte balance in a gentle chewable dose.',
+          ingredientSource: 'Magnesium citrate (90mg per gummy)',
+          ingredientForm: 'Berry-flavored chewable gummies',
+          ingredientOrigin: 'Organic citrate form for superior absorption',
           sleepBenefit: true,
-          primaryBenefit: 'Supports muscle relaxation and sleep quality'
+          primaryBenefit: 'Reduces tiredness, supports muscle function and electrolyte balance'
         };
       case 'childrens-multivitamin':
         return {
@@ -468,6 +468,14 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. High doses of biotin may interfere with blood test results. Inform your doctor before lab testing.</p>
                             </div>
+                          ) : product.id === 'magnesium' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Magnesium (citrate): 90mg (24% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults can take 1-2 gummies daily. Do not exceed 3 gummies per day.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -548,6 +556,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Gelatin-free, suitable for vegetarians and vegans. Free from gluten, dairy, and major allergens.</p>
                             </div>
+                          ) : product.id === 'magnesium' ? (
+                            <div>
+                              <p className="font-medium mb-2">Berry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Magnesium citrate (90mg per gummy) - highly bioavailable organic form</li>
+                                <li>• Natural berry flavoring</li>
+                                <li>• Pectin (vegetarian gelling agent)</li>
+                                <li>• Natural colors and low-sugar formulation</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with superior citrate absorption. Gentle on the digestive system.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -608,6 +627,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children or during pregnancy/lactation without professional advice. Inform healthcare provider before blood tests.</p>
                             </div>
+                          ) : product.id === 'magnesium' ? (
+                            <div>
+                              <p className="font-medium mb-2">Age-specific dosing:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Ages 9-18:</strong> 1 gummy per day</li>
+                                <li>• <strong>Adults:</strong> 1-2 gummies per day (do not exceed 3)</li>
+                                <li>• Take with water, ideally away from calcium-heavy meals</li>
+                                <li>• Evening use may support sleep quality</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Suitable for ages 9+. Start with 1 gummy to assess tolerance. May have laxative effect in high doses.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -663,6 +693,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Will this interfere with blood tests?</strong> Yes, high-dose biotin can affect lab results including thyroid function and heart markers. Inform your doctor before any blood tests.</li>
                                 <li>• <strong>How long before I see improvements?</strong> Hair and nail changes take time. Most people notice benefits after 8-12 weeks of consistent daily use.</li>
                                 <li>• <strong>Can I take this with other B vitamins?</strong> Yes, biotin is water-soluble so excess is naturally excreted. However, check total B-vitamin intake to avoid unnecessary excess.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'magnesium' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Magnesium Gummies:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Why magnesium citrate over other forms?</strong> Citrate has superior absorption compared to magnesium oxide and is gentler on the digestive system while providing excellent bioavailability.</li>
+                                <li>• <strong>Can I take this if I have digestive sensitivities?</strong> Yes, the 90mg dose is gentle and well-tolerated. Start with 1 gummy to assess your individual response.</li>
+                                <li>• <strong>When is the best time to take magnesium?</strong> Any time works, but many prefer evening as magnesium may support relaxation and sleep quality.</li>
+                                <li>• <strong>Can I take this with calcium supplements?</strong> Space them apart by 2+ hours as calcium can interfere with magnesium absorption when taken simultaneously.</li>
                               </ul>
                             </div>
                           ) : (

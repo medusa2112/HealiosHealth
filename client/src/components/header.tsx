@@ -61,7 +61,7 @@ export function Header() {
         { href: "/products/probiotics", label: "Digestive Support" },
         { href: "/products/probiotic-vitamins", label: "Gut + Immune Support" },
         { href: "/products/ashwagandha", label: "Stress Management" },
-        { href: "/products/magnesium", label: "Sleep Support" },
+        { href: "/products/magnesium", label: "Sleep & Muscle Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
         { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
         { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
