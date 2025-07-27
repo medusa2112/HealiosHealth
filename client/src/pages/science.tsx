@@ -309,76 +309,7 @@ export default function Science() {
           Your browser does not support the video tag.
         </video>
       </section>
-      {/* Quality Standards - Ticked list style */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            <div>
-              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
-                Quality Standards
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-8">
-                Every active nutrient in our formulations meets rigorous scientific criteria.
-              </p>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    EFSA-approved health claim
-                  </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Referenced in clinical human studies with sufficient dosing data
-                  </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Aligned with NHS/UKRI nutrient recommendations
-                  </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    No homeopathy, unproven superfoods, or speculative additives
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-12 lg:mt-0">
-              <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-6">
-                  Gummy Administration
-                </h3>
-                <div className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
-                  <p>All Healios products are manufactured in gummy form for enhanced compliance and taste.</p>
-                  <p>Doses are capped at safe daily intake levels and generally require 1–2 gummies/day.</p>
-                  <div className="space-y-2">
-                    <p className="font-medium text-gray-900 dark:text-white">Formulation considerations:</p>
-                    <ul className="space-y-1 pl-4">
-                      <li>• Gastric acid resistance (probiotics)</li>
-                      <li>• Mouthfeel and sugar content (max 2.5g sugar/gummy)</li>
-                      <li>• Allergen exclusion (gluten-free, gelatin-free)</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Regulatory & Ethics - Background image style */}
       <section className="py-24 bg-white dark:bg-gray-900">
