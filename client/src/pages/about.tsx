@@ -68,33 +68,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            <div className="mb-12 lg:mb-0">
-              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
-                The Realisation
-              </h2>
-              <div className="space-y-6 text-gray-600 dark:text-gray-400 leading-relaxed">
-                <p>
-                  Despite being fit, disciplined, and informed. We were chronically under-mineralised. Subclinical magnesium deficiency. Low vitamin D despite outdoor activity. Subpar sleep. Fractured recovery. Blood tests showed gaps. Endocrine markers told the same story. What we thought was "just life" turned out to be correctable biology.
-                </p>
-                <p>
-                  So we built what we couldn't find: clean, high-availability, clinically-dosed compounds for normal active people - not athletes, not patients, not biohackers. Just people like us, trying to feel better, focus longer, sleep deeper, and recover faster.
-                </p>
-              </div>
-            </div>
-            <div className="relative">
-              <img 
-                src={nutritionistImg}
-                alt="Healios team member sharing valuable nutritional insights and expertise" 
-                className="w-full" 
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Our Principles */}
       <section className="py-24 bg-white dark:bg-gray-900">
