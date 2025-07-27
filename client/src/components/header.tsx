@@ -30,42 +30,42 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Healios-specific navigation structure
+  // Authentic Healios product navigation structure
   const shopSections = [
     {
       title: "Bestsellers",
       items: [
-        { href: "/products/multivitamin", label: "Daily Multivitamin" },
-        { href: "/products/omega-3", label: "Omega-3 Complex" },
-        { href: "/products/vitamin-d", label: "Vitamin D3" },
-        { href: "/products/magnesium", label: "Magnesium" },
+        { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar & Ginger" },
+        { href: "/products/vitamin-d3", label: "Vitamin D3" },
+        { href: "/products/ashwagandha", label: "KSM-66 Ashwagandha" },
+        { href: "/products/magnesium", label: "Magnesium Complex" },
       ]
     },
     {
-      title: "Vitamins & Minerals",
+      title: "By Category",
       items: [
-        { href: "/products/vitamin-c", label: "Vitamin C" },
-        { href: "/products/b-complex", label: "B-Complex" },
-        { href: "/products/zinc", label: "Zinc" },
-        { href: "/products/iron", label: "Iron" },
+        { href: "/products?category=gummies", label: "Gummies" },
+        { href: "/products?category=vitamins", label: "Vitamins" },
+        { href: "/products?category=adaptogens", label: "Adaptogens" },
+        { href: "/products?category=probiotics", label: "Probiotics" },
+        { href: "/products?category=minerals", label: "Minerals" },
       ]
     },
     {
-      title: "By Health Goal",
+      title: "Wellness Goals",
       items: [
-        { href: "/products/energy", label: "Energy Support" },
-        { href: "/products/sleep", label: "Sleep & Recovery" },
-        { href: "/products/immunity", label: "Immune Support" },
-        { href: "/products/beauty", label: "Beauty & Skin" },
+        { href: "/products/probiotics", label: "Digestive Support" },
+        { href: "/products/ashwagandha", label: "Stress Management" },
+        { href: "/products/magnesium", label: "Sleep Support" },
+        { href: "/products/vitamin-d3", label: "Immune Support" },
       ]
     },
     {
-      title: "Specialty",
+      title: "All Products",
       items: [
-        { href: "/products/prenatal", label: "Prenatal Support" },
-        { href: "/products/men", label: "Men's Health" },
-        { href: "/products/women", label: "Women's Health" },
-        { href: "/products", label: "Shop All" },
+        { href: "/products", label: "Shop All Products" },
+        { href: "/quiz", label: "Take Our Wellness Quiz" },
+        { href: "/consultation", label: "Book Free Consultation" },
       ]
     }
   ];

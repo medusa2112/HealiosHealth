@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const categories = ["All", "Digestive", "Immunity", "Stress", "Sleep", "Energy"];
+const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals"];
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,7 +43,7 @@ export default function Products() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Food-Grown® Supplements & Natural Vitamins",
-    "description": "Shop our complete range of Food-Grown® supplements with 113% better absorption. Premium natural vitamins for fertility, energy, sleep, immunity and more.",
+    "description": "Shop our complete range of quality wellness supplements. Premium natural vitamins and supplements for daily wellness support.",
     "url": "https://wildclone.com/products",
     "breadcrumb": {
       "@type": "BreadcrumbList",
@@ -68,7 +68,7 @@ export default function Products() {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEOHead
         title="Premium Supplements & Natural Vitamins | Shop All Products | Healios"
-        description="Shop our complete range of science-backed supplements designed for optimal wellness. Premium natural vitamins for energy, sleep, immunity and more. Free shipping on orders £25+."
+        description="Shop our complete range of science-backed supplements designed for optimal wellness. Premium natural vitamins and supplements for daily wellness support. Free shipping on orders £25+."
         keywords="healios supplements, natural vitamins collection, magnesium, ashwagandha, vitamin D, probiotics, science-backed supplements, premium wellness"
         url="https://healios.com/products"
         structuredData={productsStructuredData}

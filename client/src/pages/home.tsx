@@ -29,16 +29,14 @@ export default function HomePage() {
     queryKey: ['/api/products/featured'],
   });
 
-  // Category filtering logic
+  // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    DIGESTIVE: ['apple-cider-vinegar'],
-    IMMUNITY: ['vitamin-d3'],
-    STRESS: ['ashwagandha'],
-    'GUT HEALTH': ['probiotics'],
-    SLEEP: ['magnesium'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3'],
+    VITAMINS: ['vitamin-d3'],
     ADAPTOGENS: ['ashwagandha'],
-    ENERGY: ['vitamin-d3']
+    PROBIOTICS: ['probiotics'],
+    MINERALS: ['magnesium']
   };
 
   const handleCategoryChange = async (category: string) => {
@@ -214,56 +212,24 @@ export default function HomePage() {
                     BESTSELLERS
                   </button>
                   <button 
-                    onClick={() => handleCategoryChange('DIGESTIVE')}
+                    onClick={() => handleCategoryChange('GUMMIES')}
                     className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'DIGESTIVE' 
+                      selectedCategory === 'GUMMIES' 
                         ? 'bg-black text-white' 
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    Digestive
+                    GUMMIES
                   </button>
                   <button 
-                    onClick={() => handleCategoryChange('IMMUNITY')}
+                    onClick={() => handleCategoryChange('VITAMINS')}
                     className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'IMMUNITY' 
+                      selectedCategory === 'VITAMINS' 
                         ? 'bg-black text-white' 
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    Immunity
-                  </button>
-                  <button 
-                    onClick={() => handleCategoryChange('STRESS')}
-                    className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'STRESS' 
-                        ? 'bg-black text-white' 
-                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    Stress
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button 
-                    onClick={() => handleCategoryChange('GUT HEALTH')}
-                    className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'GUT HEALTH' 
-                        ? 'bg-black text-white' 
-                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    Gut Health
-                  </button>
-                  <button 
-                    onClick={() => handleCategoryChange('SLEEP')}
-                    className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'SLEEP' 
-                        ? 'bg-black text-white' 
-                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    Sleep
+                    VITAMINS
                   </button>
                   <button 
                     onClick={() => handleCategoryChange('ADAPTOGENS')}
@@ -273,17 +239,29 @@ export default function HomePage() {
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    Adaptogens
+                    ADAPTOGENS
                   </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
                   <button 
-                    onClick={() => handleCategoryChange('ENERGY')}
+                    onClick={() => handleCategoryChange('PROBIOTICS')}
                     className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'ENERGY' 
+                      selectedCategory === 'PROBIOTICS' 
                         ? 'bg-black text-white' 
                         : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
-                    Energy
+                    PROBIOTICS
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('MINERALS')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'MINERALS' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    MINERALS
                   </button>
                 </div>
               </div>

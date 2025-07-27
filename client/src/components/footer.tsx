@@ -10,12 +10,11 @@ export function Footer() {
             <h3 className="text-white font-medium mb-6">Shop</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/products" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/products?category=bestsellers" className="hover:text-white transition-colors">Bestsellers</Link></li>
-              <li><Link href="/products?category=energy" className="hover:text-white transition-colors">Energy & Focus</Link></li>
-              <li><Link href="/products?category=sleep" className="hover:text-white transition-colors">Sleep & Recovery</Link></li>
-              <li><Link href="/products?category=immunity" className="hover:text-white transition-colors">Immune Support</Link></li>
-              <li><Link href="/products?category=digestive" className="hover:text-white transition-colors">Digestive Health</Link></li>
-              <li><Link href="/products?category=stress" className="hover:text-white transition-colors">Stress Management</Link></li>
+              <li><Link href="/products?category=gummies" className="hover:text-white transition-colors">Gummies</Link></li>
+              <li><Link href="/products?category=vitamins" className="hover:text-white transition-colors">Vitamins</Link></li>
+              <li><Link href="/products?category=adaptogens" className="hover:text-white transition-colors">Adaptogens</Link></li>
+              <li><Link href="/products?category=probiotics" className="hover:text-white transition-colors">Probiotics</Link></li>
+              <li><Link href="/products?category=minerals" className="hover:text-white transition-colors">Minerals</Link></li>
             </ul>
           </div>
 

@@ -92,20 +92,7 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
-      // Additional products
-      {
-        id: "omega-3",
-        name: "Omega-3 Complex",
-        description: "Omega-3 fish oil supplement with EPA & DHA",
-        price: "32.00",
-        originalPrice: "38.00",
-        imageUrl: "https://images.unsplash.com/photo-1628771065518-0d82f1938462?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
-        category: "Supplements",
-        rating: "4.8",
-        reviewCount: 298,
-        inStock: true,
-        featured: false,
-      }
+
     ];
 
     sampleProducts.forEach(product => {
