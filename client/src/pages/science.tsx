@@ -10,7 +10,6 @@ export default function Science() {
         title="The Science Behind Healios Supplements"
         description="Discover the rigorous scientific research, clinical studies, and nutritional expertise that powers Healios premium wellness supplements."
       />
-      
       {/* Hero Section - Homepage style */}
       <section className="pt-5 pb-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -24,9 +23,7 @@ export default function Science() {
                   Science-backed nutrition.<br />
                   Effective. Safe. Verified.
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  To offer effective, safe, and science-backed nutritional gummies targeting common functional health needs: immune support, energy metabolism, gut health, skin/hair wellness, and cognitive balance — all through bioavailable, verified doses and clean delivery formats.
-                </p>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">To offer effective, safe, and science-backed nutritional gummies targeting common functional health needs: immune support, energy metabolism, gut health, skin/hair wellness, and cognitive balance. All through bioavailable, verified doses and clean delivery formats.</p>
               </div>
 
               <div className="grid grid-cols-3 gap-8 mb-8">
@@ -67,8 +64,7 @@ export default function Science() {
           </div>
         </div>
       </section>
-
-      {/* Research Foundation - Ticked list style */}
+      {/* Research Foundation - Modern card grid */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -80,84 +76,144 @@ export default function Science() {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Vitamin D3 Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-yellow-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center text-white text-xl font-bold">
+                  D3
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Vitamin D3 (1000 IU / 4000 IU)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Vitamin D3
+                  </h3>
+                  <div className="inline-block bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 text-xs font-medium mb-3">
+                    1000 IU / 4000 IU
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations. [EFSA claim ID 280]
+                    Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations.
                   </p>
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    EFSA Claim ID: 280
+                  </div>
                 </div>
               </div>
+            </div>
 
+            {/* Iron + Vitamin C Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-red-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-orange-400 flex items-center justify-center text-white text-xl font-bold">
+                  Fe
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Iron + Vitamin C (14mg + 80mg)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Iron + Vitamin C
+                  </h3>
+                  <div className="inline-block bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 text-xs font-medium mb-3">
+                    14mg + 80mg
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women. [EFSA claim ID 291]
+                    Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women.
                   </p>
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    EFSA Claim ID: 291
+                  </div>
                 </div>
               </div>
+            </div>
 
+            {/* Folic Acid Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-green-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-400 flex items-center justify-center text-white text-xl font-bold">
+                  B9
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Folic Acid (400µg)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Folic Acid
+                  </h3>
+                  <div className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 text-xs font-medium mb-3">
+                    400µg
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Strong clinical evidence for pre-conception neural tube defect reduction. [EFSA claim ID 274]
+                    Strong clinical evidence for pre-conception neural tube defect reduction.
                   </p>
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    EFSA Claim ID: 274
+                  </div>
                 </div>
               </div>
+            </div>
 
+            {/* Biotin Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-purple-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white text-xl font-bold">
+                  B7
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Biotin (5000µg)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Biotin
+                  </h3>
+                  <div className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 text-xs font-medium mb-3">
+                    5000µg
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day. [EFSA claim ID 318]
+                    Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day.
                   </p>
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    EFSA Claim ID: 318
+                  </div>
                 </div>
               </div>
+            </div>
 
+            {/* Magnesium Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-blue-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white text-xl font-bold">
+                  Mg
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Magnesium Citrate (90mg)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Magnesium Citrate
+                  </h3>
+                  <div className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 text-xs font-medium mb-3">
+                    90mg
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Supports muscle function, energy metabolism, and reduction of tiredness and fatigue. Superior bioavailability compared to oxide forms.
                   </p>
                 </div>
               </div>
+            </div>
 
+            {/* Ashwagandha Card */}
+            <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-amber-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-white"></div>
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center text-white text-sm font-bold">
+                  ASH
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Ashwagandha Root Extract (300mg)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Ashwagandha Root Extract
+                  </h3>
+                  <div className="inline-block bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-3 py-1 text-xs font-medium mb-3">
+                    300mg (5% withanolides)
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Standardized to 5% withanolides. Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
+                    Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
                   </p>
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    Traditional Use
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
       {/* Clinical Effectiveness - Ingredient breakdown style */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -335,7 +391,6 @@ export default function Science() {
           </div>
         </div>
       </section>
-
       {/* Quality Standards - Ticked list style */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -406,7 +461,6 @@ export default function Science() {
           </div>
         </div>
       </section>
-
       {/* Market Position - Stats style */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
@@ -455,7 +509,6 @@ export default function Science() {
           </div>
         </div>
       </section>
-
       {/* Regulatory & Ethics - Background image style */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -514,7 +567,6 @@ export default function Science() {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
