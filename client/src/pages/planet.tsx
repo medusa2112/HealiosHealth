@@ -181,9 +181,9 @@ export default function Planet() {
 
             <div className="bg-blue-50 dark:bg-blue-900/20 p-8">
               <Globe className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Responsible Sourcing</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Environmentally Safe Ingredients</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Working with established supply chains that prioritize quality ingredients while exploring opportunities for more sustainable sourcing practices.
+                Our botanicals are sourced from certified organic farms using regenerative agriculture. Marine-derived minerals are harvested through ocean-safe methods, and all plant extracts come from suppliers committed to biodiversity preservation.
               </p>
             </div>
 
@@ -248,32 +248,43 @@ export default function Planet() {
             <div className="flex items-start gap-6">
               <div className="w-12 h-12 bg-green-600 text-white font-medium flex items-center justify-center">Q1</div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Packaging Assessment</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Sustainable Ingredient Sourcing</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">In Progress</span>
-                  Evaluating packaging alternatives to identify more sustainable options while maintaining product quality and safety.
+                  <span className="inline-block bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 text-xs font-medium mr-2">Complete</span>
+                  Our supplements use responsibly sourced botanicals including sustainably harvested ashwagandha from certified organic farms, marine-friendly magnesium citrate, and ethically sourced turmeric from regenerative agriculture practices.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-purple-600 text-white font-medium flex items-center justify-center">Q2</div>
+              <div className="w-12 h-12 bg-teal-600 text-white font-medium flex items-center justify-center">Q2</div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Packaging Assessment</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">In Progress</span>
+                  Evaluating ocean-safe packaging alternatives and recyclable materials while maintaining product freshness and safety standards.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-6">
+              <div className="w-12 h-12 bg-purple-600 text-white font-medium flex items-center justify-center">Q3</div>
               <div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Environmental Education</h3>
                 <p className="text-gray-600 dark:text-gray-400">
                   <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Planned</span>
-                  Expanding content about ocean health and environmental wellness for our community.
+                  Expanding content about ocean health, sustainable wellness practices, and ingredient transparency for our community.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-indigo-600 text-white font-medium flex items-center justify-center">Q3</div>
+              <div className="w-12 h-12 bg-indigo-600 text-white font-medium flex items-center justify-center">Q4</div>
               <div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Partnership Growth</h3>
                 <p className="text-gray-600 dark:text-gray-400">
                   <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Goal</span>
-                  Exploring opportunities to increase our ocean cleanup contribution as our business grows.
+                  Exploring opportunities to expand our environmental impact through additional sustainable sourcing initiatives and ocean cleanup contributions.
                 </p>
               </div>
             </div>

@@ -261,6 +261,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Revised environmental commitments to reflect actual capabilities rather than aspirational statements
 ✓ Updated timeline to show practical goals like packaging assessment and environmental education
 ✓ Removed external Ocean Cleanup dashboard link for cleaner, more focused content
+✓ Removed specific R15,000+ contribution amounts from all sections for more flexible messaging
+✓ Added comprehensive sustainable ingredient sourcing timeline entry highlighting certified organic farms, marine-friendly minerals, and regenerative agriculture
+✓ Updated responsible sourcing section to focus on environmentally safe ingredients and biodiversity preservation
+✓ Enhanced timeline with specific botanical sourcing details (ashwagandha, magnesium citrate, turmeric) from ethical suppliers
 
 ## Advanced SEO Implementation (January 2025)
 
