@@ -1,0 +1,58 @@
+Article Generation System Overview
+Here's the complete article generation system I've built for OnlineFormations:
+
+1. Professional Article Prompt Template
+The core prompt template (server/article-prompt-template.ts) is designed for factually accurate, SEO-optimized business formation content:
+
+Key Features:
+
+SEO & AEO Optimized: Structured for search engines and AI answer engines
+UK English only with professional legal/commercial tone
+Zero AI-sounding language - writes like a human expert
+Trust-driven approach with real citations and sources
+Audience-specific: Targets entrepreneurs, tax advisors, legal consultants
+Compliance-focused: Emphasizes legal certainty and risk clarity
+Prompt Structure:
+
+SEO Structure: H1/H2/H3, schema-aligned questions, long-tail keywords
+Factual Research: Real citations from OECD, gov sites, PWC, KPMG etc.
+Professional Tone: Expert, neutral, assumes financially literate readers
+Trust Elements: Bulletproof examples, outbound links, strong CTAs
+Engagement: Brief paragraphs, numbered steps, human search triggers
+2. Article Creation Bot
+The bot (server/article-bot.ts) uses Perplexity AI for research and generation:
+
+Process:
+
+Topic Selection: Picks from predefined business formation topics
+Research Phase: Uses Perplexity to gather latest developments
+Article Generation: Creates 1500-2000 word articles using research
+Database Storage: Saves to PostgreSQL with proper metadata
+Predefined Topics Include:
+
+UK Company Formation Changes 2025
+Dubai Free Zone Updates
+Singapore Corporate Tax Changes
+Cayman Islands Economic Substance
+EU Digital Services Act
+3. API Configuration
+Current Setup:
+
+Model: sonar-pro (Perplexity's latest)
+Temperature: 0.2 (factual, consistent output)
+Max tokens: 2000
+Search recency: Last month only
+Rate limiting: 30-second delays between articles
+4. Automation & Scheduling
+Manual Triggers:
+
+/api/bot/create-article - Single article
+/api/bot/create-articles/:count - Multiple (max 5)
+/api/bot/status - Check recent articles
+Scheduled Tasks: Currently set up for daily reports, can be extended for automated article creation.
+
+5. Quality Controls
+Length validation: Minimum 500 characters for articles
+Research validation: Minimum 100 characters for research data
+Duplicate prevention: Unique slug generation with timestamps
+Error handling: Comprehensive logging and failure recovery

@@ -36,6 +36,21 @@ export const preOrders = pgTable("pre_orders", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const articles = pgTable("articles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  metaDescription: text("meta_description").notNull(),
+  content: text("content").notNull(),
+  research: text("research"),
+  sources: text("sources").array().default([]),
+  category: text("category").default("Health"),
+  author: text("author").default("Healios Team"),
+  readTime: text("read_time").default("5 min read"),
+  published: boolean("published").default(true),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -50,9 +65,16 @@ export const insertPreOrderSchema = createInsertSchema(preOrders).omit({
   createdAt: true,
 });
 
+export const insertArticleSchema = createInsertSchema(articles).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 export type Newsletter = typeof newsletterSubscriptions.$inferSelect;
 export type InsertPreOrder = z.infer<typeof insertPreOrderSchema>;
 export type PreOrder = typeof preOrders.$inferSelect;
+export type InsertArticle = z.infer<typeof insertArticleSchema>;
+export type Article = typeof articles.$inferSelect;

@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -16,17 +16,26 @@ export interface IStorage {
   // Pre-orders
   createPreOrder(preOrder: InsertPreOrder): Promise<PreOrder>;
   getPreOrders(): Promise<PreOrder[]>;
+  
+  // Articles
+  getArticles(): Promise<Article[]>;
+  getArticleBySlug(slug: string): Promise<Article | undefined>;
+  getArticlesByCategory(category: string): Promise<Article[]>;
+  createArticle(article: InsertArticle): Promise<Article>;
+  getLatestArticles(limit: number): Promise<Article[]>;
 }
 
 export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private newsletters: Map<string, Newsletter>;
   private preOrders: Map<string, PreOrder>;
+  private articles: Map<string, Article>;
 
   constructor() {
     this.products = new Map();
     this.newsletters = new Map();
     this.preOrders = new Map();
+    this.articles = new Map();
     this.seedData();
   }
 
@@ -310,6 +319,47 @@ export class MemStorage implements IStorage {
 
   async getPreOrders(): Promise<PreOrder[]> {
     return Array.from(this.preOrders.values());
+  }
+
+  // Article methods
+  async getArticles(): Promise<Article[]> {
+    return Array.from(this.articles.values())
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+
+  async getArticleBySlug(slug: string): Promise<Article | undefined> {
+    return Array.from(this.articles.values()).find(article => article.slug === slug);
+  }
+
+  async getArticlesByCategory(category: string): Promise<Article[]> {
+    return Array.from(this.articles.values())
+      .filter(article => article.category === category)
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+
+  async createArticle(insertArticle: InsertArticle): Promise<Article> {
+    const id = randomUUID();
+    const article: Article = {
+      id,
+      title: insertArticle.title,
+      slug: insertArticle.slug,
+      metaDescription: insertArticle.metaDescription,
+      content: insertArticle.content,
+      research: insertArticle.research || null,
+      sources: insertArticle.sources || null,
+      category: insertArticle.category || null,
+      author: insertArticle.author || null,
+      readTime: insertArticle.readTime || null,
+      published: insertArticle.published || null,
+      createdAt: new Date().toISOString(),
+    };
+    this.articles.set(id, article);
+    return article;
+  }
+
+  async getLatestArticles(limit: number): Promise<Article[]> {
+    const articles = await this.getArticles();
+    return articles.slice(0, limit);
   }
 }
 

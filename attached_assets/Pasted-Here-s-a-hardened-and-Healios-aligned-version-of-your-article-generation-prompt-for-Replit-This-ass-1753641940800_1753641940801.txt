@@ -1,0 +1,134 @@
+Here’s a hardened and Healios-aligned version of your article generation prompt for Replit. This assumes you're triggering article generation manually via the backend, storing outputs directly in your database, and not using a frontend interface.
+
+---
+
+## ✅ Prompt: Replit Build – Healios Article Generation System (Backend Only)
+
+**Objective**:
+Build a backend-only article generation system for Healios that produces expert-level, medically credible health and wellness articles. The system must integrate research retrieval, AI generation (via Perplexity or OpenAI), strict tone/quality controls, and database storage.
+
+---
+
+### 🧠 System Responsibilities
+
+**Architecture Summary**:
+
+* **Prompt Engine**: Templates aligned to SEO, evidence-based medicine, and audience targeting.
+* **Research Layer**: Uses Perplexity API to gather data from gov/med/org sites.
+* **Generation Bot**: Assembles long-form articles using structured research and pre-vetted tone.
+* **Database Writer**: Saves full article + research meta to PostgreSQL.
+* **Manual Triggers**: Via API endpoints (no UI).
+
+---
+
+### 1. 📄 Prompt Template: `server/article-prompt-template.ts`
+
+**Purpose**: Guide GPT-style model to generate medically trustworthy, SEO-optimised articles in UK English.
+
+**Requirements**:
+
+* Professional medical tone (avoid “AI-speak”, clickbait, overhyped claims)
+* Structure: H1 > H2 > H3, with numbered sections, bullet lists, schema.org style
+* Trust layers: Explicitly cite PubMed, NICE, NHS, Mayo Clinic, or WHO sources where available
+* Audience: Health-conscious consumers (UK-based), no medical jargon overload
+* Avoid medical advice — educational only
+
+**Prompt Sections**:
+
+* `Article Title`
+* `Meta Description` (≤160 characters)
+* `Intro` (short, hook-based)
+* `Main Sections`: Answer common health questions with credible depth
+* `Sources`: Inline and end-of-article citations
+
+---
+
+### 2. 🤖 Article Bot: `server/article-bot.ts`
+
+**Bot Logic**:
+
+* Input: Topic from predefined list (or passed via API)
+* Step 1: Use Perplexity API to gather credible citations (PubMed, NICE, etc.)
+* Step 2: Format citations for use in article prompt
+* Step 3: Generate article (1500–2000 words) with temperature `0.2`, `max_tokens: 2000`
+* Step 4: Validate length (>500 chars), research content (>100 chars)
+* Step 5: Store in PostgreSQL:
+
+  * `title`, `slug`, `meta_description`, `content`, `research`, `sources`, `created_at`
+
+---
+
+### 3. 🧠 Predefined Topics (extendable)
+
+* **Magnesium for Sleep**
+* **Vitamin D and Mood**
+* **Collagen Benefits Backed by Research**
+* **Gut-Skin Axis: What Science Says**
+* **What Is Adaptogenic Fatigue Recovery?**
+* **The Truth About Hormonal Imbalance in Men & Women**
+* **Immune System Priming Through Supplementation**
+* **UK Supplement Regulation Explained**
+
+---
+
+### 4. ⚙️ API Endpoints: `server/routes/api.ts`
+
+* `POST /api/bot/create-article`
+  → Body: `{ "topic": "Magnesium for Sleep" }`
+
+* `POST /api/bot/create-articles/:count`
+  → Max: 5 articles per run
+
+* `GET /api/bot/status`
+  → Returns latest 10 articles with slugs, length, timestamps
+
+---
+
+### 5. ⏱ Scheduling (Optional)
+
+* Use `cron` (Node or external) to auto-trigger `create-articles` once daily
+* Rate limit: 1 article every 30 seconds to avoid token spam
+
+---
+
+### 6. 🧪 Quality Controls
+
+* **Duplicate Slug Detection**: Title → slug with timestamp fallback
+* **Length Checks**: >500 chars content, >100 chars research
+* **Logging**: Errors saved to `logs/article-bot-error.log`
+* **Retries**: Max 2 retries on generation failure
+* **Sanitisation**: Strip all AI disclaimers, hallucinated URLs, or unsupported health claims
+
+---
+
+### 7. 🔐 Security & Compliance
+
+* No frontend exposure
+* All endpoints protected with admin API key
+* GDPR-compliant data handling (no personal data processed)
+* Medical content disclaimer embedded in every article
+
+---
+
+### ✅ Output Format Example
+
+```ts
+{
+  title: "How Magnesium Supports Deep Sleep: A Research-Based Guide",
+  slug: "magnesium-sleep-guide-20250727",
+  meta_description: "Explore how magnesium helps improve sleep based on clinical studies and expert-backed research.",
+  content: "<h1>How Magnesium Supports Deep Sleep</h1><p>...</p>",
+  research: "Sources include NICE, Mayo Clinic, PubMed ID: 12345678",
+  sources: [
+    "https://www.ncbi.nlm.nih.gov/pubmed/12345678",
+    "https://www.nice.org.uk/advice/magnesium"
+  ],
+  created_at: "2025-07-27T15:45:00Z"
+}
+```
+
+---
+
+### 💥 Next Step
+
+Would you like me to generate the Replit-compatible `Prompt 0` for building this now (including file structure, modules, DB schema, and CLI trigger)?
