@@ -52,7 +52,7 @@ export class MemStorage implements IStorage {
         description: "Daily immune & bone support with 1000 IU vitamin D3 in delicious lemon-flavored gummies for adults and teens 12+.",
         price: "15.99",
         originalPrice: "26.99",
-        imageUrl: "/images/vitamin-d3-gummies.svg",
+        imageUrl: "/assets/Vitamin D3  1000 IU_1753612877752.png",
         category: "Vitamins",
         rating: "4.9",
         reviewCount: 189,
