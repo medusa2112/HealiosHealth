@@ -99,14 +99,7 @@ export function Header() {
         { href: "/science/research", label: "Research & Clinical Studies" },
       ]
     },
-    {
-      title: "For Practitioners",
-      items: [
-        { href: "/practitioners", label: "Our Practitioner Community" },
-        { href: "/practitioners/events", label: "Practitioner Events" },
-        { href: "/practitioners/resources", label: "Professional Resources" },
-      ]
-    },
+
     {
       title: "Women's Health Hubs",
       items: [
