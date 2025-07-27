@@ -341,6 +341,39 @@ export default function Science() {
             </div>
           </div>
 
+          {/* Full-Width Video Section */}
+          <div className="w-full mt-16 -mx-6">
+            <div className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                onLoadStart={() => console.log('Title video loading started')}
+                onCanPlay={() => console.log('Title video can play')}
+                onLoadedData={() => console.log('Title video loaded')}
+              >
+                <source src="/assets/title-video.webm" type="video/webm" />
+                <source src="/assets/title-video.mp4" type="video/mp4" />
+                <source src="/assets/title-video.mov" type="video/quicktime" />
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Optional overlay content */}
+              <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <h3 className="text-3xl lg:text-4xl font-light mb-4">
+                    Science Meets Innovation
+                  </h3>
+                  <p className="text-lg lg:text-xl max-w-2xl mx-auto opacity-90">
+                    Experience the future of nutritional wellness through cutting-edge research and premium formulation
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Synergistic Formulations */}
           <div className="mt-16">
             <div className="text-center mb-12">
