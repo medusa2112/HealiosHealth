@@ -102,7 +102,7 @@ export function CartSidebar() {
               </div>
               <Link href="/checkout">
                 <Button 
-                  className="w-full bg-black hover:bg-gray-800 text-white py-3 font-medium transition-colors duration-200 touch-manipulation"
+                  className="w-full bg-black hover:text-[#07a88a] text-white py-3 font-medium transition-colors duration-200 touch-manipulation"
                   onClick={toggleCart}
                 >
                   Proceed to Checkout

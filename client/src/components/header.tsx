@@ -228,7 +228,7 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(false)}
-                  className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                  className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
                     isScrolled ? 'h-12 px-3' : 'h-16 px-4'
                   }`}
                 >
@@ -242,7 +242,7 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
                   isScrolled ? 'h-12 px-3' : 'h-16 px-4'
                 }`}
               >
@@ -257,7 +257,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+              className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
                 isScrolled ? 'h-12 px-3' : 'h-16 px-4'
               }`}
             >
@@ -277,7 +277,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className={`text-white hover:bg-healios-cyan hover:text-black relative transition-colors duration-200 ${
+              className={`text-white hover:text-[#07a88a] relative transition-colors duration-200 ${
                 isScrolled ? 'h-12 px-3' : 'h-16 px-4'
               }`}
             >
@@ -297,7 +297,7 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className={`lg:hidden text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                  className={`lg:hidden text-white hover:text-[#07a88a] transition-colors duration-200 ${
                     isScrolled ? 'h-12 px-3' : 'h-16 px-4'
                   }`}
                 >
@@ -448,7 +448,7 @@ export function Header() {
                     Book a free 15 min consultation
                   </p>
                   <Link href="/consultation">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors whitespace-nowrap">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
                       Book Now →
                     </button>
                   </Link>
@@ -469,7 +469,7 @@ export function Header() {
                     Visit our pregnancy hub
                   </p>
                   <Link href="/pregnancy">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors whitespace-nowrap">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
                       Explore →
                     </button>
                   </Link>
