@@ -2,7 +2,7 @@ import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain, Check } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
 import teamFitnessImg from '@assets/we-make-the-best-team-2025-04-05-22-51-36-utc (1) (1)_1753630878366.jpg';
-import basketballTeamImg from '@assets/the-game-is-what-brings-us-together-2025-04-06-11-08-01-utc_1753630689523.jpg';
+import teamCelebrationImg from '@assets/we-make-the-best-team-2025-04-05-22-51-36-utc (1) (1)_1753631002255.jpg';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
 export default function About() {
@@ -131,8 +131,8 @@ export default function About() {
             <div className="order-2 lg:order-1">
               <div className="relative h-96 overflow-hidden">
                 <img
-                  src={basketballTeamImg}
-                  alt="Diverse basketball team representing the Healios community of active individuals who prioritize performance and wellness"
+                  src={teamCelebrationImg}
+                  alt="Diverse team of athletes celebrating together, representing the Healios community of high-performing individuals who support each other"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
