@@ -31,6 +31,7 @@ export default function HomePage() {
   
   // Animation state for pharmacists image
   const [imageTransform, setImageTransform] = useState('translateX(-100px) scale(0.95)');
+  const [hasReachedCenter, setHasReachedCenter] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top when component mounts
@@ -57,19 +58,31 @@ export default function HomePage() {
             const maxDistance = windowHeight / 2;
             const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
             
-            // Smooth easing function
-            const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-            const easedProgress = easeOutCubic(progress);
+            // Check if we've reached the center (progress > 0.8 means very close to center)
+            if (progress > 0.8 && !hasReachedCenter) {
+              setHasReachedCenter(true);
+            }
             
-            // Calculate transforms based on progress
-            const translateX = -100 + (easedProgress * 100); // From -100px to 0px
-            const scale = 0.95 + (easedProgress * 0.05); // From 0.95 to 1.0
-            const opacity = 0.7 + (easedProgress * 0.3); // From 0.7 to 1.0
-            
-            setImageTransform(`translateX(${translateX}px) scale(${scale})`);
-            imageElement.style.opacity = opacity.toString();
-          } else {
-            // Reset to initial state when not intersecting
+            // Only animate if we haven't reached center yet, otherwise keep final position
+            if (!hasReachedCenter) {
+              // Smooth easing function
+              const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+              const easedProgress = easeOutCubic(progress);
+              
+              // Calculate transforms based on progress
+              const translateX = -100 + (easedProgress * 100); // From -100px to 0px
+              const scale = 0.95 + (easedProgress * 0.05); // From 0.95 to 1.0
+              const opacity = 0.7 + (easedProgress * 0.3); // From 0.7 to 1.0
+              
+              setImageTransform(`translateX(${translateX}px) scale(${scale})`);
+              imageElement.style.opacity = opacity.toString();
+            } else {
+              // Keep final position once center is reached
+              setImageTransform('translateX(0px) scale(1.0)');
+              imageElement.style.opacity = '1.0';
+            }
+          } else if (!hasReachedCenter) {
+            // Only reset if we haven't reached center yet
             setImageTransform('translateX(-100px) scale(0.95)');
             imageElement.style.opacity = '0.7';
           }
@@ -84,7 +97,7 @@ export default function HomePage() {
     observer.observe(imageElement);
 
     return () => observer.disconnect();
-  }, []);
+  }, [hasReachedCenter]);
 
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['/api/products/featured'],
