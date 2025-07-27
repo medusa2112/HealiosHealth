@@ -871,59 +871,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Customer Photos */}
-          <div className="mt-3">
-            <div className="grid grid-cols-3 lg:grid-cols-3 gap-8">
-              <div className="flex justify-between items-center">
-                {[
-                  "/assets/Screenshot 2025-07-27 at 15.19.44_1753622601502.png",
-                  "/assets/Screenshot 2025-07-27 at 15.19.52_1753622601502.png",
-                  "/assets/Screenshot 2025-07-27 at 15.20.03_1753622601501.png",
-                  "/assets/Screenshot 2025-07-27 at 15.20.15_1753622601501.png"
-                ].map((src, index) => (
-                  <div key={index} className="flex-shrink-0">
-                    <img
-                      src={src}
-                      alt={`Happy customer ${index + 1}`}
-                      className="w-16 h-16 object-cover border-2 border-white dark:border-gray-600"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-between items-center">
-                {[
-                  "/assets/Screenshot 2025-07-27 at 15.20.40_1753622601501.png",
-                  "/assets/Screenshot 2025-07-27 at 15.20.51_1753622601501.png",
-                  "/assets/Screenshot 2025-07-27 at 15.21.07_1753622601500.png",
-                  "/assets/Screenshot 2025-07-27 at 15.21.14_1753622601500.png"
-                ].map((src, index) => (
-                  <div key={index + 4} className="flex-shrink-0">
-                    <img
-                      src={src}
-                      alt={`Happy customer ${index + 5}`}
-                      className="w-16 h-16 object-cover border-2 border-white dark:border-gray-600"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-between items-center">
-                {[
-                  "/assets/Screenshot 2025-07-27 at 15.22.13_1753622601500.png",
-                  "/assets/Screenshot 2025-07-27 at 15.22.24_1753622601500.png",
-                  "/assets/Screenshot 2025-07-27 at 15.22.36_1753622601500.png",
-                  "/assets/Screenshot 2025-07-27 at 15.22.50_1753622601499.png"
-                ].map((src, index) => (
-                  <div key={index + 8} className="flex-shrink-0">
-                    <img
-                      src={src}
-                      alt={`Happy customer ${index + 9}`}
-                      className="w-16 h-16 object-cover border-2 border-white dark:border-gray-600"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+
         </div>
       </section>
 
