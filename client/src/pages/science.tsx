@@ -248,7 +248,48 @@ export default function Science() {
         </div>
       </section>
 
+      {/* Key Ingredient Spotlight */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-12">
+            <div className="text-center mb-12">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+                Featured Ingredient: Lichen-Derived Vitamin D3
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Our flagship Vitamin D3 is sourced from wild lichen harvested in the pristine environments of Iceland and Norway, providing a vegan-friendly alternative to traditional lanolin-derived D3 with superior bioavailability.
+              </p>
+            </div>
 
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">1000-4000 IU</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Daily Dosage Range</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">100% Vegan</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Plant-Based Source</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">EFSA-Approved</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Health Claims</p>
+                <a 
+                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
+                >
+                  View Claim ID: 280
+                </a>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Nordic Origin</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Iceland & Norway</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Full-Width Video Section */}
       <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
