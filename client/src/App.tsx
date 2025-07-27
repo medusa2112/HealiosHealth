@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
-import Product from "@/pages/product";
+import ProductComprehensive from "@/pages/product-comprehensive";
 import Checkout from "@/pages/checkout";
 import OrderConfirmation from "@/pages/order-confirmation";
 import About from "@/pages/about";
@@ -25,7 +25,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
-      <Route path="/products/:id" component={Product} />
+      <Route path="/products/:id" component={ProductComprehensive} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/order-confirmation" component={OrderConfirmation} />
       <Route path="/about" component={About} />
