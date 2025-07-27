@@ -151,7 +151,7 @@ export default function About() {
 
               {/* Personal Statements */}
               <div className="mb-8">
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-black dark:text-white mt-0.5 flex-shrink-0" />
                     <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
