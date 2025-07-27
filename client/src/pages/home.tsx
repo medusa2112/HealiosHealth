@@ -513,8 +513,22 @@ export default function HomePage() {
       {/* Pregnancy & New Mother Section */}
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
-          {/* Black Background Column */}
-          <div className="bg-black min-h-[600px] lg:h-full">
+          {/* Video Column */}
+          <div className="relative overflow-hidden min-h-[600px] lg:h-full">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              onLoadStart={() => console.log('TheFourths video loading started')}
+              onCanPlay={() => console.log('TheFourths video can play')}
+            >
+              <source src="/attached_assets/TheFourths_1753620188166.mov" type="video/mp4" />
+              {/* Fallback to black background if video fails to load */}
+              <div className="absolute inset-0 bg-black"></div>
+            </video>
           </div>
 
           {/* Content */}
