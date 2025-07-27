@@ -84,33 +84,39 @@ export default function About() {
 
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="text-center">
-              <Microscope className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
-                Ingredient Bioavailability
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                Every formula starts with forms that actually absorb. You won't find magnesium oxide or synthetic D2 here. Only bioactive forms with proven uptake — like magnesium bisglycinate (with &gt;80% absorption) and cholecalciferol (D3), used in over 95% of vitamin D outcome trials.
-              </p>
+              <div className="bg-gray-50 dark:bg-gray-800 p-8">
+                <Microscope className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+                  Ingredient Bioavailability
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  Every formula starts with forms that actually absorb. You won't find magnesium oxide or synthetic D2 here. Only bioactive forms with proven uptake — like magnesium bisglycinate (with &gt;80% absorption) and cholecalciferol (D3), used in over 95% of vitamin D outcome trials.
+                </p>
+              </div>
             </div>
 
             <div className="text-center">
-              <TestTube className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
-                Therapeutic Dosages, Not Marketing Dust
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                No pixie dusting. If it doesn't reach the dose used in peer-reviewed studies, it's not in our formula. Period.
-              </p>
+              <div className="bg-gray-50 dark:bg-gray-800 p-8">
+                <TestTube className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+                  Therapeutic Dosages, Not Marketing Dust
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  No pixie dusting. If it doesn't reach the dose used in peer-reviewed studies, it's not in our formula. Period.
+                </p>
+              </div>
             </div>
 
             <div className="text-center">
-              <Target className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
-                Zero Fillers, Additives, or Undisclosed Blends
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
-              </p>
+              <div className="bg-gray-50 dark:bg-gray-800 p-8">
+                <Target className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+                  Zero Fillers, Additives, or Undisclosed Blends
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
+                </p>
+              </div>
             </div>
           </div>
         </div>
