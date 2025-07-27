@@ -156,8 +156,8 @@ export default function HomePage() {
 
   // Filter reviews based on selected category
   const filteredReviews = selectedReviewCategory === 'All' 
-    ? allReviews.slice(0, 3) // Show first 3 for 'All'
-    : allReviews.filter(review => review.category === selectedReviewCategory).slice(0, 3);
+    ? allReviews // Show all reviews for 'All'
+    : allReviews.filter(review => review.category === selectedReviewCategory);
   
   // Removed animation state for fitness video - now static display
   
@@ -847,7 +847,7 @@ export default function HomePage() {
 
             {/* Reviews Grid */}
             <div className={`lg:col-span-3 ${selectedReviewCategory === 'All' 
-              ? 'flex gap-6 overflow-x-auto pb-4' 
+              ? 'flex gap-6 overflow-x-auto pb-4 scrollbar-hide' 
               : 'grid grid-cols-1 lg:grid-cols-3 gap-6'
             }`}>
               {filteredReviews.map((review) => (
