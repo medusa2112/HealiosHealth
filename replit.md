@@ -161,6 +161,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Fixed critical site-wide image serving issue by adding static file route for /assets directory
 ✓ Updated Biotin 5000µg with final authentic Healios product image featuring premium black packaging
 ✓ Updated Folic Acid 400µg with latest authentic Healios image featuring green pregnancy/maternal health branding and premium black packaging
+✓ Implemented clean single pricing structure across all products removing original prices and discount displays
+✓ Updated all product prices to match new RRP pricing table with no sales or discounts
 
 ## Advanced SEO Implementation (January 2025)
 

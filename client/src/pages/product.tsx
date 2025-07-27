@@ -139,16 +139,6 @@ export default function ProductPage() {
                   <span className="text-3xl font-semibold text-gray-900 dark:text-white">
                     £{product.price}
                   </span>
-                  {product.originalPrice && (
-                    <span className="text-xl text-gray-500 line-through">
-                      £{product.originalPrice}
-                    </span>
-                  )}
-                  {product.originalPrice && (
-                    <span className="bg-red-600 text-white px-3 py-1 text-sm font-medium">
-                      Save £{(parseFloat(product.originalPrice) - parseFloat(product.price)).toFixed(2)}
-                    </span>
-                  )}
                 </div>
 
                 {/* Description */}

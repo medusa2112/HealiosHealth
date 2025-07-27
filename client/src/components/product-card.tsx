@@ -68,11 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 BESTSELLER
               </span>
             )}
-            {product.originalPrice && (
-              <span className="bg-red-600 text-white px-2 py-1 text-xs font-medium">
-                SAVE £{(parseFloat(product.originalPrice) - parseFloat(product.price)).toFixed(0)}
-              </span>
-            )}
+
             {!product.inStock && (
               <span className="bg-gray-600 text-white px-2 py-1 text-xs font-medium">
                 SOLD OUT
@@ -132,11 +128,6 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-lg font-semibold text-gray-900 dark:text-white">
               £{product.price}
             </span>
-            {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through">
-                £{product.originalPrice}
-              </span>
-            )}
           </div>
         </div>
       </div>

@@ -261,18 +261,8 @@ export default function ProductDetail() {
               <div className="mb-6">
                 <div className="flex items-baseline gap-4 mb-4">
                   <span className="text-3xl font-light text-gray-900 dark:text-white">
-                    £{subscriptionMode ? (parseFloat(product.price) * 0.8).toFixed(2) : product.price}
+                    £{product.price}
                   </span>
-                  {product.originalPrice && (
-                    <span className="text-lg text-gray-500 line-through">
-                      £{product.originalPrice}
-                    </span>
-                  )}
-                  {subscriptionMode && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      Save 20%
-                    </Badge>
-                  )}
                 </div>
 
                 {/* Subscription Toggle */}

@@ -79,7 +79,6 @@ export function ApparelCard({ product, badge }: ApparelCardProps) {
             
             {/* Price */}
             <div className="text-sm text-gray-800 dark:text-gray-200 font-medium" itemProp="offers" itemScope itemType="https://schema.org/Offer">
-              <span className="line-through text-gray-400 mr-2 text-xs">£{product.originalPrice}</span>
               <span itemProp="price" content={product.price}>£{product.price}</span>
               <meta itemProp="priceCurrency" content="GBP" />
               <meta itemProp="availability" content="https://schema.org/PreOrder" />
