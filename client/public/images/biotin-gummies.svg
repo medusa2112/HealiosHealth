@@ -1,0 +1,78 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bottleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF0F3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE4E8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gummyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DB2777;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#FAFAFA"/>
+  
+  <!-- Hair strands -->
+  <g opacity="0.3" stroke="#8D6E63" stroke-width="2" fill="none">
+    <path d="M 80 100 Q 85 130 75 160 Q 70 190 80 220"/>
+    <path d="M 90 95 Q 95 125 85 155 Q 80 185 90 215"/>
+    <path d="M 320 110 Q 315 140 325 170 Q 330 200 320 230"/>
+    <path d="M 310 105 Q 305 135 315 165 Q 320 195 310 225"/>
+  </g>
+  
+  <!-- Bottle -->
+  <rect x="150" y="100" width="100" height="140" rx="8" fill="url(#bottleGradient)" stroke="#E0E0E0" stroke-width="2"/>
+  
+  <!-- Bottle cap -->
+  <rect x="160" y="80" width="80" height="30" rx="15" fill="#2D3748"/>
+  
+  <!-- Label -->
+  <rect x="160" y="140" width="80" height="60" rx="4" fill="white" stroke="#E0E0E0"/>
+  <text x="200" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#2D3748">HEALIOS</text>
+  <text x="200" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#666">Biotin</text>
+  <text x="200" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#666">5000µg</text>
+  
+  <!-- Gummies -->
+  <circle cx="120" cy="280" r="18" fill="url(#gummyGradient)"/>
+  <circle cx="170" cy="300" r="18" fill="url(#gummyGradient)"/>
+  <circle cx="230" cy="290" r="18" fill="url(#gummyGradient)"/>
+  <circle cx="280" cy="310" r="18" fill="url(#gummyGradient)"/>
+  <circle cx="140" cy="340" r="18" fill="url(#gummyGradient)"/>
+  <circle cx="250" cy="340" r="18" fill="url(#gummyGradient)"/>
+  
+  <!-- Beauty elements -->
+  <g opacity="0.4">
+    <!-- Nail -->
+    <ellipse cx="100" cy="260" rx="6" ry="15" fill="#EC4899"/>
+    <ellipse cx="300" cy="180" rx="5" ry="12" fill="#EC4899"/>
+    
+    <!-- Skin glow -->
+    <circle cx="320" cy="270" r="20" fill="#FFE4E8" opacity="0.6"/>
+  </g>
+  
+  <!-- Strawberry illustration -->
+  <g transform="translate(200, 50)">
+    <path d="M 0 0 Q -10 -12 0 -18 Q 10 -12 0 0 Q 8 10 0 18 Q -8 10 0 0" fill="#EC4899" opacity="0.6"/>
+    <circle cx="-4" cy="4" r="1.5" fill="white" opacity="0.8"/>
+    <circle cx="4" cy="8" r="1.5" fill="white" opacity="0.8"/>
+    <circle cx="0" cy="-4" r="1.5" fill="white" opacity="0.8"/>
+    <path d="M -6 -15 L -2 -22 M 0 -15 L 0 -25 M 6 -15 L 2 -22" stroke="#22C55E" stroke-width="2"/>
+  </g>
+  
+  <!-- High potency indicators -->
+  <g opacity="0.5">
+    <text x="80" y="340" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#EC4899">5000</text>
+    <text x="320" y="340" font-family="Arial, sans-serif" font-size="12" fill="#666">µg</text>
+  </g>
+  
+  <!-- Shine effects -->
+  <g opacity="0.6">
+    <path d="M 120 120 L 123 127 L 130 125 L 123 133 Z" fill="#EC4899"/>
+    <path d="M 280 120 L 283 127 L 290 125 L 283 133 Z" fill="#EC4899"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2D3748">Strawberry Flavour</text>
+  <text x="200" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">High-Potency Hair, Skin & Nails</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bottleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF9E6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE066;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gummyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBBF24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FCD34D;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#FAFAFA"/>
+  
+  <!-- Sun rays -->
+  <g stroke="#F59E0B" stroke-width="3" opacity="0.4">
+    <line x1="80" y1="80" x2="100" y2="100"/>
+    <line x1="120" y1="60" x2="120" y2="80"/>
+    <line x1="160" y1="80" x2="140" y2="100"/>
+    <line x1="320" y1="80" x2="300" y2="100"/>
+    <line x1="280" y1="60" x2="280" y2="80"/>
+    <line x1="240" y1="80" x2="260" y2="100"/>
+  </g>
+  
+  <!-- Sun -->
+  <circle cx="200" cy="120" r="40" fill="url(#sunGradient)"/>
+  
+  <!-- Bottle -->
+  <rect x="150" y="180" width="100" height="140" rx="8" fill="url(#bottleGradient)" stroke="#E0E0E0" stroke-width="2"/>
+  
+  <!-- Bottle cap -->
+  <rect x="160" y="160" width="80" height="30" rx="15" fill="#2D3748"/>
+  
+  <!-- Label -->
+  <rect x="160" y="220" width="80" height="60" rx="4" fill="white" stroke="#E0E0E0"/>
+  <text x="200" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#2D3748">HEALIOS</text>
+  <text x="200" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#666">Vitamin D3</text>
+  <text x="200" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#666">1000 IU</text>
+  
+  <!-- Gummies -->
+  <circle cx="120" cy="340" r="16" fill="url(#gummyGradient)"/>
+  <circle cx="170" cy="360" r="16" fill="url(#gummyGradient)"/>
+  <circle cx="230" cy="350" r="16" fill="url(#gummyGradient)"/>
+  <circle cx="280" cy="370" r="16" fill="url(#gummyGradient)"/>
+  <circle cx="140" cy="380" r="16" fill="url(#gummyGradient)"/>
+  <circle cx="250" cy="390" r="16" fill="url(#gummyGradient)"/>
+  
+  <!-- Lemon slice -->
+  <circle cx="320" cy="200" r="20" fill="#FBBF24" opacity="0.6"/>
+  <path d="M 300 200 L 340 200 M 310 185 L 330 215 M 310 215 L 330 185" stroke="white" stroke-width="1.5"/>
+  
+  <!-- Text -->
+  <text x="200" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2D3748">Lemon Flavour</text>
+  <text x="200" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666">Daily immune support</text>
+</svg>
