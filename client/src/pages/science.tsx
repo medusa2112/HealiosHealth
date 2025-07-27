@@ -343,35 +343,127 @@ export default function Science() {
             </div>
           </div>
 
-          {/* Full-Width Video Section */}
-          <div className="w-full mt-16 -mx-6">
-            <div className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
-              <video
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                onLoadStart={() => console.log('Title video loading started')}
-                onCanPlay={() => console.log('Title video can play')}
-                onLoadedData={() => console.log('Title video loaded')}
-              >
-                <source src="/assets/title-video.webm" type="video/webm" />
-                <source src="/assets/title-video.mp4" type="video/mp4" />
-                <source src="/assets/title-video.mov" type="video/quicktime" />
-                Your browser does not support the video tag.
-              </video>
-              
-              {/* Optional overlay content */}
-              <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <h3 className="text-3xl lg:text-4xl font-light mb-4">
-                    Science Meets Innovation
-                  </h3>
-                  <p className="text-lg lg:text-xl max-w-2xl mx-auto opacity-90">
-                    Experience the future of nutritional wellness through cutting-edge research and premium formulation
-                  </p>
-                </div>
+        </div>
+      </section>
+
+      {/* Full-Width Video Section */}
+      <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadStart={() => console.log('Title video loading started')}
+          onCanPlay={() => console.log('Title video can play')}
+          onLoadedData={() => console.log('Title video loaded')}
+        >
+          <source src="/assets/title-video.webm" type="video/webm" />
+          <source src="/assets/title-video.mp4" type="video/mp4" />
+          <source src="/assets/title-video.mov" type="video/quicktime" />
+          Your browser does not support the video tag.
+        </video>
+        
+        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h3 className="text-3xl lg:text-4xl font-light mb-4">
+              Science Meets Innovation
+            </h3>
+            <p className="text-lg lg:text-xl max-w-2xl mx-auto opacity-90">
+              Experience the future of nutritional wellness through cutting-edge research and premium formulation
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Sourcing Excellence - Streamlined approach */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
+              Sourcing Excellence
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Premium ingredients sourced from certified suppliers across Europe and Scandinavia
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8 mb-16">
+            {/* Global Sourcing */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                🌍
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Global Network
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Partnered with certified suppliers across Iceland, Norway, Germany, Switzerland, Netherlands, and Belgium
+              </p>
+            </div>
+
+            {/* Quality Assurance */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                ✓
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Pharmaceutical Grade
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                All active ingredients meet pharmaceutical-grade standards with full traceability documentation
+              </p>
+            </div>
+
+            {/* Ethical Standards */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                🏆
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Sustainable Practices
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Ethically sourced with environmental impact considerations and fair trade partnerships
+              </p>
+            </div>
+          </div>
+
+          {/* Key Ingredient Spotlight */}
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-12">
+            <div className="text-center mb-12">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+                Featured Ingredient: Lichen-Derived Vitamin D3
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Our flagship Vitamin D3 is sourced from wild lichen harvested in the pristine environments of Iceland and Norway, providing a vegan-friendly alternative to traditional lanolin-derived D3 with superior bioavailability.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">1000-4000 IU</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Daily Dosage Range</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">100% Vegan</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Plant-Based Source</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">EFSA-Approved</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Health Claims</p>
+                <a 
+                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                >
+                  View Claim ID: 280 →
+                </a>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Nordic Origin</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Iceland & Norway</p>
               </div>
             </div>
           </div>
