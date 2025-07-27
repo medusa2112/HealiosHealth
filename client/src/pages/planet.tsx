@@ -234,59 +234,69 @@ export default function Planet() {
             </p>
           </div>
 
-          <div className="space-y-8">
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-blue-600 text-white font-medium flex items-center justify-center">Q4</div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2024: Partnership Launch</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Established monthly contribution program with The Ocean Cleanup to support ocean plastic removal efforts.
-                </p>
+          <div className="space-y-12">
+            <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-600 dark:bg-blue-400"></div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Q4 2024</span>
+                <div className="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
               </div>
+              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-3">Partnership Launch</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Established monthly contribution program with The Ocean Cleanup to support ocean plastic removal efforts.
+              </p>
             </div>
 
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-green-600 text-white font-medium flex items-center justify-center">Q1</div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Sustainable Ingredient Sourcing</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 text-xs font-medium mr-2">Complete</span>
-                  Our supplements use responsibly sourced botanicals including sustainably harvested ashwagandha from certified organic farms, marine-friendly magnesium citrate, and ethically sourced turmeric from regenerative agriculture practices.
-                </p>
+            <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-green-600 dark:bg-green-400"></div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-sm font-medium text-green-600 dark:text-green-400">Q1 2025</span>
+                <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 font-medium">Complete</span>
+                <div className="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
               </div>
+              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-3">Sustainable Ingredient Sourcing</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Our supplements use responsibly sourced botanicals including sustainably harvested ashwagandha from certified organic farms, marine-friendly magnesium citrate, and ethically sourced turmeric from regenerative agriculture practices.
+              </p>
             </div>
 
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-teal-600 text-white font-medium flex items-center justify-center">Q2</div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Packaging Assessment</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">In Progress</span>
-                  Evaluating ocean-safe packaging alternatives and recyclable materials while maintaining product freshness and safety standards.
-                </p>
+            <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-gray-400 dark:bg-gray-500"></div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Q2 2025</span>
+                <span className="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 font-medium">In Progress</span>
+                <div className="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
               </div>
+              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-3">Packaging Assessment</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Evaluating ocean-safe packaging alternatives and recyclable materials while maintaining product freshness and safety standards.
+              </p>
             </div>
 
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-purple-600 text-white font-medium flex items-center justify-center">Q3</div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Environmental Education</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Planned</span>
-                  Expanding content about ocean health, sustainable wellness practices, and ingredient transparency for our community.
-                </p>
+            <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-gray-300 dark:bg-gray-600"></div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Q3 2025</span>
+                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium">Planned</span>
+                <div className="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
               </div>
+              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-3">Environmental Education</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Expanding content about ocean health, sustainable wellness practices, and ingredient transparency for our community.
+              </p>
             </div>
 
-            <div className="flex items-start gap-6">
-              <div className="w-12 h-12 bg-indigo-600 text-white font-medium flex items-center justify-center">Q4</div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Partnership Growth</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Goal</span>
-                  Exploring opportunities to expand our environmental impact through additional sustainable sourcing initiatives and ocean cleanup contributions.
-                </p>
+            <div className="border-l-2 border-gray-200 dark:border-gray-700 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-gray-300 dark:bg-gray-600"></div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Q4 2025</span>
+                <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium">Goal</span>
+                <div className="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
               </div>
+              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-3">Partnership Growth</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Exploring opportunities to expand our environmental impact through additional sustainable sourcing initiatives and ocean cleanup contributions.
+              </p>
             </div>
           </div>
         </div>
