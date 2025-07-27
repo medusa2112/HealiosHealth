@@ -165,6 +165,24 @@ export default function ProductComprehensive() {
           sleepBenefit: true,
           primaryBenefit: 'Supports muscle relaxation and sleep quality'
         };
+      case 'childrens-multivitamin':
+        return {
+          bundleWith: 'Vitamin D3 Gummies',
+          bundlePrice: '£32.00',
+          bundleOriginalPrice: '£46.00',
+          statisticNumber: '85%',
+          statisticText: 'of children don\'t get adequate vitamins from diet alone',
+          testimonial: '"These gummies are a game-changer for busy parents. My children actually look forward to taking their vitamins now!"',
+          testimonialAuthor: 'DR. SARAH JOHNSON',
+          testimonialTitle: 'Pediatric Nutritionist',
+          benefitTitle: 'Complete daily nutrition for growing bodies',
+          benefitDescription: '13 essential vitamins and minerals support immune function, growth, energy metabolism, and cognitive development in children aged 3-12.',
+          ingredientSource: 'Premium vitamin and mineral blend',
+          ingredientForm: 'Berry-flavored chewable gummies',
+          ingredientOrigin: 'EFSA-approved bioavailable sources',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports healthy growth, immunity, and cognitive development'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -334,27 +352,95 @@ export default function ProductComprehensive() {
                       )}
                       {section === 'NUTRITIONAL INFORMATION' && (
                         <div>
-                          <p>Per serving nutritional information:</p>
-                          <ul className="mt-2 space-y-1">
-                            <li>• Active ingredients clearly listed</li>
-                            <li>• Third-party tested for purity</li>
-                            <li>• No artificial fillers or preservatives</li>
-                          </ul>
+                          {product.id === 'childrens-multivitamin' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy (Daily Values for Children):</p>
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                                <div className="font-medium">Vitamin A: 400μg (50% NRV)</div>
+                                <div className="font-medium">Vitamin D2: 5μg (100% NRV)</div>
+                                <div className="font-medium">Vitamin E: 6mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin C: 40mg (50% NRV)</div>
+                                <div className="font-medium">Niacin (B3): 8mg (50% NRV)</div>
+                                <div className="font-medium">Pantothenic Acid: 3mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B6: 0.7mg (50% NRV)</div>
+                                <div className="font-medium">Folic Acid: 100μg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B12: 1.25μg (50% NRV)</div>
+                                <div className="font-medium">Biotin: 25μg (50% NRV)</div>
+                                <div className="font-medium">Zinc: 5mg (50% NRV)</div>
+                                <div className="font-medium">Iodine: 75μg (50% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value</p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p>Per serving nutritional information:</p>
+                              <ul className="mt-2 space-y-1">
+                                <li>• Active ingredients clearly listed</li>
+                                <li>• Third-party tested for purity</li>
+                                <li>• No artificial fillers or preservatives</li>
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       )}
                       {section === 'INGREDIENTS' && (
-                        <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
+                        <div>
+                          {product.id === 'childrens-multivitamin' ? (
+                            <div>
+                              <p className="font-medium mb-2">Berry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Vitamin A (retinyl acetate)</li>
+                                <li>• Vitamin D2 (ergocalciferol)</li>
+                                <li>• Vitamin E (d-alpha tocopherol)</li>
+                                <li>• Vitamin C (ascorbic acid)</li>
+                                <li>• B-Complex vitamins (B3, B5, B6, B12, Biotin, Folic Acid)</li>
+                                <li>• Zinc (zinc citrate)</li>
+                                <li>• Iodine (potassium iodide)</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
+                            </div>
+                          ) : (
+                            <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
+                          )}
+                        </div>
                       )}
                       {section === 'HOW TO TAKE' && (
-                        <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
+                        <div>
+                          {product.id === 'childrens-multivitamin' ? (
+                            <div>
+                              <p className="font-medium mb-2">Age-specific dosing:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Ages 3-8:</strong> 1 gummy per day</li>
+                                <li>• <strong>Ages 9+:</strong> 2 gummies per day</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Take with or without food. Do not exceed recommended dosage. Keep out of reach of children under 3 years.</p>
+                            </div>
+                          ) : (
+                            <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
+                          )}
+                        </div>
                       )}
                       {section === 'FAQS' && (
                         <div>
-                          <p className="font-medium">Common questions about this product:</p>
-                          <ul className="mt-2 space-y-2">
-                            <li>• Can I take this with other supplements? Generally yes, but consult your healthcare provider.</li>
-                            <li>• When will I see results? Individual results vary, typically 2-4 weeks of consistent use.</li>
-                          </ul>
+                          {product.id === 'childrens-multivitamin' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about children's vitamins:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Are these safe for picky eaters?</strong> Yes, these gummies are designed specifically for children who struggle with tablets or have selective eating habits.</li>
+                                <li>• <strong>Can my child take these with other supplements?</strong> Generally yes, but consult your pediatrician to avoid exceeding daily vitamin limits.</li>
+                                <li>• <strong>What age can start taking these?</strong> Suitable for children aged 3 and above. Different dosing for 3-8 vs 9+ age groups.</li>
+                                <li>• <strong>Are there any allergens?</strong> These are gelatin-free, lactose-free, gluten-free and suitable for vegetarians.</li>
+                              </ul>
+                            </div>
+                          ) : (
+                            <div>
+                              <p className="font-medium">Common questions about this product:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• Can I take this with other supplements? Generally yes, but consult your healthcare provider.</li>
+                                <li>• When will I see results? Individual results vary, typically 2-4 weeks of consistent use.</li>
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       )}
                       {section === 'SHIPPING AND RETURNS' && (

@@ -92,6 +92,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "childrens-multivitamin",
+        name: "Children's Multivitamin & Mineral Gummies",
+        description: "Complete daily nutrient support for growing bodies (Ages 3+) with 13 essential vitamins and minerals in delicious berry-flavored gummies.",
+        price: "19.99",
+        originalPrice: "29.99",
+        imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png", // Using a similar gummy product image as placeholder
+        category: "Children",
+        rating: "4.8",
+        reviewCount: 312,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

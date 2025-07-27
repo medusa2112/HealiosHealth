@@ -39,6 +39,7 @@ export function Header() {
         { href: "/products/vitamin-d3", label: "Vitamin D3" },
         { href: "/products/ashwagandha", label: "KSM-66 Ashwagandha" },
         { href: "/products/magnesium", label: "Magnesium Complex" },
+        { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
       ]
     },
     {
@@ -49,6 +50,7 @@ export function Header() {
         { href: "/products?category=adaptogens", label: "Adaptogens" },
         { href: "/products?category=probiotics", label: "Probiotics" },
         { href: "/products?category=minerals", label: "Minerals" },
+        { href: "/products?category=children", label: "Children's Health" },
       ]
     },
     {
@@ -58,6 +60,7 @@ export function Header() {
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
+        { href: "/products/childrens-multivitamin", label: "Children's Development" },
       ]
     },
     {

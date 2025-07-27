@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals"];
+const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children"];
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +33,7 @@ export default function Products() {
       case "price-high":
         return parseFloat(b.price) - parseFloat(a.price);
       case "rating":
-        return parseFloat(b.rating) - parseFloat(a.rating);
+        return parseFloat(b.rating || "0") - parseFloat(a.rating || "0");
       default:
         return a.name.localeCompare(b.name);
     }
