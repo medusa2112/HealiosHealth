@@ -21,7 +21,7 @@ export function CartSidebar() {
     <Sheet open={cart.isOpen} onOpenChange={toggleCart}>
       <SheetContent side="right" className="w-full sm:w-96 sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="font-heading text-lg font-semibold text-gray-900 dark:text-white">
+          <SheetTitle className="text-lg font-semibold text-gray-900 dark:text-white">
             Shopping Cart ({cart.items.length} {cart.items.length === 1 ? 'item' : 'items'})
           </SheetTitle>
         </SheetHeader>

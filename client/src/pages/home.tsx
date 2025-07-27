@@ -479,7 +479,7 @@ export default function HomePage() {
                         
                         {/* Product Info - Wild Nutrition Clean Style */}
                         <div className="space-y-2">
-                          <h3 className="font-normal text-gray-900 dark:text-white text-sm group-hover:text-healios-cyan transition-colors" itemProp="name">
+                          <h3 className="font-medium text-gray-900 dark:text-white text-sm group-hover:text-healios-cyan transition-colors" itemProp="name">
                             {product.name}
                           </h3>
                           
