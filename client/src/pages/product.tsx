@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/hooks/use-cart';
 import { SEOHead } from '@/components/seo-head';
-import appleCiderVinegarImg from '@assets/Apple-Cider-Vinegar-X_1753469577640.png';
-import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
-import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
-import probioticsImg from '@assets/Porbiotic_Vitamins_1753613149126.png';
-import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
+import appleCiderVinegarImg from '@assets/Apple Cider Vinegar_1753615197742.png';
+import vitaminD3Img from '@assets/Vitamin D3  1000 IU_1753615197740.png';
+import ashwagandhaImg from '@assets/Ashwagandha 600mg_1753615197741.png';
+import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
+import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 
-import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753613534935.png';
+import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 
 const productImages: Record<string, string> = {
   'apple-cider-vinegar': appleCiderVinegarImg,
@@ -24,7 +24,10 @@ const productImages: Record<string, string> = {
   'children-multivitamin': childrenMultivitaminImg,
   'childrens-multivitamin': childrenMultivitaminImg,
   'probiotic-vitamins': probioticsImg,
-  'collagen-complex': '/assets/Collagen Complex__1753613481879.png',
+  'collagen-complex': '/assets/Collagen Complex__1753615197742.png',
+  'biotin-5000': '/assets/Biton_1753615197741.png',
+  'iron-vitamin-c': '/assets/Iron + Vitamin C_1753615197739.png',
+  'folic-acid': '/assets/Folic Acid 400µg_1753615197741.png',
 };
 
 export default function ProductPage() {

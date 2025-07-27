@@ -5,17 +5,17 @@ import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb } from
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
-import appleCiderVinegarImg from '@assets/Apple-Cider-Vinegar-X_1753469577640.png';
-import vitaminD3Img from '@assets/Vitamin-D3-4000iu-X-1_1753469577640.png';
-import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
-import probioticsImg from '@assets/Porbiotic_Vitamins_1753613149126.png';
-import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
+import appleCiderVinegarImg from '@assets/Apple Cider Vinegar_1753615197742.png';
+import vitaminD3Img from '@assets/Vitamin D3  1000 IU_1753615197740.png';
+import ashwagandhaImg from '@assets/Ashwagandha 600mg_1753615197741.png';
+import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
+import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
-import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753613534935.png';
-import collagenComplexImg from '@assets/Collagen Complex__1753613481879.png';
+import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
+import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
 
 export default function HomePage() {
   const { toast } = useToast();
