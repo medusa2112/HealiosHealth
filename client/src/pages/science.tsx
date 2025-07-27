@@ -214,177 +214,121 @@ export default function Science() {
           </div>
         </div>
       </section>
-      {/* Clinical Effectiveness - Ingredient breakdown style */}
+      {/* Sourcing Excellence - Streamlined approach */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              Ingredients of Integrity
+              Sourcing Excellence
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Clean ingredients from ethical sources, always
+              Premium ingredients sourced from certified suppliers across Europe and Scandinavia
             </p>
           </div>
 
-          <div className="space-y-16">
-            {/* Vitamin D3 Breakdown */}
-            <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-              <div className="relative mb-8 lg:mb-0">
-                <div className="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900 dark:to-orange-900 h-80 flex items-center justify-center">
-                  <div className="text-6xl">☀️</div>
-                </div>
+          <div className="grid lg:grid-cols-3 gap-8 mb-16">
+            {/* Global Sourcing */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                🌍
               </div>
-              
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                  Nutrients of Integrity
-                </p>
-                <h3 className="text-2xl font-light text-gray-900 dark:text-white mb-8">
-                  Premium vitamin sources, sustainably sourced
-                </h3>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    A closer look: Cholecalciferol strength profile
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Source</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Lichen-derived cholecalciferol</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Form</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Vitamin D3 (1000 IU / 4000 IU)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Country of origin</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Iceland, Norway</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Found in</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Vitamin D3 gummies</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    What makes it extraordinary
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 border-l-2 border-gray-300 dark:border-gray-600">
-                    <p className="text-sm italic text-gray-600 dark:text-gray-400">
-                      "Vitamin D3 has been essential for bone health and immune function, with clinical studies showing significant benefits at 1000-4000 IU daily dosing."
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Global Network
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Partnered with certified suppliers across Iceland, Norway, Germany, Switzerland, Netherlands, and Belgium
+              </p>
             </div>
 
-            {/* Iron + Vitamin C Breakdown */}
-            <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-              <div className="relative mb-8 lg:mb-0">
-                <div className="bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900 h-80 flex items-center justify-center">
-                  <div className="text-6xl">⚡</div>
-                </div>
+            {/* Quality Assurance */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                ✓
               </div>
-              
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                  Nutrients of Integrity
-                </p>
-                <h3 className="text-2xl font-light text-gray-900 dark:text-white mb-8">
-                  Enhanced absorption mineral complex
-                </h3>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    A closer look: Iron + Vitamin C synergy profile
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Source</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Ferric pyrophosphate + ascorbic acid</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Form</span>
-                      <span className="text-sm text-gray-900 dark:text-white">14mg Iron + 80mg Vitamin C</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Country of origin</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Germany, Switzerland</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Found in</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Iron + Vitamin C gummies</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    What makes it extraordinary
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 border-l-2 border-gray-300 dark:border-gray-600">
-                    <p className="text-sm italic text-gray-600 dark:text-gray-400">
-                      "Iron with Vitamin C has been clinically proven to enhance absorption by up to 300%, particularly beneficial for women of reproductive age."
-                    </p>
-                  </div>  
-                </div>
-              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Pharmaceutical Grade
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                All active ingredients meet pharmaceutical-grade standards with full traceability documentation
+              </p>
             </div>
 
-            {/* Biotin Breakdown */}
-            <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-              <div className="relative mb-8 lg:mb-0">
-                <div className="bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 h-80 flex items-center justify-center">
-                  <div className="text-6xl">✨</div>
+            {/* Ethical Standards */}
+            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
+                🏆
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Sustainable Practices
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Ethically sourced with environmental impact considerations and fair trade partnerships
+              </p>
+            </div>
+          </div>
+
+          {/* Key Ingredient Spotlight */}
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-12">
+            <div className="text-center mb-12">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+                Featured Ingredient: Lichen-Derived Vitamin D3
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Our flagship Vitamin D3 is sourced from wild lichen harvested in the pristine environments of Iceland and Norway, providing a vegan-friendly alternative to traditional lanolin-derived D3 with superior bioavailability.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">1000-4000 IU</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Daily Dosage Range</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">100% Vegan</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Plant-Based Source</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">EFSA-Approved</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Health Claims</p>
+              </div>
+              <div className="bg-white dark:bg-gray-600 p-6 text-center">
+                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Nordic Origin</div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Iceland & Norway</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Synergistic Formulations */}
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+                Synergistic Formulation Science
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                Strategic nutrient combinations designed to enhance bioavailability and therapeutic effectiveness
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="p-8 border-l-4 border-red-400 bg-gray-50 dark:bg-gray-800">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-3">Iron + Vitamin C Complex</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Ferric pyrophosphate paired with ascorbic acid increases iron absorption by up to 300%, specifically formulated for optimal bioavailability in women of reproductive age.
+                </p>
+                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                  <span>14mg Iron + 80mg Vitamin C</span>
+                  <span>German/Swiss sourcing</span>
                 </div>
               </div>
-              
-              <div>
-                <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                  Nutrients of Integrity
+
+              <div className="p-8 border-l-4 border-purple-400 bg-gray-50 dark:bg-gray-800">
+                <h4 className="font-medium text-gray-900 dark:text-white mb-3">Therapeutic Biotin 5000µg</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Pharmaceutical-grade synthetic D-biotin at therapeutic dosing (10,000% NRV) for clinically significant hair, skin, and nail support with 8-12 week visible results.
                 </p>
-                <h3 className="text-2xl font-light text-gray-900 dark:text-white mb-8">
-                  High-potency beauty support vitamin
-                </h3>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    A closer look: Biotin therapeutic strength profile
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Source</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Synthetic D-biotin (pharmaceutical grade)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Form</span>
-                      <span className="text-sm text-gray-900 dark:text-white">5000µg (10,000% NRV)</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Country of origin</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Netherlands, Belgium</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Found in</span>
-                      <span className="text-sm text-gray-900 dark:text-white">Biotin 5000µg gummies</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
-                    What makes it extraordinary
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-800 p-4 border-l-2 border-gray-300 dark:border-gray-600">
-                    <p className="text-sm italic text-gray-600 dark:text-gray-400">
-                      "Biotin at 5000µg provides therapeutic-level support for hair, skin and nail maintenance, with visible results typically seen within 8-12 weeks."
-                    </p>
-                  </div>
+                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                  <span>5000µg per serving</span>
+                  <span>Netherlands/Belgium sourcing</span>
                 </div>
               </div>
             </div>
