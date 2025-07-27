@@ -1,9 +1,16 @@
 import { Link } from "wouter";
 import { Waves, Recycle, Heart, Globe, Users, Target, ArrowRight, CheckCircle } from "lucide-react";
+import { SEOHead } from '@/components/seo-head';
 
 export default function Planet() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEOHead 
+        title="Ocean Cleanup Partnership - Environmental Impact | Healios"
+        description="Every Healios supplement purchase contributes to The Ocean Cleanup's mission to rid our oceans of plastic pollution. Join our environmental initiative for a healthier planet."
+        keywords="ocean cleanup, environmental supplements, sustainable health products, plastic pollution, healios ocean partnership, environmental impact"
+        url="https://healios.com/planet"
+      />
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-900 py-24">
         <div className="max-w-7xl mx-auto px-6">
