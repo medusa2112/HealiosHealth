@@ -616,19 +616,33 @@ export default function HomePage() {
                             itemProp="image"
                           />
                           
-                          {/* Pre-Order Button */}
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setShowPreOrderModal(true);
-                              setSelectedProductName(product.name);
-                              setSelectedSalePrice(product.price);
-                            }}
-                            className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100"
-                          >
-                            Pre-Order
-                          </button>
+                          {/* Dynamic Action Button */}
+                          {product.inStock && product.stockQuantity > 0 ? (
+                            <button 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                // TODO: Implement add to cart functionality
+                                console.log('Add to cart:', product.name);
+                              }}
+                              className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              Add to Cart
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowPreOrderModal(true);
+                                setSelectedProductName(product.name);
+                                setSelectedSalePrice(product.price);
+                              }}
+                              className="absolute bottom-3 right-3 bg-gray-600 text-white px-3 py-2 text-xs font-medium hover:bg-gray-700 transition-colors opacity-0 group-hover:opacity-100"
+                            >
+                              Pre-Order
+                            </button>
+                          )}
                         </div>
                         
                         {/* Product Info - Wild Nutrition Clean Style */}
@@ -637,11 +651,26 @@ export default function HomePage() {
                             {product.name}
                           </h3>
                           
-                          {/* Price */}
+                          {/* Price and Stock Status */}
                           <div className="text-sm text-gray-800 dark:text-gray-200 font-medium" itemProp="offers" itemScope itemType="https://schema.org/Offer">
                             <span itemProp="price" content={product.price}>R{product.price}</span>
-                            <meta itemProp="priceCurrency" content="GBP" />
-                            <meta itemProp="availability" content="https://schema.org/InStock" />
+                            <meta itemProp="priceCurrency" content="ZAR" />
+                            <meta itemProp="availability" content={product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"} />
+                          </div>
+                          
+                          {/* Dynamic Stock Status */}
+                          <div className="text-xs">
+                            {product.inStock && product.stockQuantity > 0 ? (
+                              <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
+                                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                {product.stockQuantity > 5 ? 'In Stock - Ready to Ship' : `Only ${product.stockQuantity} left in stock`}
+                              </span>
+                            ) : (
+                              <span className="text-red-600 dark:text-red-400 flex items-center gap-1">
+                                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                                Out of Stock
+                              </span>
+                            )}
                           </div>
                           
                           {/* Benefits - More Minimal */}
