@@ -42,8 +42,8 @@ export class MemStorage implements IStorage {
       },
       {
         id: "vitamin-d3",
-        name: "Vitamin D3 (60 Gummies)",
-        description: "Vitamin D3 supplement gummies",
+        name: "Vitamin D3 1000 IU Gummies (Lemon Flavour)",
+        description: "Daily immune & bone support with 1000 IU vitamin D3 in delicious lemon-flavored gummies for adults and teens 12+.",
         price: "15.99",
         originalPrice: "26.99",
         imageUrl: "/attached_assets/Vitamin-D3-4000iu-X-1_1753469577640.png",

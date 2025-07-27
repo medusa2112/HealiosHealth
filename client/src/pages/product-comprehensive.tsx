@@ -98,18 +98,18 @@ export default function ProductComprehensive() {
           bundleWith: 'Magnesium Complex',
           bundlePrice: '£65.00',
           bundleOriginalPrice: '£73.00',
-          statisticNumber: '85%',
-          statisticText: '85% of UK adults have insufficient Vitamin D levels',
-          testimonial: '"Since taking Vitamin D3, I feel more energetic and my mood has improved significantly."',
-          testimonialAuthor: 'JAMES WALKER',
-          testimonialTitle: 'Fitness Instructor',
-          benefitTitle: 'Immune system support',
-          benefitDescription: 'Vitamin D3 supports immune function and is essential for bone health.',
-          ingredientSource: 'Cholecalciferol (Vitamin D3)',
-          ingredientForm: 'Gummies with natural orange flavor',
-          ingredientOrigin: 'Sustainably sourced',
+          statisticNumber: '42%',
+          statisticText: 'of UK adults are vitamin D deficient, especially during winter months',
+          testimonial: '"Vitamin D levels in the UK fall dramatically between October and March. This 1000 IU dose supports optimal serum levels without needing sunlight."',
+          testimonialAuthor: 'DR. SARAH WINTERS',
+          testimonialTitle: 'Endocrinologist',
+          benefitTitle: 'Daily immune and bone support',
+          benefitDescription: '1000 IU of vitamin D3 supports immune system function, calcium absorption, muscle function, and maintains healthy bones and teeth.',
+          ingredientSource: 'Cholecalciferol (Vitamin D3) 25 μg',
+          ingredientForm: 'Lemon-flavored chewable gummies',
+          ingredientOrigin: 'Bioidentical to sunlight-produced vitamin D',
           sleepBenefit: false,
-          primaryBenefit: 'Supports immune system and bone health'
+          primaryBenefit: 'Supports immune function, bone health, and muscle function'
         };
       case 'ashwagandha':
         return {
@@ -371,6 +371,14 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value</p>
                             </div>
+                          ) : product.id === 'vitamin-d3' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Vitamin D3 (cholecalciferol): 25 μg (1000 IU) - 500% NRV</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. 1000 IU is a safe and effective maintenance dose for most healthy adults.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -399,6 +407,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
                             </div>
+                          ) : product.id === 'vitamin-d3' ? (
+                            <div>
+                              <p className="font-medium mb-2">Lemon-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Cholecalciferol (Vitamin D3) - most bioavailable form</li>
+                                <li>• Natural lemon flavoring</li>
+                                <li>• Pectin (vegetarian gelling agent)</li>
+                                <li>• Natural colors and sweeteners</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Suitable for vegetarians. Cholecalciferol is identical to the form produced by skin exposure to sunlight.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -415,6 +434,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Take with or without food. Do not exceed recommended dosage. Keep out of reach of children under 3 years.</p>
                             </div>
+                          ) : product.id === 'vitamin-d3' ? (
+                            <div>
+                              <p className="font-medium mb-2">Daily dosing for adults and teens 12+:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 1 gummy per day</strong></li>
+                                <li>• Can be taken with or without food</li>
+                                <li>• Ideal for daily use year-round</li>
+                                <li>• Do not exceed recommended dose unless advised by healthcare provider</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12 unless supervised by a healthcare provider. Consult your GP if taking other vitamin D supplements.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -430,6 +460,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can my child take these with other supplements?</strong> Generally yes, but consult your pediatrician to avoid exceeding daily vitamin limits.</li>
                                 <li>• <strong>What age can start taking these?</strong> Suitable for children aged 3 and above. Different dosing for 3-8 vs 9+ age groups.</li>
                                 <li>• <strong>Are there any allergens?</strong> These are gelatin-free, lactose-free, gluten-free and suitable for vegetarians.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'vitamin-d3' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Vitamin D3:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Why 1000 IU and not higher doses?</strong> 1000 IU is widely accepted as a safe and effective maintenance dose for most healthy adults, providing 2.5x the NHS minimum recommendation.</li>
+                                <li>• <strong>When is the best time to take vitamin D?</strong> Any time of day, with or without food. Consistency is more important than timing.</li>
+                                <li>• <strong>Is this suitable for winter months?</strong> Yes, especially important during UK winter months (October-March) when sunlight exposure is limited.</li>
+                                <li>• <strong>Can I take this if I already take a multivitamin?</strong> Check your multivitamin label to avoid exceeding 4000 IU total daily intake. Consult your healthcare provider if unsure.</li>
                               </ul>
                             </div>
                           ) : (
