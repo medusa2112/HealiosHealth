@@ -130,7 +130,7 @@ export class MemStorage implements IStorage {
         description: "Daily skin, hair & nail support with 500mg hydrolysed collagen peptides plus antioxidant vitamins C, E, biotin and selenium in delicious orange-flavored gummies.",
         price: "26.99",
         originalPrice: "36.99",
-        imageUrl: "/images/collagen-complex-gummies.svg",
+        imageUrl: "/assets/Collagen Complex__1753613481879.png",
         category: "Beauty",
         rating: "4.6",
         reviewCount: 267,

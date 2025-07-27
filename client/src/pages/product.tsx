@@ -24,6 +24,7 @@ const productImages: Record<string, string> = {
   'children-multivitamin': childrenMultivitaminImg,
   'childrens-multivitamin': childrenMultivitaminImg,
   'probiotic-vitamins': probioticsImg,
+  'collagen-complex': '/assets/Collagen Complex__1753613481879.png',
 };
 
 export default function ProductPage() {

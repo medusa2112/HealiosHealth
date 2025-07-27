@@ -15,6 +15,7 @@ import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
 import childrenMultivitaminImg from '@assets/Multivitamin & Mineral for Children_1753612563199.png';
+import collagenComplexImg from '@assets/Collagen Complex__1753613481879.png';
 
 export default function HomePage() {
   const { toast } = useToast();
@@ -33,10 +34,10 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex'],
     VITAMINS: ['vitamin-d3', 'children-multivitamin'],
     ADAPTOGENS: ['ashwagandha'],
-    PROBIOTICS: ['probiotics'],
+    PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
     MINERALS: ['magnesium']
   };
 
@@ -298,7 +299,10 @@ export default function HomePage() {
                     'ashwagandha': ashwagandhaImg,
                     'probiotics': probioticsImg,
                     'magnesium': magnesiumImg,
-                    'children-multivitamin': childrenMultivitaminImg
+                    'children-multivitamin': childrenMultivitaminImg,
+                    'childrens-multivitamin': childrenMultivitaminImg,
+                    'probiotic-vitamins': probioticsImg,
+                    'collagen-complex': collagenComplexImg
                   };
 
                   const productGradients = {
@@ -307,7 +311,10 @@ export default function HomePage() {
                     'ashwagandha': 'from-green-100 to-teal-200',
                     'probiotics': 'from-blue-100 to-purple-200',
                     'magnesium': 'from-purple-100 to-pink-200',
-                    'children-multivitamin': 'from-pink-100 to-purple-200'
+                    'children-multivitamin': 'from-pink-100 to-purple-200',
+                    'childrens-multivitamin': 'from-pink-100 to-purple-200',
+                    'probiotic-vitamins': 'from-blue-100 to-purple-200',
+                    'collagen-complex': 'from-teal-100 to-cyan-200'
                   };
 
                   const productBadges = {
@@ -316,7 +323,10 @@ export default function HomePage() {
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
                     'magnesium': 'Sleep',
-                    'children-multivitamin': 'Kids'
+                    'children-multivitamin': 'Kids',
+                    'childrens-multivitamin': 'Kids',
+                    'probiotic-vitamins': 'Immunity',
+                    'collagen-complex': 'Beauty'
                   };
 
                   return (
