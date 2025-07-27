@@ -108,16 +108,6 @@ export default function Planet() {
                   </span>
                 </div>
               </div>
-
-              <a 
-                href="https://theoceancleanup.com/impact/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium hover:underline"
-              >
-                View Live Impact Dashboard
-                <ArrowRight className="w-4 h-4" />
-              </a>
             </div>
 
             <div className="mt-12 lg:mt-0">
