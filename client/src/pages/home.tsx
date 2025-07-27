@@ -29,10 +29,7 @@ export default function HomePage() {
   const [selectedProductName, setSelectedProductName] = useState('');
   const [selectedSalePrice, setSelectedSalePrice] = useState('');
   
-  // Animation state for pharmacists image
-  const [imageTransform, setImageTransform] = useState('translateX(-100px) scale(0.95)');
-  const [hasReachedCenter, setHasReachedCenter] = useState(false);
-  const imageRef = useRef<HTMLDivElement>(null);
+  // Removed animation state for fitness video - now static display
   
   // Animation state for right image (Science section)
   const [rightImageTransform, setRightImageTransform] = useState('translateX(100px) scale(0.95)');
@@ -44,65 +41,7 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Intersection Observer for image animation
-  useEffect(() => {
-    const imageElement = imageRef.current;
-    if (!imageElement) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const rect = entry.boundingClientRect;
-          const windowHeight = window.innerHeight;
-          const elementCenter = rect.top + rect.height / 2;
-          const windowCenter = windowHeight / 2;
-          
-          if (entry.isIntersecting) {
-            // Calculate progress based on how close element center is to window center
-            const distanceFromCenter = Math.abs(elementCenter - windowCenter);
-            const maxDistance = windowHeight / 2;
-            const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
-            
-            // Check if we've reached the center (progress > 0.8 means very close to center)
-            if (progress > 0.8 && !hasReachedCenter) {
-              setHasReachedCenter(true);
-            }
-            
-            // Only animate if we haven't reached center yet, otherwise keep final position
-            if (!hasReachedCenter) {
-              // Smooth easing function
-              const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-              const easedProgress = easeOutCubic(progress);
-              
-              // Calculate transforms based on progress
-              const translateX = -100 + (easedProgress * 100); // From -100px to 0px
-              const scale = 0.95 + (easedProgress * 0.05); // From 0.95 to 1.0
-              const opacity = 0.7 + (easedProgress * 0.3); // From 0.7 to 1.0
-              
-              setImageTransform(`translateX(${translateX}px) scale(${scale})`);
-              imageElement.style.opacity = opacity.toString();
-            } else {
-              // Keep final position once center is reached
-              setImageTransform('translateX(0px) scale(1.0)');
-              imageElement.style.opacity = '1.0';
-            }
-          } else if (!hasReachedCenter) {
-            // Only reset if we haven't reached center yet
-            setImageTransform('translateX(-100px) scale(0.95)');
-            imageElement.style.opacity = '0.7';
-          }
-        });
-      },
-      {
-        threshold: Array.from({ length: 101 }, (_, i) => i / 100), // Fine-grained thresholds
-        rootMargin: '-10% 0px -10% 0px' // Start animation slightly before entering viewport
-      }
-    );
-
-    observer.observe(imageElement);
-
-    return () => observer.disconnect();
-  }, [hasReachedCenter]);
+  // Removed intersection observer for fitness video animation - now static display
 
   // Intersection Observer for right image animation (Science section)
   useEffect(() => {
@@ -536,15 +475,7 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Image Section - Full height, no padding, extends to left edge */}
-          <div 
-            ref={imageRef}
-            className="relative overflow-hidden aspect-square"
-            style={{
-              transform: imageTransform,
-              transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
-              opacity: 0.7
-            }}
-          >
+          <div className="relative overflow-hidden aspect-square">
             <video
               autoPlay
               muted
