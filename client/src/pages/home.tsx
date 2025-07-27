@@ -679,55 +679,6 @@ export default function HomePage() {
 
       {/* Expert Consultation Section */}
       <section className="bg-white dark:bg-gray-900">
-        {/* White space buffer */}
-        <div className="py-12"></div>
-        
-        {/* Icons Header */}
-        <div className="bg-black py-8">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="grid grid-cols-3 gap-8 text-center">
-              <div className="text-white">
-                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
-                  </svg>
-                </div>
-                <p className="text-xs uppercase tracking-wide">
-                  PREMIUM<br />
-                  INGREDIENTS
-                </p>
-              </div>
-
-              <div className="text-white">
-                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                </div>
-                <p className="text-xs uppercase tracking-wide">
-                  THIRD-PARTY<br />
-                  TESTED
-                </p>
-              </div>
-
-              <div className="text-white">
-                <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H15V1h-2v1H7V1H5v1H.5C-.13 2-.13 3.87.5 4H19c.63-.13.63-1.87 0-2z"/>
-                  </svg>
-                </div>
-                <p className="text-xs uppercase tracking-wide">
-                  CLINICALLY<br />
-                  RESEARCHED
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* White space buffer */}
-        <div className="py-12"></div>
-
         {/* Main Consultation Content */}
         <div className="py-24">
           <div className="max-w-7xl mx-auto px-6">
