@@ -90,8 +90,6 @@ export function Header() {
       items: [
         { href: "/about", label: "Our Story" },
         { href: "/science", label: "The Science-Backed difference" },
-        { href: "/sustainability", label: "Sustainability" },
-        { href: "/awards", label: "Our Award Winning supplements" },
         { href: "/planet", label: "Subscribe to spare the planet + save 20%" },
       ]
     },
