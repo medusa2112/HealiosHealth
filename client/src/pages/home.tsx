@@ -150,7 +150,70 @@ export default function HomePage() {
       text: 'Started taking these during pre-conception planning as recommended. The berry flavor is pleasant and they\'re easy to incorporate into my routine.',
       product: 'Folic Acid 400µg',
       productLink: '/products/folic-acid',
-      productImage: appleCiderVinegarImg // Using placeholder for now
+      productImage: appleCiderVinegarImg
+    },
+    {
+      id: 10,
+      category: 'Beauty',
+      name: 'ANNA L.',
+      text: 'My hairdresser noticed the difference in my hair thickness after 2 months. The strawberry flavor makes them enjoyable and the high potency formula really works.',
+      product: 'Biotin 5000µg',
+      productLink: '/products/biotin-5000mcg',
+      productImage: collagenComplexImg
+    },
+    {
+      id: 11,
+      category: 'Immunity',
+      name: 'PETER R.',
+      text: 'Perfect for winter months when I need extra immune support. The lemon flavor is refreshing and the 1000 IU dose is just right for daily maintenance.',
+      product: 'Vitamin D3 1000 IU',
+      productLink: '/products/vitamin-d3-1000iu',
+      productImage: vitaminD3Img
+    },
+    {
+      id: 12,
+      category: 'Stress',
+      name: 'HELEN W.',
+      text: 'These have become essential for managing my hectic schedule. The adaptogenic properties really help with daily stress. Love the traditional Ayurvedic approach.',
+      product: 'KSM-66 Ashwagandha',
+      productLink: '/products/ashwagandha',
+      productImage: ashwagandhaImg
+    },
+    {
+      id: 13,
+      category: 'Minerals',
+      name: 'THOMAS B.',
+      text: 'Great for post-workout recovery and evening relaxation. The berry flavor is delicious and I sleep much better since starting these. Highly recommend.',
+      product: 'Magnesium Complex',
+      productLink: '/products/magnesium',
+      productImage: magnesiumImg
+    },
+    {
+      id: 14,
+      category: 'Digestive',
+      name: 'SARAH K.',
+      text: 'Love the combination of probiotics with vitamins in one gummy. The pineapple flavor is tropical and refreshing. Great for daily digestive support.',
+      product: 'Probiotic + Vitamins',
+      productLink: '/products/probiotic-vitamins',
+      productImage: probioticsImg
+    },
+    {
+      id: 15,
+      category: 'Children',
+      name: 'MARK T.',
+      text: 'Finally found vitamins my picky eater will actually take! The fruit flavors are a hit and I love knowing they\'re getting comprehensive nutrition.',
+      product: 'Children\'s Multivitamin',
+      productLink: '/products/children-multivitamin',
+      productImage: childrenMultivitaminImg
+    },
+    {
+      id: 16,
+      category: 'Metabolism',
+      name: 'LISA R.',
+      text: 'Much more convenient than liquid apple cider vinegar. I take these before meals and love that there\'s no harsh taste or tooth enamel concerns.',
+      product: 'Apple Cider Vinegar',
+      productLink: '/products/apple-cider-vinegar',
+      productImage: appleCiderVinegarImg
     }
   ];
 
