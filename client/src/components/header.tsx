@@ -112,14 +112,7 @@ export function Header() {
         { href: "/journal/all", label: "All blog posts" },
       ]
     },
-    {
-      title: "Healios Sessions Podcast",
-      items: [
-        { href: "/podcast", label: "The Perimenopause Series" },
-        { href: "/podcast/episodes", label: "All Episodes" },
-        { href: "/podcast/subscribe", label: "Subscribe & Listen" },
-      ]
-    }
+
   ];
 
   const isActiveLink = (href: string) => location === href;
@@ -368,14 +361,14 @@ export function Header() {
         style={{
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '600px',
-          maxWidth: '90vw'
+          width: '500px',
+          maxWidth: '85vw'
         }}
         onMouseEnter={() => setIsLearnDropdownOpen(true)}
         onMouseLeave={() => setIsLearnDropdownOpen(false)}
       >
         <div className="px-6 py-6">
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             {learnSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
