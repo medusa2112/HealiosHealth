@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb } from 'lucide-react';
@@ -28,10 +28,62 @@ export default function HomePage() {
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
   const [selectedProductName, setSelectedProductName] = useState('');
   const [selectedSalePrice, setSelectedSalePrice] = useState('');
+  
+  // Animation state for pharmacists image
+  const [imageTransform, setImageTransform] = useState('translateX(-100px) scale(0.95)');
+  const imageRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Intersection Observer for image animation
+  useEffect(() => {
+    const imageElement = imageRef.current;
+    if (!imageElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const rect = entry.boundingClientRect;
+          const windowHeight = window.innerHeight;
+          const elementCenter = rect.top + rect.height / 2;
+          const windowCenter = windowHeight / 2;
+          
+          if (entry.isIntersecting) {
+            // Calculate progress based on how close element center is to window center
+            const distanceFromCenter = Math.abs(elementCenter - windowCenter);
+            const maxDistance = windowHeight / 2;
+            const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
+            
+            // Smooth easing function
+            const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+            const easedProgress = easeOutCubic(progress);
+            
+            // Calculate transforms based on progress
+            const translateX = -100 + (easedProgress * 100); // From -100px to 0px
+            const scale = 0.95 + (easedProgress * 0.05); // From 0.95 to 1.0
+            const opacity = 0.7 + (easedProgress * 0.3); // From 0.7 to 1.0
+            
+            setImageTransform(`translateX(${translateX}px) scale(${scale})`);
+            imageElement.style.opacity = opacity.toString();
+          } else {
+            // Reset to initial state when not intersecting
+            setImageTransform('translateX(-100px) scale(0.95)');
+            imageElement.style.opacity = '0.7';
+          }
+        });
+      },
+      {
+        threshold: Array.from({ length: 101 }, (_, i) => i / 100), // Fine-grained thresholds
+        rootMargin: '-10% 0px -10% 0px' // Start animation slightly before entering viewport
+      }
+    );
+
+    observer.observe(imageElement);
+
+    return () => observer.disconnect();
   }, []);
 
   const { data: featuredProducts, isLoading } = useQuery({
@@ -406,7 +458,15 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Image Section - Full height, no padding, extends to left edge */}
-          <div className="relative">
+          <div 
+            ref={imageRef}
+            className="relative overflow-hidden"
+            style={{
+              transform: imageTransform,
+              transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+              opacity: 0.7
+            }}
+          >
             <img
               src={pharmacistsImg}
               alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
