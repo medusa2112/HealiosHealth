@@ -75,7 +75,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              What drives us
+              What We Refused to Compromise On
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Three simple principles that guide every decision we make.
