@@ -23,8 +23,7 @@ export default function About() {
                   ABOUT HEALIOS
                 </p>
                 <h1 className="text-3xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Nutrition without<br />
-                  the nonsense.
+                  We built Healios because we needed it.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   We're committed to providing quality supplements designed to support your daily wellness routine with carefully selected ingredients.
