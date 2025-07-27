@@ -682,6 +682,9 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        
+        {/* White space buffer */}
+        <div className="py-12"></div>
 
         {/* Main Consultation Content */}
         <div className="py-24">
