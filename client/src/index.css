@@ -147,6 +147,12 @@
   .border-healios-cyan { border-color: var(--healios-cyan); }
   .border-healios-teal { border-color: var(--healios-teal); }
   .border-healios-violet { border-color: var(--healios-violet); }
+  
+  /* Global Button Styles - Override shadcn defaults */
+  button[class*="bg-black"],
+  .btn-healios-primary {
+    @apply bg-black border border-black text-white hover:bg-white hover:text-black transition-colors duration-200;
+  }
 }
 
 @layer utilities {
