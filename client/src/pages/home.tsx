@@ -13,7 +13,7 @@ import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import pharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618338989.jpg';
-import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
+import newPharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618756171.jpg';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
 
@@ -194,7 +194,7 @@ export default function HomePage() {
           <source src="/hero-video.mp4" type="video/mp4" />
           {/* Fallback image if video fails to load */}
           <img 
-            src={healiosGummiesImg}
+            src={newPharmacistsImg}
             alt="Hero background"
             className="w-full h-full object-cover"
           />
@@ -603,8 +603,8 @@ export default function HomePage() {
           {/* Image - Extends to right edge and bottom */}
           <div className="relative">
             <img
-              src={healiosGummiesImg}
-              alt="Healios Apple Cider Vinegar & Ginger Gummies - premium supplement showcasing natural ingredients and professional packaging"
+              src={newPharmacistsImg}
+              alt="Professional multiracial pharmacists and scientists collaborating in modern laboratory, developing quality supplements and wellness solutions"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
