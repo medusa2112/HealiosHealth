@@ -78,7 +78,7 @@ export default function Science() {
 
           <div className="grid lg:grid-cols-3 gap-12 px-6">
             {/* Vitamin D3 */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Vitamin D3  1000 IU_1753615197740.png" 
@@ -106,7 +106,7 @@ export default function Science() {
             </div>
 
             {/* Iron + Vitamin C */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Iron + Vitamin C_1753615197739.png" 
@@ -134,7 +134,7 @@ export default function Science() {
             </div>
 
             {/* Folic Acid */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Folic Acid 400µg_1753615197741.png" 
@@ -162,7 +162,7 @@ export default function Science() {
             </div>
 
             {/* Biotin */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Biton_1753615197741.png" 
@@ -190,7 +190,7 @@ export default function Science() {
             </div>
 
             {/* Magnesium */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Magnesium_1753615197741.png" 
@@ -218,7 +218,7 @@ export default function Science() {
             </div>
 
             {/* Ashwagandha */}
-            <div className="text-center">
+            <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Ashwagandha 600mg_1753615197741.png" 
