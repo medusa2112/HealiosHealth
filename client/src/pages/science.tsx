@@ -311,7 +311,64 @@ export default function Science() {
       </section>
       
 
-      
+      {/* Regulatory & Ethics - Background image style */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
+                Regulatory Compliance
+              </h2>
+              <div className="space-y-6">
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">UK Food Information Regulations</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    All labelling follows UK Food Information Regulations and EFSA Health Claims Register
+                  </p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">Traditional Use Ingredients</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Traditional-use ingredients (Ashwagandha, ACV, turmeric) are clearly marked [Unverified] or [Traditional Use] when applicable
+                  </p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">Safety Warnings</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Child safety and upper intake warnings are included where required (e.g., Iron, Vitamin D3)
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
+                Environmental & Ethical Factors
+              </h2>
+              <div className="space-y-6">
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">Manufacturing</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    All gummies are produced in GMP-certified UK or EU facilities
+                  </p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">Packaging</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    PET bottles or fully recyclable pouches with clear sustainability messaging
+                  </p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-3">Ethics</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Products are cruelty-free and contain no artificial colours or fillers. Vegan or vegetarian status is declared clearly on every label.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* CTA Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
