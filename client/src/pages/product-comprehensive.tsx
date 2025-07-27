@@ -219,6 +219,24 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports healthy skin, hair, nails, and connective tissues'
         };
+      case 'biotin-5000':
+        return {
+          bundleWith: 'Collagen Complex Gummies',
+          bundlePrice: '£42.00',
+          bundleOriginalPrice: '£54.00',
+          statisticNumber: '10,000%',
+          statisticText: 'NRV - delivering therapeutic-level biotin in just one gummy',
+          testimonial: '"High-strength biotin supports keratin production for healthy hair and nails. Consistency is key for visible results within 8-12 weeks."',
+          testimonialAuthor: 'DR. SOPHIA CHEN',
+          testimonialTitle: 'Trichologist & Hair Health Specialist',
+          benefitTitle: 'High-potency beauty support',
+          benefitDescription: '5000µg pure biotin (vitamin B7) supports healthy hair strength, skin resilience, and nail integrity with just one daily gummy.',
+          ingredientSource: 'Pure biotin (vitamin B7) 5000µg',
+          ingredientForm: 'Strawberry-flavored chewable gummies',
+          ingredientOrigin: 'High-purity biotin with therapeutic potency',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports hair strength, skin health, and nail integrity'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -442,6 +460,14 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
                             </div>
+                          ) : product.id === 'biotin-5000' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy (One daily dose):</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Biotin (Vitamin B7): 5000μg (10,000% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. High doses of biotin may interfere with blood test results. Inform your doctor before lab testing.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -511,6 +537,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
                             </div>
+                          ) : product.id === 'biotin-5000' ? (
+                            <div>
+                              <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Pure biotin (vitamin B7) - 5000μg therapeutic dose</li>
+                                <li>• Natural strawberry flavoring</li>
+                                <li>• Pectin (vegetarian gelling agent)</li>
+                                <li>• Natural colors and sweeteners</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, suitable for vegetarians and vegans. Free from gluten, dairy, and major allergens.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -560,6 +597,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for pregnant or breastfeeding unless advised by healthcare provider. Contains bovine collagen.</p>
                             </div>
+                          ) : product.id === 'biotin-5000' ? (
+                            <div>
+                              <p className="font-medium mb-2">Adult dosing (18+ years):</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 1 gummy daily</strong> - no more needed</li>
+                                <li>• Can be taken with or without food</li>
+                                <li>• Recommended minimum 8 weeks for noticeable benefits</li>
+                                <li>• Store in cool, dry place below 25°C</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children or during pregnancy/lactation without professional advice. Inform healthcare provider before blood tests.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -605,6 +653,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Is this suitable for vegans?</strong> No, the collagen is bovine-derived. However, the formulation is non-gelatin and suitable for vegetarians.</li>
                                 <li>• <strong>Why is vitamin C included?</strong> Vitamin C is essential for natural collagen formation in the body and enhances the effectiveness of supplemental collagen.</li>
                                 <li>• <strong>Can I take this with other beauty supplements?</strong> Yes, but check total vitamin intake to avoid exceeding recommended daily amounts, especially for vitamins A and E.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'biotin-5000' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Biotin 5000µg:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Why such a high dose of biotin?</strong> 5000µg is a therapeutic dose commonly used in beauty supplements for optimal hair and nail support, especially for those with brittle nails or hair concerns.</li>
+                                <li>• <strong>Will this interfere with blood tests?</strong> Yes, high-dose biotin can affect lab results including thyroid function and heart markers. Inform your doctor before any blood tests.</li>
+                                <li>• <strong>How long before I see improvements?</strong> Hair and nail changes take time. Most people notice benefits after 8-12 weeks of consistent daily use.</li>
+                                <li>• <strong>Can I take this with other B vitamins?</strong> Yes, biotin is water-soluble so excess is naturally excreted. However, check total B-vitamin intake to avoid unnecessary excess.</li>
                               </ul>
                             </div>
                           ) : (

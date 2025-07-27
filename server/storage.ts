@@ -131,6 +131,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "biotin-5000",
+        name: "Biotin 5000 µg Strawberry Gummies",
+        description: "High-potency hair, skin & nail support with 5000µg biotin (10,000% NRV) in delicious strawberry-flavored gummies. Just one gummy a day for optimal beauty support.",
+        price: "18.99",
+        originalPrice: "26.99",
+        imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png", // Using gummy product image as placeholder
+        category: "Beauty",
+        rating: "4.5",
+        reviewCount: 342,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

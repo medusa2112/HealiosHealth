@@ -37,10 +37,10 @@ export function Header() {
       items: [
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar & Ginger" },
         { href: "/products/vitamin-d3", label: "Vitamin D3 1000 IU Gummies" },
+        { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
         { href: "/products/ashwagandha", label: "KSM-66 Ashwagandha" },
         { href: "/products/probiotic-vitamins", label: "Probiotic + Vitamins Gummies" },
-        { href: "/products/magnesium", label: "Magnesium Complex" },
-        { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
+        { href: "/products/collagen-complex", label: "Collagen Complex Gummies" },
       ]
     },
     {
@@ -63,6 +63,7 @@ export function Header() {
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
+        { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
         { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
         { href: "/products/childrens-multivitamin", label: "Children's Development" },
       ]
