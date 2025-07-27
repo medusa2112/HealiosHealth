@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain } from "lucide-react";
+import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain, Check } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
 import healiosFitnessImg from '@assets/multicultural-fitness-group-looking-at-the-camera-2024-11-28-11-11-49-utc_1753630516538.jpg';
 import basketballTeamImg from '@assets/the-game-is-what-brings-us-together-2025-04-06-11-08-01-utc_1753630689523.jpg';
@@ -152,21 +152,33 @@ export default function About() {
               {/* Personal Statements */}
               <div className="mb-8">
                 <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                    You train, but still wake up tired.
-                  </p>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-black dark:text-white mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                      You train, but still wake up tired.
+                    </p>
+                  </div>
                   
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                    You eat well, but something feels off.
-                  </p>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-black dark:text-white mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                      You eat well, but something feels off.
+                    </p>
+                  </div>
                   
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                    You're high-functioning, but short-fused.
-                  </p>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-black dark:text-white mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                      You're high-functioning, but short-fused.
+                    </p>
+                  </div>
                   
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
-                    You don't want a supplement stack — you want confidence.
-                  </p>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-black dark:text-white mt-0.5 flex-shrink-0" />
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                      You don't want a supplement stack — you want confidence.
+                    </p>
+                  </div>
                 </div>
               </div>
 
