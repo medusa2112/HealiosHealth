@@ -97,8 +97,6 @@ export function Header() {
       title: "The Science",
       items: [
         { href: "/science/research", label: "Research & Clinical Studies" },
-        { href: "/science/nutrition", label: "Nutrition Science" },
-        { href: "/science/bioavailability", label: "Bioavailability Studies" },
       ]
     },
     {
