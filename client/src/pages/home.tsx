@@ -36,19 +36,19 @@ const FAQItem = ({ question, answer }: FAQItemProps) => {
       }`}
       onClick={() => setIsOpen(!isOpen)}
     >
-      <div className="p-6">
+      <div className="p-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-sm font-medium leading-relaxed pr-4">
+          <h3 className="text-xs font-medium pr-4">
             {question}
           </h3>
-          <div className={`text-lg font-light transition-transform ${isOpen ? 'rotate-45' : ''}`}>
+          <div className={`text-sm transition-transform ${isOpen ? 'rotate-45' : ''}`}>
             +
           </div>
         </div>
         
         {isOpen && (
-          <div className="mt-4 pt-4 border-t border-black">
-            <p className="text-sm leading-relaxed text-black">
+          <div className="mt-3 pt-3 border-t border-gray-300">
+            <p className="text-xs text-gray-700">
               {answer}
             </p>
           </div>
