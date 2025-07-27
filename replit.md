@@ -129,6 +129,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Added age-specific dosing (12+: 1-2 gummies) with calcium spacing recommendations and safety warnings
 ✓ Implemented automatic scroll-to-top behavior for all page navigation
 ✓ Created custom useScrollToTop hook integrated with Wouter router for seamless page transitions
+✓ Added Folic Acid 400µg Gummies as 12th Healios product for pre-pregnancy and prenatal support
+✓ Created NHS-recommended dose supplement with comprehensive maternal tissue growth messaging
+✓ Implemented EFSA-compliant claims for folate status and pregnancy support without birth defect prevention claims
+✓ Added new Prenatal category to navigation and product filtering system with pre-conception timing guidance
 
 ## Advanced SEO Implementation (January 2025)
 

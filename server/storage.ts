@@ -157,6 +157,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "folic-acid-400",
+        name: "Folic Acid 400µg Gummies (Berry Flavour)",
+        description: "Pre-pregnancy & prenatal support with 400µg folic acid for maternal tissue growth and neural tube development. NHS-recommended dose in convenient berry-flavored gummies.",
+        price: "16.99",
+        originalPrice: "24.99",
+        imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png", // Using gummy product image as placeholder
+        category: "Prenatal",
+        rating: "4.8",
+        reviewCount: 156,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

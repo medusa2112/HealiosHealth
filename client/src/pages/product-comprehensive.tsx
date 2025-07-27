@@ -255,6 +255,24 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports energy levels, focus, and healthy red blood cell formation'
         };
+      case 'folic-acid-400':
+        return {
+          bundleWith: 'Vitamin D3 Gummies',
+          bundlePrice: '£29.00',
+          bundleOriginalPrice: '£40.00',
+          statisticNumber: '28',
+          statisticText: 'days - when neural tube development occurs, often before pregnancy is known',
+          testimonial: '"Folic acid supplementation is crucial for all women of reproductive age. Starting 4+ weeks before conception provides optimal maternal folate status for healthy development."',
+          testimonialAuthor: 'DR. SARAH WILLIAMS',
+          testimonialTitle: 'Consultant Obstetrician & Maternal-Fetal Medicine',
+          benefitTitle: 'Pre-pregnancy & prenatal support',
+          benefitDescription: '400µg folic acid supports maternal tissue growth during pregnancy and contributes to normal blood formation and psychological function.',
+          ingredientSource: 'Folic acid (vitamin B9) 400µg',
+          ingredientForm: 'Berry-flavored chewable gummies',
+          ingredientOrigin: 'NHS-recommended clinical dose',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports maternal folate status and tissue growth during pregnancy'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -503,6 +521,14 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults and teens 12+: 1-2 gummies daily. Keep out of reach of children.</p>
                             </div>
+                          ) : product.id === 'folic-acid-400' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy (NHS-recommended dose):</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Folic Acid (Vitamin B9): 400µg (200% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. This is the gold-standard dose recommended by NHS and global maternity guidelines.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -606,6 +632,18 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with reduced metallic aftertaste. Gentle on stomach compared to traditional iron tablets.</p>
                             </div>
+                          ) : product.id === 'folic-acid-400' ? (
+                            <div>
+                              <p className="font-medium mb-2">Berry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Folic acid (vitamin B9) - 400µg clinical dose</li>
+                                <li>• Natural berry flavoring</li>
+                                <li>• Pectin (vegetarian gelling agent)</li>
+                                <li>• Natural colors and sweeteners</li>
+                                <li>• Child-safe formulation</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation specifically designed for prenatal safety. High compliance gummy format vs traditional tablets.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -688,6 +726,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12. Keep out of reach of children. Do not exceed recommended dose unless advised by healthcare professional.</p>
                             </div>
+                          ) : product.id === 'folic-acid-400' ? (
+                            <div>
+                              <p className="font-medium mb-2">Pre-pregnancy & prenatal dosing:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Take 1 gummy daily</strong> - standard NHS-recommended dose</li>
+                                <li>• Start at least 4+ weeks before trying to conceive</li>
+                                <li>• Continue daily throughout first trimester (12 weeks)</li>
+                                <li>• Can be taken with or without food</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Women aged 18-40 planning pregnancy. If pregnant, consult doctor before taking new supplements. Do not exceed 1000µg daily unless advised.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -763,6 +812,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Is this suitable for vegetarians and vegans?</strong> Yes, this is ideal for plant-based diets as it provides easily absorbed iron that may be lacking from non-heme plant sources.</li>
                                 <li>• <strong>Will this cause stomach upset like iron tablets?</strong> The ferric pyrophosphate form is much gentler than ferrous sulfate, and the gummy format reduces metallic aftertaste and stomach irritation.</li>
                                 <li>• <strong>Can I take this if I'm not anemic?</strong> Yes, this is designed for daily maintenance to prevent iron deficiency, especially beneficial for menstruating women and active individuals.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'folic-acid-400' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Folic Acid 400µg:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>When should I start taking folic acid?</strong> Ideally 4+ weeks before trying to conceive, as neural tube development occurs within the first 28 days, often before pregnancy is known.</li>
+                                <li>• <strong>Can I take this if I'm not planning pregnancy?</strong> Yes, folic acid supports normal blood formation and psychological function in all women of reproductive age.</li>
+                                <li>• <strong>Is 400µg the right dose for everyone?</strong> This is the NHS-recommended standard dose. Women with MTHFR gene variants or previous neural tube defects may need higher doses under medical supervision.</li>
+                                <li>• <strong>Can I continue this throughout pregnancy?</strong> Yes for the first trimester, but consult your healthcare provider about comprehensive prenatal vitamins after 12 weeks.</li>
                               </ul>
                             </div>
                           ) : (
