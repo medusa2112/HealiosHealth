@@ -17,7 +17,7 @@ import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2
 
 export default function ProductComprehensive() {
   const [, params] = useRoute("/products/:id");
-  const { addToCart } = useCart();
+  const { addToCart, removeFromCart } = useCart();
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -62,19 +62,30 @@ export default function ProductComprehensive() {
     }
   };
 
-  const handleAddBundleProduct = () => {
+  const handleToggleBundleProduct = () => {
     if (!product || !allProducts) return;
     
     const productContent = getProductContent(product.id);
     const bundleProduct = allProducts.find(p => p.name === productContent.bundleWith);
     
     if (bundleProduct) {
-      addToCart(bundleProduct);
-      setBundleAdded(true);
-      toast({
-        title: "Bundle product added!",
-        description: `${bundleProduct.name} has been added to your cart.`,
-      });
+      if (bundleAdded) {
+        // Remove from cart
+        removeFromCart(bundleProduct.id);
+        setBundleAdded(false);
+        toast({
+          title: "Bundle product removed",
+          description: `${bundleProduct.name} has been removed from your cart.`,
+        });
+      } else {
+        // Add to cart
+        addToCart(bundleProduct);
+        setBundleAdded(true);
+        toast({
+          title: "Bundle product added!",
+          description: `${bundleProduct.name} has been added to your cart.`,
+        });
+      }
     }
   };
 
@@ -483,7 +494,7 @@ export default function ProductComprehensive() {
                     <p className="text-xs font-medium">{product.name}</p>
                     <p className="text-xs text-gray-600">R{product.price}</p>
                   </div>
-                  <div className="text-xs text-gray-500">✓ Added</div>
+                  <div className="text-xs text-gray-500">{bundleAdded ? '✓ Added to cart' : ''}</div>
                 </div>
 
                 {/* Recommended Product */}
@@ -498,10 +509,9 @@ export default function ProductComprehensive() {
                   <Button 
                     size="sm" 
                     className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
-                    onClick={handleAddBundleProduct}
-                    disabled={bundleAdded}
+                    onClick={handleToggleBundleProduct}
                   >
-                    {bundleAdded ? 'Added' : 'Add'}
+                    {bundleAdded ? 'Remove' : 'Add'}
                   </Button>
                 </div>
 
