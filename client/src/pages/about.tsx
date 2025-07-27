@@ -47,7 +47,7 @@ export default function About() {
                 <div className="text-left">
                   <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">8.9/10</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Rating
+                    Customer Satisfaction
                   </p>
                 </div>
                 <div className="text-left">
