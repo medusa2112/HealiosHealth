@@ -81,13 +81,10 @@ export default function About() {
               </h2>
               <div className="space-y-6 text-gray-600 dark:text-gray-400 leading-relaxed">
                 <p>
-                  Founded in 2019 by a team of nutritional scientists who wanted to create quality supplements with transparent ingredient lists and clear labeling. We believe in honest communication about what our products contain.
+                  Despite being fit, disciplined, and informed. We were chronically under-mineralised. Subclinical magnesium deficiency. Low vitamin D despite outdoor activity. Subpar sleep. Fractured recovery. Blood tests showed gaps. Endocrine markers told the same story. What we thought was "just life" turned out to be correctable biology.
                 </p>
                 <p>
-                  We focus on carefully formulating our supplements with quality ingredients, clear dosage information, and transparent labeling. Our products are designed to support your daily wellness routine.
-                </p>
-                <p>
-                  Every formula is developed with care, manufactured in quality facilities, and third-party tested for purity. We believe in providing supplements you can trust as part of your wellness routine.
+                  So we built what we couldn't find: clean, high-availability, clinically-dosed compounds for normal active people - not athletes, not patients, not biohackers. Just people like us, trying to feel better, focus longer, sleep deeper, and recover faster.
                 </p>
               </div>
             </div>
