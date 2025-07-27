@@ -148,20 +148,22 @@ export default function JournalAll() {
       {/* Category Filter */}
       <section className="pb-12 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2 text-sm font-medium transition-colors ${
-                  activeCategory === category
-                    ? 'bg-black text-white'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+          <div className="mb-12 flex justify-center">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeCategory === category
+                      ? 'bg-black text-white'
+                      : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
