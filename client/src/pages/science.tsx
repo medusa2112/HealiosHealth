@@ -249,9 +249,9 @@ export default function Science() {
       </section>
 
       {/* Key Ingredient Spotlight */}
-      <section className="py-24 bg-white dark:bg-gray-900">
+      <section className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-12">
+          <div className="p-12">
             <div className="text-center mb-12">
               <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
                 Featured Ingredient: Lichen-Derived Vitamin D3
@@ -292,7 +292,7 @@ export default function Science() {
       </section>
 
       {/* Full-Width Video Section */}
-      <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
+      <section className="relative w-full h-[200px] overflow-hidden">
         <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay
