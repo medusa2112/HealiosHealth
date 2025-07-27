@@ -40,34 +40,32 @@ export default function Planet() {
         </div>
       </section>
 
-      {/* Impact Statistics */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-6">
-              Our Environmental Impact
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Through our partnership with The Ocean Cleanup, every Healios purchase makes a measurable difference in ocean conservation.
+      {/* Full Width Video Section */}
+      <section className="relative">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="w-full h-[60vh] lg:h-[70vh] object-cover"
+          onLoadStart={() => console.log('Planet page video loading started')}
+          onCanPlay={() => console.log('Planet page video can play')}
+          onLoadedData={() => console.log('Planet page video loaded')}
+          onError={(e) => console.error('Planet page video error:', e)}
+        >
+          <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/webm" />
+          <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Optional overlay content if needed */}
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h2 className="text-4xl lg:text-6xl font-light mb-4">Our Environmental Impact</h2>
+            <p className="text-lg lg:text-xl max-w-2xl mx-auto px-6">
+              Through our partnership with The Ocean Cleanup, every Healios purchase makes a measurable difference
             </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 bg-blue-50 dark:bg-blue-900/20">
-              <Globe className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-              <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">R15,000+</div>
-              <p className="text-gray-600 dark:text-gray-400">Monthly contribution to ocean cleanup efforts</p>
-            </div>
-            <div className="text-center p-8 bg-green-50 dark:bg-green-900/20">
-              <Recycle className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
-              <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">2.5kg</div>
-              <p className="text-gray-600 dark:text-gray-400">Average plastic removed per customer annually</p>
-            </div>
-            <div className="text-center p-8 bg-purple-50 dark:bg-purple-900/20">
-              <Heart className="w-12 h-12 text-purple-600 dark:text-purple-400 mx-auto mb-4" />
-              <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">100%</div>
-              <p className="text-gray-600 dark:text-gray-400">Of customers contributing to ocean health</p>
-            </div>
           </div>
         </div>
       </section>
