@@ -76,275 +76,170 @@ export default function Science() {
             </p>
           </div>
 
-          <div className="space-y-1">
+          <div className="grid lg:grid-cols-3 gap-12">
             {/* Vitamin D3 */}
-            <div className="flex items-center gap-8 py-8 border-b border-gray-100 dark:border-gray-800">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Vitamin D3  1000 IU_1753615197740.png" 
                   alt="Vitamin D3 1000 IU Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Vitamin D3
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">1000 IU / 4000 IU</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
-                  Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations.
-                </p>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
-                >
-                  EFSA Claim ID: 280 →
-                </a>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Vitamin D3
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">1000 IU / 4000 IU</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations.
+              </p>
+              <a 
+                href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              >
+                EFSA Claim ID: 280 →
+              </a>
             </div>
 
             {/* Iron + Vitamin C */}
-            <div className="flex items-center gap-8 py-8 border-b border-gray-100 dark:border-gray-800">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Iron + Vitamin C_1753615197739.png" 
                   alt="Iron + Vitamin C Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Iron + Vitamin C
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">14mg + 80mg</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
-                  Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women.
-                </p>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
-                >
-                  EFSA Claim ID: 291 →
-                </a>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Iron + Vitamin C
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">14mg + 80mg</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women.
+              </p>
+              <a 
+                href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              >
+                EFSA Claim ID: 291 →
+              </a>
             </div>
 
             {/* Folic Acid */}
-            <div className="flex items-center gap-8 py-8 border-b border-gray-100 dark:border-gray-800">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Folic Acid 400µg_1753615197741.png" 
                   alt="Folic Acid 400µg Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Folic Acid
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">400µg</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
-                  Strong clinical evidence for pre-conception neural tube defect reduction.
-                </p>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2009.1213" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
-                >
-                  EFSA Claim ID: 274 →
-                </a>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Folic Acid
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">400µg</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Strong clinical evidence for pre-conception neural tube defect reduction.
+              </p>
+              <a 
+                href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2009.1213" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              >
+                EFSA Claim ID: 274 →
+              </a>
             </div>
 
             {/* Biotin */}
-            <div className="flex items-center gap-8 py-8 border-b border-gray-100 dark:border-gray-800">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Biton_1753615197741.png" 
                   alt="Biotin 5000µg Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Biotin
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">5000µg</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
-                  Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day.
-                </p>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
-                >
-                  EFSA Claim ID: 318 →
-                </a>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Biotin
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">5000µg</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day.
+              </p>
+              <a 
+                href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              >
+                EFSA Claim ID: 318 →
+              </a>
             </div>
 
             {/* Magnesium */}
-            <div className="flex items-center gap-8 py-8 border-b border-gray-100 dark:border-gray-800">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Magnesium_1753615197741.png" 
                   alt="Magnesium Citrate Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Magnesium Citrate
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">90mg</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Supports muscle function, energy metabolism, and reduction of tiredness and fatigue. Superior bioavailability compared to oxide forms.
-                </p>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Magnesium Citrate
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">90mg</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                Supports muscle function, energy metabolism, and reduction of tiredness and fatigue. Superior bioavailability compared to oxide forms.
+              </p>
             </div>
 
             {/* Ashwagandha */}
-            <div className="flex items-center gap-8 py-8">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-6">
                 <img 
                   src="/assets/Ashwagandha 600mg_1753615197741.png" 
                   alt="Ashwagandha 600mg Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1">
-                <div className="flex items-baseline gap-4 mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                    Ashwagandha Root Extract
-                  </h3>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">300mg (5% withanolides)</span>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
-                  Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
-                </p>
-                <a 
-                  href="https://www.ema.europa.eu/en/medicines/herbal/withania-somnifera" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
-                >
-                  EMA Traditional Use →
-                </a>
+              <div className="mb-4">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  Ashwagandha Root Extract
+                </h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">300mg (5% withanolides)</span>
               </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
+              </p>
+              <a 
+                href="https://www.ema.europa.eu/en/medicines/herbal/withania-somnifera" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+              >
+                EMA Traditional Use →
+              </a>
             </div>
           </div>
         </div>
       </section>
-      {/* Sourcing Excellence - Streamlined approach */}
-      <section className="pt-24 pb-0 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              Sourcing Excellence
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Premium ingredients sourced from certified suppliers across Europe and Scandinavia
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {/* Global Sourcing */}
-            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
-                🌍
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-                Global Network
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Partnered with certified suppliers across Iceland, Norway, Germany, Switzerland, Netherlands, and Belgium
-              </p>
-            </div>
-
-            {/* Quality Assurance */}
-            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
-                ✓
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-                Pharmaceutical Grade
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                All active ingredients meet pharmaceutical-grade standards with full traceability documentation
-              </p>
-            </div>
-
-            {/* Ethical Standards */}
-            <div className="text-center p-8 bg-gray-50 dark:bg-gray-800">
-              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 mx-auto mb-6 flex items-center justify-center text-white font-bold text-xl">
-                🏆
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-                Sustainable Practices
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Ethically sourced with environmental impact considerations and fair trade partnerships
-              </p>
-            </div>
-          </div>
-
-          {/* Key Ingredient Spotlight */}
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-12">
-            <div className="text-center mb-12">
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
-                Featured Ingredient: Lichen-Derived Vitamin D3
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                Our flagship Vitamin D3 is sourced from wild lichen harvested in the pristine environments of Iceland and Norway, providing a vegan-friendly alternative to traditional lanolin-derived D3 with superior bioavailability.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white dark:bg-gray-600 p-6 text-center">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">1000-4000 IU</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Daily Dosage Range</p>
-              </div>
-              <div className="bg-white dark:bg-gray-600 p-6 text-center">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">100% Vegan</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Plant-Based Source</p>
-              </div>
-              <div className="bg-white dark:bg-gray-600 p-6 text-center">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">EFSA-Approved</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Health Claims</p>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-                >
-                  View Claim ID: 280 →
-                </a>
-              </div>
-              <div className="bg-white dark:bg-gray-600 p-6 text-center">
-                <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Nordic Origin</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Iceland & Norway</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      
 
       {/* Full-Width Video Section */}
       <section className="relative w-full h-[60vh] min-h-[400px] overflow-hidden">
@@ -364,16 +259,7 @@ export default function Science() {
           Your browser does not support the video tag.
         </video>
         
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h3 className="text-3xl lg:text-4xl font-light mb-4">
-              Science Meets Innovation
-            </h3>
-            <p className="text-lg lg:text-xl max-w-2xl mx-auto opacity-90">
-              Experience the future of nutritional wellness through cutting-edge research and premium formulation
-            </p>
-          </div>
-        </div>
+        
       </section>
 
       {/* Sourcing Excellence - Streamlined approach */}
@@ -383,9 +269,7 @@ export default function Science() {
             <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
               Sourcing Excellence
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Premium ingredients sourced from certified suppliers across Europe and Scandinavia
-            </p>
+            
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
@@ -468,57 +352,9 @@ export default function Science() {
             </div>
           </div>
 
-          {/* Synergistic Formulations */}
-          <div className="mt-16">
-            <div className="text-center mb-12">
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
-                Synergistic Formulation Science
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                Strategic nutrient combinations designed to enhance bioavailability and therapeutic effectiveness
-              </p>
-            </div>
+          
 
-            <div className="grid lg:grid-cols-2 gap-8">
-              <div className="p-8 border-l-4 border-red-400 bg-gray-50 dark:bg-gray-800">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-3">Iron + Vitamin C Complex</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Ferric pyrophosphate paired with ascorbic acid increases iron absorption by up to 300%, specifically formulated for optimal bioavailability in women of reproductive age.
-                </p>
-                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
-                  <span>14mg Iron + 80mg Vitamin C</span>
-                  <span>German/Swiss sourcing</span>
-                </div>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 text-xs font-medium hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
-                >
-                  EFSA Claim ID: 291 →
-                </a>
-              </div>
-
-              <div className="p-8 border-l-4 border-purple-400 bg-gray-50 dark:bg-gray-800">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-3">Therapeutic Biotin 5000µg</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Pharmaceutical-grade synthetic D-biotin at therapeutic dosing (10,000% NRV) for clinically significant hair, skin, and nail support with 8-12 week visible results.
-                </p>
-                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
-                  <span>5000µg per serving</span>
-                  <span>Netherlands/Belgium sourcing</span>
-                </div>
-                <a 
-                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
-                >
-                  EFSA Claim ID: 318 →
-                </a>
-              </div>
-            </div>
-          </div>
+            
         </div>
       </section>
       {/* Quality Standards - Ticked list style */}
