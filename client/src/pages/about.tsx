@@ -31,7 +31,7 @@ export default function About() {
               </div>
 
               {/* Key Stats */}
-              <div className="grid grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-3 gap-3 mb-8">
                 <div className="text-left">
                   <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">2024</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
