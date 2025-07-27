@@ -41,11 +41,12 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex', 'biotin-5000'],
     VITAMINS: ['vitamin-d3', 'children-multivitamin'],
     ADAPTOGENS: ['ashwagandha'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
     MINERALS: ['magnesium'],
+    BEAUTY: ['collagen-complex', 'biotin-5000'],
     APPAREL: ['healios-jumper-men', 'healios-jumper-women', 'healios-tshirt-men', 'healios-tshirt-women']
   };
 
@@ -321,6 +322,7 @@ export default function HomePage() {
                     'childrens-multivitamin': childrenMultivitaminImg,
                     'probiotic-vitamins': probioticsImg,
                     'collagen-complex': collagenComplexImg,
+                    'biotin-5000': '/assets/Biotin  5000µg_1753615890295.png',
                     'healios-jumper-men': '/images/healios-jumper-men.svg',
                     'healios-jumper-women': '/images/healios-jumper-women.svg',
                     'healios-tshirt-men': '/images/healios-tshirt-men.svg',
@@ -349,6 +351,7 @@ export default function HomePage() {
                     'childrens-multivitamin': 'Kids',
                     'probiotic-vitamins': 'Immunity',
                     'collagen-complex': 'Beauty',
+                    'biotin-5000': 'Hair & Skin',
                     'healios-jumper-men': 'Performance',
                     'healios-jumper-women': 'Performance',
                     'healios-tshirt-men': 'Essential',
