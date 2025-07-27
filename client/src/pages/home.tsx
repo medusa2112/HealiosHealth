@@ -45,7 +45,7 @@ export default function HomePage() {
     VITAMINS: ['vitamin-d3', 'children-multivitamin'],
     ADAPTOGENS: ['ashwagandha'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
-    MINERALS: ['magnesium'],
+    MINERALS: ['magnesium', 'iron-vitamin-c'],
     BEAUTY: ['collagen-complex', 'biotin-5000'],
     APPAREL: ['healios-jumper-men', 'healios-jumper-women', 'healios-tshirt-men', 'healios-tshirt-women']
   };
@@ -323,6 +323,7 @@ export default function HomePage() {
                     'probiotic-vitamins': probioticsImg,
                     'collagen-complex': collagenComplexImg,
                     'biotin-5000': '/assets/Biotin  5000µg_1753615890295.png',
+                    'iron-vitamin-c': '/assets/Iron + Vitamin C_1753615899091.png',
                     'healios-jumper-men': '/images/healios-jumper-men.svg',
                     'healios-jumper-women': '/images/healios-jumper-women.svg',
                     'healios-tshirt-men': '/images/healios-tshirt-men.svg',
@@ -352,6 +353,7 @@ export default function HomePage() {
                     'probiotic-vitamins': 'Immunity',
                     'collagen-complex': 'Beauty',
                     'biotin-5000': 'Hair & Skin',
+                    'iron-vitamin-c': 'Energy',
                     'healios-jumper-men': 'Performance',
                     'healios-jumper-women': 'Performance',
                     'healios-tshirt-men': 'Essential',

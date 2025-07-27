@@ -192,7 +192,7 @@ export class MemStorage implements IStorage {
         description: "Gentle daily support for energy, focus & iron absorption with 7mg iron and 40mg vitamin C. Bioavailable formula for reduced fatigue and healthy red blood cell formation.",
         price: "19.99",
         originalPrice: "28.99",
-        imageUrl: "/assets/Iron + Vitamin C_1753615197739.png",
+        imageUrl: "/assets/Iron + Vitamin C_1753615899091.png",
         category: "Minerals",
         rating: "4.6",
         reviewCount: 189,
