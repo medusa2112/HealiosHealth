@@ -18,6 +18,7 @@ import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Science from "@/pages/science";
 import ScienceResearch from "@/pages/science-research";
+import JournalAll from "@/pages/journal-all";
 import Consultation from "@/pages/consultation";
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/science" component={Science} />
       <Route path="/science/research" component={ScienceResearch} />
+      <Route path="/journal/all" component={JournalAll} />
       <Route path="/consultation" component={Consultation} />
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
