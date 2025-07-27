@@ -156,59 +156,59 @@ export default function Planet() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-6">
-              Our Sustainable Practices
+              Our Environmental Commitments
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Beyond ocean cleanup, we're committed to sustainable business practices throughout our entire operation.
+              Beyond our ocean cleanup partnership, we're exploring opportunities to improve our environmental practices as we grow our business responsibly.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-green-50 dark:bg-green-900/20 p-8">
               <Recycle className="w-10 h-10 text-green-600 dark:text-green-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Recyclable Packaging</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Sustainable Packaging</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                All Healios products are packaged in fully recyclable PET bottles or sustainable pouches with clear recycling instructions.
+                Working toward more sustainable packaging solutions as we grow, with current recyclable PET bottles and ongoing assessment of eco-friendly alternatives.
               </p>
             </div>
 
             <div className="bg-blue-50 dark:bg-blue-900/20 p-8">
               <Globe className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Carbon-Conscious Sourcing</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Responsible Sourcing</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                We prioritize suppliers with verified sustainability certifications and work to minimize our supply chain carbon footprint.
+                Partnering with Nutribl's established supply chains that prioritize quality ingredients while exploring opportunities for more sustainable sourcing practices.
               </p>
             </div>
 
             <div className="bg-purple-50 dark:bg-purple-900/20 p-8">
               <Users className="w-10 h-10 text-purple-600 dark:text-purple-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Community Education</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Environmental Awareness</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Regular content and resources to help our community make more sustainable health and lifestyle choices.
+                Sharing information about ocean health and environmental wellness through our community content and The Ocean Cleanup partnership.
               </p>
             </div>
 
             <div className="bg-orange-50 dark:bg-orange-900/20 p-8">
               <Target className="w-10 h-10 text-orange-600 dark:text-orange-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Science-Based Goals</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Continuous Improvement</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Our environmental commitments are backed by measurable targets and regular third-party assessment.
+                As a growing brand, we're committed to evaluating and improving our environmental practices while maintaining product quality and safety standards.
               </p>
             </div>
 
             <div className="bg-teal-50 dark:bg-teal-900/20 p-8">
               <Heart className="w-10 h-10 text-teal-600 dark:text-teal-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Ethical Manufacturing</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Quality Manufacturing</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                All manufacturing partners maintain certified ethical labor practices and environmental compliance standards.
+                Our supplements are manufactured by Nutribl in GMP-certified facilities that meet strict quality and safety standards.
               </p>
             </div>
 
             <div className="bg-indigo-50 dark:bg-indigo-900/20 p-8">
               <Waves className="w-10 h-10 text-indigo-600 dark:text-indigo-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Ocean-Safe Ingredients</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Ocean Conservation Focus</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                We ensure our ingredient sourcing doesn't contribute to marine ecosystem disruption or coastal habitat damage.
+                Our primary environmental commitment is supporting ocean cleanup through our monthly contributions to The Ocean Cleanup organization.
               </p>
             </div>
           </div>
@@ -241,9 +241,10 @@ export default function Planet() {
             <div className="flex items-start gap-6">
               <div className="w-12 h-12 bg-green-600 text-white font-medium flex items-center justify-center">Q1</div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Packaging Optimization</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Packaging Assessment</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Transitioned to 100% recyclable packaging materials and introduced refill programs for regular customers.
+                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">In Progress</span>
+                  Evaluating packaging alternatives to identify more sustainable options while maintaining product quality and safety.
                 </p>
               </div>
             </div>
@@ -251,10 +252,10 @@ export default function Planet() {
             <div className="flex items-start gap-6">
               <div className="w-12 h-12 bg-purple-600 text-white font-medium flex items-center justify-center">Q2</div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Carbon Neutral Shipping</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Environmental Education</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Coming Soon</span>
-                  Implementing carbon offset program for all deliveries and sustainable packaging materials.
+                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Planned</span>
+                  Expanding content about ocean health and environmental wellness for our community.
                 </p>
               </div>
             </div>
@@ -262,10 +263,10 @@ export default function Planet() {
             <div className="flex items-start gap-6">
               <div className="w-12 h-12 bg-indigo-600 text-white font-medium flex items-center justify-center">Q3</div>
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Community Impact Program</h3>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">2025: Partnership Growth</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Planned</span>
-                  Launching customer-led beach cleanup events and environmental education workshops.
+                  <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 px-2 py-1 text-xs font-medium mr-2">Goal</span>
+                  Exploring opportunities to increase our ocean cleanup contribution as our business grows.
                 </p>
               </div>
             </div>

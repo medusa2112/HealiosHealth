@@ -257,6 +257,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Replaced static impact statistics grid with cinematic video presentation using home-header-1080p-v3.webm
 ✓ Added text overlay on video with environmental impact messaging for better visual storytelling
 ✓ Removed bottom whitespace between sections for seamless visual flow from video to content sections
+✓ Updated sustainable practices section with realistic claims for Nutribl-manufactured products
+✓ Revised environmental commitments to reflect actual capabilities rather than aspirational statements
+✓ Updated timeline to show practical goals like packaging assessment and environmental education
+✓ Removed external Ocean Cleanup dashboard link for cleaner, more focused content
 
 ## Advanced SEO Implementation (January 2025)
 
