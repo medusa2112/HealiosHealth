@@ -228,9 +228,13 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(false)}
-                  className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
+                  className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                    isScrolled ? 'h-12 px-3' : 'h-16 px-4'
+                  }`}
                 >
-                  <X className="h-4 w-4" />
+                  <X className={`transition-all duration-300 ${
+                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                  }`} />
                 </Button>
               </div>
             ) : (
@@ -238,7 +242,9 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
+                className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                  isScrolled ? 'h-12 px-3' : 'h-16 px-4'
+                }`}
               >
                 <Search className={`transition-all duration-300 ${
                   isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -251,7 +257,9 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
+              className={`text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                isScrolled ? 'h-12 px-3' : 'h-16 px-4'
+              }`}
             >
               {theme === 'light' ? (
                 <Moon className={`transition-all duration-300 ${
@@ -269,7 +277,9 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className="text-white hover:bg-healios-cyan hover:text-black relative transition-colors duration-200"
+              className={`text-white hover:bg-healios-cyan hover:text-black relative transition-colors duration-200 ${
+                isScrolled ? 'h-12 px-3' : 'h-16 px-4'
+              }`}
             >
               <ShoppingBag className={`transition-all duration-300 ${
                 isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -287,9 +297,13 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="lg:hidden text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
+                  className={`lg:hidden text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200 ${
+                    isScrolled ? 'h-12 px-3' : 'h-16 px-4'
+                  }`}
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className={`transition-all duration-300 ${
+                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                  }`} />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-black border-gray-700">
