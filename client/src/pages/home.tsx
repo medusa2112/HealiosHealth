@@ -315,7 +315,7 @@ export default function HomePage() {
                     'apple-cider-vinegar': appleCiderVinegarImg,
                     'vitamin-d3': vitaminD3Img,
                     'ashwagandha': ashwagandhaImg,
-                    'probiotics': '/images/probiotics-complex.svg',
+                    'probiotics': '/assets/Probiotics10Bil-X_1753615874344.png',
                     'magnesium': magnesiumImg,
                     'children-multivitamin': childrenMultivitaminImg,
                     'childrens-multivitamin': childrenMultivitaminImg,
