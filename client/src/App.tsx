@@ -19,6 +19,7 @@ import Contact from "@/pages/contact";
 import Science from "@/pages/science";
 import Consultation from "@/pages/consultation";
 import Quiz from "@/pages/quiz";
+import Planet from "@/pages/planet";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -37,6 +38,7 @@ function Router() {
       <Route path="/science" component={Science} />
       <Route path="/consultation" component={Consultation} />
       <Route path="/quiz" component={Quiz} />
+      <Route path="/planet" component={Planet} />
       <Route component={NotFound} />
     </Switch>
   );
