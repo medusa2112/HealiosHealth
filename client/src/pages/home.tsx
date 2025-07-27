@@ -19,6 +19,45 @@ import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
+interface FAQItemProps {
+  question: string;
+  answer: string;
+}
+
+const FAQItem = ({ question, answer }: FAQItemProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div 
+      className={`border border-black cursor-pointer transition-colors ${
+        isOpen 
+          ? 'bg-white text-black border-black' 
+          : 'bg-white text-black border-black hover:bg-black hover:text-white'
+      }`}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="p-6">
+        <div className="flex justify-between items-center">
+          <h3 className="text-sm font-medium leading-relaxed pr-4">
+            {question}
+          </h3>
+          <div className={`text-lg font-light transition-transform ${isOpen ? 'rotate-45' : ''}`}>
+            +
+          </div>
+        </div>
+        
+        {isOpen && (
+          <div className="mt-4 pt-4 border-t border-black">
+            <p className="text-sm leading-relaxed text-black">
+              {answer}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function HomePage() {
   const { toast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
@@ -875,6 +914,42 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-12 text-center">
+            Frequently Asked Questions
+          </h2>
+          
+          <div className="space-y-4">
+            <FAQItem 
+              question="What makes Healios supplements different?"
+              answer="Our supplements are formulated with premium ingredients and are third-party tested for purity. We focus on quality and transparency in every product we create."
+            />
+            <FAQItem 
+              question="Are your supplements suitable for vegetarians and vegans?"
+              answer="Most of our gummy supplements are suitable for vegetarians. Please check individual product pages for specific dietary information and certifications."
+            />
+            <FAQItem 
+              question="How long does shipping take?"
+              answer="We offer free UK shipping on orders over £25. Standard delivery takes 2-3 working days, and express delivery is available for next working day delivery."
+            />
+            <FAQItem 
+              question="Can I take multiple supplements together?"
+              answer="Many of our supplements can be taken together. For personalized advice on combining supplements, we recommend booking a free consultation with our nutritionists."
+            />
+            <FAQItem 
+              question="Do you offer a satisfaction guarantee?"
+              answer="Yes, we offer a 30-day satisfaction guarantee on all our products. If you're not completely satisfied, contact our customer service team for a full refund."
+            />
+            <FAQItem 
+              question="Are your products third-party tested?"
+              answer="Absolutely. All Healios supplements undergo rigorous third-party testing for purity, potency, and quality to ensure you receive the highest standard products."
+            />
           </div>
         </div>
       </section>
