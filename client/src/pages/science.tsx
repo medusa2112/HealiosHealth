@@ -195,41 +195,6 @@ export default function Science() {
         </div>
       </section>
 
-      {/* Target Users - Pill style */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-              Target Users
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Our supplements are designed for specific demographics with targeted health needs.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-4 justify-center">
-            <div className="bg-black text-white px-6 py-3 text-sm">
-              Adults aged 18–55 managing energy, immunity, stress
-            </div>
-            <div className="bg-black text-white px-6 py-3 text-sm">
-              Parents buying children's multivitamins (ages 3–12)
-            </div>
-            <div className="bg-black text-white px-6 py-3 text-sm">
-              Women supplementing for hair/skin, fatigue, pregnancy
-            </div>
-            <div className="bg-black text-white px-6 py-3 text-sm">
-              Fitness-focused men aged 25–45
-            </div>
-          </div>
-
-          <div className="mt-12 bg-white dark:bg-gray-700 p-6 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              All products are safe for daily use within UK tolerable upper intake levels, unless otherwise noted.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Quality Standards - Ticked list style */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
