@@ -514,7 +514,7 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Video Column */}
-          <div className="relative overflow-hidden min-h-[600px] lg:h-full">
+          <div className="relative overflow-hidden min-h-[600px] lg:h-full bg-black">
             <video
               autoPlay
               muted
@@ -522,13 +522,14 @@ export default function HomePage() {
               playsInline
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
-              onLoadStart={() => console.log('Optimized video loading started')}
-              onCanPlay={() => console.log('Optimized video can play')}
-              onLoadedData={() => console.log('Optimized video loaded')}
+              onLoadStart={() => console.log('TheFourths video loading started')}
+              onCanPlay={() => console.log('TheFourths video can play')}
+              onLoadedData={() => console.log('TheFourths video loaded')}
+              onError={(e) => console.error('TheFourths video error:', e)}
             >
-              <source src="/attached_assets/TheFourths_1753620348483.mov" type="video/mp4" />
-              {/* Fallback to black background if video fails to load */}
-              <div className="absolute inset-0 bg-black"></div>
+              <source src="/assets/TheFourths_1753620348483.mov" type="video/quicktime" />
+              <source src="/assets/TheFourths_1753620348483.mov" type="video/mp4" />
+              Your browser does not support the video tag.
             </video>
           </div>
 
