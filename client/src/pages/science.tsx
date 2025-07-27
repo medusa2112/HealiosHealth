@@ -76,7 +76,7 @@ export default function Science() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid lg:grid-cols-3 gap-12 px-6">
             {/* Vitamin D3 */}
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-6">
