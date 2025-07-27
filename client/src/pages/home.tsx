@@ -846,9 +846,14 @@ export default function HomePage() {
             </div>
 
             {/* Reviews Grid */}
-            <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className={`lg:col-span-3 ${selectedReviewCategory === 'All' 
+              ? 'flex gap-6 overflow-x-auto pb-4' 
+              : 'grid grid-cols-1 lg:grid-cols-3 gap-6'
+            }`}>
               {filteredReviews.map((review) => (
-                <div key={review.id} className="bg-white dark:bg-gray-700 p-6">
+                <div key={review.id} className={`bg-white dark:bg-gray-700 p-6 ${
+                  selectedReviewCategory === 'All' ? 'flex-shrink-0 w-80' : ''
+                }`}>
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
