@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
 import healiosFitnessImg from '@assets/multicultural-fitness-group-looking-at-the-camera-2024-11-28-11-11-49-utc_1753630516538.jpg';
+import basketballTeamImg from '@assets/the-game-is-what-brings-us-together-2025-04-06-11-08-01-utc_1753630689523.jpg';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
 export default function About() {
@@ -128,18 +129,12 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left side - Image */}
             <div className="order-2 lg:order-1">
-              <div className="bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900 dark:to-orange-900 p-8 h-96 flex items-center justify-center">
-                <div className="w-full h-full bg-cover bg-center opacity-60" 
-                     style={{
-                       backgroundImage: `repeating-linear-gradient(
-                         45deg,
-                         #d4a574,
-                         #d4a574 8px,
-                         #e8c4a0 8px,
-                         #e8c4a0 16px
-                       )`
-                     }}>
-                </div>
+              <div className="relative h-96 overflow-hidden">
+                <img
+                  src={basketballTeamImg}
+                  alt="Diverse basketball team representing the Healios community of active individuals who prioritize performance and wellness"
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
             </div>
 
