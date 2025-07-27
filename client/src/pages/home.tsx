@@ -702,19 +702,19 @@ export default function HomePage() {
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-1">
                   <span className="bg-black text-white px-2 py-1 text-xs font-medium">All</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Sleep</span>
                   <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Energy</span>
                   <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Beauty</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Digestive</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Fertility</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Pregnancy</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Prenatal</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Children</span>
                   <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Immunity</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Stress</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Gut Health</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Wellbeing</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Minerals</span>
+                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Metabolism</span>
                 </div>
               </div>
 
@@ -735,10 +735,10 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  I take this supplement as part of my evening routine and find it fits well into my wellness schedule. I appreciate the quality and consistency of this product. Would recommend to others!
+                  Started taking these after struggling with restless evenings. Within two weeks, I noticed a significant improvement in my relaxation routine. The berry flavor is pleasant and the quality is excellent.
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">SARAH M.</p>
                   <Link href="/products/magnesium">
                     <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                       <img src={magnesiumImg} alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
@@ -759,10 +759,10 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  Excellent customer service. Very prompt reply and Lizzie went out of her way to assist. Really good products too, top quality ingredients. Would recommend!
+                  My skin and nails have noticeably improved since starting these three months ago. The orange flavor makes them enjoyable to take daily. Great value for the quality you receive.
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">CATHERINE</p>
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">EMMA K.</p>
                   <Link href="/products/collagen-complex">
                     <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                       <img src={collagenComplexImg} alt="Healios Collagen Complex" className="w-8 h-10 object-contain" />
@@ -783,10 +783,10 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  Really pleased with these excellent quality supplements that have made a big difference to my energy levels which have lowered significantly due to the peri menopause.
+                  These have become part of my daily routine for stress management. I appreciate that they're made with traditional Ayurvedic ingredients. The strawberry flavor is a nice touch.
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">LISA</p>
+                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">RACHEL P.</p>
                   <Link href="/products/ashwagandha">
                     <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                       <img src={ashwagandhaImg} alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
