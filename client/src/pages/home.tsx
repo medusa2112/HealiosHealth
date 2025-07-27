@@ -875,8 +875,8 @@ export default function HomePage() {
           </div>
 
           {/* Customer Photos */}
-          <div className="mt-16">
-            <div className="flex items-center justify-center gap-4 overflow-x-auto">
+          <div className="mt-3">
+            <div className="lg:col-span-3 flex justify-between items-center">
               {[
                 "/assets/Screenshot 2025-07-27 at 15.19.44_1753622601502.png",
                 "/assets/Screenshot 2025-07-27 at 15.19.52_1753622601502.png",
@@ -895,7 +895,7 @@ export default function HomePage() {
                   <img
                     src={src}
                     alt={`Happy customer ${index + 1}`}
-                    className="w-16 h-16 object-cover rounded-full border-2 border-white dark:border-gray-600"
+                    className="w-16 h-16 object-cover border-2 border-white dark:border-gray-600"
                   />
                 </div>
               ))}
@@ -971,6 +971,7 @@ export default function HomePage() {
         isOpen={showPreOrderModal}
         onClose={() => setShowPreOrderModal(false)}
         productName={selectedProductName}
+        productId="sample-product"
       />
     </div>
   );
