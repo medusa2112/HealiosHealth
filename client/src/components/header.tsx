@@ -319,8 +319,8 @@ export function Header() {
         onMouseEnter={() => setIsShopDropdownOpen(true)}
         onMouseLeave={() => setIsShopDropdownOpen(false)}
       >
-        <div className="px-8 py-8">
-          <div className="grid grid-cols-4 gap-8">
+        <div className="px-6 py-6">
+          <div className="grid grid-cols-4 gap-6">
             {shopSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
@@ -342,7 +342,7 @@ export function Header() {
           </div>
           
           {/* CTA Section */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
+          <div className="mt-6 pt-4 border-t border-gray-800">
             <div className="bg-healios-gradient-2 p-4 text-center">
               <h3 className="text-base font-medium text-white mb-2">
                 Not sure where to start?
@@ -368,14 +368,14 @@ export function Header() {
         style={{
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '900px',
-          maxWidth: '95vw'
+          width: '600px',
+          maxWidth: '90vw'
         }}
         onMouseEnter={() => setIsLearnDropdownOpen(true)}
         onMouseLeave={() => setIsLearnDropdownOpen(false)}
       >
-        <div className="px-8 py-8">
-          <div className="grid grid-cols-6 gap-6">
+        <div className="px-6 py-6">
+          <div className="grid grid-cols-4 gap-4">
             {learnSections.map((section, index) => (
               <div key={index}>
                 <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
@@ -397,8 +397,8 @@ export function Header() {
           </div>
           
           {/* Featured Content with Images */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <div className="grid grid-cols-2 gap-6">
+          <div className="mt-6 pt-4 border-t border-gray-800">
+            <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
                   src="/attached_assets/Healios_1753559079971.png" 
