@@ -77,7 +77,7 @@ export default function About() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
             <div className="mb-12 lg:mb-0">
               <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
-                Why Healios exists
+                The Realisation
               </h2>
               <div className="space-y-6 text-gray-600 dark:text-gray-400 leading-relaxed">
                 <p>
