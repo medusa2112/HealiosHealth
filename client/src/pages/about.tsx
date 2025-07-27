@@ -122,7 +122,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Nutrients of Integrity */}
+      {/* Who We're For */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -147,69 +147,44 @@ export default function About() {
             <div className="order-1 lg:order-2">
               <div className="mb-8">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-                  NUTRIENTS OF INTEGRITY
+                  WHO WE'RE FOR
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
-                  Clean ingredients from ethical sources, always
+                  Who We're For
                 </h2>
               </div>
 
-              {/* Ingredient Details Table */}
+              {/* Personal Statements */}
               <div className="mb-8">
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-                  A CLOSER LOOK: MAGNESIUM CITRATE
-                </p>
-                
                 <div className="space-y-4">
-                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Source</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Premium Citrate Complex</span>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    You train, but still wake up tired.
+                  </p>
                   
-                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Form</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Highly bioavailable chelated mineral</span>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    You eat well, but something feels off.
+                  </p>
                   
-                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Country of origin</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">European Union</span>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    You're high-functioning, but short-fused.
+                  </p>
                   
-                  <div className="pb-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">Found in</span>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Green leafy vegetables, nuts, seeds</span>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                    You don't want a supplement stack — you want confidence.
+                  </p>
                 </div>
               </div>
 
-              {/* What Makes It Extraordinary */}
+              {/* Main Message */}
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
-                  WHAT MAKES IT EXTRAORDINARY
-                </p>
-                
                 <blockquote className="border-l-4 border-healios-cyan pl-6 mb-6">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 italic leading-relaxed mb-4">
-                    "This incredible ingredient is derived from premium mineral sources and, due to its advanced chelation process, has 85% bioavailability. It is the key ingredient to support muscle function and energy metabolism, backed by compelling scientific studies. It really is something unique."
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                    Healios is for people who take care of themselves… but still feel the drag. For those who want to understand what they're taking and feel the difference.
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                    Not extremes. Not hacks. Just evidence-based supplementation for real life.
                   </p>
                 </blockquote>
-                
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600"></div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">DR. SARAH MITCHELL</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Director, Clinical Research</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
