@@ -520,12 +520,13 @@ export default function HomePage() {
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
-              onLoadStart={() => console.log('TheFourths video loading started')}
-              onCanPlay={() => console.log('TheFourths video can play')}
+              onLoadStart={() => console.log('Optimized video loading started')}
+              onCanPlay={() => console.log('Optimized video can play')}
+              onLoadedData={() => console.log('Optimized video loaded')}
             >
-              <source src="/attached_assets/TheFourths_1753620188166.mov" type="video/mp4" />
+              <source src="/attached_assets/TheFourths_1753620348483.mov" type="video/mp4" />
               {/* Fallback to black background if video fails to load */}
               <div className="absolute inset-0 bg-black"></div>
             </video>
