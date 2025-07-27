@@ -96,9 +96,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEOHead 
-        title="Wild Nutrition - Premium Food-Grown® Supplements | Better Absorbed, Better Retained"
-        description="Discover award-winning Food-Grown® supplements with 113% better absorption. Premium vitamins for women's health, fertility, energy, and wellness. Free shipping over $50."
-        keywords="food-grown supplements, natural vitamins, women's health, fertility supplements, Wild Nutrition, better absorption, premium supplements"
+        title="Healios - Premium Wellness Supplements | Quality Ingredients, Third-Party Tested"
+        description="Discover Healios premium wellness supplements made with quality ingredients. Carefully formulated to support your daily wellness routine. Third-party tested for purity."
+        keywords="wellness supplements, natural vitamins, daily wellness, premium supplements, Healios, quality ingredients, third-party tested"
         image="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630"
       />
 
@@ -130,9 +130,9 @@ export default function HomePage() {
 
         {/* Content */}
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
-          {/* Food-Grown Badge */}
+          {/* Badge */}
           <div className="inline-flex items-center bg-transparent text-white border border-white px-4 py-2 text-sm font-medium mb-8">
-            Engineered for tired bodies, broken sleep, and stressed systems.
+            Quality supplements for daily wellness support.
           </div>
 
           {/* Main Heading */}
@@ -194,10 +194,10 @@ export default function HomePage() {
             {/* Sidebar */}
             <div className="lg:col-span-1 mb-12 lg:mb-0">
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-4">
-                Supplements That Don't Pretend.
+                Quality Wellness Supplements.
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-wide">
-                EVERY LIFE STAGE, EVERY HEALTH GOAL
+                SUPPORTING YOUR DAILY WELLNESS ROUTINE
               </p>
 
               {/* Category Pills */}
@@ -415,7 +415,7 @@ export default function HomePage() {
               </h2>
 
               <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                We don't promise miracles. We fix what's missing — with the nutrients your body's begging for.
+                Quality supplements designed to support your daily wellness routine with carefully selected ingredients.
               </p>
 
               {/* Key Benefits List */}
@@ -423,19 +423,19 @@ export default function HomePage() {
                 <div className="flex items-start gap-3">
                   <Microscope className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    Clinically validated dosages, not marketing blends.
+                    Carefully formulated with quality ingredients.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
                   <TestTube className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    Lab-tested, WADA-safe, UK-manufactured.
+                    Third-party tested for purity and quality.
                   </span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Lightbulb className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" />
                   <span className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    Designed by nutritional scientists, not influencers.
+                    Designed to support your wellness routine.
                   </span>
                 </div>
               </div>
@@ -463,9 +463,9 @@ export default function HomePage() {
                   THE HEALIOS DIFFERENCE
                 </p>
                 <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Science-backed wellness solutions<br />
-                  designed for optimal <em className="italic">bioavailability</em><br />
-                  and maximum health impact.
+                  Quality wellness supplements<br />
+                  designed to support your<br />
+                  daily wellness routine.
                 </h2>
               </div>
 
@@ -610,7 +610,7 @@ export default function HomePage() {
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                       </svg>
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Health goals & symptom support</span>
+                    <span className="text-gray-700 dark:text-gray-300">Wellness goals & lifestyle support</span>
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -717,7 +717,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  I am so surprised by this product. I take an hour before bed and fall asleep with such ease. I wake up refreshed and I cannot say enough about how grateful I am for having good sleep sleep. Highly recommended!
+                  I take this supplement as part of my evening routine and find it fits well into my wellness schedule. I appreciate the quality and consistency of this product. Would recommend to others!
                 </p>
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">JANINE</p>

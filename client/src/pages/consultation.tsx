@@ -26,7 +26,7 @@ export default function Consultation() {
                   No sales pitch.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Get honest, evidence-based advice from our team of qualified nutritionists. We'll help you understand what your body actually needs—not what marketing wants you to buy.
+                  Get personalized guidance from our team of qualified nutritionists. We'll help you understand how supplements may fit into your wellness routine.
                 </p>
               </div>
 

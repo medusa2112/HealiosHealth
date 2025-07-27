@@ -27,7 +27,7 @@ export default function About() {
                   the nonsense.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  We're not here to sell you dreams. We're here to fix what's broken—tired bodies, restless sleep, and stressed systems—with supplements that actually work.
+                  We're committed to providing quality supplements designed to support your daily wellness routine with carefully selected ingredients.
                 </p>
               </div>
 
@@ -82,13 +82,13 @@ export default function About() {
               </h2>
               <div className="space-y-6 text-gray-600 dark:text-gray-400 leading-relaxed">
                 <p>
-                  Founded in 2019 by a team of frustrated nutritional scientists who were tired of seeing ineffective supplements flood the market. We watched people waste money on under-dosed formulas and marketing gimmicks while their health goals remained out of reach.
+                  Founded in 2019 by a team of nutritional scientists who wanted to create quality supplements with transparent ingredient lists and clear labeling. We believe in honest communication about what our products contain.
                 </p>
                 <p>
-                  We decided to build something different. No proprietary blends hiding low doses. No celebrity endorsements replacing scientific evidence. Just clinically validated dosages of nutrients your body actually needs.
+                  We focus on carefully formulating our supplements with quality ingredients, clear dosage information, and transparent labeling. Our products are designed to support your daily wellness routine.
                 </p>
                 <p>
-                  Every formula is developed by PhD nutritional scientists, manufactured in UK facilities that exceed international standards, and third-party tested for purity and potency. Because your health deserves better than guesswork.
+                  Every formula is developed with care, manufactured in quality facilities, and third-party tested for purity. We believe in providing supplements you can trust as part of your wellness routine.
                 </p>
               </div>
             </div>

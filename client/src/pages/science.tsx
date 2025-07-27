@@ -26,7 +26,7 @@ export default function Science() {
                   No shortcuts. No compromises.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Every Healios supplement is built on rigorous scientific research, clinical validation, and nutritional expertise. We don't chase trends—we follow the evidence.
+                  Healios supplements are carefully formulated using quality ingredients and nutritional knowledge. We focus on creating products designed to support your wellness routine.
                 </p>
               </div>
 
@@ -92,7 +92,7 @@ export default function Science() {
                   Clinical Validation
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                  Every ingredient is backed by peer-reviewed clinical studies demonstrating safety and efficacy at the exact dosages we use.
+                  We select ingredients based on available research and formulate our supplements to support your wellness routine.
                 </p>
               </div>
               

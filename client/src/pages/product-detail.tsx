@@ -140,8 +140,8 @@ export default function ProductDetail() {
       answer: "Yes, this supplement can generally be taken with other vitamins and minerals. However, if you're taking medication or have health conditions, consult your healthcare provider before combining supplements."
     },
     {
-      question: "How long until I see results?",
-      answer: "Results vary by individual and depend on your baseline levels and health goals. Many people notice improvements within 2-4 weeks of consistent use, though optimal benefits may take 2-3 months."
+      question: "How long should I take this supplement?",
+      answer: "This supplement is designed for daily use as part of your wellness routine. The duration of use depends on your individual needs and goals. Consult with a healthcare professional for personalized advice."
     },
     {
       question: "Is this suitable for vegetarians/vegans?",
@@ -251,7 +251,7 @@ export default function ProductDetail() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <span className="text-gray-700 dark:text-gray-300">Clinically researched dosages</span>
+                  <span className="text-gray-700 dark:text-gray-300">Carefully formulated</span>
                 </li>
               </ul>
             </div>
@@ -407,8 +407,8 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">How to take</h2>
           <div className="bg-gray-50 dark:bg-gray-800 p-8">
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              Take 1-2 capsules daily with food, preferably with your main meal. For optimal absorption, 
-              take consistently at the same time each day. Do not exceed the recommended daily dose.
+              Take 1-2 capsules daily with food, preferably with your main meal. Take consistently 
+              at the same time each day. Do not exceed the recommended daily dose.
             </p>
           </div>
         </div>
@@ -489,15 +489,15 @@ export default function ProductDetail() {
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Enhanced absorption</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Quality ingredients</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Improved sleep quality</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Convenient daily supplement</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Reduced stress & fatigue</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Third-party tested</span>
                   </li>
                 </ul>
                 <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">

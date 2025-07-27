@@ -30,7 +30,7 @@ export class MemStorage implements IStorage {
       {
         id: "apple-cider-vinegar",
         name: "Apple Cider Vinegar & Ginger (60 Gummies)",
-        description: "Digestive support with metabolic wellness and anti-inflammatory properties",
+        description: "Apple cider vinegar and ginger supplement gummies",
         price: "16.99",
         originalPrice: "29.99",
         imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
@@ -43,7 +43,7 @@ export class MemStorage implements IStorage {
       {
         id: "vitamin-d3",
         name: "Vitamin D3 (60 Gummies)",
-        description: "Immunity support, bone health, and mood support",
+        description: "Vitamin D3 supplement gummies",
         price: "15.99",
         originalPrice: "26.99",
         imageUrl: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
@@ -56,7 +56,7 @@ export class MemStorage implements IStorage {
       {
         id: "ashwagandha",
         name: "KSM-66 Ashwagandha Capsules",
-        description: "Stress relief, cognitive support, and energy enhancement",
+        description: "KSM-66 Ashwagandha supplement capsules",
         price: "24.99",
         originalPrice: "34.99",
         imageUrl: "https://images.unsplash.com/photo-1609501676725-7186f734cd16?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
@@ -69,7 +69,7 @@ export class MemStorage implements IStorage {
       {
         id: "probiotics",
         name: "10 Billion CFU Probiotic Complex",
-        description: "Digestive health support with gut microbiome balance",
+        description: "10 billion CFU probiotic supplement complex",
         price: "21.99",
         originalPrice: "29.99",
         imageUrl: "https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
@@ -82,7 +82,7 @@ export class MemStorage implements IStorage {
       {
         id: "magnesium",
         name: "Magnesium Complex Capsules",
-        description: "Sleep support, muscle recovery, and stress relief",
+        description: "Magnesium complex supplement capsules",
         price: "18.99",
         originalPrice: "28.99",
         imageUrl: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
@@ -96,7 +96,7 @@ export class MemStorage implements IStorage {
       {
         id: "omega-3",
         name: "Omega-3 Complex",
-        description: "Pure fish oil with EPA & DHA for heart and brain health",
+        description: "Omega-3 fish oil supplement with EPA & DHA",
         price: "32.00",
         originalPrice: "38.00",
         imageUrl: "https://images.unsplash.com/photo-1628771065518-0d82f1938462?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
