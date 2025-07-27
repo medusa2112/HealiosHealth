@@ -19,7 +19,7 @@ const productImages: Record<string, string> = {
   'apple-cider-vinegar': appleCiderVinegarImg,
   'vitamin-d3': vitaminD3Img,
   'ashwagandha': ashwagandhaImg,
-  'probiotics': probioticsImg,
+  'probiotics': '/images/probiotics-complex.svg',
   'magnesium': magnesiumImg,
   'children-multivitamin': childrenMultivitaminImg,
   'childrens-multivitamin': childrenMultivitaminImg,
