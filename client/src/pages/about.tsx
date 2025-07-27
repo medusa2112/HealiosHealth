@@ -57,11 +57,11 @@ export default function About() {
             </div>
 
             {/* Image */}
-            <div className="relative h-full">
+            <div className="relative h-full overflow-hidden">
               <img
                 src={healiosNatureImg}
                 alt="Pure natural wellness representing Healios commitment to science-backed nutrition without compromise"
-                className="w-full h-full object-cover min-h-[500px]"
+                className="w-full h-full object-cover object-left-top min-h-[500px]"
               />
             </div>
           </div>
