@@ -176,7 +176,7 @@ export default function Planet() {
               <Globe className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Responsible Sourcing</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Partnering with Nutribl's established supply chains that prioritize quality ingredients while exploring opportunities for more sustainable sourcing practices.
+                Working with established supply chains that prioritize quality ingredients while exploring opportunities for more sustainable sourcing practices.
               </p>
             </div>
 
@@ -200,7 +200,7 @@ export default function Planet() {
               <Heart className="w-10 h-10 text-teal-600 dark:text-teal-400 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">Quality Manufacturing</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Our supplements are manufactured by Nutribl in GMP-certified facilities that meet strict quality and safety standards.
+                Our supplements are manufactured in GMP-certified facilities that meet strict quality and safety standards.
               </p>
             </div>
 
