@@ -62,11 +62,102 @@ export default function HomePage() {
   const { toast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
   const [isFilterLoading, setIsFilterLoading] = useState(false);
+  const [selectedReviewCategory, setSelectedReviewCategory] = useState('All');
   
   // Pre-order modal states
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
   const [selectedProductName, setSelectedProductName] = useState('');
   const [selectedSalePrice, setSelectedSalePrice] = useState('');
+
+  // Review data with categories
+  const allReviews = [
+    {
+      id: 1,
+      category: 'Minerals',
+      name: 'SARAH M.',
+      text: 'Started taking these after struggling with restless evenings. Within two weeks, I noticed a significant improvement in my relaxation routine. The berry flavor is pleasant and the quality is excellent.',
+      product: 'Magnesium Complex',
+      productLink: '/products/magnesium',
+      productImage: magnesiumImg
+    },
+    {
+      id: 2,
+      category: 'Beauty',
+      name: 'EMMA K.',
+      text: 'My skin and nails have noticeably improved since starting these three months ago. The orange flavor makes them enjoyable to take daily. Great value for the quality you receive.',
+      product: 'Collagen Complex',
+      productLink: '/products/collagen-complex',
+      productImage: collagenComplexImg
+    },
+    {
+      id: 3,
+      category: 'Stress',
+      name: 'RACHEL P.',
+      text: 'These have become part of my daily routine for stress management. I appreciate that they\'re made with traditional Ayurvedic ingredients. The strawberry flavor is a nice touch.',
+      product: 'KSM-66 Ashwagandha',
+      productLink: '/products/ashwagandha',
+      productImage: ashwagandhaImg
+    },
+    {
+      id: 4,
+      category: 'Digestive',
+      name: 'JAMES R.',
+      text: 'Great for supporting my digestive routine. The pineapple flavor is refreshing and I love that it combines probiotics with essential vitamins. Quality is excellent.',
+      product: 'Probiotic + Vitamins',
+      productLink: '/products/probiotic-vitamins',
+      productImage: probioticsImg
+    },
+    {
+      id: 5,
+      category: 'Immunity',
+      name: 'LUCY H.',
+      text: 'Perfect for daily immune support. The lemon flavor is delicious and it fits easily into my morning routine. Really happy with the quality and consistency.',
+      product: 'Vitamin D3 1000 IU',
+      productLink: '/products/vitamin-d3-1000iu',
+      productImage: vitaminD3Img
+    },
+    {
+      id: 6,
+      category: 'Children',
+      name: 'SOPHIE T.',
+      text: 'My kids actually ask for their daily vitamins now! The fruit flavors are amazing and I feel confident knowing they\'re getting quality nutrition. Highly recommend for families.',
+      product: 'Children\'s Multivitamin',
+      productLink: '/products/children-multivitamin',
+      productImage: childrenMultivitaminImg
+    },
+    {
+      id: 7,
+      category: 'Metabolism',
+      name: 'MICHAEL D.',
+      text: 'I take these before meals as part of my wellness routine. The strawberry flavor makes them enjoyable and I appreciate the convenient gummy format.',
+      product: 'Apple Cider Vinegar',
+      productLink: '/products/apple-cider-vinegar',
+      productImage: appleCiderVinegarImg
+    },
+    {
+      id: 8,
+      category: 'Energy',
+      name: 'DAVID K.',
+      text: 'Really helps with my afternoon energy dips. I love that it combines iron with vitamin C for better absorption. The cherry flavor is excellent.',
+      product: 'Iron + Vitamin C',
+      productLink: '/products/iron-vitamin-c',
+      productImage: appleCiderVinegarImg // Using placeholder for now
+    },
+    {
+      id: 9,
+      category: 'Prenatal',
+      name: 'JESSICA M.',
+      text: 'Started taking these during pre-conception planning as recommended. The berry flavor is pleasant and they\'re easy to incorporate into my routine.',
+      product: 'Folic Acid 400µg',
+      productLink: '/products/folic-acid',
+      productImage: appleCiderVinegarImg // Using placeholder for now
+    }
+  ];
+
+  // Filter reviews based on selected category
+  const filteredReviews = selectedReviewCategory === 'All' 
+    ? allReviews.slice(0, 3) // Show first 3 for 'All'
+    : allReviews.filter(review => review.category === selectedReviewCategory).slice(0, 3);
   
   // Removed animation state for fitness video - now static display
   
@@ -701,20 +792,49 @@ export default function HomePage() {
               {/* Category Pills */}
               <div className="space-y-2 mb-8">
                 <div className="flex flex-wrap gap-1">
-                  <span className="bg-black text-white px-2 py-1 text-xs font-medium">All</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Energy</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Beauty</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Digestive</span>
+                  {['All', 'Energy', 'Beauty', 'Digestive'].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedReviewCategory(category)}
+                      className={`px-2 py-1 text-xs font-medium transition-colors ${
+                        selectedReviewCategory === category
+                          ? 'bg-black text-white'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Prenatal</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Children</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Immunity</span>
+                  {['Prenatal', 'Children', 'Immunity'].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedReviewCategory(category)}
+                      className={`px-2 py-1 text-xs font-medium transition-colors ${
+                        selectedReviewCategory === category
+                          ? 'bg-black text-white'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Stress</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Minerals</span>
-                  <span className="border border-gray-300 text-gray-700 px-2 py-1 text-xs font-medium">Metabolism</span>
+                  {['Stress', 'Minerals', 'Metabolism'].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedReviewCategory(category)}
+                      className={`px-2 py-1 text-xs font-medium transition-colors ${
+                        selectedReviewCategory === category
+                          ? 'bg-black text-white'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -727,77 +847,30 @@ export default function HomePage() {
 
             {/* Reviews Grid */}
             <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Review 1 */}
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  Started taking these after struggling with restless evenings. Within two weeks, I noticed a significant improvement in my relaxation routine. The berry flavor is pleasant and the quality is excellent.
-                </p>
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">SARAH M.</p>
-                  <Link href="/products/magnesium">
-                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                      <img src={magnesiumImg} alt="Healios Magnesium Complex" className="w-8 h-10 object-contain" />
-                      <div>
-                        <p className="text-xs font-medium text-gray-900 dark:text-white">Magnesium Complex</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+              {filteredReviews.map((review) => (
+                <div key={review.id} className="bg-white dark:bg-gray-700 p-6">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                    {review.text}
+                  </p>
+                  <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+                    <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">{review.name}</p>
+                    <Link href={review.productLink}>
+                      <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                        <img src={review.productImage} alt={`Healios ${review.product}`} className="w-8 h-10 object-contain" />
+                        <div>
+                          <p className="text-xs font-medium text-gray-900 dark:text-white">{review.product}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-
-              {/* Review 2 */}
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  My skin and nails have noticeably improved since starting these three months ago. The orange flavor makes them enjoyable to take daily. Great value for the quality you receive.
-                </p>
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">EMMA K.</p>
-                  <Link href="/products/collagen-complex">
-                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                      <img src={collagenComplexImg} alt="Healios Collagen Complex" className="w-8 h-10 object-contain" />
-                      <div>
-                        <p className="text-xs font-medium text-gray-900 dark:text-white">Collagen Complex</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Review 3 */}
-              <div className="bg-white dark:bg-gray-700 p-6">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                  These have become part of my daily routine for stress management. I appreciate that they're made with traditional Ayurvedic ingredients. The strawberry flavor is a nice touch.
-                </p>
-                <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                  <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">RACHEL P.</p>
-                  <Link href="/products/ashwagandha">
-                    <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                      <img src={ashwagandhaImg} alt="Healios Ashwagandha Energy Support" className="w-8 h-10 object-contain" />
-                      <div>
-                        <p className="text-xs font-medium text-gray-900 dark:text-white">KSM-66 Ashwagandha</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -894,7 +967,6 @@ export default function HomePage() {
         isOpen={showPreOrderModal}
         onClose={() => setShowPreOrderModal(false)}
         productName={selectedProductName}
-        productPrice={selectedSalePrice}
       />
     </div>
   );
