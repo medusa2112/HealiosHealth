@@ -172,7 +172,7 @@ export default function ProductComprehensive() {
         };
       case 'vitamin-d3':
         return {
-          bundleWith: 'Magnesium Complex',
+          bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1552.85',
           bundleOriginalPrice: 'R1743.97',
           statisticNumber: '42%',
@@ -190,7 +190,7 @@ export default function ProductComprehensive() {
         };
       case 'ashwagandha':
         return {
-          bundleWith: 'Magnesium Gummies',
+          bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1385.62',
           statisticNumber: '3,000',
@@ -208,7 +208,7 @@ export default function ProductComprehensive() {
         };
       case 'probiotics':
         return {
-          bundleWith: 'Apple Cider Vinegar Gummies',
+          bundleWith: 'Apple Cider Vinegar Gummies (Strawberry Flavour)',
           bundlePrice: 'R1385.62',
           bundleOriginalPrice: 'R1576.74',
           statisticNumber: '70%',
@@ -226,7 +226,7 @@ export default function ProductComprehensive() {
         };
       case 'magnesium':
         return {
-          bundleWith: 'KSM-66 Ashwagandha',
+          bundleWith: 'Ashwagandha 300mg Gummies (Strawberry Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1385.62',
           statisticNumber: '60%',
@@ -244,7 +244,7 @@ export default function ProductComprehensive() {
         };
       case 'childrens-multivitamin':
         return {
-          bundleWith: 'Vitamin D3 Gummies',
+          bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R764.48',
           bundleOriginalPrice: 'R1098.94',
           statisticNumber: '85%',
@@ -262,7 +262,7 @@ export default function ProductComprehensive() {
         };
       case 'probiotic-vitamins':
         return {
-          bundleWith: 'Apple Cider Vinegar Gummies',
+          bundleWith: 'Apple Cider Vinegar Gummies (Strawberry Flavour)',
           bundlePrice: 'R860.04',
           bundleOriginalPrice: 'R1170.61',
           statisticNumber: '70%',
@@ -280,7 +280,7 @@ export default function ProductComprehensive() {
         };
       case 'collagen-complex':
         return {
-          bundleWith: 'Vitamin C Gummies',
+          bundleWith: 'Biotin 10,000 µg Strawberry Gummies',
           bundlePrice: 'R931.71',
           bundleOriginalPrice: 'R1242.28',
           statisticNumber: '25',
@@ -298,7 +298,7 @@ export default function ProductComprehensive() {
         };
       case 'biotin-5000':
         return {
-          bundleWith: 'Collagen Complex Gummies',
+          bundleWith: 'Collagen + C + Zinc + Selenium Gummies (Orange Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1290.06',
           statisticNumber: '10,000%',
@@ -316,7 +316,7 @@ export default function ProductComprehensive() {
         };
       case 'iron-vitamin-c':
         return {
-          bundleWith: 'Vitamin D3 Gummies',
+          bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R764.48',
           bundleOriginalPrice: 'R1051.16',
           statisticNumber: '50%',
@@ -334,9 +334,9 @@ export default function ProductComprehensive() {
         };
       case 'folic-acid-400':
         return {
-          bundleWith: 'Vitamin D3 Gummies',
-          bundlePrice: '£29.00',
-          bundleOriginalPrice: '£40.00',
+          bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
+          bundlePrice: 'R692.81',
+          bundleOriginalPrice: 'R955.60',
           statisticNumber: '28',
           statisticText: 'days - when neural tube development occurs, often before pregnancy is known',
           testimonial: '"Folic acid supplementation is crucial for all women of reproductive age. Starting 4+ weeks before conception provides optimal maternal folate status for healthy development."',
