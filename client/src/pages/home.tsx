@@ -403,20 +403,20 @@ export default function HomePage() {
       </section>
 
       {/* Pregnancy & New Mother Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Image Section */}
-            <div className="relative mb-12 lg:mb-0">
-              <img
-                src={healiosNatureImg}
-                alt="Pure natural wellness - pristine mountain lake representing the purity and natural origins of Healios supplements"
-                className="w-full aspect-video object-cover"
-              />
-            </div>
+      <section className="bg-gray-50 dark:bg-gray-800">
+        <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
+          {/* Image Section - Full height, no padding, extends to left edge */}
+          <div className="relative">
+            <img
+              src={healiosNatureImg}
+              alt="Pure natural wellness - pristine mountain lake representing the purity and natural origins of Healios supplements"
+              className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+            />
+          </div>
 
-            {/* Content */}
-            <div className="lg:pl-8">
+          {/* Content */}
+          <div className="py-24 px-6 lg:px-16 flex items-center">
+            <div>
               <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
                 Why Choose Healios Supplements?
               </h2>
