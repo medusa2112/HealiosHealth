@@ -93,8 +93,15 @@ export default function Science() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations.
                   </p>
-                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                    EFSA Claim ID: 280
+                  <div className="mt-3">
+                    <a 
+                      href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 text-xs font-medium hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors"
+                    >
+                      EFSA Claim ID: 280 →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -116,8 +123,15 @@ export default function Science() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women.
                   </p>
-                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                    EFSA Claim ID: 291
+                  <div className="mt-3">
+                    <a 
+                      href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-2 py-1 text-xs font-medium hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+                    >
+                      EFSA Claim ID: 291 →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -139,8 +153,15 @@ export default function Science() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Strong clinical evidence for pre-conception neural tube defect reduction.
                   </p>
-                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                    EFSA Claim ID: 274
+                  <div className="mt-3">
+                    <a 
+                      href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2009.1213" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 text-xs font-medium hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+                    >
+                      EFSA Claim ID: 274 →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -162,8 +183,15 @@ export default function Science() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day.
                   </p>
-                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                    EFSA Claim ID: 318
+                  <div className="mt-3">
+                    <a 
+                      href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
+                    >
+                      EFSA Claim ID: 318 →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -205,8 +233,15 @@ export default function Science() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
                   </p>
-                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                    Traditional Use
+                  <div className="mt-3">
+                    <a 
+                      href="https://www.ema.europa.eu/en/medicines/herbal/withania-somnifera" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-block bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-2 py-1 text-xs font-medium hover:bg-amber-200 dark:hover:bg-amber-800 transition-colors"
+                    >
+                      EMA Traditional Use →
+                    </a>
                   </div>
                 </div>
               </div>
@@ -289,7 +324,15 @@ export default function Science() {
               </div>
               <div className="bg-white dark:bg-gray-600 p-6 text-center">
                 <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">EFSA-Approved</div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">Health Claims</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Health Claims</p>
+                <a 
+                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                >
+                  View Claim ID: 280 →
+                </a>
               </div>
               <div className="bg-white dark:bg-gray-600 p-6 text-center">
                 <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Nordic Origin</div>
@@ -315,10 +358,18 @@ export default function Science() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Ferric pyrophosphate paired with ascorbic acid increases iron absorption by up to 300%, specifically formulated for optimal bioavailability in women of reproductive age.
                 </p>
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
                   <span>14mg Iron + 80mg Vitamin C</span>
                   <span>German/Swiss sourcing</span>
                 </div>
+                <a 
+                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 text-xs font-medium hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+                >
+                  EFSA Claim ID: 291 →
+                </a>
               </div>
 
               <div className="p-8 border-l-4 border-purple-400 bg-gray-50 dark:bg-gray-800">
@@ -326,10 +377,18 @@ export default function Science() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Pharmaceutical-grade synthetic D-biotin at therapeutic dosing (10,000% NRV) for clinically significant hair, skin, and nail support with 8-12 week visible results.
                 </p>
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-3">
                   <span>5000µg per serving</span>
                   <span>Netherlands/Belgium sourcing</span>
                 </div>
+                <a 
+                  href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors"
+                >
+                  EFSA Claim ID: 318 →
+                </a>
               </div>
             </div>
           </div>
