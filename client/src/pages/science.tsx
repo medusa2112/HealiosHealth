@@ -299,13 +299,14 @@ export default function Science() {
           muted
           loop
           playsInline
-          onLoadStart={() => console.log('Title video loading started')}
-          onCanPlay={() => console.log('Title video can play')}
-          onLoadedData={() => console.log('Title video loaded')}
+          preload="metadata"
+          onLoadStart={() => console.log('Compressed video loading started')}
+          onCanPlay={() => console.log('Compressed video can play')}
+          onLoadedData={() => console.log('Compressed video loaded')}
         >
+          <source src="/assets/title-video-compressed.mp4" type="video/mp4" />
           <source src="/assets/title-video.webm" type="video/webm" />
           <source src="/assets/title-video.mp4" type="video/mp4" />
-          <source src="/assets/title-video.mov" type="video/quicktime" />
           Your browser does not support the video tag.
         </video>
       </section>
