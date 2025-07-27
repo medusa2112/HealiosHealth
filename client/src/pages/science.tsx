@@ -26,28 +26,28 @@ export default function Science() {
                   No shortcuts. No compromises.
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Every Healios supplement is manufactured in GMP-certified facilities using rigorous quality control processes. Our commitment to scientific excellence ensures you receive premium wellness products you can trust.
+                  Every Healios supplement is manufactured by Nutribl using rigorous quality control processes. Our commitment to scientific excellence ensures you receive premium gummy supplements you can trust.
                 </p>
               </div>
 
               {/* Key Statistics */}
               <div className="grid grid-cols-3 gap-8 mb-8">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">GMP</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">12</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Certified Facilities
+                    Gummy Products
                   </p>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">280+</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">100%</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Contaminant Tests
+                    Third-Party Tested
                   </p>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">ISO</div>
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">0</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Quality Certified
+                    Artificial Colors
                   </p>
                 </div>
               </div>
@@ -63,7 +63,7 @@ export default function Science() {
             <div className="relative">
               <img
                 src={healiosGummiesImg}
-                alt="Healios Apple Cider Vinegar & Ginger Gummies showcasing premium supplement quality and scientific formulation"
+                alt="Healios gummy supplements showcasing premium quality and scientific formulation by Nutribl"
                 className="w-full"
               />
             </div>
@@ -126,7 +126,7 @@ export default function Science() {
                   Laboratory Testing
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                  Every batch undergoes comprehensive testing by accredited laboratories following USP standards for identity, purity, potency, and contaminant screening.
+                  Every batch undergoes comprehensive testing by accredited laboratories following international standards for identity, purity, potency, and contaminant screening.
                 </p>
               </div>
               
@@ -265,18 +265,18 @@ export default function Science() {
             <div className="grid grid-cols-2 gap-8">
               <div className="text-center">
                 <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                  <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">500+</div>
+                  <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">12</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Studies Reviewed
+                    Active Products
                   </p>
                 </div>
               </div>
               
               <div className="text-center">
                 <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                  <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">24</div>
+                  <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">9</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Quality Tests
+                    Health Categories
                   </p>
                 </div>
               </div>
@@ -285,7 +285,7 @@ export default function Science() {
                 <div className="bg-gray-50 dark:bg-gray-800 p-8">
                   <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">0</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Marketing Fillers
+                    Artificial Colors
                   </p>
                 </div>
               </div>
@@ -294,7 +294,7 @@ export default function Science() {
                 <div className="bg-gray-50 dark:bg-gray-800 p-8">
                   <div className="text-3xl font-light text-gray-900 dark:text-white mb-2">100%</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Transparency
+                    Gummy Format
                   </p>
                 </div>
               </div>
@@ -311,7 +311,7 @@ export default function Science() {
               Manufacturing Excellence
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              All Healios supplements are manufactured in FDA-registered facilities following Current Good Manufacturing Practice (cGMP) standards with comprehensive quality control processes.
+              All Healios supplements are manufactured by Nutribl in facilities following Current Good Manufacturing Practice (cGMP) standards with comprehensive quality control processes and regulatory compliance.
             </p>
           </div>
 
@@ -326,17 +326,17 @@ export default function Science() {
 
             <div className="text-center">
               <FlaskConical className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-              <h3 className="font-medium text-gray-900 dark:text-white mb-2">USP Verified</h3>
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">ISO Certified</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                United States Pharmacopeia verification for ingredient purity and potency.
+                International quality management standards for consistent manufacturing processes.
               </p>
             </div>
 
             <div className="text-center">
               <Award className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-              <h3 className="font-medium text-gray-900 dark:text-white mb-2">FDA Registered</h3>
+              <h3 className="font-medium text-gray-900 dark:text-white mb-2">EFSA Compliant</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Facilities registered with FDA following 21 CFR Part 111 regulations.
+                European Food Safety Authority guidelines for nutritional supplement claims and safety.
               </p>
             </div>
 

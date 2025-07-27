@@ -72,8 +72,7 @@ export default function Contact() {
                   <Phone className="h-5 w-5 text-brand-yellow mt-1" />
                   <div>
                     <p className="font-medium text-dark-text">Phone</p>
-                    <p className="text-gray-600">1-800-WILD-NUT</p>
-                    <p className="text-gray-600">(1-800-945-3688)</p>
+                    <p className="text-gray-600">+44 20 7946 0958</p>
                   </div>
                 </div>
 
@@ -81,7 +80,7 @@ export default function Contact() {
                   <Mail className="h-5 w-5 text-brand-yellow mt-1" />
                   <div>
                     <p className="font-medium text-dark-text">Email</p>
-                    <p className="text-gray-600">support@wildnutrition.com</p>
+                    <p className="text-gray-600">support@healios.health</p>
                   </div>
                 </div>
 
@@ -90,9 +89,8 @@ export default function Contact() {
                   <div>
                     <p className="font-medium text-dark-text">Address</p>
                     <p className="text-gray-600">
-                      123 Wellness Boulevard<br />
-                      Austin, TX 78701<br />
-                      United States
+                      Healios Health<br />
+                      London, United Kingdom
                     </p>
                   </div>
                 </div>
@@ -102,8 +100,8 @@ export default function Contact() {
                   <div>
                     <p className="font-medium text-dark-text">Business Hours</p>
                     <p className="text-gray-600">
-                      Monday - Friday: 9AM - 7PM EST<br />
-                      Saturday: 10AM - 4PM EST<br />
+                      Monday - Friday: 9AM - 6PM GMT<br />
+                      Saturday: 10AM - 2PM GMT<br />
                       Sunday: Closed
                     </p>
                   </div>

@@ -223,6 +223,11 @@ Preferred communication style: Simple, everyday language.
 ✓ Completed full currency localization from British Pounds (£) to South African Rand (R) using 23.89 exchange rate
 ✓ Updated all product prices, bundle pricing calculations, and currency display logic throughout the application
 ✓ Applied comprehensive currency conversion to database storage and frontend displays for SA market targeting
+✓ Removed all American-specific references from science page (FDA, USP) and replaced with international standards
+✓ Updated manufacturing claims to reflect Healios/Nutribl as actual manufacturer with EFSA compliance and ISO certification
+✓ Fixed contact page to use UK phone format (+44), Healios email domain, and GMT business hours
+✓ Updated statistics to be factual and conservative (12 products, 9 categories) rather than unverified claims
+✓ Ensured all content accurately represents Healios as UK-based brand manufactured by Nutribl
 
 ## Advanced SEO Implementation (January 2025)
 
