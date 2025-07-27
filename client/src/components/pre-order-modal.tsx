@@ -111,7 +111,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !email}
-                className="w-full bg-black text-white font-medium py-3 hover:text-[#07a88a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Submitting..." : "Join Pre-Order List"}
               </Button>
@@ -152,7 +152,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
             </p>
             <Button 
               onClick={handleClose}
-              className="w-full bg-black text-white font-medium py-3 hover:text-[#07a88a] transition-colors"
+              className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors"
             >
               Continue Shopping
             </Button>

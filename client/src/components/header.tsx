@@ -228,13 +228,9 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(false)}
-                  className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
-                    isScrolled ? 'h-12 px-3' : 'h-16 px-4'
-                  }`}
+                  className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
                 >
-                  <X className={`transition-all duration-300 ${
-                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                  }`} />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
             ) : (
@@ -242,9 +238,7 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
-                  isScrolled ? 'h-12 px-3' : 'h-16 px-4'
-                }`}
+                className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
               >
                 <Search className={`transition-all duration-300 ${
                   isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -257,9 +251,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className={`text-white hover:text-[#07a88a] transition-colors duration-200 ${
-                isScrolled ? 'h-12 px-3' : 'h-16 px-4'
-              }`}
+              className="text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
             >
               {theme === 'light' ? (
                 <Moon className={`transition-all duration-300 ${
@@ -277,9 +269,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className={`text-white hover:text-[#07a88a] relative transition-colors duration-200 ${
-                isScrolled ? 'h-12 px-3' : 'h-16 px-4'
-              }`}
+              className="text-white hover:bg-healios-cyan hover:text-black relative transition-colors duration-200"
             >
               <ShoppingBag className={`transition-all duration-300 ${
                 isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -297,13 +287,9 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className={`lg:hidden text-white hover:text-[#07a88a] transition-colors duration-200 ${
-                    isScrolled ? 'h-12 px-3' : 'h-16 px-4'
-                  }`}
+                  className="lg:hidden text-white hover:bg-healios-cyan hover:text-black transition-colors duration-200"
                 >
-                  <Menu className={`transition-all duration-300 ${
-                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                  }`} />
+                  <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-black border-gray-700">
@@ -386,7 +372,7 @@ export function Header() {
                 Take our 60-second quiz for personalized recommendations
               </p>
               <Link href="/quiz">
-                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
+                <button className="bg-white text-black px-4 py-2 text-xs font-medium hover:bg-gray-100 transition-colors">
                   Take the Quiz →
                 </button>
               </Link>
@@ -448,7 +434,7 @@ export function Header() {
                     Book a free 15 min consultation
                   </p>
                   <Link href="/consultation">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Book Now →
                     </button>
                   </Link>
@@ -469,7 +455,7 @@ export function Header() {
                     Visit our pregnancy hub
                   </p>
                   <Link href="/pregnancy">
-                    <button className="text-healios-cyan text-xs font-medium hover:text-[#07a88a] transition-colors whitespace-nowrap">
+                    <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Explore →
                     </button>
                   </Link>

@@ -81,7 +81,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.inStock ? (
               <Button
                 onClick={handleAddToCart}
-                className="bg-white text-black px-6 py-2 text-sm font-medium hover:text-[#07a88a] transition-colors"
+                className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
               >
                 Add to Cart
               </Button>
@@ -92,7 +92,7 @@ export function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   setShowPreOrderModal(true);
                 }}
-                className="bg-healios-cyan text-white px-6 py-2 text-sm font-medium hover:text-[#07a88a] transition-colors"
+                className="bg-healios-cyan text-white px-6 py-2 text-sm font-medium hover:bg-healios-cyan/90 transition-colors"
               >
                 Pre-Order 10% Off
               </Button>
