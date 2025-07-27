@@ -209,7 +209,7 @@ export class MemStorage implements IStorage {
         description: "Pre-pregnancy & prenatal support with 400µg folic acid for maternal tissue growth and neural tube development. NHS-recommended dose in convenient berry-flavored gummies.",
         price: "16.99",
         originalPrice: "24.99",
-        imageUrl: "/assets/Folic Acid 400µg_1753615197741.png",
+        imageUrl: "/assets/Folic Acid 400µg_1753615927607.png",
         category: "Prenatal",
         rating: "4.8",
         reviewCount: 156,

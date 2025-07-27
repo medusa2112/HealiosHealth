@@ -41,12 +41,13 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex', 'biotin-5000'],
-    VITAMINS: ['vitamin-d3', 'children-multivitamin'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400'],
+    VITAMINS: ['vitamin-d3', 'children-multivitamin', 'folic-acid-400'],
     ADAPTOGENS: ['ashwagandha'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
     MINERALS: ['magnesium', 'iron-vitamin-c'],
     BEAUTY: ['collagen-complex', 'biotin-5000'],
+    PRENATAL: ['folic-acid-400'],
     APPAREL: ['healios-jumper-men', 'healios-jumper-women', 'healios-tshirt-men', 'healios-tshirt-women']
   };
 
@@ -324,6 +325,7 @@ export default function HomePage() {
                     'collagen-complex': collagenComplexImg,
                     'biotin-5000': '/assets/Biotin  5000µg_1753615890295.png',
                     'iron-vitamin-c': '/assets/Iron + Vitamin C_1753615899091.png',
+                    'folic-acid-400': '/assets/Folic Acid 400µg_1753615927607.png',
                     'healios-jumper-men': '/images/healios-jumper-men.svg',
                     'healios-jumper-women': '/images/healios-jumper-women.svg',
                     'healios-tshirt-men': '/images/healios-tshirt-men.svg',
@@ -354,6 +356,7 @@ export default function HomePage() {
                     'collagen-complex': 'Beauty',
                     'biotin-5000': 'Hair & Skin',
                     'iron-vitamin-c': 'Energy',
+                    'folic-acid-400': 'Prenatal',
                     'healios-jumper-men': 'Performance',
                     'healios-jumper-women': 'Performance',
                     'healios-tshirt-men': 'Essential',
