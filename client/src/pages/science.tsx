@@ -76,7 +76,7 @@ export default function Science() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Vitamin D3 Card */}
             <div className="bg-white dark:bg-gray-700 p-8 border-l-4 border-yellow-400 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
