@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
-import healiosNatureImg from '@assets/Healios_1753559079971.png';
+import healiosFitnessImg from '@assets/multicultural-fitness-group-looking-at-the-camera-2024-11-28-11-11-49-utc_1753630516538.jpg';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
 export default function About() {
@@ -59,8 +59,8 @@ export default function About() {
             {/* Image */}
             <div className="relative h-full overflow-hidden">
               <img
-                src={healiosNatureImg}
-                alt="Pure natural wellness representing Healios commitment to science-backed nutrition without compromise"
+                src={healiosFitnessImg}
+                alt="Diverse fitness group representing Healios community of high-performing individuals who prioritize their health"
                 className="w-full h-full object-cover object-left-top min-h-[500px]"
               />
             </div>
