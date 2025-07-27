@@ -637,6 +637,9 @@ export default function HomePage() {
 
       {/* Expert Consultation Section */}
       <section className="bg-white dark:bg-gray-900">
+        {/* White space buffer */}
+        <div className="py-12"></div>
+        
         {/* Icons Header */}
         <div className="bg-black py-8">
           <div className="max-w-4xl mx-auto px-6">
