@@ -14,7 +14,7 @@ import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
-import childrenMultivitaminImg from '@assets/Multivitamin & Mineral for Children_1753612563199.png';
+import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753613534935.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753613481879.png';
 
 export default function HomePage() {

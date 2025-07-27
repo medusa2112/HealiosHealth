@@ -13,7 +13,7 @@ import ashwagandhaImg from '@assets/Ashwagandha-X-2_1753469577639.webp';
 import probioticsImg from '@assets/Porbiotic_Vitamins_1753613149126.png';
 import magnesiumImg from '@assets/Magnesium-X_1753469577641.png';
 
-import childrenMultivitaminImg from '@assets/Multivitamin & Mineral for Children_1753612563199.png';
+import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753613534935.png';
 
 const productImages: Record<string, string> = {
   'apple-cider-vinegar': appleCiderVinegarImg,

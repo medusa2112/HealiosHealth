@@ -104,7 +104,7 @@ export class MemStorage implements IStorage {
         description: "Complete daily nutrient support for growing bodies (Ages 3+) with 13 essential vitamins and minerals in delicious berry-flavored gummies.",
         price: "19.99",
         originalPrice: "29.99",
-        imageUrl: "/assets/Multivitamin & Mineral for Children_1753612563199.png",
+        imageUrl: "/assets/Multivitamin for Kids_1753613534935.png",
         category: "Children",
         rating: "4.8",
         reviewCount: 312,
