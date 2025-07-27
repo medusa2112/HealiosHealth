@@ -68,7 +68,7 @@ export default function Science() {
         </div>
       </section>
 
-      {/* Research Foundation - Card grid style */}
+      {/* Research Foundation - Ticked list style */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -80,58 +80,76 @@ export default function Science() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            <div className="bg-white dark:bg-gray-700 p-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black dark:bg-white flex items-center justify-center flex-shrink-0">
-                  <TestTube className="w-6 h-6 text-white dark:text-black" />
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Vitamin D3</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Vitamin D3 (1000 IU / 4000 IU)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations. [EFSA claim ID 280]
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white dark:bg-gray-700 p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black dark:bg-white flex items-center justify-center flex-shrink-0">
-                  <Zap className="w-6 h-6 text-white dark:text-black" />
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Iron + Vitamin C</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Iron + Vitamin C (14mg + 80mg)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Clinical data supports that ascorbic acid improves absorption of non-heme iron, especially in menstruating women. [EFSA claim ID 291]
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white dark:bg-gray-700 p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black dark:bg-white flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-6 h-6 text-white dark:text-black" />
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Folic Acid</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Folic Acid (400µg)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Strong clinical evidence for pre-conception neural tube defect reduction. [EFSA claim ID 274]
                   </p>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white dark:bg-gray-700 p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black dark:bg-white flex items-center justify-center flex-shrink-0">
-                  <Star className="w-6 h-6 text-white dark:text-black" />
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Biotin</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Biotin (5000µg)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                     Maintenance of normal skin and hair; most studies show benefits at ≥5000 µg/day. [EFSA claim ID 318]
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Magnesium Citrate (90mg)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Supports muscle function, energy metabolism, and reduction of tiredness and fatigue. Superior bioavailability compared to oxide forms.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-6 h-6 bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                  <div className="w-2 h-2 bg-white"></div>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-2">Ashwagandha Root Extract (300mg)</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Standardized to 5% withanolides. Traditional adaptogenic herb with emerging research on stress response and cortisol regulation.
                   </p>
                 </div>
               </div>
