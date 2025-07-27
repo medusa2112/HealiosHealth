@@ -480,11 +480,25 @@ export default function HomePage() {
               opacity: 0.7
             }}
           >
-            <img
-              src={pharmacistsImg}
-              alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
-            />
+              onLoadStart={() => console.log('Fitness video loading started')}
+              onCanPlay={() => console.log('Fitness video can play')}
+            >
+              <source src="/fitness-video-compressed.mp4" type="video/mp4" />
+              <source src="/fitness-video.mov" type="video/mp4" />
+              {/* Fallback image if video fails to load */}
+              <img 
+                src={pharmacistsImg}
+                alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
+                className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+              />
+            </video>
           </div>
 
           {/* Content */}
