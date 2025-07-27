@@ -38,12 +38,26 @@ export default function ProductComprehensive() {
 
   const handleAddToCart = () => {
     if (product) {
+      // Add the main product to cart
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
+      
+      // If bundle is added, also add the bundle product to cart
+      if (bundleAdded && allProducts) {
+        const productContent = getProductContent(product.id);
+        const bundleProduct = allProducts.find(p => p.name === productContent.bundleWith);
+        if (bundleProduct) {
+          for (let i = 0; i < quantity; i++) {
+            addToCart(bundleProduct);
+          }
+        }
+      }
+      
+      const bundleInfo = bundleAdded ? ' (with bundle discount)' : '';
       toast({
         title: "Added to cart!",
-        description: `${quantity}x ${product.name} has been added to your cart.`,
+        description: `${quantity}x ${product.name}${bundleInfo} has been added to your cart.`,
       });
     }
   };
@@ -72,10 +86,16 @@ export default function ProductComprehensive() {
     const originalPrice = parseFloat(productContent.bundleOriginalPrice.replace('£', ''));
     const discount = originalPrice - bundlePrice;
     
+    // The bundle price is for both products combined, so we need to calculate the discounted price per main product
+    const mainProductPrice = parseFloat(subscriptionPrice);
+    const bundleProductPrice = bundlePrice - mainProductPrice;
+    
     return {
       bundlePrice: bundlePrice,
       originalPrice: originalPrice,
-      discount: discount
+      discount: discount,
+      mainProductPrice: mainProductPrice,
+      bundleProductPrice: bundleProductPrice
     };
   };
 
@@ -511,7 +531,7 @@ export default function ProductComprehensive() {
                   {bundleAdded && getBundleDiscountPrice() ? (
                     <>
                       ADD TO BASKET - £{(getBundleDiscountPrice()!.bundlePrice * quantity).toFixed(2)} 
-                      <span className="text-xs ml-2 opacity-75">(Save £{getBundleDiscountPrice()!.discount.toFixed(2)})</span>
+                      <span className="text-xs ml-2 opacity-75">(Save £{(getBundleDiscountPrice()!.discount * quantity).toFixed(2)})</span>
                     </>
                   ) : (
                     `ADD TO BASKET - £${(parseFloat(subscriptionPrice) * quantity).toFixed(2)}`
