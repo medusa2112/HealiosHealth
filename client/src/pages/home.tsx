@@ -475,17 +475,14 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Video Section - Full height, extends to left edge */}
-          <div className="relative overflow-hidden h-full min-h-[600px]">
+          <div className="relative overflow-hidden aspect-square lg:aspect-auto lg:h-full">
             <video
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                objectPosition: 'center center'
-              }}
+              className="absolute inset-0 w-full h-full object-cover object-center"
               onLoadStart={() => console.log('Fitness video loading started')}
               onCanPlay={() => console.log('Fitness video can play')}
             >
