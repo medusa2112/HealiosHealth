@@ -30,6 +30,10 @@ export default function ProductComprehensive() {
     enabled: !!params?.id,
   });
 
+  const { data: allProducts } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
+  });
+
   const handleAddToCart = () => {
     if (product) {
       for (let i = 0; i < quantity; i++) {
@@ -38,6 +42,21 @@ export default function ProductComprehensive() {
       toast({
         title: "Added to cart!",
         description: `${quantity}x ${product.name} has been added to your cart.`,
+      });
+    }
+  };
+
+  const handleAddBundleProduct = () => {
+    if (!product || !allProducts) return;
+    
+    const productContent = getProductContent(product.id);
+    const bundleProduct = allProducts.find(p => p.name === productContent.bundleWith);
+    
+    if (bundleProduct) {
+      addToCart(bundleProduct);
+      toast({
+        title: "Bundle product added!",
+        description: `${bundleProduct.name} has been added to your cart.`,
       });
     }
   };
@@ -393,7 +412,11 @@ export default function ProductComprehensive() {
                     <p className="text-xs font-medium">{productContent.bundleWith}</p>
                     <p className="text-xs text-gray-600">Recommended for enhanced benefits</p>
                   </div>
-                  <Button size="sm" className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800">
+                  <Button 
+                    size="sm" 
+                    className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
+                    onClick={handleAddBundleProduct}
+                  >
                     Add
                   </Button>
                 </div>
