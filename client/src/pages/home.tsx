@@ -16,11 +16,18 @@ import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
+import { ApparelCard } from '@/components/apparel-card';
+import { PreOrderModal } from '@/components/pre-order-modal';
 
 export default function HomePage() {
   const { toast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
   const [isFilterLoading, setIsFilterLoading] = useState(false);
+  
+  // Pre-order modal states
+  const [showPreOrderModal, setShowPreOrderModal] = useState(false);
+  const [selectedProductName, setSelectedProductName] = useState('');
+  const [selectedSalePrice, setSelectedSalePrice] = useState('');
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -38,7 +45,8 @@ export default function HomePage() {
     VITAMINS: ['vitamin-d3', 'children-multivitamin'],
     ADAPTOGENS: ['ashwagandha'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
-    MINERALS: ['magnesium']
+    MINERALS: ['magnesium'],
+    APPAREL: ['healios-jumper-men', 'healios-jumper-women', 'healios-tshirt-men', 'healios-tshirt-women']
   };
 
   const handleCategoryChange = async (category: string) => {
@@ -265,6 +273,16 @@ export default function HomePage() {
                   >
                     MINERALS
                   </button>
+                  <button 
+                    onClick={() => handleCategoryChange('APPAREL')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'APPAREL' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    APPAREL
+                  </button>
                 </div>
               </div>
 
@@ -302,7 +320,11 @@ export default function HomePage() {
                     'children-multivitamin': childrenMultivitaminImg,
                     'childrens-multivitamin': childrenMultivitaminImg,
                     'probiotic-vitamins': probioticsImg,
-                    'collagen-complex': collagenComplexImg
+                    'collagen-complex': collagenComplexImg,
+                    'healios-jumper-men': '/images/healios-jumper-men.svg',
+                    'healios-jumper-women': '/images/healios-jumper-women.svg',
+                    'healios-tshirt-men': '/images/healios-tshirt-men.svg',
+                    'healios-tshirt-women': '/images/healios-tshirt-women.svg'
                   };
 
                   const productGradients = {
@@ -326,8 +348,23 @@ export default function HomePage() {
                     'children-multivitamin': 'Kids',
                     'childrens-multivitamin': 'Kids',
                     'probiotic-vitamins': 'Immunity',
-                    'collagen-complex': 'Beauty'
+                    'collagen-complex': 'Beauty',
+                    'healios-jumper-men': 'Performance',
+                    'healios-jumper-women': 'Performance',
+                    'healios-tshirt-men': 'Essential',
+                    'healios-tshirt-women': 'Essential'
                   };
+
+                  // Check if this is an apparel product
+                  if (product.type === 'apparel') {
+                    return (
+                      <ApparelCard 
+                        key={product.id} 
+                        product={product}
+                        badge={productBadges[product.id as keyof typeof productBadges]}
+                      />
+                    );
+                  }
 
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
@@ -347,9 +384,18 @@ export default function HomePage() {
                             itemProp="image"
                           />
                           
-                          {/* Add to Cart Button - Bottom Right */}
-                          <button className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100">
-                            Add
+                          {/* Pre-Order Button */}
+                          <button 
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setShowPreOrderModal(true);
+                              setSelectedProductName(product.name);
+                              setSelectedSalePrice(product.price);
+                            }}
+                            className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100"
+                          >
+                            Pre-Order
                           </button>
                         </div>
                         
@@ -850,7 +896,13 @@ export default function HomePage() {
         </div>
       </section>
 
-
+      {/* Pre-Order Modal */}
+      <PreOrderModal
+        isOpen={showPreOrderModal}
+        onClose={() => setShowPreOrderModal(false)}
+        productName={selectedProductName}
+        productPrice={selectedSalePrice}
+      />
     </div>
   );
 }

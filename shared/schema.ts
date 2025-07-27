@@ -6,7 +6,7 @@ import { z } from "zod";
 export const products = pgTable("products", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
-  description: text("description").notNull(),
+  description: text("description").notNull(), 
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   originalPrice: decimal("original_price", { precision: 10, scale: 2 }),
   imageUrl: text("image_url").notNull(),
@@ -15,6 +15,10 @@ export const products = pgTable("products", {
   reviewCount: integer("review_count").default(0),
   inStock: boolean("in_stock").default(true),
   featured: boolean("featured").default(false),
+  sizes: text("sizes").array(),
+  colors: text("colors").array(),
+  gender: text("gender"), // 'men', 'women', 'unisex'
+  type: text("type").default('supplement'), // 'supplement', 'apparel'
 });
 
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {

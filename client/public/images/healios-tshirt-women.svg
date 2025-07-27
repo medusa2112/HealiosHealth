@@ -1,0 +1,38 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tshirtGradientWomen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#333333;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#f8f8f8"/>
+  
+  <!-- T-Shirt Body - More fitted -->
+  <path d="M110 160 L290 160 L285 340 C285 350, 275 360, 265 360 L135 360 C125 360, 115 350, 115 340 Z" fill="url(#tshirtGradientWomen)"/>
+  
+  <!-- Sleeves - More tapered -->
+  <path d="M85 160 L110 160 L115 195 L95 195 C80 195, 70 185, 70 170 L70 165 C70 155, 75 150, 85 160" fill="url(#tshirtGradientWomen)"/>
+  <path d="M315 160 L290 160 L285 195 L305 195 C320 195, 330 185, 330 170 L330 165 C330 155, 325 150, 315 160" fill="url(#tshirtGradientWomen)"/>
+  
+  <!-- Neckline - Slightly lower -->
+  <path d="M165 160 C165 150, 175 140, 185 140 L215 140 C225 140, 235 150, 235 160 L225 175 L175 175 Z" fill="url(#tshirtGradientWomen)" opacity="0.8"/>
+  
+  <!-- HEALIOS Logo - Slightly smaller -->
+  <text x="200" y="235" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">HEALIOS</text>
+  
+  <!-- Tagline -->
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white" opacity="0.7">NUTRITION WITHOUT THE NONSENSE</text>
+  
+  <!-- Shoulder seams -->
+  <line x1="110" y1="160" x2="95" y2="170" stroke="#2a2a2a" stroke-width="2"/>
+  <line x1="290" y1="160" x2="305" y2="170" stroke="#2a2a2a" stroke-width="2"/>
+  
+  <!-- Side seams - Slight curve for feminine fit -->
+  <path d="M110 200 Q105 270 115 340" stroke="#2a2a2a" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M290 200 Q295 270 285 340" stroke="#2a2a2a" stroke-width="1" fill="none" opacity="0.5"/>
+  
+  <!-- Feminine detail -->
+  <circle cx="285" cy="170" r="4" fill="white" opacity="0.2"/>
+</svg>

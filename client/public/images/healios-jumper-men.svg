@@ -1,0 +1,35 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="jumperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4a4a4a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#f8f8f8"/>
+  
+  <!-- Jumper Body -->
+  <path d="M80 150 C80 140, 90 130, 100 130 L300 130 C310 130, 320 140, 320 150 L320 320 C320 330, 310 340, 300 340 L100 340 C90 340, 80 330, 80 320 Z" fill="url(#jumperGradient)"/>
+  
+  <!-- Sleeves -->
+  <ellipse cx="60" cy="180" rx="30" ry="60" fill="url(#jumperGradient)"/>
+  <ellipse cx="340" cy="180" rx="30" ry="60" fill="url(#jumperGradient)"/>
+  
+  <!-- Neckline -->
+  <path d="M160 130 C160 120, 170 110, 180 110 L220 110 C230 110, 240 120, 240 130 L240 150 L160 150 Z" fill="url(#jumperGradient)"/>
+  
+  <!-- HEALIOS Text -->
+  <text x="200" y="220" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">HEALIOS</text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="250" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" opacity="0.8">PERFORMANCE</text>
+  
+  <!-- Ribbed Details -->
+  <rect x="80" y="320" width="240" height="8" fill="#2a2a2a"/>
+  <rect x="60" y="220" width="20" height="8" fill="#2a2a2a"/>
+  <rect x="320" y="220" width="20" height="8" fill="#2a2a2a"/>
+  
+  <!-- Brand mark -->
+  <circle cx="320" cy="160" r="8" fill="white" opacity="0.3"/>
+</svg>
