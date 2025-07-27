@@ -428,6 +428,38 @@ export default function ProductComprehensive() {
                 ))}
               </div>
             )}
+
+            {/* Quality Commitments */}
+            <div className="grid grid-cols-2 gap-4 text-xs mt-6">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                <div>
+                  <p className="font-medium">THIRD-PARTY TESTED</p>
+                  <p className="text-gray-600">Every batch tested for purity, potency, and heavy metals by independent labs</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                <div>
+                  <p className="font-medium">SCIENCE-BACKED FORMULAS</p>
+                  <p className="text-gray-600">Dosages based on clinical research and EFSA-approved health claims</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                <div>
+                  <p className="font-medium">NO ARTIFICIAL NASTIES</p>
+                  <p className="text-gray-600">Free from artificial colors, flavors, preservatives, and unnecessary fillers</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                <div>
+                  <p className="font-medium">SUSTAINABLE SOURCING</p>
+                  <p className="text-gray-600">Responsibly sourced ingredients with ethical supply chain practices</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Product Details */}
@@ -560,37 +592,7 @@ export default function ProductComprehensive() {
               </div>
             )}
 
-            {/* Quality Commitments */}
-            <div className="grid grid-cols-2 gap-4 text-xs mt-6">
-              <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                <div>
-                  <p className="font-medium">THIRD-PARTY TESTED</p>
-                  <p className="text-gray-600">Every batch tested for purity, potency, and heavy metals by independent labs</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                <div>
-                  <p className="font-medium">SCIENCE-BACKED FORMULAS</p>
-                  <p className="text-gray-600">Dosages based on clinical research and EFSA-approved health claims</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                <div>
-                  <p className="font-medium">NO ARTIFICIAL NASTIES</p>
-                  <p className="text-gray-600">Free from artificial colors, flavors, preservatives, and unnecessary fillers</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                <div>
-                  <p className="font-medium">SUSTAINABLE SOURCING</p>
-                  <p className="text-gray-600">Responsibly sourced ingredients with ethical supply chain practices</p>
-                </div>
-              </div>
-            </div>
+
 
             {/* Expandable Sections */}
             <div className="space-y-2">
