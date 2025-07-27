@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap } from "lucide-react";
+import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
 import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
@@ -78,11 +78,11 @@ export default function About() {
               What We Refused to Compromise On
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Three simple principles that guide every decision we make.
+              Four simple principles that guide every decision we make.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="bg-gray-50 dark:bg-gray-800 p-8">
                 <Microscope className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
@@ -115,6 +115,18 @@ export default function About() {
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-gray-50 dark:bg-gray-800 p-8">
+                <Brain className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+                  Formulated With Medical Logic
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  All inputs follow guidance from human data, not anecdote. We reference endocrine panels, micronutrient studies, and clinical outcome data. No AI guesses. No bro-science.
                 </p>
               </div>
             </div>
