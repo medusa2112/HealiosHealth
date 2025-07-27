@@ -31,7 +31,7 @@ export default function About() {
               </div>
 
               {/* Key Stats */}
-              <div className="grid grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-4 gap-6 mb-8">
                 <div className="text-left">
                   <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">2019</div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
@@ -49,6 +49,9 @@ export default function About() {
                   <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                     Scientists
                   </p>
+                </div>
+                <div className="text-left">
+                  {/* Empty column for spacing */}
                 </div>
               </div>
 
