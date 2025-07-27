@@ -175,7 +175,7 @@ export class MemStorage implements IStorage {
         description: "High-potency hair, skin & nail support with 5000µg biotin (10,000% NRV) in delicious strawberry-flavored gummies. Just one gummy a day for optimal beauty support.",
         price: "18.99",
         originalPrice: "26.99",
-        imageUrl: "/assets/Biotin  5000µg_1753615890295.png",
+        imageUrl: "/assets/Biton_1753616500658.png",
         category: "Beauty",
         rating: "4.5",
         reviewCount: 342,
