@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Brain, Zap, Star } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
-import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
+import biotinProductImg from '@assets/Multivitamin & Mineral for Children (2)_1753633320058.png';
 
 export default function Science() {
   return (
@@ -57,11 +57,11 @@ export default function Science() {
               </Link>
             </div>
 
-            <div className="relative">
+            <div className="relative -mt-6 -mr-6">
               <img
-                src={healiosGummiesImg}
-                alt="Healios gummy supplements showcasing premium quality and scientific formulation by Nutribl"
-                className="w-full"
+                src={biotinProductImg}
+                alt="Healios Biotin 5000µg supplement bottle showcasing premium black packaging and professional product design"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
