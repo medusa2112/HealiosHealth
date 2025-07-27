@@ -533,11 +533,11 @@ export default function HomePage() {
 
 
       {/* The Healios Science Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            {/* Content */}
-            <div className="mb-12 lg:mb-0">
+      <section className="bg-white dark:bg-gray-900">
+        <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
+          {/* Content */}
+          <div className="py-24 px-6 lg:px-16 flex items-center">
+            <div>
               <div className="mb-8">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
                   THE HEALIOS DIFFERENCE
@@ -597,18 +597,16 @@ export default function HomePage() {
                   </button>
                 </Link>
               </div>
-
-
             </div>
+          </div>
 
-            {/* Image */}
-            <div className="relative">
-              <img
-                src={healiosGummiesImg}
-                alt="Healios Apple Cider Vinegar & Ginger Gummies - premium supplement showcasing natural ingredients and professional packaging"
-                className="w-full"
-              />
-            </div>
+          {/* Image - Extends to right edge and bottom */}
+          <div className="relative">
+            <img
+              src={healiosGummiesImg}
+              alt="Healios Apple Cider Vinegar & Ginger Gummies - premium supplement showcasing natural ingredients and professional packaging"
+              className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+            />
           </div>
         </div>
       </section>
