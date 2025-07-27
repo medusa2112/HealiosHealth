@@ -99,9 +99,9 @@ export default function Science() {
                 href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
               >
-                EFSA Claim ID: 280 →
+                EFSA Claim ID: 280
               </a>
             </div>
 
@@ -127,9 +127,9 @@ export default function Science() {
                 href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1589" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
               >
-                EFSA Claim ID: 291 →
+                EFSA Claim ID: 291
               </a>
             </div>
 
@@ -155,9 +155,9 @@ export default function Science() {
                 href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2009.1213" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
               >
-                EFSA Claim ID: 274 →
+                EFSA Claim ID: 274
               </a>
             </div>
 
@@ -183,9 +183,9 @@ export default function Science() {
                 href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1728" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
               >
-                EFSA Claim ID: 318 →
+                EFSA Claim ID: 318
               </a>
             </div>
 
@@ -231,9 +231,9 @@ export default function Science() {
                 href="https://www.ema.europa.eu/en/medicines/herbal/withania-somnifera" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors underline"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
               >
-                EMA Traditional Use →
+                EMA Traditional Use
               </a>
             </div>
           </div>
@@ -318,9 +318,9 @@ export default function Science() {
                   href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1468" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 text-xs font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                  className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
                 >
-                  View Claim ID: 280 →
+                  View Claim ID: 280
                 </a>
               </div>
               <div className="bg-white dark:bg-gray-600 p-6 text-center">
