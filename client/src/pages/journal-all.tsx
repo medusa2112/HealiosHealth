@@ -131,47 +131,37 @@ export default function JournalAll() {
         url="https://healios.com/journal/all"
       />
 
-      {/* Header */}
-      <section className="pt-24 pb-12 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6">
-              Healios Journal
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-              Evidence-based insights on nutrition, wellness, and healthy living from our team of experts
-            </p>
+      <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
+        <div className="mb-12 text-center">
+          <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
+            Healios Journal
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Evidence-based insights on nutrition, wellness, and healthy living from our team of experts
+          </p>
+        </div>
+
+        {/* Category Pills */}
+        <div className="mb-12 flex justify-center">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                  activeCategory === category
+                    ? 'bg-black text-white'
+                    : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
           </div>
         </div>
-      </section>
 
-      {/* Category Filter */}
-      <section className="pb-12 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-12 flex justify-center">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 text-sm font-medium transition-colors ${
-                    activeCategory === category
-                      ? 'bg-black text-white'
-                      : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Posts Grid */}
-      <section className="pb-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Blog Posts Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => (
               <article 
                 key={post.id}
@@ -224,14 +214,13 @@ export default function JournalAll() {
             ))}
           </div>
 
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <button className="bg-black text-white px-8 py-4 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-all">
-              Load More Articles
-            </button>
-          </div>
+        {/* Load More Button */}
+        <div className="text-center mt-12">
+          <button className="bg-black text-white px-8 py-4 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-all">
+            Load More Articles
+          </button>
         </div>
-      </section>
+      </div>
 
       {/* Newsletter CTA */}
       <section className="py-16 bg-gray-50 dark:bg-gray-800">
