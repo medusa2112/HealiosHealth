@@ -19,7 +19,7 @@ export default function OrderConfirmationPage() {
       />
       
       <div className="min-h-screen bg-white dark:bg-black">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 pt-5 pb-8">
           <div className="max-w-2xl mx-auto text-center">
             <div className="mb-8">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />

@@ -74,7 +74,7 @@ export default function Products() {
         structuredData={productsStructuredData}
       />
       
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
         <div className="mb-12 text-center">
           <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
             Our Products

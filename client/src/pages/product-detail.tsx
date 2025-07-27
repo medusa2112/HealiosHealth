@@ -164,7 +164,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 pt-5 pb-12">
         {/* Main Product Section */}
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 mb-16">
           {/* Image Carousel */}

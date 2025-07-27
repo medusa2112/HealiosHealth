@@ -97,14 +97,7 @@ export default function ProductPage() {
       />
       
       <div className="min-h-screen bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          {/* Back Button */}
-          <Link href="/products">
-            <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors mb-12">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Products
-            </button>
-          </Link>
+        <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Product Image */}

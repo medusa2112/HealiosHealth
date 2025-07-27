@@ -174,7 +174,7 @@ export default function CheckoutPage() {
         />
         
         <div className="min-h-screen bg-white dark:bg-black">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 pt-5 pb-8">
             <div className="text-center py-16">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Your Cart is Empty</h1>
               <p className="text-gray-600 dark:text-gray-400 mb-8">Add some products to your cart before checking out.</p>
@@ -200,7 +200,7 @@ export default function CheckoutPage() {
         />
         
         <div className="min-h-screen bg-white dark:bg-black">
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 pt-5 pb-8">
             <div className="text-center py-16">
               <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
               <p className="text-gray-600 dark:text-gray-400">Preparing your checkout...</p>
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
       />
       
       <div className="min-h-screen bg-white dark:bg-black">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 pt-5 pb-8">
           {/* Back Button */}
           <Link href="/">
             <button className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors mb-8">

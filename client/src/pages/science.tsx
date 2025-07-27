@@ -12,7 +12,7 @@ export default function Science() {
       />
       
       {/* Hero Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
+      <section className="pt-5 pb-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
             {/* Content */}

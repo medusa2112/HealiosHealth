@@ -128,7 +128,7 @@ export default function QuizPage() {
           description="Your personalized supplement recommendations based on your wellness quiz responses."
         />
         
-        <div className="max-w-2xl mx-auto px-6 py-24">
+        <div className="max-w-2xl mx-auto px-6 pt-5 pb-24">
           <div className="text-center">
             <div className="mb-8">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -185,7 +185,7 @@ export default function QuizPage() {
         description="Take our 60-second wellness quiz to get personalized supplement recommendations based on your health goals and lifestyle."
       />
       
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-6 pt-5 pb-12">
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
