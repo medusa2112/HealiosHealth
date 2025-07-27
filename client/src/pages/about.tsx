@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain, Check } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
-import teamFitnessImg from '@assets/we-make-the-best-team-2025-04-05-22-51-36-utc (1) (1)_1753630878366.jpg';
+import vitaminD3Img from '@assets/Multivitamin & Mineral for Children (1)_1753633010283.png';
 import teamCelebrationImg from '@assets/we-make-the-best-team-2025-04-05-22-51-36-utc (1) (1)_1753631002255.jpg';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
@@ -60,8 +60,8 @@ export default function About() {
             {/* Image */}
             <div className="relative h-full overflow-hidden">
               <img
-                src={teamFitnessImg}
-                alt="Diverse team of athletes celebrating together, representing the Healios community spirit and high-performance lifestyle"
+                src={vitaminD3Img}
+                alt="Healios Vitamin D3 4000 IU supplement bottle showcasing professional product design and premium black packaging"
                 className="w-full h-full object-cover object-center min-h-[500px]"
               />
             </div>
