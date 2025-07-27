@@ -99,7 +99,7 @@ export default function About() {
               <div className="bg-gray-50 dark:bg-gray-800 p-6">
                 <TestTube className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Therapeutic Dosages, Not Marketing Dust
+                  Therapeutic Dosages
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   No pixie dusting. If it doesn't reach the dose used in peer-reviewed studies, it's not in our formula. Period.
@@ -111,7 +111,7 @@ export default function About() {
               <div className="bg-gray-50 dark:bg-gray-800 p-6">
                 <Target className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Zero Fillers, Additives, or Undisclosed Blends
+                  Zero Fillers & Additives
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
