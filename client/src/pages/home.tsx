@@ -860,12 +860,9 @@ export default function HomePage() {
                   <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                     <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">{review.name}</p>
                     <Link href={review.productLink}>
-                      <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                        <img src={review.productImage} alt={`Healios ${review.product}`} className="w-8 h-10 object-contain" />
-                        <div>
-                          <p className="text-xs font-medium text-gray-900 dark:text-white">{review.product}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
-                        </div>
+                      <div className="cursor-pointer hover:opacity-80 transition-opacity">
+                        <p className="text-xs font-medium text-gray-900 dark:text-white">{review.product}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
                       </div>
                     </Link>
                   </div>
