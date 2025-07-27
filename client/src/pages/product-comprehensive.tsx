@@ -183,6 +183,24 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports healthy growth, immunity, and cognitive development'
         };
+      case 'probiotic-vitamins':
+        return {
+          bundleWith: 'Apple Cider Vinegar Gummies',
+          bundlePrice: '£36.00',
+          bundleOriginalPrice: '£49.00',
+          statisticNumber: '70%',
+          statisticText: 'of your immune cells are housed in your gut',
+          testimonial: '"This all-in-one formula has transformed my daily wellness routine. I love getting digestive support and vitamins in one delicious gummy."',
+          testimonialAuthor: 'DR. MICHELLE TORRES',
+          testimonialTitle: 'Integrative Medicine Specialist',
+          benefitTitle: 'Gut, immune, and energy support',
+          benefitDescription: 'Multi-functional formula combining 3-strain probiotic blend with essential B & C vitamins for comprehensive daily wellness support.',
+          ingredientSource: '3-strain probiotic blend + B & C vitamins',
+          ingredientForm: 'Pineapple-flavored gummies',
+          ingredientOrigin: 'Shelf-stable probiotic cultures with EFSA-approved vitamins',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports digestive wellness, immune function, and energy metabolism'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -379,6 +397,18 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. 1000 IU is a safe and effective maintenance dose for most healthy adults.</p>
                             </div>
+                          ) : product.id === 'probiotic-vitamins' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy (Vitamins Only - EFSA Approved):</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Vitamin B3 (Niacin): 8mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B5 (Pantothenic Acid): 3mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin B6: 0.7mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin C: 40mg (50% NRV)</div>
+                                <div className="font-medium">Probiotic Blend: 3-strain proprietary blend</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Probiotic efficacy may vary between individuals.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -418,6 +448,21 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Suitable for vegetarians. Cholecalciferol is identical to the form produced by skin exposure to sunlight.</p>
                             </div>
+                          ) : product.id === 'probiotic-vitamins' ? (
+                            <div>
+                              <p className="font-medium mb-2">Pineapple-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Bifidobacterium infantis (probiotic strain)</li>
+                                <li>• Lactobacillus casei (probiotic strain)</li>
+                                <li>• Lactobacillus rhamnosus (probiotic strain)</li>
+                                <li>• Vitamin B3 (Niacin)</li>
+                                <li>• Vitamin B5 (Pantothenic Acid)</li>
+                                <li>• Vitamin B6</li>
+                                <li>• Vitamin C (Ascorbic Acid)</li>
+                                <li>• Natural pineapple flavoring</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, vegetarian formulation. Probiotic cultures are shelf-stable in low-water gummy matrix.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -445,6 +490,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12 unless supervised by a healthcare provider. Consult your GP if taking other vitamin D supplements.</p>
                             </div>
+                          ) : product.id === 'probiotic-vitamins' ? (
+                            <div>
+                              <p className="font-medium mb-2">Age-specific dosing:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Ages 4-8:</strong> 1 gummy per day</li>
+                                <li>• <strong>Ages 9+ and adults:</strong> 2 gummies per day</li>
+                                <li>• Best taken in the morning with or without food</li>
+                                <li>• Store in cool, dry place to preserve probiotic viability</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Not suitable for children under 4 years. Consult healthcare provider if taking antibiotics or have compromised immune system.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -470,6 +526,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>When is the best time to take vitamin D?</strong> Any time of day, with or without food. Consistency is more important than timing.</li>
                                 <li>• <strong>Is this suitable for winter months?</strong> Yes, especially important during UK winter months (October-March) when sunlight exposure is limited.</li>
                                 <li>• <strong>Can I take this if I already take a multivitamin?</strong> Check your multivitamin label to avoid exceeding 4000 IU total daily intake. Consult your healthcare provider if unsure.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'probiotic-vitamins' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Probiotic + Vitamins:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>How do probiotics survive in gummy form?</strong> Our probiotic strains are protected in a low-water, shelf-stable gummy matrix designed to maintain viability at room temperature.</li>
+                                <li>• <strong>Can I take this with antibiotics?</strong> Yes, but space doses 2-3 hours apart from antibiotic medication. Continue taking for several weeks after antibiotic course.</li>
+                                <li>• <strong>Will I notice digestive benefits immediately?</strong> Individual responses vary. Some people notice changes within days, while others may take 2-4 weeks of consistent use.</li>
+                                <li>• <strong>Is this suitable for travel?</strong> Yes, the shelf-stable format makes it ideal for travel when your normal routine and diet may be disrupted.</li>
                               </ul>
                             </div>
                           ) : (

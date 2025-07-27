@@ -105,6 +105,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "probiotic-vitamins",
+        name: "Probiotic + Vitamins Gummies",
+        description: "Digestive balance meets energy & immunity – all in one pineapple-flavored gummy with 3-strain probiotic blend and essential B & C vitamins.",
+        price: "22.99",
+        originalPrice: "32.99",
+        imageUrl: "/attached_assets/Probiotics10Bil-X_1753469577640.png",
+        category: "Probiotics",
+        rating: "4.7",
+        reviewCount: 198,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

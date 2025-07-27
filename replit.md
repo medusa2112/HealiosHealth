@@ -105,6 +105,11 @@ Preferred communication style: Simple, everyday language.
 ✓ Enhanced Vitamin D3 product with detailed 1000 IU specifications and lemon flavoring
 ✓ Updated Vitamin D3 product page with comprehensive dosing guidelines, safety information, and UK-specific health messaging
 ✓ Added product-specific nutritional information, ingredients, and FAQ sections for both children's and adult vitamin products
+✓ Added Probiotic + Vitamins Gummies as 7th Healios product combining digestive and immune support
+✓ Created comprehensive product page with 3-strain probiotic blend and B & C vitamin specifications
+✓ Implemented EFSA-compliant messaging separating vitamin claims from probiotic benefits
+✓ Added age-specific dosing guidelines (4-8 years: 1 gummy, 9+ years: 2 gummies)
+✓ Included pineapple-flavored formulation details and shelf-stability information
 
 ## Advanced SEO Implementation (January 2025)
 

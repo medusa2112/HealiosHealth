@@ -36,8 +36,9 @@ export function Header() {
       title: "Bestsellers",
       items: [
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar & Ginger" },
-        { href: "/products/vitamin-d3", label: "Vitamin D3" },
+        { href: "/products/vitamin-d3", label: "Vitamin D3 1000 IU Gummies" },
         { href: "/products/ashwagandha", label: "KSM-66 Ashwagandha" },
+        { href: "/products/probiotic-vitamins", label: "Probiotic + Vitamins Gummies" },
         { href: "/products/magnesium", label: "Magnesium Complex" },
         { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
       ]
@@ -57,6 +58,7 @@ export function Header() {
       title: "Wellness Goals",
       items: [
         { href: "/products/probiotics", label: "Digestive Support" },
+        { href: "/products/probiotic-vitamins", label: "Gut + Immune Support" },
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
