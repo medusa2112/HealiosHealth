@@ -363,71 +363,123 @@ export default function ProductComprehensive() {
           {/* Product Details */}
           <div className="space-y-6">
             {/* Better Together Section */}
-            <div className="bg-gray-50 p-4 mb-6">
-              <h3 className="font-medium text-sm mb-2">Better together</h3>
-              <p className="text-xs text-gray-600 mb-4">Our Expert Nutritional Therapists Recommend...</p>
-              
-              <div className="flex items-center gap-3 mb-4">
-                <img src={product.imageUrl} alt="Bundle product" className="w-12 h-12 object-cover" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{product.name} + {productContent.bundleWith}</p>
-                  <p className="text-xs text-gray-600">{productContent.bundlePrice} {productContent.bundleOriginalPrice}</p>
+            <div className="border border-gray-200 p-4 mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-black text-white flex items-center justify-center text-xs font-medium">
+                  +
                 </div>
-                <Button size="sm" className="bg-black text-white px-4 py-1 text-xs">
-                  Add
-                </Button>
+                <h3 className="font-medium text-sm">Better Together</h3>
               </div>
-
-              <p className="text-xs text-gray-600 mb-3">BENEFITS WHEN TAKEN TOGETHER →</p>
               
-              {product.inStock ? (
-                <>
-                  <div className="flex items-center gap-4 mb-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 p-0"
-                    >
-                      <Minus className="w-3 h-3" />
-                    </Button>
-                    <span className="w-8 text-center text-sm">{quantity}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 p-0"
-                    >
-                      <Plus className="w-3 h-3" />
-                    </Button>
+              <p className="text-xs text-gray-600 mb-4">Expert Nutritionists Recommend This Combination</p>
+              
+              <div className="space-y-3">
+                {/* Current Product */}
+                <div className="flex items-center gap-3 p-3 bg-gray-50">
+                  <img src={product.imageUrl} alt={product.name} className="w-10 h-10 object-cover" />
+                  <div className="flex-1">
+                    <p className="text-xs font-medium">{product.name}</p>
+                    <p className="text-xs text-gray-600">£{product.price}</p>
                   </div>
+                  <div className="text-xs text-gray-500">✓ Added</div>
+                </div>
 
-                  <Button 
-                    onClick={handleAddToCart}
-                    className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
-                  >
-                    ADD TO BASKET
-                  </Button>
-                </>
-              ) : (
-                <div className="space-y-4">
-                  <div className="bg-red-50 border border-red-200 p-4 text-center">
-                    <p className="text-red-800 font-medium text-sm">Currently Sold Out</p>
-                    <p className="text-red-600 text-xs mt-1">We're working hard to restock this popular product</p>
+                {/* Recommended Product */}
+                <div className="flex items-center gap-3 p-3 border border-gray-200">
+                  <div className="w-10 h-10 bg-gray-100 flex items-center justify-center">
+                    <Plus className="w-4 h-4 text-gray-400" />
                   </div>
-                  
-                  <Button 
-                    onClick={() => setShowPreOrderModal(true)}
-                    className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:bg-healios-cyan/90"
-                  >
-                    PRE-ORDER & GET 10% OFF
+                  <div className="flex-1">
+                    <p className="text-xs font-medium">{productContent.bundleWith}</p>
+                    <p className="text-xs text-gray-600">Recommended for enhanced benefits</p>
+                  </div>
+                  <Button size="sm" className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800">
+                    Add
                   </Button>
                 </div>
-              )}
+
+                {/* Bundle Benefits */}
+                <div className="bg-green-50 border border-green-200 p-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    <p className="text-xs font-medium text-green-800">Bundle Benefits</p>
+                  </div>
+                  <p className="text-xs text-green-700">
+                    {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
+                    {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
+                    {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
+                    {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
+                    {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
+                    {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
+                    {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
+                    {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
+                    {product.id === 'childrens-multivitamin' && 'Complete multivitamin foundation enhanced with extra vitamin D for growing bones and immunity.'}
+                    {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
+                    {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'childrens-multivitamin', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
+                  </p>
+                </div>
+
+                {/* Bundle Pricing */}
+                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                  <div className="text-xs">
+                    <p className="font-medium">Bundle Price: {productContent.bundlePrice}</p>
+                    <p className="text-gray-600 line-through">{productContent.bundleOriginalPrice}</p>
+                  </div>
+                  <div className="text-xs font-medium text-green-600">
+                    Save £{(parseFloat(productContent.bundleOriginalPrice.replace('£', '')) - parseFloat(productContent.bundlePrice.replace('£', ''))).toFixed(2)}
+                  </div>
+                </div>
+              </div>
             </div>
 
+            {/* Add to Cart Section */}
+            {product.inStock ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-8 h-8 p-0"
+                  >
+                    <Minus className="w-3 h-3" />
+                  </Button>
+                  <span className="w-8 text-center text-sm">{quantity}</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-8 h-8 p-0"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </Button>
+                </div>
+
+                <Button 
+                  onClick={handleAddToCart}
+                  className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
+                >
+                  ADD TO BASKET - £{(parseFloat(subscriptionPrice) * quantity).toFixed(2)}
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-red-50 border border-red-200 p-4 text-center">
+                  <p className="text-red-800 font-medium text-sm">Currently Sold Out</p>
+                  <p className="text-red-600 text-xs mt-1">We're working hard to restock this popular product</p>
+                </div>
+                
+                <Button 
+                  onClick={() => setShowPreOrderModal(true)}
+                  className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:bg-healios-cyan/90"
+                >
+                  PRE-ORDER & GET 10% OFF
+                </Button>
+              </div>
+            )}
+
             {/* Trust Signals */}
-            <div className="grid grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-2 gap-4 text-xs mt-6">
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
                 <div>
