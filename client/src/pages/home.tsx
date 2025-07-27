@@ -608,34 +608,34 @@ export default function HomePage() {
               </div>
 
               {/* Statistics Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">99%</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">99%</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
                     Pure Active<br />
                     Ingredients
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">300K+</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">300K+</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
                     Satisfied<br />
                     Customers
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">15+</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">15+</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
                     Years of<br />
                     Research
                   </p>
                 </div>
 
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-2">600mg</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-tight">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">600mg</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
                     Clinical<br />
                     Dosage
                   </p>
@@ -718,9 +718,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                Shop bestsellers →
-              </button>
+              <Link href="/products">
+                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                  Shop bestsellers →
+                </button>
+              </Link>
             </div>
 
             {/* Reviews Grid */}
@@ -803,14 +805,14 @@ export default function HomePage() {
           <div className="mt-16">
             <div className="flex items-center justify-center gap-4 overflow-x-auto">
               {[
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
-                "/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg"
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg",
+                "/assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg"
               ].map((src, index) => (
                 <div key={index} className="flex-shrink-0">
                   <img
