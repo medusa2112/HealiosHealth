@@ -204,9 +204,17 @@ export default function Science() {
                 </h3>
                 <span className="text-sm text-gray-500 dark:text-gray-400">90mg</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
                 Supports muscle function, energy metabolism, and reduction of tiredness and fatigue. Superior bioavailability compared to oxide forms.
               </p>
+              <a 
+                href="https://efsa.onlinelibrary.wiley.com/doi/abs/10.2903/j.efsa.2010.1807" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block bg-black text-white px-3 py-1 text-xs font-medium hover:bg-gray-800 transition-colors"
+              >
+                EFSA Claim ID: 230
+              </a>
             </div>
 
             {/* Ashwagandha */}
