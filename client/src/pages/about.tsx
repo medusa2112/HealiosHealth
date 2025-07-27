@@ -116,6 +116,100 @@ export default function About() {
         </div>
       </section>
 
+      {/* Nutrients of Integrity */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left side - Image */}
+            <div className="order-2 lg:order-1">
+              <div className="bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900 dark:to-orange-900 p-8 h-96 flex items-center justify-center">
+                <div className="w-full h-full bg-cover bg-center opacity-60" 
+                     style={{
+                       backgroundImage: `repeating-linear-gradient(
+                         45deg,
+                         #d4a574,
+                         #d4a574 8px,
+                         #e8c4a0 8px,
+                         #e8c4a0 16px
+                       )`
+                     }}>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side - Content */}
+            <div className="order-1 lg:order-2">
+              <div className="mb-8">
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                  NUTRIENTS OF INTEGRITY
+                </p>
+                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
+                  Clean ingredients from ethical sources, always
+                </h2>
+              </div>
+
+              {/* Ingredient Details Table */}
+              <div className="mb-8">
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                  A CLOSER LOOK: MAGNESIUM CITRATE
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Source</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Premium Citrate Complex</span>
+                    </div>
+                  </div>
+                  
+                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Form</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Highly bioavailable chelated mineral</span>
+                    </div>
+                  </div>
+                  
+                  <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Country of origin</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">European Union</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pb-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">Found in</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Green leafy vegetables, nuts, seeds</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* What Makes It Extraordinary */}
+              <div>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                  WHAT MAKES IT EXTRAORDINARY
+                </p>
+                
+                <blockquote className="border-l-4 border-healios-cyan pl-6 mb-6">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 italic leading-relaxed mb-4">
+                    "This incredible ingredient is derived from premium mineral sources and, due to its advanced chelation process, has 85% bioavailability. It is the key ingredient to support muscle function and energy metabolism, backed by compelling scientific studies. It really is something unique."
+                  </p>
+                </blockquote>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600"></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">DR. SARAH MITCHELL</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Director, Clinical Research</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Standards & Certifications */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
