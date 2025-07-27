@@ -33,6 +33,11 @@ export default function HomePage() {
   const [imageTransform, setImageTransform] = useState('translateX(-100px) scale(0.95)');
   const [hasReachedCenter, setHasReachedCenter] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
+  
+  // Animation state for right image (Science section)
+  const [rightImageTransform, setRightImageTransform] = useState('translateX(100px) scale(0.95)');
+  const [rightHasReachedCenter, setRightHasReachedCenter] = useState(false);
+  const rightImageRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -98,6 +103,66 @@ export default function HomePage() {
 
     return () => observer.disconnect();
   }, [hasReachedCenter]);
+
+  // Intersection Observer for right image animation (Science section)
+  useEffect(() => {
+    const rightImageElement = rightImageRef.current;
+    if (!rightImageElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const rect = entry.boundingClientRect;
+          const windowHeight = window.innerHeight;
+          const elementCenter = rect.top + rect.height / 2;
+          const windowCenter = windowHeight / 2;
+          
+          if (entry.isIntersecting) {
+            // Calculate progress based on how close element center is to window center
+            const distanceFromCenter = Math.abs(elementCenter - windowCenter);
+            const maxDistance = windowHeight / 2;
+            const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
+            
+            // Check if we've reached the center (progress > 0.8 means very close to center)
+            if (progress > 0.8 && !rightHasReachedCenter) {
+              setRightHasReachedCenter(true);
+            }
+            
+            // Only animate if we haven't reached center yet, otherwise keep final position
+            if (!rightHasReachedCenter) {
+              // Smooth easing function
+              const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+              const easedProgress = easeOutCubic(progress);
+              
+              // Calculate transforms based on progress (slide from right, so positive to 0)
+              const translateX = 100 - (easedProgress * 100); // From 100px to 0px
+              const scale = 0.95 + (easedProgress * 0.05); // From 0.95 to 1.0
+              const opacity = 0.7 + (easedProgress * 0.3); // From 0.7 to 1.0
+              
+              setRightImageTransform(`translateX(${translateX}px) scale(${scale})`);
+              rightImageElement.style.opacity = opacity.toString();
+            } else {
+              // Keep final position once center is reached
+              setRightImageTransform('translateX(0px) scale(1.0)');
+              rightImageElement.style.opacity = '1.0';
+            }
+          } else if (!rightHasReachedCenter) {
+            // Only reset if we haven't reached center yet
+            setRightImageTransform('translateX(100px) scale(0.95)');
+            rightImageElement.style.opacity = '0.7';
+          }
+        });
+      },
+      {
+        threshold: Array.from({ length: 101 }, (_, i) => i / 100), // Fine-grained thresholds
+        rootMargin: '-10% 0px -10% 0px' // Start animation slightly before entering viewport
+      }
+    );
+
+    observer.observe(rightImageElement);
+
+    return () => observer.disconnect();
+  }, [rightHasReachedCenter]);
 
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['/api/products/featured'],
@@ -615,7 +680,15 @@ export default function HomePage() {
           </div>
 
           {/* Image - Extends to right edge and bottom */}
-          <div className="relative">
+          <div 
+            ref={rightImageRef}
+            className="relative overflow-hidden"
+            style={{
+              transform: rightImageTransform,
+              transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+              opacity: 0.7
+            }}
+          >
             <img
               src={newPharmacistsImg}
               alt="Professional multiracial pharmacists and scientists collaborating in modern laboratory, developing quality supplements and wellness solutions"
