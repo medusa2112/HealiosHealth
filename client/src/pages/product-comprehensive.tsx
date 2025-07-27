@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Link } from "wouter";
 import { SEOHead } from "@/components/seo-head";
+import { PreOrderModal } from "@/components/pre-order-modal";
 
 // Import images
 import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
@@ -22,6 +23,7 @@ export default function ProductComprehensive() {
   const [quantity, setQuantity] = useState(1);
   const [subscriptionMode, setSubscriptionMode] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [showPreOrderModal, setShowPreOrderModal] = useState(false);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
@@ -378,32 +380,50 @@ export default function ProductComprehensive() {
 
               <p className="text-xs text-gray-600 mb-3">BENEFITS WHEN TAKEN TOGETHER →</p>
               
-              <div className="flex items-center gap-4 mb-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 p-0"
-                >
-                  <Minus className="w-3 h-3" />
-                </Button>
-                <span className="w-8 text-center text-sm">{quantity}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 p-0"
-                >
-                  <Plus className="w-3 h-3" />
-                </Button>
-              </div>
+              {product.inStock ? (
+                <>
+                  <div className="flex items-center gap-4 mb-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-8 h-8 p-0"
+                    >
+                      <Minus className="w-3 h-3" />
+                    </Button>
+                    <span className="w-8 text-center text-sm">{quantity}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      <Plus className="w-3 h-3" />
+                    </Button>
+                  </div>
 
-              <Button 
-                onClick={handleAddToCart}
-                className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
-              >
-                ADD TO BASKET
-              </Button>
+                  <Button 
+                    onClick={handleAddToCart}
+                    className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
+                  >
+                    ADD TO BASKET
+                  </Button>
+                </>
+              ) : (
+                <div className="space-y-4">
+                  <div className="bg-red-50 border border-red-200 p-4 text-center">
+                    <p className="text-red-800 font-medium text-sm">Currently Sold Out</p>
+                    <p className="text-red-600 text-xs mt-1">We're working hard to restock this popular product</p>
+                  </div>
+                  
+                  <Button 
+                    onClick={() => setShowPreOrderModal(true)}
+                    className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:bg-healios-cyan/90"
+                  >
+                    PRE-ORDER & GET 10% OFF
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Trust Signals */}
@@ -1300,6 +1320,14 @@ export default function ProductComprehensive() {
           </div>
         </div>
       </div>
+
+      {/* Pre-order Modal */}
+      <PreOrderModal
+        isOpen={showPreOrderModal}
+        onClose={() => setShowPreOrderModal(false)}
+        productName={product.name}
+        productId={product.id}
+      />
     </div>
   );
 }

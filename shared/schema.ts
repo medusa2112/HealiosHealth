@@ -23,6 +23,14 @@ export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   subscribedAt: text("subscribed_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const preOrders = pgTable("pre_orders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  productId: text("product_id").notNull(),
+  productName: text("product_name").notNull(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -32,7 +40,14 @@ export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions
   subscribedAt: true,
 });
 
+export const insertPreOrderSchema = createInsertSchema(preOrders).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 export type Newsletter = typeof newsletterSubscriptions.$inferSelect;
+export type InsertPreOrder = z.infer<typeof insertPreOrderSchema>;
+export type PreOrder = typeof preOrders.$inferSelect;

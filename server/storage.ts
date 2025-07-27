@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -12,15 +12,21 @@ export interface IStorage {
   // Newsletter
   subscribeToNewsletter(email: InsertNewsletter): Promise<Newsletter>;
   getNewsletterSubscription(email: string): Promise<Newsletter | undefined>;
+  
+  // Pre-orders
+  createPreOrder(preOrder: InsertPreOrder): Promise<PreOrder>;
+  getPreOrders(): Promise<PreOrder[]>;
 }
 
 export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private newsletters: Map<string, Newsletter>;
+  private preOrders: Map<string, PreOrder>;
 
   constructor() {
     this.products = new Map();
     this.newsletters = new Map();
+    this.preOrders = new Map();
     this.seedData();
   }
 
@@ -37,7 +43,7 @@ export class MemStorage implements IStorage {
         category: "Gummies",
         rating: "4.8",
         reviewCount: 247,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -50,7 +56,7 @@ export class MemStorage implements IStorage {
         category: "Vitamins",
         rating: "4.9",
         reviewCount: 189,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -63,7 +69,7 @@ export class MemStorage implements IStorage {
         category: "Adaptogens",
         rating: "4.7",
         reviewCount: 432,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -76,7 +82,7 @@ export class MemStorage implements IStorage {
         category: "Probiotics",
         rating: "4.7",
         reviewCount: 203,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -89,7 +95,7 @@ export class MemStorage implements IStorage {
         category: "Minerals",
         rating: "4.7",
         reviewCount: 234,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -98,11 +104,11 @@ export class MemStorage implements IStorage {
         description: "Complete daily nutrient support for growing bodies (Ages 3+) with 13 essential vitamins and minerals in delicious berry-flavored gummies.",
         price: "19.99",
         originalPrice: "29.99",
-        imageUrl: "/images/childrens-multivitamin-gummies.svg",
+        imageUrl: "/assets/Multivitamin & Mineral for Children_1753612563199.png",
         category: "Children",
         rating: "4.8",
         reviewCount: 312,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -115,7 +121,7 @@ export class MemStorage implements IStorage {
         category: "Probiotics",
         rating: "4.7",
         reviewCount: 198,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -128,7 +134,7 @@ export class MemStorage implements IStorage {
         category: "Beauty",
         rating: "4.6",
         reviewCount: 267,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -141,7 +147,7 @@ export class MemStorage implements IStorage {
         category: "Beauty",
         rating: "4.5",
         reviewCount: 342,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -154,7 +160,7 @@ export class MemStorage implements IStorage {
         category: "Minerals",
         rating: "4.6",
         reviewCount: 189,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
       {
@@ -167,7 +173,7 @@ export class MemStorage implements IStorage {
         category: "Prenatal",
         rating: "4.8",
         reviewCount: 156,
-        inStock: true,
+        inStock: false,
         featured: true,
       },
 
@@ -229,6 +235,21 @@ export class MemStorage implements IStorage {
 
   async getNewsletterSubscription(email: string): Promise<Newsletter | undefined> {
     return this.newsletters.get(email);
+  }
+
+  async createPreOrder(preOrder: InsertPreOrder): Promise<PreOrder> {
+    const id = randomUUID();
+    const newPreOrder: PreOrder = {
+      ...preOrder,
+      id,
+      createdAt: new Date().toISOString(),
+    };
+    this.preOrders.set(id, newPreOrder);
+    return newPreOrder;
+  }
+
+  async getPreOrders(): Promise<PreOrder[]> {
+    return Array.from(this.preOrders.values());
   }
 }
 

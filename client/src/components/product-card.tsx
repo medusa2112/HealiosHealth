@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
+import { PreOrderModal } from "@/components/pre-order-modal";
+import { useState } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +15,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const [showPreOrderModal, setShowPreOrderModal] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,6 +50,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
+    <>
     <Link href={`/products/${product.id}`}>
       <div className="group cursor-pointer">
         {/* Product Image */}
@@ -69,16 +73,34 @@ export function ProductCard({ product }: ProductCardProps) {
                 SAVE £{(parseFloat(product.originalPrice) - parseFloat(product.price)).toFixed(0)}
               </span>
             )}
+            {!product.inStock && (
+              <span className="bg-gray-600 text-white px-2 py-1 text-xs font-medium">
+                SOLD OUT
+              </span>
+            )}
           </div>
 
-          {/* Add to Cart Button - appears on hover */}
+          {/* Add to Cart/Pre-order Button - appears on hover */}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <Button
-              onClick={handleAddToCart}
-              className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
-            >
-              Add to Cart
-            </Button>
+            {product.inStock ? (
+              <Button
+                onClick={handleAddToCart}
+                className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
+              >
+                Add to Cart
+              </Button>
+            ) : (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowPreOrderModal(true);
+                }}
+                className="bg-healios-cyan text-white px-6 py-2 text-sm font-medium hover:bg-healios-cyan/90 transition-colors"
+              >
+                Pre-Order 10% Off
+              </Button>
+            )}
           </div>
         </div>
 
@@ -119,5 +141,14 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
     </Link>
+    
+    {/* Pre-order Modal */}
+    <PreOrderModal
+      isOpen={showPreOrderModal}
+      onClose={() => setShowPreOrderModal(false)}
+      productName={product.name}
+      productId={product.id}
+    />
+    </>
   );
 }
