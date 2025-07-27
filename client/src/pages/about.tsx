@@ -206,7 +206,7 @@ export default function About() {
               Standards that matter
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Our certifications aren't marketing badges—they're proof of pharmaceutical-grade quality.
+              Our certifications aren't marketing badges - they're proof of pharmaceutical-grade quality.
             </p>
           </div>
 
