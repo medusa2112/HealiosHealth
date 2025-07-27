@@ -228,7 +228,7 @@ export function Header() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsSearchOpen(false)}
-                  className="text-white hover:text-gray-300"
+                  className="text-white hover:bg-healios-secondary hover:text-black transition-colors duration-200"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -238,7 +238,7 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSearchOpen(true)}
-                className="text-white hover:text-gray-300"
+                className="text-white hover:bg-healios-secondary hover:text-black transition-colors duration-200"
               >
                 <Search className={`transition-all duration-300 ${
                   isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -251,7 +251,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleTheme}
-              className="text-white hover:text-gray-300"
+              className="text-white hover:bg-healios-secondary hover:text-black transition-colors duration-200"
             >
               {theme === 'light' ? (
                 <Moon className={`transition-all duration-300 ${
@@ -269,7 +269,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className="text-white hover:text-gray-300 relative"
+              className="text-white hover:bg-healios-secondary hover:text-black relative transition-colors duration-200"
             >
               <ShoppingBag className={`transition-all duration-300 ${
                 isScrolled ? 'h-4 w-4' : 'h-5 w-5'
@@ -287,7 +287,7 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="lg:hidden text-white hover:text-gray-300"
+                  className="lg:hidden text-white hover:bg-healios-secondary hover:text-black transition-colors duration-200"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
