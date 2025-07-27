@@ -249,7 +249,7 @@ export default function Science() {
       </section>
 
       {/* Key Ingredient Spotlight */}
-      <section className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 py-24">
+      <section className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="p-12">
             <div className="text-center mb-12">
