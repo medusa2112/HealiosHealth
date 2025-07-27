@@ -154,8 +154,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Updated probiotics product to use authentic Healios "10 Billion CFU Probiotic Complex" image with professional product photography
 ✓ Updated Biotin 5000µg product with latest authentic Healios image featuring professional hair photography and premium black packaging design
 ✓ Updated Iron + Vitamin C product with latest authentic Healios image featuring premium black packaging and red energy-focused design
-✓ Completed comprehensive Apparel category integration with specialized ApparelCard component for size/color selection
-✓ Implemented full pre-order system across all 16 products (12 supplements + 4 apparel items) with 10% discount modal
+✓ Removed all apparel products from the site, focusing exclusively on supplement products
+✓ Implemented full pre-order system across all 12 supplement products with 10% discount modal
 ✓ All product images now authentic Healios branding with consistent professional photography and SVG designs
 ✓ Added proper category filtering for all products including Beauty and Minerals categories with Energy badges
 ✓ Fixed critical site-wide image serving issue by adding static file route for /assets directory
@@ -163,6 +163,8 @@ Preferred communication style: Simple, everyday language.
 ✓ Updated Folic Acid 400µg with latest authentic Healios image featuring green pregnancy/maternal health branding and premium black packaging
 ✓ Implemented clean single pricing structure across all products removing original prices and discount displays
 ✓ Updated all product prices to match new RRP pricing table with no sales or discounts
+✓ Removed all apparel/clothing products from database and frontend components
+✓ Cleaned up navigation and category filtering to only show supplement products
 
 ## Advanced SEO Implementation (January 2025)
 

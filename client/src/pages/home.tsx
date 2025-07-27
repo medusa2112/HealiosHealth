@@ -16,7 +16,7 @@ import healiosNatureImg from '@assets/Healios_1753559079971.png';
 import healiosGummiesImg from '@assets/Screenshot 2025-07-26 at 21.46.49_1753559220742.png';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
-import { ApparelCard } from '@/components/apparel-card';
+
 import { PreOrderModal } from '@/components/pre-order-modal';
 
 export default function HomePage() {
@@ -48,7 +48,7 @@ export default function HomePage() {
     MINERALS: ['magnesium', 'iron-vitamin-c'],
     BEAUTY: ['collagen-complex', 'biotin-5000'],
     PRENATAL: ['folic-acid-400'],
-    APPAREL: ['healios-jumper-men', 'healios-jumper-women', 'healios-tshirt-men', 'healios-tshirt-women']
+
   };
 
   const handleCategoryChange = async (category: string) => {
@@ -275,16 +275,7 @@ export default function HomePage() {
                   >
                     MINERALS
                   </button>
-                  <button 
-                    onClick={() => handleCategoryChange('APPAREL')}
-                    className={`px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === 'APPAREL' 
-                        ? 'bg-black text-white' 
-                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    APPAREL
-                  </button>
+
                 </div>
               </div>
 
@@ -340,22 +331,10 @@ export default function HomePage() {
                     'biotin-5000': 'Hair & Skin',
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
-                    'healios-jumper-men': 'Performance',
-                    'healios-jumper-women': 'Performance',
-                    'healios-tshirt-men': 'Essential',
-                    'healios-tshirt-women': 'Essential'
+
                   };
 
-                  // Check if this is an apparel product
-                  if (product.type === 'apparel') {
-                    return (
-                      <ApparelCard 
-                        key={product.id} 
-                        product={product}
-                        badge={productBadges[product.id as keyof typeof productBadges]}
-                      />
-                    );
-                  }
+
 
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
