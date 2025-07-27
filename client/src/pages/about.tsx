@@ -46,7 +46,10 @@ export default function About() {
                   </p>
                 </div>
                 <div className="text-left">
-                  {/* Empty column for spacing */}
+                  <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">600+</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                    Scientific Studies Reviewed
+                  </p>
                 </div>
               </div>
 
