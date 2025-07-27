@@ -615,7 +615,7 @@ export default function ProductComprehensive() {
                           {product.id === 'childrens-multivitamin' ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy (Daily Values for Children):</p>
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
                                 <div className="font-medium">Vitamin A: 400μg (50% NRV)</div>
                                 <div className="font-medium">Vitamin D2: 5μg (100% NRV)</div>
                                 <div className="font-medium">Vitamin E: 6mg (50% NRV)</div>
@@ -629,7 +629,7 @@ export default function ProductComprehensive() {
                                 <div className="font-medium">Zinc: 5mg (50% NRV)</div>
                                 <div className="font-medium">Iodine: 75μg (50% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value</p>
                             </div>
                           ) : product.id === 'vitamin-d3' ? (
                             <div>
@@ -637,7 +637,7 @@ export default function ProductComprehensive() {
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Vitamin D3 (cholecalciferol): 25 μg (1000 IU) - 500% NRV</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. 1000 IU is a safe and effective maintenance dose for most healthy adults.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. 1000 IU is a safe and effective maintenance dose for most healthy adults.</p>
                             </div>
                           ) : product.id === 'probiotic-vitamins' ? (
                             <div>
@@ -649,7 +649,7 @@ export default function ProductComprehensive() {
                                 <div className="font-medium">Vitamin C: 40mg (50% NRV)</div>
                                 <div className="font-medium">Probiotic Blend: 3-strain proprietary blend</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Probiotic efficacy may vary between individuals.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Probiotic efficacy may vary between individuals.</p>
                             </div>
                           ) : product.id === 'collagen-complex' ? (
                             <div>
@@ -664,7 +664,7 @@ export default function ProductComprehensive() {
                                 <div className="font-medium">Vitamin B12: 1.25μg (50% NRV)</div>
                                 <div className="font-medium">Selenium: 27.5μg (50% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
                             </div>
                           ) : product.id === 'biotin-5000' ? (
                             <div>
@@ -672,7 +672,7 @@ export default function ProductComprehensive() {
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Biotin (Vitamin B7): 5000μg (10,000% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. High doses of biotin may interfere with blood test results. Inform your doctor before lab testing.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. High doses of biotin may interfere with blood test results. Inform your doctor before lab testing.</p>
                             </div>
                           ) : product.id === 'magnesium' ? (
                             <div>
@@ -680,7 +680,7 @@ export default function ProductComprehensive() {
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Magnesium (citrate): 90mg (24% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults can take 1-2 gummies daily. Do not exceed 3 gummies per day.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. Adults can take 1-2 gummies daily. Do not exceed 3 gummies per day.</p>
                             </div>
                           ) : product.id === 'iron-vitamin-c' ? (
                             <div>
@@ -689,7 +689,7 @@ export default function ProductComprehensive() {
                                 <div className="font-medium">Iron (ferric pyrophosphate): 7mg (50% NRV)</div>
                                 <div className="font-medium">Vitamin C (ascorbic acid): 40mg (50% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults and teens 12+: 1-2 gummies daily. Keep out of reach of children.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. Adults and teens 12+: 1-2 gummies daily. Keep out of reach of children.</p>
                             </div>
                           ) : product.id === 'folic-acid-400' ? (
                             <div>
@@ -697,25 +697,25 @@ export default function ProductComprehensive() {
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Folic Acid (Vitamin B9): 400µg (200% NRV)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. This is the gold-standard dose recommended by NHS and global maternity guidelines.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. This is the gold-standard dose recommended by NHS and global maternity guidelines.</p>
                             </div>
                           ) : product.id === 'ashwagandha' ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Ashwagandha Root Extract: 300mg</div>
-                                <div className="text-xs text-gray-600">(Withania somnifera, standardized to 5% withanolides)</div>
+                                <div className="text-sm text-gray-600">(Withania somnifera, standardized to 5% withanolides)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">Traditional adaptogenic herb. No EFSA health claims authorized for ashwagandha - general wellbeing support only.</p>
+                              <p className="mt-3 text-sm text-gray-600">Traditional adaptogenic herb. No EFSA health claims authorized for ashwagandha - general wellbeing support only.</p>
                             </div>
                           ) : product.id === 'apple-cider-vinegar' ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Apple Cider Vinegar (powder): 500mg</div>
-                                <div className="text-xs text-gray-600">(Concentrated equivalent without harsh acetic acid)</div>
+                                <div className="text-sm text-gray-600">(Concentrated equivalent without harsh acetic acid)</div>
                               </div>
-                              <p className="mt-3 text-xs text-gray-600">No EFSA health claims authorized for ACV. Traditional wellness use only. Enamel-safe format vs liquid vinegar.</p>
+                              <p className="mt-3 text-sm text-gray-600">No EFSA health claims authorized for ACV. Traditional wellness use only. Enamel-safe format vs liquid vinegar.</p>
                             </div>
                           ) : (
                             <div>
@@ -743,7 +743,7 @@ export default function ProductComprehensive() {
                                 <li>• Zinc (zinc citrate)</li>
                                 <li>• Iodine (potassium iodide)</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
+                              <p className="mt-2 text-sm text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
                             </div>
                           ) : product.id === 'vitamin-d3' ? (
                             <div>
@@ -754,7 +754,7 @@ export default function ProductComprehensive() {
                                 <li>• Pectin (vegetarian gelling agent)</li>
                                 <li>• Natural colors and sweeteners</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Suitable for vegetarians. Cholecalciferol is identical to the form produced by skin exposure to sunlight.</p>
+                              <p className="mt-2 text-sm text-gray-600">Suitable for vegetarians. Cholecalciferol is identical to the form produced by skin exposure to sunlight.</p>
                             </div>
                           ) : product.id === 'probiotic-vitamins' ? (
                             <div>
@@ -769,7 +769,7 @@ export default function ProductComprehensive() {
                                 <li>• Vitamin C (Ascorbic Acid)</li>
                                 <li>• Natural pineapple flavoring</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, vegetarian formulation. Probiotic cultures are shelf-stable in low-water gummy matrix.</p>
+                              <p className="mt-2 text-sm text-gray-600">Gelatin-free, vegetarian formulation. Probiotic cultures are shelf-stable in low-water gummy matrix.</p>
                             </div>
                           ) : product.id === 'collagen-complex' ? (
                             <div>
@@ -784,7 +784,7 @@ export default function ProductComprehensive() {
                                 <li>• B-vitamins (B6, B12) - energy metabolism</li>
                                 <li>• Natural orange flavoring</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
+                              <p className="mt-2 text-sm text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
                             </div>
                           ) : product.id === 'biotin-5000' ? (
                             <div>
@@ -795,7 +795,7 @@ export default function ProductComprehensive() {
                                 <li>• Pectin (vegetarian gelling agent)</li>
                                 <li>• Natural colors and sweeteners</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Gelatin-free, suitable for vegetarians and vegans. Free from gluten, dairy, and major allergens.</p>
+                              <p className="mt-2 text-sm text-gray-600">Gelatin-free, suitable for vegetarians and vegans. Free from gluten, dairy, and major allergens.</p>
                             </div>
                           ) : product.id === 'magnesium' ? (
                             <div>
@@ -806,7 +806,7 @@ export default function ProductComprehensive() {
                                 <li>• Pectin (vegetarian gelling agent)</li>
                                 <li>• Natural colors and low-sugar formulation</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with superior citrate absorption. Gentle on the digestive system.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegetarian formulation with superior citrate absorption. Gentle on the digestive system.</p>
                             </div>
                           ) : product.id === 'iron-vitamin-c' ? (
                             <div>
@@ -818,7 +818,7 @@ export default function ProductComprehensive() {
                                 <li>• Pectin (vegetarian gelling agent)</li>
                                 <li>• Natural colors and sweeteners</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with reduced metallic aftertaste. Gentle on stomach compared to traditional iron tablets.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegetarian formulation with reduced metallic aftertaste. Gentle on stomach compared to traditional iron tablets.</p>
                             </div>
                           ) : product.id === 'folic-acid-400' ? (
                             <div>
@@ -830,7 +830,7 @@ export default function ProductComprehensive() {
                                 <li>• Natural colors and sweeteners</li>
                                 <li>• Child-safe formulation</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation specifically designed for prenatal safety. High compliance gummy format vs traditional tablets.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegetarian formulation specifically designed for prenatal safety. High compliance gummy format vs traditional tablets.</p>
                             </div>
                           ) : product.id === 'ashwagandha' ? (
                             <div>
@@ -842,7 +842,7 @@ export default function ProductComprehensive() {
                                 <li>• Natural colors and sweeteners</li>
                                 <li>• Gluten-free, gelatin-free formulation</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Vegan formulation suitable for daily use. Traditional Ayurvedic herb with 3,000+ years of traditional wellness use.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegan formulation suitable for daily use. Traditional Ayurvedic herb with 3,000+ years of traditional wellness use.</p>
                             </div>
                           ) : product.id === 'apple-cider-vinegar' ? (
                             <div>
@@ -854,7 +854,7 @@ export default function ProductComprehensive() {
                                 <li>• Natural fruit colors</li>
                                 <li>• Natural sweeteners (no artificial sugars)</li>
                               </ul>
-                              <p className="mt-2 text-xs text-gray-600">Vegan, enamel-safe formulation. Delivers traditional ACV benefits without stomach burn or tooth erosion.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegan, enamel-safe formulation. Delivers traditional ACV benefits without stomach burn or tooth erosion.</p>
                             </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
