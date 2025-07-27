@@ -148,3 +148,31 @@
   .border-healios-teal { border-color: var(--healios-teal); }
   .border-healios-violet { border-color: var(--healios-violet); }
 }
+
+@layer utilities {
+  /* Custom animation delays for multicolor blur effect */
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  
+  /* Custom blur intensities */
+  .blur-xs {
+    filter: blur(2px);
+  }
+  
+  .blur-4xl {
+    filter: blur(64px);
+  }
+  
+  .blur-5xl {
+    filter: blur(80px);
+  }
+}
