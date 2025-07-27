@@ -208,6 +208,7 @@ async function listArticles() {
   });
 }
 
-if (require.main === module) {
+// ES Module entry point check
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
