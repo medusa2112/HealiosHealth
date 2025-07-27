@@ -100,17 +100,7 @@ export function Header() {
       ]
     },
 
-    {
-      title: "Women's Health Hubs",
-      items: [
-        { href: "/womens-health", label: "Fertility hub" },
-        { href: "/pregnancy", label: "Pregnancy & New Mother hub" },
-        { href: "/menopause", label: "Perimenopause & Menopause hub" },
-        { href: "/womens-blog", label: "Women's health blogs" },
-        { href: "/beauty", label: "Beauty blogs" },
-        { href: "/family", label: "Family health guides" },
-      ]
-    },
+
     {
       title: "Healios Journal",
       items: [
