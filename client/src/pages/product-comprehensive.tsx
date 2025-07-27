@@ -11,9 +11,8 @@ import { Link } from "wouter";
 import { SEOHead } from "@/components/seo-head";
 
 // Import images
-import healiosNatureImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
+import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
-import fitnessImg from '@assets/fitness-running-and-woman-in-a-city-at-night-for-2023-11-27-05-00-25-utc(1)_1753466794043.mov';
 
 export default function ProductComprehensive() {
   const [, params] = useRoute("/products/:id");
@@ -409,7 +408,7 @@ export default function ProductComprehensive() {
               </div>
               <div>
                 <img
-                  src={healiosNatureImg}
+                  src={nutritionistImg}
                   alt="Book consultation"
                   className="w-full h-48 object-cover mb-4"
                 />
@@ -459,7 +458,7 @@ export default function ProductComprehensive() {
               </div>
               <div>
                 <img
-                  src={healiosNatureImg}
+                  src={nutritionistImg}
                   alt="Health journey"
                   className="w-full h-48 object-cover mb-4"
                 />
@@ -525,7 +524,7 @@ export default function ProductComprehensive() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
             <div className="mb-8 lg:mb-0">
               <img
-                src={healiosNatureImg}
+                src={nutritionistImg}
                 alt="Clean ingredients"
                 className="w-full h-96 object-cover"
               />
@@ -577,7 +576,7 @@ export default function ProductComprehensive() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
             <div className="mb-8 lg:mb-0">
               <img
-                src={healiosNatureImg}
+                src={nutritionistImg}
                 alt="Sleep benefits"
                 className="w-full h-96 object-cover"
               />
@@ -671,7 +670,7 @@ export default function ProductComprehensive() {
             </p>
             
             <img
-              src={healiosNatureImg}
+              src={nutritionistImg}
               alt="Wellness lifestyle"
               className="w-full h-64 object-cover"
             />
