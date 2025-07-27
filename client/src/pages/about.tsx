@@ -82,50 +82,50 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-8">
+          <div className="grid lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                <Microscope className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                <Microscope className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Ingredient Bioavailability
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   Every formula starts with forms that actually absorb. You won't find magnesium oxide or synthetic D2 here. Only bioactive forms with proven uptake — like magnesium bisglycinate (with &gt;80% absorption) and cholecalciferol (D3), used in over 95% of vitamin D outcome trials.
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                <TestTube className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                <TestTube className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Therapeutic Dosages, Not Marketing Dust
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   No pixie dusting. If it doesn't reach the dose used in peer-reviewed studies, it's not in our formula. Period.
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                <Target className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                <Target className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Zero Fillers, Additives, or Undisclosed Blends
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   What's on the tin is what's in the tin. Every capsule is traceable, batch-tested, and third-party verified. You'll never find artificial colours, soy, or titanium dioxide in our stack.
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              <div className="bg-gray-50 dark:bg-gray-800 p-8">
-                <Brain className="w-12 h-12 text-black dark:text-white mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-3">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6">
+                <Brain className="w-8 h-8 text-black dark:text-white mx-auto mb-3" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Formulated With Medical Logic
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-xs leading-relaxed">
                   All inputs follow guidance from human data, not anecdote. We reference endocrine panels, micronutrient studies, and clinical outcome data. No AI guesses. No bro-science.
                 </p>
               </div>
