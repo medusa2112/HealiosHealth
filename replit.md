@@ -123,6 +123,10 @@ Preferred communication style: Simple, everyday language.
 ✓ Enhanced magnesium product with comprehensive muscle, mind & energy support specifications
 ✓ Added age-specific dosing (9-18: 1 gummy, adults: 1-2 gummies) with evening timing recommendations
 ✓ Implemented EFSA-compliant claims for fatigue reduction, muscle function, and electrolyte balance
+✓ Added Iron + Vitamin C Gummies as 11th Healios product for energy and focus support
+✓ Created gentle iron supplement with ferric pyrophosphate and vitamin C for enhanced absorption
+✓ Implemented EFSA-compliant messaging for red blood cell formation and fatigue reduction
+✓ Added age-specific dosing (12+: 1-2 gummies) with calcium spacing recommendations and safety warnings
 
 ## Advanced SEO Implementation (January 2025)
 

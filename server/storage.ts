@@ -144,6 +144,19 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: true,
       },
+      {
+        id: "iron-vitamin-c",
+        name: "Iron + Vitamin C Gummies (Cherry Flavour)",
+        description: "Gentle daily support for energy, focus & iron absorption with 7mg iron and 40mg vitamin C. Bioavailable formula for reduced fatigue and healthy red blood cell formation.",
+        price: "19.99",
+        originalPrice: "28.99",
+        imageUrl: "/attached_assets/Apple-Cider-Vinegar-X_1753469577640.png", // Using gummy product image as placeholder
+        category: "Minerals",
+        rating: "4.6",
+        reviewCount: 189,
+        inStock: true,
+        featured: true,
+      },
 
     ];
 

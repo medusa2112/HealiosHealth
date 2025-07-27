@@ -237,6 +237,24 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports hair strength, skin health, and nail integrity'
         };
+      case 'iron-vitamin-c':
+        return {
+          bundleWith: 'Vitamin D3 Gummies',
+          bundlePrice: '£32.00',
+          bundleOriginalPrice: '£44.00',
+          statisticNumber: '50%',
+          statisticText: 'better iron absorption when taken with vitamin C compared to iron alone',
+          testimonial: '"Iron deficiency is incredibly common, especially in women. This gentle formula with vitamin C enhances absorption while minimizing digestive discomfort."',
+          testimonialAuthor: 'DR. REBECCA MARTINEZ',
+          testimonialTitle: 'Hematology & Women\'s Health Specialist',
+          benefitTitle: 'Energy & focus support',
+          benefitDescription: '7mg bioavailable iron with 40mg vitamin C supports healthy red blood cell formation, reduces fatigue, and enhances iron absorption.',
+          ingredientSource: 'Iron (ferric pyrophosphate) + Vitamin C',
+          ingredientForm: 'Cherry-flavored chewable gummies',
+          ingredientOrigin: 'Gentle iron form with absorption enhancer',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports energy levels, focus, and healthy red blood cell formation'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
@@ -476,6 +494,15 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults can take 1-2 gummies daily. Do not exceed 3 gummies per day.</p>
                             </div>
+                          ) : product.id === 'iron-vitamin-c' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Iron (ferric pyrophosphate): 7mg (50% NRV)</div>
+                                <div className="font-medium">Vitamin C (ascorbic acid): 40mg (50% NRV)</div>
+                              </div>
+                              <p className="mt-3 text-xs text-gray-600">*NRV = Nutrient Reference Value. Adults and teens 12+: 1-2 gummies daily. Keep out of reach of children.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -567,6 +594,18 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with superior citrate absorption. Gentle on the digestive system.</p>
                             </div>
+                          ) : product.id === 'iron-vitamin-c' ? (
+                            <div>
+                              <p className="font-medium mb-2">Cherry-flavored gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Iron (ferric pyrophosphate) - gentle, low-irritation form vs ferrous sulfate</li>
+                                <li>• Vitamin C (ascorbic acid) - enhances iron absorption by up to 50%</li>
+                                <li>• Natural cherry flavoring</li>
+                                <li>• Pectin (vegetarian gelling agent)</li>
+                                <li>• Natural colors and sweeteners</li>
+                              </ul>
+                              <p className="mt-2 text-xs text-gray-600">Vegetarian formulation with reduced metallic aftertaste. Gentle on stomach compared to traditional iron tablets.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -638,6 +677,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Suitable for ages 9+. Start with 1 gummy to assess tolerance. May have laxative effect in high doses.</p>
                             </div>
+                          ) : product.id === 'iron-vitamin-c' ? (
+                            <div>
+                              <p className="font-medium mb-2">Age-specific dosing:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Ages 12-18:</strong> 1 gummy per day</li>
+                                <li>• <strong>Adults:</strong> 1-2 gummies daily depending on iron status</li>
+                                <li>• Take with or without food, but avoid calcium-rich meals within 1 hour</li>
+                                <li>• Take consistently for 6-12 weeks for maximum benefit</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12. Keep out of reach of children. Do not exceed recommended dose unless advised by healthcare professional.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -703,6 +753,16 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this if I have digestive sensitivities?</strong> Yes, the 90mg dose is gentle and well-tolerated. Start with 1 gummy to assess your individual response.</li>
                                 <li>• <strong>When is the best time to take magnesium?</strong> Any time works, but many prefer evening as magnesium may support relaxation and sleep quality.</li>
                                 <li>• <strong>Can I take this with calcium supplements?</strong> Space them apart by 2+ hours as calcium can interfere with magnesium absorption when taken simultaneously.</li>
+                              </ul>
+                            </div>
+                          ) : product.id === 'iron-vitamin-c' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Iron + Vitamin C:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>Why is vitamin C included with iron?</strong> Vitamin C significantly enhances iron absorption and helps convert iron into a more bioavailable form, improving uptake by up to 50%.</li>
+                                <li>• <strong>Is this suitable for vegetarians and vegans?</strong> Yes, this is ideal for plant-based diets as it provides easily absorbed iron that may be lacking from non-heme plant sources.</li>
+                                <li>• <strong>Will this cause stomach upset like iron tablets?</strong> The ferric pyrophosphate form is much gentler than ferrous sulfate, and the gummy format reduces metallic aftertaste and stomach irritation.</li>
+                                <li>• <strong>Can I take this if I'm not anemic?</strong> Yes, this is designed for daily maintenance to prevent iron deficiency, especially beneficial for menstruating women and active individuals.</li>
                               </ul>
                             </div>
                           ) : (
