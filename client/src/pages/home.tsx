@@ -474,19 +474,17 @@ export default function HomePage() {
       {/* Pregnancy & New Mother Section */}
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
-          {/* Image Section - Full height, no padding, extends to left edge */}
-          <div className="relative overflow-hidden aspect-square">
+          {/* Video Section - Full height, extends to left edge */}
+          <div className="relative overflow-hidden h-full min-h-[600px]">
             <video
               autoPlay
               muted
               loop
               playsInline
               preload="metadata"
-              className="w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               style={{
-                aspectRatio: '1/1',
-                objectPosition: 'center center',
-                minHeight: '400px'
+                objectPosition: 'center center'
               }}
               onLoadStart={() => console.log('Fitness video loading started')}
               onCanPlay={() => console.log('Fitness video can play')}
@@ -497,11 +495,9 @@ export default function HomePage() {
               <img 
                 src={pharmacistsImg}
                 alt="Professional pharmacists and scientists working together in modern laboratory developing quality supplements and wellness products"
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
                 style={{
-                  aspectRatio: '1/1',
-                  objectPosition: 'center center',
-                  minHeight: '400px'
+                  objectPosition: 'center center'
                 }}
               />
             </video>
