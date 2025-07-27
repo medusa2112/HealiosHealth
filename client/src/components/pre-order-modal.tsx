@@ -111,22 +111,9 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !email}
-                className="w-full bg-black text-white font-medium py-3 relative overflow-hidden group transition-all duration-300 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  background: isSubmitting || !email ? '#000' : undefined,
-                }}
+                className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span className="relative z-10">
-                  {isSubmitting ? "Submitting..." : "Join Pre-Order List"}
-                </span>
-                {/* Animated multicolor blur background */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 blur-xl animate-pulse"></div>
-                  <div className="absolute inset-0 bg-gradient-to-l from-green-400 via-yellow-400 to-red-400 blur-lg animate-ping animation-delay-200"></div>
-                  <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 via-teal-400 to-orange-400 blur-md animate-bounce animation-delay-400"></div>
-                </div>
-                {/* Subtle glass overlay */}
-                <div className="absolute inset-0 bg-black/70 group-hover:bg-black/40 transition-colors duration-300"></div>
+                {isSubmitting ? "Submitting..." : "Join Pre-Order List"}
               </Button>
             </form>
 
@@ -165,17 +152,9 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
             </p>
             <Button 
               onClick={handleClose}
-              className="w-full bg-black text-white font-medium py-3 relative overflow-hidden group transition-all duration-300 hover:shadow-2xl"
+              className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors"
             >
-              <span className="relative z-10">Continue Shopping</span>
-              {/* Animated multicolor blur background */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 blur-xl animate-pulse"></div>
-                <div className="absolute inset-0 bg-gradient-to-l from-green-400 via-yellow-400 to-red-400 blur-lg animate-ping animation-delay-200"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 via-teal-400 to-orange-400 blur-md animate-bounce animation-delay-400"></div>
-              </div>
-              {/* Subtle glass overlay */}
-              <div className="absolute inset-0 bg-black/70 group-hover:bg-black/40 transition-colors duration-300"></div>
+              Continue Shopping
             </Button>
           </div>
         )}
