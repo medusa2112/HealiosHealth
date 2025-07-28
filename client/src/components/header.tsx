@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, ShoppingBag, Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, ChevronDown } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
-import { useTheme } from "./theme-provider";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import healiosLogo from "@assets/healios-logo (1)_1753466737582.png";
 
 export function Header() {
   const [location] = useLocation();
   const { toggleCart, getTotalItems } = useCart();
-  const { theme, toggleTheme } = useTheme();
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -186,56 +182,6 @@ export function Header() {
           
           {/* Right Side Icons */}
           <div className="flex items-center space-x-2">
-            {/* Search */}
-            {isSearchOpen ? (
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  className="w-48 bg-gray-800 border-gray-600 text-white placeholder:text-gray-300"
-                  autoFocus
-                  onBlur={() => setIsSearchOpen(false)}
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsSearchOpen(false)}
-                  className="text-white hover:bg-black hover:text-healios-violet transition-colors duration-200"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsSearchOpen(true)}
-                className="text-white hover:bg-black hover:text-healios-violet transition-colors duration-200"
-              >
-                <Search className={`transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                }`} />
-              </Button>
-            )}
-            
-            {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleTheme}
-              className="text-white hover:bg-black hover:text-healios-violet transition-colors duration-200"
-            >
-              {theme === 'light' ? (
-                <Moon className={`transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                }`} />
-              ) : (
-                <Sun className={`transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-                }`} />
-              )}
-            </Button>
-            
             {/* Cart */}
             <Button
               variant="ghost"
