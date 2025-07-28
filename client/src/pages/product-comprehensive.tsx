@@ -1130,7 +1130,7 @@ export default function ProductComprehensive() {
             advice, we support the whole you
           </h2>
           <Button className="bg-black text-white px-6 py-3 font-medium hover:bg-gray-800">
-            <Link href="/consultation">
+            <Link href="/consultation" className="flex items-center">
               Book your free consultation <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
@@ -1540,7 +1540,7 @@ export default function ProductComprehensive() {
                       
                       <Button
                         onClick={() => {
-                          handleAddBundleProduct();
+                          handleToggleBundleProduct();
                           setShowBundleModal(false);
                         }}
                         className="w-full"
