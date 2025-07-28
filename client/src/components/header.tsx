@@ -187,7 +187,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={toggleCart}
-              className="text-white hover:bg-black hover:text-healios-violet relative transition-colors duration-200"
+              className="text-white hover:bg-transparent hover:text-healios-cyan relative transition-colors duration-200"
             >
               <ShoppingBag className={`transition-all duration-300 ${
                 isScrolled ? 'h-4 w-4' : 'h-5 w-5'
