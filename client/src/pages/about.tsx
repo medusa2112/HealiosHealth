@@ -31,39 +31,7 @@ export default function About() {
                 </p>
               </div>
 
-              {/* Key Stats */}
-              <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-8">
-                <div className="text-left">
-                  <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">2024</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Founded
-                  </p>
-                </div>
-                <div className="text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-1">8.9/10</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Customer Satisfaction
-                  </p>
-                </div>
-                <div className="text-left">
-                  <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">600+</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Scientific Studies Reviewed
-                  </p>
-                </div>
-                <div className="text-left">
-                  <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">98%</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Ingredient Traceability
-                  </p>
-                </div>
-                <div className="text-left">
-                  <div className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-0.5">10</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                    Active Nutrients with EFSA Claims
-                  </p>
-                </div>
-              </div>
+
 
               <Link href="/products">
                 <button className="bg-black text-white px-8 py-4 text-sm font-medium hover:bg-gray-800 transition-colors">
