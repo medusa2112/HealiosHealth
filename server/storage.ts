@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -8,6 +8,8 @@ export interface IStorage {
   getProductById(id: string): Promise<Product | undefined>;
   getProductsByCategory(category: string): Promise<Product[]>;
   createProduct(product: InsertProduct): Promise<Product>;
+  updateProductStock(productId: string, quantity: number): Promise<Product | undefined>;
+  decreaseProductStock(productId: string, quantity: number): Promise<Product | undefined>;
   
   // Newsletter
   subscribeToNewsletter(email: InsertNewsletter): Promise<Newsletter>;
@@ -16,6 +18,18 @@ export interface IStorage {
   // Pre-orders
   createPreOrder(preOrder: InsertPreOrder): Promise<PreOrder>;
   getPreOrders(): Promise<PreOrder[]>;
+  
+  // Orders
+  createOrder(order: InsertOrder): Promise<Order>;
+  getOrderById(id: string): Promise<Order | undefined>;
+  getOrdersByEmail(email: string): Promise<Order[]>;
+  updateOrderStatus(orderId: string, status: string): Promise<Order | undefined>;
+  updatePaymentStatus(orderId: string, status: string): Promise<Order | undefined>;
+  
+  // Stock Alerts
+  createStockAlert(alert: InsertStockAlert): Promise<StockAlert>;
+  getStockAlerts(): Promise<StockAlert[]>;
+  markAlertSent(alertId: string): Promise<void>;
   
   // Articles
   getArticles(): Promise<Article[]>;
@@ -30,12 +44,16 @@ export class MemStorage implements IStorage {
   private newsletters: Map<string, Newsletter>;
   private preOrders: Map<string, PreOrder>;
   private articles: Map<string, Article>;
+  private orders: Map<string, Order>;
+  private stockAlerts: Map<string, StockAlert>;
 
   constructor() {
     this.products = new Map();
     this.newsletters = new Map();
     this.preOrders = new Map();
     this.articles = new Map();
+    this.orders = new Map();
+    this.stockAlerts = new Map();
     this.seedData();
   }
 
@@ -286,6 +304,46 @@ export class MemStorage implements IStorage {
     return product;
   }
 
+  async updateProductStock(productId: string, quantity: number): Promise<Product | undefined> {
+    const product = this.products.get(productId);
+    if (!product) return undefined;
+    
+    const updatedProduct = {
+      ...product,
+      stockQuantity: quantity,
+      inStock: quantity > 0
+    };
+    this.products.set(productId, updatedProduct);
+    return updatedProduct;
+  }
+
+  async decreaseProductStock(productId: string, quantity: number): Promise<Product | undefined> {
+    const product = this.products.get(productId);
+    if (!product) return undefined;
+    
+    const currentStock = product.stockQuantity || 0;
+    const newQuantity = Math.max(0, currentStock - quantity);
+    const updatedProduct = {
+      ...product,
+      stockQuantity: newQuantity,
+      inStock: newQuantity > 0
+    };
+    this.products.set(productId, updatedProduct);
+    
+    // Check if we need to create a stock alert
+    if (newQuantity <= 3 && newQuantity > 0) {
+      await this.createStockAlert({
+        productId: product.id,
+        productName: product.name,
+        currentStock: newQuantity,
+        threshold: 3,
+        alertSent: false
+      });
+    }
+    
+    return updatedProduct;
+  }
+
   async subscribeToNewsletter(insertNewsletter: InsertNewsletter): Promise<Newsletter> {
     const existing = await this.getNewsletterSubscription(insertNewsletter.email);
     if (existing) {
@@ -360,6 +418,101 @@ export class MemStorage implements IStorage {
   async getLatestArticles(limit: number): Promise<Article[]> {
     const articles = await this.getArticles();
     return articles.slice(0, limit);
+  }
+
+  // Order methods
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const id = randomUUID();
+    const order: Order = {
+      id,
+      customerEmail: insertOrder.customerEmail,
+      customerName: insertOrder.customerName || null,
+      customerPhone: insertOrder.customerPhone || null,
+      shippingAddress: insertOrder.shippingAddress,
+      billingAddress: insertOrder.billingAddress || null,
+      orderItems: insertOrder.orderItems,
+      totalAmount: insertOrder.totalAmount,
+      currency: insertOrder.currency || null,
+      paymentStatus: insertOrder.paymentStatus || null,
+      orderStatus: insertOrder.orderStatus || null,
+      stripePaymentIntentId: insertOrder.stripePaymentIntentId || null,
+      trackingNumber: insertOrder.trackingNumber || null,
+      notes: insertOrder.notes || null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.orders.set(id, order);
+    return order;
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    return this.orders.get(id);
+  }
+
+  async getOrdersByEmail(email: string): Promise<Order[]> {
+    return Array.from(this.orders.values()).filter(order => order.customerEmail === email);
+  }
+
+  async updateOrderStatus(orderId: string, status: string): Promise<Order | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+    
+    const updatedOrder = {
+      ...order,
+      orderStatus: status,
+      updatedAt: new Date().toISOString()
+    };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+
+  async updatePaymentStatus(orderId: string, status: string): Promise<Order | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+    
+    const updatedOrder = {
+      ...order,
+      paymentStatus: status,
+      updatedAt: new Date().toISOString()
+    };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+
+  // Stock Alert methods
+  async createStockAlert(insertAlert: InsertStockAlert): Promise<StockAlert> {
+    // Check if alert already exists for this product
+    const existingAlert = Array.from(this.stockAlerts.values()).find(
+      alert => alert.productId === insertAlert.productId && !alert.alertSent
+    );
+    
+    if (existingAlert) {
+      return existingAlert;
+    }
+    
+    const id = randomUUID();
+    const alert: StockAlert = {
+      id,
+      productId: insertAlert.productId,
+      productName: insertAlert.productName,
+      currentStock: insertAlert.currentStock,
+      threshold: insertAlert.threshold || null,
+      alertSent: insertAlert.alertSent || null,
+      createdAt: new Date().toISOString(),
+    };
+    this.stockAlerts.set(id, alert);
+    return alert;
+  }
+
+  async getStockAlerts(): Promise<StockAlert[]> {
+    return Array.from(this.stockAlerts.values());
+  }
+
+  async markAlertSent(alertId: string): Promise<void> {
+    const alert = this.stockAlerts.get(alertId);
+    if (alert) {
+      this.stockAlerts.set(alertId, { ...alert, alertSent: true });
+    }
   }
 }
 

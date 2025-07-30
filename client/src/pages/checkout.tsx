@@ -23,6 +23,12 @@ const CheckoutForm = () => {
   const { toast } = useToast();
   const { cart, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    email: '',
+    name: '',
+    phone: '',
+    address: ''
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,27 +37,74 @@ const CheckoutForm = () => {
       return;
     }
 
-    setIsProcessing(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + '/order-confirmation',
-      },
-    });
-
-    if (error) {
+    if (!customerInfo.email || !customerInfo.address) {
       toast({
-        title: "Payment Failed",
-        description: error.message,
+        title: "Missing Information",
+        description: "Please fill in your email and shipping address.",
         variant: "destructive",
       });
-    } else {
-      // Clear cart on successful payment
-      clearCart();
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Create order in our system first
+      const orderData = {
+        customerEmail: customerInfo.email,
+        customerName: customerInfo.name || null,
+        customerPhone: customerInfo.phone || null,
+        shippingAddress: customerInfo.address,
+        billingAddress: customerInfo.address,
+        orderItems: JSON.stringify(cart.items),
+        totalAmount: cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0).toFixed(2),
+        currency: 'ZAR',
+        paymentStatus: 'pending',
+        orderStatus: 'processing'
+      };
+
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error('Failed to create order');
+      }
+
+      const order = await orderResponse.json();
+
+      // Process payment
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/order-confirmation?order_id=${order.id}`,
+        },
+      });
+
+      if (error) {
+        toast({
+          title: "Payment Failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        // Clear cart on successful payment
+        clearCart();
+        toast({
+          title: "Payment Successful",
+          description: "Thank you for your purchase! Your order is being processed.",
+        });
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
       toast({
-        title: "Payment Successful",
-        description: "Thank you for your purchase! Your order is being processed.",
+        title: "Checkout Failed",
+        description: "There was an error processing your order. Please try again.",
+        variant: "destructive",
       });
     }
 
@@ -104,6 +157,45 @@ const CheckoutForm = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Customer Information */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Contact Information</h4>
+              <input
+                type="email"
+                placeholder="Email address *"
+                value={customerInfo.email}
+                onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
+                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Full name"
+                value={customerInfo.name}
+                onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
+              />
+              <input
+                type="tel"
+                placeholder="Phone number"
+                value={customerInfo.phone}
+                onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
+                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
+              />
+            </div>
+
+            {/* Shipping Address */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Shipping Address</h4>
+              <textarea
+                placeholder="Full shipping address including postal code *"
+                value={customerInfo.address}
+                onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
+                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none h-24 resize-none"
+                required
+              />
+            </div>
+
             <PaymentElement />
             <Button 
               type="submit" 

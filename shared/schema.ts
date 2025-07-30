@@ -51,6 +51,35 @@ export const articles = pgTable("articles", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const orders = pgTable("orders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  customerEmail: text("customer_email").notNull(),
+  customerName: text("customer_name"),
+  customerPhone: text("customer_phone"),
+  shippingAddress: text("shipping_address").notNull(),
+  billingAddress: text("billing_address"),
+  orderItems: text("order_items").notNull(), // JSON string of cart items
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  currency: text("currency").default("ZAR"),
+  paymentStatus: text("payment_status").default("pending"), // pending, completed, failed, refunded
+  orderStatus: text("order_status").default("processing"), // processing, shipped, delivered, cancelled
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  trackingNumber: text("tracking_number"),
+  notes: text("notes"),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const stockAlerts = pgTable("stock_alerts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: text("product_id").notNull(),
+  productName: text("product_name").notNull(),
+  currentStock: integer("current_stock").notNull(),
+  threshold: integer("threshold").default(5),
+  alertSent: boolean("alert_sent").default(false),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -70,6 +99,17 @@ export const insertArticleSchema = createInsertSchema(articles).omit({
   createdAt: true,
 });
 
+export const insertOrderSchema = createInsertSchema(orders).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertStockAlertSchema = createInsertSchema(stockAlerts).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
@@ -78,3 +118,7 @@ export type InsertPreOrder = z.infer<typeof insertPreOrderSchema>;
 export type PreOrder = typeof preOrders.$inferSelect;
 export type InsertArticle = z.infer<typeof insertArticleSchema>;
 export type Article = typeof articles.$inferSelect;
+export type InsertOrder = z.infer<typeof insertOrderSchema>;
+export type Order = typeof orders.$inferSelect;
+export type InsertStockAlert = z.infer<typeof insertStockAlertSchema>;
+export type StockAlert = typeof stockAlerts.$inferSelect;
