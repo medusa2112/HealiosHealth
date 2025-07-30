@@ -342,7 +342,7 @@ export default function ProductDetail() {
                         <li>• Free UK Delivery every 30 days</li>
                         <li>• Change or cancel anytime</li>
                         <li>• Refillable glass jar & recyclable refills</li>
-                        <li>• 2 free 30-minute consultations each year</li>
+                        <li>• Priority customer support</li>
                       </ul>
                     </div>
                   )}
@@ -413,9 +413,9 @@ export default function ProductDetail() {
                   Ask a question
                 </button>
               </Link>
-              <Link href="/consultation">
+              <Link href="/contact">
                 <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
-                  Book a free consultation
+                  Contact support
                 </button>
               </Link>
             </div>

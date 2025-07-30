@@ -75,7 +75,7 @@ export function Header() {
       items: [
         { href: "/products", label: "Shop All Products" },
         { href: "/quiz", label: "Take Our Wellness Quiz" },
-        { href: "/consultation", label: "Book Free Consultation" },
+
       ]
     }
   ];
@@ -171,13 +171,7 @@ export function Header() {
               </span>
             </Link>
             
-            <Link href="/consultation">
-              <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
-                isScrolled ? 'text-xs' : 'text-sm'
-              }`}>
-                Book a Consultation
-              </span>
-            </Link>
+
           </div>
           
           {/* Right Side Icons */}
@@ -222,11 +216,7 @@ export function Header() {
                       Supplement Quiz
                     </span>
                   </Link>
-                  <Link href="/consultation">
-                    <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                      Consultation
-                    </span>
-                  </Link>
+
                   <Link href="/about">
                     <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
                       About
@@ -341,19 +331,19 @@ export function Header() {
               <div className="bg-gray-900 overflow-hidden">
                 <img 
                   src="/attached_assets/Healios_1753559079971.png" 
-                  alt="Need more support?" 
+                  alt="Take our wellness quiz" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-sm font-medium text-white mb-2">
-                    Need more support?
+                    Need supplement guidance?
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Book a free 15 min consultation
+                    Take our personalized wellness quiz
                   </p>
-                  <Link href="/consultation">
+                  <Link href="/quiz">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
-                      Book Now →
+                      Start Quiz →
                     </button>
                   </Link>
                 </div>

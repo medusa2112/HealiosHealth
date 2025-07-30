@@ -1119,25 +1119,25 @@ export default function ProductComprehensive() {
         </div>
       </div>
 
-      {/* Consultation Section */}
+      {/* Support Section */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-            MEET OUR NUTRITIONAL THERAPISTS
+            NEED SUPPORT?
           </p>
           <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-4">
-            Through personalised nutrition<br />
-            advice, we support the whole you
+            Get in touch with our team<br />
+            for personalized guidance
           </h2>
           <Button className="bg-black text-white px-6 py-3 font-medium hover:bg-gray-800">
-            <Link href="/consultation" className="flex items-center">
-              Book your free consultation <ArrowRight className="w-4 h-4 ml-2" />
+            <Link href="/contact" className="flex items-center">
+              Contact our team <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </Button>
         </div>
       </section>
 
-      {/* Consultation Process */}
+      {/* Support Process */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -1151,17 +1151,17 @@ export default function ProductComprehensive() {
               <div>
                 <img
                   src={nutritionistImg}
-                  alt="Book consultation"
+                  alt="Take our quiz"
                   className="w-full h-48 object-cover mb-4"
                 />
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                   STEP 1
                 </p>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Book your free consultation
+                  Take our wellness quiz
                 </h3>
                 <p className="text-sm text-gray-600">
-                  We know how busy life gets. Choose a day and time to suit you, by Zoom or phone. Remember, this is support on your terms.
+                  Answer a few simple questions about your health goals and lifestyle to get personalized supplement recommendations.
                 </p>
               </div>
             </div>
@@ -1176,17 +1176,17 @@ export default function ProductComprehensive() {
               <div>
                 <img
                   src={nutritionistImg}
-                  alt="Bespoke advice"
+                  alt="Browse products"
                   className="w-full h-48 object-cover mb-4"
                 />
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                   STEP 2
                 </p>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Bespoke advice tailored to the whole you
+                  Browse our science-backed range
                 </h3>
                 <p className="text-sm text-gray-600">
-                  Our registered nutritional therapists will ask some gentle questions to understand how best to support your body, mind and mood.
+                  Explore our carefully formulated supplements, each backed by scientific research and designed for optimal absorption.
                 </p>
               </div>
             </div>
@@ -1208,10 +1208,10 @@ export default function ProductComprehensive() {
                   STEP 3
                 </p>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Your health journey begins
+                  Start your wellness journey
                 </h3>
                 <p className="text-sm text-gray-600">
-                  You'll receive an email with your personalised health routine. Click to order and your supplements will arrive in next to no time.
+                  Order your selected supplements and begin your personalized health routine with fast, reliable delivery.
                 </p>
               </div>
             </div>

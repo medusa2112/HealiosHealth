@@ -151,7 +151,7 @@ export default function QuizPage() {
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-lg">💬</span>
-                  <span>Book a free consultation with our nutritionists</span>
+                  <span>Contact our team for personalized guidance</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-lg">🛒</span>
@@ -161,9 +161,9 @@ export default function QuizPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/consultation">
+              <Link href="/contact">
                 <button className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors">
-                  Book Free Consultation
+                  Contact Our Team
                 </button>
               </Link>
               <Link href="/products">

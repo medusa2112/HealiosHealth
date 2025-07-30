@@ -326,9 +326,9 @@ export default function Science() {
                 Shop Supplements
               </button>
             </Link>
-            <Link href="/consultation">
+            <Link href="/quiz">
               <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                Book Free Consultation
+                Take Wellness Quiz
               </button>
             </Link>
           </div>
