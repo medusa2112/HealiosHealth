@@ -584,17 +584,26 @@ export default function ProductComprehensive() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="bg-red-50 border border-red-200 p-4 text-center">
-                  <p className="text-red-800 font-medium text-sm">Currently Sold Out</p>
-                  <p className="text-red-600 text-xs mt-1">We're working hard to restock this popular product</p>
-                </div>
-                
-                <Button 
-                  onClick={() => setShowPreOrderModal(true)}
-                  className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
-                >
-                  PRE-ORDER NOW
-                </Button>
+                {product.id === 'childrens-multivitamin' ? (
+                  <div className="bg-red-50 border border-red-200 p-4 text-center">
+                    <p className="text-red-800 font-medium text-sm">Preorder Cap Reached</p>
+                    <p className="text-red-600 text-xs mt-1">We've reached maximum pre-orders for this product</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="bg-red-50 border border-red-200 p-4 text-center">
+                      <p className="text-red-800 font-medium text-sm">Currently Sold Out</p>
+                      <p className="text-red-600 text-xs mt-1">We're working hard to restock this popular product</p>
+                    </div>
+                    
+                    <Button 
+                      onClick={() => setShowPreOrderModal(true)}
+                      className="w-full bg-red-600 text-white py-3 text-sm font-medium hover:bg-red-700"
+                    >
+                      PRE-ORDER NOW
+                    </Button>
+                  </>
+                )}
               </div>
             )}
 

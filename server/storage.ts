@@ -370,6 +370,10 @@ export class MemStorage implements IStorage {
     const newPreOrder: PreOrder = {
       ...preOrder,
       id,
+      quantity: preOrder.quantity ?? 1,
+      notes: preOrder.notes ?? null,
+      customerPhone: preOrder.customerPhone ?? null,
+      status: preOrder.status ?? 'pending',
       createdAt: new Date().toISOString(),
     };
     this.preOrders.set(id, newPreOrder);

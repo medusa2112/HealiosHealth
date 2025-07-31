@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
-import { PreOrderModal } from "@/components/pre-order-modal";
+import { PreOrderPopup } from "@/components/pre-order-popup";
 import { useState } from "react";
 
 interface ProductCardProps {
@@ -70,8 +70,12 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
 
             {!product.inStock && (
-              <span className="bg-gray-600 text-white px-2 py-1 text-xs font-medium">
-                SOLD OUT
+              <span className={`text-white px-2 py-1 text-xs font-medium ${
+                product.id === 'childrens-multivitamin' 
+                  ? 'bg-red-600' 
+                  : 'bg-red-600'
+              }`}>
+                {product.id === 'childrens-multivitamin' ? 'PREORDER CAP REACHED' : 'SOLD OUT'}
               </span>
             )}
           </div>
@@ -85,6 +89,10 @@ export function ProductCard({ product }: ProductCardProps) {
               >
                 Add to Cart
               </Button>
+            ) : product.id === 'childrens-multivitamin' ? (
+              <div className="bg-red-600 text-white px-6 py-2 text-sm font-medium">
+                Cap Reached
+              </div>
             ) : (
               <Button
                 onClick={(e) => {
@@ -92,9 +100,9 @@ export function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   setShowPreOrderModal(true);
                 }}
-                className="bg-healios-cyan text-white px-6 py-2 text-sm font-medium hover:bg-healios-cyan/90 transition-colors"
+                className="bg-red-600 text-white px-6 py-2 text-sm font-medium hover:bg-red-700 transition-colors"
               >
-                Pre-Order 10% Off
+                Pre-Order Now
               </Button>
             )}
           </div>
@@ -134,11 +142,10 @@ export function ProductCard({ product }: ProductCardProps) {
     </Link>
     
     {/* Pre-order Modal */}
-    <PreOrderModal
+    <PreOrderPopup
+      product={product}
       isOpen={showPreOrderModal}
       onClose={() => setShowPreOrderModal(false)}
-      productName={product.name}
-      productId={product.id}
     />
     </>
   );
