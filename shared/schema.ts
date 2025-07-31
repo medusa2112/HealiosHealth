@@ -30,9 +30,15 @@ export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
 
 export const preOrders = pgTable("pre_orders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: text("email").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerPhone: text("customer_phone"),
   productId: text("product_id").notNull(),
   productName: text("product_name").notNull(),
+  quantity: integer("quantity").default(1),
+  notes: text("notes"),
+  productPrice: text("product_price").notNull(),
+  status: text("status").default("pending"), // pending, contacted, fulfilled, cancelled
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 

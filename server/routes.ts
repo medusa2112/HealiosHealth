@@ -75,6 +75,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Pre-order submission
+  app.post("/api/pre-orders", async (req, res) => {
+    try {
+      const preOrderData = insertPreOrderSchema.parse(req.body);
+      const preOrder = await storage.createPreOrder(preOrderData);
+      
+      // Send notification emails using Resend
+      await EmailService.sendPreOrderNotification(preOrder);
+      
+      res.json(preOrder);
+    } catch (error) {
+      console.error('Pre-order submission error:', error);
+      res.status(400).json({ message: "Failed to submit pre-order" });
+    }
+  });
+
   // Stripe payment route for one-time payments
   app.post("/api/create-payment-intent", async (req, res) => {
     try {

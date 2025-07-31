@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import type { PreOrder } from '@shared/schema';
 import { type Order } from '@shared/schema';
 
 interface CartItem {
@@ -105,6 +106,129 @@ export class EmailService {
       return true;
     } catch (error) {
       console.error('Failed to send order confirmation email:', error);
+      return false;
+    }
+  }
+
+  static async sendPreOrderNotification(preOrder: PreOrder): Promise<boolean> {
+    try {
+      const adminHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>New Pre-Order - Healios</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #000; margin: 0;">Healios</h1>
+            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 10px 0;">🎯 New Pre-Order Alert</h2>
+            <p style="margin: 0; color: #666;">A customer has placed a pre-order for an out-of-stock product.</p>
+          </div>
+
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Details</h3>
+            <p><strong>Name:</strong> ${preOrder.customerName}</p>
+            <p><strong>Email:</strong> <a href="mailto:${preOrder.customerEmail}" style="color: #000;">${preOrder.customerEmail}</a></p>
+            ${preOrder.customerPhone ? `<p><strong>Phone:</strong> <a href="tel:${preOrder.customerPhone}" style="color: #000;">${preOrder.customerPhone}</a></p>` : ''}
+            <p><strong>Pre-Order Date:</strong> ${new Date(preOrder.createdAt || Date.now()).toLocaleDateString()}</p>
+          </div>
+
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Product Information</h3>
+            <p><strong>Product:</strong> ${preOrder.productName}</p>
+            <p><strong>Price:</strong> R${preOrder.productPrice}</p>
+            <p><strong>Quantity Requested:</strong> ${preOrder.quantity}</p>
+            <p><strong>Total Value:</strong> R${(parseFloat(preOrder.productPrice) * preOrder.quantity).toFixed(2)}</p>
+          </div>
+
+          ${preOrder.notes ? `
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Notes</h3>
+            <p style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 0;">${preOrder.notes}</p>
+          </div>` : ''}
+
+          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <h3 style="margin: 0 0 10px 0;">Next Steps</h3>
+            <p style="margin: 0;">Add this customer to the pre-order waiting list and notify them when stock arrives.</p>
+          </div>
+
+          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 12px;">
+              Pre-Order ID: ${preOrder.id}
+            </p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      // Send to both admin emails
+      const adminEmails = ['dn@thefourths.com', 'ms@thefourths.com'];
+      
+      for (const adminEmail of adminEmails) {
+        await resend.emails.send({
+          from: this.FROM_EMAIL,
+          to: adminEmail,
+          subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
+          html: adminHtml,
+        });
+      }
+
+      // Send confirmation to customer
+      const customerHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Pre-Order Confirmation - Healios</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #000; margin: 0;">Healios</h1>
+            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 10px 0;">Pre-Order Confirmed!</h2>
+            <p style="margin: 0; color: #666;">Thank you for your interest in ${preOrder.productName}. We'll notify you as soon as it's back in stock.</p>
+          </div>
+
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Your Pre-Order</h3>
+            <p><strong>Product:</strong> ${preOrder.productName}</p>
+            <p><strong>Quantity:</strong> ${preOrder.quantity}</p>
+            <p><strong>Price:</strong> R${preOrder.productPrice} each</p>
+            <p><strong>Estimated Total:</strong> R${(parseFloat(preOrder.productPrice) * preOrder.quantity).toFixed(2)}</p>
+          </div>
+
+          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <h3 style="margin: 0 0 10px 0;">What Happens Next?</h3>
+            <p style="margin: 0;">We'll email you immediately when this product is back in stock. No payment is required until then.</p>
+          </div>
+
+          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 12px;">
+              Questions? Contact us at <a href="mailto:support@thehealios.com" style="color: #000;">support@thehealios.com</a>
+            </p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: preOrder.customerEmail,
+        subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
+        html: customerHtml,
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error sending pre-order notification emails:', error);
       return false;
     }
   }

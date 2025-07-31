@@ -31,18 +31,15 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
     setIsSubmitting(true);
 
     try {
-      await apiRequest('/api/pre-orders', {
-        method: 'POST',
-        body: JSON.stringify({
-          productId: product.id,
-          productName: product.name,
-          customerName: formData.name,
-          customerEmail: formData.email,
-          customerPhone: formData.phone,
-          quantity: formData.quantity,
-          notes: formData.notes,
-          productPrice: product.price
-        })
+      await apiRequest('/api/pre-orders', 'POST', {
+        productId: product.id,
+        productName: product.name,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        quantity: formData.quantity,
+        notes: formData.notes,
+        productPrice: product.price
       });
 
       setIsSuccess(true);

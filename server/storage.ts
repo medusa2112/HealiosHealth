@@ -18,6 +18,7 @@ export interface IStorage {
   // Pre-orders
   createPreOrder(preOrder: InsertPreOrder): Promise<PreOrder>;
   getPreOrders(): Promise<PreOrder[]>;
+  getPreOrdersByProduct(productId: string): Promise<PreOrder[]>;
   
   // Orders
   createOrder(order: InsertOrder): Promise<Order>;
@@ -377,6 +378,10 @@ export class MemStorage implements IStorage {
 
   async getPreOrders(): Promise<PreOrder[]> {
     return Array.from(this.preOrders.values());
+  }
+
+  async getPreOrdersByProduct(productId: string): Promise<PreOrder[]> {
+    return Array.from(this.preOrders.values()).filter(preOrder => preOrder.productId === productId);
   }
 
   // Article methods

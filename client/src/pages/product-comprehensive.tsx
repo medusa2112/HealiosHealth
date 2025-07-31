@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Link } from "wouter";
 import { SEOHead } from "@/components/seo-head";
-import { PreOrderModal } from "@/components/pre-order-modal";
+import { PreOrderPopup } from "@/components/pre-order-popup";
 
 // Import images
 import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
@@ -591,9 +591,9 @@ export default function ProductComprehensive() {
                 
                 <Button 
                   onClick={() => setShowPreOrderModal(true)}
-                  className="w-full bg-healios-cyan text-white py-3 text-sm font-medium hover:bg-healios-cyan/90"
+                  className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800"
                 >
-                  PRE-ORDER & GET 10% OFF
+                  PRE-ORDER NOW
                 </Button>
               </div>
             )}
@@ -1552,6 +1552,13 @@ export default function ProductComprehensive() {
           </div>
         </div>
       )}
+
+      {/* Pre-Order Popup */}
+      <PreOrderPopup
+        product={product}
+        isOpen={showPreOrderModal}
+        onClose={() => setShowPreOrderModal(false)}
+      />
     </div>
   );
 }
