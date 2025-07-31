@@ -27,14 +27,12 @@ export function CartSidebar() {
       <SheetContent side="right" className="w-full sm:w-[440px] flex flex-col h-full p-0">
         {/* Header */}
         <div className="px-6 py-4 border-b bg-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5" />
-              <SheetTitle className="text-lg font-semibold text-gray-900">
-                Your Cart
-              </SheetTitle>
-            </div>
-            <Badge variant="secondary" className="bg-black text-white">
+          <div className="flex items-center gap-3">
+            <ShoppingBag className="w-5 h-5" />
+            <SheetTitle className="text-lg font-semibold text-gray-900 flex-1">
+              Your Cart
+            </SheetTitle>
+            <Badge variant="secondary" className="bg-black text-white flex-shrink-0">
               {totalItems} {totalItems === 1 ? 'item' : 'items'}
             </Badge>
           </div>
