@@ -24,7 +24,7 @@ export function CartSidebar() {
 
   return (
     <Sheet open={cart.isOpen} onOpenChange={toggleCart}>
-      <SheetContent side="right" className="w-full sm:w-[440px] flex flex-col h-full p-0">
+      <SheetContent side="right" className="w-full sm:w-[440px] flex flex-col h-auto max-h-[90vh] p-0">
         {/* Header */}
         <div className="px-6 py-4 border-b bg-white">
           <div className="flex items-center gap-3">
@@ -64,9 +64,9 @@ export function CartSidebar() {
         </div>
 
         {/* Cart Content */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex flex-col">
           {cart.items.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+            <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <ShoppingBag className="w-8 h-8 text-gray-400" />
               </div>
@@ -79,7 +79,7 @@ export function CartSidebar() {
           ) : (
             <>
               {/* Items List */}
-              <div className="flex-1 overflow-y-auto px-6 py-4">
+              <div className="overflow-y-auto max-h-[50vh] px-6 py-4">
                 <div className="space-y-4">
                   {cart.items.map((item) => (
                     <div key={item.product.id} className="bg-white border border-gray-200 p-4 hover:shadow-sm transition-shadow">
