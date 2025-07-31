@@ -43,7 +43,7 @@ export default function ProductComprehensive() {
         addToCart(product);
       }
       
-      // If bundle is added, also add the bundle product to cart
+      // If bundle is selected, add the bundle product too
       if (bundleAdded && allProducts) {
         const productContent = getProductContent(product.id);
         const bundleProduct = allProducts.find(p => p.name === productContent.bundleWith);
@@ -54,7 +54,7 @@ export default function ProductComprehensive() {
         }
       }
       
-      const bundleInfo = bundleAdded ? ' (with bundle discount)' : '';
+      const bundleInfo = bundleAdded ? ' with bundle' : '';
       toast({
         title: "Added to cart!",
         description: `${quantity}x ${product.name}${bundleInfo} has been added to your cart.`,
@@ -70,20 +70,16 @@ export default function ProductComprehensive() {
     
     if (bundleProduct) {
       if (bundleAdded) {
-        // Remove from cart
-        removeFromCart(bundleProduct.id);
         setBundleAdded(false);
         toast({
-          title: "Bundle product removed",
-          description: `${bundleProduct.name} has been removed from your cart.`,
+          title: "Bundle removed",
+          description: `${bundleProduct.name} has been removed from your bundle selection.`,
         });
       } else {
-        // Add to cart
-        addToCart(bundleProduct);
         setBundleAdded(true);
         toast({
-          title: "Bundle product added!",
-          description: `${bundleProduct.name} has been added to your cart.`,
+          title: "Bundle added!",
+          description: `${bundleProduct.name} has been added to your bundle selection.`,
         });
       }
     }
