@@ -16,7 +16,7 @@ interface PreOrderPopupProps {
 
 export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
     email: '',
     phone: '',
     quantity: 1,
@@ -34,7 +34,7 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
       await apiRequest('/api/pre-orders', 'POST', {
         productId: product.id,
         productName: product.name,
-        customerName: formData.name,
+        customerName: formData.firstName,
         customerEmail: formData.email,
         customerPhone: formData.phone,
         quantity: formData.quantity,
@@ -53,7 +53,7 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
         onClose();
         setIsSuccess(false);
         setFormData({
-          name: '',
+          firstName: '',
           email: '',
           phone: '',
           quantity: 1,
@@ -123,17 +123,17 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="name" className="text-sm font-medium text-black">
-                    Full Name *
+                  <Label htmlFor="firstName" className="text-sm font-medium text-black">
+                    First Name *
                   </Label>
                   <Input
-                    id="name"
+                    id="firstName"
                     type="text"
                     required
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    value={formData.firstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                     className="mt-1 focus:ring-black focus:border-black"
-                    placeholder="Your full name"
+                    placeholder="Your first name"
                   />
                 </div>
                 <div>

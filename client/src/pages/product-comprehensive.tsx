@@ -1478,11 +1478,10 @@ export default function ProductComprehensive() {
       </div>
 
       {/* Pre-order Modal */}
-      <PreOrderModal
+      <PreOrderPopup
+        product={product}
         isOpen={showPreOrderModal}
         onClose={() => setShowPreOrderModal(false)}
-        productName={product.name}
-        productId={product.id}
       />
 
       {/* Bundle Product Modal */}
