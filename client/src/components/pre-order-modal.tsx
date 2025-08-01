@@ -15,6 +15,7 @@ interface PreOrderModalProps {
 
 export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOrderModalProps) {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
@@ -23,14 +24,17 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !name) return;
 
     setIsSubmitting(true);
     try {
       await apiRequest("POST", "/api/pre-orders", {
-        email,
+        customerEmail: email,
+        customerName: name,
         productId,
         productName,
+        productPrice: "Various", // For multi-product pre-orders
+        quantity: 1,
       });
       
       setIsSuccess(true);
@@ -51,6 +55,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
 
   const handleClose = () => {
     setEmail("");
+    setName("");
     setIsSuccess(false);
     onClose();
   };
@@ -91,6 +96,23 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
+                <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Full Name
+                </Label>
+                <div className="mt-1">
+                  <Input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your full name"
+                    required
+                    className="border-gray-300 dark:border-gray-600 focus:border-healios-cyan focus:ring-healios-cyan"
+                  />
+                </div>
+              </div>
+
+              <div>
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Email Address
                 </Label>
@@ -110,7 +132,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
 
               <Button 
                 type="submit" 
-                disabled={isSubmitting || !email}
+                disabled={isSubmitting || !email || !name}
                 className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Submitting..." : "Join Pre-Order List"}

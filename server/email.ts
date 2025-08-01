@@ -143,7 +143,7 @@ export class EmailService {
             <p><strong>Product:</strong> ${preOrder.productName}</p>
             <p><strong>Price:</strong> R${preOrder.productPrice}</p>
             <p><strong>Quantity Requested:</strong> ${preOrder.quantity}</p>
-            <p><strong>Total Value:</strong> R${(parseFloat(preOrder.productPrice) * preOrder.quantity).toFixed(2)}</p>
+            <p><strong>Total Value:</strong> R${(parseFloat(preOrder.productPrice) * (preOrder.quantity || 1)).toFixed(2)}</p>
           </div>
 
           ${preOrder.notes ? `
@@ -200,9 +200,9 @@ export class EmailService {
           <div style="margin-bottom: 30px;">
             <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Your Pre-Order</h3>
             <p><strong>Product:</strong> ${preOrder.productName}</p>
-            <p><strong>Quantity:</strong> ${preOrder.quantity}</p>
+            <p><strong>Quantity:</strong> ${preOrder.quantity || 1}</p>
             <p><strong>Price:</strong> R${preOrder.productPrice} each</p>
-            <p><strong>Estimated Total:</strong> R${(parseFloat(preOrder.productPrice) * preOrder.quantity).toFixed(2)}</p>
+            <p><strong>Estimated Total:</strong> R${(parseFloat(preOrder.productPrice) * (preOrder.quantity || 1)).toFixed(2)}</p>
           </div>
 
           <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
@@ -327,42 +327,5 @@ export class EmailService {
     }
   }
 
-  static async sendPreOrderNotification(productName: string, customerEmail: string, productId: string): Promise<boolean> {
-    try {
-      const html = `
-        <!DOCTYPE html>
-        <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #000;">New Pre-Order - Healios</h2>
-          
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin: 0 0 10px 0; color: #333;">Pre-Order Details</h3>
-            <p><strong>Product:</strong> ${productName}</p>
-            <p><strong>Customer Email:</strong> ${customerEmail}</p>
-            <p><strong>Product ID:</strong> ${productId}</p>
-            <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-          </div>
 
-          <div style="background: #e8f5e8; border: 1px solid #28a745; padding: 15px; border-radius: 8px;">
-            <p style="margin: 0; color: #155724;">
-              <strong>💡 Note:</strong> Customer will receive 10% discount when product becomes available.
-            </p>
-          </div>
-        </body>
-        </html>
-      `;
-
-      await resend.emails.send({
-        from: this.FROM_EMAIL,
-        to: this.ADMIN_EMAIL,
-        subject: `New Pre-Order: ${productName}`,
-        html,
-      });
-
-      return true;
-    } catch (error) {
-      console.error('Failed to send pre-order notification:', error);
-      return false;
-    }
-  }
 }

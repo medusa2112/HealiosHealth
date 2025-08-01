@@ -257,11 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send email notification using Resend
       try {
-        await EmailService.sendPreOrderNotification(
-          validatedData.productName,
-          validatedData.customerEmail,
-          validatedData.productId
-        );
+        await EmailService.sendPreOrderNotification(preOrder);
       } catch (emailError) {
         console.error('Failed to send pre-order email notification:', emailError);
         // Don't fail the pre-order if email fails
