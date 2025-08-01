@@ -31,17 +31,17 @@ export function StockUpdateBanner() {
 
   return (
     <>
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-amber-50 text-amber-900 px-4 py-3 shadow-lg transition-transform duration-500 border-b border-amber-200 ${
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-white text-black px-4 py-3 shadow-lg transition-transform duration-500 border-b border-gray-200 ${
         isClosing ? '-translate-y-full' : isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <Package className="h-5 w-5 text-amber-800 flex-shrink-0" />
+            <Package className="h-5 w-5 text-black flex-shrink-0" />
             <div className="min-w-0">
-              <p className="text-sm font-medium text-amber-900">
+              <p className="text-sm font-medium text-black">
                 Stock Update: New inventory arriving August 10th
               </p>
-              <p className="text-xs text-amber-700 hidden sm:block">
+              <p className="text-xs text-gray-600 hidden sm:block">
                 Pre-order now and save 10% on out-of-stock items
               </p>
             </div>
@@ -49,10 +49,10 @@ export function StockUpdateBanner() {
           
           <button
             onClick={handleClose}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-amber-100 transition-colors duration-200 flex-shrink-0"
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200 flex-shrink-0"
             aria-label="Close stock update notification"
           >
-            <X className="h-4 w-4 text-amber-800" />
+            <X className="h-4 w-4 text-black" />
           </button>
         </div>
       </div>
