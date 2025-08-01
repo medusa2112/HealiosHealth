@@ -119,7 +119,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-[300px] lg:w-[300px] flex flex-col p-0">
+      <SheetContent side="right" className="w-full sm:w-[400px] lg:w-[450px] flex flex-col p-0 backdrop-blur-sm bg-white/95 dark:bg-gray-900/95 border-l border-gray-200/50 dark:border-gray-700/50">
         {/* Header */}
         <SheetHeader className="px-6 py-4 border-b bg-black">
           <div className="flex items-center gap-3">
