@@ -28,7 +28,7 @@ export function StockNotification() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+      <div className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
         {/* Close button */}
         <button
           onClick={handleClose}
@@ -38,14 +38,12 @@ export function StockNotification() {
         </button>
 
         {/* Header with product image */}
-        <div className="relative h-48 bg-gradient-to-br from-teal-100 to-blue-100">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img 
-              src={haloGlowImage}
-              alt="Halo Glow Collagen"
-              className="w-32 h-32 object-contain drop-shadow-lg"
-            />
-          </div>
+        <div className="relative h-64 bg-gradient-to-br from-teal-100 to-blue-100">
+          <img 
+            src={haloGlowImage}
+            alt="Halo Glow Collagen"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Content */}
