@@ -119,7 +119,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-[400px] lg:w-[450px] flex flex-col p-0 backdrop-blur-sm bg-white/95 dark:bg-gray-900/95 border-l border-gray-200/50 dark:border-gray-700/50">
+      <SheetContent side="right" className="w-full sm:w-[400px] lg:w-[450px] flex flex-col p-0 backdrop-blur-sm bg-black/95 border-l border-gray-600/50">
         {/* Header */}
         <SheetHeader className="px-6 py-4 border-b bg-black">
           <div className="flex items-center gap-3">
@@ -141,24 +141,24 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                 key={message.id}
                 className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`flex items-start gap-2 max-w-[250px] ${
+                <div className={`flex items-start gap-2 max-w-[320px] ${
                   message.isUser ? 'flex-row-reverse' : 'flex-row'
                 }`}>
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.isUser 
-                      ? 'bg-black' 
-                      : 'bg-white border border-gray-300'
+                      ? 'bg-white' 
+                      : 'bg-gray-700 border border-gray-600'
                   }`}>
                     {message.isUser ? (
-                      <User className="w-3 h-3 text-white" />
+                      <User className="w-3 h-3 text-black" />
                     ) : (
-                      <Bot className="w-3 h-3 text-black" />
+                      <Bot className="w-3 h-3 text-white" />
                     )}
                   </div>
                   <div className={`rounded-lg p-3 ${
                     message.isUser
-                      ? 'bg-black text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                      ? 'bg-white text-black'
+                      : 'bg-gray-800 text-white border border-gray-700'
                   }`}>
                     <div 
                       className="text-sm leading-relaxed whitespace-pre-wrap"
@@ -170,7 +170,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                       }}
                     />
                     <p className={`text-xs mt-1 opacity-70 ${
-                      message.isUser ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'
+                      message.isUser ? 'text-gray-600' : 'text-gray-400'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -182,13 +182,13 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center">
-                    <Bot className="w-3 h-3 text-black" />
+                  <div className="w-6 h-6 rounded-full bg-gray-700 border border-gray-600 flex items-center justify-center">
+                    <Bot className="w-3 h-3 text-white" />
                   </div>
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+                  <div className="bg-gray-800 border border-gray-700 rounded-lg p-3">
                     <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-gray-600 dark:text-gray-400" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Thinking...</span>
+                      <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                      <span className="text-sm text-gray-400">Thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -201,14 +201,14 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
         {/* Quick Questions (only show if no conversation yet) */}
         {messages.length === 1 && (
-          <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Quick questions:</p>
+          <div className="px-4 py-2 border-t border-gray-700">
+            <p className="text-xs text-gray-400 mb-2">Quick questions:</p>
             <div className="space-y-1">
               {quickQuestions.slice(0, 3).map((question, index) => (
                 <button
                   key={index}
                   onClick={() => handleQuickQuestion(question)}
-                  className="text-xs text-left w-full p-2 rounded border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300"
+                  className="text-xs text-left w-full p-2 rounded border border-gray-600 hover:bg-gray-800 transition-colors text-gray-300 hover:text-white"
                 >
                   {question}
                 </button>
@@ -218,7 +218,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         )}
 
         {/* Input */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-t border-gray-700">
           <div className="flex gap-2">
             <Input
               ref={inputRef}
@@ -226,13 +226,13 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask about ingredients, dosages, benefits..."
-              className="flex-1 text-sm"
+              className="flex-1 text-sm bg-gray-800 border-gray-600 text-white placeholder:text-gray-400 focus:border-white"
               disabled={isLoading}
             />
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isLoading}
-              className="px-3 bg-black hover:bg-gray-800 text-white"
+              className="px-3 bg-white hover:bg-gray-200 text-black"
             >
               <Send className="w-4 h-4" />
             </Button>
