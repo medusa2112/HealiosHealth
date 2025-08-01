@@ -471,6 +471,35 @@ export default function ProductComprehensive() {
 
           {/* Product Details */}
           <div className="space-y-6">
+            {/* Product Title and Basic Info */}
+            <div className="mb-6">
+              <h1 className="text-3xl font-light text-gray-900 dark:text-white mb-4">
+                {product.name}
+              </h1>
+              
+              {/* Reviews */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${
+                      i < Math.floor(parseFloat(product.rating || "0"))
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                    }`} />
+                  ))}
+                </div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {product.rating} ({product.reviewCount} Reviews)
+                </span>
+              </div>
+
+              {/* Price */}
+              <div className="mb-6">
+                <span className="text-3xl font-light text-gray-900 dark:text-white">
+                  R{product.price}
+                </span>
+              </div>
+            </div>
             {/* Better Together Section - Only show if recommended product is in stock */}
             {(() => {
               const bundleProduct = allProducts?.find(p => p.name === productContent.bundleWith);
