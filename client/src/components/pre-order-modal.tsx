@@ -84,7 +84,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
                 Get 10% Off When Available
               </h2>
               <p className="text-gray-600 dark:text-gray-300 text-sm">
-                <strong>{productName}</strong> is currently sold out. Join our pre-order list to be notified when it's back and receive an exclusive 10% discount.
+                <strong>{productName}</strong> will be restocking soon. Secure your spot in line and save 10% on your order when new stock arrives on August 10th.
               </p>
             </div>
 
