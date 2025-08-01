@@ -7,13 +7,7 @@ export function StockUpdateBanner() {
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
-    // Check if user has already dismissed the banner in this session
-    const dismissed = sessionStorage.getItem('stockUpdateDismissed');
-    if (dismissed) {
-      setIsDismissed(true);
-      return;
-    }
-
+    // Always show the banner on every visit - remove session storage check
     // Auto-open after 10 seconds
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -27,7 +21,7 @@ export function StockUpdateBanner() {
     setTimeout(() => {
       setIsVisible(false);
       setIsDismissed(true);
-      sessionStorage.setItem('stockUpdateDismissed', 'true');
+      // Remove session storage since banner should appear on every visit
     }, 300); // Match the animation duration
   };
 
@@ -37,17 +31,17 @@ export function StockUpdateBanner() {
 
   return (
     <>
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 py-3 shadow-lg transition-transform duration-500 ${
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-amber-50 text-amber-900 px-4 py-3 shadow-lg transition-transform duration-500 border-b border-amber-200 ${
         isClosing ? '-translate-y-full' : isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0 flex-1">
-            <Package className="h-5 w-5 text-white flex-shrink-0" />
+            <Package className="h-5 w-5 text-amber-800 flex-shrink-0" />
             <div className="min-w-0">
-              <p className="text-sm font-medium">
+              <p className="text-sm font-medium text-amber-900">
                 Stock Update: New inventory arriving August 10th
               </p>
-              <p className="text-xs text-gray-300 hidden sm:block">
+              <p className="text-xs text-amber-700 hidden sm:block">
                 Pre-order now and save 10% on out-of-stock items
               </p>
             </div>
@@ -55,10 +49,10 @@ export function StockUpdateBanner() {
           
           <button
             onClick={handleClose}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors duration-200 flex-shrink-0"
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-amber-100 transition-colors duration-200 flex-shrink-0"
             aria-label="Close stock update notification"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4 text-amber-800" />
           </button>
         </div>
       </div>
