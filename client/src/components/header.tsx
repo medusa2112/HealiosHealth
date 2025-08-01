@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Menu, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, ChevronDown, MessageCircle } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import healiosLogo from "@assets/healios-logo (1)_1753466737582.png";
 import { LearningPopup } from './learning-popup';
+import { AssistantSidebar } from './assistant-sidebar';
 
 export function Header() {
   const [location] = useLocation();
@@ -13,6 +14,7 @@ export function Header() {
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   
   const totalItems = getTotalItems();
 
@@ -177,6 +179,18 @@ export function Header() {
           
           {/* Right Side Icons */}
           <div className="flex items-center space-x-2">
+            {/* Assistant */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAssistantOpen(true)}
+              className="text-white hover:bg-transparent hover:text-healios-cyan transition-colors duration-200"
+            >
+              <MessageCircle className={`transition-all duration-300 ${
+                isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+              }`} />
+            </Button>
+
             {/* Cart */}
             <Button
               variant="ghost"
@@ -377,6 +391,12 @@ export function Header() {
       
       {/* Learning Popup */}
       <LearningPopup />
+
+      {/* Assistant Sidebar */}
+      <AssistantSidebar 
+        isOpen={isAssistantOpen} 
+        onClose={() => setIsAssistantOpen(false)} 
+      />
     </header>
   );
 }
