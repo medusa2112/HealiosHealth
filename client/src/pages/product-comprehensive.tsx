@@ -68,7 +68,7 @@ export default function ProductComprehensive() {
     const productContent = getProductContent(product.id);
     const bundleProduct = allProducts.find(p => p.name === productContent.bundleWith);
     
-    if (bundleProduct) {
+    if (bundleProduct && bundleProduct.inStock) {
       if (bundleAdded) {
         setBundleAdded(false);
         toast({
@@ -471,79 +471,88 @@ export default function ProductComprehensive() {
 
           {/* Product Details */}
           <div className="space-y-6">
-            {/* Better Together Section */}
-            <div className="border border-gray-200 p-4 mb-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 bg-black text-white flex items-center justify-center text-xs font-medium">
-                  +
-                </div>
-                <h3 className="font-medium text-sm">Better Together</h3>
-              </div>
+            {/* Better Together Section - Only show if recommended product is in stock */}
+            {(() => {
+              const bundleProduct = allProducts?.find(p => p.name === productContent.bundleWith);
+              const showBundleSection = bundleProduct && bundleProduct.inStock;
               
-              <p className="text-xs text-gray-600 mb-4">Expert Nutritionists Recommend This Combination</p>
+              if (!showBundleSection) return null;
               
-              <div className="space-y-3">
-                {/* Current Product */}
-                <div className="flex items-center gap-3 p-3 bg-gray-50">
-                  <img src={product.imageUrl} alt={product.name} className="w-10 h-10 object-cover" />
-                  <div className="flex-1">
-                    <p className="text-xs font-medium">{product.name}</p>
-                    <p className="text-xs text-gray-600">R{product.price}</p>
+              return (
+                <div className="border border-gray-200 p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-6 h-6 bg-black text-white flex items-center justify-center text-xs font-medium">
+                      +
+                    </div>
+                    <h3 className="font-medium text-sm">Better Together</h3>
                   </div>
-                  <div className="text-xs text-gray-500">{bundleAdded ? '✓ Added to cart' : ''}</div>
-                </div>
+                  
+                  <p className="text-xs text-gray-600 mb-4">Expert Nutritionists Recommend This Combination</p>
+                  
+                  <div className="space-y-3">
+                    {/* Current Product */}
+                    <div className="flex items-center gap-3 p-3 bg-gray-50">
+                      <img src={product.imageUrl} alt={product.name} className="w-10 h-10 object-cover" />
+                      <div className="flex-1">
+                        <p className="text-xs font-medium">{product.name}</p>
+                        <p className="text-xs text-gray-600">R{product.price}</p>
+                      </div>
+                      <div className="text-xs text-gray-500">{bundleAdded ? '✓ Added to cart' : ''}</div>
+                    </div>
 
-                {/* Recommended Product */}
-                <div className="flex items-center gap-3 p-3 border border-gray-200">
-                  <div className="w-10 h-10 bg-gray-100 flex items-center justify-center cursor-pointer" onClick={() => setShowBundleModal(true)}>
-                    {bundleAdded ? <Check className="w-4 h-4 text-green-600" /> : <Plus className="w-4 h-4 text-gray-400" />}
-                  </div>
-                  <div className="flex-1 cursor-pointer" onClick={() => setShowBundleModal(true)}>
-                    <p className="text-xs font-medium">{productContent.bundleWith}</p>
-                    <p className="text-xs text-gray-600">Recommended for enhanced benefits</p>
-                  </div>
-                  <Button 
-                    size="sm" 
-                    className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
-                    onClick={handleToggleBundleProduct}
-                  >
-                    {bundleAdded ? 'Remove' : 'Add'}
-                  </Button>
-                </div>
+                    {/* Recommended Product */}
+                    <div className="flex items-center gap-3 p-3 border border-gray-200">
+                      <div className="w-10 h-10 bg-gray-100 flex items-center justify-center cursor-pointer" onClick={() => setShowBundleModal(true)}>
+                        {bundleAdded ? <Check className="w-4 h-4 text-green-600" /> : <Plus className="w-4 h-4 text-gray-400" />}
+                      </div>
+                      <div className="flex-1 cursor-pointer" onClick={() => setShowBundleModal(true)}>
+                        <p className="text-xs font-medium">{productContent.bundleWith}</p>
+                        <p className="text-xs text-gray-600">Recommended for enhanced benefits</p>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        className="bg-black text-white px-3 py-1 text-xs hover:bg-gray-800"
+                        onClick={handleToggleBundleProduct}
+                      >
+                        {bundleAdded ? 'Remove' : 'Add'}
+                      </Button>
+                    </div>
 
-                {/* Bundle Benefits */}
-                <div className="bg-green-50 border border-green-200 p-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <p className="text-xs font-medium text-green-800">Bundle Benefits</p>
-                  </div>
-                  <p className="text-xs text-green-700">
-                    {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
-                    {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
-                    {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
-                    {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
-                    {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
-                    {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
-                    {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
-                    {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
-                    {product.id === 'childrens-multivitamin' && 'Complete multivitamin foundation enhanced with extra vitamin D for growing bones and immunity.'}
-                    {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
-                    {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'childrens-multivitamin', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
-                  </p>
-                </div>
+                    {/* Bundle Benefits */}
+                    <div className="bg-green-50 border border-green-200 p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <p className="text-xs font-medium text-green-800">Bundle Benefits</p>
+                      </div>
+                      <p className="text-xs text-green-700">
+                        {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
+                        {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
+                        {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
+                        {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
+                        {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
+                        {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
+                        {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
+                        {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
+                        {product.id === 'childrens-multivitamin' && 'Complete multivitamin foundation enhanced with extra vitamin D for growing bones and immunity.'}
+                        {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
+                        {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'childrens-multivitamin', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
+                      </p>
+                    </div>
 
-                {/* Bundle Pricing */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                  <div className="text-xs">
-                    <p className="font-medium">Bundle Price: {productContent.bundlePrice}</p>
-                    <p className="text-gray-600 line-through">{productContent.bundleOriginalPrice}</p>
-                  </div>
-                  <div className="text-xs font-medium text-green-600">
-                    Save R{(parseFloat(productContent.bundleOriginalPrice.replace('R', '')) - parseFloat(productContent.bundlePrice.replace('R', ''))).toFixed(2)}
+                    {/* Bundle Pricing */}
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                      <div className="text-xs">
+                        <p className="font-medium">Bundle Price: {productContent.bundlePrice}</p>
+                        <p className="text-gray-600 line-through">{productContent.bundleOriginalPrice}</p>
+                      </div>
+                      <div className="text-xs font-medium text-green-600">
+                        Save R{(parseFloat(productContent.bundleOriginalPrice.replace('R', '')) - parseFloat(productContent.bundlePrice.replace('R', ''))).toFixed(2)}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Add to Cart Section */}
             {product.inStock ? (
