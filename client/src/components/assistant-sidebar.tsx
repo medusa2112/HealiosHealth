@@ -125,8 +125,12 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
           {/* Animated background pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] via-transparent to-white/[0.02] animate-pulse"></div>
           <div className="relative z-10 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white to-gray-200 flex items-center justify-center shadow-lg">
-              <Bot className="w-6 h-6 text-black" />
+            <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20">
+              <img 
+                src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                alt="Hannah - Your nutrition expert"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex-1">
               <SheetTitle className="text-xl font-bold text-white mb-1">Hannah</SheetTitle>
@@ -148,15 +152,19 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                 <div className={`flex items-start gap-3 max-w-[360px] ${
                   message.isUser ? 'flex-row-reverse' : 'flex-row'
                 }`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg ${
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden ${
                     message.isUser 
                       ? 'bg-gradient-to-br from-white to-gray-100' 
-                      : 'bg-gradient-to-br from-gray-800 to-black border border-gray-600'
+                      : 'ring-1 ring-gray-600'
                   }`}>
                     {message.isUser ? (
                       <User className="w-4 h-4 text-black" />
                     ) : (
-                      <Bot className="w-4 h-4 text-white" />
+                      <img 
+                        src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                        alt="Hannah"
+                        className="w-full h-full object-cover"
+                      />
                     )}
                   </div>
                   <div className={`rounded-2xl p-4 shadow-lg backdrop-blur-sm ${
@@ -186,8 +194,12 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
             {isLoading && (
               <div className="flex justify-start animate-fadeIn">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-800 to-black border border-gray-600 flex items-center justify-center shadow-lg">
-                    <Bot className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 rounded-full overflow-hidden shadow-lg ring-1 ring-gray-600">
+                    <img 
+                      src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                      alt="Hannah"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="bg-gradient-to-br from-gray-800/90 to-black/90 border border-gray-700/50 rounded-2xl p-4 shadow-lg backdrop-blur-sm">
                     <div className="flex items-center gap-3">
