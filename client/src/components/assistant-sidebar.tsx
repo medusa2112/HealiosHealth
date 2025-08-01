@@ -129,7 +129,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               <Bot className="w-6 h-6 text-black" />
             </div>
             <div className="flex-1">
-              <SheetTitle className="text-xl font-bold text-white mb-1">Healios Assistant</SheetTitle>
+              <SheetTitle className="text-xl font-bold text-white mb-1">Hannah</SheetTitle>
               <p className="text-sm text-gray-300 font-medium">Your nutrition expert • Always here to help</p>
             </div>
           </div>
