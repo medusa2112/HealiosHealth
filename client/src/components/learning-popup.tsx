@@ -118,13 +118,9 @@ export function LearningPopup() {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 ${
+          className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 bg-black hover:bg-gray-800 border-none ${
             isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
           }`}
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            border: 'none'
-          }}
         >
           <MessageCircle className="w-6 h-6 text-white" />
         </Button>
@@ -136,21 +132,21 @@ export function LearningPopup() {
       }`}>
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-96 h-[600px] flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-600 to-blue-600">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-black">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                <Bot className="w-5 h-5 text-black" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Healios Assistant</h3>
-                <p className="text-xs text-white/80">Ask about our supplements</p>
+                <p className="text-xs text-gray-300">Ask about our supplements</p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20 rounded-full w-8 h-8 p-0"
+              className="text-white hover:bg-white/10 rounded-full w-8 h-8 p-0"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -169,25 +165,25 @@ export function LearningPopup() {
                   }`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                       message.isUser 
-                        ? 'bg-blue-600' 
-                        : 'bg-gradient-to-r from-purple-600 to-blue-600'
+                        ? 'bg-black' 
+                        : 'bg-white border border-gray-300'
                     }`}>
                       {message.isUser ? (
                         <User className="w-3 h-3 text-white" />
                       ) : (
-                        <Bot className="w-3 h-3 text-white" />
+                        <Bot className="w-3 h-3 text-black" />
                       )}
                     </div>
                     <div className={`rounded-lg p-3 ${
                       message.isUser
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-black text-white'
                         : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
                     }`}>
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">
                         {message.content}
                       </p>
                       <p className={`text-xs mt-1 opacity-70 ${
-                        message.isUser ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                        message.isUser ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'
                       }`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
@@ -199,8 +195,8 @@ export function LearningPopup() {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="flex items-start gap-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
-                      <Bot className="w-3 h-3 text-white" />
+                    <div className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center">
+                      <Bot className="w-3 h-3 text-black" />
                     </div>
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                       <div className="flex items-center gap-2">
@@ -225,7 +221,7 @@ export function LearningPopup() {
                   <button
                     key={index}
                     onClick={() => handleQuickQuestion(question)}
-                    className="text-xs text-left w-full p-2 rounded bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+                    className="text-xs text-left w-full p-2 rounded border border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300"
                   >
                     {question}
                   </button>
@@ -249,7 +245,7 @@ export function LearningPopup() {
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="px-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                className="px-3 bg-black hover:bg-gray-800 text-white"
               >
                 <Send className="w-4 h-4" />
               </Button>
