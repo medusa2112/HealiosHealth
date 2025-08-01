@@ -117,8 +117,8 @@ export class MemStorage implements IStorage {
       },
       {
         id: "probiotics",
-        name: "Probiotic Gummies (10 Billion CFU)",
-        description: "Premium gut health support with 10 billion CFU multi-strain probiotic complex in convenient strawberry-flavored gummy format for digestive wellness and immune support.",
+        name: "Probiotic Complex (10 Billion CFU)",
+        description: "Premium gut health support with 10 billion CFU multi-strain probiotic complex in advanced capsule format with delayed-release technology for optimal digestive wellness and immune support.",
         price: "419.00",
         originalPrice: null,
         imageUrl: "/assets/Probiotics10Bil-X_1753615874344.png",
