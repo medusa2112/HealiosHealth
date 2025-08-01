@@ -160,9 +160,15 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                       ? 'bg-black text-white'
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
                   }`}>
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
+                    <div 
+                      className="text-sm leading-relaxed whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{
+                        __html: message.content
+                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                          .replace(/\n/g, '<br>')
+                      }}
+                    />
                     <p className={`text-xs mt-1 opacity-70 ${
                       message.isUser ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'
                     }`}>
