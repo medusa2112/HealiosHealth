@@ -119,16 +119,16 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-[420px] lg:w-[480px] flex flex-col p-0 backdrop-blur-xl bg-gradient-to-br from-gray-900 via-black to-gray-800 border-l border-gray-600/30 shadow-2xl">
+      <SheetContent side="right" className="w-full sm:w-[420px] lg:w-[480px] flex flex-col p-0 backdrop-blur-2xl bg-black/40 border-l border-white/10 shadow-2xl">
         {/* Header with gradient background */}
-        <SheetHeader className="px-6 py-6 bg-gradient-to-r from-gray-900 via-black to-gray-800 relative overflow-hidden">
+        <SheetHeader className="px-6 py-6 bg-black/60 backdrop-blur-xl relative overflow-hidden">
           {/* Animated background pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] via-transparent to-white/[0.02] animate-pulse"></div>
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20">
               <img 
-                src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
-                alt="Hannah - Your nutrition expert"
+                src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                alt="Hannah - Product information assistant"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -142,7 +142,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         </SheetHeader>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-6 bg-gradient-to-b from-black/20 to-transparent">
+        <ScrollArea className="flex-1 p-6 bg-black/10">
           <div className="space-y-6">
             {messages.map((message) => (
               <div
@@ -161,7 +161,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                       <User className="w-4 h-4 text-black" />
                     ) : (
                       <img 
-                        src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                        src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
                         alt="Hannah"
                         className="w-full h-full object-cover"
                       />
@@ -196,7 +196,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full overflow-hidden shadow-lg ring-1 ring-gray-600">
                     <img 
-                      src="/attached_assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                      src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
                       alt="Hannah"
                       className="w-full h-full object-cover"
                     />
@@ -220,7 +220,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
         {/* Quick Questions (only show if no conversation yet) */}
         {messages.length === 1 && (
-          <div className="px-6 py-4 bg-gradient-to-r from-gray-900/50 to-black/50 backdrop-blur-sm">
+          <div className="px-6 py-4 bg-black/30 backdrop-blur-xl">
             <div className="mb-3 flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-white animate-pulse"></div>
               <p className="text-sm text-white font-medium">Quick questions</p>
@@ -240,7 +240,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         )}
 
         {/* Input */}
-        <div className="p-6 bg-gradient-to-r from-gray-900 to-black backdrop-blur-sm">
+        <div className="p-6 bg-black/60 backdrop-blur-xl">
           <div className="relative">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             <div className="flex gap-3 pt-4">
