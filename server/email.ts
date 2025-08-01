@@ -111,6 +111,7 @@ export class EmailService {
   }
 
   static async sendPreOrderNotification(preOrder: PreOrder): Promise<boolean> {
+    console.log('📧 Starting pre-order email notification process for:', preOrder.customerEmail);
     try {
       const adminHtml = `
         <!DOCTYPE html>
@@ -169,13 +170,15 @@ export class EmailService {
       // Send to both admin emails
       const adminEmails = ['dn@thefourths.com', 'ms@thefourths.com'];
       
+      console.log('📧 Sending admin emails to:', adminEmails);
       for (const adminEmail of adminEmails) {
-        await resend.emails.send({
+        const adminResult = await resend.emails.send({
           from: this.FROM_EMAIL,
           to: adminEmail,
           subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
           html: adminHtml,
         });
+        console.log(`📧 Admin email sent to ${adminEmail}:`, adminResult);
       }
 
       // Send confirmation to customer
@@ -219,13 +222,16 @@ export class EmailService {
         </html>
       `;
 
-      await resend.emails.send({
+      console.log('📧 Sending customer confirmation email to:', preOrder.customerEmail);
+      const customerResult = await resend.emails.send({
         from: this.FROM_EMAIL,
         to: preOrder.customerEmail,
         subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
         html: customerHtml,
       });
+      console.log('📧 Customer email sent:', customerResult);
 
+      console.log('✅ All pre-order emails sent successfully');
       return true;
     } catch (error) {
       console.error('Error sending pre-order notification emails:', error);

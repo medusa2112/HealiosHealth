@@ -75,21 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Pre-order submission
-  app.post("/api/pre-orders", async (req, res) => {
-    try {
-      const preOrderData = insertPreOrderSchema.parse(req.body);
-      const preOrder = await storage.createPreOrder(preOrderData);
-      
-      // Send notification emails using Resend
-      await EmailService.sendPreOrderNotification(preOrder);
-      
-      res.json(preOrder);
-    } catch (error) {
-      console.error('Pre-order submission error:', error);
-      res.status(400).json({ message: "Failed to submit pre-order" });
-    }
-  });
+
 
   // Stripe payment route for one-time payments
   app.post("/api/create-payment-intent", async (req, res) => {
@@ -256,10 +242,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const preOrder = await storage.createPreOrder(validatedData);
       
       // Send email notification using Resend
+      console.log('🚀 Attempting to send pre-order email notification...');
       try {
-        await EmailService.sendPreOrderNotification(preOrder);
+        const emailResult = await EmailService.sendPreOrderNotification(preOrder);
+        console.log('📧 Email sending result:', emailResult);
       } catch (emailError) {
-        console.error('Failed to send pre-order email notification:', emailError);
+        console.error('❌ Failed to send pre-order email notification:', emailError);
         // Don't fail the pre-order if email fails
       }
       
