@@ -52,7 +52,7 @@ export function StockUpdateBanner() {
             <Package className="h-5 w-5 text-black flex-shrink-0" />
             <div className="min-w-0">
               <p className="text-sm font-medium text-black">
-                Stock Update: New inventory arriving August 10th
+                Stock Update: New inventory arriving August 28th
               </p>
               <p className="text-xs text-gray-600 hidden sm:block">
                 Pre-order now and save 10% on out-of-stock items

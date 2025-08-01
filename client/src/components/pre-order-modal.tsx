@@ -89,7 +89,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
                 Get 10% Off When Available
               </h2>
               <p className="text-gray-600 dark:text-gray-300 text-sm">
-                <strong>{productName}</strong> will be restocking soon. Secure your spot in line and save 10% on your order when new stock arrives on August 10th.
+                <strong>{productName}</strong> will be restocking soon. Secure your spot in line and save 10% on your order when new stock arrives on August 28th.
               </p>
             </div>
 
