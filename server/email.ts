@@ -20,7 +20,7 @@ interface OrderEmailData {
 }
 
 export class EmailService {
-  private static readonly FROM_EMAIL = 'noreply@thehealios.com';
+  private static readonly FROM_EMAIL = 'dn@thefourths.com';
   private static readonly ADMIN_EMAIL = 'dn@thefourths.com';
 
   static async sendOrderConfirmation(emailData: OrderEmailData): Promise<boolean> {
@@ -89,7 +89,7 @@ export class EmailService {
 
           <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 12px;">
-              Questions? Contact us at <a href="mailto:support@thehealios.com" style="color: #000;">support@thehealios.com</a>
+              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
             </p>
           </div>
         </body>
@@ -108,6 +108,10 @@ export class EmailService {
       console.error('Failed to send order confirmation email:', error);
       return false;
     }
+  }
+
+  private static async sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   static async sendPreOrderNotification(preOrder: PreOrder): Promise<boolean> {
@@ -172,13 +176,26 @@ export class EmailService {
       
       console.log('📧 Sending admin emails to:', adminEmails);
       for (const adminEmail of adminEmails) {
-        const adminResult = await resend.emails.send({
-          from: this.FROM_EMAIL,
-          to: adminEmail,
-          subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
-          html: adminHtml,
-        });
-        console.log(`📧 Admin email sent to ${adminEmail}:`, adminResult);
+        try {
+          const adminResult = await resend.emails.send({
+            from: this.FROM_EMAIL,
+            to: adminEmail,
+            subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
+            html: adminHtml,
+          });
+          console.log(`📧 Admin email sent to ${adminEmail}:`, adminResult);
+          
+          if (adminResult.error) {
+            console.error(`❌ Error sending admin email to ${adminEmail}:`, adminResult.error);
+          } else {
+            console.log(`✅ Admin email successfully sent to ${adminEmail}`);
+          }
+        } catch (error) {
+          console.error(`❌ Failed to send admin email to ${adminEmail}:`, error);
+        }
+        
+        // Add delay to avoid rate limiting
+        await this.sleep(600); // 600ms delay between emails (under 2 per second)
       }
 
       // Send confirmation to customer
@@ -215,7 +232,7 @@ export class EmailService {
 
           <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; font-size: 12px;">
-              Questions? Contact us at <a href="mailto:support@thehealios.com" style="color: #000;">support@thehealios.com</a>
+              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
             </p>
           </div>
         </body>
@@ -223,13 +240,25 @@ export class EmailService {
       `;
 
       console.log('📧 Sending customer confirmation email to:', preOrder.customerEmail);
-      const customerResult = await resend.emails.send({
-        from: this.FROM_EMAIL,
-        to: preOrder.customerEmail,
-        subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
-        html: customerHtml,
-      });
-      console.log('📧 Customer email sent:', customerResult);
+      try {
+        const customerResult = await resend.emails.send({
+          from: this.FROM_EMAIL,
+          to: preOrder.customerEmail,
+          subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
+          html: customerHtml,
+        });
+        console.log('📧 Customer email sent:', customerResult);
+        
+        if (customerResult.error) {
+          console.error('❌ Error sending customer email:', customerResult.error);
+          return false;
+        } else {
+          console.log('✅ Customer email successfully sent');
+        }
+      } catch (error) {
+        console.error('❌ Failed to send customer email:', error);
+        return false;
+      }
 
       console.log('✅ All pre-order emails sent successfully');
       return true;
