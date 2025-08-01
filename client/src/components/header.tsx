@@ -5,6 +5,7 @@ import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import healiosLogo from "@assets/healios-logo (1)_1753466737582.png";
+import { LearningPopup } from './learning-popup';
 
 export function Header() {
   const [location] = useLocation();
@@ -373,6 +374,9 @@ export function Header() {
           </div>
         </div>
       </div>
+      
+      {/* Learning Popup */}
+      <LearningPopup />
     </header>
   );
 }
