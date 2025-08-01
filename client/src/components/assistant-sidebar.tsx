@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import hannahImage from '@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png';
 
 interface Message {
   id: string;
@@ -127,7 +128,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
           <div className="relative z-10 flex items-center gap-4">
             <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20">
               <img 
-                src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                src={hannahImage} 
                 alt="Hannah - Product information assistant"
                 className="w-full h-full object-cover"
               />
@@ -161,7 +162,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                       <User className="w-4 h-4 text-black" />
                     ) : (
                       <img 
-                        src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                        src={hannahImage} 
                         alt="Hannah"
                         className="w-full h-full object-cover"
                       />
@@ -196,7 +197,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full overflow-hidden shadow-lg ring-1 ring-gray-600">
                     <img 
-                      src="@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png" 
+                      src={hannahImage} 
                       alt="Hannah"
                       className="w-full h-full object-cover"
                     />
