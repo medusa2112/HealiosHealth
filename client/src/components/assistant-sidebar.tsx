@@ -22,7 +22,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hi! I\'m your Healios nutrition assistant. Ask me anything about our science-backed supplements, ingredients, dosages, or which products might be right for you.',
+      content: 'Hi! I\'m Hannah. I provide factual information about our products based on research and scientific evidence. Ask me about ingredients, formulations, or product details.',
       isUser: false,
       timestamp: new Date()
     }
