@@ -134,7 +134,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
             </div>
             <div className="flex-1">
               <SheetTitle className="text-xl font-bold text-white mb-1">Hannah</SheetTitle>
-              <p className="text-sm text-gray-300 font-medium">Your nutrition expert • Always here to help</p>
+              <p className="text-sm text-gray-300 font-medium">Product information • Research-based facts</p>
             </div>
           </div>
           {/* Subtle bottom border with gradient */}
