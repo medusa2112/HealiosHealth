@@ -1183,25 +1183,22 @@ export default function ProductComprehensive() {
 
 
       {/* Statistics Section */}
-      <section className="py-16 bg-gray-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="w-full h-full bg-gradient-to-r from-gray-800 to-gray-900"></div>
-        </div>
-        <div className="relative max-w-4xl mx-auto px-6 text-center">
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-4">
-            DID YOU KNOW?
-          </p>
-          <div className="inline-flex items-center justify-center w-24 h-24 border-4 border-white rounded-full mb-6">
-            <span className="text-2xl font-light">{productContent.statisticNumber}</span>
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
+              DID YOU KNOW?
+            </p>
+            <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.statisticNumber}</div>
+            <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed max-w-2xl mx-auto">
+              {productContent.statisticText}
+            </p>
           </div>
-          <p className="text-lg text-gray-300">
-            {productContent.statisticText}
-          </p>
         </div>
       </section>
 
       {/* Testimonial Section */}
-      <section className="py-16 bg-white">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-6">
             WHY IT'S IMPORTANT
@@ -1224,51 +1221,50 @@ export default function ProductComprehensive() {
       </section>
 
       {/* Ingredients Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            <div className="mb-8 lg:mb-0">
-              <img
-                src={nutritionistImg}
-                alt="Clean ingredients"
-                className="w-full h-96 object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-                NUTRIENTS OF INTEGRITY
-              </p>
-              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
-                Clean ingredients from ethical sources, always
-              </h2>
-              
-              <div className="space-y-6">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  A CLOSER LOOK: {product.name.toUpperCase()}
+          <div className="text-center mb-12">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
+              NUTRIENTS OF INTEGRITY
+            </p>
+            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
+              Clean ingredients from ethical sources, always
+            </h2>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-8 text-center">
+              A CLOSER LOOK: {product.name.toUpperCase()}
+            </p>
+            
+            {/* Ingredients Grid - styled like home page facts */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              <div className="text-center">
+                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Source</div>
+                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                  {productContent.ingredientSource}
                 </p>
-                
-                <div className="space-y-4 text-sm">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Source</span>
-                    <span className="text-gray-900">{productContent.ingredientSource}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Form</span>
-                    <span className="text-gray-900">{productContent.ingredientForm}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Country of origin</span>
-                    <span className="text-gray-900">{productContent.ingredientOrigin}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Primary benefit</span>
-                    <span className="text-gray-900">{productContent.primaryBenefit}</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Scientifically studied</span>
-                    <span className="text-gray-900">View full reference</span>
-                  </div>
-                </div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Form</div>
+                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                  {productContent.ingredientForm}
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Origin</div>
+                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                  {productContent.ingredientOrigin}
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Benefit</div>
+                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                  {productContent.primaryBenefit}
+                </p>
               </div>
             </div>
           </div>
@@ -1276,66 +1272,48 @@ export default function ProductComprehensive() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-            <div className="mb-8 lg:mb-0">
-              <img
-                src={nutritionistImg}
-                alt="Sleep benefits"
-                className="w-full h-96 object-cover"
-              />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-                FORMULATIONS WITHOUT COMPROMISE
+          <div className="text-center mb-12">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
+              FORMULATIONS WITHOUT COMPROMISE
+            </p>
+            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
+              Unique supplements: powered by<br />
+              <em>nature</em>, backed by <em>science</em>
+            </h2>
+          </div>
+          
+          {/* Benefits Grid - styled like home page facts */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+            <div className="text-center">
+              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Daily</div>
+              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
+                {productContent.benefitTitle}
               </p>
-              <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
-                Unique supplements: powered by<br />
-                <em>nature</em>, backed by <em>science</em>
-              </h2>
-              
-              <div className="space-y-6">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  BENEFITS OF DAILY USE
-                </p>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
-                      1
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900 mb-1">{productContent.benefitTitle}</h3>
-                      <p className="text-sm text-gray-600">
-                        {productContent.benefitDescription}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">
-                      2
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900 mb-1">The Healios difference</h3>
-                      <p className="text-sm text-gray-600">
-                        Our supplements are carefully formulated with premium ingredients sourced from trusted suppliers, ensuring optimal quality and bioavailability for your body's needs.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 mt-1" />
-                    <div>
-                      <h3 className="font-medium text-gray-900 mb-1">Quality assurance</h3>
-                      <p className="text-sm text-gray-600">
-                        Every batch is third-party tested for purity and potency, ensuring you receive consistent, reliable nutrition support in every serving.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {productContent.benefitDescription}
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Premium</div>
+              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
+                The Healios Difference
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Our supplements are carefully formulated with premium ingredients sourced from trusted suppliers, ensuring optimal quality and bioavailability for your body's needs.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Tested</div>
+              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
+                Quality Assurance
+              </p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Every batch is third-party tested for purity and potency, ensuring you receive consistent, reliable nutrition support in every serving.
+              </p>
             </div>
           </div>
         </div>
