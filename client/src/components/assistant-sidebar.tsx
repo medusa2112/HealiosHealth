@@ -252,7 +252,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about ingredients, dosages, benefits..."
-                  className="w-full text-sm bg-gradient-to-r from-gray-800/80 to-black/80 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-white/60 rounded-xl px-4 py-3 shadow-lg backdrop-blur-sm focus:shadow-xl transition-all duration-300"
+                  className="w-full text-sm bg-black border-white/30 text-white placeholder:text-gray-400 focus:border-white rounded-xl px-4 py-3 shadow-lg focus:shadow-xl transition-all duration-300"
                   disabled={isLoading}
                 />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/[0.02] to-transparent pointer-events-none"></div>
