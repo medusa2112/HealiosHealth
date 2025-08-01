@@ -38,7 +38,7 @@ export function StockNotification() {
         </button>
 
         {/* Header with product image */}
-        <div className="relative h-64 bg-gradient-to-br from-teal-100 to-blue-100">
+        <div className="relative h-80 bg-gradient-to-br from-teal-100 to-blue-100">
           <img 
             src={haloGlowImage}
             alt="Halo Glow Collagen"
