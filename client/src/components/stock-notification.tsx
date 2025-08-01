@@ -32,9 +32,9 @@ export function StockNotification() {
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
         >
-          <X className="w-4 h-4 text-black" />
+          <X className="w-4 h-4 text-white" />
         </button>
 
         {/* Header with product image */}
