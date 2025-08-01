@@ -116,14 +116,14 @@ export function LearningPopup() {
     <>
       {/* Floating Chat Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button
+        <button
           onClick={() => setIsOpen(true)}
-          className={`rounded-full px-6 py-3 h-auto shadow-lg transition-all duration-300 hover:scale-105 bg-black hover:bg-gray-600 border border-transparent hover:border-gray-400 ${
+          className={`rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:scale-105 bg-black hover:bg-white text-white hover:text-black border-2 border-black hover:border-black ${
             isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
           }`}
         >
-          <span className="text-white text-sm font-medium whitespace-nowrap">Chat about your needs?</span>
-        </Button>
+          <span className="text-sm font-medium whitespace-nowrap">Chat about your needs?</span>
+        </button>
       </div>
 
       {/* Chat Popup */}
