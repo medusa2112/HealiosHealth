@@ -374,6 +374,35 @@ export default function HomePage() {
         image="/attached_assets/Healios_1753559079971.png"
       />
 
+      {/* New Stock Arrival Notification */}
+      <section className="bg-black text-white py-6">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <div className="w-2 h-2 bg-healios-cyan rounded-full animate-pulse"></div>
+              <p className="text-sm font-medium uppercase tracking-wide text-healios-cyan">
+                Stock Update
+              </p>
+              <div className="w-2 h-2 bg-healios-cyan rounded-full animate-pulse"></div>
+            </div>
+            <h2 className="text-xl lg:text-2xl font-light mb-3">
+              New Stock Arriving August 10th
+            </h2>
+            <p className="text-gray-300 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
+              We're restocking our most popular supplements including Ashwagandha, Iron + Vitamin C, 
+              Biotin, Magnesium, and more. Thank you for your continued support and patience.
+            </p>
+            <div className="mt-4">
+              <span className="inline-flex items-center gap-2 text-xs text-gray-400">
+                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                Pre-order now to secure your supplements
+                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Wild Nutrition Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background */}
