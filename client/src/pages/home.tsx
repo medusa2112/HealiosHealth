@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
 import appleCiderVinegarImg from '@assets/Apple Cider Vinegar_1753615197742.png';
-import vitaminD3Img from '@assets/Vitamin D3  1000 IU_1753615197740.png';
+import vitaminD3Img from '@assets/Vitamin D3  4000 IU_1754056731371.png';
 import ashwagandhaImg from '@assets/Ashwagandha 600mg_1753615197741.png';
 import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
 import magnesiumImg from '@assets/Magnesium_1753615197741.png';
@@ -112,8 +112,8 @@ export default function HomePage() {
       category: 'Immunity',
       name: 'LUCY H.',
       text: 'Perfect for daily immune support. The lemon flavor is delicious and it fits easily into my morning routine. Really happy with the quality and consistency.',
-      product: 'Vitamin D3 1000 IU',
-      productLink: '/products/vitamin-d3-1000iu',
+      product: 'Vitamin D3 4000 IU',
+      productLink: '/products/vitamin-d3',
       productImage: vitaminD3Img
     },
     {
@@ -165,9 +165,9 @@ export default function HomePage() {
       id: 11,
       category: 'Immunity',
       name: 'PETER R.',
-      text: 'Perfect for winter months when I need extra immune support. The lemon flavor is refreshing and the 1000 IU dose is just right for daily maintenance.',
-      product: 'Vitamin D3 1000 IU',
-      productLink: '/products/vitamin-d3-1000iu',
+      text: 'Perfect for winter months when I need extra immune support. The lemon flavor is refreshing and the 4000 IU high-potency dose is ideal for optimal levels.',
+      product: 'Vitamin D3 4000 IU',
+      productLink: '/products/vitamin-d3',
       productImage: vitaminD3Img
     },
     {

@@ -5,7 +5,7 @@ import { SEOHead } from '@/components/seo-head';
 export default function ScienceResearch() {
   const ingredientData = [
     {
-      ingredient: 'Vitamin D3 (1000 IU)',
+      ingredient: 'Vitamin D3 (4000 IU)',
       function: 'Immune support, bone maintenance, muscle function',
       evidenceTier: 'EFSA + NHS',
       efsa: true

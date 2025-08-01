@@ -776,9 +776,9 @@ export default function ProductComprehensive() {
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
-                                <div className="font-medium">Vitamin D3 (cholecalciferol): 25 μg (1000 IU) - 500% NRV</div>
+                                <div className="font-medium">Vitamin D3 (cholecalciferol): 100 μg (4000 IU) - 2000% NRV</div>
                               </div>
-                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. 1000 IU is a safe and effective maintenance dose for most healthy adults.</p>
+                              <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. 4000 IU is a high-potency therapeutic dose for optimal vitamin D levels.</p>
                             </div>
                           ) : product.id === 'probiotic-vitamins' ? (
                             <div>
@@ -1133,7 +1133,7 @@ export default function ProductComprehensive() {
                             <div>
                               <p className="font-medium mb-2">Common questions about Vitamin D3:</p>
                               <ul className="mt-2 space-y-2">
-                                <li>• <strong>Why 1000 IU and not higher doses?</strong> 1000 IU is widely accepted as a safe and effective maintenance dose for most healthy adults, providing 2.5x the NHS minimum recommendation.</li>
+                                <li>• <strong>Why 4000 IU high-potency formula?</strong> 4000 IU is the optimal therapeutic dose for achieving and maintaining healthy vitamin D blood levels year-round, especially in regions with limited sunlight.</li>
                                 <li>• <strong>When is the best time to take vitamin D?</strong> Any time of day, with or without food. Consistency is more important than timing.</li>
                                 <li>• <strong>Is this suitable for winter months?</strong> Yes, especially important during UK winter months (October-March) when sunlight exposure is limited.</li>
                                 <li>• <strong>Can I take this if I already take a multivitamin?</strong> Check your multivitamin label to avoid exceeding 4000 IU total daily intake. Consult your healthcare provider if unsure.</li>

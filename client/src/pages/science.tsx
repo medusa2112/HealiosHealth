@@ -81,8 +81,8 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Vitamin D3  1000 IU_1753615197740.png" 
-                  alt="Vitamin D3 1000 IU Gummies"
+                  src="/assets/Vitamin D3  4000 IU_1754056731371.png" 
+                  alt="Vitamin D3 4000 IU Gummies"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -90,7 +90,7 @@ export default function Science() {
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Vitamin D3
                 </h3>
-                <span className="text-sm text-gray-500 dark:text-gray-400">1000 IU / 4000 IU</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">4000 IU High-Potency</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
                 Meta-analyses confirm benefits in immune regulation, bone density, and reducing infection risk in deficient populations.

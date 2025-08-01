@@ -32,7 +32,7 @@ export function Header() {
       title: "Bestsellers",
       items: [
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar Gummies" },
-        { href: "/products/vitamin-d3", label: "Vitamin D3 1000 IU Gummies" },
+        { href: "/products/vitamin-d3", label: "Vitamin D3 4000 IU Gummies" },
         { href: "/products/iron-vitamin-c", label: "Iron + Vitamin C Gummies" },
         { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
         { href: "/products/ashwagandha", label: "Ashwagandha Gummies" },

@@ -47,7 +47,7 @@ export default function JournalAll() {
       readTime: '6 min read',
       author: 'Dr. Emma Thompson',
       date: '10 Jan 2025',
-      image: '/assets/Vitamin D3  1000 IU_1753615197740.png',
+      image: '/assets/Vitamin D3  4000 IU_1754056731371.png',
       slug: 'blood-sugar-balance'
     },
     {
