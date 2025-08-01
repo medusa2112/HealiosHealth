@@ -268,6 +268,139 @@ export class EmailService {
     }
   }
 
+  static async sendRestockNotification(data: {
+    firstName: string;
+    email: string;
+    product: string;
+    restockDate: string;
+  }): Promise<boolean> {
+    try {
+      const { firstName, email, product, restockDate } = data;
+
+      // Admin notification HTML
+      const adminHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Restock Notification Request - Healios</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #000; margin: 0;">Healios</h1>
+            <p style="color: #666; margin: 5px 0 0 0;">Restock Notification Request</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 10px 0;">New Restock Notification Request</h2>
+            <p style="margin: 0; color: #666;">A customer has requested to be notified when a product is back in stock.</p>
+          </div>
+
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Details</h3>
+            <p><strong>Name:</strong> ${firstName}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Product:</strong> ${product}</p>
+            <p><strong>Expected Restock:</strong> ${restockDate}</p>
+          </div>
+
+          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <h3 style="margin: 0 0 10px 0;">Action Required</h3>
+            <p style="margin: 0;">Add this customer to the ${product} restock notification list.</p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      // Send to admin emails
+      const adminEmails = ['dn@thefourths.com', 'ms@thefourths.com'];
+      
+      console.log('📧 Sending restock notification to admins:', adminEmails);
+      for (const adminEmail of adminEmails) {
+        try {
+          const adminResult = await resend.emails.send({
+            from: this.FROM_EMAIL,
+            to: adminEmail,
+            subject: `🔔 Restock Notification Request: ${product} - ${firstName}`,
+            html: adminHtml,
+          });
+          console.log(`📧 Admin restock email sent to ${adminEmail}:`, adminResult);
+        } catch (error) {
+          console.error(`❌ Failed to send admin restock email to ${adminEmail}:`, error);
+        }
+        
+        // Add delay to avoid rate limiting
+        await this.sleep(600);
+      }
+
+      // Customer confirmation HTML
+      const customerHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Restock Notification Confirmed - Healios</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #000; margin: 0;">Healios</h1>
+            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
+          </div>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 10px 0;">You're on the list, ${firstName}!</h2>
+            <p style="margin: 0; color: #666;">We'll notify you as soon as ${product} is back in stock.</p>
+          </div>
+
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Notification Details</h3>
+            <p><strong>Product:</strong> ${product}</p>
+            <p><strong>Expected Restock:</strong> ${restockDate}</p>
+            <p><strong>Your Email:</strong> ${email}</p>
+          </div>
+
+          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <h3 style="margin: 0 0 10px 0;">What Happens Next?</h3>
+            <p style="margin: 0;">We'll send you an email the moment ${product} is available for purchase. Be ready to order quickly as popular items sell fast!</p>
+          </div>
+
+          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 12px;">
+              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
+            </p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      // Send confirmation to customer
+      console.log('📧 Sending restock confirmation email to customer:', email);
+      try {
+        const customerResult = await resend.emails.send({
+          from: this.FROM_EMAIL,
+          to: email,
+          subject: `You're on the list! ${product} Restock Notification - Healios`,
+          html: customerHtml,
+        });
+        console.log('📧 Customer restock email sent:', customerResult);
+        
+        if (customerResult.error) {
+          console.error('❌ Error sending customer restock email:', customerResult.error);
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ Failed to send customer restock email:', error);
+        return false;
+      }
+
+      console.log('✅ All restock notification emails sent successfully');
+      return true;
+    } catch (error) {
+      console.error('Error sending restock notification emails:', error);
+      return false;
+    }
+  }
+
   static async sendAdminOrderNotification(emailData: OrderEmailData): Promise<boolean> {
     try {
       const { order, orderItems } = emailData;

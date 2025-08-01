@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react';
-import { X, Package } from 'lucide-react';
+import { X, Package, Mail, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 import haloGlowImage from '@assets/20250718_1126_Collagen Pouch Oasis_remix_01k0edj6avexgr8xadn8ch16cv_1754074058203.png';
 
 export function StockNotification() {
   const [isVisible, setIsVisible] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Show notification after a short delay
@@ -17,11 +25,58 @@ export function StockNotification() {
 
   const handleClose = () => {
     setIsVisible(false);
+    setShowEmailForm(false);
   };
 
   const handleNotifyMe = () => {
-    // Add notification signup logic here
-    setIsVisible(false);
+    setShowEmailForm(true);
+  };
+
+  const handleSubmitNotification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName.trim() || !email.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in both your first name and email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/notify-restock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          email: email.trim(),
+          product: 'Halo Glow Collagen',
+          restockDate: 'August 28th'
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "You're on the list!",
+          description: "We'll notify you as soon as Halo Glow is back in stock."
+        });
+        setIsVisible(false);
+        setShowEmailForm(false);
+      } else {
+        throw new Error('Failed to submit notification request');
+      }
+    } catch (error) {
+      toast({
+        title: "Oops! Something went wrong",
+        description: "Please try again or contact support if the issue persists.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isVisible) return null;
@@ -84,21 +139,79 @@ export function StockNotification() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <Button
-              onClick={handleNotifyMe}
-              className="flex-1 bg-black hover:bg-gray-800 text-white"
-            >
-              Notify Me
-            </Button>
-            <Button
-              onClick={handleClose}
-              variant="outline"
-              className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50"
-            >
-              Close
-            </Button>
-          </div>
+          {!showEmailForm ? (
+            <div className="flex gap-3">
+              <Button
+                onClick={handleNotifyMe}
+                className="flex-1 bg-black hover:bg-gray-800 text-white"
+              >
+                Notify Me
+              </Button>
+              <Button
+                onClick={handleClose}
+                variant="outline"
+                className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Close
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmitNotification} className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                    First Name
+                  </Label>
+                  <div className="relative mt-1">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Enter your first name"
+                      className="pl-10 border-gray-300 focus:border-black focus:ring-black"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                    Email Address
+                  </Label>
+                  <div className="relative mt-1">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      className="pl-10 border-gray-300 focus:border-black focus:ring-black"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-black hover:bg-gray-800 text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Notify Me'}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setShowEmailForm(false)}
+                  variant="outline"
+                  className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
+                  Back
+                </Button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>

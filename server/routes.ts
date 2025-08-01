@@ -260,6 +260,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Restock notification submission
+  app.post("/api/notify-restock", async (req, res) => {
+    try {
+      const { firstName, email, product, restockDate } = req.body;
+      
+      if (!firstName || !email || !product || !restockDate) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      console.log('🚀 Sending restock notification emails...');
+      const success = await EmailService.sendRestockNotification({
+        firstName,
+        email,
+        product,
+        restockDate
+      });
+
+      if (success) {
+        res.json({ message: "Notification request submitted successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to send notification emails" });
+      }
+    } catch (error) {
+      console.error('Error handling restock notification:', error);
+      res.status(500).json({ message: "Failed to process notification request" });
+    }
+  });
+
   // Article generation routes
   let articleBot: ArticleBot | null = null;
 
