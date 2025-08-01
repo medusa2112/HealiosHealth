@@ -143,6 +143,22 @@
 
   .border-healios-purple { border-color: var(--healios-purple); }
   .border-healios-magenta { border-color: var(--healios-magenta); }
+  
+  /* Assistant Animations */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   .border-healios-blue { border-color: var(--healios-blue); }
   .border-healios-cyan { border-color: var(--healios-cyan); }
   .border-healios-teal { border-color: var(--healios-teal); }
