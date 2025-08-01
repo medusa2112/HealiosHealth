@@ -153,8 +153,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Probiotic + Vitamins Gummies',
           bundlePrice: 'R905.43',
           bundleOriginalPrice: 'R1289.76',
-          statisticNumber: '3',
-          statisticText: 'pH level of liquid ACV - about the same as battery acid, which can erode tooth enamel',
+          sectionTitle: 'THE METABOLIC ADVANTAGE',
+          sectionHeading: 'Advanced apple cider vinegar\nformulation for digestive wellness\nwithout the acidic burn.',
+          stat1Number: '500mg',
+          stat1Text: 'Concentrated\nACV Powder',
+          stat2Number: '3.0',
+          stat2Text: 'pH Level\nAcid-Free',
+          stat3Number: '95%',
+          stat3Text: 'Stomach\nComfort Rate',
+          stat4Number: '100%',
+          stat4Text: 'Enamel\nSafe Formula',
           testimonial: '"These gummies give me all the benefits of ACV without the harsh taste or stomach burn. Perfect for my daily wellness routine."',
           testimonialAuthor: 'EMMA THOMPSON',
           testimonialTitle: 'Fitness & Wellness Enthusiast',
@@ -171,8 +179,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1552.85',
           bundleOriginalPrice: 'R1743.97',
-          statisticNumber: '42%',
-          statisticText: 'of UK adults are vitamin D deficient, especially during winter months',
+          sectionTitle: 'THE SUNSHINE VITAMIN',
+          sectionHeading: 'Clinical-grade vitamin D3\nsupplements for optimal immune\nand bone health year-round.',
+          stat1Number: '1000 IU',
+          stat1Text: 'Optimal Daily\nDose',
+          stat2Number: '42%',
+          stat2Text: 'UK Adults\nDeficient',
+          stat3Number: '365',
+          stat3Text: 'Days Annual\nSupport',
+          stat4Number: 'D3',
+          stat4Text: 'Superior\nAbsorption',
           testimonial: '"Vitamin D levels in the UK fall dramatically between October and March. This 1000 IU dose supports optimal serum levels without needing sunlight."',
           testimonialAuthor: 'DR. SARAH WINTERS',
           testimonialTitle: 'Endocrinologist',
@@ -189,8 +205,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1385.62',
-          statisticNumber: '3,000',
-          statisticText: 'years of traditional use in Ayurvedic medicine for stress support and mental wellbeing',
+          sectionTitle: 'THE ANCIENT ADAPTOGEN',
+          sectionHeading: 'Premium ashwagandha root extract\nfor modern stress management\nand natural vitality support.',
+          stat1Number: '300mg',
+          stat1Text: 'Root Extract\nDaily Dose',
+          stat2Number: '3000',
+          stat2Text: 'Years Ancient\nWisdom',
+          stat3Number: '5%',
+          stat3Text: 'Withanolides\nStandardized',
+          stat4Number: '95%',
+          stat4Text: 'Natural Stress\nSupport',
           testimonial: '"Ashwagandha has been a cornerstone of Ayurvedic wellness for millennia. The 300mg dose in gummy form provides convenient daily support for natural balance and wellbeing."',
           testimonialAuthor: 'DR. ANISHA PATEL',
           testimonialTitle: 'Integrative Wellness & Herbal Medicine Specialist',
@@ -207,8 +231,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Apple Cider Vinegar Gummies (Strawberry Flavour)',
           bundlePrice: 'R1385.62',
           bundleOriginalPrice: 'R1576.74',
-          statisticNumber: '70%',
-          statisticText: '70% of immune system function is located in the gut',
+          sectionTitle: 'THE GUT-IMMUNITY CONNECTION',
+          sectionHeading: 'Multi-strain probiotic formula\nwith essential vitamins for complete\ndigestive and immune wellness.',
+          stat1Number: '10B',
+          stat1Text: 'Live Cultures\nPer Serving',
+          stat2Number: '70%',
+          stat2Text: 'Immune System\nin Gut',
+          stat3Number: '5',
+          stat3Text: 'Targeted\nStrains',
+          stat4Number: '100%',
+          stat4Text: 'Survivability\nGuaranteed',
           testimonial: '"These probiotics have completely transformed my digestive health and overall wellbeing."',
           testimonialAuthor: 'RACHEL THOMPSON',
           testimonialTitle: 'Nutritionist',
@@ -225,8 +257,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Ashwagandha 300mg Gummies (Strawberry Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1385.62',
-          statisticNumber: '60%',
-          statisticText: 'of Western diets fall short on magnesium - stress, caffeine, and exercise deplete stores faster',
+          sectionTitle: 'THE RELAXATION MINERAL',
+          sectionHeading: 'Premium magnesium citrate\nfor muscle recovery, sleep quality\nand natural stress relief.',
+          stat1Number: '90mg',
+          stat1Text: 'Bioavailable\nMagnesium',
+          stat2Number: '60%',
+          stat2Text: 'Adults\nDeficient',
+          stat3Number: '300+',
+          stat3Text: 'Enzymatic\nReactions',
+          stat4Number: '24hr',
+          stat4Text: 'Recovery\nSupport',
           testimonial: '"Magnesium citrate in gummy form has transformed my recovery routine. I sleep better and my muscles feel less tense after training."',
           testimonialAuthor: 'DR. JAMES THORNTON',
           testimonialTitle: 'Sports Medicine Specialist',
@@ -243,8 +283,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R764.48',
           bundleOriginalPrice: 'R1098.94',
-          statisticNumber: '85%',
-          statisticText: 'of children don\'t get adequate vitamins from diet alone',
+          sectionTitle: 'THE GROWING YEARS FORMULA',
+          sectionHeading: 'Complete multivitamin blend\nspecially formulated for children\naged 3-12 years.',
+          stat1Number: '13',
+          stat1Text: 'Essential\nNutrients',
+          stat2Number: '85%',
+          stat2Text: 'Children Need\nSupplementation',
+          stat3Number: '3-12',
+          stat3Text: 'Years Age\nRange',
+          stat4Number: '100%',
+          stat4Text: 'Natural Fruit\nFlavors',
           testimonial: '"These gummies are a game-changer for busy parents. My children actually look forward to taking their vitamins now!"',
           testimonialAuthor: 'DR. SARAH JOHNSON',
           testimonialTitle: 'Pediatric Nutritionist',
@@ -261,8 +309,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Apple Cider Vinegar Gummies (Strawberry Flavour)',
           bundlePrice: 'R860.04',
           bundleOriginalPrice: 'R1170.61',
-          statisticNumber: '70%',
-          statisticText: 'of your immune cells are housed in your gut',
+          sectionTitle: 'THE ENERGY-GUT NEXUS',
+          sectionHeading: 'Revolutionary dual-action formula\ncombining probiotics with B-vitamins\nfor complete wellness support.',
+          stat1Number: '3',
+          stat1Text: 'Probiotic\nStrains',
+          stat2Number: '70%',
+          stat2Text: 'Immune Cells\nin Gut',
+          stat3Number: 'B+C',
+          stat3Text: 'Essential\nVitamins',
+          stat4Number: '2in1',
+          stat4Text: 'Formula\nAdvantage',
           testimonial: '"This all-in-one formula has transformed my daily wellness routine. I love getting digestive support and vitamins in one delicious gummy."',
           testimonialAuthor: 'DR. MICHELLE TORRES',
           testimonialTitle: 'Integrative Medicine Specialist',
@@ -279,8 +335,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Biotin 10,000 µg Strawberry Gummies',
           bundlePrice: 'R931.71',
           bundleOriginalPrice: 'R1242.28',
-          statisticNumber: '25',
-          statisticText: 'years - when collagen production begins to naturally decline',
+          sectionTitle: 'THE BEAUTY FOUNDATION',
+          sectionHeading: 'Hydrolysed collagen peptides\nwith vitamin C and beauty minerals\nfor radiant skin and strong nails.',
+          stat1Number: '500mg',
+          stat1Text: 'Collagen\nPeptides',
+          stat2Number: '25',
+          stat2Text: 'Years Peak\nProduction',
+          stat3Number: '30%',
+          stat3Text: 'Body Protein\nCollagen',
+          stat4Number: '12',
+          stat4Text: 'Weeks Visible\nResults',
           testimonial: '"Consistent collagen supplementation with vitamin C supports the body\'s natural ability to build and maintain healthy skin structure."',
           testimonialAuthor: 'DR. ELENA RODRIGUEZ',
           testimonialTitle: 'Dermatology Nutritionist',
@@ -297,8 +361,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Collagen + C + Zinc + Selenium Gummies (Orange Flavour)',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1290.06',
-          statisticNumber: '10,000%',
-          statisticText: 'NRV - delivering therapeutic-level biotin in just one gummy',
+          sectionTitle: 'THE KERATIN CATALYST',
+          sectionHeading: 'Therapeutic-strength biotin\nfor enhanced hair growth,\nstronger nails, and healthy skin.',
+          stat1Number: '5000µg',
+          stat1Text: 'High-Potency\nBiotin',
+          stat2Number: '10000%',
+          stat2Text: 'Daily Value\nNRV',
+          stat3Number: '8-12',
+          stat3Text: 'Weeks Visible\nResults',
+          stat4Number: 'B7',
+          stat4Text: 'Essential\nVitamin',
           testimonial: '"High-strength biotin supports keratin production for healthy hair and nails. Consistency is key for visible results within 8-12 weeks."',
           testimonialAuthor: 'DR. SOPHIA CHEN',
           testimonialTitle: 'Trichologist & Hair Health Specialist',
@@ -315,8 +387,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R764.48',
           bundleOriginalPrice: 'R1051.16',
-          statisticNumber: '50%',
-          statisticText: 'better iron absorption when taken with vitamin C compared to iron alone',
+          sectionTitle: 'THE ENERGY PARTNERSHIP',
+          sectionHeading: 'Gentle iron with vitamin C\nfor enhanced absorption and\nsustained energy support.',
+          stat1Number: '7mg',
+          stat1Text: 'Bioavailable\nIron',
+          stat2Number: '40mg',
+          stat2Text: 'Vitamin C\nBoost',
+          stat3Number: '50%',
+          stat3Text: 'Better\nAbsorption',
+          stat4Number: '25%',
+          stat4Text: 'Women\nDeficient',
           testimonial: '"Iron deficiency is incredibly common, especially in women. This gentle formula with vitamin C enhances absorption while minimizing digestive discomfort."',
           testimonialAuthor: 'DR. REBECCA MARTINEZ',
           testimonialTitle: 'Hematology & Women\'s Health Specialist',
@@ -333,8 +413,16 @@ export default function ProductComprehensive() {
           bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R692.81',
           bundleOriginalPrice: 'R955.60',
-          statisticNumber: '28',
-          statisticText: 'days - when neural tube development occurs, often before pregnancy is known',
+          sectionTitle: 'THE MATERNAL SHIELD',
+          sectionHeading: 'NHS-recommended folic acid\nfor pre-conception and pregnancy\nsupport at optimal dosage.',
+          stat1Number: '400µg',
+          stat1Text: 'Clinical\nDose',
+          stat2Number: '28',
+          stat2Text: 'Days Neural\nTube Development',
+          stat3Number: '4+',
+          stat3Text: 'Weeks Before\nConception',
+          stat4Number: 'NHS',
+          stat4Text: 'Official\nRecommendation',
           testimonial: '"Folic acid supplementation is crucial for all women of reproductive age. Starting 4+ weeks before conception provides optimal maternal folate status for healthy development."',
           testimonialAuthor: 'DR. SARAH WILLIAMS',
           testimonialTitle: 'Consultant Obstetrician & Maternal-Fetal Medicine',
@@ -1182,139 +1270,75 @@ export default function ProductComprehensive() {
 
 
 
-      {/* Statistics Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-              DID YOU KNOW?
-            </p>
-            <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.statisticNumber}</div>
-            <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed max-w-2xl mx-auto">
-              {productContent.statisticText}
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Product-Specific Facts Section - Like Home Page */}
+      <section className="bg-white">
+        <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
+          {/* Content */}
+          <div className="py-24 px-6 lg:px-16 flex items-center">
+            <div>
+              <div className="mb-8">
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
+                  {productContent.sectionTitle}
+                </p>
+                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 leading-tight mb-6">
+                  {productContent.sectionHeading}
+                </h2>
+              </div>
 
-      {/* Testimonial Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-6">
-            WHY IT'S IMPORTANT
-          </p>
-          <blockquote className="text-xl lg:text-2xl font-light text-gray-900 mb-8 italic">
-            {productContent.testimonial}
-          </blockquote>
-          <div className="flex items-center justify-center gap-3">
+              {/* Statistics Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat1Number}</div>
+                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                    {productContent.stat1Text}
+                  </p>
+                </div>
+
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat2Number}</div>
+                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                    {productContent.stat2Text}
+                  </p>
+                </div>
+
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat3Number}</div>
+                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                    {productContent.stat3Text}
+                  </p>
+                </div>
+
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat4Number}</div>
+                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                    {productContent.stat4Text}
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/products">
+                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                    Shop Healios supplements →
+                  </button>
+                </Link>
+                <Link href="/science">
+                  <button className="border border-black text-black px-6 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors w-full sm:w-auto">
+                    Learn about our science →
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="relative overflow-hidden">
             <img
               src={nutritionistImg}
-              alt={productContent.testimonialAuthor}
-              className="w-12 h-12 rounded-full object-cover"
+              alt="Professional healthcare experts developing quality supplements and wellness solutions"
+              className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
-            <div className="text-left">
-              <p className="font-medium text-sm">{productContent.testimonialAuthor}</p>
-              <p className="text-xs text-gray-600">{productContent.testimonialTitle}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ingredients Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-              NUTRIENTS OF INTEGRITY
-            </p>
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
-              Clean ingredients from ethical sources, always
-            </h2>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-8 text-center">
-              A CLOSER LOOK: {product.name.toUpperCase()}
-            </p>
-            
-            {/* Ingredients Grid - styled like home page facts */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Source</div>
-                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                  {productContent.ingredientSource}
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Form</div>
-                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                  {productContent.ingredientForm}
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Origin</div>
-                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                  {productContent.ingredientOrigin}
-                </p>
-              </div>
-              
-              <div className="text-center">
-                <div className="text-2xl lg:text-3xl font-light text-gray-900 mb-3">Benefit</div>
-                <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                  {productContent.primaryBenefit}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-              FORMULATIONS WITHOUT COMPROMISE
-            </p>
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-6">
-              Unique supplements: powered by<br />
-              <em>nature</em>, backed by <em>science</em>
-            </h2>
-          </div>
-          
-          {/* Benefits Grid - styled like home page facts */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-            <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Daily</div>
-              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
-                {productContent.benefitTitle}
-              </p>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {productContent.benefitDescription}
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Premium</div>
-              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
-                The Healios Difference
-              </p>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Our supplements are carefully formulated with premium ingredients sourced from trusted suppliers, ensuring optimal quality and bioavailability for your body's needs.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">Tested</div>
-              <p className="text-xs text-gray-600 uppercase tracking-wide mb-3">
-                Quality Assurance
-              </p>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Every batch is third-party tested for purity and potency, ensuring you receive consistent, reliable nutrition support in every serving.
-              </p>
-            </div>
           </div>
         </div>
       </section>
