@@ -31,14 +31,14 @@ export function StockUpdateBanner() {
     }, 300); // Match the animation duration
   };
 
-  if (isDismissed || !isVisible) {
+  if (isDismissed) {
     return null;
   }
 
   return (
     <>
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 py-3 shadow-lg transition-transform duration-300 ${
-        isClosing ? '-translate-y-full' : 'translate-y-0'
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 py-3 shadow-lg transition-transform duration-500 ${
+        isClosing ? '-translate-y-full' : isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -63,7 +63,7 @@ export function StockUpdateBanner() {
         </div>
       </div>
       {/* Spacer to push content down when banner is visible */}
-      <div className="h-16"></div>
+      {isVisible && !isClosing && <div className="h-16"></div>}
     </>
   );
 }
