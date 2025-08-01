@@ -393,11 +393,18 @@ export default function HomePage() {
               Biotin, Magnesium, and more. Thank you for your continued support and patience.
             </p>
             <div className="mt-4">
-              <span className="inline-flex items-center gap-2 text-xs text-gray-400">
-                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+              <button 
+                onClick={() => {
+                  setShowPreOrderModal(true);
+                  setSelectedProductName('New Stock - Multiple Products');
+                  setSelectedSalePrice('Various');
+                }}
+                className="inline-flex items-center gap-2 bg-healios-cyan hover:bg-healios-cyan/90 text-black px-4 py-2 text-xs font-medium transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-healios-cyan/50"
+              >
+                <span className="w-1.5 h-1.5 bg-black rounded-full animate-pulse"></span>
                 Pre-order now to secure your supplements
-                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-              </span>
+                <span className="w-1.5 h-1.5 bg-black rounded-full animate-pulse"></span>
+              </button>
             </div>
           </div>
         </div>
