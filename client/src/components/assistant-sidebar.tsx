@@ -259,9 +259,9 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="px-4 py-3 bg-gradient-to-r from-white to-gray-100 hover:from-gray-100 hover:to-white text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                className="px-4 py-3 bg-white hover:bg-gray-100 text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4 text-black" />
               </Button>
             </div>
           </div>
