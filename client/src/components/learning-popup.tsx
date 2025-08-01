@@ -118,11 +118,11 @@ export function LearningPopup() {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className={`rounded-full w-14 h-14 shadow-lg transition-all duration-300 hover:scale-110 bg-black hover:bg-gray-800 border-none ${
+          className={`rounded-full px-6 py-3 h-auto shadow-lg transition-all duration-300 hover:scale-105 bg-black hover:bg-gray-800 border-none ${
             isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
           }`}
         >
-          <MessageCircle className="w-6 h-6 text-white" />
+          <span className="text-white text-sm font-medium whitespace-nowrap">Chat about your needs?</span>
         </Button>
       </div>
 
