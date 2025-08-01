@@ -118,13 +118,13 @@ export function StockNotification() {
             Our new <strong>Halo Glow</strong> premium collagen product has completely sold out due to incredible demand.
           </p>
           
-          <div className="border-2 border-black rounded-lg p-4 mb-4 bg-white">
+          <div className="bg-gray-50 rounded-lg p-3 mb-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
                   Restock Date
                 </p>
-                <p className="text-xl font-bold text-black">
+                <p className="text-lg font-bold text-black">
                   August 28th
                 </p>
               </div>
@@ -132,7 +132,7 @@ export function StockNotification() {
                 <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
                   Quantity
                 </p>
-                <p className="text-xl font-bold text-black">
+                <p className="text-lg font-bold text-black">
                   500 units
                 </p>
               </div>
@@ -156,61 +156,53 @@ export function StockNotification() {
               </Button>
             </div>
           ) : (
-            <form onSubmit={handleSubmitNotification} className="space-y-4">
-              <div className="space-y-3">
-                <div>
-                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                    First Name
-                  </Label>
-                  <div className="relative mt-1">
+            <div className="bg-gray-50 rounded-lg p-3">
+              <form onSubmit={handleSubmitNotification} className="space-y-3">
+                <div className="space-y-2">
+                  <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="firstName"
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Enter your first name"
-                      className="pl-10 border-gray-300 focus:border-black focus:ring-black"
+                      placeholder="First name"
+                      className="pl-10 h-9 text-sm border-gray-300 focus:border-black focus:ring-black"
                       required
                     />
                   </div>
-                </div>
-                <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email Address
-                  </Label>
-                  <div className="relative mt-1">
+                  <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
-                      className="pl-10 border-gray-300 focus:border-black focus:ring-black"
+                      placeholder="Email address"
+                      className="pl-10 h-9 text-sm border-gray-300 focus:border-black focus:ring-black"
                       required
                     />
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-3">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 bg-black hover:bg-gray-800 text-white disabled:opacity-50"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Notify Me'}
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setShowEmailForm(false)}
-                  variant="outline"
-                  className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50"
-                >
-                  Back
-                </Button>
-              </div>
-            </form>
+                <div className="flex gap-2 pt-1">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 h-9 bg-black hover:bg-gray-800 text-white disabled:opacity-50 text-sm"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Notify Me'}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => setShowEmailForm(false)}
+                    variant="outline"
+                    className="px-4 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 text-sm"
+                  >
+                    Back
+                  </Button>
+                </div>
+              </form>
+            </div>
           )}
         </div>
       </div>
