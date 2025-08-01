@@ -63,13 +63,25 @@ export function StockNotification() {
             Our new <strong>Halo Glow</strong> premium collagen product has completely sold out due to incredible demand.
           </p>
           
-          <div className="bg-gradient-to-r from-black to-gray-800 rounded-lg p-4 mb-4">
-            <p className="text-sm text-gray-300 mb-1">
-              <strong>New stock arriving:</strong>
-            </p>
-            <p className="text-lg font-semibold text-white">
-              August 28th • 500 units
-            </p>
+          <div className="border-2 border-black rounded-lg p-4 mb-4 bg-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
+                  Restock Date
+                </p>
+                <p className="text-xl font-bold text-black">
+                  August 28th
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
+                  Quantity
+                </p>
+                <p className="text-xl font-bold text-black">
+                  500 units
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-3">
