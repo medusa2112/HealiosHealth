@@ -910,6 +910,22 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">No EFSA health claims authorized for ACV. Traditional wellness use only. Enamel-safe format vs liquid vinegar.</p>
                             </div>
+                          ) : product.id === 'mind-memory-mushroom' ? (
+                            <div>
+                              <p className="font-medium mb-3">Per 2 gummies:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Lion's Mane (Hericium erinaceus) fruit body extract (10:1): 200mg</div>
+                                <div className="font-medium">Equivalent to dried mushroom: 2000mg</div>
+                                <div className="font-medium">Energy: 14 Kcal (62.32 KJ)</div>
+                                <div className="font-medium">Sugars: 3.64g</div>
+                                <div className="font-medium">Carbohydrates: 3.92g</div>
+                                <div className="font-medium">Fat: 0.012g (saturated: 0.012g)</div>
+                                <div className="font-medium">Fibre: 0.12g</div>
+                                <div className="font-medium">Salt: 0.02g</div>
+                                <div className="font-medium">Protein: 0g</div>
+                              </div>
+                              <p className="mt-3 text-sm text-gray-600">*200mg of 10:1 extract provides the equivalent of 2000mg dried Lion's Mane mushroom. Clinically relevant dosage for cognitive support.</p>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -1049,6 +1065,24 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Vegan, enamel-safe formulation. Delivers traditional ACV benefits without stomach burn or tooth erosion.</p>
                             </div>
+                          ) : product.id === 'mind-memory-mushroom' ? (
+                            <div>
+                              <p className="font-medium mb-2">Berry-flavored vegan gummy base with:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Glucose Syrup</li>
+                                <li>• Sugar</li>
+                                <li>• Water</li>
+                                <li>• Lion's Mane (Hericium erinaceus) Fruit Body Extract (10:1)</li>
+                                <li>• Pectin (Gelling Agent)</li>
+                                <li>• Citric Acid</li>
+                                <li>• Trisodium Citrate</li>
+                                <li>• Anthocyanins (Natural Colour)</li>
+                                <li>• Coconut Oil</li>
+                                <li>• Natural Berry Flavour</li>
+                                <li>• Carnauba Wax</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Allergens: None declared. Manufactured under strict allergen control protocols. 100% vegan formulation.</p>
+                            </div>
                           ) : (
                             <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
                           )}
@@ -1164,6 +1198,18 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12. May cause mild digestive upset if taken in excess. Start with 1 gummy to assess tolerance.</p>
                             </div>
+                          ) : product.id === 'mind-memory-mushroom' ? (
+                            <div>
+                              <p className="font-medium mb-2">Adult dosing (18+ years):</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Chew two (2) gummies daily</strong> - optimal therapeutic dose</li>
+                                <li>• Do not exceed the stated dose</li>
+                                <li>• Gummies should be chewed, not swallowed whole</li>
+                                <li>• Can be taken with or without food</li>
+                                <li>• Consistent daily use recommended for best results</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children. Some benefits may be noticed within weeks, but optimal cognitive support typically develops over 4-6 weeks of consistent use.</p>
+                            </div>
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
@@ -1271,6 +1317,18 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Will these help with weight management?</strong> ACV may support appetite control and post-meal satisfaction, but it's not a weight loss product and should be combined with healthy diet and exercise.</li>
                               </ul>
                             </div>
+                          ) : product.id === 'mind-memory-mushroom' ? (
+                            <div>
+                              <p className="font-medium mb-2">Common questions about Lion's Mane Gummies:</p>
+                              <ul className="mt-2 space-y-2">
+                                <li>• <strong>What is Lion's Mane good for?</strong> Lion's Mane is clinically studied for its potential to support neurogenesis, memory, focus, and cognitive performance.</li>
+                                <li>• <strong>Is this made from the fruiting body or mycelium?</strong> Only fruiting body extract is used — the part richest in bioactive compounds like hericenones and erinacines.</li>
+                                <li>• <strong>Can I take this with coffee or other supplements?</strong> Yes, Lion's Mane is often paired with caffeine or adaptogens, but always check with your healthcare provider if unsure.</li>
+                                <li>• <strong>Is it safe long-term?</strong> Current research suggests Lion's Mane is well-tolerated for ongoing use at recommended doses.</li>
+                                <li>• <strong>Will it make me feel more focused right away?</strong> Some people notice short-term effects, but the strongest benefits are typically seen after consistent daily use over 4–6 weeks.</li>
+                                <li>• <strong>Are these gummies vegan and sugar-free?</strong> They're 100% vegan. While not sugar-free, each serving contains 3.64g of sugar — similar to a small piece of fruit.</li>
+                              </ul>
+                            </div>
                           ) : (
                             <div>
                               <p className="font-medium">Common questions about this product:</p>
@@ -1284,13 +1342,27 @@ export default function ProductComprehensive() {
                       )}
                       {section === 'SHIPPING AND RETURNS' && (
                         <div>
-                          <p>We currently ship to the following countries:</p>
-                          <ul className="mt-2 space-y-1 text-xs">
-                            <li>• UK: 2-3 business days</li>
-                            <li>• USA: 5-7 business days</li>
-                            <li>• Canada: 6-8 business days</li>
-                            <li>• Australia: 7 business days</li>
-                          </ul>
+                          {product.id === 'mind-memory-mushroom' ? (
+                            <div>
+                              <p className="font-medium mb-2">Shipping and Returns:</p>
+                              <ul className="mt-2 space-y-1 text-sm">
+                                <li>• <strong>UK Delivery:</strong> 2–3 working days</li>
+                                <li>• <strong>EU Delivery:</strong> 5–7 working days</li>
+                                <li>• <strong>Returns:</strong> 30-day money-back guarantee if unopened</li>
+                                <li>• <strong>Fulfilled from:</strong> UK warehouse, under food-grade manufacturing standards</li>
+                              </ul>
+                            </div>
+                          ) : (
+                            <div>
+                              <p>We currently ship to the following countries:</p>
+                              <ul className="mt-2 space-y-1 text-xs">
+                                <li>• UK: 2-3 business days</li>
+                                <li>• USA: 5-7 business days</li>
+                                <li>• Canada: 6-8 business days</li>
+                                <li>• Australia: 7 business days</li>
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
