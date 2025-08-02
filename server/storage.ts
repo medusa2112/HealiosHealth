@@ -319,7 +319,7 @@ export class MemStorage implements IStorage {
         description: "Pure hydrolysed marine collagen peptides for skin, hair, nail and joint support. Easily dissolves in hot or cold drinks with no taste or texture. Type I & III collagen for maximum bioavailability.",
         price: "399.99",
         originalPrice: null,
-        imageUrl: "/assets/HaloGlow_1754134253465.png",
+        imageUrl: "/assets/HaloGlowB_1754157621693.png",
         category: "Beauty",
         rating: "4.8",
         reviewCount: 892,

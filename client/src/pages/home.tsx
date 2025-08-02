@@ -545,7 +545,7 @@ export default function HomePage() {
             <div className="order-1 lg:order-2 mb-8 lg:mb-0">
               <div className="relative aspect-square overflow-hidden">
                 <img 
-                  src="/assets/HaloGlow_1754136104683.png"
+                  src="/assets/HaloGlowB_1754157621693.png"
                   alt="Halo Glow Collagen Complex - Premium Marine Collagen"
                   className="w-full h-full object-cover"
                 />
