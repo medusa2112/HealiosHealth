@@ -20,6 +20,9 @@ export const products = pgTable("products", {
   colors: text("colors").array(),
   gender: text("gender"), // 'men', 'women', 'unisex'
   type: text("type").default('supplement'), // 'supplement', 'apparel'
+  bottleCount: integer("bottle_count"),
+  dailyDosage: integer("daily_dosage"),
+  supplyDays: integer("supply_days"),
 });
 
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {

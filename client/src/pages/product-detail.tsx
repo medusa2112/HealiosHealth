@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "wouter";
-import { Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight, Plus, Minus, Check } from "lucide-react";
+import { Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight, Plus, Minus, Check, Bell, Calendar } from "lucide-react";
 import { type Product } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [subscriptionMode, setSubscriptionMode] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
@@ -264,6 +265,56 @@ export default function ProductDetail() {
                     R{product.price}
                   </span>
                 </div>
+
+                {/* Supply Information Badge */}
+                {(product as any).bottleCount && (
+                  <div className="bg-black text-white px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
+                    <span>{(product as any).bottleCount} {product.category === 'Beauty' && product.name.includes('Powder') ? 'servings' : 'gummies'}</span>
+                    <span>•</span>
+                    <span>{(product as any).dailyDosage} per day</span>
+                    <span>•</span>
+                    <span>{(product as any).supplyDays}-day supply</span>
+                    <button 
+                      onClick={() => setShowNotificationModal(true)}
+                      className="ml-2 hover:bg-gray-800 p-1 transition-colors"
+                      title="Set reorder reminder"
+                    >
+                      <Bell className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Reorder Notification Modal */}
+                {showNotificationModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                    <div className="bg-white dark:bg-gray-800 p-6 max-w-sm w-full">
+                      <h3 className="font-medium text-gray-900 dark:text-white mb-4">Reorder Reminder</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        Get notified 10 days before your {(product as any).supplyDays}-day supply runs out.
+                      </p>
+                      <div className="flex gap-3">
+                        <button 
+                          onClick={() => {
+                            setShowNotificationModal(false);
+                            toast({
+                              title: "Reminder set!",
+                              description: `We'll notify you on ${new Date(Date.now() + ((product as any).supplyDays - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}`
+                            });
+                          }}
+                          className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
+                        >
+                          Set Reminder
+                        </button>
+                        <button 
+                          onClick={() => setShowNotificationModal(false)}
+                          className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Subscription Toggle */}
                 <div className="space-y-4 mb-6">

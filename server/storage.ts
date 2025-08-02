@@ -78,6 +78,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "vitamin-d3",
@@ -96,6 +99,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 1,
+        supplyDays: 60,
       },
       {
         id: "ashwagandha",
@@ -114,6 +120,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "probiotics",
@@ -132,6 +141,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 30,
+        dailyDosage: 1,
+        supplyDays: 30,
       },
       {
         id: "magnesium",
@@ -150,6 +162,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "childrens-multivitamin",
@@ -168,6 +183,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 150,
+        dailyDosage: 1,
+        supplyDays: 150,
       },
       {
         id: "probiotic-vitamins",
@@ -186,6 +204,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "collagen-complex",
@@ -204,6 +225,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "biotin-5000",
@@ -222,6 +246,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 1,
+        supplyDays: 60,
       },
       {
         id: "iron-vitamin-c",
@@ -240,6 +267,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 1,
+        supplyDays: 60,
       },
       {
         id: "folic-acid-400",
@@ -258,6 +288,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 1,
+        supplyDays: 60,
       },
       {
         id: "mind-memory-mushroom",
@@ -276,6 +309,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
       },
       {
         id: "collagen-powder",
@@ -294,6 +330,9 @@ export class MemStorage implements IStorage {
         colors: null,
         gender: null,
         type: 'supplement',
+        bottleCount: 30,
+        dailyDosage: 1,
+        supplyDays: 30,
       },
 
     ];
