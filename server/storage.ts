@@ -259,6 +259,24 @@ export class MemStorage implements IStorage {
         gender: null,
         type: 'supplement',
       },
+      {
+        id: "mind-memory-mushroom",
+        name: "Mind & Memory Mushroom - Lion's Mane Gummies (2000mg)",
+        description: "Powerful daily support for brain health, focus, and cognition with 200mg 10:1 Lion's Mane extract (equivalent to 2000mg dried). Premium nootropic benefits in delicious berry-flavored vegan gummies.",
+        price: "2499",
+        originalPrice: null,
+        imageUrl: "/assets/lions-mane-gummies.png",
+        category: "Mushrooms",
+        rating: "4.9",
+        reviewCount: 1032,
+        inStock: false,
+        stockQuantity: 0,
+        featured: true,
+        sizes: null,
+        colors: null,
+        gender: null,
+        type: 'supplement',
+      },
 
     ];
 

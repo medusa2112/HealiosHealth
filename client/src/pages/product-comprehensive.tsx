@@ -434,6 +434,32 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports maternal folate status and tissue growth during pregnancy'
         };
+      case 'mind-memory-mushroom':
+        return {
+          bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
+          bundlePrice: 'R629.99',
+          bundleOriginalPrice: 'R849.97',
+          sectionTitle: 'THE COGNITIVE ADVANTAGE',
+          sectionHeading: 'Powerful Lion\'s Mane mushroom extract\nfor brain health, focus, and memory\nsupport in delicious berry gummies.',
+          stat1Number: '2000mg',
+          stat1Text: 'Fruiting Body\nEquivalent',
+          stat2Number: '10:1',
+          stat2Text: 'High-Strength\nExtract',
+          stat3Number: '60',
+          stat3Text: 'Days\nSupply',
+          stat4Number: '1 in 3',
+          stat4Text: 'UK Adults Struggle\nwith Memory',
+          testimonial: '"Lion\'s Mane is one of the most researched nootropic mushrooms for cognitive function. This high-strength extract provides clinically relevant doses for neurogenesis support."',
+          testimonialAuthor: 'DR. MICHAEL CHEN',
+          testimonialTitle: 'Neurologist & Functional Medicine Specialist',
+          benefitTitle: 'Brain health, focus & memory support',
+          benefitDescription: '200mg 10:1 Lion\'s Mane extract (equivalent to 2000mg dried mushroom) supports neurogenesis, memory, focus, and cognitive performance through bioactive hericenones and erinacines.',
+          ingredientSource: 'Lion\'s Mane (Hericium erinaceus) fruit body extract',
+          ingredientForm: 'Berry-flavored vegan gummies',
+          ingredientOrigin: 'Premium fruiting body extract with standardized compounds',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports memory, focus, mental clarity, and cognitive performance'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',

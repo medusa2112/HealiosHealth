@@ -461,6 +461,107 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Mind & Memory Mushroom Featured Section */}
+      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+            {/* Left Column - Content */}
+            <div className="order-2 lg:order-1 mb-12 lg:mb-0">
+              <div className="mb-4">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  NEW ARRIVAL • PREORDER NOW
+                </span>
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+                Mind & Memory<br />
+                Mushroom
+              </h2>
+              <div className="mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-2xl font-light text-gray-900 dark:text-white">R249.99</span>
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(1,032 reviews)</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg leading-relaxed">
+                Powerful daily support for brain health, focus, and cognition with 200mg 10:1 Lion's Mane extract 
+                (equivalent to 2000mg dried). Premium nootropic benefits in delicious berry-flavored vegan gummies.
+              </p>
+              
+              {/* Stats Row */}
+              <div className="grid grid-cols-4 gap-4 mb-8">
+                <div className="text-center">
+                  <div className="font-medium text-gray-900 dark:text-white">2000mg</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Fruiting body equivalent</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-medium text-gray-900 dark:text-white">1 in 3</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">UK adults struggle with memory</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-medium text-gray-900 dark:text-white">60 days</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">2-month supply</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-medium text-gray-900 dark:text-white">10:1</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">High-strength extract</div>
+                </div>
+              </div>
+
+              {/* Preorder Info */}
+              <div className="bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-600 mb-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white text-sm">Preorder Now</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">250 units arriving September 1st</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Limited quantity</div>
+                    <div className="text-xs font-medium text-green-600">Reserve yours today</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={() => {
+                    setSelectedProductName('Mind & Memory Mushroom - Lion\'s Mane Gummies (2000mg)');
+                    setSelectedSalePrice('R249.99');
+                    setShowPreOrderModal(true);
+                  }}
+                  className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors flex-1"
+                >
+                  Preorder Now
+                </button>
+                <Link href="/products/mind-memory-mushroom">
+                  <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    Learn More →
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column - Image */}
+            <div className="order-1 lg:order-2 mb-8 lg:mb-0">
+              <div className="relative bg-white dark:bg-gray-200 aspect-square flex items-center justify-center">
+                {/* Placeholder for Lions Mane product image */}
+                <div className="text-center p-8">
+                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-orange-200 to-yellow-200 flex items-center justify-center mb-4">
+                    <span className="text-4xl">🍄</span>
+                  </div>
+                  <div className="text-sm text-gray-600">Lion's Mane Gummies</div>
+                  <div className="text-xs text-gray-500">Premium Brain Support</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Wild Nutrition Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
