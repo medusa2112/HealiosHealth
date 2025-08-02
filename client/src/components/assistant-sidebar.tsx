@@ -120,9 +120,9 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent side="right" className="w-full sm:w-[420px] lg:w-[480px] flex flex-col p-0 backdrop-blur-2xl bg-black/40 border-l border-white/10 shadow-2xl">
+      <SheetContent side="right" className="w-full sm:w-[420px] lg:w-[480px] flex flex-col p-0 bg-black sm:backdrop-blur-2xl sm:bg-black/40 border-l border-white/10 shadow-2xl">
         {/* Header with gradient background */}
-        <SheetHeader className="px-4 sm:px-6 py-4 sm:py-6 bg-black/60 backdrop-blur-xl relative overflow-hidden">
+        <SheetHeader className="px-4 sm:px-6 py-4 sm:py-6 bg-black sm:bg-black/60 sm:backdrop-blur-xl relative overflow-hidden">
           {/* Animated background pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] via-transparent to-white/[0.02] animate-pulse"></div>
           <div className="relative z-10 flex items-center gap-3 sm:gap-4">
@@ -143,7 +143,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         </SheetHeader>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-3 sm:p-6 bg-black/10">
+        <ScrollArea className="flex-1 p-3 sm:p-6 bg-black sm:bg-black/10">
           <div className="space-y-4 sm:space-y-6">
             {messages.map((message) => (
               <div
@@ -221,7 +221,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
         {/* Quick Questions (only show if no conversation yet) */}
         {messages.length === 1 && (
-          <div className="px-3 sm:px-6 py-3 sm:py-4 bg-black/30 backdrop-blur-xl">
+          <div className="px-3 sm:px-6 py-3 sm:py-4 bg-black sm:bg-black/30 sm:backdrop-blur-xl">
             <div className="mb-2 sm:mb-3 flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-white animate-pulse"></div>
               <p className="text-xs sm:text-sm text-white font-medium">Quick questions</p>
@@ -241,7 +241,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         )}
 
         {/* Input */}
-        <div className="p-3 sm:p-6 bg-black/60 backdrop-blur-xl">
+        <div className="p-3 sm:p-6 bg-black sm:bg-black/60 sm:backdrop-blur-xl">
           <div className="relative">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
