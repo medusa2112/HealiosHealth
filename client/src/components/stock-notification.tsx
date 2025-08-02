@@ -89,15 +89,26 @@ export function StockNotification() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      onClick={handleClose}
+    >
+      <div 
+        className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close button */}
         <button
-          onClick={handleClose}
-          className="absolute top-2 right-2 z-20 p-3 rounded-full bg-black/50 hover:bg-black/70 transition-colors touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleClose();
+          }}
+          className="absolute top-3 right-3 z-50 p-4 rounded-full bg-black/80 hover:bg-black transition-colors touch-manipulation min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg"
           aria-label="Close notification"
+          type="button"
         >
-          <X className="w-5 h-5 text-white" />
+          <X className="w-6 h-6 text-white stroke-2" />
         </button>
 
         {/* Header with product image */}
