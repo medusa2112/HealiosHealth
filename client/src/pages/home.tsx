@@ -449,14 +449,14 @@ export default function HomePage() {
         {/* Press Mentions Footer */}
         <div className="absolute bottom-8 left-6 right-6 lg:left-12 lg:right-12">
           <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
-            <span>The Telegraph</span>
-            <span>VOGUE</span>
-            <span>Women's Health</span>
-            <span>GRAZIA</span>
-            <span>The Telegraph</span>
-            <span>VOGUE</span>
-            <span>Women's Health</span>
-            <span>GRAZIA</span>
+            <span>The Grind Fitness</span>
+            <span>Eleven Eleven Sports Performance</span>
+            <span>Peak Performance Nutrition</span>
+            <span>Elite Wellness Studio</span>
+            <span>The Grind Fitness</span>
+            <span>Eleven Eleven Sports Performance</span>
+            <span>Peak Performance Nutrition</span>
+            <span>Elite Wellness Studio</span>
           </div>
         </div>
       </section>
