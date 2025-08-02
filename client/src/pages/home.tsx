@@ -543,15 +543,12 @@ export default function HomePage() {
 
             {/* Right Column - Image */}
             <div className="order-1 lg:order-2 mb-8 lg:mb-0">
-              <div className="relative bg-white dark:bg-gray-200 aspect-square flex items-center justify-center">
-                {/* Placeholder for Lions Mane product image */}
-                <div className="text-center p-8">
-                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-orange-200 to-yellow-200 flex items-center justify-center mb-4">
-                    <span className="text-4xl">🍄</span>
-                  </div>
-                  <div className="text-sm text-gray-600">Lion's Mane Gummies</div>
-                  <div className="text-xs text-gray-500">Premium Brain Support</div>
-                </div>
+              <div className="relative bg-white dark:bg-gray-200 aspect-square flex items-center justify-center p-8">
+                <img 
+                  src="/assets/Lion's Mane Gummies (2000mg)_1754125996287.png"
+                  alt="Mind & Memory Mushroom - Lion's Mane Gummies (2000mg)"
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
           </div>
