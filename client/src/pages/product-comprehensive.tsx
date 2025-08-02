@@ -1402,43 +1402,49 @@ export default function ProductComprehensive() {
       </section>
 
       {/* Fixed Bottom Purchase Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 lg:hidden">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium text-sm">{product.name}</p>
-            <div className="flex items-center gap-2">
-              {[1,2,3,4,5].map((star) => (
-                <Star key={star} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-              ))}
-              <span className="text-xs text-gray-600">({product.reviewCount} Reviews)</span>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 lg:hidden">
+        <div className="space-y-3">
+          {/* Product Info Row */}
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">{product.name}</p>
+              <div className="flex items-center gap-1">
+                {[1,2,3,4,5].map((star) => (
+                  <Star key={star} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-xs text-gray-600 ml-1">({product.reviewCount})</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-medium">Subscribe & Save 20%</p>
+              <p className="text-sm text-gray-600">R{subscriptionPrice}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-sm">Subscribe & Save 20% - £8.60</p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-8 h-8 p-0"
-                >
-                  <Minus className="w-3 h-3" />
-                </Button>
-                <span className="w-8 text-center text-sm">{quantity}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-8 h-8 p-0"
-                >
-                  <Plus className="w-3 h-3" />
-                </Button>
-              </div>
+          
+          {/* Quantity and Add to Cart Row */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-8 h-8 p-0"
+              >
+                <Minus className="w-3 h-3" />
+              </Button>
+              <span className="w-8 text-center text-sm font-medium">{quantity}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-8 h-8 p-0"
+              >
+                <Plus className="w-3 h-3" />
+              </Button>
             </div>
             <Button 
               onClick={handleAddToCart}
-              className="bg-black text-white px-6 py-2 text-sm font-medium"
+              className="flex-1 bg-black text-white py-3 text-sm font-medium"
             >
               Add to Basket
             </Button>
