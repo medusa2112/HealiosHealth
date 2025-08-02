@@ -666,7 +666,7 @@ export default function ProductComprehensive() {
                   <div className="bg-gray-800 text-white px-2 py-1 text-xs font-medium">
                     {product.dailyDosage} per day
                   </div>
-                  <div className="bg-gray-600 text-white px-2 py-1 text-xs font-medium">
+                  <div className="bg-white border border-black text-black px-2 py-1 text-xs font-medium">
                     {product.supplyDays}-day supply
                   </div>
                   <button 
