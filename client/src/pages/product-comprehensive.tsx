@@ -460,6 +460,32 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports memory, focus, mental clarity, and cognitive performance'
         };
+      case 'collagen-powder':
+        return {
+          bundleWith: 'Biotin 10,000 µg Strawberry Gummies',
+          bundlePrice: 'R759.99',
+          bundleOriginalPrice: 'R959.97',
+          sectionTitle: 'THE BEAUTY FOUNDATION',
+          sectionHeading: 'Pure marine collagen powder\nfor skin elasticity, hair strength\nand nail vitality from within.',
+          stat1Number: '10g',
+          stat1Text: 'Pure Collagen\nPer Serving',
+          stat2Number: 'Type I & III',
+          stat2Text: 'Marine Collagen\nPeptides',
+          stat3Number: '90%',
+          stat3Text: 'Absorption\nRate',
+          stat4Number: '100%',
+          stat4Text: 'Unflavoured\n& Dissolves',
+          testimonial: '"Marine collagen provides the highest bioavailability of Type I and III collagen peptides. This unflavoured powder dissolves completely in any beverage for convenient daily beauty support."',
+          testimonialAuthor: 'DR. AMANDA FOSTER',
+          testimonialTitle: 'Dermatologist & Anti-Aging Specialist',
+          benefitTitle: 'Pure marine collagen for beauty support',
+          benefitDescription: '10g pure hydrolysed marine collagen peptides support skin elasticity, hair strength, nail vitality and joint health. Unflavoured powder dissolves easily in hot or cold drinks.',
+          ingredientSource: 'Hydrolysed marine collagen peptides (Type I & III)',
+          ingredientForm: 'Unflavoured powder',
+          ingredientOrigin: 'Sustainably sourced marine collagen with high bioavailability',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports skin elasticity, hair strength, nail vitality and joint health'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',

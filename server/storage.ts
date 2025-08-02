@@ -277,6 +277,24 @@ export class MemStorage implements IStorage {
         gender: null,
         type: 'supplement',
       },
+      {
+        id: "collagen-powder",
+        name: "Premium Collagen Powder (Unflavoured)",
+        description: "Pure hydrolysed marine collagen peptides for skin, hair, nail and joint support. Easily dissolves in hot or cold drinks with no taste or texture. Type I & III collagen for maximum bioavailability.",
+        price: "3999",
+        originalPrice: null,
+        imageUrl: "/assets/collagen-powder.png",
+        category: "Beauty",
+        rating: "4.8",
+        reviewCount: 892,
+        inStock: true,
+        stockQuantity: 15,
+        featured: true,
+        sizes: null,
+        colors: null,
+        gender: null,
+        type: 'supplement',
+      },
 
     ];
 
