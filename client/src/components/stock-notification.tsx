@@ -94,9 +94,10 @@ export function StockNotification() {
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
+          className="absolute top-2 right-2 z-20 p-3 rounded-full bg-black/50 hover:bg-black/70 transition-colors touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+          aria-label="Close notification"
         >
-          <X className="w-4 h-4 text-white" />
+          <X className="w-5 h-5 text-white" />
         </button>
 
         {/* Header with product image */}
