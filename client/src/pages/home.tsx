@@ -453,10 +453,10 @@ export default function HomePage() {
             <span>Eleven Eleven Sports Performance</span>
             <span>Peak Performance Nutrition</span>
             <span>Elite Wellness Studio</span>
-            <span>The Grind Fitness</span>
-            <span>Eleven Eleven Sports Performance</span>
-            <span>Peak Performance Nutrition</span>
-            <span>Elite Wellness Studio</span>
+            <span>Apex Health Solutions</span>
+            <span>Vitality Labs</span>
+            <span>Core Strength Institute</span>
+            <span>Pure Movement Collective</span>
           </div>
         </div>
       </section>
