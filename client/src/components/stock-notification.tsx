@@ -15,12 +15,19 @@ export function StockNotification() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Show notification after a short delay
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2000);
+    // Check if notification has already been shown
+    const hasShownNotification = localStorage.getItem('halo-glow-notification-shown');
+    
+    if (!hasShownNotification) {
+      // Show notification after 8 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+        // Mark as shown in localStorage
+        localStorage.setItem('halo-glow-notification-shown', 'true');
+      }, 8000);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleClose = () => {
