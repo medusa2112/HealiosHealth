@@ -655,18 +655,6 @@ export default function ProductComprehensive() {
                 <span className="text-3xl font-light text-gray-900 dark:text-white">
                   R{product.price}
                 </span>
-                
-                {/* Auto discount benefits */}
-                <div className="space-y-1 text-xs text-gray-700 mt-3">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3 h-3 text-green-600" />
-                    <span>2+ month supply</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3 h-3 text-green-600" />
-                    <span>Auto discount at checkout</span>
-                  </div>
-                </div>
               </div>
 
               {/* Supply Information Badges */}
