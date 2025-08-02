@@ -268,7 +268,7 @@ export default function ProductDetail() {
 
                 {/* Supply Information Badge */}
                 {(product as any).bottleCount && (
-                  <div className="bg-black text-white px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
+                  <div className="bg-white border border-black text-black px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
                     <span>{(product as any).bottleCount} {product.category === 'Beauty' && product.name.includes('Powder') ? 'servings' : 'gummies'}</span>
                     <span>•</span>
                     <span>{(product as any).dailyDosage} per day</span>
@@ -276,10 +276,10 @@ export default function ProductDetail() {
                     <span>{(product as any).supplyDays}-day supply</span>
                     <button 
                       onClick={() => setShowNotificationModal(true)}
-                      className="ml-2 hover:bg-gray-800 p-1 transition-colors"
+                      className="ml-2 bg-white border border-black text-black px-2 py-1 hover:bg-gray-50 transition-colors text-xs"
                       title="Set reorder reminder"
                     >
-                      <Bell className="w-3 h-3" />
+                      Get Notified
                     </button>
                   </div>
                 )}
