@@ -15,22 +15,19 @@ export function StockNotification() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if notification has already been shown
-    const hasShownNotification = localStorage.getItem('halo-glow-notification-shown');
+    // Clear localStorage for testing - TEMPORARY
+    localStorage.removeItem('halo-glow-notification-shown');
     
-    if (!hasShownNotification) {
-      // Show notification after 8 seconds
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-        // Mark as shown in localStorage
-        localStorage.setItem('halo-glow-notification-shown', 'true');
-      }, 8000);
+    // Show notification after 3 seconds for testing
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 3000);
 
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   const handleClose = () => {
+    console.log('Close button clicked'); // Debug log
     setIsVisible(false);
     setShowEmailForm(false);
   };
@@ -100,15 +97,23 @@ export function StockNotification() {
         {/* Close button */}
         <button
           onClick={(e) => {
+            console.log('Close button onClick triggered'); // Debug log
             e.preventDefault();
             e.stopPropagation();
             handleClose();
           }}
-          className="absolute top-3 right-3 z-50 p-4 rounded-full bg-black/80 hover:bg-black transition-colors touch-manipulation min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg"
+          onTouchEnd={(e) => {
+            console.log('Close button onTouchEnd triggered'); // Debug log
+            e.preventDefault();
+            e.stopPropagation();
+            handleClose();
+          }}
+          className="absolute top-1 right-1 z-[60] p-3 m-2 rounded-full bg-red-500 hover:bg-red-600 transition-colors touch-manipulation min-w-[50px] min-h-[50px] flex items-center justify-center shadow-xl border-2 border-white"
           aria-label="Close notification"
           type="button"
+          style={{ touchAction: 'manipulation' }}
         >
-          <X className="w-6 h-6 text-white stroke-2" />
+          <X className="w-7 h-7 text-white stroke-[3]" />
         </button>
 
         {/* Header with product image */}
