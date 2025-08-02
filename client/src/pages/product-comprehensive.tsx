@@ -664,20 +664,24 @@ export default function ProductComprehensive() {
                 </div>
               </div>
 
-              {/* Supply Information Badge */}
+              {/* Supply Information Badges */}
               {product.bottleCount && (
-                <div className="bg-black text-white px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
-                  <span>{product.bottleCount} {getProductUnit(product)}</span>
-                  <span>•</span>
-                  <span>{product.dailyDosage} per day</span>
-                  <span>•</span>
-                  <span>{product.supplyDays}-day supply</span>
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <div className="bg-black text-white px-2 py-1 text-xs font-medium">
+                    {product.bottleCount} {getProductUnit(product)}
+                  </div>
+                  <div className="bg-gray-800 text-white px-2 py-1 text-xs font-medium">
+                    {product.dailyDosage} per day
+                  </div>
+                  <div className="bg-gray-600 text-white px-2 py-1 text-xs font-medium">
+                    {product.supplyDays}-day supply
+                  </div>
                   <button 
                     onClick={() => setShowNotificationModal(true)}
-                    className="ml-2 hover:bg-gray-800 p-1 transition-colors"
+                    className="bg-gray-100 hover:bg-gray-200 p-2 transition-colors border border-gray-300"
                     title="Set reorder reminder"
                   >
-                    <Bell className="w-3 h-3" />
+                    <Bell className="w-3 h-3 text-gray-600" />
                   </button>
                 </div>
               )}
