@@ -150,7 +150,7 @@ export function StockNotification() {
               <Button
                 onClick={handleClose}
                 variant="outline"
-                className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black"
               >
                 Close
               </Button>
@@ -196,7 +196,7 @@ export function StockNotification() {
                     type="button"
                     onClick={() => setShowEmailForm(false)}
                     variant="outline"
-                    className="px-4 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 text-sm"
+                    className="px-4 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
                   >
                     Back
                   </Button>
