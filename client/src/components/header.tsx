@@ -34,9 +34,9 @@ export function Header() {
     {
       title: "Bestsellers",
       items: [
+        { href: "/products/collagen-powder", label: "Halo Glow Collagen Powder" },
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar Gummies" },
         { href: "/products/vitamin-d3", label: "Vitamin D3 4000 IU Gummies" },
-        { href: "/products/magnesium", label: "Magnesium Gummies" },
         { href: "/products/mind-memory-mushroom", label: "Mind & Memory Mushroom Gummies" },
         { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
         { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
