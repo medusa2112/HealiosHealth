@@ -95,11 +95,22 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleAnswer = (questionId: number, answer: string | string[]) => {
+  const handleAnswer = (questionId: number, answer: string | string[], questionType: 'single' | 'multiple' = 'single') => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: answer
     }));
+
+    // Auto-advance for single choice questions
+    if (questionType === 'single') {
+      setTimeout(() => {
+        if (currentQuestion < quizQuestions.length - 1) {
+          setCurrentQuestion(prev => prev + 1);
+        } else {
+          setIsCompleted(true);
+        }
+      }, 800); // Small delay to show selection feedback
+    }
   };
 
   const handleNext = () => {
@@ -229,7 +240,7 @@ export default function QuizPage() {
                         name={`question-${currentQuestionData.id}`}
                         value={option}
                         checked={currentAnswer === option}
-                        onChange={(e) => handleAnswer(currentQuestionData.id, e.target.value)}
+                        onChange={(e) => handleAnswer(currentQuestionData.id, e.target.value, 'single')}
                         className="sr-only"
                       />
                       <div className={`w-4 h-4 border-2 transition-colors ${
@@ -266,9 +277,9 @@ export default function QuizPage() {
                         onChange={(e) => {
                           const currentAnswers = Array.isArray(currentAnswer) ? currentAnswer : [];
                           if (e.target.checked) {
-                            handleAnswer(currentQuestionData.id, [...currentAnswers, option]);
+                            handleAnswer(currentQuestionData.id, [...currentAnswers, option], 'multiple');
                           } else {
-                            handleAnswer(currentQuestionData.id, currentAnswers.filter(a => a !== option));
+                            handleAnswer(currentQuestionData.id, currentAnswers.filter(a => a !== option), 'multiple');
                           }
                         }}
                         className="sr-only"
