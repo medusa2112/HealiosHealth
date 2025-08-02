@@ -3,7 +3,7 @@ import { X, Send, Loader2, Bot, User, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import hannahImage from '@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png';
 
 interface Message {
@@ -122,20 +122,20 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="right" className="w-full sm:w-[420px] lg:w-[480px] flex flex-col p-0 backdrop-blur-2xl bg-black/40 border-l border-white/10 shadow-2xl">
         {/* Header with gradient background */}
-        <SheetHeader className="px-6 py-6 bg-black/60 backdrop-blur-xl relative overflow-hidden">
+        <SheetHeader className="px-4 sm:px-6 py-4 sm:py-6 bg-black/60 backdrop-blur-xl relative overflow-hidden">
           {/* Animated background pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/[0.02] via-transparent to-white/[0.02] animate-pulse"></div>
-          <div className="relative z-10 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20">
+          <div className="relative z-10 flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shadow-lg ring-2 ring-white/20">
               <img 
                 src={hannahImage} 
                 alt="Hannah - Product information assistant"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex-1">
-              <SheetTitle className="text-xl font-bold text-white mb-1">Hannah</SheetTitle>
-              <p className="text-sm text-gray-300 font-medium">Product information • Research-based facts</p>
+            <div className="flex-1 min-w-0">
+              <SheetTitle className="text-lg sm:text-xl font-bold text-white mb-1">Hannah</SheetTitle>
+              <SheetDescription className="text-xs sm:text-sm text-gray-300 font-medium">Product information • Research-based facts</SheetDescription>
             </div>
           </div>
           {/* Subtle bottom border with gradient */}
@@ -143,23 +143,23 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         </SheetHeader>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-6 bg-black/10">
-          <div className="space-y-6">
+        <ScrollArea className="flex-1 p-3 sm:p-6 bg-black/10">
+          <div className="space-y-4 sm:space-y-6">
             {messages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.isUser ? 'justify-end' : 'justify-start'} animate-fadeIn`}
               >
-                <div className={`flex items-start gap-3 max-w-[360px] ${
+                <div className={`flex items-start gap-2 sm:gap-3 max-w-[85%] sm:max-w-[360px] ${
                   message.isUser ? 'flex-row-reverse' : 'flex-row'
                 }`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden ${
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden ${
                     message.isUser 
                       ? 'bg-gradient-to-br from-white to-gray-100' 
                       : 'ring-1 ring-gray-600'
                   }`}>
                     {message.isUser ? (
-                      <User className="w-4 h-4 text-black" />
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
                     ) : (
                       <img 
                         src={hannahImage} 
@@ -168,13 +168,13 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                       />
                     )}
                   </div>
-                  <div className={`rounded-2xl p-4 shadow-lg backdrop-blur-sm ${
+                  <div className={`rounded-2xl p-3 sm:p-4 shadow-lg backdrop-blur-sm ${
                     message.isUser
                       ? 'bg-gradient-to-br from-white to-gray-50 text-black border border-gray-200'
                       : 'bg-gradient-to-br from-gray-800/90 to-black/90 text-white border border-gray-700/50'
                   }`}>
                     <div 
-                      className="text-sm leading-relaxed whitespace-pre-wrap"
+                      className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap"
                       dangerouslySetInnerHTML={{
                         __html: message.content
                           .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
@@ -182,7 +182,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                           .replace(/\n/g, '<br>')
                       }}
                     />
-                    <p className={`text-xs mt-2 font-medium ${
+                    <p className={`text-[10px] sm:text-xs mt-2 font-medium ${
                       message.isUser ? 'text-gray-500' : 'text-gray-400'
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -194,21 +194,21 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
             
             {isLoading && (
               <div className="flex justify-start animate-fadeIn">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full overflow-hidden shadow-lg ring-1 ring-gray-600">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden shadow-lg ring-1 ring-gray-600">
                     <img 
                       src={hannahImage} 
                       alt="Hannah"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="bg-gradient-to-br from-gray-800/90 to-black/90 border border-gray-700/50 rounded-2xl p-4 shadow-lg backdrop-blur-sm">
-                    <div className="flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-gray-800/90 to-black/90 border border-gray-700/50 rounded-2xl p-3 sm:p-4 shadow-lg backdrop-blur-sm">
+                    <div className="flex items-center gap-2 sm:gap-3">
                       <div className="relative">
-                        <Loader2 className="w-5 h-5 animate-spin text-white" />
+                        <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-white" />
                         <div className="absolute inset-0 rounded-full bg-white/20 animate-ping"></div>
                       </div>
-                      <span className="text-sm text-white font-medium">Thinking...</span>
+                      <span className="text-xs sm:text-sm text-white font-medium">Thinking...</span>
                     </div>
                   </div>
                 </div>
@@ -221,17 +221,17 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
         {/* Quick Questions (only show if no conversation yet) */}
         {messages.length === 1 && (
-          <div className="px-6 py-4 bg-black/30 backdrop-blur-xl">
-            <div className="mb-3 flex items-center gap-2">
+          <div className="px-3 sm:px-6 py-3 sm:py-4 bg-black/30 backdrop-blur-xl">
+            <div className="mb-2 sm:mb-3 flex items-center gap-2">
               <div className="w-1 h-1 rounded-full bg-white animate-pulse"></div>
-              <p className="text-sm text-white font-medium">Quick questions</p>
+              <p className="text-xs sm:text-sm text-white font-medium">Quick questions</p>
             </div>
             <div className="space-y-2">
               {quickQuestions.slice(0, 3).map((question, index) => (
                 <button
                   key={index}
                   onClick={() => handleQuickQuestion(question)}
-                  className="text-xs text-left w-full p-3 rounded-xl bg-gradient-to-r from-gray-800/60 to-black/60 border border-gray-700/50 hover:from-white hover:to-gray-100 hover:text-black transition-all duration-300 text-white font-medium shadow-lg backdrop-blur-sm hover:shadow-xl hover:scale-[1.02]"
+                  className="text-[10px] sm:text-xs text-left w-full p-2 sm:p-3 rounded-xl bg-gradient-to-r from-gray-800/60 to-black/60 border border-gray-700/50 hover:from-white hover:to-gray-100 hover:text-black transition-all duration-300 text-white font-medium shadow-lg backdrop-blur-sm hover:shadow-xl hover:scale-[1.02] leading-tight"
                 >
                   {question}
                 </button>
@@ -241,10 +241,10 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
         )}
 
         {/* Input */}
-        <div className="p-6 bg-black/60 backdrop-blur-xl">
+        <div className="p-3 sm:p-6 bg-black/60 backdrop-blur-xl">
           <div className="relative">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
               <div className="flex-1 relative">
                 <Input
                   ref={inputRef}
@@ -252,7 +252,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about ingredients, dosages, benefits..."
-                  className="w-full text-sm bg-black border-white/30 text-white placeholder:text-gray-400 focus:border-white rounded-xl px-4 py-3 shadow-lg focus:shadow-xl transition-all duration-300"
+                  className="w-full text-xs sm:text-sm bg-black border-white/30 text-white placeholder:text-gray-400 focus:border-white rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-lg focus:shadow-xl transition-all duration-300"
                   disabled={isLoading}
                 />
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/[0.02] to-transparent pointer-events-none"></div>
@@ -260,9 +260,9 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="px-4 py-3 bg-white hover:bg-gray-100 text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                className="px-3 sm:px-4 py-2 sm:py-3 bg-white hover:bg-gray-100 text-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
               >
-                <Send className="w-4 h-4 text-black" />
+                <Send className="w-3 h-3 sm:w-4 sm:h-4 text-black" />
               </Button>
             </div>
           </div>
