@@ -15,6 +15,17 @@ import { PreOrderPopup } from "@/components/pre-order-popup";
 import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 
+// Helper function to determine the correct unit for products
+const getProductUnit = (product: Product): string => {
+  const name = product.name.toLowerCase();
+  if (name.includes('gummies')) return 'gummies';
+  if (name.includes('powder')) return 'servings';
+  if (name.includes('capsules')) return 'capsules';
+  if (name.includes('tablets')) return 'tablets';
+  // Default for supplements
+  return 'capsules';
+};
+
 export default function ProductComprehensive() {
   const [, params] = useRoute("/products/:id");
   const { addToCart, removeFromCart } = useCart();
@@ -642,13 +653,13 @@ export default function ProductComprehensive() {
               </div>
 
               {/* Supply Information Badge */}
-              {(product as any).bottleCount && (
+              {product.bottleCount && (
                 <div className="bg-black text-white px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
-                  <span>{(product as any).bottleCount} {product.category === 'Beauty' && product.name.includes('Powder') ? 'servings' : 'gummies'}</span>
+                  <span>{product.bottleCount} {getProductUnit(product)}</span>
                   <span>•</span>
-                  <span>{(product as any).dailyDosage} per day</span>
+                  <span>{product.dailyDosage} per day</span>
                   <span>•</span>
-                  <span>{(product as any).supplyDays}-day supply</span>
+                  <span>{product.supplyDays}-day supply</span>
                   <button 
                     onClick={() => setShowNotificationModal(true)}
                     className="ml-2 hover:bg-gray-800 p-1 transition-colors"
@@ -665,7 +676,7 @@ export default function ProductComprehensive() {
                   <div className="bg-white dark:bg-gray-800 p-6 max-w-sm w-full">
                     <h3 className="font-medium text-gray-900 dark:text-white mb-4">Reorder Reminder</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                      Get notified 10 days before your {(product as any).supplyDays}-day supply runs out.
+                      Get notified 10 days before your {product.supplyDays}-day supply runs out.
                     </p>
                     <div className="flex gap-3">
                       <button 
@@ -673,7 +684,7 @@ export default function ProductComprehensive() {
                           setShowNotificationModal(false);
                           toast({
                             title: "Reminder set!",
-                            description: `We'll notify you on ${new Date(Date.now() + ((product as any).supplyDays - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}`
+                            description: `We'll notify you on ${new Date(Date.now() + (product.supplyDays! - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}`
                           });
                         }}
                         className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
