@@ -36,12 +36,10 @@ export function Header() {
       items: [
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar Gummies" },
         { href: "/products/vitamin-d3", label: "Vitamin D3 4000 IU Gummies" },
-        { href: "/products/iron-vitamin-c", label: "Iron + Vitamin C Gummies" },
-        { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
-        { href: "/products/ashwagandha", label: "Ashwagandha Gummies" },
-        { href: "/products/probiotic-vitamins", label: "Probiotic + Vitamins Gummies" },
         { href: "/products/magnesium", label: "Magnesium Gummies" },
-        { href: "/products/collagen-complex", label: "Collagen Complex Gummies" },
+        { href: "/products/mind-memory-mushroom", label: "Mind & Memory Mushroom Gummies" },
+        { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
+        { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
       ]
     },
     {
