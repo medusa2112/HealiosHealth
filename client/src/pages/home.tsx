@@ -543,11 +543,11 @@ export default function HomePage() {
 
             {/* Right Column - Image */}
             <div className="order-1 lg:order-2 mb-8 lg:mb-0">
-              <div className="relative bg-white dark:bg-gray-200 aspect-square flex items-center justify-center p-8">
+              <div className="relative aspect-square overflow-hidden">
                 <img 
                   src="/assets/Lion's Mane Gummies (2000mg)_1754125996287.png"
                   alt="Mind & Memory Mushroom - Lion's Mane Gummies (2000mg)"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
