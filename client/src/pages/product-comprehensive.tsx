@@ -14,6 +14,7 @@ import { PreOrderPopup } from "@/components/pre-order-popup";
 // Import images
 import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
+import haloGlowImage from '@assets/HaloGlow_1754136104683.png';
 
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {
@@ -144,8 +145,12 @@ export default function ProductComprehensive() {
     );
   }
 
-  // Product images - only show one image if that's all we have
-  const productImages = [product.imageUrl];
+  // Product images - use correct image for each product
+  const productImages = [
+    product.id === 'collagen-complex' || product.name.toLowerCase().includes('halo glow') || product.name.toLowerCase().includes('collagen')
+      ? haloGlowImage
+      : product.imageUrl
+  ];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
