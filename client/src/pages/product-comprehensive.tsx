@@ -1342,27 +1342,16 @@ export default function ProductComprehensive() {
                       )}
                       {section === 'SHIPPING AND RETURNS' && (
                         <div>
-                          {product.id === 'mind-memory-mushroom' ? (
-                            <div>
-                              <p className="font-medium mb-2">Shipping and Returns:</p>
-                              <ul className="mt-2 space-y-1 text-sm">
-                                <li>• <strong>UK Delivery:</strong> 2–3 working days</li>
-                                <li>• <strong>EU Delivery:</strong> 5–7 working days</li>
-                                <li>• <strong>Returns:</strong> 30-day money-back guarantee if unopened</li>
-                                <li>• <strong>Fulfilled from:</strong> UK warehouse, under food-grade manufacturing standards</li>
-                              </ul>
-                            </div>
-                          ) : (
-                            <div>
-                              <p>We currently ship to the following countries:</p>
-                              <ul className="mt-2 space-y-1 text-xs">
-                                <li>• UK: 2-3 business days</li>
-                                <li>• USA: 5-7 business days</li>
-                                <li>• Canada: 6-8 business days</li>
-                                <li>• Australia: 7 business days</li>
-                              </ul>
-                            </div>
-                          )}
+                          <p className="font-medium mb-2">Shipping and Returns:</p>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• <strong>South Africa Delivery:</strong> 2–3 working days</li>
+                            <li>• <strong>UK Delivery:</strong> 5–7 working days</li>
+                            <li>• <strong>EU Delivery:</strong> 7–10 working days</li>
+                            <li>• <strong>USA/Canada:</strong> 10–14 working days</li>
+                            <li>• <strong>Australia:</strong> 12–16 working days</li>
+                            <li>• <strong>Returns:</strong> 30-day money-back guarantee if unopened</li>
+                            <li>• <strong>Fulfilled from:</strong> South African warehouse, under GMP manufacturing standards</li>
+                          </ul>
                         </div>
                       )}
                     </div>
