@@ -1623,21 +1623,6 @@ export default function ProductComprehensive() {
         </section>
       )}
 
-      {/* Customer Reviews */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-lg text-gray-600 mb-8">
-            Every 40 seconds one of our supplements is sold
-          </p>
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="text-sm font-medium">Excellent</span>
-            {[1,2,3,4,5].map((star) => (
-              <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            ))}
-            <span className="text-sm text-gray-600">4.74 based on 306 reviews</span>
-          </div>
-        </div>
-      </section>
 
       {/* Fixed Bottom Purchase Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 lg:hidden">
