@@ -897,7 +897,7 @@ export default function ProductComprehensive() {
 
             {/* Expandable Sections */}
             <div className="space-y-2">
-              {['DESCRIPTION', 'NUTRITIONAL INFORMATION', 'INGREDIENTS', 'HOW TO TAKE', 'FAQS', 'SHIPPING AND RETURNS'].map((section) => (
+              {['DESCRIPTION', 'NUTRITIONAL INFORMATION', 'INGREDIENTS', 'HOW TO TAKE', 'PACKAGE INFORMATION', 'FAQS', 'SHIPPING AND RETURNS'].map((section) => (
                 <div key={section} className="border-b border-gray-200">
                   <button
                     onClick={() => setExpandedSection(expandedSection === section ? null : section)}
@@ -1321,6 +1321,30 @@ export default function ProductComprehensive() {
                           ) : (
                             <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
                           )}
+                        </div>
+                      )}
+                      {section === 'PACKAGE INFORMATION' && (
+                        <div>
+                          <p className="font-medium mb-3">Package Design & Regional Variations:</p>
+                          <div className="space-y-3 text-sm text-gray-600">
+                            <p>
+                              <strong>Product packaging may vary</strong> from the images shown due to:
+                            </p>
+                            <ul className="space-y-2 ml-4">
+                              <li>• <strong>Regional distribution requirements</strong> - Package design may differ between countries to meet local regulatory standards and language requirements</li>
+                              <li>• <strong>Design updates and improvements</strong> - We continuously enhance our packaging design, sustainability materials, and product presentation</li>
+                              <li>• <strong>Supply chain optimization</strong> - Manufacturing locations may vary to ensure product freshness and reduce environmental impact</li>
+                              <li>• <strong>Batch variations</strong> - Minor differences in color, texture, or appearance may occur between production batches while maintaining identical formulation</li>
+                            </ul>
+                            <div className="bg-gray-50 p-3 border border-gray-200 mt-4">
+                              <p className="text-sm">
+                                <strong>Quality Guarantee:</strong> Regardless of packaging appearance, all products maintain the same high-quality formulation, potency, and safety standards. Product contents, nutritional values, and active ingredients remain consistent across all package variations.
+                              </p>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-3">
+                              If you receive a product with packaging that differs from our website images, rest assured the contents and quality remain identical. Contact our support team if you have any concerns about your product.
+                            </p>
+                          </div>
                         </div>
                       )}
                       {section === 'FAQS' && (
