@@ -18,6 +18,17 @@ export function StockUpdateBanner() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    // Auto-close after 7 seconds when banner becomes visible
+    if (isVisible && !isClosing) {
+      const autoCloseTimer = setTimeout(() => {
+        handleClose();
+      }, 7000);
+
+      return () => clearTimeout(autoCloseTimer);
+    }
+  }, [isVisible, isClosing]);
+
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
