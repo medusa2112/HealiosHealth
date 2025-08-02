@@ -10,7 +10,7 @@ interface SEOHeadProps {
 
 export function SEOHead({
   title = "Food-Grown® Supplements | Premium Natural Vitamins | WildClone",
-  description = "Shop Food-Grown® supplements with 113% better absorption. Premium natural vitamins, fertility support, magnesium & more. Trusted by 300,000+ customers.",
+  description = "Shop Food-Grown® supplements with 113% better absorption. Premium natural vitamins, fertility support, magnesium & more. Trusted by thousands of customers.",
   keywords = "food grown supplements, natural vitamins, magnesium supplement, fertility support, vitamin D, collagen, organic supplements",
   image = "https://wildclone.com/images/og-image.jpg",
   url = "https://wildclone.com",

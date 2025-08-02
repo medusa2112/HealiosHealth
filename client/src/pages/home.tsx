@@ -441,7 +441,7 @@ export default function HomePage() {
               <span className="font-medium">4.84 RATING</span>
             </div>
             <div className="text-xs opacity-80">
-              LOVED BY 300,000+ CUSTOMERS
+              LOVED BY THOUSANDS OF CUSTOMERS
             </div>
           </div>
         </div>
