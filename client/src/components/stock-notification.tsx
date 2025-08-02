@@ -122,7 +122,7 @@ export function StockNotification() {
           </h3>
           
           <p className="text-gray-700 mb-4 leading-relaxed">
-            Our new <strong>Halo Glow</strong> premium collagen product has completely sold out due to incredible demand.
+            Thanks to your incredible support, demand for our <strong>Halo Glow</strong> premium collagen exceeded all expectations - every unit is now sold out.
           </p>
           
           <div className="bg-gray-50 rounded-lg p-3 mb-4">
