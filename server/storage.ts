@@ -355,27 +355,6 @@ export class MemStorage implements IStorage {
         dailyDosage: 2,
         supplyDays: 75,
       },
-      {
-        id: "bio-cultures-vitamin-plus-kids",
-        name: "Gut + Mind + Energy Vitamin Plus Gummies for Kids (Pineapple Flavour)",
-        description: "A tasty vegan gummy with bio-cultures (400M CFU) and essential B-vitamins designed for children aged 3+. Supports energy, psychological function, and immune health with 1 gummy daily.",
-        price: "419.00",
-        originalPrice: null,
-        imageUrl: "/assets/Bio-Cultures Vitamin Plus Gummies_1754131929638.png",
-        category: "Children",
-        rating: "4.9",
-        reviewCount: 328,
-        inStock: true,
-        stockQuantity: 15,
-        featured: true,
-        sizes: null,
-        colors: null,
-        gender: null,
-        type: 'supplement',
-        bottleCount: 150,
-        dailyDosage: 1,
-        supplyDays: 150,
-      },
 
     ];
 
