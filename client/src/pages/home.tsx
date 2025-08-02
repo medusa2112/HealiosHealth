@@ -457,7 +457,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Mind & Memory Mushroom Featured Section */}
+      {/* Halo Glow Collagen Featured Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
@@ -465,46 +465,46 @@ export default function HomePage() {
             <div className="order-2 lg:order-1 mb-12 lg:mb-0">
               <div className="mb-4">
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                  NEW ARRIVAL • PREORDER NOW
+                  NEW ARRIVAL • SOLD OUT
                 </span>
               </div>
               <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                Mind & Memory<br />
-                Mushroom
+                Halo Glow<br />
+                Collagen
               </h2>
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="text-2xl font-light text-gray-900 dark:text-white">R249.99</span>
+                  <span className="text-2xl font-light text-gray-900 dark:text-white">R299.99</span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(1,032 reviews)</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(2,847 reviews)</span>
                   </div>
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg leading-relaxed">
-                Powerful daily support for brain health, focus, and cognition with 200mg 10:1 Lion's Mane extract 
-                (equivalent to 2000mg dried). Premium nootropic benefits in delicious berry-flavored vegan gummies.
+                Premium collagen complex with hyaluronic acid and vitamin C for radiant skin, strong hair, and healthy nails. 
+                Our advanced formula supports natural collagen production and skin elasticity from within.
               </p>
               
               {/* Stats Row */}
               <div className="grid grid-cols-4 gap-4 mb-8">
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">2000mg</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Fruiting body equivalent</div>
+                  <div className="font-medium text-gray-900 dark:text-white">2.5g</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Collagen per serving</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">1 in 3</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">UK adults struggle with memory</div>
+                  <div className="font-medium text-gray-900 dark:text-white">Type I & III</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Marine collagen</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">60 days</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">2-month supply</div>
+                  <div className="font-medium text-gray-900 dark:text-white">30 days</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">1-month supply</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">10:1</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">High-strength extract</div>
+                  <div className="font-medium text-gray-900 dark:text-white">+Vitamin C</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Enhanced absorption</div>
                 </div>
               </div>
 
@@ -512,12 +512,12 @@ export default function HomePage() {
               <div className="bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-600 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white text-sm">Preorder Now</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">250 units arriving September 1st</div>
+                    <div className="font-medium text-gray-900 dark:text-white text-sm">Currently Sold Out</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">500 units restocking August 28th</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Limited quantity</div>
-                    <div className="text-xs font-medium text-green-600">Reserve yours today</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">High demand item</div>
+                    <div className="text-xs font-medium text-orange-600">Get notified when available</div>
                   </div>
                 </div>
               </div>
@@ -525,15 +525,15 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                   onClick={() => {
-                    setSelectedProductName('Mind & Memory Mushroom - Lion\'s Mane Gummies (2000mg)');
-                    setSelectedSalePrice('R249.99');
+                    setSelectedProductName('Halo Glow Collagen Complex');
+                    setSelectedSalePrice('R299.99');
                     setShowPreOrderModal(true);
                   }}
-                  className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors flex-1"
+                  className="bg-gray-600 text-white px-8 py-4 font-medium hover:bg-gray-700 transition-colors flex-1"
                 >
-                  Preorder Now
+                  Notify When Available
                 </button>
-                <Link href="/products/mind-memory-mushroom">
+                <Link href="/products/collagen-complex">
                   <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     Learn More →
                   </button>
@@ -545,8 +545,8 @@ export default function HomePage() {
             <div className="order-1 lg:order-2 mb-8 lg:mb-0">
               <div className="relative aspect-square overflow-hidden">
                 <img 
-                  src="/assets/Lion's Mane Gummies (2000mg)_1754125996287.png"
-                  alt="Mind & Memory Mushroom - Lion's Mane Gummies (2000mg)"
+                  src="/assets/HaloGlow_1754136104683.png"
+                  alt="Halo Glow Collagen Complex - Premium Marine Collagen"
                   className="w-full h-full object-cover"
                 />
               </div>
