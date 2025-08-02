@@ -265,7 +265,7 @@ export class MemStorage implements IStorage {
         description: "Powerful daily support for brain health, focus, and cognition with 200mg 10:1 Lion's Mane extract (equivalent to 2000mg dried). Premium nootropic benefits in delicious berry-flavored vegan gummies.",
         price: "2499",
         originalPrice: null,
-        imageUrl: "/assets/lions-mane-gummies.png",
+        imageUrl: "/assets/Lion's Mane Gummies (2000mg)_1754125996287.png",
         category: "Mushrooms",
         rating: "4.9",
         reviewCount: 1032,
