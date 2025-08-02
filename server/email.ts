@@ -52,45 +52,60 @@ export class EmailService {
           <meta charset="utf-8">
           <title>Order Confirmation - Healios</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #000; margin: 0;">Healios</h1>
-            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-            <h2 style="color: #333; margin: 0 0 10px 0;">Order Confirmed!</h2>
-            <p style="margin: 0; color: #666;">Thank you for your order. We'll send you shipping details once your order is on its way.</p>
-          </div>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: left;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                ORDER CONFIRMATION
+              </div>
+              
+              <h1 style="color: #000; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                Your order has been confirmed and will be processed within 1-2 business days.
+              </h1>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Order Details</h3>
-            <p><strong>Order ID:</strong> ${order.id}</p>
-            <p><strong>Order Date:</strong> ${new Date(order.createdAt || Date.now()).toLocaleDateString()}</p>
-            <p><strong>Total:</strong> R${order.totalAmount}</p>
-          </div>
+            <!-- Order Stats Grid -->
+            <div style="padding: 0 40px; margin-bottom: 40px;">
+              <div style="display: table; width: 100%; border-collapse: collapse;">
+                <div style="display: table-row;">
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">#${order.id.slice(-8)}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">ORDER<br>NUMBER</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">R${order.totalAmount}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">ORDER<br>TOTAL</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">${new Date(order.createdAt || Date.now()).toLocaleDateString()}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">ORDER<br>DATE</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">1-2 Days</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">PROCESSING<br>TIME</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Items Ordered</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-              ${orderItemsHtml}
-            </table>
-          </div>
+            <!-- Items Ordered -->
+            <div style="padding: 0 40px; margin-bottom: 40px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                ITEMS ORDERED
+              </div>
+              <table style="width: 100%; border-collapse: collapse; border-top: 1px solid #eee;">
+                ${orderItemsHtml}
+              </table>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Shipping Address</h3>
-            <p style="white-space: pre-line;">${order.shippingAddress}</p>
-          </div>
-
-          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0;">What's Next?</h3>
-            <p style="margin: 0;">We'll process your order within 1-2 business days and send you tracking information via email.</p>
-          </div>
-
-          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="color: #666; font-size: 12px;">
-              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
-            </p>
+            <!-- CTA Buttons -->
+            <div style="padding: 0 40px 60px 40px;">
+              <div style="margin-bottom: 20px;">
+                <a href="https://healios.com/products" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500; margin-right: 15px;">Shop Healios supplements →</a>
+                <a href="https://healios.com/science" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500;">Learn about our science →</a>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -206,34 +221,50 @@ export class EmailService {
           <meta charset="utf-8">
           <title>Pre-Order Confirmation - Healios</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #000; margin: 0;">Healios</h1>
-            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-            <h2 style="color: #333; margin: 0 0 10px 0;">Pre-Order Confirmed!</h2>
-            <p style="margin: 0; color: #666;">Thank you for your interest in ${preOrder.productName}. We'll notify you as soon as it's back in stock.</p>
-          </div>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: left;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                THE COGNITIVE ADVANTAGE
+              </div>
+              
+              <h1 style="color: #000; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                Your ${preOrder.productName} pre-order has been confirmed.
+              </h1>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Your Pre-Order</h3>
-            <p><strong>Product:</strong> ${preOrder.productName}</p>
-            <p><strong>Quantity:</strong> ${preOrder.quantity || 1}</p>
-            <p><strong>Price:</strong> R${preOrder.productPrice} each</p>
-            <p><strong>Estimated Total:</strong> R${(parseFloat(preOrder.productPrice) * (preOrder.quantity || 1)).toFixed(2)}</p>
-          </div>
+            <!-- Product Stats Grid -->
+            <div style="padding: 0 40px; margin-bottom: 40px;">
+              <div style="display: table; width: 100%; border-collapse: collapse;">
+                <div style="display: table-row;">
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">R${preOrder.productPrice}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">PREORDER<br>PRICE</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">${preOrder.quantity || 1}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">QUANTITY<br>REQUESTED</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">Sept 1st</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">EXPECTED<br>RESTOCK</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">No Payment</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">REQUIRED<br>UNTIL STOCK</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0;">What Happens Next?</h3>
-            <p style="margin: 0;">We'll email you immediately when this product is back in stock. No payment is required until then.</p>
-          </div>
-
-          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="color: #666; font-size: 12px;">
-              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
-            </p>
+            <!-- CTA Buttons -->
+            <div style="padding: 0 40px 60px 40px;">
+              <div style="margin-bottom: 20px;">
+                <a href="https://healios.com/products" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500; margin-right: 15px;">Shop Healios supplements →</a>
+                <a href="https://healios.com/science" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500;">Learn about our science →</a>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -341,33 +372,50 @@ export class EmailService {
           <meta charset="utf-8">
           <title>Restock Notification Confirmed - Healios</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #000; margin: 0;">Healios</h1>
-            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-            <h2 style="color: #333; margin: 0 0 10px 0;">You're on the list, ${firstName}!</h2>
-            <p style="margin: 0; color: #666;">We'll notify you as soon as ${product} is back in stock.</p>
-          </div>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: left;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                RESTOCK NOTIFICATION
+              </div>
+              
+              <h1 style="color: #000; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                You're on the list, ${firstName}! We'll notify you as soon as ${product} is back in stock.
+              </h1>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Notification Details</h3>
-            <p><strong>Product:</strong> ${product}</p>
-            <p><strong>Expected Restock:</strong> ${restockDate}</p>
-            <p><strong>Your Email:</strong> ${email}</p>
-          </div>
+            <!-- Product Stats Grid -->
+            <div style="padding: 0 40px; margin-bottom: 40px;">
+              <div style="display: table; width: 100%; border-collapse: collapse;">
+                <div style="display: table-row;">
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">${product}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">PRODUCT<br>REQUESTED</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">${restockDate}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">EXPECTED<br>RESTOCK</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">${email}</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">NOTIFICATION<br>EMAIL</div>
+                  </div>
+                  <div style="display: table-cell; width: 25%; padding: 20px 10px; text-align: left; vertical-align: top;">
+                    <div style="font-size: 24px; font-weight: 400; color: #000; margin-bottom: 8px;">Instant</div>
+                    <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4;">EMAIL<br>ALERT</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0;">What Happens Next?</h3>
-            <p style="margin: 0;">We'll send you an email the moment ${product} is available for purchase. Be ready to order quickly as popular items sell fast!</p>
-          </div>
-
-          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="color: #666; font-size: 12px;">
-              Questions? Contact us at <a href="mailto:dn@thefourths.com" style="color: #000;">dn@thefourths.com</a>
-            </p>
+            <!-- CTA Buttons -->
+            <div style="padding: 0 40px 60px 40px;">
+              <div style="margin-bottom: 20px;">
+                <a href="https://healios.com/products" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500; margin-right: 15px;">Shop Healios supplements →</a>
+                <a href="https://healios.com/science" style="display: inline-block; background-color: #000; color: white; padding: 16px 32px; text-decoration: none; font-size: 14px; font-weight: 500;">Learn about our science →</a>
+              </div>
+            </div>
           </div>
         </body>
         </html>
