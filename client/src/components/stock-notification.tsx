@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import haloGlowImage from '@assets/WhatsApp Image 2025-08-02 at 10.40.29_1754124417135.jpeg';
+import haloGlowImage from '@assets/HaloGlow_1754136104683.png';
 
 export function StockNotification() {
   const [isVisible, setIsVisible] = useState(false);
