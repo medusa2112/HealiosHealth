@@ -640,8 +640,8 @@ export default function ProductComprehensive() {
                 </span>
               </div>
             </div>
-            {/* Better Together Section - Only show if recommended product is in stock */}
-            {(() => {
+            {/* Better Together Section - Only show for non-Children products and if recommended product is in stock */}
+            {product.category !== "Children" && (() => {
               const bundleProduct = allProducts?.find(p => p.name === productContent.bundleWith);
               const showBundleSection = bundleProduct && bundleProduct.inStock;
               
@@ -702,9 +702,8 @@ export default function ProductComprehensive() {
                         {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
                         {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
                         {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
-                        {product.id === 'childrens-multivitamin' && 'Complete multivitamin foundation enhanced with extra vitamin D for growing bones and immunity.'}
                         {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
-                        {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'childrens-multivitamin', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
+                        {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
                       </p>
                     </div>
 
@@ -722,6 +721,47 @@ export default function ProductComprehensive() {
                 </div>
               );
             })()}
+
+            {/* Special Discount Section - Only for Children products */}
+            {product.category === "Children" && (
+              <div className="border border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 p-4 mb-6">
+                <div className="text-center">
+                  <h3 className="font-medium text-sm mb-2">Stock Up & Save</h3>
+                  <p className="text-xs text-gray-600 mb-4">Buy 2 or more and save 20%</p>
+                  
+                  <div className="bg-white p-3 mb-4 border border-gray-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-left">
+                        <p className="text-xs text-gray-600">2 Bottles</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          Regular: R{(parseFloat(product.price) * 2).toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-green-600">20% Off</p>
+                        <p className="text-sm font-medium text-green-600">
+                          You Pay: R{(parseFloat(product.price) * 2 * 0.8).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-xs font-medium text-green-600 text-center">
+                      Save R{(parseFloat(product.price) * 2 * 0.2).toFixed(2)}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 text-xs text-gray-700">
+                    <div className="flex items-center gap-2">
+                      <Check className="w-3 h-3 text-green-600" />
+                      <span>2+ month supply</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-3 h-3 text-green-600" />
+                      <span>Auto discount at checkout</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Add to Cart Section */}
             {product.inStock ? (

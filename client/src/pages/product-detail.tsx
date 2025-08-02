@@ -443,60 +443,126 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Better Together Section */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
-            Better <em className="italic">together</em>
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Our Expert Nutritional Therapists Recommend...
-          </p>
-          
-          <div className="bg-gray-50 dark:bg-gray-800 p-8">
-            <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-              <div className="mb-6 lg:mb-0">
-                <img
-                  src="/attached_assets/Healios_1753559079971.png"
-                  alt="Supplement bundle recommendation"
-                  className="w-full aspect-[4/3] object-cover"
-                />
-              </div>
-              <div>
-                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
-                  {product.name} + Magnesium Complex
-                </h3>
-                <div className="flex items-baseline gap-4 mb-4">
-                  <span className="text-2xl font-light text-gray-900 dark:text-white">
-                    R{(parseFloat(product.price) + 14.99).toFixed(2)}
-                  </span>
-                  <span className="text-lg text-gray-500 line-through">
-                    R{(parseFloat(product.price) + 24.99).toFixed(2)}
-                  </span>
-                  <Badge variant="secondary" className="bg-red-100 text-red-800">
-                    Save R10.00
-                  </Badge>
+        {/* Better Together Section - Only for non-Children products */}
+        {product.category !== "Children" && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
+              Better <em className="italic">together</em>
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Our Expert Nutritional Therapists Recommend...
+            </p>
+            
+            <div className="bg-gray-50 dark:bg-gray-800 p-8">
+              <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <div className="mb-6 lg:mb-0">
+                  <img
+                    src="/attached_assets/Healios_1753559079971.png"
+                    alt="Supplement bundle recommendation"
+                    className="w-full aspect-[4/3] object-cover"
+                  />
                 </div>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Quality ingredients</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Convenient daily supplement</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Third-party tested</span>
-                  </li>
-                </ul>
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                  + Add Bundle
-                </button>
+                <div>
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
+                    {product.name} + Magnesium Complex
+                  </h3>
+                  <div className="flex items-baseline gap-4 mb-4">
+                    <span className="text-2xl font-light text-gray-900 dark:text-white">
+                      R{(parseFloat(product.price) + 14.99).toFixed(2)}
+                    </span>
+                    <span className="text-lg text-gray-500 line-through">
+                      R{(parseFloat(product.price) + 24.99).toFixed(2)}
+                    </span>
+                    <Badge variant="secondary" className="bg-red-100 text-red-800">
+                      Save R10.00
+                    </Badge>
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Quality ingredients</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Convenient daily supplement</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Third-party tested</span>
+                    </li>
+                  </ul>
+                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+                    + Add Bundle
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Special Discount Section - Only for Children products */}
+        {product.category === "Children" && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
+              Stock Up & <em className="italic">Save</em>
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Buy 2 or more and save 20% on your order
+            </p>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 p-8">
+              <div className="text-center">
+                <div className="mb-6">
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
+                    Multi-Buy Discount
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Perfect for keeping your little ones healthy all year round
+                  </p>
+                </div>
+                
+                <div className="bg-white dark:bg-gray-800 p-6 mb-6 border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-left">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">2 Bottles</p>
+                      <p className="text-lg font-medium text-gray-900 dark:text-white">
+                        Regular Price: R{(parseFloat(product.price) * 2).toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-green-600 dark:text-green-400">20% Off</p>
+                      <p className="text-lg font-medium text-green-600 dark:text-green-400">
+                        Your Price: R{(parseFloat(product.price) * 2 * 0.8).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                    Save R{(parseFloat(product.price) * 2 * 0.2).toFixed(2)}
+                  </Badge>
+                </div>
+
+                <ul className="space-y-2 mb-6 text-left max-w-md mx-auto">
+                  <li className="flex items-center gap-3">
+                    <Check className="w-4 h-4 text-green-600" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">2+ month supply for your child</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Check className="w-4 h-4 text-green-600" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Never run out of essential vitamins</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <Check className="w-4 h-4 text-green-600" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Automatic 20% discount at checkout</span>
+                  </li>
+                </ul>
+                
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                  Discount automatically applied when you add 2 or more bottles to your cart
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
