@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
 
 interface QuizQuestion {
@@ -140,50 +140,114 @@ export default function QuizPage() {
           description="Your personalized supplement recommendations based on your wellness quiz responses."
         />
         
-        <div className="max-w-2xl mx-auto px-6 pt-5 pb-24">
-          <div className="text-center">
-            <div className="mb-8">
-              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
+        <div className="max-w-4xl mx-auto px-6 pt-12 pb-24">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-healios-gradient-1 mb-6">
+              <Sparkles className="w-10 h-10 text-white" />
+            </div>
+            <div className="space-y-2 mb-8">
+              <div className="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-medium">
+                ASSESSMENT COMPLETE
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white tracking-tight">
                 Quiz Complete
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                Thank you for taking our wellness assessment. Based on your responses, we'll recommend personalized supplements to support your health goals.
-              </p>
             </div>
+            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              Thank you for taking our wellness assessment. Based on your responses, we'll recommend personalized supplements to support your health goals.
+            </p>
+          </div>
 
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 mb-8 text-left">
-              <h2 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
-                Your Recommended Next Steps:
-              </h2>
-              <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">📧</span>
-                  <span>Check your email for personalized product recommendations</span>
+          {/* Action Cards Grid */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {/* Email Card */}
+            <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
+                  <Mail className="w-6 h-6" />
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">💬</span>
-                  <span>Contact our team for personalized guidance</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">🛒</span>
-                  <span>Browse our science-backed supplement range</span>
+                <div className="space-y-2">
+                  <h3 className="font-medium text-gray-900 dark:text-white">
+                    Check Your Email
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Personalized product recommendations based on your assessment
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <button className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors">
-                  Contact Our Team
-                </button>
-              </Link>
-              <Link href="/products">
-                <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  Shop Products
-                </button>
-              </Link>
+            {/* Contact Card */}
+            <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
+                  <MessageSquare className="w-6 h-6" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-medium text-gray-900 dark:text-white">
+                    Expert Guidance
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Connect with our wellness team for personalized support
+                  </p>
+                </div>
+              </div>
             </div>
+
+            {/* Shop Card */}
+            <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
+                  <ShoppingBag className="w-6 h-6" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-medium text-gray-900 dark:text-white">
+                    Science-Backed Range
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Browse our complete collection of premium supplements
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="bg-gray-50 dark:bg-gray-800 p-12 text-center">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-light text-gray-900 dark:text-white">
+                  Ready to Begin Your Journey?
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Start with expert guidance or explore our full product range
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                <Link href="/contact" className="w-full sm:w-auto">
+                  <button className="w-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-all duration-200 flex items-center justify-center gap-2">
+                    Contact Our Team
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </Link>
+                <Link href="/products" className="w-full sm:w-auto">
+                  <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-white hover:border-black dark:hover:bg-gray-700 dark:hover:border-white transition-all duration-200">
+                    Shop Products
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Back to Home */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+            <Link href="/">
+              <span className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                ← Back to Home
+              </span>
+            </Link>
           </div>
         </div>
       </div>
