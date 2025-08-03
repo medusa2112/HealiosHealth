@@ -63,9 +63,9 @@ export class QuizRecommendationService {
     }
     
     // Analyze energy and fatigue concerns
-    if (energyLevel.includes('Very low') || energyLevel.includes('Low') || (improvementAreas && improvementAreas.includes('Physical energy'))) {
+    if ((energyLevel && (energyLevel.includes('Very low') || energyLevel.includes('Low'))) || (improvementAreas && improvementAreas.includes('Physical energy'))) {
       // Check if they might benefit from Iron
-      if (ageRange.includes('26-') || ageRange.includes('36-') || ageRange.includes('46-')) {
+      if (ageRange && (ageRange.includes('26-') || ageRange.includes('36-') || ageRange.includes('46-'))) {
         recommendations.push({
           productId: 'iron-vitamin-c',
           productName: 'Iron + Vitamin C Gummies',
@@ -174,7 +174,7 @@ export class QuizRecommendationService {
     }
     
     // Add metabolic support if needed
-    if (ageRange.includes('35') || ageRange.includes('45') || ageRange.includes('55')) {
+    if (ageRange && (ageRange.includes('35') || ageRange.includes('45') || ageRange.includes('55'))) {
       recommendations.push({
         productId: 'apple-cider-vinegar',
         productName: 'Apple Cider Vinegar Gummies',
