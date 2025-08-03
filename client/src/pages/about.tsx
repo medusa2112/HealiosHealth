@@ -127,7 +127,7 @@ export default function About() {
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
                   WHO WE'RE FOR
                 </p>
-                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-6">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-6">
                   Who We're For
                 </h2>
               </div>
