@@ -405,8 +405,39 @@ export default function QuizPage() {
               </h1>
             </div>
             <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-              Thank you for taking our wellness assessment. Based on your responses, we'll recommend personalized supplements to support your health goals.
+              Thank you for taking our wellness assessment. You should receive personalized supplement recommendations via email shortly.
             </p>
+            
+            {/* Important Disclaimers */}
+            <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 mt-8 max-w-3xl mx-auto">
+              <div className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+                <div className="font-medium text-gray-900 dark:text-white mb-3">
+                  Important Health Information
+                </div>
+                
+                <div className="space-y-3 leading-relaxed">
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">Educational Purpose Only:</strong> The recommendations provided are for educational and informational purposes only. They are not intended as medical advice, diagnosis, or treatment.
+                  </p>
+                  
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">Consult Healthcare Providers:</strong> Always consult with qualified healthcare professionals before starting any new supplement regimen, especially if you have existing health conditions, take medications, or are pregnant or nursing.
+                  </p>
+                  
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">Individual Results Vary:</strong> These recommendations are general suggestions based on your quiz responses. Individual nutritional needs vary significantly based on genetics, lifestyle, medical history, and other factors.
+                  </p>
+                  
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">Not Evaluated by Regulatory Bodies:</strong> These statements and product recommendations have not been evaluated by the FDA, TGA, or other regulatory agencies. Our products are not intended to diagnose, treat, cure, or prevent any disease.
+                  </p>
+                  
+                  <p>
+                    <strong className="text-gray-900 dark:text-white">Professional Guidance Recommended:</strong> For personalized nutrition advice tailored to your specific health needs, consider consulting with a registered dietitian, nutritionist, or healthcare provider.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Action Cards Grid */}
@@ -422,7 +453,7 @@ export default function QuizPage() {
                     Check Your Email
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Personalized product recommendations based on your assessment
+                    General wellness suggestions based on your responses (not medical advice)
                   </p>
                 </div>
               </div>
@@ -436,10 +467,10 @@ export default function QuizPage() {
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-medium text-gray-900 dark:text-white">
-                    Expert Guidance
+                    Product Questions
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Connect with our wellness team for personalized support
+                    Contact our team for product information and general wellness support
                   </p>
                 </div>
               </div>
@@ -468,10 +499,13 @@ export default function QuizPage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <h2 className="text-2xl font-light text-gray-900 dark:text-white">
-                  Ready to Begin Your Journey?
+                  Ready to Explore Our Products?
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Start with expert guidance or explore our full product range
+                  Browse our science-backed supplement range or get product information from our team
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Remember: Always consult your healthcare provider before starting new supplements
                 </p>
               </div>
               
