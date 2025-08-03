@@ -723,6 +723,119 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
     }
   });
 
+  // Test email endpoint - sends samples of all email templates
+  app.post("/api/test-emails", async (req, res) => {
+    try {
+      console.log('🧪 Testing all email templates...');
+      const results: string[] = [];
+      
+      // Ensure we return JSON response
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Test Newsletter Confirmation
+      try {
+        const testNewsletter = {
+          id: 'test-newsletter-123',
+          email: 'dn@thefourths.com',
+          firstName: 'Test',
+          lastName: 'User',
+          birthday: '1990-01-15',
+          subscribedAt: new Date().toISOString()
+        };
+        await EmailService.sendNewsletterConfirmation(testNewsletter);
+        results.push('✅ Newsletter confirmation email sent');
+      } catch (error) {
+        results.push('❌ Newsletter confirmation failed: ' + error.message);
+      }
+
+      // Test Order Confirmation
+      try {
+        const testOrder = {
+          id: 'test-order-123',
+          customerEmail: 'dn@thefourths.com',
+          customerName: 'Test Customer',
+          customerPhone: '+27123456789',
+          totalAmount: '599.00',
+          createdAt: new Date().toISOString(),
+          shippingAddress: '123 Test Street\nCape Town, 8001\nSouth Africa',
+          billingAddress: '123 Test Street\nCape Town, 8001\nSouth Africa',
+          orderItems: JSON.stringify([{
+            product: { id: 'test-1', name: 'Test Vitamin D3', price: '399.00', imageUrl: 'https://via.placeholder.com/150' },
+            quantity: 1
+          }]),
+          currency: 'ZAR',
+          paymentStatus: 'completed',
+          orderStatus: 'processing'
+        };
+        const testOrderItems = [{
+          product: { id: 'test-1', name: 'Test Vitamin D3', price: '399.00', imageUrl: 'https://via.placeholder.com/150' },
+          quantity: 1
+        }];
+        await EmailService.sendOrderConfirmation({ order: testOrder, orderItems: testOrderItems });
+        await EmailService.sendAdminOrderNotification({ order: testOrder, orderItems: testOrderItems });
+        results.push('✅ Order confirmation and admin notification emails sent');
+      } catch (error) {
+        results.push('❌ Order emails failed: ' + error.message);
+      }
+
+      // Test Low Stock Alert
+      try {
+        await EmailService.sendLowStockAlert('Test Vitamin D3', 2, 'test-product-123');
+        results.push('✅ Low stock alert email sent');
+      } catch (error) {
+        results.push('❌ Low stock alert failed: ' + error.message);
+      }
+
+      // Test Pre-Order Notification
+      try {
+        const testPreOrder = {
+          id: 'test-preorder-123',
+          customerEmail: 'dn@thefourths.com',
+          customerName: 'Test Customer',
+          customerPhone: '+27123456789',
+          productId: 'test-product-456',
+          productName: 'Test Magnesium Gummies',
+          productPrice: '449.00',
+          quantity: 2,
+          notes: 'Please notify me as soon as available',
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        };
+        await EmailService.sendPreOrderNotification(testPreOrder);
+        results.push('✅ Pre-order confirmation email sent');
+      } catch (error) {
+        results.push('❌ Pre-order notification failed: ' + error.message);
+      }
+
+      // Test Restock Notification
+      try {
+        await EmailService.sendRestockNotification({
+          firstName: 'Test',
+          email: 'dn@thefourths.com',
+          product: 'Test Collagen Complex',
+          restockDate: 'February 15th'
+        });
+        results.push('✅ Restock notification emails sent');
+      } catch (error) {
+        results.push('❌ Restock notification failed: ' + error.message);
+      }
+
+      console.log('🧪 Email test results:', results);
+      return res.json({ 
+        success: true, 
+        message: 'Email tests completed', 
+        results 
+      });
+    } catch (error) {
+      console.error('❌ Email test endpoint error:', error);
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Email test failed', 
+        error: error?.message || 'Unknown error'
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
