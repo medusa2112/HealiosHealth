@@ -532,7 +532,6 @@ export default function ProductComprehensive() {
         title={`${product.name} | Healios`}
         description={product.description}
       />
-
       {/* Main Product Section */}
       <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 mb-16">
@@ -1027,6 +1026,26 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*200mg of 10:1 extract provides the equivalent of 2000mg dried Lion's Mane mushroom. Clinically relevant dosage for cognitive support.</p>
                             </div>
+                          ) : product.id === 'collagen-powder' ? (
+                            <div>
+                              <p className="font-medium mb-3">Nutritional Information (Per 2.5g daily serving):</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Energy: 9 kcal</div>
+                                <div className="font-medium">Protein: 2.25g</div>
+                                <div className="font-medium">Fat: 0g</div>
+                                <div className="font-medium">of which saturates: 0g</div>
+                                <div className="font-medium">Carbohydrates: 0g</div>
+                                <div className="font-medium">of which sugars: 0g</div>
+                                <div className="font-medium">Salt: 0.01g</div>
+                                <div className="font-medium">Hydrolysed Collagen Peptides (bovine): 2,500mg</div>
+                              </div>
+                              <div className="mt-3 space-y-1 text-sm text-green-600">
+                                <div>✅ No fat, sugar, cholesterol, or dietary fibre</div>
+                                <div>✅ ≥90% protein by dry weight</div>
+                                <div>✅ Average molecular weight ~2,000 Daltons for optimal absorption</div>
+                                <div>✅ VERISOL B</div>
+                              </div>
+                            </div>
                           ) : (
                             <div>
                               <p>Per serving nutritional information:</p>
@@ -1185,7 +1204,7 @@ export default function ProductComprehensive() {
                               <p className="mt-2 text-sm text-gray-600">Allergens: None declared. Manufactured under strict allergen control protocols. 100% vegan formulation.</p>
                             </div>
                           ) : (
-                            <p>Premium quality ingredients sourced from trusted suppliers worldwide. All ingredients are tested for purity and potency.</p>
+                            <p>Ingredients Hydrolysed Bovine Collagen Peptides (100%) • No additives, flavourings, preservatives or fillers • Non-GMO | Clean label | Neutral in taste and odour  Allergens: None declared. Manufactured in a facility with strict allergen control procedures</p>
                           )}
                         </div>
                       )}
@@ -1487,7 +1506,6 @@ export default function ProductComprehensive() {
           </div>
         </div>
       </div>
-
       {/* Support Section */}
       <section className="bg-gray-50 py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -1505,9 +1523,6 @@ export default function ProductComprehensive() {
           </Button>
         </div>
       </section>
-
-
-
       {/* Product-Specific Facts Section - Like Home Page */}
       <section className="bg-white">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
@@ -1580,7 +1595,6 @@ export default function ProductComprehensive() {
           </div>
         </div>
       </section>
-
       {/* Sleep Benefits Section - Only show for products with sleep benefits */}
       {productContent.sleepBenefit && (
         <section className="py-16 bg-gray-50">
@@ -1622,8 +1636,6 @@ export default function ProductComprehensive() {
           </div>
         </section>
       )}
-
-
       {/* Fixed Bottom Purchase Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 lg:hidden">
         <div className="space-y-3">
@@ -1674,14 +1686,12 @@ export default function ProductComprehensive() {
           </div>
         </div>
       </div>
-
       {/* Pre-order Modal */}
       <PreOrderPopup
         product={product}
         isOpen={showPreOrderModal}
         onClose={() => setShowPreOrderModal(false)}
       />
-
       {/* Bundle Product Modal */}
       {showBundleModal && getBundleProduct() && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -1749,7 +1759,6 @@ export default function ProductComprehensive() {
           </div>
         </div>
       )}
-
       {/* Pre-Order Popup */}
       <PreOrderPopup
         product={product}

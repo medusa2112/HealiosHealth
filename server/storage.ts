@@ -328,7 +328,7 @@ export class MemStorage implements IStorage {
       {
         id: "collagen-powder",
         name: "Premium Collagen Powder (Unflavoured)",
-        description: "Pure hydrolysed marine collagen peptides for skin, hair, nail and joint support. Easily dissolves in hot or cold drinks with no taste or texture. Type I & III collagen for maximum bioavailability.",
+        description: "HALO GLOW is a premium-grade collagen peptide powder designed to promote radiant skin, stronger nails, fuller hair, and improved skin elasticity from within. Derived from hydrolysed bovine collagen and backed by published human studies, it delivers 2.5g of bioactive collagen peptides per serving — the clinically researched dose shown to reduce fine lines and improve dermal structure when used consistently over 4–12 weeks.",
         price: "1000.00",
         originalPrice: null,
         imageUrl: "/assets/HaloGlowB_1754157621693.png",
