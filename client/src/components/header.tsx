@@ -142,12 +142,14 @@ export function Header() {
               onMouseEnter={() => setIsShopDropdownOpen(true)}
               onMouseLeave={() => setIsShopDropdownOpen(false)}
             >
-              <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
-                isScrolled ? 'text-xs' : 'text-sm'
-              }`}>
-                Shop
-                <ChevronDown className="h-3 w-3" />
-              </button>
+              <Link href="/products">
+                <button className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-1 ${
+                  isScrolled ? 'text-xs' : 'text-sm'
+                }`}>
+                  Shop
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+              </Link>
             </div>
             
             {/* Learn Dropdown */}
