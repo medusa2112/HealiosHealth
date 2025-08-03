@@ -15,19 +15,22 @@ export function StockNotification() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Clear localStorage for testing - TEMPORARY
-    localStorage.removeItem('halo-glow-notification-shown');
+    // Check if notification has already been shown
+    const hasShownNotification = localStorage.getItem('halo-glow-notification-shown');
     
-    // Show notification after 3 seconds for testing
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 3000);
+    if (!hasShownNotification) {
+      // Show notification after 8 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+        // Mark as shown in localStorage
+        localStorage.setItem('halo-glow-notification-shown', 'true');
+      }, 8000);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleClose = () => {
-    console.log('Close button clicked'); // Debug log
     setIsVisible(false);
     setShowEmailForm(false);
   };

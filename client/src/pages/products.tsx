@@ -74,24 +74,24 @@ export default function Products() {
         structuredData={productsStructuredData}
       />
       
-      <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
-        <div className="mb-12 text-center">
-          <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-16">
+        <div className="mb-8 sm:mb-12 text-center">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
             Our Products
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4">
             Discover our complete range of premium supplements, each carefully formulated with science-backed ingredients to support your wellness journey.
           </p>
         </div>
 
         {/* Category Pills */}
-        <div className="mb-12 flex justify-center">
-          <div className="flex flex-wrap gap-2 justify-center">
+        <div className="mb-8 sm:mb-12 flex justify-center px-4">
+          <div className="flex flex-wrap gap-2 justify-center max-w-4xl">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   selectedCategory === category
                     ? 'bg-black text-white'
                     : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -104,19 +104,19 @@ export default function Products() {
         </div>
 
         {/* Search and Sort */}
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
+        <div className="mb-8 flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto px-4">
           <div className="flex-1">
             <Input
               type="search"
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full border-gray-300 focus:border-gray-400"
+              className="w-full border-gray-300 focus:border-gray-400 h-10 sm:h-auto"
             />
           </div>
           
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full sm:w-[200px] border-gray-300">
+            <SelectTrigger className="w-full sm:w-[200px] border-gray-300 h-10 sm:h-auto">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -132,14 +132,14 @@ export default function Products() {
 
         {/* Products Grid */}
         {isLoading ? (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-gray-200 h-96 animate-pulse" />
+              <div key={i} className="bg-gray-200 h-80 sm:h-96 animate-pulse" />
             ))}
           </div>
         ) : sortedProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-gray-500 text-lg mb-6">No products found matching your criteria.</p>
+          <div className="text-center py-12 sm:py-16 px-4">
+            <p className="text-gray-500 text-base sm:text-lg mb-6">No products found matching your criteria.</p>
             <Button
               onClick={() => {
                 setSearchTerm("");
@@ -151,7 +151,7 @@ export default function Products() {
             </Button>
           </div>
         ) : (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4">
             {sortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

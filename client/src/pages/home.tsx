@@ -403,42 +403,42 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-black/30" />
 
         {/* Content */}
-        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 max-w-4xl mx-auto py-8 sm:py-0">
           {/* Badge */}
-          <div className="inline-flex items-center bg-transparent text-white border border-white px-4 py-2 text-sm font-medium mb-8">
+          <div className="inline-flex items-center bg-transparent text-white border border-white px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium mb-6 sm:mb-8">
             Quality supplements for daily wellness support.
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-8">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light leading-tight mb-8 sm:mb-12">
             Feel Better.
             <br />
             <em className="font-light italic">Every day</em>
           </h1>
 
           {/* CTA Buttons */}
-          <div className="mb-12 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row gap-4 justify-center px-4">
             <Link href="/products">
-              <button className="bg-black text-white px-8 py-4 font-medium text-lg border border-black hover:bg-white hover:text-black hover:border-black transition-colors focus:outline-none focus:ring-2 focus:ring-white">
+              <button className="bg-black text-white px-6 sm:px-8 py-3 sm:py-4 font-medium text-base sm:text-lg border border-black hover:bg-white hover:text-black hover:border-black transition-colors focus:outline-none focus:ring-2 focus:ring-white w-full sm:w-auto">
                 Explore The Range
               </button>
             </Link>
             <Link href="/quiz">
-              <button className="border border-white/30 text-white px-8 py-4 font-medium text-lg bg-white/10 backdrop-blur-md hover:bg-white/20 hover:border-white/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50">
+              <button className="border border-white/30 text-white px-6 sm:px-8 py-3 sm:py-4 font-medium text-base sm:text-lg bg-white/10 backdrop-blur-md hover:bg-white/20 hover:border-white/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50 w-full sm:w-auto">
                 Take a Quiz
               </button>
             </Link>
           </div>
 
           {/* Rating and Customer Count */}
-          <div className="mb-8">
+          <div className="mb-16 sm:mb-8">
             <div className="flex items-center justify-center gap-2 mb-2">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-white text-white" />
                 ))}
               </div>
-              <span className="font-medium">4.84 RATING</span>
+              <span className="font-medium text-sm sm:text-base">4.84 RATING</span>
             </div>
             <div className="text-xs opacity-80">
               LOVED BY THOUSANDS OF CUSTOMERS
@@ -447,28 +447,28 @@ export default function HomePage() {
         </div>
 
         {/* Press Mentions Footer */}
-        <div className="absolute bottom-8 left-6 right-6 lg:left-12 lg:right-12">
-          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
-            <span>The Grind Fitness</span>
-            <span>Eleven Eleven Sports Performance</span>
-            <span>Peak Performance Nutrition</span>
-            <span>Elite Wellness Studio</span>
+        <div className="absolute bottom-4 sm:bottom-8 left-4 right-4 sm:left-6 sm:right-6 lg:left-12 lg:right-12">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
+            <span className="text-center">The Grind Fitness</span>
+            <span className="text-center">Eleven Eleven Sports Performance</span>
+            <span className="text-center">Peak Performance Nutrition</span>
+            <span className="text-center">Elite Wellness Studio</span>
           </div>
         </div>
       </section>
 
       {/* Halo Glow Collagen Featured Section */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+      <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
             {/* Left Column - Content */}
-            <div className="order-2 lg:order-1 mb-12 lg:mb-0">
+            <div className="order-2 lg:order-1 mb-8 sm:mb-12 lg:mb-0">
               <div className="mb-4">
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                   NEW ARRIVAL • SOLD OUT
                 </span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-4 sm:mb-6">
                 Halo Glow<br />
                 Collagen
               </h2>
@@ -483,15 +483,15 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
                 Premium collagen complex with hyaluronic acid and vitamin C for radiant skin, strong hair, and healthy nails. 
                 Our advanced formula supports natural collagen production and skin elasticity from within.
               </p>
               
               {/* Stats Row */}
-              <div className="grid grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">2.5g</div>
+                  <div className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">2.5g</div>
                   <div className="text-xs text-gray-600 dark:text-gray-400">Collagen per serving</div>
                 </div>
                 <div className="text-center">
