@@ -824,10 +824,6 @@ The Healios Team
               Your Personalized Supplement Recommendations
             </h1>
             
-            <p style="font-size: 18px; line-height: 1.6; color: #333; margin: 0 0 20px 0;">
-              Hi ${quizResult.firstName},
-            </p>
-            
             <div style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0; white-space: pre-line;">
               ${personalizedMessage}
             </div>
