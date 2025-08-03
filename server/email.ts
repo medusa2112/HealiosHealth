@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
-import type { PreOrder, Newsletter } from '@shared/schema';
+import type { PreOrder, Newsletter, QuizResult } from '@shared/schema';
 import { type Order } from '@shared/schema';
+import { QuizRecommendationService } from './quiz-service';
 
 interface CartItem {
   product: {
@@ -17,6 +18,21 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 interface OrderEmailData {
   order: Order;
   orderItems: CartItem[];
+}
+
+interface ProductRecommendation {
+  productId: string;
+  productName: string;
+  reason: string;
+  medicalBasis: string;
+  researchCitations: string[];
+  priority: number;
+}
+
+interface QuizRecommendations {
+  primaryRecommendations: ProductRecommendation[];
+  secondaryRecommendations: ProductRecommendation[];
+  personalizedMessage: string;
 }
 
 export class EmailService {
@@ -585,6 +601,233 @@ export class EmailService {
       return true;
     } catch (error) {
       console.error('Error sending low stock alert:', error);
+      return false;
+    }
+  }
+
+  static async sendQuizRecommendations(
+    quizResult: QuizResult, 
+    recommendations: QuizRecommendations
+  ): Promise<boolean> {
+    try {
+      // Send personalized recommendations to user
+      const userEmailSuccess = await this.sendUserQuizRecommendations(quizResult, recommendations);
+      
+      // Send admin notification to dn@thefourths.com
+      const adminEmailSuccess = await this.sendQuizAdminNotification(quizResult, recommendations);
+      
+      return userEmailSuccess && adminEmailSuccess;
+    } catch (error) {
+      console.error('Error sending quiz recommendation emails:', error);
+      return false;
+    }
+  }
+
+  private static async sendUserQuizRecommendations(
+    quizResult: QuizResult,
+    recommendations: QuizRecommendations
+  ): Promise<boolean> {
+    try {
+      const personalizedMessage = recommendations.personalizedMessage.replace('there', quizResult.firstName);
+      
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Your Personalized Wellness Recommendations</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              YOUR PERSONALIZED RECOMMENDATIONS
+            </div>
+            
+            <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
+              Hi ${quizResult.firstName}, here are your personalized supplement recommendations.
+            </h1>
+            
+            <div style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0; white-space: pre-line;">
+              ${personalizedMessage}
+            </div>
+            
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              RECOMMENDED FOR YOU
+            </div>
+            
+            ${recommendations.primaryRecommendations.map((rec, index) => `
+              <div style="border-left: 4px solid #000; padding-left: 20px; margin-bottom: 40px;">
+                <h3 style="font-size: 18px; font-weight: 500; margin: 0 0 15px 0; color: #000;">
+                  ${rec.productName}
+                </h3>
+                <p style="font-size: 16px; line-height: 1.6; color: #333; margin: 0 0 15px 0;">
+                  ${rec.reason}
+                </p>
+                <div style="background-color: #f8f9fa; padding: 15px; margin: 15px 0;">
+                  <h4 style="font-size: 14px; font-weight: 500; margin: 0 0 10px 0; color: #666;">
+                    RESEARCH BASIS
+                  </h4>
+                  <p style="font-size: 14px; line-height: 1.5; color: #666; margin: 0 0 10px 0;">
+                    ${rec.medicalBasis}
+                  </p>
+                  <div style="font-size: 12px; color: #888;">
+                    <strong>References:</strong><br>
+                    ${rec.researchCitations.map(citation => `• <a href="${citation.split(' - ')[0]}" style="color: #666; text-decoration: underline;">${citation.split(' - ')[1] || 'View Study'}</a>`).join('<br>')}
+                  </div>
+                </div>
+                <div style="margin-top: 20px;">
+                  <a href="https://healios.com/products/${rec.productId}" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: 500; font-size: 14px;">
+                    View Product →
+                  </a>
+                </div>
+              </div>
+            `).join('')}
+            
+            ${recommendations.secondaryRecommendations.length > 0 ? `
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin: 50px 0 30px 0;">
+                ADDITIONAL CONSIDERATIONS
+              </div>
+              ${recommendations.secondaryRecommendations.map(rec => `
+                <div style="border-left: 2px solid #ccc; padding-left: 20px; margin-bottom: 30px;">
+                  <h4 style="font-size: 16px; font-weight: 500; margin: 0 0 10px 0; color: #000;">
+                    ${rec.productName}
+                  </h4>
+                  <p style="font-size: 14px; line-height: 1.5; color: #666; margin: 0 0 10px 0;">
+                    ${rec.reason}
+                  </p>
+                  <a href="https://healios.com/products/${rec.productId}" style="color: #666; text-decoration: underline; font-size: 14px;">
+                    Learn More →
+                  </a>
+                </div>
+              `).join('')}
+            ` : ''}
+            
+            <div style="border-top: 1px solid #eee; padding-top: 30px; margin-top: 50px;">
+              <div style="background-color: #f8f9fa; padding: 20px; text-align: center;">
+                <h3 style="font-size: 16px; font-weight: 500; margin: 0 0 10px 0; color: #000;">
+                  Questions About These Recommendations?
+                </h3>
+                <p style="font-size: 14px; color: #666; margin: 0 0 15px 0;">
+                  Our wellness team is here to help you make informed decisions about your health journey.
+                </p>
+                <a href="mailto:dn@thefourths.com" style="display: inline-block; border: 1px solid #000; color: #000; padding: 10px 20px; text-decoration: none; font-weight: 500; font-size: 14px;">
+                  Contact Our Team
+                </a>
+              </div>
+            </div>
+            
+            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #888; text-align: center;">
+              <p style="margin: 0;">
+                <strong>Important:</strong> These recommendations are for educational purposes only and are not intended as medical advice. Always consult with your healthcare provider before starting any new supplement regimen, especially if you have existing health conditions or take medications.
+              </p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const result = await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: [quizResult.email],
+        subject: `Your Personalized Wellness Recommendations from Healios`,
+        html,
+      });
+
+      return result.error ? false : true;
+    } catch (error) {
+      console.error('Error sending user quiz recommendations:', error);
+      return false;
+    }
+  }
+
+  private static async sendQuizAdminNotification(
+    quizResult: QuizResult,
+    recommendations: QuizRecommendations
+  ): Promise<boolean> {
+    try {
+      const answers = JSON.parse(quizResult.answers);
+      
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>New Quiz Completion - Admin Notification</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              NEW QUIZ COMPLETION
+            </div>
+            
+            <h1 style="font-size: 24px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
+              Quiz completed by ${quizResult.firstName} ${quizResult.lastName}
+            </h1>
+            
+            <div style="background-color: #f8f9fa; padding: 20px; margin-bottom: 30px;">
+              <h3 style="font-size: 16px; font-weight: 500; margin: 0 0 15px 0; color: #000;">Customer Details</h3>
+              <p style="font-size: 14px; line-height: 1.5; color: #666; margin: 0;">
+                <strong>Name:</strong> ${quizResult.firstName} ${quizResult.lastName}<br>
+                <strong>Email:</strong> ${quizResult.email}<br>
+                <strong>Marketing Consent:</strong> ${quizResult.consentToMarketing ? 'Yes' : 'No'}<br>
+                <strong>Completed:</strong> ${new Date(quizResult.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+              </p>
+            </div>
+            
+            <div style="border-left: 4px solid #000; padding-left: 20px; margin-bottom: 30px;">
+              <h3 style="font-size: 16px; font-weight: 500; margin: 0 0 15px 0; color: #000;">Quiz Responses</h3>
+              <div style="font-size: 14px; line-height: 1.6; color: #666;">
+                <p><strong>Primary Health Goal:</strong> ${answers[1] || 'Not answered'}</p>
+                <p><strong>Energy Level:</strong> ${answers[2] || 'Not answered'}</p>
+                <p><strong>Areas to Improve:</strong> ${Array.isArray(answers[3]) ? answers[3].join(', ') : (answers[3] || 'Not answered')}</p>
+                <p><strong>Current Supplements:</strong> ${answers[4] || 'Not answered'}</p>
+                <p><strong>Age Range:</strong> ${answers[5] || 'Not answered'}</p>
+                <p><strong>Dietary Restrictions:</strong> ${Array.isArray(answers[6]) ? answers[6].join(', ') : (answers[6] || 'Not answered')}</p>
+              </div>
+            </div>
+            
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+              RECOMMENDED PRODUCTS
+            </div>
+            
+            <div style="background-color: #f8f9fa; padding: 20px;">
+              <h4 style="font-size: 14px; font-weight: 500; margin: 0 0 15px 0; color: #000;">Primary Recommendations:</h4>
+              ${recommendations.primaryRecommendations.map(rec => `
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                  <strong style="color: #000;">${rec.productName}</strong><br>
+                  <span style="font-size: 13px; color: #666;">${rec.reason}</span>
+                </div>
+              `).join('')}
+              
+              ${recommendations.secondaryRecommendations.length > 0 ? `
+                <h4 style="font-size: 14px; font-weight: 500; margin: 20px 0 15px 0; color: #000;">Secondary Recommendations:</h4>
+                ${recommendations.secondaryRecommendations.map(rec => `
+                  <div style="margin-bottom: 10px;">
+                    <strong style="color: #000;">${rec.productName}</strong><br>
+                    <span style="font-size: 13px; color: #666;">${rec.reason}</span>
+                  </div>
+                `).join('')}
+              ` : ''}
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #888;">
+              <p style="margin: 0;">This is an automated notification from the Healios wellness quiz system.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const result = await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: ['dn@thefourths.com'],
+        subject: `New Quiz Completion: ${quizResult.firstName} ${quizResult.lastName}`,
+        html,
+      });
+
+      return result.error ? false : true;
+    } catch (error) {
+      console.error('Error sending quiz admin notification:', error);
       return false;
     }
   }

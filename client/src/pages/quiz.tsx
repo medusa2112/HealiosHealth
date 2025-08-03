@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2 } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
+import { useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+import { z } from 'zod';
 
 interface QuizQuestion {
   id: number;
@@ -90,10 +94,53 @@ const quizQuestions: QuizQuestion[] = [
   }
 ];
 
+const emailFormSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  consentToMarketing: z.boolean().refine(val => val === true, {
+    message: 'Please consent to receive your personalized recommendations'
+  })
+});
+
+type EmailFormData = z.infer<typeof emailFormSchema>;
+
 export default function QuizPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [emailFormData, setEmailFormData] = useState<EmailFormData>({
+    email: '',
+    firstName: '',
+    lastName: '',
+    consentToMarketing: false
+  });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const { toast } = useToast();
+
+  const quizCompletionMutation = useMutation({
+    mutationFn: async (data: EmailFormData & { answers: Record<number, string | string[]> }) => {
+      return apiRequest('/api/quiz/complete', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      });
+    },
+    onSuccess: () => {
+      setIsCompleted(true);
+      toast({
+        title: "Quiz Complete!",
+        description: "Check your email for personalized recommendations."
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Something went wrong",
+        description: error.message || "Please try again later.",
+        variant: "destructive"
+      });
+    }
+  });
 
   const handleAnswer = (questionId: number, answer: string | string[]) => {
     setAnswers(prev => ({
@@ -118,7 +165,49 @@ export default function QuizPage() {
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      setIsCompleted(true);
+      setShowEmailForm(true);
+    }
+  };
+
+  const handleEmailFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate form
+    try {
+      emailFormSchema.parse(emailFormData);
+      setFormErrors({});
+      
+      // Submit quiz completion
+      quizCompletionMutation.mutate({
+        ...emailFormData,
+        answers
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const errors: Record<string, string> = {};
+        error.errors.forEach(err => {
+          if (err.path[0]) {
+            errors[err.path[0] as string] = err.message;
+          }
+        });
+        setFormErrors(errors);
+      }
+    }
+  };
+
+  const handleInputChange = (field: keyof EmailFormData, value: string | boolean) => {
+    setEmailFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    
+    // Clear error when user starts typing
+    if (formErrors[field]) {
+      setFormErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
@@ -131,6 +220,170 @@ export default function QuizPage() {
   const currentQuestionData = quizQuestions[currentQuestion];
   const currentAnswer = answers[currentQuestionData?.id];
   const isAnswered = currentAnswer && (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : currentAnswer.length > 0);
+
+  // Email Collection Form
+  if (showEmailForm && !isCompleted) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <SEOHead 
+          title="Complete Your Quiz - Healios"
+          description="Enter your details to receive personalized supplement recommendations."
+        />
+        
+        <div className="max-w-lg mx-auto px-6 pt-12 pb-24">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-healios-gradient-1 mb-6">
+              <CheckCircle className="w-8 h-8 text-white" />
+            </div>
+            <div className="space-y-2 mb-6">
+              <div className="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-medium">
+                QUIZ COMPLETE
+              </div>
+              <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white tracking-tight">
+                Get Your Results
+              </h1>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Enter your details to receive personalized supplement recommendations based on your responses.
+            </p>
+          </div>
+
+          <form onSubmit={handleEmailFormSubmit} className="space-y-6">
+            {/* First Name */}
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                First Name *
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                value={emailFormData.firstName}
+                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                className={`w-full px-4 py-3 border transition-colors focus:outline-none focus:ring-0 ${
+                  formErrors.firstName 
+                    ? 'border-red-500 focus:border-red-500' 
+                    : 'border-gray-300 dark:border-gray-600 focus:border-black dark:focus:border-white'
+                } bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
+                placeholder="Enter your first name"
+              />
+              {formErrors.firstName && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.firstName}</p>
+              )}
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Last Name *
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                value={emailFormData.lastName}
+                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                className={`w-full px-4 py-3 border transition-colors focus:outline-none focus:ring-0 ${
+                  formErrors.lastName 
+                    ? 'border-red-500 focus:border-red-500' 
+                    : 'border-gray-300 dark:border-gray-600 focus:border-black dark:focus:border-white'
+                } bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
+                placeholder="Enter your last name"
+              />
+              {formErrors.lastName && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.lastName}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email Address *
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={emailFormData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className={`w-full px-4 py-3 border transition-colors focus:outline-none focus:ring-0 ${
+                  formErrors.email 
+                    ? 'border-red-500 focus:border-red-500' 
+                    : 'border-gray-300 dark:border-gray-600 focus:border-black dark:focus:border-white'
+                } bg-white dark:bg-gray-800 text-gray-900 dark:text-white`}
+                placeholder="Enter your email address"
+              />
+              {formErrors.email && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+              )}
+            </div>
+
+            {/* Consent Checkbox */}
+            <div>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={emailFormData.consentToMarketing}
+                  onChange={(e) => handleInputChange('consentToMarketing', e.target.checked)}
+                  className="mt-1 sr-only"
+                />
+                <div className={`w-5 h-5 border-2 mt-0.5 flex items-center justify-center transition-colors ${
+                  emailFormData.consentToMarketing
+                    ? 'border-black dark:border-white bg-black dark:bg-white'
+                    : formErrors.consentToMarketing
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-600'
+                }`}>
+                  {emailFormData.consentToMarketing && (
+                    <CheckCircle className="w-3 h-3 text-white dark:text-black" />
+                  )}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  I consent to receive personalized supplement recommendations and wellness content from Healios. 
+                  You can unsubscribe at any time. *
+                </div>
+              </label>
+              {formErrors.consentToMarketing && (
+                <p className="text-red-500 text-sm mt-1 ml-8">{formErrors.consentToMarketing}</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={quizCompletionMutation.isPending}
+              className="w-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              {quizCompletionMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Sending Recommendations...
+                </>
+              ) : (
+                <>
+                  Get My Recommendations
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+
+            {/* Privacy Note */}
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">
+              Your information is secure and will only be used to provide personalized recommendations. 
+              We never share your data with third parties.
+            </p>
+          </form>
+
+          {/* Back Button */}
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setShowEmailForm(false)}
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              ← Back to Quiz
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isCompleted) {
     return (

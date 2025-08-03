@@ -2,8 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, type Article } from "@shared/schema";
+import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, type Article, type QuizResult } from "@shared/schema";
 import { EmailService } from "./email";
+import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
@@ -440,6 +441,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Article generation endpoints have been removed for security purposes
+
+  // Quiz completion endpoint
+  app.post("/api/quiz/complete", async (req, res) => {
+    try {
+      const {
+        email,
+        firstName,
+        lastName,
+        consentToMarketing,
+        answers
+      } = req.body;
+      
+      // Validate required fields
+      if (!email || !firstName || !lastName || !answers) {
+        return res.status(400).json({ 
+          message: "Email, first name, last name, and answers are required" 
+        });
+      }
+      
+      // Generate personalized recommendations based on quiz answers
+      const recommendations = QuizRecommendationService.analyzeAnswersAndRecommend(answers);
+      
+      // Save quiz result to database
+      const quizResult = await storage.createQuizResult({
+        email,
+        firstName,
+        lastName,
+        consentToMarketing: consentToMarketing || false,
+        answers: JSON.stringify(answers),
+        recommendations: JSON.stringify(recommendations)
+      });
+      
+      // Send emails (user recommendations + admin notification)
+      const emailSuccess = await EmailService.sendQuizRecommendations(quizResult, recommendations);
+      
+      if (!emailSuccess) {
+        console.error('Failed to send quiz completion emails');
+        // Still return success as the quiz was saved, just log the email failure
+      }
+      
+      res.json({
+        success: true,
+        message: "Quiz completed successfully! Check your email for personalized recommendations.",
+        quizId: quizResult.id,
+        recommendationCount: recommendations.primaryRecommendations.length + recommendations.secondaryRecommendations.length
+      });
+      
+    } catch (error) {
+      console.error("Quiz completion failed:", error);
+      res.status(500).json({ 
+        message: "Failed to process quiz completion", 
+        error: (error as Error).message 
+      });
+    }
+  });
+
+  // Get quiz statistics (admin only)
+  app.get("/api/quiz/stats", async (req, res) => {
+    try {
+      const quizResults = await storage.getQuizResults();
+      
+      res.json({
+        totalCompletions: quizResults.length,
+        recentCompletions: quizResults
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 10)
+          .map(result => ({
+            id: result.id,
+            name: `${result.firstName} ${result.lastName}`,
+            email: result.email,
+            completedAt: result.createdAt,
+            consentToMarketing: result.consentToMarketing
+          }))
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get quiz statistics" });
+    }
+  });
 
   // Chat endpoint for product questions
   app.post("/api/chat/product-question", async (req, res) => {

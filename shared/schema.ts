@@ -25,6 +25,17 @@ export const products = pgTable("products", {
   supplyDays: integer("supply_days"),
 });
 
+export const quizResults = pgTable("quiz_results", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  consentToMarketing: boolean("consent_to_marketing").default(false),
+  answers: text("answers").notNull(), // JSON stringified answers
+  recommendations: text("recommendations").notNull(), // JSON stringified product recommendations
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
@@ -122,6 +133,11 @@ export const insertStockAlertSchema = createInsertSchema(stockAlerts).omit({
   createdAt: true,
 });
 
+export const insertQuizResultSchema = createInsertSchema(quizResults).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Product = typeof products.$inferSelect;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
@@ -134,3 +150,5 @@ export type InsertOrder = z.infer<typeof insertOrderSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertStockAlert = z.infer<typeof insertStockAlertSchema>;
 export type StockAlert = typeof stockAlerts.$inferSelect;
+export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
+export type QuizResult = typeof quizResults.$inferSelect;

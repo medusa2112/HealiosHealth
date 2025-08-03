@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -38,6 +38,10 @@ export interface IStorage {
   getArticlesByCategory(category: string): Promise<Article[]>;
   createArticle(article: InsertArticle): Promise<Article>;
   getLatestArticles(limit: number): Promise<Article[]>;
+  
+  // Quiz Results
+  createQuizResult(quizResult: InsertQuizResult): Promise<QuizResult>;
+  getQuizResults(): Promise<QuizResult[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -47,6 +51,7 @@ export class MemStorage implements IStorage {
   private articles: Map<string, Article>;
   private orders: Map<string, Order>;
   private stockAlerts: Map<string, StockAlert>;
+  private quizResults: Map<string, QuizResult>;
 
   constructor() {
     this.products = new Map();
@@ -55,6 +60,7 @@ export class MemStorage implements IStorage {
     this.articles = new Map();
     this.orders = new Map();
     this.stockAlerts = new Map();
+    this.quizResults = new Map();
     this.seedData();
   }
 
@@ -622,6 +628,27 @@ export class MemStorage implements IStorage {
     if (alert) {
       this.stockAlerts.set(alertId, { ...alert, alertSent: true });
     }
+  }
+
+  // Quiz Results
+  async createQuizResult(quizResultData: InsertQuizResult): Promise<QuizResult> {
+    const quizResult: QuizResult = {
+      id: randomUUID(),
+      email: quizResultData.email,
+      firstName: quizResultData.firstName,
+      lastName: quizResultData.lastName,
+      consentToMarketing: quizResultData.consentToMarketing || false,
+      answers: quizResultData.answers,
+      recommendations: quizResultData.recommendations,
+      createdAt: new Date().toISOString()
+    };
+    
+    this.quizResults.set(quizResult.id, quizResult);
+    return quizResult;
+  }
+
+  async getQuizResults(): Promise<QuizResult[]> {
+    return Array.from(this.quizResults.values());
   }
 }
 
