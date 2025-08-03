@@ -143,7 +143,7 @@ export function Header() {
                 className="text-white hover:text-[#4285F4] transition-colors duration-200"
               >
                 <SiGoogle className={`transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                  isScrolled ? 'h-3 w-3' : 'h-4 w-4'
                 }`} />
               </a>
               <a
@@ -153,7 +153,7 @@ export function Header() {
                 className="text-white hover:text-[#E4405F] transition-colors duration-200"
               >
                 <SiInstagram className={`transition-all duration-300 ${
-                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                  isScrolled ? 'h-3 w-3' : 'h-4 w-4'
                 }`} />
               </a>
             </div>
