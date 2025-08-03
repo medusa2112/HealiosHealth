@@ -86,38 +86,8 @@ export function StockNotification() {
   if (!isVisible) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-      onClick={handleClose}
-    >
-      <div 
-        className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl animate-fadeIn"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close button - positioned inside the modal */}
-        <button
-          onClick={(e) => {
-            console.log('Close button onClick triggered'); // Debug log
-            e.preventDefault();
-            e.stopPropagation();
-            handleClose();
-          }}
-          onTouchStart={(e) => {
-            console.log('Close button onTouchStart triggered'); // Debug log
-            e.preventDefault();
-            e.stopPropagation();
-            handleClose();
-          }}
-          className="absolute top-4 right-4 z-[60] w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center shadow-xl border-2 border-white"
-          aria-label="Close notification"
-          type="button"
-          style={{ 
-            touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'transparent'
-          }}
-        >
-          <X className="w-6 h-6 text-white stroke-[3]" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl animate-fadeIn">
 
         {/* Header with product image */}
         <div className="relative h-80 bg-gradient-to-br from-teal-100 to-blue-100 overflow-hidden">
@@ -167,19 +137,21 @@ export function StockNotification() {
           </div>
 
           {!showEmailForm ? (
-            <div className="flex gap-3">
-              <Button
-                onClick={handleNotifyMe}
-                className="flex-1 bg-black hover:bg-gray-800 text-white"
-              >
-                Notify Me
-              </Button>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleNotifyMe}
+                  className="flex-1 bg-black hover:bg-gray-800 text-white"
+                >
+                  Notify Me
+                </Button>
+              </div>
               <Button
                 onClick={handleClose}
-                variant="outline"
-                className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black"
+                className="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-bold text-lg"
+                type="button"
               >
-                Close
+                CLOSE
               </Button>
             </div>
           ) : (
@@ -211,11 +183,11 @@ export function StockNotification() {
                     />
                   </div>
                 </div>
-                <div className="flex gap-2 pt-1">
+                <div className="space-y-2 pt-1">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 h-9 bg-black hover:bg-gray-800 text-white disabled:opacity-50 text-sm"
+                    className="w-full h-9 bg-black hover:bg-gray-800 text-white disabled:opacity-50 text-sm"
                   >
                     {isSubmitting ? 'Submitting...' : 'Notify Me'}
                   </Button>
@@ -223,9 +195,16 @@ export function StockNotification() {
                     type="button"
                     onClick={() => setShowEmailForm(false)}
                     variant="outline"
-                    className="px-4 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
+                    className="w-full h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
                   >
                     Back
+                  </Button>
+                  <Button
+                    onClick={handleClose}
+                    className="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-bold text-lg"
+                    type="button"
+                  >
+                    CLOSE
                   </Button>
                 </div>
               </form>
