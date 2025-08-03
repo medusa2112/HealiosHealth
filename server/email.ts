@@ -139,48 +139,105 @@ export class EmailService {
           <meta charset="utf-8">
           <title>New Pre-Order - Healios</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #000; margin: 0;">Healios</h1>
-            <p style="color: #666; margin: 5px 0 0 0;">Premium Wellness Supplements</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-            <h2 style="color: #333; margin: 0 0 10px 0;">🎯 New Pre-Order Alert</h2>
-            <p style="margin: 0; color: #666;">A customer has placed a pre-order for an out-of-stock product.</p>
-          </div>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                NEW PRE-ORDER RECEIVED
+              </div>
+              
+              <h1 style="color: #000; font-size: 24px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                ${preOrder.customerName} pre-ordered ${preOrder.productName}
+              </h1>
+              
+              <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
+                A customer has placed a pre-order for an out-of-stock product.
+              </p>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Details</h3>
-            <p><strong>Name:</strong> ${preOrder.customerName}</p>
-            <p><strong>Email:</strong> <a href="mailto:${preOrder.customerEmail}" style="color: #000;">${preOrder.customerEmail}</a></p>
-            ${preOrder.customerPhone ? `<p><strong>Phone:</strong> <a href="tel:${preOrder.customerPhone}" style="color: #000;">${preOrder.customerPhone}</a></p>` : ''}
-            <p><strong>Pre-Order Date:</strong> ${new Date(preOrder.createdAt || Date.now()).toLocaleDateString()}</p>
-          </div>
+            <!-- Customer Details -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                CUSTOMER DETAILS
+              </div>
+              
+              <div style="border: 1px solid #eee; padding: 30px;">
+                <div style="display: table; width: 100%;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Name</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${preOrder.customerName}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Email</div>
+                    <div style="display: table-cell; padding: 8px 0;"><a href="mailto:${preOrder.customerEmail}" style="color: #000; text-decoration: none;">${preOrder.customerEmail}</a></div>
+                  </div>
+                  ${preOrder.customerPhone ? `
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Phone</div>
+                    <div style="display: table-cell; padding: 8px 0;"><a href="tel:${preOrder.customerPhone}" style="color: #000; text-decoration: none;">${preOrder.customerPhone}</a></div>
+                  </div>` : ''}
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Pre-Order Date</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${new Date(preOrder.createdAt || Date.now()).toLocaleDateString()}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Product Information</h3>
-            <p><strong>Product:</strong> ${preOrder.productName}</p>
-            <p><strong>Price:</strong> R${preOrder.productPrice}</p>
-            <p><strong>Quantity Requested:</strong> ${preOrder.quantity}</p>
-            <p><strong>Total Value:</strong> R${(parseFloat(preOrder.productPrice) * (preOrder.quantity || 1)).toFixed(2)}</p>
-          </div>
+            <!-- Product Information -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                PRODUCT INFORMATION
+              </div>
+              
+              <div style="border: 1px solid #eee; padding: 30px;">
+                <div style="display: table; width: 100%;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Product</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${preOrder.productName}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Price</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">R${preOrder.productPrice}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Quantity</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${preOrder.quantity}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Total Value</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">R${(parseFloat(preOrder.productPrice) * (preOrder.quantity || 1)).toFixed(2)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          ${preOrder.notes ? `
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Notes</h3>
-            <p style="background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 0;">${preOrder.notes}</p>
-          </div>` : ''}
+            ${preOrder.notes ? `
+            <!-- Customer Notes -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                CUSTOMER NOTES
+              </div>
+              <div style="border: 1px solid #eee; padding: 20px; font-family: monospace; font-size: 14px; line-height: 1.6; color: #000; white-space: pre-line;">${preOrder.notes}</div>
+            </div>` : ''}
 
-          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0;">Next Steps</h3>
-            <p style="margin: 0;">Add this customer to the pre-order waiting list and notify them when stock arrives.</p>
-          </div>
+            <!-- Action Required -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="background: #000; color: white; padding: 20px; text-align: center;">
+                <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 8px;">ACTION REQUIRED</div>
+                <div style="color: #ccc; font-size: 14px;">Add this customer to the pre-order waiting list and notify them when stock arrives</div>
+              </div>
+            </div>
 
-          <div style="text-center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="color: #666; font-size: 12px;">
-              Pre-Order ID: ${preOrder.id}
-            </p>
+            <!-- Footer -->
+            <div style="padding: 0 40px 40px 40px;">
+              <div style="border-top: 1px solid #eee; padding-top: 20px;">
+                <p style="color: #666; font-size: 12px; margin: 0;">
+                  Pre-Order ID: ${preOrder.id}
+                </p>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -316,28 +373,62 @@ export class EmailService {
           <meta charset="utf-8">
           <title>Restock Notification Request - Healios</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #000; margin: 0;">Healios</h1>
-            <p style="color: #666; margin: 5px 0 0 0;">Restock Notification Request</p>
-          </div>
-          
-          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-            <h2 style="color: #333; margin: 0 0 10px 0;">New Restock Notification Request</h2>
-            <p style="margin: 0; color: #666;">A customer has requested to be notified when a product is back in stock.</p>
-          </div>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                RESTOCK NOTIFICATION REQUEST
+              </div>
+              
+              <h1 style="color: #000; font-size: 24px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                ${firstName} wants to be notified about ${product}
+              </h1>
+              
+              <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
+                A customer has requested to be notified when this product is back in stock.
+              </p>
+            </div>
 
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 8px;">Customer Details</h3>
-            <p><strong>Name:</strong> ${firstName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Product:</strong> ${product}</p>
-            <p><strong>Expected Restock:</strong> ${restockDate}</p>
-          </div>
+            <!-- Request Details -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                REQUEST DETAILS
+              </div>
+              
+              <div style="border: 1px solid #eee; padding: 30px;">
+                <div style="display: table; width: 100%;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 140px;">Customer Name</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${firstName}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Email Address</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${email}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Product Requested</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${product}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Expected Restock</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${restockDate}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Request Date</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${new Date().toLocaleString()}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="background: #000; color: white; padding: 20px; border-radius: 8px; text-align: center;">
-            <h3 style="margin: 0 0 10px 0;">Action Required</h3>
-            <p style="margin: 0;">Add this customer to the ${product} restock notification list.</p>
+            <!-- Action Required -->
+            <div style="padding: 0 40px 40px 40px;">
+              <div style="background: #000; color: white; padding: 20px; text-align: center;">
+                <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 8px;">ACTION REQUIRED</div>
+                <div style="color: #ccc; font-size: 14px;">Add this customer to the ${product} restock notification list</div>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -460,28 +551,70 @@ export class EmailService {
       const html = `
         <!DOCTYPE html>
         <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #000;">New Order Received - Healios</h2>
-          
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin: 0 0 10px 0; color: #333;">Order #${order.id}</h3>
-            <p><strong>Customer:</strong> ${order.customerEmail}</p>
-            <p><strong>Total:</strong> R${order.totalAmount}</p>
-            <p><strong>Date:</strong> ${new Date(order.createdAt || Date.now()).toLocaleString()}</p>
-          </div>
+        <head>
+          <meta charset="utf-8">
+          <title>New Order - Healios</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                NEW ORDER RECEIVED
+              </div>
+              
+              <h1 style="color: #000; font-size: 24px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                Order #${order.id.slice(-8)} - R${order.totalAmount}
+              </h1>
+              
+              <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
+                Customer: ${order.customerEmail}
+              </p>
+            </div>
 
-          <div style="margin: 20px 0;">
-            <h4>Items:</h4>
-            <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">${orderItemsList}</pre>
-          </div>
+            <!-- Order Details -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="border: 1px solid #eee; padding: 30px;">
+                <div style="display: table; width: 100%;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Order Date</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${new Date(order.createdAt || Date.now()).toLocaleString()}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Customer</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${order.customerName || 'N/A'}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Phone</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${order.customerPhone || 'N/A'}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="margin: 20px 0;">
-            <h4>Shipping Address:</h4>
-            <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">${order.shippingAddress}</pre>
-          </div>
+            <!-- Items Ordered -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                ITEMS ORDERED
+              </div>
+              <div style="border: 1px solid #eee; padding: 20px; font-family: monospace; font-size: 14px; line-height: 1.8; color: #000; white-space: pre-line;">${orderItemsList}</div>
+            </div>
 
-          <div style="background: #000; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-top: 20px;">
-            <p style="margin: 0;"><strong>Action Required:</strong> Process this order and update stock levels</p>
+            <!-- Shipping Address -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                SHIPPING ADDRESS
+              </div>
+              <div style="border: 1px solid #eee; padding: 20px; font-family: monospace; font-size: 14px; line-height: 1.6; color: #000; white-space: pre-line;">${order.shippingAddress}</div>
+            </div>
+
+            <!-- Action Required -->
+            <div style="padding: 0 40px 40px 40px;">
+              <div style="background: #000; color: white; padding: 20px; text-align: center;">
+                <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 8px;">ACTION REQUIRED</div>
+                <div style="color: #ccc; font-size: 14px;">Process this order and update stock levels</div>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -506,24 +639,67 @@ export class EmailService {
       const html = `
         <!DOCTYPE html>
         <html>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #e74c3c;">Low Stock Alert - Healios</h2>
-          
-          <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin: 0 0 10px 0; color: #856404;">⚠️ Stock Running Low</h3>
-            <p><strong>Product:</strong> ${productName}</p>
-            <p><strong>Current Stock:</strong> ${currentStock} units remaining</p>
-            <p><strong>Product ID:</strong> ${productId}</p>
-          </div>
+        <head>
+          <meta charset="utf-8">
+          <title>Low Stock Alert - Healios</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Header -->
+            <div style="padding: 40px 40px 20px 40px;">
+              <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                LOW STOCK ALERT
+              </div>
+              
+              <h1 style="color: #000; font-size: 24px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                ${productName} is running low
+              </h1>
+              
+              <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
+                Immediate attention required to prevent stockouts.
+              </p>
+            </div>
 
-          <div style="background: #000; color: white; padding: 15px; border-radius: 8px; text-align: center;">
-            <p style="margin: 0;"><strong>Action Required:</strong> Restock this product to avoid stockouts</p>
-          </div>
+            <!-- Stock Details -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="border: 1px solid #eee; padding: 30px;">
+                <div style="display: table; width: 100%;">
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 140px;">Product</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${productName}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Current Stock</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${currentStock} units remaining</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Product ID</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${productId}</div>
+                  </div>
+                  <div style="display: table-row;">
+                    <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Alert Date</div>
+                    <div style="display: table-cell; padding: 8px 0; color: #000;">${new Date().toLocaleString()}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
-            <p style="color: #666; font-size: 12px;">
-              This alert was sent automatically when stock fell below the threshold of 3 units.
-            </p>
+            <!-- Action Required -->
+            <div style="padding: 0 40px; margin-bottom: 30px;">
+              <div style="background: #000; color: white; padding: 20px; text-align: center;">
+                <div style="color: white; font-size: 14px; font-weight: 500; margin-bottom: 8px;">ACTION REQUIRED</div>
+                <div style="color: #ccc; font-size: 14px;">Restock this product to avoid stockouts</div>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="padding: 0 40px 40px 40px;">
+              <div style="border-top: 1px solid #eee; padding-top: 20px;">
+                <p style="color: #666; font-size: 12px; margin: 0;">
+                  This alert was sent automatically when stock fell below the threshold of 3 units.
+                </p>
+              </div>
+            </div>
           </div>
         </body>
         </html>
@@ -557,25 +733,57 @@ export class EmailService {
             <meta charset="utf-8">
             <title>Welcome to Healios</title>
           </head>
-          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="text-align: center; margin-bottom: 30px;">
-              <h1 style="color: #000; margin-bottom: 10px;">Welcome to Healios!</h1>
-              <p style="color: #666; font-size: 16px;">Thank you for joining our wellness community</p>
-            </div>
-            
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-              <h2 style="color: #000; margin-top: 0;">Hi ${newsletter.firstName}! 👋</h2>
-              <p>We're excited to have you as part of the Healios family. You'll now receive:</p>
-              <ul style="color: #666;">
-                <li>Exclusive wellness tips and insights</li>
-                <li>Early access to new products</li>
-                <li>Special offers and promotions</li>
-                <li>Birthday surprises 🎉</li>
-              </ul>
-            </div>
-            
-            <div style="text-align: center; margin-top: 30px;">
-              <p style="color: #666; font-size: 14px;">Thank you for choosing Healios for your wellness journey!</p>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+              <!-- Header -->
+              <div style="padding: 40px 40px 20px 40px; text-align: left;">
+                <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                  WELCOME TO HEALIOS
+                </div>
+                
+                <h1 style="color: #000; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0 0 20px 0;">
+                  Hi ${newsletter.firstName}, welcome to our wellness community.
+                </h1>
+                
+                <p style="color: #666; font-size: 16px; line-height: 1.5; margin: 0;">
+                  Thank you for joining Healios. You're now part of a community dedicated to premium, science-backed nutrition.
+                </p>
+              </div>
+
+              <!-- Benefits Section -->
+              <div style="padding: 0 40px; margin-bottom: 40px;">
+                <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                  WHAT TO EXPECT
+                </div>
+                
+                <div style="border-left: 2px solid #000; padding-left: 20px; margin-bottom: 30px;">
+                  <div style="margin-bottom: 16px;">
+                    <div style="color: #000; font-weight: 500; margin-bottom: 4px;">Exclusive wellness insights</div>
+                    <div style="color: #666; font-size: 14px;">Evidence-based nutrition tips and health guidance</div>
+                  </div>
+                  <div style="margin-bottom: 16px;">
+                    <div style="color: #000; font-weight: 500; margin-bottom: 4px;">Early product access</div>
+                    <div style="color: #666; font-size: 14px;">Be first to discover new supplements and formulations</div>
+                  </div>
+                  <div style="margin-bottom: 16px;">
+                    <div style="color: #000; font-weight: 500; margin-bottom: 4px;">Member-only offers</div>
+                    <div style="color: #666; font-size: 14px;">Special pricing and exclusive promotions</div>
+                  </div>
+                  <div>
+                    <div style="color: #000; font-weight: 500; margin-bottom: 4px;">Personalized recommendations</div>
+                    <div style="color: #666; font-size: 14px;">Tailored wellness suggestions and birthday offers</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div style="padding: 0 40px 40px 40px; text-align: center;">
+                <div style="border-top: 1px solid #eee; padding-top: 20px;">
+                  <p style="color: #666; font-size: 14px; margin: 0;">
+                    Thank you for choosing Healios for your wellness journey.
+                  </p>
+                </div>
+              </div>
             </div>
           </body>
           </html>
@@ -594,14 +802,38 @@ export class EmailService {
             <meta charset="utf-8">
             <title>New Newsletter Subscriber</title>
           </head>
-          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #000;">New Newsletter Subscription</h2>
-            
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
-              <p><strong>Name:</strong> ${newsletter.firstName} ${newsletter.lastName}</p>
-              <p><strong>Email:</strong> ${newsletter.email}</p>
-              <p><strong>Birthday:</strong> ${newsletter.birthday || 'Not provided'}</p>
-              <p><strong>Subscribed:</strong> ${newsletter.subscribedAt}</p>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+              <!-- Header -->
+              <div style="padding: 40px 40px 20px 40px;">
+                <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                  NEW NEWSLETTER SUBSCRIPTION
+                </div>
+                
+                <h1 style="color: #000; font-size: 24px; font-weight: 400; line-height: 1.3; margin: 0 0 30px 0;">
+                  ${newsletter.firstName} ${newsletter.lastName} joined the community
+                </h1>
+              </div>
+
+              <!-- Details -->
+              <div style="padding: 0 40px; margin-bottom: 40px;">
+                <div style="border: 1px solid #eee; padding: 30px;">
+                  <div style="display: table; width: 100%;">
+                    <div style="display: table-row;">
+                      <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px; width: 120px;">Email</div>
+                      <div style="display: table-cell; padding: 8px 0; color: #000; font-weight: 500;">${newsletter.email}</div>
+                    </div>
+                    <div style="display: table-row;">
+                      <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Birthday</div>
+                      <div style="display: table-cell; padding: 8px 0; color: #000;">${newsletter.birthday || 'Not provided'}</div>
+                    </div>
+                    <div style="display: table-row;">
+                      <div style="display: table-cell; padding: 8px 0; color: #666; font-size: 14px;">Subscribed</div>
+                      <div style="display: table-cell; padding: 8px 0; color: #000;">${new Date(newsletter.subscribedAt || Date.now()).toLocaleString()}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </body>
           </html>
