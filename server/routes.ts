@@ -287,6 +287,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Cart route to handle automatic cart population from quiz recommendations
+  app.get("/cart", async (req, res) => {
+    try {
+      const { items } = req.query;
+      
+      if (!items || typeof items !== 'string') {
+        // Redirect to normal cart page if no items specified
+        return res.redirect('/');
+      }
+
+      // Parse items format: "productId1:quantity1,productId2:quantity2"
+      const cartItems = items.split(',').map(item => {
+        const [productId, quantity] = item.split(':');
+        return { productId, quantity: parseInt(quantity || '1') };
+      });
+
+      // Fetch product data for all items
+      const productsData = [];
+      for (const item of cartItems) {
+        try {
+          const product = await storage.getProductById(item.productId);
+          if (product) {
+            productsData.push({
+              product,
+              quantity: item.quantity
+            });
+          }
+        } catch (error) {
+          console.error(`Failed to fetch product ${item.productId}:`, error);
+        }
+      }
+
+      // Generate cart data as JSON for the frontend
+      const cartData = {
+        items: productsData,
+        autoAdded: true,
+        source: 'quiz_recommendations'
+      };
+
+      // Return a simple HTML page that will populate the cart via JavaScript
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Loading Your Cart - Healios</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background: #fff; text-align: center; }
+            .loader { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #000; border-radius: 50%; animation: spin 1s linear infinite; }
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          </style>
+        </head>
+        <body>
+          <h1>Adding Your Recommendations to Cart...</h1>
+          <div class="loader"></div>
+          <p>Please wait while we prepare your personalized supplements.</p>
+          
+          <script>
+            const cartData = ${JSON.stringify(cartData)};
+            
+            // Store cart data in localStorage for the main app to use
+            localStorage.setItem('healios_auto_cart', JSON.stringify(cartData));
+            localStorage.setItem('healios_cart_timestamp', Date.now().toString());
+            
+            // Redirect to main app
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1500);
+          </script>
+        </body>
+        </html>
+      `;
+
+      res.send(html);
+    } catch (error) {
+      console.error('Cart route error:', error);
+      res.redirect('/');
+    }
+  });
+
   // Update order status (admin endpoint)
   app.patch("/api/orders/:id/status", async (req, res) => {
     try {

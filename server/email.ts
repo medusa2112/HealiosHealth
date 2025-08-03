@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
-import type { PreOrder, Newsletter, QuizResult } from '@shared/schema';
+import type { PreOrder, Newsletter, QuizResult, Product } from '@shared/schema';
 import { type Order } from '@shared/schema';
 import { QuizRecommendationService } from './quiz-service';
+import { storage } from './storage';
 
 interface CartItem {
   product: {
@@ -29,15 +30,75 @@ interface ProductRecommendation {
   priority: number;
 }
 
+interface EnhancedProductRecommendation extends ProductRecommendation {
+  product?: Product;
+}
+
 interface QuizRecommendations {
   primaryRecommendations: ProductRecommendation[];
   secondaryRecommendations: ProductRecommendation[];
   personalizedMessage: string;
 }
 
+interface EnhancedQuizRecommendations {
+  primaryRecommendations: EnhancedProductRecommendation[];
+  secondaryRecommendations: EnhancedProductRecommendation[];
+  personalizedMessage: string;
+  cartUrl: string;
+}
+
 export class EmailService {
   private static readonly FROM_EMAIL = 'dn@thefourths.com';
   private static readonly ADMIN_EMAILS = ['dn@thefourths.com', 'ms@thefourths.com'];
+  private static readonly BASE_URL = process.env.NODE_ENV === 'production' ? 'https://healios.com' : 'http://localhost:5000';
+
+  private static async enhanceRecommendationsWithProductData(
+    recommendations: QuizRecommendations
+  ): Promise<EnhancedQuizRecommendations> {
+    // Fetch product data for all recommendations
+    const allProductIds = [
+      ...recommendations.primaryRecommendations.map(r => r.productId),
+      ...recommendations.secondaryRecommendations.map(r => r.productId)
+    ];
+
+    const productDataMap = new Map<string, Product>();
+    for (const productId of allProductIds) {
+      try {
+        const product = await storage.getProductById(productId);
+        if (product) {
+          productDataMap.set(productId, product);
+        }
+      } catch (error) {
+        console.error(`Failed to fetch product data for ${productId}:`, error);
+      }
+    }
+
+    // Enhance recommendations with product data
+    const enhancedPrimary = recommendations.primaryRecommendations.map(rec => ({
+      ...rec,
+      product: productDataMap.get(rec.productId)
+    }));
+
+    const enhancedSecondary = recommendations.secondaryRecommendations.map(rec => ({
+      ...rec,
+      product: productDataMap.get(rec.productId)
+    }));
+
+    // Generate cart URL with all primary recommendations
+    const cartItems = enhancedPrimary
+      .filter(rec => rec.product)
+      .map(rec => `${rec.productId}:1`)
+      .join(',');
+    
+    const cartUrl = `${this.BASE_URL}/cart?items=${encodeURIComponent(cartItems)}`;
+
+    return {
+      primaryRecommendations: enhancedPrimary,
+      secondaryRecommendations: enhancedSecondary,
+      personalizedMessage: recommendations.personalizedMessage,
+      cartUrl
+    };
+  }
 
   static async sendNewsletterConfirmation(newsletter: Newsletter): Promise<boolean> {
     try {
@@ -610,11 +671,14 @@ export class EmailService {
     recommendations: QuizRecommendations
   ): Promise<boolean> {
     try {
+      // Enhance recommendations with product data and cart URL
+      const enhancedRecommendations = await this.enhanceRecommendationsWithProductData(recommendations);
+      
       // Send personalized recommendations to user
-      const userEmailSuccess = await this.sendUserQuizRecommendations(quizResult, recommendations);
+      const userEmailSuccess = await this.sendUserQuizRecommendations(quizResult, enhancedRecommendations);
       
       // Send admin notification to dn@thefourths.com
-      const adminEmailSuccess = await this.sendQuizAdminNotification(quizResult, recommendations);
+      const adminEmailSuccess = await this.sendQuizAdminNotification(quizResult, enhancedRecommendations);
       
       return userEmailSuccess && adminEmailSuccess;
     } catch (error) {
@@ -625,7 +689,7 @@ export class EmailService {
 
   private static async sendUserQuizRecommendations(
     quizResult: QuizResult,
-    recommendations: QuizRecommendations
+    recommendations: EnhancedQuizRecommendations
   ): Promise<boolean> {
     try {
       const personalizedMessage = recommendations.personalizedMessage.replace('there', quizResult.firstName);
@@ -657,9 +721,19 @@ export class EmailService {
             
             ${recommendations.primaryRecommendations.map((rec, index) => `
               <div style="border-left: 4px solid #000; padding-left: 20px; margin-bottom: 40px;">
+                ${rec.product ? `
+                  <div style="margin-bottom: 20px;">
+                    <img src="${this.BASE_URL}${rec.product.imageUrl}" alt="${rec.product.name}" style="width: 120px; height: 120px; object-fit: cover; border: 1px solid #eee;" />
+                  </div>
+                ` : ''}
                 <h3 style="font-size: 18px; font-weight: 500; margin: 0 0 15px 0; color: #000;">
                   ${rec.productName}
                 </h3>
+                ${rec.product ? `
+                  <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                    <strong>Price:</strong> R${rec.product.price}
+                  </div>
+                ` : ''}
                 <p style="font-size: 16px; line-height: 1.6; color: #333; margin: 0 0 15px 0;">
                   ${rec.reason}
                 </p>
@@ -676,7 +750,7 @@ export class EmailService {
                   </div>
                 </div>
                 <div style="margin-top: 20px;">
-                  <a href="https://healios.com/products/${rec.productId}" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: 500; font-size: 14px;">
+                  <a href="${this.BASE_URL}/products/${rec.productId}" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; font-weight: 500; font-size: 14px;">
                     View Product →
                   </a>
                 </div>
@@ -703,6 +777,21 @@ export class EmailService {
             ` : ''}
             
             <div style="border-top: 1px solid #eee; padding-top: 30px; margin-top: 50px;">
+              <div style="background-color: #000; padding: 30px; text-align: center; margin-bottom: 30px;">
+                <h3 style="font-size: 18px; font-weight: 500; margin: 0 0 15px 0; color: #fff;">
+                  Ready to Start Your Wellness Journey?
+                </h3>
+                <p style="font-size: 14px; color: #ccc; margin: 0 0 20px 0;">
+                  Add all your recommended supplements to your cart with one click.
+                </p>
+                <a href="${recommendations.cartUrl}" style="display: inline-block; background-color: #fff; color: #000; padding: 15px 30px; text-decoration: none; font-weight: 600; font-size: 16px; margin-bottom: 15px;">
+                  🛒 Add All to Cart
+                </a>
+                <div style="font-size: 12px; color: #ccc;">
+                  Convenient one-click shopping for your personalized recommendations
+                </div>
+              </div>
+              
               <div style="background-color: #f8f9fa; padding: 20px; text-align: center;">
                 <h3 style="font-size: 16px; font-weight: 500; margin: 0 0 10px 0; color: #000;">
                   Questions About These Recommendations?
@@ -742,7 +831,7 @@ export class EmailService {
 
   private static async sendQuizAdminNotification(
     quizResult: QuizResult,
-    recommendations: QuizRecommendations
+    recommendations: EnhancedQuizRecommendations
   ): Promise<boolean> {
     try {
       const answers = JSON.parse(quizResult.answers);
@@ -770,7 +859,7 @@ export class EmailService {
                 <strong>Name:</strong> ${quizResult.firstName} ${quizResult.lastName}<br>
                 <strong>Email:</strong> ${quizResult.email}<br>
                 <strong>Marketing Consent:</strong> ${quizResult.consentToMarketing ? 'Yes' : 'No'}<br>
-                <strong>Completed:</strong> ${new Date(quizResult.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                <strong>Completed:</strong> ${new Date(quizResult.createdAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
             
