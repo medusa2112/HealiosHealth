@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2, User, Heart, Headphones } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2, User, Heart, Headphones, X, Clock, DollarSign } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -117,6 +117,8 @@ export default function QuizPage() {
     consentToMarketing: false
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [showPTModal, setShowPTModal] = useState(false);
+  const [showNutritionistModal, setShowNutritionistModal] = useState(false);
   const { toast } = useToast();
 
   const quizCompletionMutation = useMutation({
@@ -440,7 +442,10 @@ export default function QuizPage() {
           {/* Action Cards Grid */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Personal Trainer Card */}
-            <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
+            <div 
+              onClick={() => setShowPTModal(true)}
+              className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300 cursor-pointer"
+            >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
                   <User className="w-6 h-6" />
@@ -457,7 +462,10 @@ export default function QuizPage() {
             </div>
 
             {/* Nutritionist Card */}
-            <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
+            <div 
+              onClick={() => setShowNutritionistModal(true)}
+              className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300 cursor-pointer"
+            >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
                   <Heart className="w-6 h-6" />
@@ -491,6 +499,200 @@ export default function QuizPage() {
             </div>
           </div>
 
+
+          {/* Personal Trainer Modal */}
+          {showPTModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white dark:bg-gray-900 max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+                <button
+                  onClick={() => setShowPTModal(false)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-black text-white flex items-center justify-center mx-auto mb-4">
+                    <User className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-2">
+                    Personal Training Consultation
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Connect with a certified personal trainer for personalized fitness guidance tailored to your goals.
+                  </p>
+                </div>
+
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">15-Minute Consultation</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Quick assessment of your fitness goals and current level</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <DollarSign className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">£10 Session Fee</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Professional consultation with certified trainer</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <User className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">What You'll Get</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Personalized workout recommendations, form guidance, and goal-setting strategies</div>
+                    </div>
+                  </div>
+                </div>
+
+                <form className="space-y-4">
+                  <div>
+                    <label htmlFor="pt-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="pt-name"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="pt-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="pt-email"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="pt-goals" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Fitness Goals
+                    </label>
+                    <textarea
+                      id="pt-goals"
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors resize-none"
+                      placeholder="Tell us about your fitness goals and any specific areas you'd like to focus on..."
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full bg-black text-white px-6 py-3 font-medium hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-colors"
+                  >
+                    Book Consultation - £10
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Nutritionist Modal */}
+          {showNutritionistModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white dark:bg-gray-900 max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+                <button
+                  onClick={() => setShowNutritionistModal(false)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-black text-white flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-2">
+                    Nutrition Consultation
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Work with a qualified nutritionist to create a personalized nutrition plan that supports your wellness goals.
+                  </p>
+                </div>
+
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">15-Minute Consultation</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Initial assessment of your dietary needs and health goals</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <DollarSign className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">£10 Session Fee</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Professional consultation with registered nutritionist</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <Heart className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">What You'll Get</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Personalized nutrition advice, meal planning guidance, and supplement recommendations</div>
+                    </div>
+                  </div>
+                </div>
+
+                <form className="space-y-4">
+                  <div>
+                    <label htmlFor="nut-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="nut-name"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="nut-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="nut-email"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="nut-goals" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Health & Nutrition Goals
+                    </label>
+                    <textarea
+                      id="nut-goals"
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors resize-none"
+                      placeholder="Tell us about your nutrition goals, dietary restrictions, or health concerns..."
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full bg-black text-white px-6 py-3 font-medium hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-colors"
+                  >
+                    Book Consultation - £10
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
 
           {/* Back to Home */}
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
