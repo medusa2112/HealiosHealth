@@ -5,6 +5,13 @@ import { CheckCircle, Package, ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 
+// Extend Window interface for Google Analytics
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 interface Order {
   id: string;
   customerEmail: string;
@@ -31,6 +38,14 @@ export default function OrderConfirmationPage() {
       fetchOrder(orderId);
     } else {
       setLoading(false);
+    }
+
+    // Google Ads Conversion Tracking
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: orderId || 'unknown',
+        send_to: 'AW-CONVERSION_ID/CONVERSION_LABEL' // Replace with your actual conversion ID
+      });
     }
   }, []);
 

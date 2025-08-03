@@ -10,6 +10,13 @@ import { ArrowLeft, ShoppingBag } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 
+// Extend Window interface for Google Analytics
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
 if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
@@ -216,15 +223,31 @@ export default function CheckoutPage() {
   const { cart } = useCart();
   const { toast } = useToast();
 
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
   // Calculate total amount
   const totalAmount = cart.items.reduce((sum, item) => 
     sum + parseFloat(item.product.price) * item.quantity, 0
   );
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Google Ads - Begin Checkout Conversion
+    if (typeof window !== 'undefined' && window.gtag && cart.items.length > 0) {
+      window.gtag('event', 'begin_checkout', {
+        currency: 'ZAR',
+        value: totalAmount,
+        send_to: 'AW-CONVERSION_ID/BEGIN_CHECKOUT_LABEL', // Replace with your actual conversion ID
+        items: cart.items.map(item => ({
+          item_id: item.product.id,
+          item_name: item.product.name,
+          category: item.product.category || 'Supplements',
+          quantity: item.quantity,
+          price: parseFloat(item.product.price)
+        }))
+      });
+    }
+  }, [cart.items, totalAmount]);
 
   useEffect(() => {
     if (cart.items.length > 0 && totalAmount > 0) {

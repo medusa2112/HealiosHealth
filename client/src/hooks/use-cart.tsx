@@ -2,6 +2,13 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import { type Product } from "@shared/schema";
 import { type CartItem, type CartState } from "@/lib/types";
 
+// Extend Window interface for Google Analytics
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 interface CartContextType {
   cart: CartState;
   addToCart: (product: Product) => void;
@@ -24,6 +31,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existingItem = prev.items.find((item) => item.product.id === product.id);
+      
+      // Google Analytics - Add to Cart Event
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'add_to_cart', {
+          currency: 'ZAR',
+          value: parseFloat(product.price),
+          send_to: 'AW-CONVERSION_ID/ADD_TO_CART_LABEL', // Replace with your actual conversion ID
+          items: [{
+            item_id: product.id,
+            item_name: product.name,
+            category: product.category || 'Supplements',
+            quantity: 1,
+            price: parseFloat(product.price)
+          }]
+        });
+      }
       
       if (existingItem) {
         return {
