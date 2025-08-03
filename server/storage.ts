@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -42,12 +42,17 @@ export interface IStorage {
   // Quiz Results
   createQuizResult(quizResult: InsertQuizResult): Promise<QuizResult>;
   getQuizResults(): Promise<QuizResult[]>;
+  
+  // Consultation Bookings
+  createConsultationBooking(booking: InsertConsultationBooking): Promise<ConsultationBooking>;
+  getConsultationBookings(): Promise<ConsultationBooking[]>;
 }
 
 export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private newsletters: Map<string, Newsletter>;
   private preOrders: Map<string, PreOrder>;
+  private consultationBookings: Map<string, ConsultationBooking>;
   private articles: Map<string, Article>;
   private orders: Map<string, Order>;
   private stockAlerts: Map<string, StockAlert>;
@@ -59,6 +64,7 @@ export class MemStorage implements IStorage {
     this.preOrders = new Map();
     this.articles = new Map();
     this.orders = new Map();
+    this.consultationBookings = new Map();
     this.stockAlerts = new Map();
     this.quizResults = new Map();
     this.seedData();
@@ -670,6 +676,26 @@ export class MemStorage implements IStorage {
 
   async getQuizResults(): Promise<QuizResult[]> {
     return Array.from(this.quizResults.values());
+  }
+
+  // Consultation Bookings
+  async createConsultationBooking(bookingData: InsertConsultationBooking): Promise<ConsultationBooking> {
+    const booking: ConsultationBooking = {
+      id: randomUUID(),
+      type: bookingData.type,
+      name: bookingData.name,
+      email: bookingData.email,
+      goals: bookingData.goals || null,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    
+    this.consultationBookings.set(booking.id, booking);
+    return booking;
+  }
+
+  async getConsultationBookings(): Promise<ConsultationBooking[]> {
+    return Array.from(this.consultationBookings.values());
   }
 }
 

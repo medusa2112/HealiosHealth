@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2, User, Heart, Headphones, X, Clock, DollarSign } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
@@ -119,7 +119,50 @@ export default function QuizPage() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [showPTModal, setShowPTModal] = useState(false);
   const [showNutritionistModal, setShowNutritionistModal] = useState(false);
+  const [ptFormData, setPtFormData] = useState({ name: '', email: '', goals: '' });
+  const [nutritionistFormData, setNutritionistFormData] = useState({ name: '', email: '', goals: '' });
+  const [bookingConfirmation, setBookingConfirmation] = useState<{ type: 'trainer' | 'nutritionist'; bookingId: string } | null>(null);
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
+
+  // Fetch latest article for redirect
+  const { data: latestArticle } = useQuery({
+    queryKey: ['/api/articles/latest'],
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+  // Book consultation mutation
+  const bookConsultationMutation = useMutation({
+    mutationFn: async (data: { type: 'trainer' | 'nutritionist'; name: string; email: string; goals?: string }) => {
+      const response = await apiRequest('POST', '/api/consultations/book', data);
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      setBookingConfirmation({ type: variables.type, bookingId: data.bookingId });
+      // Close modals and reset forms
+      setShowPTModal(false);
+      setShowNutritionistModal(false);
+      setPtFormData({ name: '', email: '', goals: '' });
+      setNutritionistFormData({ name: '', email: '', goals: '' });
+      
+      // Redirect to latest article after 3 seconds
+      setTimeout(() => {
+        if (latestArticle?.slug) {
+          setLocation(`/journal/${latestArticle.slug}`);
+        } else {
+          setLocation('/journal/all');
+        }
+      }, 3000);
+    },
+    onError: (error) => {
+      console.error('Booking failed:', error);
+      toast({
+        title: "Booking Failed",
+        description: "Sorry, we couldn't process your booking. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
 
   const quizCompletionMutation = useMutation({
     mutationFn: async (data: EmailFormData & { answers: Record<number, string | string[]> }) => {
@@ -690,6 +733,35 @@ export default function QuizPage() {
                     Book Consultation - £10
                   </button>
                 </form>
+              </div>
+            </div>
+          )}
+
+          {/* Booking Confirmation Modal */}
+          {bookingConfirmation && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white dark:bg-gray-900 max-w-md w-full p-8 text-center">
+                <div className="w-16 h-16 bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4 rounded-full">
+                  <CheckCircle className="w-8 h-8" />
+                </div>
+                <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-2">
+                  Booking Confirmed!
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                  Thank you for booking a consultation with our {bookingConfirmation.type === 'trainer' ? 'Personal Trainer' : 'Nutritionist'}. 
+                  You'll receive a confirmation email shortly and our team will contact you within 24-48 hours to schedule your session.
+                </p>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 mb-6 text-sm text-gray-600 dark:text-gray-400">
+                  <p><strong>Booking ID:</strong> {bookingConfirmation.bookingId}</p>
+                  <p><strong>Session Fee:</strong> £10</p>
+                  <p><strong>Duration:</strong> 15 minutes</p>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                  Redirecting you to our latest article in a few seconds...
+                </p>
+                <div className="flex items-center justify-center">
+                  <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                </div>
               </div>
             </div>
           )}

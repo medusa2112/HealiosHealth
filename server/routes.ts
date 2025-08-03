@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, type Article, type QuizResult } from "@shared/schema";
+import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, type Article, type QuizResult, type ConsultationBooking } from "@shared/schema";
 import { EmailService } from "./email";
 import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
@@ -58,6 +58,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(products);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products by category" });
+    }
+  });
+
+  // Book consultation (trainer or nutritionist)
+  app.post("/api/consultations/book", async (req, res) => {
+    try {
+      const validatedData = insertConsultationBookingSchema.parse(req.body);
+      const booking = await storage.createConsultationBooking(validatedData);
+      
+      // Send confirmation email
+      await EmailService.sendConsultationBookingConfirmation({
+        email: booking.email,
+        name: booking.name,
+        type: booking.type as 'trainer' | 'nutritionist',
+        bookingId: booking.id
+      });
+      
+      res.json({ 
+        success: true, 
+        message: "Consultation booked successfully!",
+        bookingId: booking.id
+      });
+    } catch (error) {
+      console.error('Consultation booking error:', error);
+      res.status(400).json({ 
+        success: false, 
+        message: "Failed to book consultation" 
+      });
+    }
+  });
+
+  // Get most recent article
+  app.get("/api/articles/latest", async (req, res) => {
+    try {
+      const articles = await storage.getArticles();
+      if (articles.length === 0) {
+        return res.status(404).json({ message: "No articles found" });
+      }
+      
+      // Sort by createdAt descending and get the first one
+      const latestArticle = articles.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )[0];
+      
+      res.json(latestArticle);
+    } catch (error) {
+      console.error('Error fetching latest article:', error);
+      res.status(500).json({ message: "Failed to fetch latest article" });
     }
   });
 

@@ -666,6 +666,119 @@ export class EmailService {
     }
   }
 
+  static async sendConsultationBookingConfirmation({ email, name, type, bookingId }: {
+    email: string;
+    name: string;
+    type: 'trainer' | 'nutritionist';
+    bookingId: string;
+  }): Promise<void> {
+    const consultationType = type === 'trainer' ? 'Personal Trainer' : 'Nutritionist';
+    const subject = `Consultation Booking Confirmed - ${consultationType}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Consultation Booking Confirmation</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+          
+          <!-- Header -->
+          <div style="text-align: center; padding: 40px 0; border-bottom: 1px solid #eee;">
+            <h1 style="color: #000; font-size: 28px; font-weight: 300; margin: 0;">Healios</h1>
+            <p style="color: #666; font-size: 14px; margin: 8px 0 0;">Evidence-Based Wellness & Nutrition</p>
+          </div>
+          
+          <!-- Main Content -->
+          <div style="padding: 40px 0;">
+            <h2 style="color: #000; font-size: 24px; font-weight: 400; margin: 0 0 20px;">Booking Confirmed!</h2>
+            
+            <p style="color: #333; font-size: 16px; margin: 0 0 20px;">Dear ${name},</p>
+            
+            <p style="color: #333; font-size: 16px; margin: 0 0 20px; line-height: 1.6;">
+              Thank you for booking a consultation with our ${consultationType}! We're excited to help you on your wellness journey.
+            </p>
+            
+            <!-- Booking Details -->
+            <div style="background-color: #f8f9fa; padding: 24px; margin: 24px 0; border-left: 4px solid #000;">
+              <h3 style="color: #000; font-size: 18px; font-weight: 500; margin: 0 0 16px;">Booking Details</h3>
+              <p style="color: #333; margin: 0 0 8px;"><strong>Service:</strong> ${consultationType} Consultation</p>
+              <p style="color: #333; margin: 0 0 8px;"><strong>Duration:</strong> 15 minutes</p>
+              <p style="color: #333; margin: 0 0 8px;"><strong>Fee:</strong> £10</p>
+              <p style="color: #333; margin: 0 0 8px;"><strong>Booking ID:</strong> ${bookingId}</p>
+            </div>
+            
+            <div style="background-color: #fff8e1; padding: 20px; margin: 24px 0; border: 1px solid #ffe082; border-radius: 4px;">
+              <h4 style="color: #f57c00; font-size: 16px; font-weight: 500; margin: 0 0 12px;">What Happens Next?</h4>
+              <ul style="color: #333; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.6;">
+                <li>Our team will contact you within 24-48 hours to schedule your session</li>
+                <li>You'll receive a calendar invite with the meeting details</li>
+                <li>Payment will be processed at the time of your consultation</li>
+                <li>Feel free to prepare any questions about your health and wellness goals</li>
+              </ul>
+            </div>
+            
+            <p style="color: #333; font-size: 16px; margin: 24px 0 0; line-height: 1.6;">
+              If you have any immediate questions or need to reschedule, please reply to this email.
+            </p>
+            
+            <p style="color: #333; font-size: 16px; margin: 20px 0 0;">Best regards,<br><strong>The Healios Team</strong></p>
+          </div>
+          
+          <!-- Footer -->
+          <div style="border-top: 1px solid #eee; padding: 20px 0; text-align: center;">
+            <p style="color: #999; font-size: 12px; margin: 0;">© 2024 Healios. Evidence-based nutrition without the nonsense.</p>
+          </div>
+          
+        </body>
+      </html>
+    `;
+    
+    const text = `
+Booking Confirmed!
+
+Dear ${name},
+
+Thank you for booking a consultation with our ${consultationType}! We're excited to help you on your wellness journey.
+
+Booking Details:
+- Service: ${consultationType} Consultation
+- Duration: 15 minutes  
+- Fee: £10
+- Booking ID: ${bookingId}
+
+What Happens Next?
+• Our team will contact you within 24-48 hours to schedule your session
+• You'll receive a calendar invite with the meeting details
+• Payment will be processed at the time of your consultation
+• Feel free to prepare any questions about your health and wellness goals
+
+If you have any immediate questions or need to reschedule, please reply to this email.
+
+Best regards,
+The Healios Team
+
+© 2024 Healios. Evidence-based nutrition without the nonsense.
+    `;
+    
+    try {
+      const data = await resend.emails.send({
+        from: 'Healios Team <noreply@healios.com>',
+        to: [email],
+        subject,
+        html,
+        text,
+      });
+      
+      console.log('✅ Consultation booking confirmation email sent:', data.id);
+    } catch (error) {
+      console.error('❌ Failed to send consultation booking confirmation email:', error);
+      throw error;
+    }
+  }
+
   static async sendQuizRecommendations(
     quizResult: QuizResult, 
     recommendations: QuizRecommendations
@@ -992,6 +1105,14 @@ export class EmailService {
 
       await this.sendPreOrderNotification(testPreOrderData);
       console.log('✅ Pre-order notification test emails sent');
+
+      await this.sendConsultationBookingConfirmation({
+        email: 'test@example.com',
+        name: 'John Doe',
+        type: 'trainer',
+        bookingId: 'test-booking-123'
+      });
+      console.log('✅ Consultation booking confirmation test email sent');
 
       await this.sendRestockNotification({
         firstName: 'John',
