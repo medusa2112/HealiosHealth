@@ -121,10 +121,7 @@ export default function QuizPage() {
 
   const quizCompletionMutation = useMutation({
     mutationFn: async (data: EmailFormData & { answers: Record<number, string | string[]> }) => {
-      return apiRequest('/api/quiz/complete', {
-        method: 'POST',
-        body: JSON.stringify(data)
-      });
+      return apiRequest('POST', '/api/quiz/complete', data);
     },
     onSuccess: () => {
       setIsCompleted(true);
