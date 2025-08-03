@@ -877,7 +877,7 @@ export default function ProductComprehensive() {
                     
                     <Button 
                       onClick={() => setShowPreOrderModal(true)}
-                      className="w-full bg-red-600 text-white py-3 text-sm font-medium hover:bg-red-700"
+                      className="w-full bg-red-600 text-white py-3 text-sm font-medium hover:bg-black hover:text-white"
                     >
                       PRE-ORDER NOW
                     </Button>
