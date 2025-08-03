@@ -54,6 +54,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px; text-align: left;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -141,6 +146,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -375,6 +385,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -465,6 +480,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px; text-align: left;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -557,6 +577,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -645,6 +670,11 @@ export class EmailService {
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
           <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+            <!-- Logo Header -->
+            <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+            </div>
+            
             <!-- Header -->
             <div style="padding: 40px 40px 20px 40px;">
               <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
@@ -735,6 +765,11 @@ export class EmailService {
           </head>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
             <div style="max-width: 600px; margin: 0 auto; background-color: white;">
+              <!-- Logo Header -->
+              <div style="padding: 40px 40px 20px 40px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+                <img src="${process.env.REPLIT_DOMAINS || 'http://localhost:5000'}/assets/Healios Logo_1754209950893.png" alt="Healios" style="height: 32px; width: auto;" />
+              </div>
+              
               <!-- Header -->
               <div style="padding: 40px 40px 20px 40px; text-align: left;">
                 <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
