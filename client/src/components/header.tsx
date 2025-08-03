@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { ShoppingBag, Menu, ChevronDown, MessageCircle } from "lucide-react";
+import { SiGoogle, SiInstagram } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -121,8 +122,8 @@ export function Header() {
         isScrolled ? 'py-1' : 'py-2'
       }`}>
         <div className="flex justify-between items-center">
-          {/* Left Logo */}
-          <div className="flex-shrink-0">
+          {/* Left Logo & Social Icons */}
+          <div className="flex items-center space-x-4">
             <Link href="/">
               <img 
                 src={healiosLogo}
@@ -132,6 +133,30 @@ export function Header() {
                 }`}
               />
             </Link>
+            
+            {/* Social Icons */}
+            <div className="hidden sm:flex items-center space-x-3">
+              <a
+                href="https://g.co/kgs/EpVioa6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#4285F4] transition-colors duration-200"
+              >
+                <SiGoogle className={`transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`} />
+              </a>
+              <a
+                href="https://www.instagram.com/thehealios_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#E4405F] transition-colors duration-200"
+              >
+                <SiInstagram className={`transition-all duration-300 ${
+                  isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                }`} />
+              </a>
+            </div>
           </div>
           
           {/* Center Navigation */}
