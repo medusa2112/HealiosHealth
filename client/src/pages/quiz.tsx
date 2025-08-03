@@ -145,13 +145,9 @@ export default function QuizPage() {
       setPtFormData({ name: '', email: '', goals: '' });
       setNutritionistFormData({ name: '', email: '', goals: '' });
       
-      // Redirect to latest article after 3 seconds
+      // Redirect to index page after 3 seconds
       setTimeout(() => {
-        if (latestArticle?.slug) {
-          setLocation(`/journal/${latestArticle.slug}`);
-        } else {
-          setLocation('/journal/all');
-        }
+        setLocation('/');
       }, 3000);
     },
     onError: (error) => {
@@ -757,7 +753,7 @@ export default function QuizPage() {
                   <p><strong>Duration:</strong> 15 minutes</p>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  Redirecting you to our latest article in a few seconds...
+                  Redirecting you to the home page in a few seconds...
                 </p>
                 <div className="flex items-center justify-center">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
