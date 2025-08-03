@@ -86,20 +86,28 @@ export function StockNotification() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-sm">
+      <div className="relative max-w-sm w-full max-h-[95vh] bg-white rounded-2xl shadow-2xl animate-fadeIn overflow-hidden flex flex-col">
 
         {/* Header with product image */}
-        <div className="relative h-80 bg-gradient-to-br from-teal-100 to-blue-100 overflow-hidden">
+        <div className="relative h-48 sm:h-64 bg-gradient-to-br from-teal-100 to-blue-100 overflow-hidden flex-shrink-0">
           <img 
             src={haloGlowImage}
             alt="Halo Glow Collagen"
-            className="w-full h-full object-cover transition-transform duration-500 ease-in-out md:hover:scale-150 cursor-pointer"
+            className="w-full h-full object-cover"
           />
+          {/* Close button overlay on image */}
+          <button
+            onClick={handleClose}
+            className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/70 hover:bg-black flex items-center justify-center"
+            type="button"
+          >
+            <X className="w-4 h-4 text-white" />
+          </button>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6 flex-1 overflow-y-auto">
           <div className="flex items-center gap-2 mb-3">
             <Package className="w-5 h-5 text-orange-500" />
             <span className="text-sm font-medium text-orange-500 uppercase tracking-wide">
@@ -115,7 +123,7 @@ export function StockNotification() {
             Thanks to your incredible support, demand for our <strong>Halo Glow</strong> premium collagen exceeded all expectations - every unit is now sold out.
           </p>
           
-          <div className="bg-gray-50 rounded-lg p-3 mb-4">
+          <div className="bg-gray-50 rounded-lg p-3 mb-3">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
@@ -137,21 +145,19 @@ export function StockNotification() {
           </div>
 
           {!showEmailForm ? (
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleNotifyMe}
-                  className="flex-1 bg-black hover:bg-gray-800 text-white"
-                >
-                  Notify Me
-                </Button>
-              </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={handleNotifyMe}
+                className="flex-1 bg-black hover:bg-gray-800 text-white"
+              >
+                Notify Me
+              </Button>
               <Button
                 onClick={handleClose}
-                className="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-bold text-lg"
-                type="button"
+                variant="outline"
+                className="px-6 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black"
               >
-                CLOSE
+                Close
               </Button>
             </div>
           ) : (
@@ -183,11 +189,11 @@ export function StockNotification() {
                     />
                   </div>
                 </div>
-                <div className="space-y-2 pt-1">
+                <div className="flex gap-2 pt-1">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-9 bg-black hover:bg-gray-800 text-white disabled:opacity-50 text-sm"
+                    className="flex-1 h-9 bg-black hover:bg-gray-800 text-white disabled:opacity-50 text-sm"
                   >
                     {isSubmitting ? 'Submitting...' : 'Notify Me'}
                   </Button>
@@ -195,16 +201,17 @@ export function StockNotification() {
                     type="button"
                     onClick={() => setShowEmailForm(false)}
                     variant="outline"
-                    className="w-full h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
+                    className="px-4 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
                   >
                     Back
                   </Button>
                   <Button
                     onClick={handleClose}
-                    className="w-full h-12 bg-red-500 hover:bg-red-600 text-white font-bold text-lg"
+                    variant="outline"
+                    className="px-3 h-9 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-black text-sm"
                     type="button"
                   >
-                    CLOSE
+                    ✕
                   </Button>
                 </div>
               </form>
