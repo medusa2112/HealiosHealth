@@ -77,28 +77,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  // Stripe payment route for one-time payments
-  app.post("/api/create-payment-intent", async (req, res) => {
+  // Create Stripe Checkout Session for external payment processing
+  app.post("/api/create-checkout-session", async (req, res) => {
     try {
-      const { amount, currency = "zar", orderData } = req.body;
+      const { orderData, lineItems, successUrl, cancelUrl } = req.body;
       
-      if (!amount || amount <= 0) {
-        return res.status(400).json({ message: "Invalid amount" });
+      if (!lineItems || !lineItems.length) {
+        return res.status(400).json({ message: "Line items are required" });
       }
 
-      // Create payment intent
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100), // Convert to cents
-        currency,
+      // Create order first to get order ID for success URL
+      const order = await storage.createOrder(orderData);
+      
+      // Update stock for each item
+      const orderItems = JSON.parse(orderData.orderItems);
+      for (const item of orderItems) {
+        await storage.decreaseProductStock(item.product.id, item.quantity);
+      }
+
+      // Create Stripe Checkout Session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: lineItems,
+        mode: 'payment',
+        success_url: `${successUrl}?order_id=${order.id}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: cancelUrl,
+        customer_email: orderData.customerEmail,
         metadata: {
-          orderData: JSON.stringify(orderData || {}),
+          orderId: order.id,
+          orderData: JSON.stringify(orderData),
+        },
+        billing_address_collection: 'required',
+        shipping_address_collection: {
+          allowed_countries: ['ZA', 'US', 'GB'], // Add countries as needed
         },
       });
       
-      res.json({ clientSecret: paymentIntent.client_secret });
+      res.json({ 
+        sessionUrl: session.url,
+        orderId: order.id,
+        sessionId: session.id
+      });
     } catch (error: any) {
-      console.error("Stripe payment intent error:", error);
-      res.status(500).json({ message: "Error creating payment intent: " + error.message });
+      console.error("Stripe checkout session error:", error);
+      res.status(500).json({ message: "Error creating checkout session: " + error.message });
+    }
+  });
+
+  // Webhook endpoint for Stripe payment confirmation
+  app.post("/api/stripe-webhook", express.raw({type: 'application/json'}), async (req, res) => {
+    const sig = req.headers['stripe-signature'] as string;
+    let event;
+
+    try {
+      // Verify webhook signature (add STRIPE_WEBHOOK_SECRET to env)
+      if (process.env.STRIPE_WEBHOOK_SECRET) {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+      } else {
+        event = JSON.parse(req.body.toString());
+      }
+    } catch (err: any) {
+      console.error('Webhook signature verification failed:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    // Handle the event
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        const orderId = session.metadata?.orderId;
+        
+        if (orderId) {
+          try {
+            // Update order status to paid
+            await storage.updateOrderStatus(orderId, 'completed');
+            
+            // Get order details for email
+            const order = await storage.getOrderById(orderId);
+            if (order) {
+              const orderItems = JSON.parse(order.orderItems);
+              
+              // Send confirmation emails
+              try {
+                await EmailService.sendOrderConfirmation({ order, orderItems });
+                await EmailService.sendAdminOrderNotification({ order, orderItems });
+              } catch (emailError) {
+                console.error('Failed to send order emails:', emailError);
+              }
+            }
+          } catch (error) {
+            console.error('Error processing completed checkout:', error);
+          }
+        }
+        break;
+        
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    res.json({received: true});
+  });
+
+  // Create Shopify redirect endpoint
+  app.post("/api/create-shopify-checkout", async (req, res) => {
+    try {
+      const { orderData, returnUrl } = req.body;
+      
+      // Create order first
+      const order = await storage.createOrder(orderData);
+      
+      // Update stock
+      const orderItems = JSON.parse(orderData.orderItems);
+      for (const item of orderItems) {
+        await storage.decreaseProductStock(item.product.id, item.quantity);
+      }
+      
+      // For Shopify, you would typically redirect to your Shopify store's checkout
+      // with cart items. This is a placeholder implementation.
+      const shopifyStoreUrl = process.env.SHOPIFY_STORE_URL || 'https://your-store.myshopify.com';
+      
+      // Build Shopify cart URL with items
+      const cartItems = orderItems.map((item: any) => 
+        `${item.product.id}:${item.quantity}`
+      ).join(',');
+      
+      const shopifyCheckoutUrl = `${shopifyStoreUrl}/cart/${cartItems}?return_to=${encodeURIComponent(returnUrl + '?order_id=' + order.id)}`;
+      
+      res.json({ 
+        checkoutUrl: shopifyCheckoutUrl,  
+        orderId: order.id
+      });
+    } catch (error: any) {
+      console.error("Shopify checkout error:", error);
+      res.status(500).json({ message: "Error creating Shopify checkout: " + error.message });
     }
   });
 
@@ -128,13 +239,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      // Send confirmation emails
+      // For direct order creation (fallback), send emails immediately
       try {
         await EmailService.sendOrderConfirmation({ order, orderItems });
         await EmailService.sendAdminOrderNotification({ order, orderItems });
       } catch (emailError) {
         console.error('Failed to send order emails:', emailError);
-        // Don't fail the order if email fails
       }
 
       res.json(order);

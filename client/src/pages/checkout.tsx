@@ -1,5 +1,4 @@
-import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+// Removed Stripe Elements - now using external checkout
 import { useEffect, useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { useToast } from "@/hooks/use-toast";
@@ -17,19 +16,13 @@ declare global {
   }
 }
 
-// Make sure to call `loadStripe` outside of a component's render to avoid
-// recreating the `Stripe` object on every render.
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// External checkout - no Stripe initialization needed
 
 const CheckoutForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
   const { toast } = useToast();
   const { cart, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'shopify'>('stripe');
   const [customerInfo, setCustomerInfo] = useState({
     email: '',
     name: '',
@@ -37,12 +30,8 @@ const CheckoutForm = () => {
     address: ''
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
 
     if (!customerInfo.email || !customerInfo.address) {
       toast({
@@ -56,7 +45,7 @@ const CheckoutForm = () => {
     setIsProcessing(true);
 
     try {
-      // Create order in our system first
+      // Prepare order data
       const orderData = {
         customerEmail: customerInfo.email,
         customerName: customerInfo.name || null,
@@ -70,52 +59,119 @@ const CheckoutForm = () => {
         orderStatus: 'processing'
       };
 
-      const orderResponse = await fetch('/api/orders', {
+      // Prepare line items for Stripe
+      const lineItems = cart.items.map(item => ({
+        price_data: {
+          currency: 'zar',
+          product_data: {
+            name: item.product.name,
+            images: [item.product.imageUrl],
+            description: item.product.description?.substring(0, 100) || '',
+          },
+          unit_amount: Math.round(parseFloat(item.product.price) * 100), // Convert to cents
+        },
+        quantity: item.quantity,
+      }));
+
+      // Create Stripe checkout session
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify({
+          orderData,
+          lineItems,
+          successUrl: `${window.location.origin}/order-confirmation`,
+          cancelUrl: `${window.location.origin}/checkout`,
+        }),
       });
 
-      if (!orderResponse.ok) {
-        throw new Error('Failed to create order');
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
       }
 
-      const order = await orderResponse.json();
-
-      // Process payment
-      const { error } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/order-confirmation?order_id=${order.id}`,
-        },
-      });
-
-      if (error) {
-        toast({
-          title: "Payment Failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        // Clear cart on successful payment
-        clearCart();
-        toast({
-          title: "Payment Successful",
-          description: "Thank you for your purchase! Your order is being processed.",
-        });
-      }
+      const { sessionUrl } = await response.json();
+      
+      // Clear cart before redirecting
+      clearCart();
+      
+      // Redirect to Stripe Checkout
+      window.location.href = sessionUrl;
+      
     } catch (error) {
-      console.error('Checkout error:', error);
+      console.error('Stripe checkout error:', error);
       toast({
         title: "Checkout Failed",
-        description: "There was an error processing your order. Please try again.",
+        description: "There was an error creating your checkout session. Please try again.",
         variant: "destructive",
       });
+      setIsProcessing(false);
+    }
+  };
+
+  const handleShopifyCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!customerInfo.email) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in your email address.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    setIsProcessing(false);
+    setIsProcessing(true);
+
+    try {
+      // Prepare order data
+      const orderData = {
+        customerEmail: customerInfo.email,
+        customerName: customerInfo.name || null,
+        customerPhone: customerInfo.phone || null,
+        shippingAddress: customerInfo.address || 'To be collected at checkout',
+        billingAddress: customerInfo.address || 'To be collected at checkout',
+        orderItems: JSON.stringify(cart.items),
+        totalAmount: cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0).toFixed(2),
+        currency: 'ZAR',
+        paymentStatus: 'pending',
+        orderStatus: 'processing'
+      };
+
+      // Create Shopify checkout
+      const response = await fetch('/api/create-shopify-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderData,
+          returnUrl: `${window.location.origin}/order-confirmation`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create Shopify checkout');
+      }
+
+      const { checkoutUrl } = await response.json();
+      
+      // Clear cart before redirecting
+      clearCart();
+      
+      // Redirect to Shopify
+      window.location.href = checkoutUrl;
+      
+    } catch (error) {
+      console.error('Shopify checkout error:', error);
+      toast({
+        title: "Checkout Failed",
+        description: "There was an error creating your Shopify checkout. Please try again.",
+        variant: "destructive",
+      });
+      setIsProcessing(false);
+    }
   };
 
   const total = cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
@@ -163,7 +219,7 @@ const CheckoutForm = () => {
           <CardTitle>Payment Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6">
             {/* Customer Information */}
             <div className="space-y-4">
               <h4 className="font-medium">Contact Information</h4>
@@ -203,14 +259,47 @@ const CheckoutForm = () => {
               />
             </div>
 
-            <PaymentElement />
+            {/* Payment Method Selection */}
+            <div className="space-y-4">
+              <h4 className="font-medium">Choose Payment Method</h4>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="stripe"
+                    checked={paymentMethod === 'stripe'}
+                    onChange={(e) => setPaymentMethod(e.target.value as 'stripe')}
+                    className="w-4 h-4"
+                  />
+                  <span>Stripe Checkout</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="shopify"
+                    checked={paymentMethod === 'shopify'}
+                    onChange={(e) => setPaymentMethod(e.target.value as 'shopify')}
+                    className="w-4 h-4"
+                  />
+                  <span>Shopify Checkout</span>
+                </label>
+              </div>
+            </div>
+
             <Button 
               type="submit" 
-              disabled={!stripe || isProcessing}
+              disabled={isProcessing}
+              onClick={paymentMethod === 'stripe' ? handleStripeCheckout : handleShopifyCheckout}
               className="w-full bg-black hover:bg-gray-800 text-white py-3 text-lg font-medium"
             >
-              {isProcessing ? "Processing..." : `Pay R${total.toFixed(2)}`}
+              {isProcessing ? "Redirecting..." : `Continue to ${paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} - R${total.toFixed(2)}`}
             </Button>
+            
+            <p className="text-sm text-gray-600 text-center">
+              You'll be redirected to {paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} to complete your secure payment.
+            </p>
           </form>
         </CardContent>
       </Card>
@@ -219,9 +308,7 @@ const CheckoutForm = () => {
 };
 
 export default function CheckoutPage() {
-  const [clientSecret, setClientSecret] = useState("");
   const { cart } = useCart();
-  const { toast } = useToast();
 
   // Calculate total amount
   const totalAmount = cart.items.reduce((sum, item) => 
@@ -249,37 +336,6 @@ export default function CheckoutPage() {
     }
   }, [cart.items, totalAmount]);
 
-  useEffect(() => {
-    if (cart.items.length > 0 && totalAmount > 0) {
-      // Create PaymentIntent as soon as the page loads
-      fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalAmount }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          } else {
-            toast({
-              title: "Error",
-              description: "Failed to initialize payment. Please try again.",
-              variant: "destructive",
-            });
-          }
-        })
-        .catch((error) => {
-          console.error('Payment intent error:', error);
-          toast({
-            title: "Error",
-            description: "Failed to initialize payment. Please try again.",
-            variant: "destructive",
-          });
-        });
-    }
-  }, [cart.items, totalAmount, toast]);
-
   if (cart.items.length === 0) {
     return (
       <>
@@ -306,25 +362,7 @@ export default function CheckoutPage() {
     );
   }
 
-  if (!clientSecret) {
-    return (
-      <>
-        <SEOHead 
-          title="Checkout | Healios"
-          description="Complete your purchase of premium Healios supplements"
-        />
-        
-        <div className="min-h-screen bg-white dark:bg-black">
-          <div className="container mx-auto px-4 pt-5 pb-8">
-            <div className="text-center py-16">
-              <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">Preparing your checkout...</p>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+  // Removed loading state - no payment intent needed for external checkout
 
   return (
     <>
@@ -346,14 +384,11 @@ export default function CheckoutPage() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Checkout</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Complete your purchase securely with Stripe
+              Choose your preferred payment method to complete your purchase securely
             </p>
           </div>
 
-          {/* Make SURE to wrap the form in <Elements> which provides the stripe context. */}
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <CheckoutForm />
-          </Elements>
+          <CheckoutForm />
         </div>
       </div>
     </>
