@@ -361,6 +361,27 @@ export class MemStorage implements IStorage {
         dailyDosage: 2,
         supplyDays: 75,
       },
+      {
+        id: "healios-oversized-tee",
+        name: "Healios Oversized Tee - Bubble Print",
+        description: "Premium oversized tee featuring bubble puff print technology. Customize your look with your choice of base tee color (Black or White) and puff print color. The front features our iconic Healios HealthClub -1984- logo, while you can personalize the back with your own puff design. Perfect for expressing your wellness lifestyle in comfort and style.",
+        price: "750.00",
+        originalPrice: null,
+        imageUrl: "/assets/Healios Oversized Tee_1754228108976.png",
+        category: "Apparel",
+        rating: "4.7",
+        reviewCount: 8,
+        inStock: true,
+        stockQuantity: 50,
+        featured: true,
+        sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+        colors: ["Black", "White"],
+        gender: "unisex",
+        type: 'apparel',
+        bottleCount: null,
+        dailyDosage: null,
+        supplyDays: null,
+      },
 
     ];
 
