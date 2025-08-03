@@ -61,22 +61,19 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-      
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-sm" onClick={handleClose}>
       {/* Modal */}
-      <div className="relative bg-white dark:bg-gray-900 p-4 sm:p-6 lg:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
+      <div 
+        className="relative bg-white dark:bg-gray-900 p-6 sm:p-8 max-w-sm sm:max-w-md w-full max-h-[95vh] overflow-y-auto rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700" 
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close button */}
         <button 
           onClick={handleClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          className="absolute -top-2 -right-2 w-10 h-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 flex items-center justify-center rounded-full hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors shadow-lg z-10"
           aria-label="Close modal"
         >
-          <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          <X className="w-5 h-5" />
         </button>
 
         {!isSuccess ? (
