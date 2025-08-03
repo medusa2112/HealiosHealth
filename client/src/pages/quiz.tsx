@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, Mail, MessageSquare, ShoppingBag, ArrowRight, Sparkles, Loader2, User, Heart, Headphones } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -442,88 +442,58 @@ export default function QuizPage() {
 
           {/* Action Cards Grid */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {/* Email Card */}
+            {/* Personal Trainer Card */}
             <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
-                  <Mail className="w-6 h-6" />
+                  <User className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-medium text-gray-900 dark:text-white">
-                    Check Your Email
+                    Chat with an Online Personal Trainer
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    General wellness suggestions based on your responses (not medical advice)
+                    Get personalized fitness guidance and workout plans from certified trainers
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Contact Card */}
+            {/* Nutritionist Card */}
             <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
-                  <MessageSquare className="w-6 h-6" />
+                  <Heart className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-medium text-gray-900 dark:text-white">
-                    Product Questions
+                    Chat with an Online Nutritionist
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Contact our team for product information and general wellness support
+                    Connect with qualified nutritionists for personalized dietary advice and meal planning
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Shop Card */}
+            {/* Support Card */}
             <div className="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-8 hover:border-black dark:hover:border-white transition-all duration-300">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 flex items-center justify-center group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors">
-                  <ShoppingBag className="w-6 h-6" />
+                  <Headphones className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="font-medium text-gray-900 dark:text-white">
-                    Science-Backed Range
+                    Contact our Support Team
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Browse our complete collection of premium supplements
+                    Get help with orders, products, and general wellness questions from our support team
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* CTA Section */}
-          <div className="bg-gray-50 dark:bg-gray-800 p-12 text-center">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-light text-gray-900 dark:text-white">
-                  Ready to Explore Our Products?
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Browse our science-backed supplement range or get product information from our team
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
-                  Remember: Always consult your healthcare provider before starting new supplements
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-                <Link href="/contact" className="w-full sm:w-auto">
-                  <button className="w-full bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-all duration-200 flex items-center justify-center gap-2">
-                    Contact Our Team
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </Link>
-                <Link href="/products" className="w-full sm:w-auto">
-                  <button className="w-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-white hover:border-black dark:hover:bg-gray-700 dark:hover:border-white transition-all duration-200">
-                    Shop Products
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
 
           {/* Back to Home */}
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
