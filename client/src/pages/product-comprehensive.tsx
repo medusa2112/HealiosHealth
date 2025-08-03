@@ -1473,6 +1473,35 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Are these gummies vegan and sugar-free?</strong> They're 100% vegan. While not sugar-free, each serving contains 3.64g of sugar — similar to a small piece of fruit.</li>
                               </ul>
                             </div>
+                          ) : product.id === 'collagen-powder' ? (
+                            <div>
+                              <div className="space-y-4">
+                                <div>
+                                  <p className="font-medium mb-2">Q: What results can I expect from daily use?</p>
+                                  <p className="text-sm text-gray-600">Clinical studies show noticeable improvements in skin elasticity in 4 weeks, and reduced wrinkle depth and volume by week 8. Nail strength and growth improve after 2–3 months, and hair thickness increases by around 31% over 12 weeks.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: Is HALO GLOW flavoured?</p>
+                                  <p className="text-sm text-gray-600">No. It is completely unflavoured and odourless — designed to dissolve into any drink or food without altering taste.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: What type of collagen is used?</p>
+                                  <p className="text-sm text-gray-600">Type I and III bovine collagen peptides, optimised for skin, hair, and nail health.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: Can I use this with other supplements?</p>
+                                  <p className="text-sm text-gray-600">Yes. HALO GLOW is a pure protein supplement and is generally well tolerated. Always consult your healthcare professional if on medication or during pregnancy.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: Is it suitable for vegetarians or vegans?</p>
+                                  <p className="text-sm text-gray-600">HALO GLOW is suitable for vegetarians but not for vegans, as the collagen is sourced from bovine skin.</p>
+                                </div>
+                              </div>
+                            </div>
                           ) : (
                             <div>
                               <p className="font-medium">Common questions about this product:</p>
