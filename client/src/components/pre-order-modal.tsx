@@ -61,7 +61,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -69,26 +69,27 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
       />
       
       {/* Modal */}
-      <div className="relative bg-white dark:bg-gray-900 p-8 max-w-md w-full mx-4 border border-gray-200 dark:border-gray-700">
+      <div className="relative bg-white dark:bg-gray-900 p-4 sm:p-6 lg:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto rounded-lg shadow-xl border border-gray-200 dark:border-gray-700">
         {/* Close button */}
         <button 
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         {!isSuccess ? (
           <>
             {/* Header */}
-            <div className="text-center mb-6">
-              <div className="mx-auto w-16 h-16 bg-healios-cyan/10 dark:bg-healios-cyan/20 flex items-center justify-center mb-4">
-                <Percent className="w-8 h-8 text-healios-cyan" />
+            <div className="text-center mb-4 sm:mb-6">
+              <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                <Percent className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                 Get 10% Off When Available
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed px-2">
                 <strong>{productName}</strong> will be restocking soon. Secure your spot in line and save 10% on your order when new stock arrives on August 28th.
               </p>
             </div>
@@ -107,7 +108,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your full name"
                     required
-                    className="border-gray-300 dark:border-gray-600 focus:border-healios-cyan focus:ring-healios-cyan"
+                    className="h-10 sm:h-11 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                   />
                 </div>
               </div>
@@ -124,7 +125,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
-                    className="pl-10 border-gray-300 dark:border-gray-600 focus:border-healios-cyan focus:ring-healios-cyan"
+                    className="h-10 sm:h-11 pl-10 border-gray-300 dark:border-gray-600 focus:border-orange-500 focus:ring-orange-500"
                   />
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
@@ -133,26 +134,26 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !email || !name}
-                className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-11 sm:h-12 bg-black text-white font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isSubmitting ? "Submitting..." : "Join Pre-Order List"}
               </Button>
             </form>
 
             {/* Benefits */}
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
               <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">You'll receive:</h3>
               <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                 <li className="flex items-center">
-                  <div className="w-1.5 h-1.5 bg-healios-cyan mr-3 flex-shrink-0"></div>
+                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-3 flex-shrink-0"></div>
                   10% exclusive discount when product launches
                 </li>
                 <li className="flex items-center">
-                  <div className="w-1.5 h-1.5 bg-healios-cyan mr-3 flex-shrink-0"></div>
+                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-3 flex-shrink-0"></div>
                   Priority access before general availability
                 </li>
                 <li className="flex items-center">
-                  <div className="w-1.5 h-1.5 bg-healios-cyan mr-3 flex-shrink-0"></div>
+                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-3 flex-shrink-0"></div>
                   Launch notification via email
                 </li>
               </ul>
@@ -160,21 +161,21 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
           </>
         ) : (
           /* Success state */
-          <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-2">
+            <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
               You're on the list!
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-sm mb-6">
+            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 px-2">
               We'll email you when <strong>{productName}</strong> is available with your 10% discount code.
             </p>
             <Button 
               onClick={handleClose}
-              className="w-full bg-black text-white font-medium py-3 hover:bg-gray-800 transition-colors"
+              className="w-full h-11 sm:h-12 bg-black text-white font-medium hover:bg-gray-800 transition-colors text-sm sm:text-base"
             >
               Continue Shopping
             </Button>
