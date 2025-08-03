@@ -51,6 +51,7 @@ export class EmailService {
   private static readonly FROM_EMAIL = 'dn@thefourths.com';
   private static readonly ADMIN_EMAILS = ['dn@thefourths.com', 'ms@thefourths.com'];
   private static readonly BASE_URL = process.env.NODE_ENV === 'production' ? 'https://healios.com' : 'http://localhost:5000';
+  private static readonly EMAIL_IMAGE_BASE = process.env.NODE_ENV === 'production' ? 'https://healios.com' : 'https://via.placeholder.com/120x120/f3f4f6/6b7280?text=';
 
   private static async enhanceRecommendationsWithProductData(
     recommendations: QuizRecommendations
@@ -836,7 +837,7 @@ The Healios Team
               <div style="border-left: 4px solid #000; padding-left: 20px; margin-bottom: 40px;">
                 ${rec.product ? `
                   <div style="margin-bottom: 20px;">
-                    <img src="${this.BASE_URL}${rec.product.imageUrl}" alt="${rec.product.name}" style="width: 120px; height: 120px; object-fit: cover; border: 1px solid #eee;" />
+                    <img src="${process.env.NODE_ENV === 'production' ? this.BASE_URL + rec.product.imageUrl : this.EMAIL_IMAGE_BASE + encodeURIComponent(rec.product.name)}" alt="${rec.product.name}" style="width: 120px; height: 120px; object-fit: cover; border: 1px solid #eee;" />
                   </div>
                 ` : ''}
                 <h3 style="font-size: 18px; font-weight: 500; margin: 0 0 15px 0; color: #000;">
