@@ -393,9 +393,6 @@ export default function QuizPage() {
         <div className="max-w-4xl mx-auto px-6 pt-12 pb-24">
           {/* Header Section */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-healios-gradient-1 mb-6">
-              <Sparkles className="w-10 h-10 text-white" />
-            </div>
             <div className="space-y-2 mb-8">
               <div className="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-medium">
                 ASSESSMENT COMPLETE
