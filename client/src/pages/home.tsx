@@ -551,7 +551,7 @@ export default function HomePage() {
               <span className="font-medium text-sm sm:text-base">4.84 RATING</span>
             </div>
             <div className="text-xs opacity-80">
-              LOVED BY THOUSANDS OF CUSTOMERS
+              LOVED BY OUR CUSTOMERS
             </div>
           </div>
         </div>
