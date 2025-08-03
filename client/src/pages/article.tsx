@@ -189,7 +189,6 @@ export default function Article() {
 
         {/* Related Articles */}
         <div className="mt-12">
-          <h2 className="text-xl font-medium text-gray-900 dark:text-white mb-6">More Evidence-Based Articles</h2>
           <div className="text-center">
             <Link href="/journal/all">
               <button className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white px-6 py-3 font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
