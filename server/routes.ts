@@ -169,7 +169,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Send confirmation emails
               try {
                 await EmailService.sendOrderConfirmation({ order, orderItems });
-                await EmailService.sendAdminOrderNotification({ order, orderItems });
               } catch (emailError) {
                 console.error('Failed to send order emails:', emailError);
               }
@@ -251,7 +250,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For direct order creation (fallback), send emails immediately
       try {
         await EmailService.sendOrderConfirmation({ order, orderItems });
-        await EmailService.sendAdminOrderNotification({ order, orderItems });
       } catch (emailError) {
         console.error('Failed to send order emails:', emailError);
       }
@@ -745,7 +743,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
         await EmailService.sendNewsletterConfirmation(testNewsletter);
         results.push('✅ Newsletter confirmation email sent');
       } catch (error) {
-        results.push('❌ Newsletter confirmation failed: ' + error.message);
+        results.push('❌ Newsletter confirmation failed: ' + (error as Error).message);
       }
 
       // Test Order Confirmation
@@ -772,15 +770,14 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
           quantity: 1
         }];
         await EmailService.sendOrderConfirmation({ order: testOrder, orderItems: testOrderItems });
-        await EmailService.sendAdminOrderNotification({ order: testOrder, orderItems: testOrderItems });
         results.push('✅ Order confirmation and admin notification emails sent');
       } catch (error) {
-        results.push('❌ Order emails failed: ' + error.message);
+        results.push('❌ Order emails failed: ' + (error as Error).message);
       }
 
       // Test Low Stock Alert
       try {
-        await EmailService.sendLowStockAlert('Test Vitamin D3', 2, 'test-product-123');
+        await EmailService.sendLowStockAlert({ productName: 'Test Vitamin D3', currentStock: 2, threshold: 5 });
         results.push('✅ Low stock alert email sent');
       } catch (error) {
         results.push('❌ Low stock alert failed: ' + error.message);
