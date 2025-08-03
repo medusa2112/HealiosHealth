@@ -101,12 +101,12 @@ export function Header() {
     {
       title: "Healios Journal",
       items: [
-        { href: "/journal", label: "Longevity & why nutrition is key" },
-        { href: "/journal/collagen", label: "Collagen 500 Plus Q+A with Henrietta Norton" },
-        { href: "/journal/weight", label: "Weight Management at every lifestage" },
-        { href: "/journal/ashwagandha", label: "5 healthy benefits of Ashwagandha" },
-        { href: "/journal/recipes", label: "The Wild Kitchen recipes" },
-        { href: "/journal/all", label: "All blog posts" },
+        { href: "/journal/magnesium-for-sleep-clinical-evidence-and-benefits-20250803", label: "Magnesium for Sleep: Clinical Evidence" },
+        { href: "/journal/ashwagandha-ancient-medicine-meets-modern-science-20250803", label: "Ashwagandha: Ancient Medicine Meets Modern Science" },
+        { href: "/journal/collagen-benefits-backed-by-research-20250803", label: "Collagen Benefits Backed by Research" },
+        { href: "/journal/vitamin-d-and-mood-what-research-shows-20250803", label: "Vitamin D and Mood: What Research Shows" },
+        { href: "/journal/probiotic-benefits-evidence-based-health-support-20250803", label: "Probiotic Benefits: Evidence-Based Support" },
+        { href: "/journal/all", label: "All Evidence-Based Articles" },
       ]
     },
 

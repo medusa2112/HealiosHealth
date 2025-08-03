@@ -2,121 +2,103 @@ import { useState } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight, Clock, User } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
+import { useQuery } from '@tanstack/react-query';
+
+interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  metaDescription: string;
+  content: string;
+  research: string;
+  sources: string[];
+  createdAt: string;
+}
 
 export default function JournalAll() {
   const [activeCategory, setActiveCategory] = useState('All');
 
+  // Fetch articles from API
+  const { data: articles = [], isLoading, error } = useQuery<Article[]>({
+    queryKey: ['/api/articles'],
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
   const categories = [
     'All',
+    'Sleep & Recovery',
+    'Mental Health',
+    'Beauty & Skin',
+    'Digestive Health',
+    'Immune Support',
     'Women\'s Health',
-    'Pregnancy',
-    'Fertility',
-    'Ingredients',
-    'Recipes',
-    'The Science'
+    'Hormonal Health',
+    'Pregnancy & Prenatal',
+    'Supplement Science'
   ];
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: 'Weight Management Support: Q+A with our Head of Nutrition',
-      excerpt: 'Our Head of Nutrition, Isabelle Mann, reveals more on the UK\'s first to market botanical complex found in Weight Management Support and why it\'s...',
-      category: 'Ingredients',
-      readTime: '5 min read',
-      author: 'Isabelle Mann',
-      date: '15 Jan 2025',
-      image: '/assets/Ashwagandha-X-2_1753469577639.webp',
-      slug: 'weight-management-support-qa'
-    },
-    {
-      id: 2,
-      title: 'Your top 10 questions on weight loss injections, answered',
-      excerpt: 'Increasingly we\'re speaking with scores of women who are either using GLP-1 RAa injections like peptide T receptor agonists) such as Semaglutide (O...',
-      category: 'Women\'s Health',
-      readTime: '8 min read',
-      author: 'Dr. Sarah Wilson',
-      date: '12 Jan 2025',
-      image: '/assets/Apple-Cider-Vinegar-X_1753469577640.png',
-      slug: 'weight-loss-injections-qa'
-    },
-    {
-      id: 3,
-      title: 'What is blood sugar balance?',
-      excerpt: 'While many of us may not be suffering from a serious blood sugar disease like diabetes, understanding that certain foods or methods of eating may h...',
-      category: 'The Science',
-      readTime: '6 min read',
-      author: 'Dr. Emma Thompson',
-      date: '10 Jan 2025',
-      image: '/assets/Vitamin D3  4000 IU_1754056731371.png',
-      slug: 'blood-sugar-balance'
-    },
-    {
-      id: 4,
-      title: 'The Complete Guide to Prenatal Nutrition',
-      excerpt: 'Supporting your body through pregnancy requires specific nutrients at specific times. Our comprehensive guide covers everything from pre-conception to...',
-      category: 'Pregnancy',
-      readTime: '12 min read',
-      author: 'Midwife Lisa Roberts',
-      date: '8 Jan 2025',
-      image: '/assets/Folic Acid 400µg_1753615197741.png',
-      slug: 'prenatal-nutrition-guide'
-    },
-    {
-      id: 5,
-      title: 'Understanding Fertility Supplements: What Really Works?',
-      excerpt: 'Navigating fertility support can be overwhelming. We break down the science behind key nutrients like folic acid, vitamin D, and coenzyme Q10...',
-      category: 'Fertility',
-      readTime: '10 min read',
-      author: 'Dr. Michael Chen',
-      date: '5 Jan 2025',
-      image: '/assets/Iron + Vitamin C_1753615197739.png',
-      slug: 'fertility-supplements-guide'
-    },
-    {
-      id: 6,
-      title: '5 Nutrient-Dense Smoothie Recipes for Busy Mornings',
-      excerpt: 'Start your day right with these delicious smoothie recipes packed with vitamins, minerals, and natural energy boosters. Perfect for on-the-go nutrition...',
-      category: 'Recipes',
-      readTime: '4 min read',
-      author: 'Chef Maya Patel',
-      date: '3 Jan 2025',
-      image: '/assets/Multivitamin for Kids_1753615197742.png',
-      slug: 'morning-smoothie-recipes'
-    },
-    {
-      id: 7,
-      title: 'The Science Behind Ashwagandha: Ancient Wisdom Meets Modern Research',
-      excerpt: 'Ashwagandha has been used in Ayurvedic medicine for over 3,000 years. Recent clinical studies reveal how this adaptogenic herb supports stress...',
-      category: 'Ingredients',
-      readTime: '7 min read',
-      author: 'Dr. Priya Sharma',
-      date: '1 Jan 2025',
-      image: '/assets/Ashwagandha 600mg_1753615197741.png',
-      slug: 'ashwagandha-science'
-    },
-    {
-      id: 8,
-      title: 'Hormonal Changes During Perimenopause: What to Expect',
-      excerpt: 'Understanding the hormonal shifts that occur during perimenopause can help you navigate this transition with confidence. Learn about symptoms and...',
-      category: 'Women\'s Health',
-      readTime: '9 min read',
-      author: 'Dr. Rachel Green',
-      date: '28 Dec 2024',
-      image: '/assets/Magnesium_1753615197741.png',
-      slug: 'perimenopause-hormones'
-    },
-    {
-      id: 9,
-      title: 'Building Healthy Eating Habits for the Whole Family',
-      excerpt: 'Creating nutritious meals that everyone enjoys doesn\'t have to be complicated. These family-friendly recipes and tips make healthy eating simple...',
-      category: 'Recipes',
-      readTime: '6 min read',
-      author: 'Nutritionist Tom Wilson',
-      date: '25 Dec 2024',
-      image: '/assets/Multivitamin & Mineral for Children (2)_1753633320058.png',
-      slug: 'family-nutrition-habits'
-    }
-  ];
+  // Helper function to categorize articles based on title keywords
+  const categorizeArticle = (title: string): string => {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes('magnesium') || titleLower.includes('sleep')) return 'Sleep & Recovery';
+    if (titleLower.includes('vitamin d') || titleLower.includes('mood') || titleLower.includes('ashwagandha')) return 'Mental Health';
+    if (titleLower.includes('collagen') || titleLower.includes('biotin') || titleLower.includes('hair') || titleLower.includes('skin')) return 'Beauty & Skin';
+    if (titleLower.includes('gut') || titleLower.includes('probiotic') || titleLower.includes('digestive')) return 'Digestive Health';
+    if (titleLower.includes('immune') || titleLower.includes('vitamin d')) return 'Immune Support';
+    if (titleLower.includes('iron') || titleLower.includes('women')) return 'Women\'s Health';
+    if (titleLower.includes('hormonal') || titleLower.includes('hormone')) return 'Hormonal Health';
+    if (titleLower.includes('folic acid') || titleLower.includes('pregnancy') || titleLower.includes('prenatal')) return 'Pregnancy & Prenatal';
+    if (titleLower.includes('regulation') || titleLower.includes('supplement') || titleLower.includes('apple cider vinegar')) return 'Supplement Science';
+    return 'Supplement Science';
+  };
+
+  // Helper function to estimate read time
+  const estimateReadTime = (content: string): string => {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(' ').length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
+  // Helper function to create excerpt from content
+  const createExcerpt = (content: string): string => {
+    // Remove HTML tags and get first paragraph
+    const plainText = content.replace(/<[^>]*>/g, '');
+    const firstParagraph = plainText.split('\n\n')[1] || plainText.split('\n')[1] || plainText;
+    return firstParagraph.substring(0, 160) + '...';
+  };
+
+  // Helper function to get article image based on title
+  const getArticleImage = (title: string): string => {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes('magnesium')) return '/assets/Magnesium_1753615197741.png';
+    if (titleLower.includes('vitamin d')) return '/assets/Vitamin D3  4000 IU_1754056731371.png';
+    if (titleLower.includes('collagen')) return '/assets/Collagen Powder_1753469577639.webp';
+    if (titleLower.includes('ashwagandha')) return '/assets/Ashwagandha 600mg_1753615197741.png';
+    if (titleLower.includes('probiotic')) return '/assets/Probiotics_1753615197740.png';
+    if (titleLower.includes('biotin')) return '/assets/Biotin 5000µg_1753615197740.png';
+    if (titleLower.includes('iron')) return '/assets/Iron + Vitamin C_1753615197739.png';
+    if (titleLower.includes('folic acid')) return '/assets/Folic Acid 400µg_1753615197741.png';
+    if (titleLower.includes('apple cider vinegar')) return '/assets/Apple-Cider-Vinegar-X_1753469577640.png';
+    return '/assets/Healios_1753559079971.png'; // Default image
+  };
+
+  // Convert articles to the format expected by the UI
+  const blogPosts = articles.map((article, index) => ({
+    id: index + 1,
+    title: article.title,
+    excerpt: createExcerpt(article.content),
+    category: categorizeArticle(article.title),
+    readTime: estimateReadTime(article.content),
+    author: 'Healios Research Team',
+    date: new Date(article.createdAt).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }),
+    image: getArticleImage(article.title),
+    slug: article.slug
+  }));
 
   const filteredPosts = activeCategory === 'All' 
     ? blogPosts 
@@ -125,19 +107,19 @@ export default function JournalAll() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEOHead 
-        title="Healios Journal - All Articles | Evidence-Based Health & Nutrition Insights"
-        description="Explore our comprehensive collection of health and nutrition articles. From pregnancy support to ingredient science, discover evidence-based insights from our expert team."
-        keywords="health blog, nutrition articles, pregnancy health, women's health, supplement science, fertility support, healthy recipes"
+        title="Healios Evidence-Based Journal | Research-Backed Health & Nutrition Articles"
+        description="Explore our comprehensive collection of evidence-based health and nutrition articles. From sleep support to hormonal health, discover research-backed insights from our expert team."
+        keywords="evidence-based health, nutrition research, supplement science, clinical studies, health articles, wellness insights"
         url="https://healios.com/journal/all"
       />
 
       <div className="max-w-7xl mx-auto px-6 pt-5 pb-16">
         <div className="mb-12 text-center">
           <h1 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4">
-            Healios Journal
+            Healios Evidence-Based Journal
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Evidence-based insights on nutrition, wellness, and healthy living from our team of experts
+            Comprehensive, research-backed articles on nutrition, wellness, and supplementation from our expert team
           </p>
         </div>
 
@@ -160,8 +142,24 @@ export default function JournalAll() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin w-8 h-8 border-4 border-gray-300 border-t-black rounded-full"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading evidence-based articles...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 dark:text-red-400">Failed to load articles. Please try again later.</p>
+          </div>
+        )}
+
         {/* Blog Posts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {!isLoading && !error && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => (
               <article 
                 key={post.id}
@@ -213,20 +211,32 @@ export default function JournalAll() {
               </article>
             ))}
           </div>
+        )}
 
-        {/* Load More Button */}
-        <div className="text-center mt-12">
-          <button className="bg-black text-white px-8 py-4 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-all">
-            Load More Articles
-          </button>
-        </div>
+        {/* No Articles Found */}
+        {!isLoading && !error && filteredPosts.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 dark:text-gray-400">
+              {activeCategory === 'All' ? 'No articles available.' : `No articles found in ${activeCategory} category.`}
+            </p>
+          </div>
+        )}
+
+        {/* Article Count */}
+        {!isLoading && !error && filteredPosts.length > 0 && (
+          <div className="text-center mt-12">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Showing {filteredPosts.length} of {blogPosts.length} evidence-based articles
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Newsletter CTA */}
       <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4">
-            Stay Updated with Our Latest Insights
+            Stay Updated with Our Latest Research
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
             Get the latest evidence-based health and nutrition articles delivered to your inbox

@@ -3,7 +3,6 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, type Article } from "@shared/schema";
-import { ArticleBot } from "./article-bot";
 import { EmailService } from "./email";
 import { z } from "zod";
 import express from "express";
@@ -405,20 +404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Article generation routes
-  let articleBot: ArticleBot | null = null;
-
-  // Initialize article bot with API keys
-  const initializeArticleBot = () => {
-    const perplexityKey = process.env.PERPLEXITY_API_KEY;
-    const openaiKey = process.env.OPENAI_API_KEY;
-    
-    if (!perplexityKey || !openaiKey) {
-      return null;
-    }
-    
-    return new ArticleBot(perplexityKey, openaiKey);
-  };
+  // Article generation functionality has been disabled for security purposes
 
   // Get all articles
   app.get("/api/articles", async (req, res) => {
@@ -453,148 +439,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Bot endpoint - Create single article
-  app.post("/api/bot/create-article", async (req, res) => {
-    try {
-      const { topic, apiKey } = req.body;
-      
-      // Simple API key protection
-      if (apiKey !== process.env.ARTICLE_BOT_API_KEY && process.env.ARTICLE_BOT_API_KEY) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      
-      if (!topic) {
-        return res.status(400).json({ message: "Topic is required" });
-      }
-      
-      articleBot = articleBot || initializeArticleBot();
-      if (!articleBot) {
-        return res.status(500).json({ 
-          message: "Article bot not configured. Missing PERPLEXITY_API_KEY or OPENAI_API_KEY" 
-        });
-      }
-      
-      console.log(`Creating article for topic: ${topic}`);
-      const articleData = await articleBot.createArticle(topic);
-      
-      // Save to database
-      const article = await storage.createArticle({
-        title: articleData.title,
-        slug: articleData.slug,
-        metaDescription: articleData.meta_description,
-        content: articleData.content,
-        research: articleData.research,
-        sources: articleData.sources,
-        category: "Health",
-        author: "Healios Team",
-        readTime: "5 min read",
-        published: true
-      });
-      
-      res.json({
-        success: true,
-        article: {
-          id: article.id,
-          title: article.title,
-          slug: article.slug,
-          created: article.createdAt
-        }
-      });
-      
-    } catch (error: any) {
-      console.error("Article creation failed:", error);
-      res.status(500).json({ 
-        message: "Failed to create article", 
-        error: error.message 
-      });
-    }
-  });
-
-  // Bot endpoint - Create multiple articles
-  app.post("/api/bot/create-articles/:count", async (req, res) => {
-    try {
-      const { apiKey } = req.body;
-      const count = parseInt(req.params.count);
-      
-      // Simple API key protection
-      if (apiKey !== process.env.ARTICLE_BOT_API_KEY && process.env.ARTICLE_BOT_API_KEY) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      
-      if (isNaN(count) || count < 1 || count > 5) {
-        return res.status(400).json({ message: "Count must be between 1 and 5" });
-      }
-      
-      articleBot = articleBot || initializeArticleBot();
-      if (!articleBot) {
-        return res.status(500).json({ 
-          message: "Article bot not configured. Missing PERPLEXITY_API_KEY or OPENAI_API_KEY" 
-        });
-      }
-      
-      console.log(`Creating ${count} articles...`);
-      const articlesData = await articleBot.createMultipleArticles(count);
-      
-      // Save all articles to database
-      const savedArticles = [];
-      for (const articleData of articlesData) {
-        const article = await storage.createArticle({
-          title: articleData.title,
-          slug: articleData.slug,
-          metaDescription: articleData.meta_description,
-          content: articleData.content,
-          research: articleData.research,
-          sources: articleData.sources,
-          category: "Health",
-          author: "Healios Team",
-          readTime: "5 min read",
-          published: true
-        });
-        
-        savedArticles.push({
-          id: article.id,
-          title: article.title,
-          slug: article.slug,
-          created: article.createdAt
-        });
-      }
-      
-      res.json({
-        success: true,
-        created: savedArticles.length,
-        articles: savedArticles
-      });
-      
-    } catch (error: any) {
-      console.error("Bulk article creation failed:", error);
-      res.status(500).json({ 
-        message: "Failed to create articles", 
-        error: error.message 
-      });
-    }
-  });
-
-  // Bot status endpoint
-  app.get("/api/bot/status", async (req, res) => {
-    try {
-      const latestArticles = await storage.getLatestArticles(10);
-      
-      res.json({
-        configured: !!(process.env.PERPLEXITY_API_KEY && process.env.OPENAI_API_KEY),
-        totalArticles: latestArticles.length,
-        availableTopics: ArticleBot.getAvailableTopics(),
-        latestArticles: latestArticles.map(article => ({
-          id: article.id,
-          title: article.title,
-          slug: article.slug,
-          length: article.content.length,
-          created: article.createdAt
-        }))
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Failed to get bot status" });
-    }
-  });
+  // Article generation endpoints have been removed for security purposes
 
   // Chat endpoint for product questions
   app.post("/api/chat/product-question", async (req, res) => {
