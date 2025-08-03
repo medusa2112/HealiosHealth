@@ -28,6 +28,9 @@ export const products = pgTable("products", {
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  birthday: text("birthday"), // Format: YYYY-MM-DD
   subscribedAt: text("subscribed_at").default(sql`CURRENT_TIMESTAMP`),
 });
 

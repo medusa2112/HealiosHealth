@@ -66,10 +66,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertNewsletterSchema.parse(req.body);
       const subscription = await storage.subscribeToNewsletter(validatedData);
+      
+      // Send confirmation emails
+      try {
+        await EmailService.sendNewsletterConfirmation(subscription);
+      } catch (emailError) {
+        console.error('Failed to send newsletter confirmation emails:', emailError);
+        // Don't fail the subscription if email fails
+      }
+      
       res.json({ message: "Successfully subscribed to newsletter", subscription });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid email format" });
+        return res.status(400).json({ message: "Invalid input data", errors: error.errors });
       }
       res.status(500).json({ message: "Failed to subscribe to newsletter" });
     }

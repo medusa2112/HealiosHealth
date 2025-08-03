@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import type { PreOrder } from '@shared/schema';
+import type { PreOrder, Newsletter } from '@shared/schema';
 import { type Order } from '@shared/schema';
 
 interface CartItem {
@@ -21,7 +21,7 @@ interface OrderEmailData {
 
 export class EmailService {
   private static readonly FROM_EMAIL = 'dn@thefourths.com';
-  private static readonly ADMIN_EMAIL = 'dn@thefourths.com';
+  private static readonly ADMIN_EMAILS = ['dn@thefourths.com', 'ms@thefourths.com'];
 
   static async sendOrderConfirmation(emailData: OrderEmailData): Promise<boolean> {
     try {
@@ -489,7 +489,7 @@ export class EmailService {
 
       await resend.emails.send({
         from: this.FROM_EMAIL,
-        to: this.ADMIN_EMAIL,
+        to: this.ADMIN_EMAILS,
         subject: `New Order #${order.id.slice(-8)} - R${order.totalAmount}`,
         html,
       });
@@ -531,7 +531,7 @@ export class EmailService {
 
       await resend.emails.send({
         from: this.FROM_EMAIL,
-        to: this.ADMIN_EMAIL,
+        to: this.ADMIN_EMAILS,
         subject: `Low Stock Alert: ${productName} (${currentStock} remaining)`,
         html,
       });
@@ -543,5 +543,77 @@ export class EmailService {
     }
   }
 
+  static async sendNewsletterConfirmation(newsletter: Newsletter): Promise<boolean> {
+    try {
+      // Send confirmation to subscriber
+      await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: newsletter.email,
+        subject: 'Welcome to the Healios Community!',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Welcome to Healios</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #000; margin-bottom: 10px;">Welcome to Healios!</h1>
+              <p style="color: #666; font-size: 16px;">Thank you for joining our wellness community</p>
+            </div>
+            
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h2 style="color: #000; margin-top: 0;">Hi ${newsletter.firstName}! 👋</h2>
+              <p>We're excited to have you as part of the Healios family. You'll now receive:</p>
+              <ul style="color: #666;">
+                <li>Exclusive wellness tips and insights</li>
+                <li>Early access to new products</li>
+                <li>Special offers and promotions</li>
+                <li>Birthday surprises 🎉</li>
+              </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+              <p style="color: #666; font-size: 14px;">Thank you for choosing Healios for your wellness journey!</p>
+            </div>
+          </body>
+          </html>
+        `
+      });
+
+      // Send notification to admin emails
+      await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: this.ADMIN_EMAILS,
+        subject: 'New Newsletter Subscription',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>New Newsletter Subscriber</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #000;">New Newsletter Subscription</h2>
+            
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+              <p><strong>Name:</strong> ${newsletter.firstName} ${newsletter.lastName}</p>
+              <p><strong>Email:</strong> ${newsletter.email}</p>
+              <p><strong>Birthday:</strong> ${newsletter.birthday || 'Not provided'}</p>
+              <p><strong>Subscribed:</strong> ${newsletter.subscribedAt}</p>
+            </div>
+          </body>
+          </html>
+        `
+      });
+
+      console.log('✅ Newsletter confirmation emails sent successfully');
+      return true;
+    } catch (error) {
+      console.error('Failed to send newsletter confirmation:', error);
+      return false;
+    }
+  }
 
 }

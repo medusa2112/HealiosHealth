@@ -19,6 +19,116 @@ import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
+// Newsletter Form Component
+const NewsletterForm = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    birthday: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in your first name, last name, and email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Welcome to Healios!",
+          description: "You've successfully joined our wellness community. Check your email for confirmation."
+        });
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          birthday: ''
+        });
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to subscribe');
+      }
+    } catch (error) {
+      toast({
+        title: "Subscription Failed",
+        description: error instanceof Error ? error.message : "Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          type="text"
+          placeholder="First name"
+          value={formData.firstName}
+          onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Last name"
+          value={formData.lastName}
+          onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+          required
+        />
+      </div>
+
+      <input
+        type="email"
+        placeholder="Email address"
+        value={formData.email}
+        onChange={(e) => setFormData({...formData, email: e.target.value})}
+        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+        required
+      />
+
+      <input
+        type="date"
+        placeholder="Your Birthday"
+        value={formData.birthday}
+        onChange={(e) => setFormData({...formData, birthday: e.target.value})}
+        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white [color-scheme:dark]"
+        max={new Date().toISOString().split('T')[0]} // Prevent future dates
+      />
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? 'Signing up...' : 'Sign up now'}
+      </button>
+    </form>
+  );
+};
+
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -1078,39 +1188,7 @@ export default function HomePage() {
             Join our community for wellness tips and exclusive offers
           </p>
 
-          <form className="space-y-4 max-w-md mx-auto">
-            <div className="grid grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="First name"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-              <input
-                type="text"
-                placeholder="Last name"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-
-            <input
-              type="email"
-              placeholder="Email address"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            />
-
-            <input
-              type="text"
-              placeholder="Your Birthday"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            />
-
-            <button
-              type="submit"
-              className="w-full bg-black text-white py-3 px-6 font-medium hover:bg-white hover:text-black hover:border-black border border-black transition-colors"
-            >
-              Sign up now
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </section>
 
