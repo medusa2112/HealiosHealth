@@ -1331,7 +1331,7 @@ export default function ProductComprehensive() {
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children. Some benefits may be noticed within weeks, but optimal cognitive support typically develops over 4-6 weeks of consistent use.</p>
                             </div>
                           ) : (
-                            <p>Take as directed on the packaging. Best taken with food for optimal absorption. Consult your healthcare provider if you have any concerns.</p>
+                            <p>Add one scoop (2.5g) to a glass of water, coffee, smoothie, or yoghurt. Consume once daily. Do not exceed the stated dose. Best results occur with daily use for 8–12 weeks.</p>
                           )}
                         </div>
                       )}
