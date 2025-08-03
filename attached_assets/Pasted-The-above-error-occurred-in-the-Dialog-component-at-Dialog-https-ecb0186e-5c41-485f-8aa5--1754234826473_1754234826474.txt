@@ -1,0 +1,55 @@
+The above error occurred in the <Dialog> component:
+
+    at Dialog (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-dialog.js?v=b2a87d3a:50:5)
+    at CartSidebar (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/cart-sidebar.tsx:27:79)
+    at div
+    at CartProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/hooks/use-cart.tsx:20:32)
+    at Provider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SYCFHCMA.js?v=4960b82f:43:15)
+    at TooltipProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=4960b82f:58:5)
+    at ThemeProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/theme-provider.tsx:20:33)
+    at QueryClientProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=4960b82f:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <StockNotification> component:
+
+    at StockNotification (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/stock-notification.tsx:26:37)
+    at div
+    at CartProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/hooks/use-cart.tsx:20:32)
+    at Provider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SYCFHCMA.js?v=4960b82f:43:15)
+    at TooltipProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=4960b82f:58:5)
+    at ThemeProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/theme-provider.tsx:20:33)
+    at QueryClientProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=4960b82f:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <Toaster> component:
+
+    at Toaster (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/ui/toaster.tsx:29:22)
+    at CartProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/hooks/use-cart.tsx:20:32)
+    at Provider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SYCFHCMA.js?v=4960b82f:43:15)
+    at TooltipProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=4960b82f:58:5)
+    at ThemeProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/theme-provider.tsx:20:33)
+    at QueryClientProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=4960b82f:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+at Toaster (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/ui/toaster.tsx:29:22)
+at CartProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/hooks/use-cart.tsx:20:32)
+at Provider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-SYCFHCMA.js?v=4960b82f:43:15)
+at TooltipProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=4960b82f:58:5)
+at ThemeProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/theme-provider.tsx:20:33)
+at QueryClientProvider (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=4960b82f:2805:3)
+at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+at t.value (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Cannot read properties of null (reading 'useState')
