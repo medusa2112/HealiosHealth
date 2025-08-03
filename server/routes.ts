@@ -99,7 +99,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Sort by createdAt descending and get the first one
       const latestArticle = articles.sort((a, b) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
       )[0];
       
       res.json(latestArticle);
@@ -633,7 +633,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         totalCompletions: quizResults.length,
         recentCompletions: quizResults
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
           .slice(0, 10)
           .map(result => ({
             id: result.id,

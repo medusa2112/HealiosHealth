@@ -772,7 +772,7 @@ The Healios Team
         text,
       });
       
-      console.log('✅ Consultation booking confirmation email sent:', data.id);
+      console.log('✅ Consultation booking confirmation email sent:', data.data?.id);
     } catch (error) {
       console.error('❌ Failed to send consultation booking confirmation email:', error);
       throw error;

@@ -394,6 +394,68 @@ export class MemStorage implements IStorage {
     sampleProducts.forEach(product => {
       this.products.set(product.id, product);
     });
+
+    // Seed sample articles
+    const sampleArticles: Article[] = [
+      {
+        id: "understanding-magnesium-benefits",
+        title: "Understanding Magnesium: The Essential Mineral for Sleep and Muscle Function",
+        slug: "understanding-magnesium-benefits",
+        metaDescription: "Discover how magnesium supports better sleep, muscle function, and overall wellness. Learn about the different forms and optimal dosing strategies.",
+        content: "<p>Magnesium is one of the most important minerals for human health, yet deficiency is surprisingly common. This essential nutrient plays a role in over 300 enzymatic reactions in the body, making it crucial for energy production, muscle function, and nervous system health.</p><h2>Why Magnesium Matters for Sleep</h2><p>Research consistently shows that magnesium plays a crucial role in sleep regulation. It activates the parasympathetic nervous system, which is responsible for helping you feel calm and relaxed. Magnesium also regulates melatonin production and maintains healthy levels of GABA, a neurotransmitter that promotes sleep.</p><p>Clinical studies have demonstrated that magnesium supplementation can significantly improve sleep quality, reduce sleep onset time, and increase sleep efficiency - particularly beneficial for older adults who often experience age-related sleep disturbances.</p><h2>Muscle Function and Recovery</h2><p>For athletes and active individuals, magnesium is essential for proper muscle contraction and relaxation. It helps prevent muscle cramps and supports post-exercise recovery by reducing inflammation and oxidative stress.</p><h2>Choosing the Right Form</h2><p>Not all magnesium supplements are created equal. The form of magnesium affects absorption and bioavailability:</p><ul><li><strong>Magnesium Glycinate:</strong> Highly bioavailable and gentle on the stomach, ideal for sleep support</li><li><strong>Magnesium Citrate:</strong> Good absorption, may have mild laxative effects</li><li><strong>Magnesium Oxide:</strong> Lower bioavailability, primarily used for constipation relief</li></ul><p>Our magnesium gummies combine both citrate and glycinate forms to optimize absorption while maintaining digestive comfort.</p>",
+        research: "Multiple clinical trials have shown magnesium supplementation improves sleep quality scores by 15-25% and reduces sleep onset time by an average of 17 minutes. A 2012 study in the Journal of Research in Medical Sciences found that magnesium supplementation significantly improved insomnia severity, sleep time, and early morning awakening.",
+        sources: [
+          "https://pubmed.ncbi.nlm.nih.gov/23853635/",
+          "https://pubmed.ncbi.nlm.nih.gov/32162142/",
+          "https://pubmed.ncbi.nlm.nih.gov/24264568/"
+        ],
+        category: "Minerals",
+        author: "Healios Research Team",
+        readTime: "5",
+        published: true,
+        createdAt: "2024-01-15T10:00:00Z"
+      },
+      {
+        id: "vitamin-d3-immune-support",
+        title: "Vitamin D3: Your Immune System's Best Friend During Winter Months",
+        slug: "vitamin-d3-immune-support",
+        metaDescription: "Learn how vitamin D3 supports immune function, especially during winter months when sun exposure is limited. Discover optimal dosing and safety guidelines.",
+        content: "<p>Vitamin D3, often called the 'sunshine vitamin,' is crucial for immune system function. During winter months in the UK, when sun exposure is limited, maintaining adequate vitamin D levels becomes particularly important for overall health and disease prevention.</p><h2>The Immune Connection</h2><p>Vitamin D3 receptors are found throughout the immune system, including in T cells, B cells, and antigen-presenting cells. This widespread presence indicates vitamin D's fundamental role in immune regulation.</p><p>Research shows that vitamin D3 helps modulate both innate and adaptive immune responses, supporting the body's ability to fight off infections while preventing excessive inflammatory responses.</p><h2>Winter Deficiency Risk</h2><p>In the UK, vitamin D deficiency is particularly common during winter months due to limited sun exposure. Studies suggest that up to 40% of the UK population may have insufficient vitamin D levels during winter.</p><h2>Optimal Dosing</h2><p>The UK government recommends 10mcg (400 IU) daily, but many experts suggest higher doses for optimal immune function. Our 4000 IU gummies provide therapeutic levels while maintaining safety margins for daily use.</p>",
+        research: "A comprehensive meta-analysis published in BMJ found that vitamin D supplementation reduced the risk of acute respiratory tract infections by 12% overall, with greater protective effects in individuals with vitamin D deficiency. Daily supplementation was more effective than bolus doses.",
+        sources: [
+          "https://pubmed.ncbi.nlm.nih.gov/28202713/",
+          "https://pubmed.ncbi.nlm.nih.gov/31614810/",
+          "https://pubmed.ncbi.nlm.nih.gov/33595634/"
+        ],
+        category: "Vitamins",
+        author: "Healios Research Team",
+        readTime: "4",
+        published: true,
+        createdAt: "2024-01-10T14:30:00Z"
+      },
+      {
+        id: "ashwagandha-stress-management",
+        title: "KSM-66® Ashwagandha: Science-Backed Stress Relief and Cortisol Support",
+        slug: "ashwagandha-stress-management",
+        metaDescription: "Explore the clinical research behind KSM-66® Ashwagandha for stress management, cortisol reduction, and improved energy levels.",
+        content: "<p>In our fast-paced modern world, chronic stress has become a significant health concern. KSM-66® Ashwagandha, a clinically studied form of this ancient adaptogenic herb, offers science-backed support for stress management and overall wellbeing.</p><h2>What Makes KSM-66® Different</h2><p>KSM-66® is the most clinically studied ashwagandha extract, with over 20 human clinical trials supporting its efficacy. This full-spectrum extract is produced using a unique extraction process that preserves the natural balance of active compounds found in the ashwagandha root.</p><h2>Cortisol Reduction</h2><p>One of the most significant benefits of KSM-66® is its ability to reduce cortisol levels. Elevated cortisol, often called the 'stress hormone,' can negatively impact sleep, mood, immune function, and metabolism.</p><p>Clinical studies show that KSM-66® can reduce cortisol levels by up to 27.9%, helping to restore the body's natural stress response and promote better overall health.</p><h2>Beyond Stress Relief</h2><p>While stress management is KSM-66®'s primary benefit, research also shows improvements in:</p><ul><li>Energy levels and physical performance</li><li>Sleep quality and duration</li><li>Cognitive function and memory</li><li>Mood and emotional wellbeing</li></ul>",
+        research: "A randomized, double-blind, placebo-controlled study found that 600mg of KSM-66® daily for 60 days significantly reduced perceived stress scores by 27.9% and morning cortisol levels by 23% compared to placebo. Participants also reported improved sleep quality and general wellbeing.",
+        sources: [
+          "https://pubmed.ncbi.nlm.nih.gov/31517876/",
+          "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+          "https://pubmed.ncbi.nlm.nih.gov/34254920/"
+        ],
+        category: "Adaptogens",
+        author: "Healios Research Team",
+        readTime: "6",
+        published: true,
+        createdAt: "2024-01-05T09:15:00Z"
+      }
+    ];
+
+    sampleArticles.forEach(article => {
+      this.articles.set(article.id, article);
+    });
   }
 
   async getProducts(): Promise<Product[]> {
