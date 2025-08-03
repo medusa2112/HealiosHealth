@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { ShoppingBag, Menu, ChevronDown, MessageCircle } from "lucide-react";
-import { SiGoogle, SiInstagram } from "react-icons/si";
+import { FaGoogle } from "react-icons/fa";
+import { SiInstagram } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -142,7 +143,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#4285F4] transition-colors duration-200"
               >
-                <SiGoogle className={`transition-all duration-300 ${
+                <FaGoogle className={`transition-all duration-300 ${
                   isScrolled ? 'h-3 w-3' : 'h-4 w-4'
                 }`} />
               </a>
