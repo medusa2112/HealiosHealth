@@ -91,10 +91,10 @@ export function StockNotification() {
       onClick={handleClose}
     >
       <div 
-        className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn"
+        className="relative max-w-sm w-full bg-white rounded-2xl shadow-2xl animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
+        {/* Close button - positioned inside the modal */}
         <button
           onClick={(e) => {
             console.log('Close button onClick triggered'); // Debug log
@@ -102,18 +102,21 @@ export function StockNotification() {
             e.stopPropagation();
             handleClose();
           }}
-          onTouchEnd={(e) => {
-            console.log('Close button onTouchEnd triggered'); // Debug log
+          onTouchStart={(e) => {
+            console.log('Close button onTouchStart triggered'); // Debug log
             e.preventDefault();
             e.stopPropagation();
             handleClose();
           }}
-          className="absolute top-1 right-1 z-[60] p-3 m-2 rounded-full bg-red-500 hover:bg-red-600 transition-colors touch-manipulation min-w-[50px] min-h-[50px] flex items-center justify-center shadow-xl border-2 border-white"
+          className="absolute top-4 right-4 z-[60] w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center shadow-xl border-2 border-white"
           aria-label="Close notification"
           type="button"
-          style={{ touchAction: 'manipulation' }}
+          style={{ 
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
+          }}
         >
-          <X className="w-7 h-7 text-white stroke-[3]" />
+          <X className="w-6 h-6 text-white stroke-[3]" />
         </button>
 
         {/* Header with product image */}
