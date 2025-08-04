@@ -61,6 +61,13 @@ export function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           
+          {/* Supply Badge - Top Right */}
+          <div className="absolute top-3 right-3 z-10">
+            <span className="bg-black text-white px-3 py-1 text-xs font-medium rounded-full">
+              {product.supplyDays && product.supplyDays >= 60 ? `${Math.round(product.supplyDays / 30)}-month` : `${product.supplyDays || 30}-day`} supply
+            </span>
+          </div>
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1">
             {product.featured && (
