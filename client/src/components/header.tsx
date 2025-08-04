@@ -34,12 +34,12 @@ export function Header() {
     {
       title: "Bestsellers",
       items: [
-        { href: "/products/collagen-powder", label: "Halo Glow Collagen Powder" },
-        { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar Gummies" },
-        { href: "/products/vitamin-d3", label: "Vitamin D3 4000 IU Gummies" },
-        { href: "/products/mind-memory-mushroom", label: "Mind & Memory Mushroom Gummies" },
-        { href: "/products/biotin-5000", label: "Biotin 5000µg Strawberry Gummies" },
-        { href: "/products/childrens-multivitamin", label: "Children's Multivitamin Gummies" },
+        { href: "/products/collagen-powder", label: "HALO Glow Collagen", isNew: true },
+        { href: "/products/magnesium", label: "Magnesium Complex" },
+        { href: "/products/vitamin-d3", label: "Vitamin D3" },
+        { href: "/products/probiotics", label: "Probiotic Complex" },
+        { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar and Ginger Gummies" },
+        { href: "/products/ashwagandha", label: "Ashwagandha" },
       ]
     },
     {
@@ -50,9 +50,10 @@ export function Header() {
         { href: "/products?category=adaptogens", label: "Adaptogens" },
         { href: "/products?category=probiotics", label: "Probiotics" },
         { href: "/products?category=minerals", label: "Minerals" },
-        { href: "/products?category=children", label: "Children's Health" },
+        { href: "/products?category=womens", label: "Women's Health" },
+        { href: "/products?category=children", label: "Children's Health", comingSoon: true },
         { href: "/products?category=beauty", label: "Beauty & Wellness" },
-        { href: "/products?category=prenatal", label: "Pre-Pregnancy & Prenatal" },
+        { href: "/products?category=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true },
       ]
     },
     {
@@ -298,8 +299,18 @@ export function Header() {
                   {section.items.map((item, itemIndex) => (
                     <li key={itemIndex}>
                       <Link href={item.href}>
-                        <span className="text-sm text-white hover:text-healios-cyan transition-colors duration-200">
+                        <span className="text-sm text-white hover:text-healios-cyan transition-colors duration-200 flex items-center gap-2">
                           {item.label}
+                          {item.isNew && (
+                            <span className="text-xs font-medium text-healios-cyan bg-healios-cyan/10 px-2 py-0.5 rounded">
+                              NEW PRODUCT
+                            </span>
+                          )}
+                          {item.comingSoon && (
+                            <span className="text-xs font-medium text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded">
+                              COMING SOON
+                            </span>
+                          )}
                         </span>
                       </Link>
                     </li>
