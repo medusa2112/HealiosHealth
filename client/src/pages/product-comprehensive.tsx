@@ -13,7 +13,7 @@ import { PreOrderPopup } from "@/components/pre-order-popup";
 
 // Import images
 import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
-import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
+import supplementLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png';
 import haloGlowImage from '@assets/HaloGlowB_1754157621693.png';
 
 // Helper function to determine the correct unit for products
@@ -1760,8 +1760,8 @@ export default function ProductComprehensive() {
           {/* Image */}
           <div className="relative overflow-hidden">
             <img
-              src={nutritionistImg}
-              alt="Professional healthcare experts developing quality supplements and wellness solutions"
+              src={supplementLabImg}
+              alt="Professional supplement laboratory with premium ingredients and modern equipment"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
