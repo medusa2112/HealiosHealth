@@ -113,6 +113,18 @@ export const stockAlerts = pgTable("stock_alerts", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const restockNotifications = pgTable("restock_notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  productId: text("product_id").notNull(),
+  productName: text("product_name").notNull(),
+  agreeToContact: boolean("agree_to_contact").default(false),
+  notified: boolean("notified").default(false),
+  requestedAt: text("requested_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -143,6 +155,11 @@ export const insertStockAlertSchema = createInsertSchema(stockAlerts).omit({
   createdAt: true,
 });
 
+export const insertRestockNotificationSchema = createInsertSchema(restockNotifications).omit({
+  id: true,
+  requestedAt: true,
+});
+
 export const insertQuizResultSchema = createInsertSchema(quizResults).omit({
   id: true,
   createdAt: true,
@@ -170,3 +187,5 @@ export type InsertQuizResult = z.infer<typeof insertQuizResultSchema>;
 export type QuizResult = typeof quizResults.$inferSelect;
 export type InsertConsultationBooking = z.infer<typeof insertConsultationBookingSchema>;
 export type ConsultationBooking = typeof consultationBookings.$inferSelect;
+export type InsertRestockNotification = z.infer<typeof insertRestockNotificationSchema>;
+export type RestockNotification = typeof restockNotifications.$inferSelect;

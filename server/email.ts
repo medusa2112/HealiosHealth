@@ -1138,4 +1138,76 @@ The Healios Team
       };
     }
   }
+
+  static async sendRestockNotificationConfirmation(
+    email: string, 
+    firstName: string, 
+    productName: string
+  ): Promise<boolean> {
+    try {
+      const { data, error } = await resend.emails.send({
+        from: 'Healios <notifications@thehealios.com>',
+        to: [email],
+        subject: `We'll notify you when ${productName} is back in stock`,
+        html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Back in Stock Notification Set</title>
+          </head>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f8f9fa;">
+            <div style="max-width: 600px; margin: 0 auto; background: white;">
+              
+              <!-- Header -->
+              <div style="background: black; color: white; padding: 20px; text-align: center;">
+                <h1 style="margin: 0; font-size: 24px; font-weight: 600;">Healios</h1>
+              </div>
+              
+              <!-- Content -->
+              <div style="padding: 40px 30px;">
+                <h2 style="color: #333; margin-bottom: 20px;">Hi ${firstName}!</h2>
+                
+                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+                  Thanks for your interest in <strong>${productName}</strong>. We've added you to our notification list and will email you as soon as this product is back in stock.
+                </p>
+                
+                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+                  In the meantime, feel free to explore our other premium wellness supplements or take our personalized wellness quiz to discover products that might support your health goals.
+                </p>
+                
+                <!-- CTA Buttons -->
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="https://thehealios.com/products" style="display: inline-block; background: black; color: white; padding: 12px 24px; text-decoration: none; margin-right: 10px; font-weight: 500;">Shop All Products</a>
+                  <a href="https://thehealios.com/quiz" style="display: inline-block; border: 1px solid black; color: black; padding: 12px 24px; text-decoration: none; font-weight: 500;">Take Quiz</a>
+                </div>
+              </div>
+              
+              <!-- Footer -->
+              <div style="background: #f8f9fa; padding: 20px 30px; text-align: center;">
+                <p style="color: #666; font-size: 14px; margin: 0;">
+                  You're receiving this because you requested to be notified when ${productName} is back in stock.
+                </p>
+                <p style="color: #666; font-size: 14px; margin: 10px 0 0 0;">
+                  Questions? Reply to this email or visit <a href="https://thehealios.com" style="color: black;">thehealios.com</a>
+                </p>
+              </div>
+            </div>
+          </body>
+        </html>
+        `,
+      });
+
+      if (error) {
+        console.error('Resend error:', error);
+        return false;
+      }
+
+      console.log('Restock notification confirmation sent:', data);
+      return true;
+    } catch (error) {
+      console.error('Error sending restock notification confirmation:', error);
+      return false;
+    }
+  }
 }

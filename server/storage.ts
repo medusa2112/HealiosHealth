@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -46,6 +46,11 @@ export interface IStorage {
   // Consultation Bookings
   createConsultationBooking(booking: InsertConsultationBooking): Promise<ConsultationBooking>;
   getConsultationBookings(): Promise<ConsultationBooking[]>;
+  
+  // Restock Notifications
+  createRestockNotification(notification: InsertRestockNotification): Promise<RestockNotification>;
+  getRestockNotifications(): Promise<RestockNotification[]>;
+  getRestockNotificationsByProduct(productId: string): Promise<RestockNotification[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -57,6 +62,7 @@ export class MemStorage implements IStorage {
   private orders: Map<string, Order>;
   private stockAlerts: Map<string, StockAlert>;
   private quizResults: Map<string, QuizResult>;
+  private restockNotifications: Map<string, RestockNotification>;
 
   constructor() {
     this.products = new Map();
@@ -67,6 +73,7 @@ export class MemStorage implements IStorage {
     this.consultationBookings = new Map();
     this.stockAlerts = new Map();
     this.quizResults = new Map();
+    this.restockNotifications = new Map();
     this.seedData();
   }
 
@@ -848,6 +855,29 @@ export class MemStorage implements IStorage {
 
   async getConsultationBookings(): Promise<ConsultationBooking[]> {
     return Array.from(this.consultationBookings.values());
+  }
+
+  // Restock Notifications Implementation
+  async createRestockNotification(notification: InsertRestockNotification): Promise<RestockNotification> {
+    const id = randomUUID();
+    const newNotification: RestockNotification = {
+      ...notification,
+      id,
+      requestedAt: new Date().toISOString(),
+      notified: false,
+    };
+    this.restockNotifications.set(id, newNotification);
+    return newNotification;
+  }
+
+  async getRestockNotifications(): Promise<RestockNotification[]> {
+    return Array.from(this.restockNotifications.values());
+  }
+
+  async getRestockNotificationsByProduct(productId: string): Promise<RestockNotification[]> {
+    return Array.from(this.restockNotifications.values()).filter(
+      notification => notification.productId === productId && !notification.notified
+    );
   }
 }
 

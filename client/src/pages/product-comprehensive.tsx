@@ -38,6 +38,12 @@ export default function ProductComprehensive() {
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
   const [showBundleModal, setShowBundleModal] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [notificationFormData, setNotificationFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    agreeToContact: false
+  });
   const [bundleAdded, setBundleAdded] = useState(false);
 
   const { data: product, isLoading, error } = useQuery<Product>({
@@ -95,6 +101,56 @@ export default function ProductComprehensive() {
           description: `${bundleProduct.name} has been added to your bundle selection.`,
         });
       }
+    }
+  };
+
+  const handleNotificationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!notificationFormData.email || !notificationFormData.agreeToContact) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in your email address and agree to our contact terms.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/restock-notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...notificationFormData,
+          productId: product?.id,
+          productName: product?.name,
+          requestedAt: new Date().toISOString()
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Notification Set!",
+          description: `We'll email you when ${product?.name} is back in stock.`
+        });
+        setShowNotificationModal(false);
+        setNotificationFormData({
+          email: '',
+          firstName: '',
+          lastName: '',
+          agreeToContact: false
+        });
+      } else {
+        throw new Error('Failed to set notification');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -678,34 +734,80 @@ export default function ProductComprehensive() {
                 </div>
               )}
 
-              {/* Reorder Notification Modal */}
+              {/* Restock Notification Modal */}
               {showNotificationModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-                  <div className="bg-white dark:bg-gray-800 p-6 max-w-sm w-full">
-                    <h3 className="font-medium text-gray-900 dark:text-white mb-4">Reorder Reminder</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                      Get notified 10 days before your {product.supplyDays}-day supply runs out.
+                  <div className="bg-white dark:bg-gray-800 p-6 max-w-md w-full">
+                    <h3 className="font-medium text-gray-900 dark:text-white mb-4">
+                      {product.inStock ? 'Reorder Reminder' : 'Back in Stock Notification'}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                      {product.inStock 
+                        ? `Get notified 10 days before your ${product.supplyDays}-day supply runs out.`
+                        : `We'll email you as soon as ${product.name} is back in stock.`
+                      }
                     </p>
-                    <div className="flex gap-3">
-                      <button 
-                        onClick={() => {
-                          setShowNotificationModal(false);
-                          toast({
-                            title: "Reminder set!",
-                            description: `We'll notify you on ${new Date(Date.now() + (product.supplyDays! - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}`
-                          });
-                        }}
-                        className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
-                      >
-                        Set Reminder
-                      </button>
-                      <button 
-                        onClick={() => setShowNotificationModal(false)}
-                        className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    </div>
+                    
+                    <form onSubmit={handleNotificationSubmit} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          placeholder="First name"
+                          value={notificationFormData.firstName}
+                          onChange={(e) => setNotificationFormData({...notificationFormData, firstName: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Last name"
+                          value={notificationFormData.lastName}
+                          onChange={(e) => setNotificationFormData({...notificationFormData, lastName: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        />
+                      </div>
+                      
+                      <input
+                        type="email"
+                        placeholder="Email address*"
+                        value={notificationFormData.email}
+                        onChange={(e) => setNotificationFormData({...notificationFormData, email: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        required
+                      />
+                      
+                      <div className="space-y-3">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={notificationFormData.agreeToContact}
+                            onChange={(e) => setNotificationFormData({...notificationFormData, agreeToContact: e.target.checked})}
+                            className="mt-1 w-4 h-4 text-black focus:ring-black border-gray-300"
+                            required
+                          />
+                          <span className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            I agree to receive product availability notifications and marketing communications from Healios. 
+                            You can unsubscribe at any time. View our{" "}
+                            <a href="/privacy-policy" className="underline hover:no-underline" target="_blank">Privacy Policy</a>.
+                          </span>
+                        </label>
+                      </div>
+                    
+                      <div className="flex gap-3 pt-2">
+                        <button 
+                          type="submit"
+                          className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition-colors flex-1"
+                        >
+                          {product.inStock ? 'Set Reminder' : 'Notify Me'}
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={() => setShowNotificationModal(false)}
+                          className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               )}

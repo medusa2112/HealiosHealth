@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, type Article, type QuizResult, type ConsultationBooking } from "@shared/schema";
+import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification } from "@shared/schema";
 import { EmailService } from "./email";
 import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
@@ -132,7 +132,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-
+  // Restock notifications
+  app.post("/api/restock-notifications", async (req, res) => {
+    try {
+      const validatedData = insertRestockNotificationSchema.parse(req.body);
+      const notification = await storage.createRestockNotification(validatedData);
+      
+      // Send confirmation email
+      try {
+        await EmailService.sendRestockNotificationConfirmation(
+          validatedData.email,
+          validatedData.firstName || 'there',
+          validatedData.productName
+        );
+      } catch (emailError) {
+        console.error('Failed to send restock confirmation email:', emailError);
+        // Don't fail the notification if email fails
+      }
+      
+      res.json({ message: "Restock notification set successfully", notification });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to set restock notification" });
+    }
+  });
 
   // Create Stripe Checkout Session for external payment processing
   app.post("/api/create-checkout-session", async (req, res) => {
