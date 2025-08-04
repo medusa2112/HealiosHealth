@@ -675,10 +675,6 @@ export default function HomePage() {
                             </span>
                           </div>
 
-                          {/* Product Badge - Top Left */}
-                          <div className="absolute top-3 left-3 bg-white dark:bg-gray-700 text-black dark:text-white px-2 py-1 text-xs font-medium z-10 shadow-sm">
-                            {productBadges[product.id as keyof typeof productBadges]}
-                          </div>
                           
                           {/* Product Image */}
                           <img
@@ -719,6 +715,11 @@ export default function HomePage() {
                         
                         {/* Product Info - Wild Nutrition Clean Style */}
                         <div className="space-y-2">
+                          {/* Product Badge */}
+                          <div className="inline-block bg-white dark:bg-gray-700 text-black dark:text-white px-2 py-1 text-xs font-medium shadow-sm">
+                            {productBadges[product.id as keyof typeof productBadges]}
+                          </div>
+                          
                           <h3 className="font-medium text-gray-900 dark:text-white text-sm group-hover:text-healios-cyan transition-colors" itemProp="name">
                             {product.name}
                           </h3>
