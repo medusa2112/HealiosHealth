@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb } from 'lucide-react';
+import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
@@ -109,14 +109,17 @@ const NewsletterForm = () => {
         required
       />
 
-      <input
-        type="date"
-        placeholder="Your Birthday"
-        value={formData.birthday}
-        onChange={(e) => setFormData({...formData, birthday: e.target.value})}
-        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white [color-scheme:dark]"
-        max={new Date().toISOString().split('T')[0]} // Prevent future dates
-      />
+      <div className="relative">
+        <input
+          type="date"
+          placeholder="DD/MM/YYYY"
+          value={formData.birthday}
+          onChange={(e) => setFormData({...formData, birthday: e.target.value})}
+          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-black dark:focus:border-white bg-white dark:bg-gray-800 text-gray-900 dark:text-white [color-scheme:dark]"
+          max={new Date().toISOString().split('T')[0]} // Prevent future dates
+        />
+        <label className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">Birthday (Optional)</label>
+      </div>
 
       <button
         type="submit"
@@ -173,6 +176,25 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
   const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [selectedReviewCategory, setSelectedReviewCategory] = useState('All');
+  const [selectedReviewPlatform, setSelectedReviewPlatform] = useState('Google'); // New state for platform toggle
+  const [userCountry, setUserCountry] = useState<string | null>(null); // For geo-restriction
+
+  // Geo-location detection for HALO Glow RSA restriction
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        // Using a simple IP geolocation service
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        setUserCountry(data.country_code);
+      } catch (error) {
+        console.error('Geolocation detection failed:', error);
+        // Default to showing product if geolocation fails
+        setUserCountry('ZA');
+      }
+    };
+    detectCountry();
+  }, []);
   
   // Pre-order modal states
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
@@ -549,6 +571,34 @@ export default function HomePage() {
                 ))}
               </div>
               <span className="font-medium text-sm sm:text-base">4.84 RATING</span>
+              {/* Trustpilot and Google Review Icons */}
+              <div className="flex items-center gap-2 ml-3">
+                <a 
+                  href="https://www.trustpilot.com/review/thehealios.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Read our Trustpilot reviews"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0L15.09 8.54L24 8.54L17.46 13.82L20.18 22.36L12 17.77L3.82 22.36L6.54 13.82L0 8.54L8.91 8.54L12 0Z" fill="#00B67A"/>
+                  </svg>
+                </a>
+                <a 
+                  href="#" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity"
+                  aria-label="Read our Google reviews"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
+                </a>
+              </div>
             </div>
             <div className="text-xs opacity-80">
               LOVED BY OUR CUSTOMERS
@@ -559,21 +609,30 @@ export default function HomePage() {
         {/* Press Mentions Footer */}
         <div className="absolute bottom-4 sm:bottom-8 left-4 right-4 sm:left-6 sm:right-6 lg:left-12 lg:right-12">
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 lg:gap-16 text-white text-xs font-medium opacity-70">
-            <span className="text-center">The Grind Fitness</span>
-            <span className="text-center">Eleven Eleven Sports Performance</span>
-            <span className="text-center">Peak Performance Nutrition</span>
-            <span className="text-center">Elite Wellness Studio</span>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-center hover:opacity-100 transition-opacity cursor-pointer">The Grind Fitness</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-center hover:opacity-100 transition-opacity cursor-pointer">Eleven Eleven Sports Performance</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-center hover:opacity-100 transition-opacity cursor-pointer">Peak Performance Nutrition</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" className="text-center hover:opacity-100 transition-opacity cursor-pointer">Elite Wellness Studio</a>
           </div>
         </div>
       </section>
 
-      {/* Halo Glow Collagen Featured Section */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
+      {/* Halo Glow Collagen Featured Section - Only for RSA visitors */}
+      {userCountry === 'ZA' && (
+        <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
             {/* Left Column - Content */}
             <div className="order-2 lg:order-1 mb-8 sm:mb-12 lg:mb-0">
               <div className="mb-4">
+                <div className="flex items-center gap-4 mb-2">
+                  <span className="bg-red-500 text-white px-3 py-1 text-xs font-bold uppercase tracking-wide">
+                    NEW PRODUCT
+                  </span>
+                  <span className="bg-green-500 text-white px-3 py-1 text-xs font-bold uppercase tracking-wide">
+                    JUST LAUNCHED
+                  </span>
+                </div>
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                   THE SKIN STRUCTURE SUPPLEMENT
                 </span>
@@ -584,7 +643,7 @@ export default function HomePage() {
               </h2>
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="text-2xl font-light text-gray-900 dark:text-white">£29.95</span>
+                  <span className="text-2xl font-light text-gray-900 dark:text-white">R419</span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -594,7 +653,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
-                Glow from within with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
+                Support your skin's natural radiance with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
               </p>
               
               {/* Stats Row */}
@@ -658,6 +717,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Wild Nutrition Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
@@ -1079,6 +1139,32 @@ export default function HomePage() {
                   Trusted by our<br />
                   growing community
                 </h2>
+              </div>
+
+              {/* Platform Toggle */}
+              <div className="mb-6">
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => setSelectedReviewPlatform('Google')}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      selectedReviewPlatform === 'Google'
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Google Reviews
+                  </button>
+                  <button
+                    onClick={() => setSelectedReviewPlatform('Trustpilot')}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      selectedReviewPlatform === 'Trustpilot'
+                        ? 'bg-green-600 text-white'
+                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Trustpilot Reviews
+                  </button>
+                </div>
               </div>
 
               {/* Category Pills */}

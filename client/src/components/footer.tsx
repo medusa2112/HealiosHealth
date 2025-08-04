@@ -10,11 +10,13 @@ export function Footer() {
             <h3 className="text-white font-medium mb-6">Shop</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/products" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/products?category=gummies" className="hover:text-white transition-colors">Gummies</Link></li>
-              <li><Link href="/products?category=vitamins" className="hover:text-white transition-colors">Vitamins</Link></li>
-              <li><Link href="/products?category=adaptogens" className="hover:text-white transition-colors">Adaptogens</Link></li>
-              <li><Link href="/products?category=probiotics" className="hover:text-white transition-colors">Probiotics</Link></li>
-              <li><Link href="/products?category=minerals" className="hover:text-white transition-colors">Minerals</Link></li>
+              <li><Link href="/products?filter=gummies" className="hover:text-white transition-colors">Gummies</Link></li>
+              <li><Link href="/products?filter=vitamins" className="hover:text-white transition-colors">Vitamins</Link></li>
+              <li><Link href="/products?filter=adaptogens" className="hover:text-white transition-colors">Adaptogens</Link></li>
+              <li><Link href="/products?filter=probiotics" className="hover:text-white transition-colors">Probiotics</Link></li>
+              <li><Link href="/products?filter=minerals" className="hover:text-white transition-colors">Minerals</Link></li>
+              <li><Link href="/products?filter=beauty" className="hover:text-white transition-colors">Beauty & Skin</Link></li>
+              <li><Link href="/products?filter=womens-health" className="hover:text-white transition-colors">Women's Health</Link></li>
             </ul>
           </div>
 
@@ -24,10 +26,9 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/about" className="hover:text-white transition-colors">About Healios</Link></li>
               <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
-              <li><Link href="/practitioners" className="hover:text-white transition-colors">For Practitioners</Link></li>
-              <li><Link href="/womens-health" className="hover:text-white transition-colors">Women's Health</Link></li>
-              <li><Link href="/journal" className="hover:text-white transition-colors">Healios Journal</Link></li>
-              <li><Link href="/podcast" className="hover:text-white transition-colors">Healios Sessions Podcast</Link></li>
+              <li><Link href="/journal/all" className="hover:text-white transition-colors">Healios Journal</Link></li>
+              <li><span className="text-gray-500 cursor-not-allowed">For Practitioners (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Healios Sessions Podcast (Coming Soon)</span></li>
             </ul>
           </div>
 
@@ -36,11 +37,10 @@ export function Footer() {
             <h3 className="text-white font-medium mb-6">Support</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-
               <li><Link href="/quiz" className="hover:text-white transition-colors">Supplement Quiz</Link></li>
-              <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
-              <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping & Returns</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+              <li><span className="text-gray-500 cursor-not-allowed">FAQ (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Shipping & Returns (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Terms & Conditions (Coming Soon)</span></li>
             </ul>
           </div>
 
@@ -49,11 +49,11 @@ export function Footer() {
             <h3 className="text-white font-medium mb-6">Company</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
-              <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link href="/sustainability" className="hover:text-white transition-colors">Sustainability</Link></li>
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
-              <li><Link href="/affiliate" className="hover:text-white transition-colors">Affiliate Program</Link></li>
+              <li><Link href="/planet" className="hover:text-white transition-colors">Sustainability</Link></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Careers (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Privacy Policy (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Newsletter (Coming Soon)</span></li>
+              <li><span className="text-gray-500 cursor-not-allowed">Affiliate Program (Coming Soon)</span></li>
             </ul>
           </div>
         </div>

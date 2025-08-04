@@ -1,0 +1,86 @@
+TheHealios – Home Page & Footer Fixes
+
+Task: Apply the following functional, SEO, and content updates to the TheHealios home page and footer. Ensure code is production-ready, responsive, and fully tested before deployment.
+
+1. Rating Section
+After the existing "4.48 Rating" text, add Trustpilot and Google Review icons (SVG or optimised PNG).
+
+Icons must be clickable with target="_blank" and rel="noopener noreferrer" linking to:
+
+Trustpilot: https://www.trustpilot.com/review/thehealios.com
+
+Google Reviews: [full Google reviews link provided]
+
+Icons must have alt tags for SEO and be properly spaced inline with the rating.
+
+2. “Trusted by” Brands
+Make The Grind Fitness, Eleven Eleven Sports Performance, Peak Performance Nutrition, and Elite Wellness Studio clickable (open in new tab).
+
+On each of their sites, add our logo/name linking back to thehealios.com for inbound link SEO (coordinate with partners).
+
+3. HALO Glow Product
+Description → Update to:
+
+Support your skin's natural radiance with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
+
+Above title → Add a badge or heading: NEW PRODUCT / JUST LAUNCHED.
+
+Price → Set to R419 (ZAR only — ensure currency logic applies).
+
+Visibility → Product must only show for RSA visitors (use GeoIP logic).
+
+4. “Trusted by Our Growing Community” Section
+Pull live Google Reviews and Trustpilot Reviews via API or embed feed.
+
+Add a toggle button between Google & Trustpilot reviews alongside existing review filters.
+
+5. Newsletter Sign-up
+Confirm the date field is labelled correctly — if for Birthday, update placeholder to DD/MM/YYYY and label to “Birthday (Optional)”.
+
+6. Footer Quick Links – Functional Fixes
+Shop Category Links
+
+Ensure footer category links filter products dynamically:
+
+Vitamins → Show only vitamin products
+
+Women’s Health → Show only women’s health products
+(Verify all category links in footer apply correct shop filters.)
+
+404 Error Fixes – Ensure these links are connected to live pages or remove until available:
+
+For Practitioners
+
+Women’s Health
+
+Healios Journal
+
+Healios Sessions Podcast
+
+FAQ
+
+Shipping and Returns
+
+Terms and Conditions
+
+Careers
+
+Sustainability
+
+Privacy Policy
+
+Newsletter
+
+Affiliate Programme
+
+7. QA & Deployment
+Test desktop, tablet, and mobile responsiveness.
+
+Validate all outbound/inbound links for SEO impact.
+
+Ensure ARIA labels and alt text for all images/icons.
+
+Commit changes with descriptive Git commit messages.
+
+Deploy to staging first for review.
+
