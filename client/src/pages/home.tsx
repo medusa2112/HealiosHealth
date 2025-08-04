@@ -380,7 +380,7 @@ export default function HomePage() {
           <source src="/hero-video.mp4" type="video/mp4" />
           {/* Fallback image if video fails to load */}
           <img 
-            src={newPharmacistsImg}
+            src={modernLabImg}
             alt="Hero background"
             className="w-full h-full object-cover"
           />

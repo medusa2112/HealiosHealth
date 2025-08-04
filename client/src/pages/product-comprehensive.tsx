@@ -1801,7 +1801,7 @@ export default function ProductComprehensive() {
             </p>
             
             <img
-              src={nutritionistImg}
+              src={supplementLabImg}
               alt="Wellness lifestyle"
               className="w-full h-64 object-cover"
             />
