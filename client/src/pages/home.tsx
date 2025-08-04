@@ -282,12 +282,12 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'children-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400'],
-    VITAMINS: ['vitamin-d3', 'children-multivitamin', 'folic-acid-400'],
-    ADAPTOGENS: ['ashwagandha'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'childrens-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom'],
+    VITAMINS: ['vitamin-d3', 'childrens-multivitamin', 'folic-acid-400'],
+    ADAPTOGENS: ['ashwagandha', 'mind-memory-mushroom'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
     MINERALS: ['magnesium', 'iron-vitamin-c'],
-    BEAUTY: ['collagen-complex', 'biotin-5000'],
+    BEAUTY: ['collagen-complex', 'biotin-5000', 'collagen-powder'],
     PRENATAL: ['folic-acid-400'],
 
   };
@@ -612,6 +612,26 @@ export default function HomePage() {
                   >
                     MINERALS
                   </button>
+                  <button 
+                    onClick={() => handleCategoryChange('BEAUTY')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'BEAUTY' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    BEAUTY
+                  </button>
+                  <button 
+                    onClick={() => handleCategoryChange('PRENATAL')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'PRENATAL' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    PRENATAL
+                  </button>
 
                 </div>
               </div>
@@ -668,6 +688,8 @@ export default function HomePage() {
                     'biotin-5000': 'Hair & Skin',
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
+                    'mind-memory-mushroom': 'Focus',
+                    'collagen-powder': 'Premium',
 
                   };
 
