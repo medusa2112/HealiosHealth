@@ -1,0 +1,146 @@
+You are updating the Healios email service to:
+
+1. Apply a **universal Healios email template** to all outgoing emails (customer + admin).
+2. Add the missing email templates for full coverage of the customer journey.
+3. Maintain responsive, mobile-first HTML with inline CSS for email client compatibility.
+4. Use Healios branding:
+   - Fonts: Chakra Petch (headings), Inter (body)
+   - Colours: SAR Green (#3FAE49), Black (#000), White (#FFF)
+   - Max width: 640px
+   - Single-column layout
+   - Header: Healios logo (linked to homepage), white background
+   - Footer: Logo, quick links (Shop, About, Journal, Contact), social icons, unsubscribe link.
+5. All product images must load from CDN/website URLs (no broken icons).
+6. Buttons: Rounded corners, SAR Green background, white text, full width on mobile.
+7. **IMPORTANT:** All email notifications (customer and admin) must now be sent **from** and **to** `hello@thefourths.com`.  
+   - "From" address: `hello@thefourths.com`
+   - "Reply-to" address: `hello@thefourths.com`
+   - Admin notifications (e.g. low stock alerts) go **only** to `hello@thefourths.com`
+   - Remove all legacy addresses (`dn@thefourths.com`, `ms@thefourths.com`).
+
+---
+
+### UPDATE EXISTING EMAIL TEMPLATES
+Refactor the following existing email types into the universal Healios template:
+
+1. Newsletter Confirmation
+2. Order Confirmation
+3. Pre-Order Notification
+4. Restock Notification
+5. Consultation Booking Confirmation
+6. Quiz Recommendations (use the "Personalized Recommendations" layout with research basis + references)
+7. Low Stock Alerts (admin)
+
+---
+
+### ADD MISSING EMAIL TEMPLATES
+
+**Transactional**
+8. Order Shipped
+9. Order Delivered
+10. Review Request
+11. Order Issue Resolution
+12. Account Welcome / Login Confirmation
+
+**Revenue Recovery**
+13. Abandoned Cart
+14. Browse Abandonment
+
+**Loyalty & Upsell**
+15. Replenishment Reminder
+16. Cross-Sell / Bundle Offer
+17. VIP / Repeat Buyer Thank You
+
+---
+
+### CONTENT REQUIREMENTS FOR EACH EMAIL TYPE
+
+**Newsletter Confirmation**
+- Subject: "Welcome to Healios – Your Wellness Starts Here"
+- Intro: Warm welcome, brand ethos.
+- CTA: "Shop Our Best Sellers".
+
+**Order Confirmation**
+- Subject: "Your Healios Order #[OrderNumber] is Confirmed"
+- Body: Order summary, delivery info, tracking link.
+- CTA: "Track Your Order".
+
+**Order Shipped**
+- Subject: "Your Order #[OrderNumber] is On Its Way"
+- Body: Tracking link, delivery estimate.
+
+**Order Delivered**
+- Subject: "Your Order #[OrderNumber] Has Arrived"
+- Body: Confirmation, review request buttons (Trustpilot, Google).
+
+**Review Request**
+- Subject: "How’s Your [ProductName]?"
+- Body: 5-star icons linking to review pages.
+
+**Order Issue Resolution**
+- Subject: "Update on Your Order #[OrderNumber]"
+- Body: Resolution details (refund/replacement), apology, next steps.
+
+**Account Welcome**
+- Subject: "Welcome to Healios"
+- Body: Account features, link to shop.
+
+**Abandoned Cart**
+- Subject: "Still Thinking About [ProductName]?"
+- Body: Product image, nudge, CTA to complete purchase.
+
+**Browse Abandonment**
+- Subject: "Did Something Catch Your Eye?"
+- Body: Recently viewed products.
+
+**Replenishment Reminder**
+- Subject: "Time to Restock Your [ProductName]"
+- Body: Benefit reminder, reorder link.
+
+**Cross-Sell / Bundle Offer**
+- Subject: "Complete Your Wellness Stack"
+- Body: Related products to last purchase.
+
+**VIP / Repeat Buyer Thank You**
+- Subject: "Thanks for Being a Loyal Healios Customer"
+- Body: Recognition, early access offer.
+
+**Pre-Order Notification**
+- Subject: "You’re On the List – [ProductName] is Coming Soon"
+- Body: Benefits, reassurance.
+
+**Restock Notification**
+- Subject: "[ProductName] is Back – Order Now Before It’s Gone"
+- Body: Limited stock message, buy button.
+
+**Consultation Booking Confirmation**
+- Subject: "Your Consultation with Healios is Confirmed"
+- Body: Date, time, link, prep checklist.
+
+**Quiz Recommendations**
+- Subject: "Your Personalised Wellness Plan is Ready"
+- Body: Keep “Personalized Recommendations” style (research basis, references, add all-to-cart button).
+
+**Low Stock Alerts (Admin)**
+- Subject: "Low Stock Alert – [ProductName]"
+- Body: SKU, current quantity, reorder threshold.
+
+---
+
+### DEVELOPMENT NOTES
+- All emails must be responsive and pass Litmus tests for Gmail, Outlook, Apple Mail.
+- Images: Use `<img>` with alt text and width="100%" for scaling.
+- Buttons: Use table-based HTML buttons for email client compatibility.
+- Dynamic data placeholders: `{{FirstName}}`, `{{OrderNumber}}`, `{{ProductName}}`, `{{TrackingURL}}`, etc.
+- Test with at least 3 different email clients.
+- Ensure review buttons link to:
+  - Trustpilot: https://www.trustpilot.com/review/thehealios.com
+  - Google: [Full review link provided earlier]
+
+---
+
+Deliver:
+- Updated HTML templates for all existing email types.
+- New HTML templates for missing email types.
+- One shared CSS block for typography and colours applied inline for compatibility.
+- All email notifications routed via `hello@thefourths.com` (both from and to where applicable).

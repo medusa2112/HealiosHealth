@@ -175,8 +175,6 @@ export default function HomePage() {
   const { toast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState('BESTSELLERS');
   const [isFilterLoading, setIsFilterLoading] = useState(false);
-  const [selectedReviewCategory, setSelectedReviewCategory] = useState('All');
-  const [selectedReviewPlatform, setSelectedReviewPlatform] = useState('Google'); // New state for platform toggle
   const [userCountry, setUserCountry] = useState<string | null>(null); // For geo-restriction
 
   // Geo-location detection for HALO Glow RSA restriction
@@ -201,158 +199,7 @@ export default function HomePage() {
   const [selectedProductName, setSelectedProductName] = useState('');
   const [selectedSalePrice, setSelectedSalePrice] = useState('');
 
-  // Review data with categories
-  const allReviews = [
-    {
-      id: 1,
-      category: 'Minerals',
-      name: 'SARAH M.',
-      text: 'Started taking these after struggling with restless evenings. Within two weeks, I noticed a significant improvement in my relaxation routine. The berry flavor is pleasant and the quality is excellent.',
-      product: 'Magnesium Complex',
-      productLink: '/products/magnesium',
-      productImage: magnesiumImg
-    },
-    {
-      id: 2,
-      category: 'Beauty',
-      name: 'EMMA K.',
-      text: 'My skin and nails have noticeably improved since starting these three months ago. The orange flavor makes them enjoyable to take daily. Great value for the quality you receive.',
-      product: 'Collagen Complex',
-      productLink: '/products/collagen-complex',
-      productImage: collagenComplexImg
-    },
-    {
-      id: 3,
-      category: 'Stress',
-      name: 'RACHEL P.',
-      text: 'These have become part of my daily routine for stress management. I appreciate that they\'re made with traditional Ayurvedic ingredients. The strawberry flavor is a nice touch.',
-      product: 'KSM-66 Ashwagandha',
-      productLink: '/products/ashwagandha',
-      productImage: ashwagandhaImg
-    },
-    {
-      id: 4,
-      category: 'Digestive',
-      name: 'JAMES R.',
-      text: 'Great for supporting my digestive routine. The pineapple flavor is refreshing and I love that it combines probiotics with essential vitamins. Quality is excellent.',
-      product: 'Probiotic + Vitamins',
-      productLink: '/products/probiotic-vitamins',
-      productImage: probioticsImg
-    },
-    {
-      id: 5,
-      category: 'Immunity',
-      name: 'LUCY H.',
-      text: 'Perfect for daily immune support. The lemon flavor is delicious and it fits easily into my morning routine. Really happy with the quality and consistency.',
-      product: 'Vitamin D3 4000 IU',
-      productLink: '/products/vitamin-d3',
-      productImage: vitaminD3Img
-    },
-    {
-      id: 6,
-      category: 'Children',
-      name: 'SOPHIE T.',
-      text: 'My kids actually ask for their daily vitamins now! The fruit flavors are amazing and I feel confident knowing they\'re getting quality nutrition. Highly recommend for families.',
-      product: 'Children\'s Multivitamin',
-      productLink: '/products/children-multivitamin',
-      productImage: childrenMultivitaminImg
-    },
-    {
-      id: 7,
-      category: 'Metabolism',
-      name: 'MICHAEL D.',
-      text: 'I take these before meals as part of my wellness routine. The strawberry flavor makes them enjoyable and I appreciate the convenient gummy format.',
-      product: 'Apple Cider Vinegar',
-      productLink: '/products/apple-cider-vinegar',
-      productImage: appleCiderVinegarImg
-    },
-    {
-      id: 8,
-      category: 'Energy',
-      name: 'DAVID K.',
-      text: 'Really helps with my afternoon energy dips. I love that it combines iron with vitamin C for better absorption. The cherry flavor is excellent.',
-      product: 'Iron + Vitamin C',
-      productLink: '/products/iron-vitamin-c',
-      productImage: appleCiderVinegarImg // Using placeholder for now
-    },
-    {
-      id: 9,
-      category: 'Prenatal',
-      name: 'JESSICA M.',
-      text: 'Started taking these during pre-conception planning as recommended. The berry flavor is pleasant and they\'re easy to incorporate into my routine.',
-      product: 'Folic Acid 400µg',
-      productLink: '/products/folic-acid',
-      productImage: appleCiderVinegarImg
-    },
-    {
-      id: 10,
-      category: 'Beauty',
-      name: 'ANNA L.',
-      text: 'My hairdresser noticed the difference in my hair thickness after 2 months. The strawberry flavor makes them enjoyable and the high potency formula really works.',
-      product: 'Biotin 5000µg',
-      productLink: '/products/biotin-5000mcg',
-      productImage: collagenComplexImg
-    },
-    {
-      id: 11,
-      category: 'Immunity',
-      name: 'PETER R.',
-      text: 'Perfect for winter months when I need extra immune support. The lemon flavor is refreshing and the 4000 IU high-potency dose is ideal for optimal levels.',
-      product: 'Vitamin D3 4000 IU',
-      productLink: '/products/vitamin-d3',
-      productImage: vitaminD3Img
-    },
-    {
-      id: 12,
-      category: 'Stress',
-      name: 'HELEN W.',
-      text: 'These have become essential for managing my hectic schedule. The adaptogenic properties really help with daily stress. Love the traditional Ayurvedic approach.',
-      product: 'KSM-66 Ashwagandha',
-      productLink: '/products/ashwagandha',
-      productImage: ashwagandhaImg
-    },
-    {
-      id: 13,
-      category: 'Minerals',
-      name: 'THOMAS B.',
-      text: 'Great for post-workout recovery and evening relaxation. The berry flavor is delicious and I sleep much better since starting these. Highly recommend.',
-      product: 'Magnesium Complex',
-      productLink: '/products/magnesium',
-      productImage: magnesiumImg
-    },
-    {
-      id: 14,
-      category: 'Digestive',
-      name: 'SARAH K.',
-      text: 'Love the combination of probiotics with vitamins in one gummy. The pineapple flavor is tropical and refreshing. Great for daily digestive support.',
-      product: 'Probiotic + Vitamins',
-      productLink: '/products/probiotic-vitamins',
-      productImage: probioticsImg
-    },
-    {
-      id: 15,
-      category: 'Children',
-      name: 'MARK T.',
-      text: 'Finally found vitamins my picky eater will actually take! The fruit flavors are a hit and I love knowing they\'re getting comprehensive nutrition.',
-      product: 'Children\'s Multivitamin',
-      productLink: '/products/children-multivitamin',
-      productImage: childrenMultivitaminImg
-    },
-    {
-      id: 16,
-      category: 'Metabolism',
-      name: 'LISA R.',
-      text: 'Much more convenient than liquid apple cider vinegar. I take these before meals and love that there\'s no harsh taste or tooth enamel concerns.',
-      product: 'Apple Cider Vinegar',
-      productLink: '/products/apple-cider-vinegar',
-      productImage: appleCiderVinegarImg
-    }
-  ];
 
-  // Filter reviews based on selected category
-  const filteredReviews = selectedReviewCategory === 'All' 
-    ? allReviews // Show all reviews for 'All'
-    : allReviews.filter(review => review.category === selectedReviewCategory);
   
   // Removed animation state for fitness video - now static display
   
@@ -1119,141 +966,61 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      {/* Customer Reviews Section */}
+      {/* Customer Trust Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="lg:grid lg:grid-cols-4 lg:gap-12">
-            {/* Left Sidebar */}
-            <div className="lg:col-span-1 mb-12 lg:mb-0">
-              <div className="mb-6">
-                <div className="flex items-center gap-1 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">4.48 RATING</span>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">EXCELLENT</p>
-
-                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white leading-tight mb-6">
-                  Trusted by our<br />
-                  growing community
-                </h2>
-              </div>
-
-              {/* Platform Toggle */}
-              <div className="mb-6">
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={() => setSelectedReviewPlatform('Google')}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      selectedReviewPlatform === 'Google'
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    Google Reviews
-                  </button>
-                  <button
-                    onClick={() => setSelectedReviewPlatform('Trustpilot')}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      selectedReviewPlatform === 'Trustpilot'
-                        ? 'bg-green-600 text-white'
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    Trustpilot Reviews
-                  </button>
-                </div>
-              </div>
-
-              {/* Category Pills */}
-              <div className="space-y-2 mb-8">
-                <div className="flex flex-wrap gap-1">
-                  {['All', 'Energy', 'Beauty', 'Digestive'].map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedReviewCategory(category)}
-                      className={`px-2 py-1 text-xs font-medium transition-colors ${
-                        selectedReviewCategory === category
-                          ? 'bg-black text-white'
-                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {['Prenatal', 'Children', 'Immunity'].map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedReviewCategory(category)}
-                      className={`px-2 py-1 text-xs font-medium transition-colors ${
-                        selectedReviewCategory === category
-                          ? 'bg-black text-white'
-                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {['Stress', 'Minerals', 'Metabolism'].map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setSelectedReviewCategory(category)}
-                      className={`px-2 py-1 text-xs font-medium transition-colors ${
-                        selectedReviewCategory === category
-                          ? 'bg-black text-white'
-                          : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Link href="/products">
-                <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
-                  Shop bestsellers →
-                </button>
-              </Link>
-            </div>
-
-            {/* Reviews Grid */}
-            <div className={`lg:col-span-3 ${selectedReviewCategory === 'All' 
-              ? 'flex gap-6 overflow-x-auto pb-4 scrollbar-hide' 
-              : 'grid grid-cols-1 lg:grid-cols-3 gap-6'
-            }`}>
-              {filteredReviews.map((review) => (
-                <div key={review.id} className={`bg-white dark:bg-gray-700 p-6 ${
-                  selectedReviewCategory === 'All' ? 'flex-shrink-0 w-80' : ''
-                }`}>
-                  <div className="flex items-center gap-1 mb-3">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                    {review.text}
-                  </p>
-                  <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                    <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">{review.name}</p>
-                    <Link href={review.productLink}>
-                      <div className="cursor-pointer hover:opacity-80 transition-opacity">
-                        <p className="text-xs font-medium text-gray-900 dark:text-white">{review.product}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">View product</p>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="mb-8">
+            <div className="flex items-center justify-center gap-1 mb-4">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
               ))}
+              <span className="text-lg font-medium text-gray-600 dark:text-gray-400 ml-3">4.48 RATING</span>
             </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-6">EXCELLENT</p>
+
+            <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white leading-tight mb-6">
+              Trusted by our growing community
+            </h2>
+            
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+              We're committed to transparency and quality. Our supplements are formulated with premium ingredients and third-party tested for purity.
+            </p>
           </div>
 
+          {/* Platform Links */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <a
+              href="https://www.google.com/search?q=Healios+reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              View Google Reviews
+            </a>
+            <a
+              href="https://www.trustpilot.com/review/healios.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              View Trustpilot Reviews
+            </a>
+          </div>
 
+          <Link href="/products">
+            <button className="bg-black text-white px-8 py-4 text-sm font-medium hover:bg-gray-800 transition-colors">
+              Shop Healios supplements →
+            </button>
+          </Link>
         </div>
       </section>
       {/* Newsletter Signup Section */}
