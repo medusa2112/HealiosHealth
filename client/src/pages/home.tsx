@@ -668,10 +668,21 @@ export default function HomePage() {
                       <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
                         {/* Clean White Background for Products - Wild Nutrition Style */}
                         <div className="relative bg-gray-50 dark:bg-gray-800 mb-6 aspect-square overflow-hidden group-hover:shadow-lg transition-all duration-300">
-                          {/* Supply Badge - Top Right */}
-                          <div className="absolute top-3 right-3 z-10">
-                            <span className="bg-black text-white px-3 py-1 text-xs font-medium rounded-full">
+                          {/* Supply Badge - Top Left */}
+                          <div className="absolute top-3 left-3 z-10">
+                            <span className="bg-white text-black px-3 py-1 text-xs font-medium">
                               {product.supplyDays && product.supplyDays >= 60 ? `${Math.round(product.supplyDays / 30)}-month` : `${product.supplyDays || 30}-day`} supply
+                            </span>
+                          </div>
+
+                          {/* Product Badge - Top Left Below Supply */}
+                          <div className="absolute top-12 left-3 z-10">
+                            <span className={`px-2 py-1 text-xs font-medium ${
+                              productBadges[product.id as keyof typeof productBadges] === 'Bestseller' 
+                                ? 'bg-black text-white' 
+                                : 'bg-white text-black'
+                            }`}>
+                              {productBadges[product.id as keyof typeof productBadges]}
                             </span>
                           </div>
 
@@ -715,11 +726,6 @@ export default function HomePage() {
                         
                         {/* Product Info - Wild Nutrition Clean Style */}
                         <div className="space-y-2">
-                          {/* Product Badge */}
-                          <div className="inline-block bg-white dark:bg-gray-700 text-black dark:text-white px-2 py-1 text-xs font-medium shadow-sm">
-                            {productBadges[product.id as keyof typeof productBadges]}
-                          </div>
-                          
                           <h3 className="font-medium text-gray-900 dark:text-white text-sm group-hover:text-healios-cyan transition-colors" itemProp="name">
                             {product.name}
                           </h3>
