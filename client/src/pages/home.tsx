@@ -575,77 +575,71 @@ export default function HomePage() {
             <div className="order-2 lg:order-1 mb-8 sm:mb-12 lg:mb-0">
               <div className="mb-4">
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                  NEW ARRIVAL • SOLD OUT
+                  THE SKIN STRUCTURE SUPPLEMENT
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-4 sm:mb-6">
-                Halo Glow<br />
+                HALO Glow<br />
                 Collagen
               </h2>
               <div className="mb-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <span className="text-2xl font-light text-gray-900 dark:text-white">R299.99</span>
+                  <span className="text-2xl font-light text-gray-900 dark:text-white">£29.95</span>
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(2,847 reviews)</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(192 reviews)</span>
                   </div>
                 </div>
               </div>
               <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
-                Premium collagen complex with hyaluronic acid and vitamin C for radiant skin, strong hair, and healthy nails. 
-                Our advanced formula supports natural collagen production and skin elasticity from within.
+                Glow from within with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
               </p>
               
               {/* Stats Row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="text-center">
-                  <div className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">2.5g</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Collagen per serving</div>
+                  <div className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">2500mg</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Clinically studied daily dose</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">Type I & III</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Marine collagen</div>
+                  <div className="font-medium text-gray-900 dark:text-white">75%</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Skin matrix made of collagen</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">30 days</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">1-month supply</div>
+                  <div className="font-medium text-gray-900 dark:text-white">90 days</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Visible results in 3 months</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">+Vitamin C</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Enhanced absorption</div>
+                  <div className="font-medium text-gray-900 dark:text-white">BCP</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">Bioactive Collagen Peptides</div>
                 </div>
               </div>
 
-              {/* Preorder Info */}
+              {/* In Stock Info */}
               <div className="bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-600 mb-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-gray-900 dark:text-white text-sm">Currently Sold Out</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">500 units restocking August 28th</div>
+                    <div className="font-medium text-gray-900 dark:text-white text-sm">Now Available</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Ready to ship within 2-3 working days</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">High demand item</div>
-                    <div className="text-xs font-medium text-orange-600">Get notified when available</div>
+                    <div className="text-xs text-green-600 dark:text-green-400">✓ In Stock</div>
+                    <div className="text-xs font-medium text-green-600">Free shipping over £30</div>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => {
-                    setSelectedProductName('Halo Glow Collagen Complex');
-                    setSelectedSalePrice('R299.99');
-                    setShowPreOrderModal(true);
-                  }}
-                  className="bg-gray-600 text-white px-8 py-4 font-medium hover:bg-gray-700 transition-colors flex-1"
-                >
-                  Notify When Available
-                </button>
-                <Link href="/products/collagen-complex">
+                <Link href="/products/collagen-powder">
+                  <button className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors flex-1">
+                    Shop Healios supplements →
+                  </button>
+                </Link>
+                <Link href="/science">
                   <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    Learn More →
+                    Learn about our science →
                   </button>
                 </Link>
               </div>
