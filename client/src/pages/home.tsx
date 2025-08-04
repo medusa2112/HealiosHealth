@@ -651,22 +651,34 @@ export default function HomePage() {
               <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">Support your skin's natural radiance with HALO Glow Collagen a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.</p>
               
               {/* Stats Row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                <div className="text-center">
-                  <div className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">2500mg</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Clinically studied daily dose</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8 mb-6 sm:mb-8">
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">2500mg</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
+                    Clinically studied<br />
+                    daily dose
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">75%</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Skin matrix made of collagen</div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">75%</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
+                    Skin matrix made<br />
+                    of collagen
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">90 days</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Visible results in 3 months</div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">90 days</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
+                    Visible results<br />
+                    in 3 months
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="font-medium text-gray-900 dark:text-white">BCP</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Bioactive Collagen Peptides</div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">BCP</div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
+                    Bioactive Collagen<br />
+                    Peptides
+                  </p>
                 </div>
               </div>
 
