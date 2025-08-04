@@ -811,7 +811,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       try {
         const testNewsletter = {
           id: 'test-newsletter-123',
-          email: 'dn@thefourths.com',
+          email: 'domincinel@mac.com',
           firstName: 'Test',
           lastName: 'User',
           birthday: '1990-01-15',
@@ -827,7 +827,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       try {
         const testOrder = {
           id: 'test-order-123',
-          customerEmail: 'dn@thefourths.com',
+          customerEmail: 'domincinel@mac.com',
           customerName: 'Test Customer',
           customerPhone: '+27123456789',
           totalAmount: '599.00',
@@ -864,7 +864,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       try {
         const testPreOrder = {
           id: 'test-preorder-123',
-          customerEmail: 'dn@thefourths.com',
+          customerEmail: 'domincinel@mac.com',
           customerName: 'Test Customer',
           customerPhone: '+27123456789',
           productId: 'test-product-456',
@@ -885,7 +885,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       try {
         await EmailService.sendRestockNotification({
           firstName: 'Test',
-          email: 'dn@thefourths.com',
+          email: 'domincinel@mac.com',
           product: 'Test Collagen Complex',
           restockDate: 'February 15th'
         });
