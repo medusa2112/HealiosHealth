@@ -43,7 +43,7 @@ export function Header() {
       ]
     },
     {
-      title: "By Category",
+      title: "By Category", 
       items: [
         { href: "/products?category=gummies", label: "Gummies" },
         { href: "/products?category=vitamins", label: "Vitamins" },
@@ -54,7 +54,7 @@ export function Header() {
         { href: "/products?category=children", label: "Children's Health", comingSoon: true },
         { href: "/products?category=beauty", label: "Beauty & Wellness" },
         { href: "/products?category=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true },
-      ]
+      ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
     },
     {
       title: "Wellness Goals",
