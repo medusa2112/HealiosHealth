@@ -336,7 +336,7 @@ export class MemStorage implements IStorage {
         id: "collagen-powder",
         name: "HALO Glow Collagen — 2500mg Peptides, 30-Day Powder",
         description: "A daily dose of clinically studied bioactive peptides to enhance skin elasticity, reduce wrinkle depth, and support healthy nails and hair — from the inside out.",
-        price: "2995.00",
+        price: "420.00",
         originalPrice: null,
         imageUrl: "/assets/HaloGlowB_1754157621693.png",
         category: "Beauty",
