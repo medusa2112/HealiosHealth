@@ -861,8 +861,13 @@ export class MemStorage implements IStorage {
   async createRestockNotification(notification: InsertRestockNotification): Promise<RestockNotification> {
     const id = randomUUID();
     const newNotification: RestockNotification = {
-      ...notification,
       id,
+      email: notification.email,
+      firstName: notification.firstName ?? null,
+      lastName: notification.lastName ?? null,
+      productId: notification.productId,
+      productName: notification.productName,
+      agreeToContact: notification.agreeToContact ?? null,
       requestedAt: new Date().toISOString(),
       notified: false,
     };

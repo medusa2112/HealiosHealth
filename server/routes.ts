@@ -488,7 +488,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { productId, productName, currentStock } = req.body;
       
-      const success = await EmailService.sendLowStockAlert(productName, currentStock, productId);
+      const success = await EmailService.sendLowStockAlert({ productName, currentStock, threshold: 5 });
       
       if (success) {
         // Mark alert as sent
@@ -846,7 +846,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
           product: { id: 'test-1', name: 'Test Vitamin D3', price: '399.00', imageUrl: 'https://via.placeholder.com/150' },
           quantity: 1
         }];
-        await EmailService.sendOrderConfirmation({ order: testOrder, orderItems: testOrderItems });
+        await EmailService.sendOrderConfirmation({ order: testOrder as any, orderItems: testOrderItems });
         results.push('✅ Order confirmation and admin notification emails sent');
       } catch (error) {
         results.push('❌ Order emails failed: ' + (error as Error).message);
@@ -857,7 +857,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
         await EmailService.sendLowStockAlert({ productName: 'Test Vitamin D3', currentStock: 2, threshold: 5 });
         results.push('✅ Low stock alert email sent');
       } catch (error) {
-        results.push('❌ Low stock alert failed: ' + error.message);
+        results.push('❌ Low stock alert failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
 
       // Test Pre-Order Notification
@@ -878,7 +878,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
         await EmailService.sendPreOrderNotification(testPreOrder);
         results.push('✅ Pre-order confirmation email sent');
       } catch (error) {
-        results.push('❌ Pre-order notification failed: ' + error.message);
+        results.push('❌ Pre-order notification failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
 
       // Test Restock Notification
@@ -891,7 +891,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
         });
         results.push('✅ Restock notification emails sent');
       } catch (error) {
-        results.push('❌ Restock notification failed: ' + error.message);
+        results.push('❌ Restock notification failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
 
       console.log('🧪 Email test results:', results);
@@ -905,7 +905,7 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       return res.status(500).json({ 
         success: false, 
         message: 'Email test failed', 
-        error: error?.message || 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
