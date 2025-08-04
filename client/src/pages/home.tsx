@@ -16,6 +16,7 @@ import pharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-
 import newPharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618756171.jpg';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
+import haloGlowTextImg from '@assets/Screenshot 2025-08-04 at 11.21.18_1754299300310.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
@@ -493,8 +494,13 @@ export default function HomePage() {
                   <div className="inline-block bg-green-600 text-white px-3 py-1 text-xs font-medium uppercase tracking-wider mb-3">
                     New Launch
                   </div>
-                  <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4">
-                    <span className="font-balgin-expanded">HALO Glow</span> Collagen
+                  <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-3">
+                    <img 
+                      src={haloGlowTextImg} 
+                      alt="Halo Glow" 
+                      className="h-12 lg:h-16 object-contain"
+                    />
+                    <span>Collagen</span>
                   </h2>
                   <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                     Support your skin's natural radiance with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
