@@ -679,7 +679,7 @@ export default function HomePage() {
                   </div>
                   <div className="text-right">
                     <div className="text-xs text-green-600 dark:text-green-400">✓ In Stock</div>
-                    <div className="text-xs font-medium text-green-600">Free shipping over £30</div>
+                    <div className="text-xs font-medium text-green-600">Free shipping over R500</div>
                   </div>
                 </div>
               </div>
