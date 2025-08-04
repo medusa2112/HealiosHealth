@@ -508,7 +508,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="flex items-center space-x-6">
-                  <span className="text-5xl font-bold text-gray-900 dark:text-white tracking-tight">R419</span>
+                  <span className="text-5xl font-bold text-gray-900 dark:text-white tracking-tight">R429</span>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
                     <div>30-day supply</div>
                     <div>Free shipping over R500</div>
