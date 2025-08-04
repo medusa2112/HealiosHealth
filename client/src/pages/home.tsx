@@ -665,7 +665,7 @@ export default function HomePage() {
 
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
-                      <div className="group cursor-pointer" itemScope itemType="https://schema.org/Product">
+                      <div className={`group cursor-pointer ${!(product.inStock && product.stockQuantity > 0) ? 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100' : ''} transition-all duration-300`} itemScope itemType="https://schema.org/Product">
                         {/* Clean White Background for Products - Wild Nutrition Style */}
                         <div className="relative bg-gray-50 dark:bg-gray-800 mb-6 aspect-square overflow-hidden group-hover:shadow-lg transition-all duration-300">
                           {/* Supply Badge - Top Left */}
@@ -679,7 +679,7 @@ export default function HomePage() {
                           <img
                             src={product.imageUrl}
                             alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-300 ${!(product.inStock && product.stockQuantity > 0) ? 'group-hover:filter-none' : ''}`}
                             itemProp="image"
                           />
                           
