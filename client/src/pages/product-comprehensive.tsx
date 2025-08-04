@@ -1028,22 +1028,47 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
-                              <p className="font-medium mb-3">Nutritional Information (Per 2.5g daily serving):</p>
-                              <div className="text-sm space-y-1">
-                                <div className="font-medium">Energy: 9 kcal</div>
-                                <div className="font-medium">Protein: 2.25g</div>
-                                <div className="font-medium">Fat: 0g</div>
-                                <div className="font-medium">of which saturates: 0g</div>
-                                <div className="font-medium">Carbohydrates: 0g</div>
-                                <div className="font-medium">of which sugars: 0g</div>
-                                <div className="font-medium">Salt: 0.01g</div>
-                                <div className="font-medium">Hydrolysed Collagen Peptides (bovine): 2,500mg</div>
+                              <p className="font-medium mb-3">Nutritional Information (Per 2.5g serving):</p>
+                              <div className="overflow-x-auto">
+                                <table className="w-full text-sm border-collapse">
+                                  <thead>
+                                    <tr className="border-b">
+                                      <th className="text-left py-2 font-medium">Nutrient</th>
+                                      <th className="text-right py-2 font-medium">Amount</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="space-y-1">
+                                    <tr className="border-b border-gray-100">
+                                      <td className="py-2">Hydrolysed collagen peptides</td>
+                                      <td className="text-right py-2 font-medium">2500mg</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100">
+                                      <td className="py-2">Energy</td>
+                                      <td className="text-right py-2 font-medium">36 kJ / 9 kcal</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100">
+                                      <td className="py-2">Protein</td>
+                                      <td className="text-right py-2 font-medium">2.25g</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100">
+                                      <td className="py-2">Fat</td>
+                                      <td className="text-right py-2 font-medium">0g</td>
+                                    </tr>
+                                    <tr className="border-b border-gray-100">
+                                      <td className="py-2">Carbohydrates</td>
+                                      <td className="text-right py-2 font-medium">0g</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="py-2">Salt</td>
+                                      <td className="text-right py-2 font-medium">0g</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                               </div>
-                              <div className="mt-3 space-y-1 text-sm text-green-600">
-                                <div>✅ No fat, sugar, cholesterol, or dietary fibre</div>
-                                <div>✅ ≥90% protein by dry weight</div>
-                                <div>✅ Average molecular weight ~2,000 Daltons for optimal absorption</div>
-                                <div>✅ VERISOL B</div>
+                              <div className="mt-4">
+                                <p className="font-medium mb-2">Ingredients:</p>
+                                <p className="text-sm text-gray-600">Hydrolysed collagen peptides (from bovine origin).</p>
+                                <p className="text-xs text-gray-500 mt-1">Allergens: None declared. Manufactured in a facility with validated allergen controls.</p>
                               </div>
                             </div>
                           ) : (
@@ -1330,6 +1355,17 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children. Some benefits may be noticed within weeks, but optimal cognitive support typically develops over 4-6 weeks of consistent use.</p>
                             </div>
+                          ) : product.id === 'collagen-powder' ? (
+                            <div>
+                              <p className="font-medium mb-2">Daily dosing for adults:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Mix one 2.5g scoop with water, juice, coffee or your smoothie</strong></li>
+                                <li>• <strong>Take once daily, with or without food</strong></li>
+                                <li>• Dissolves completely with no taste or texture</li>
+                                <li>• Store in a cool, dry place</li>
+                              </ul>
+                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for vegetarians or vegans. Consult healthcare provider if pregnant, breastfeeding, or taking medication.</p>
+                            </div>
                           ) : (
                             <p>Add one scoop (2.5g) to a glass of water, coffee, smoothie, or yoghurt. Consume once daily. Do not exceed the stated dose. Best results occur with daily use for 8–12 weeks.</p>
                           )}
@@ -1477,28 +1513,33 @@ export default function ProductComprehensive() {
                             <div>
                               <div className="space-y-4">
                                 <div>
-                                  <p className="font-medium mb-2">Q: What results can I expect from daily use?</p>
-                                  <p className="text-sm text-gray-600">Clinical studies show noticeable improvements in skin elasticity in 4 weeks, and reduced wrinkle depth and volume by week 8. Nail strength and growth improve after 2–3 months, and hair thickness increases by around 31% over 12 weeks.</p>
+                                  <p className="font-medium mb-2">What's the benefit of collagen peptides over regular collagen?</p>
+                                  <p className="text-sm text-gray-600">Collagen peptides are short-chain amino acids that are easier to absorb and clinically shown to stimulate fibroblasts — the cells responsible for producing new skin collagen.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Q: Is HALO GLOW flavoured?</p>
-                                  <p className="text-sm text-gray-600">No. It is completely unflavoured and odourless — designed to dissolve into any drink or food without altering taste.</p>
+                                  <p className="font-medium mb-2">How long before I see results?</p>
+                                  <p className="text-sm text-gray-600">Clinical studies show visible skin elasticity improvement and wrinkle reduction in as little as 4–8 weeks with daily use.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Q: What type of collagen is used?</p>
-                                  <p className="text-sm text-gray-600">Type I and III bovine collagen peptides, optimised for skin, hair, and nail health.</p>
+                                  <p className="font-medium mb-2">Is this suitable for vegetarians or vegans?</p>
+                                  <p className="text-sm text-gray-600">No — this product contains bovine-derived collagen peptides and is not suitable for vegetarians or vegans.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Q: Can I use this with other supplements?</p>
-                                  <p className="text-sm text-gray-600">Yes. HALO GLOW is a pure protein supplement and is generally well tolerated. Always consult your healthcare professional if on medication or during pregnancy.</p>
+                                  <p className="font-medium mb-2">Does this help with cellulite?</p>
+                                  <p className="text-sm text-gray-600">Yes. In studies, consistent use of 2.5g daily was associated with improved skin smoothness and reduced waviness related to cellulite.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Q: Is it suitable for vegetarians or vegans?</p>
-                                  <p className="text-sm text-gray-600">HALO GLOW is suitable for vegetarians but not for vegans, as the collagen is sourced from bovine skin.</p>
+                                  <p className="font-medium mb-2">Will this support nail and hair health too?</p>
+                                  <p className="text-sm text-gray-600">Yes — participants in clinical trials experienced 42% fewer broken nails and improved hair follicle density after daily use.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Can men use HALO Glow Collagen?</p>
+                                  <p className="text-sm text-gray-600">Absolutely — collagen is a structural protein essential to skin and connective tissue in all genders.</p>
                                 </div>
                               </div>
                             </div>
