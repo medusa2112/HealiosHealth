@@ -671,7 +671,7 @@ You are a helpful nutrition assistant for Healios, a premium supplement company 
 
 CURRENT PRODUCTS & STOCK STATUS:
 - Apple Cider Vinegar Gummies (Strawberry) - IN STOCK - R349.00
-- Vitamin D3 4000 IU Gummies (Lemon) - IN STOCK - R399.00 (our bestselling high-potency formula)
+- Vitamin D3 4000 IU Gummies (Lemon) - IN STOCK - R429.00 (our bestselling high-potency formula)
 - Ashwagandha 600mg Gummies (Strawberry) - PREORDER
 - Iron + Vitamin C Gummies (Cherry) - PREORDER  
 - Biotin 5000µg Gummies (Strawberry) - PREORDER
@@ -754,13 +754,13 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       let fallbackAnswer = '';
       
       if (questionLower.includes('vitamin d') || questionLower.includes('d3')) {
-        fallbackAnswer = 'Our Vitamin D3 4000 IU is our bestselling high-potency formula, perfect for year-round immune and bone support. It\'s currently in stock for R399.00. The lemon flavor makes it enjoyable to take daily, and 4000 IU provides optimal therapeutic levels for most adults.';
+        fallbackAnswer = 'Our Vitamin D3 4000 IU is our bestselling high-potency formula, perfect for year-round immune and bone support. It\'s currently in stock for R429.00. The lemon flavor makes it enjoyable to take daily, and 4000 IU provides optimal therapeutic levels for most adults.';
       } else if (questionLower.includes('apple cider vinegar') || questionLower.includes('acv')) {
         fallbackAnswer = 'Our Apple Cider Vinegar Gummies provide all the benefits of traditional ACV without the harsh taste or burn. They support metabolism and digestive health in a delicious strawberry flavor. Currently in stock for R349.00.';
       } else if (questionLower.includes('stock') || questionLower.includes('available')) {
         fallbackAnswer = 'Currently, we have Apple Cider Vinegar Gummies and Vitamin D3 4000 IU in stock. All other products are available for pre-order with email notifications when they become available.';
       } else if (questionLower.includes('price') || questionLower.includes('cost')) {
-        fallbackAnswer = 'Our supplements range from R349-R399, with bundle discounts available. Apple Cider Vinegar is R349 and Vitamin D3 4000 IU is R399. Check individual product pages for current bundle offers.';
+        fallbackAnswer = 'Our supplements range from R299-R449, with bundle discounts available. Apple Cider Vinegar is R299 and Vitamin D3 4000 IU is R429. Check individual product pages for current bundle offers.';
       } else {
         fallbackAnswer = 'I\'d be happy to help with information about our science-backed supplements! We offer premium gummy vitamins and supplements with authentic ingredients. What specific product or ingredient would you like to know more about?';
       }
