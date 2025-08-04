@@ -13,7 +13,7 @@ import magnesiumImg from '@assets/Magnesium_1753615197741.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
 import pharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618338989.jpg';
-import newPharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618756171.jpg';
+import modernLabImg from '@assets/generated_images/Modern_pharmaceutical_research_facility_b73898e1.png';
 import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
 import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
 import haloGlowTextImg from '@assets/Screenshot 2025-08-04 at 11.21.18_1754299300310.png';
@@ -958,8 +958,8 @@ export default function HomePage() {
             }}
           >
             <img
-              src={newPharmacistsImg}
-              alt="Professional multiracial pharmacists and scientists collaborating in modern laboratory, developing quality supplements and wellness solutions"
+              src={modernLabImg}
+              alt="Modern pharmaceutical research facility with premium supplement ingredients and scientific equipment"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
