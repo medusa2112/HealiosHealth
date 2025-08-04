@@ -484,13 +484,33 @@ export default function HomePage() {
                 HALO Glow<br />
                 Collagen
               </h2>
-              <div className="mb-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-2xl font-light text-gray-900 dark:text-white">R419</span>
+              {/* Pricing and Rating Section */}
+              <div className="mb-8">
+                {/* Price Display */}
+                <div className="mb-4">
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white tracking-tight">R419</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400 line-through">R599</span>
+                  </div>
+                  <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                    Save R180 • Limited time introductory price
+                  </p>
+                </div>
+                
+                {/* Rating Display */}
+                <div className="flex items-center gap-3 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
                     ))}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+                      Premium Quality Formula
+                    </p>
+                    <p className="text-xs text-amber-700 dark:text-amber-300">
+                      Third-party tested • GMP certified facility
+                    </p>
                   </div>
                 </div>
               </div>
