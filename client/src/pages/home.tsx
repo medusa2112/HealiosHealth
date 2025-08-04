@@ -462,107 +462,67 @@ export default function HomePage() {
       </section>
       {/* Halo Glow Collagen Featured Section - Only for RSA visitors */}
       {userCountry === 'ZA' && (
-        <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
-            {/* Left Column - Content */}
-            <div className="order-2 lg:order-1 mb-8 sm:mb-12 lg:mb-0">
-              <div className="mb-4">
-                <div className="flex items-center gap-4 mb-2">
-                  <span className="bg-red-500 text-white px-3 py-1 text-xs font-bold uppercase tracking-wide">
-                    NEW PRODUCT
-                  </span>
-                  <span className="bg-green-500 text-white px-3 py-1 text-xs font-bold uppercase tracking-wide">
-                    JUST LAUNCHED
-                  </span>
-                </div>
-                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                  THE SKIN STRUCTURE SUPPLEMENT
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 dark:text-white leading-tight mb-4 sm:mb-6">
-                HALO Glow<br />
-                Collagen
-              </h2>
-              {/* Price */}
-              <div className="mb-6">
-                <span className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">R419</span>
-              </div>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">Support your skin's natural radiance with HALO Glow Collagen a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.</p>
+        <section className="py-20 bg-white dark:bg-gray-900">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
               
-              {/* Stats Row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8 mb-6 sm:mb-8">
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">2500mg</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Clinically studied<br />
-                    daily dose
-                  </p>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">75%</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Skin matrix made<br />
-                    of collagen
-                  </p>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">90 days</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Visible results<br />
-                    in 3 months
-                  </p>
-                </div>
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-3">BCP</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 uppercase tracking-wide leading-relaxed">
-                    Bioactive Collagen<br />
-                    Peptides
-                  </p>
+              {/* Product Image */}
+              <div className="relative">
+                <div className="aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                  <img 
+                    src="/assets/HaloGlowB_1754157621693.png"
+                    alt="Halo Glow Collagen Complex"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
 
-              {/* In Stock Info */}
-              <div className="bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-600 mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-white text-sm">Now Available</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Ready to ship within 2-3 working days</div>
+              {/* Product Details */}
+              <div className="space-y-8">
+                <div>
+                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                    New Launch
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs text-green-600 dark:text-green-400">✓ In Stock</div>
-                    <div className="text-xs font-medium text-green-600">Free shipping over R500</div>
+                  <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4">
+                    HALO Glow Collagen
+                  </h2>
+                  <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Premium marine collagen peptides designed to support your skin's natural radiance, hair thickness, and nail strength from within.
+                  </p>
+                </div>
+
+                <div className="flex items-baseline space-x-6">
+                  <span className="text-5xl font-bold text-gray-900 dark:text-white">R419</span>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    <div>30-day supply</div>
+                    <div>Free shipping over R500</div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="grid grid-cols-3 gap-8 py-6 border-y border-gray-200 dark:border-gray-700">
+                  <div className="text-center">
+                    <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">2500mg</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Daily dose</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">90 days</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Visible results</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-light text-gray-900 dark:text-white mb-2">Marine</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Collagen source</div>
+                  </div>
+                </div>
+
                 <Link href="/products/collagen-powder">
-                  <button className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors flex-1">
-                    Shop Healios supplements →
+                  <button className="w-full bg-black text-white py-4 px-8 font-medium hover:bg-gray-800 transition-colors">
+                    Add to Cart
                   </button>
                 </Link>
-                <Link href="/science">
-                  <button className="border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white px-8 py-4 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                    Learn about our science →
-                  </button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Column - Image */}
-            <div className="order-1 lg:order-2 mb-8 lg:mb-0">
-              <div className="relative aspect-square overflow-hidden">
-                <img 
-                  src="/assets/HaloGlowB_1754157621693.png"
-                  alt="Halo Glow Collagen Complex - Premium Marine Collagen"
-                  className="w-full h-full object-cover"
-                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
       {/* Wild Nutrition Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
