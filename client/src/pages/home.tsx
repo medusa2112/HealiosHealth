@@ -505,9 +505,6 @@ export default function HomePage() {
         keywords="wellness supplements, natural vitamins, daily wellness, premium supplements, Healios, quality ingredients, third-party tested"
         image="/attached_assets/Healios_1753559079971.png"
       />
-
-
-
       {/* Wild Nutrition Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background */}
@@ -570,7 +567,7 @@ export default function HomePage() {
                   <Star key={i} className="w-4 h-4 fill-white text-white" />
                 ))}
               </div>
-              <span className="font-medium text-sm sm:text-base">4.84 RATING</span>
+              <span className="font-medium text-sm sm:text-base">4.48 RATING</span>
               {/* Trustpilot and Google Review Icons */}
               <div className="flex items-center gap-2 ml-3">
                 <a 
@@ -616,7 +613,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Halo Glow Collagen Featured Section - Only for RSA visitors */}
       {userCountry === 'ZA' && (
         <section className="py-12 sm:py-16 lg:py-24 bg-gray-50 dark:bg-gray-800">
@@ -652,9 +648,7 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
-                Support your skin's natural radiance with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
-              </p>
+              <p className="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">Support your skin's natural radiance with HALO Glow Collagen a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.</p>
               
               {/* Stats Row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
@@ -718,7 +712,6 @@ export default function HomePage() {
         </div>
       </section>
       )}
-
       {/* Wild Nutrition Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -952,7 +945,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Pregnancy & New Mother Section */}
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
@@ -1030,9 +1022,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-
-
       {/* The Healios Science Section */}
       <section className="bg-white dark:bg-gray-900">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
@@ -1119,7 +1108,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* Customer Reviews Section */}
       <section className="py-24 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-6">
@@ -1131,7 +1119,7 @@ export default function HomePage() {
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">4.84 RATING</span>
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 ml-2">4.48 RATING</span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">EXCELLENT</p>
 
@@ -1257,7 +1245,6 @@ export default function HomePage() {
 
         </div>
       </section>
-
       {/* Newsletter Signup Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-2xl mx-auto px-6 text-center">
@@ -1271,7 +1258,6 @@ export default function HomePage() {
           <NewsletterForm />
         </div>
       </section>
-
       {/* Pre-Order Modal */}
       <PreOrderModal
         isOpen={showPreOrderModal}
