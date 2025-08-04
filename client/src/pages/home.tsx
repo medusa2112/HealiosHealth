@@ -644,7 +644,6 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
-                    <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">(192 reviews)</span>
                   </div>
                 </div>
               </div>
