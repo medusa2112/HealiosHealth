@@ -490,7 +490,7 @@ export default function HomePage() {
               {/* Product Details */}
               <div className="space-y-8">
                 <div>
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                  <div className="inline-block bg-green-600 text-white px-3 py-1 text-xs font-medium uppercase tracking-wider mb-3">
                     New Launch
                   </div>
                   <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4">
