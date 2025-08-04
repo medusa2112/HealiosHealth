@@ -307,11 +307,21 @@ export default function HomePage() {
     if (!featuredProducts || !Array.isArray(featuredProducts)) return [];
     
     const categoryFilter = categories[selectedCategory as keyof typeof categories];
-    if (categoryFilter === 'all') return featuredProducts;
+    let filteredProducts = categoryFilter === 'all' 
+      ? featuredProducts 
+      : featuredProducts.filter((product: any) => 
+          Array.isArray(categoryFilter) && categoryFilter.includes(product.id)
+        );
     
-    return featuredProducts.filter((product: any) => 
-      Array.isArray(categoryFilter) && categoryFilter.includes(product.id)
-    );
+    // Sort products: in-stock items first, then out-of-stock
+    return filteredProducts.sort((a: any, b: any) => {
+      const aInStock = a.inStock && a.stockQuantity > 0;
+      const bInStock = b.inStock && b.stockQuantity > 0;
+      
+      if (aInStock && !bInStock) return -1;
+      if (!aInStock && bInStock) return 1;
+      return 0;
+    });
   };
 
   const handleNewsletterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
