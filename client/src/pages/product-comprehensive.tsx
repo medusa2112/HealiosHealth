@@ -36,36 +36,229 @@ const getProductUnit = (product: Product): string => {
   return 'capsules';
 };
 
-// Helper function to get the appropriate image for each product
-const getProductImage = (productId: string): string => {
-  switch (productId) {
-    case 'collagen-powder':
-    case 'halo-glow':
-    case 'biotin-5000':
-    case 'collagen-complex':
-      return beautyWellnessImg;
-    case 'vitamin-d3':
-    case 'probiotics':
-    case 'probiotic-vitamins':
-    case 'gut-mind-energy':
-      return immuneHealthImg;
-    case 'ashwagandha':
-      return stressReliefImg;
-    case 'apple-cider-vinegar':
-      return digestiveHealthImg;
-    case 'magnesium':
-      return sleepWellnessImg;
-    case 'iron-vitamin-c':
-      return energyVitalityImg;
-    case 'folic-acid-400':
-      return prenatalWellnessImg;
-    case 'mind-memory-mushroom':
-      return cognitiveHealthImg;
-    case 'childrens-multivitamin':
-      return wellnessLifestyleImg;
-    default:
-      return supplementLabImg;
-  }
+// Helper function to create custom SVG illustrations for each product
+const createProductSVG = (productId: string): string => {
+  const svgs = {
+    'halo-glow': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="haloGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fdf2f8;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f3e8ff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#haloGrad)"/>
+        <circle cx="200" cy="150" r="80" fill="none" stroke="#ec4899" stroke-width="3" opacity="0.4"/>
+        <circle cx="200" cy="150" r="60" fill="none" stroke="#f472b6" stroke-width="2" opacity="0.5"/>
+        <circle cx="200" cy="150" r="40" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.6"/>
+        <circle cx="200" cy="150" r="20" fill="#f9a8d4" opacity="0.3"/>
+        <text x="200" y="155" font-family="system-ui" font-size="20" font-weight="300" text-anchor="middle" fill="#4a5568">HALO GLOW</text>
+        <text x="200" y="175" font-family="system-ui" font-size="12" text-anchor="middle" fill="#6b7280">Radiant Skin Structure</text>
+      </svg>
+    `)}`,
+    'collagen-complex': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="beautyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fdf2f8;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f3e8ff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#beautyGrad)"/>
+        <circle cx="80" cy="80" r="25" fill="#ec4899" opacity="0.1"/>
+        <circle cx="320" cy="220" r="30" fill="#a855f7" opacity="0.1"/>
+        <path d="M150 150 Q200 120 250 150 Q280 180 250 210 Q200 240 150 210 Q120 180 150 150" fill="#f9a8d4" opacity="0.3"/>
+        <text x="200" y="160" font-family="system-ui" font-size="24" font-weight="300" text-anchor="middle" fill="#4a5568">GLOW</text>
+        <text x="200" y="185" font-family="system-ui" font-size="14" text-anchor="middle" fill="#6b7280">From Within</text>
+        <g transform="translate(60,220)">
+          <rect width="4" height="20" fill="#ec4899" opacity="0.6"/>
+          <rect x="8" width="4" height="25" fill="#f472b6" opacity="0.6"/>
+          <rect x="16" width="4" height="15" fill="#fbbf24" opacity="0.6"/>
+          <rect x="24" width="4" height="30" fill="#34d399" opacity="0.6"/>
+        </g>
+      </svg>
+    `)}`,
+    
+    'vitamin-d3': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="immuneGrad" cx="50%" cy="30%" r="50%">
+            <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#dbeafe;stop-opacity:1" />
+          </radialGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#immuneGrad)"/>
+        <circle cx="200" cy="80" r="40" fill="#fbbf24" opacity="0.8"/>
+        <g transform="translate(200,80)">
+          <path d="M-50,0 L-35,-7 L-35,7 Z" fill="#fbbf24"/>
+          <path d="M50,0 L35,-7 L35,7 Z" fill="#fbbf24"/>
+          <path d="M0,-50 L-7,-35 L7,-35 Z" fill="#fbbf24"/>
+          <path d="M0,50 L-7,35 L7,35 Z" fill="#fbbf24"/>
+          <path d="M-35,-35 L-42,-28 L-28,-28 Z" fill="#fbbf24"/>
+          <path d="M35,35 L42,28 L28,28 Z" fill="#fbbf24"/>
+          <path d="M35,-35 L28,-42 L28,-28 Z" fill="#fbbf24"/>
+          <path d="M-35,35 L-28,42 L-28,28 Z" fill="#fbbf24"/>
+        </g>
+        <circle cx="120" cy="180" r="15" fill="#3b82f6" opacity="0.4"/>
+        <circle cx="280" cy="200" r="20" fill="#10b981" opacity="0.4"/>
+        <text x="200" y="220" font-family="system-ui" font-size="18" font-weight="500" text-anchor="middle" fill="#374151">IMMUNE STRENGTH</text>
+      </svg>
+    `)}`,
+    
+    'ashwagandha': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="calmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f0f9ff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ecfdf5;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#calmGrad)"/>
+        <path d="M100 200 Q150 180 200 200 Q250 220 300 200" stroke="#059669" stroke-width="3" fill="none" opacity="0.7"/>
+        <path d="M80 180 Q130 160 180 180 Q230 200 280 180" stroke="#10b981" stroke-width="2" fill="none" opacity="0.5"/>
+        <circle cx="200" cy="120" r="60" fill="none" stroke="#065f46" stroke-width="1" opacity="0.3"/>
+        <circle cx="200" cy="120" r="40" fill="none" stroke="#047857" stroke-width="1" opacity="0.4"/>
+        <circle cx="200" cy="120" r="20" fill="none" stroke="#059669" stroke-width="1" opacity="0.5"/>
+        <circle cx="200" cy="120" r="5" fill="#10b981"/>
+        <text x="200" y="250" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">STRESS RESILIENCE</text>
+      </svg>
+    `)}`,
+    
+    'apple-cider-vinegar': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="digestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fef7ed;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f0fdf4;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#digestGrad)"/>
+        <ellipse cx="200" cy="150" rx="80" ry="40" fill="#fed7aa" opacity="0.6"/>
+        <path d="M160 150 Q180 130 200 150 Q220 170 240 150" stroke="#ea580c" stroke-width="2" fill="none"/>
+        <circle cx="150" cy="120" r="8" fill="#fb923c" opacity="0.7"/>
+        <circle cx="250" cy="180" r="6" fill="#f97316" opacity="0.7"/>
+        <circle cx="180" cy="200" r="4" fill="#fdba74" opacity="0.8"/>
+        <text x="200" y="220" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">DIGESTIVE BALANCE</text>
+      </svg>
+    `)}`,
+    
+    'magnesium': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="sleepGrad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" style="stop-color:#1e1b4b;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#312e81;stop-opacity:0.3" />
+          </radialGradient>
+        </defs>
+        <rect width="400" height="300" fill="#f8fafc"/>
+        <circle cx="200" cy="150" r="120" fill="url(#sleepGrad)"/>
+        <circle cx="150" cy="100" r="3" fill="#fbbf24"/>
+        <circle cx="280" cy="130" r="2" fill="#f59e0b"/>
+        <circle cx="180" cy="80" r="1.5" fill="#fcd34d"/>
+        <circle cx="320" cy="180" r="2.5" fill="#facc15"/>
+        <path d="M100 200 Q200 180 300 200" stroke="#6366f1" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M120 220 Q200 200 280 220" stroke="#8b5cf6" stroke-width="1.5" fill="none" opacity="0.4"/>
+        <text x="200" y="260" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">RESTFUL SLEEP</text>
+      </svg>
+    `)}`,
+    
+    'iron-vitamin-c': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="energyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fef2f2;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#fff7ed;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#energyGrad)"/>
+        <path d="M50 150 L100 100 L150 120 L200 80 L250 100 L300 60 L350 80" stroke="#dc2626" stroke-width="3" fill="none"/>
+        <circle cx="100" cy="100" r="4" fill="#ef4444"/>
+        <circle cx="200" cy="80" r="4" fill="#f97316"/>
+        <circle cx="300" cy="60" r="4" fill="#fbbf24"/>
+        <polygon points="180,200 200,160 220,200" fill="#dc2626" opacity="0.7"/>
+        <polygon points="160,220 180,180 200,220" fill="#ef4444" opacity="0.6"/>
+        <polygon points="200,220 220,180 240,220" fill="#f97316" opacity="0.5"/>
+        <text x="200" y="260" font-family="system-ui" font-size="16" font-weight="500" text-anchor="middle" fill="#374151">ENERGY & VITALITY</text>
+      </svg>
+    `)}`,
+    
+    'folic-acid-400': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="prenatalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fdf2f8;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f0f9ff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#prenatalGrad)"/>
+        <circle cx="200" cy="120" r="50" fill="none" stroke="#ec4899" stroke-width="2" opacity="0.6"/>
+        <circle cx="200" cy="120" r="30" fill="none" stroke="#f472b6" stroke-width="1.5" opacity="0.7"/>
+        <heart cx="200" cy="120" fill="#f9a8d4"/>
+        <path d="M180 120 Q190 110 200 120 Q210 110 220 120 Q210 135 200 145 Q190 135 180 120" fill="#f472b6"/>
+        <circle cx="120" cy="80" r="8" fill="#fbbf24" opacity="0.4"/>
+        <circle cx="280" cy="160" r="10" fill="#34d399" opacity="0.4"/>
+        <circle cx="150" cy="200" r="6" fill="#60a5fa" opacity="0.4"/>
+        <text x="200" y="250" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">PRENATAL SUPPORT</text>
+      </svg>
+    `)}`,
+    
+    'mind-memory-mushroom': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#brainGrad)"/>
+        <path d="M120 140 Q160 120 200 140 Q240 120 280 140 Q260 180 200 160 Q140 180 120 140" fill="#6366f1" opacity="0.3"/>
+        <circle cx="160" cy="130" r="3" fill="#8b5cf6"/>
+        <circle cx="200" cy="140" r="4" fill="#6366f1"/>
+        <circle cx="240" cy="130" r="3" fill="#a855f7"/>
+        <path d="M150 160 L170 150 L190 160 L210 150 L230 160" stroke="#6366f1" stroke-width="2" fill="none"/>
+        <path d="M160 180 L180 170 L200 180 L220 170 L240 180" stroke="#8b5cf6" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <text x="200" y="240" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">COGNITIVE CLARITY</text>
+      </svg>
+    `)}`,
+    
+    'childrens-multivitamin': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="kidsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#dcfce7;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#kidsGrad)"/>
+        <circle cx="150" cy="100" r="20" fill="#fbbf24" opacity="0.7"/>
+        <circle cx="250" cy="120" r="15" fill="#f59e0b" opacity="0.7"/>
+        <rect x="180" y="140" width="40" height="40" rx="8" fill="#10b981" opacity="0.6"/>
+        <polygon points="200,200 220,180 240,200 220,220" fill="#3b82f6" opacity="0.6"/>
+        <circle cx="120" cy="180" r="12" fill="#ef4444" opacity="0.6"/>
+        <circle cx="280" cy="160" r="18" fill="#8b5cf6" opacity="0.6"/>
+        <text x="200" y="260" font-family="system-ui" font-size="16" font-weight="500" text-anchor="middle" fill="#374151">GROWING STRONG</text>
+      </svg>
+    `)}`,
+    
+    'default': `data:image/svg+xml;base64,${btoa(`
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="defaultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="400" height="300" fill="url(#defaultGrad)"/>
+        <circle cx="200" cy="150" r="60" fill="none" stroke="#64748b" stroke-width="2" opacity="0.4"/>
+        <circle cx="200" cy="150" r="40" fill="none" stroke="#64748b" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="200" cy="150" r="20" fill="none" stroke="#64748b" stroke-width="1" opacity="0.6"/>
+        <circle cx="200" cy="150" r="5" fill="#64748b"/>
+        <text x="200" y="240" font-family="system-ui" font-size="16" font-weight="400" text-anchor="middle" fill="#374151">WELLNESS SUPPORT</text>
+      </svg>
+    `)}`
+  };
+  
+  return svgs[productId as keyof typeof svgs] || svgs.default;
 };
 
 export default function ProductComprehensive() {
@@ -1801,7 +1994,7 @@ export default function ProductComprehensive() {
           {/* Image */}
           <div className="relative overflow-hidden">
             <img
-              src={params?.id === 'halo-glow' ? haloGlowImage : getProductImage(params?.id || '')}
+              src={createProductSVG(params?.id || '')}
               alt={`${product?.name} wellness lifestyle imagery`}
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
@@ -1842,7 +2035,7 @@ export default function ProductComprehensive() {
             </p>
             
             <img
-              src={sleepWellnessImg}
+              src={createProductSVG('magnesium')}
               alt="Sleep and wellness lifestyle"
               className="w-full h-64 object-cover"
             />
