@@ -16,7 +16,7 @@ import pharmacistsImg from '@assets/healios-health48.jpg';
 import modernLabImg from '@assets/generated_images/Modern_pharmaceutical_research_facility_b73898e1.png';
 import childrenMultivitaminImg from '@assets/healios-health49.png';
 import collagenComplexImg from '@assets/healios-health11.png';
-import haloGlowTextImg from '@assets/healios-health126.png';
+import haloGlowTextImg from '@assets/HaloGlow_1754394641788.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
