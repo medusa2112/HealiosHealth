@@ -28,6 +28,12 @@ export default function Products() {
   }) || [];
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
+    // First priority: in-stock products come first
+    if (a.inStock !== b.inStock) {
+      return b.inStock ? 1 : -1; // in-stock items (true) come before out-of-stock (false)
+    }
+    
+    // Second priority: apply the selected sort criteria
     switch (sortBy) {
       case "price-low":
         return parseFloat(a.price) - parseFloat(b.price);
