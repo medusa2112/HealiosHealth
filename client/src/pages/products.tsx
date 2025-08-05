@@ -24,12 +24,6 @@ export default function Products() {
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "All" || 
                            product.category === selectedCategory;
-    
-    // Debug logging
-    if (selectedCategory !== "All") {
-      console.log(`Product: ${product.name}, Category: "${product.category}", Selected: "${selectedCategory}", Matches: ${matchesCategory}`);
-    }
-    
     return matchesSearch && matchesCategory;
   }) || [];
 

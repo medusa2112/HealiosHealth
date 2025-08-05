@@ -149,7 +149,7 @@ export class MemStorage implements IStorage {
         description: "Premium gut health support with 10 billion CFU multi-strain probiotic complex in advanced capsule format with delayed-release technology for optimal digestive wellness and immune support.",
         price: "349.00",
         originalPrice: null,
-        imageUrl: "/assets/healios-health74.png",
+        imageUrl: "/assets/Probiotic Complex 10 Billion CFU__1754396650938.png",
         category: "Probiotics",
         rating: "4.7",
         reviewCount: 37,
