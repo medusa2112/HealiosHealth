@@ -28,140 +28,156 @@ import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vineg
 import marineCollagenImg from '@assets/Collagen Complex__1754395222287.png';
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 
-// KSM-66 Ashwagandha Editorial SVG as URL encoded data
+// KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" style="background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" style="background: linear-gradient(135deg, #fdfcff 0%, #f8f4ff 30%, #f5f1ff 100%);">
   <defs>
-    <linearGradient id="stressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.1"/>
-      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.05"/>
-    </linearGradient>
-    <linearGradient id="capsuleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="studioFloor" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95"/>
-      <stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#f8fafc;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:0.6"/>
     </linearGradient>
-    <filter id="calmGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <linearGradient id="bottleGradient" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.98"/>
+      <stop offset="30%" style="stop-color:#fafbfc;stop-opacity:0.95"/>
+      <stop offset="70%" style="stop-color:#f4f6f8;stop-opacity:0.92"/>
+      <stop offset="100%" style="stop-color:#e8edf3;stop-opacity:0.88"/>
+    </linearGradient>
+    <filter id="studioLighting" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="softGlow"/>
+      <feOffset dx="2" dy="6" result="shadowOffset"/>
+      <feMerge><feMergeNode in="shadowOffset"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
   
-  <!-- Floating zen particles -->
-  <g opacity="0.3">
-    <circle cx="140" cy="90" r="1.5" fill="#8b5cf6"/>
-    <circle cx="660" cy="130" r="1" fill="#6366f1"/>
-    <circle cx="700" cy="220" r="0.8" fill="#a855f7"/>
-    <circle cx="120" cy="200" r="1" fill="#8b5cf6"/>
-    <circle cx="730" cy="380" r="1.5" fill="#6366f1"/>
-    <circle cx="90" cy="480" r="1" fill="#a855f7"/>
+  <!-- Studio backdrop -->
+  <ellipse cx="400" cy="580" rx="350" ry="60" fill="url(#studioFloor)" opacity="0.4"/>
+  
+  <!-- Ambient studio lighting -->
+  <g opacity="0.06">
+    <circle cx="120" cy="100" r="3" fill="#8b5cf6"/>
+    <circle cx="680" cy="150" r="2" fill="#6366f1"/>
+    <circle cx="200" cy="250" r="1.5" fill="#a855f7"/>
+    <circle cx="700" cy="320" r="2.5" fill="#8b5cf6"/>
+    <circle cx="150" cy="450" r="2" fill="#6366f1"/>
   </g>
   
-  <!-- Adaptogenic wave elements -->
-  <g opacity="0.1">
-    <path d="M0 520 Q200 500 400 520 T800 520 L800 600 L0 600 Z" fill="url(#stressGradient)"/>
-    <path d="M0 540 Q300 520 600 540 T800 540 L800 600 L0 600 Z" fill="url(#stressGradient)"/>
-  </g>
-  
-  <!-- Main bottle/supplement container -->
-  <g transform="translate(260, 140)">
-    <!-- Bottle body -->
-    <rect x="0" y="30" width="100" height="140" rx="6" fill="url(#capsuleGradient)" stroke="#e2e8f0" stroke-width="2" filter="url(#calmGlow)"/>
+  <!-- Hero product bottle - editorial style -->
+  <g transform="translate(420, 80)">
+    <!-- Product shadow -->
+    <ellipse cx="60" cy="420" rx="55" ry="15" fill="#8b5cf6" opacity="0.12"/>
     
-    <!-- Cap -->
-    <ellipse cx="50" cy="30" rx="55" ry="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-    <ellipse cx="50" cy="26" rx="50" ry="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-    
-    <!-- Capsules inside bottle -->
-    <g opacity="0.5">
-      <ellipse cx="25" cy="100" rx="6" ry="12" fill="#6366f1"/>
-      <ellipse cx="75" cy="120" rx="6" ry="12" fill="#8b5cf6"/>
-      <ellipse cx="45" cy="140" rx="6" ry="12" fill="#6366f1"/>
-      <ellipse cx="65" cy="160" rx="6" ry="12" fill="#a855f7"/>
-      <ellipse cx="35" cy="160" rx="6" ry="12" fill="#6366f1"/>
+    <!-- Premium supplement bottle -->
+    <g filter="url(#studioLighting)">
+      <!-- Main bottle body -->
+      <rect x="20" y="100" width="80" height="260" rx="12" fill="url(#bottleGradient)" stroke="#e2e8f0" stroke-width="2"/>
+      
+      <!-- Bottle neck -->
+      <rect x="35" y="60" width="50" height="60" rx="6" fill="url(#bottleGradient)" stroke="#e2e8f0" stroke-width="1.5"/>
+      
+      <!-- Premium cap -->
+      <rect x="32" y="40" width="56" height="30" rx="10" fill="#1f2937"/>
+      <rect x="35" y="45" width="50" height="12" rx="6" fill="#4b5563"/>
+      <rect x="38" y="48" width="44" height="6" rx="3" fill="#6b7280"/>
     </g>
     
-    <!-- Label area -->
-    <rect x="10" y="60" width="80" height="40" rx="2" fill="#ffffff" stroke="#e2e8f0" stroke-width="0.5" opacity="0.8"/>
-    <text x="50" y="75" text-anchor="middle" font-family="system-ui, sans-serif" font-size="6" fill="#4338ca" font-weight="600">KSM-66</text>
-    <text x="50" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="5" fill="#6366f1">600mg</text>
+    <!-- Premium product label -->
+    <rect x="28" y="150" width="64" height="160" rx="6" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" opacity="0.98"/>
+    
+    <!-- KSM-66 Branding -->
+    <text x="60" y="175" font-family="system-ui, sans-serif" font-size="12" font-weight="800" text-anchor="middle" fill="#4c1d95" letter-spacing="0.5px">KSM-66®</text>
+    <text x="60" y="190" font-family="system-ui, sans-serif" font-size="9" font-weight="400" text-anchor="middle" fill="#6b7280">ASHWAGANDHA</text>
+    <text x="60" y="202" font-family="system-ui, sans-serif" font-size="6" font-weight="300" text-anchor="middle" fill="#8b5cf6" letter-spacing="0.8px">ROOT EXTRACT</text>
+    
+    <!-- Strength highlight -->
+    <rect x="38" y="215" width="44" height="18" rx="9" fill="#8b5cf6" opacity="0.1"/>
+    <text x="60" y="227" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#374151">600mg</text>
+    
+    <!-- Count and supply info -->
+    <text x="60" y="250" font-family="system-ui, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#8b5cf6">60 CAPSULES</text>
+    <text x="60" y="262" font-family="system-ui, sans-serif" font-size="6" text-anchor="middle" fill="#6b7280">2 Month Supply</text>
+    
+    <!-- Quality certifications -->
+    <text x="60" y="280" font-family="system-ui, sans-serif" font-size="6" font-weight="500" text-anchor="middle" fill="#10b981">✓ CLINICAL GRADE</text>
+    <text x="60" y="292" font-family="system-ui, sans-serif" font-size="6" font-weight="500" text-anchor="middle" fill="#10b981">✓ 3RD PARTY TESTED</text>
   </g>
   
-  <!-- Ashwagandha root botanical illustration -->
-  <g transform="translate(450, 200)" opacity="0.6">
-    <!-- Root system -->
-    <g stroke="#8b5cf6" stroke-width="1.5" fill="none">
-      <path d="M0 0 Q10 15 5 30 Q15 45 10 60" stroke-opacity="0.7"/>
-      <path d="M10 0 Q20 20 15 40 Q25 55 20 70" stroke-opacity="0.5"/>
-      <path d="M-5 10 Q5 25 0 40 Q10 50 5 65" stroke-opacity="0.6"/>
+  <!-- Ashwagandha botanical arrangement -->
+  <g transform="translate(180, 300)" opacity="0.7">
+    <!-- Central root system -->
+    <g stroke="#8b5cf6" stroke-width="2.5" fill="none" opacity="0.8">
+      <path d="M0 0 Q-15 20 -20 45 Q-25 65 -15 85"/>
+      <path d="M0 0 Q15 25 20 50 Q25 75 15 95"/>
+      <path d="M0 0 Q-5 30 -8 55 Q-12 80 -2 100"/>
+      <path d="M0 0 Q8 28 12 58 Q18 85 8 105"/>
     </g>
     
-    <!-- Root nodes -->
+    <!-- Root connection points -->
+    <g fill="#6366f1" opacity="0.9">
+      <circle cx="0" cy="0" r="3"/>
+      <circle cx="-12" cy="30" r="2"/>
+      <circle cx="10" cy="35" r="2"/>
+      <circle cx="-6" cy="55" r="1.5"/>
+      <circle cx="15" cy="65" r="1.5"/>
+      <circle cx="-18" cy="75" r="2"/>
+      <circle cx="20" cy="85" r="2"/>
+    </g>
+    
+    <!-- Fresh ashwagandha leaves -->
+    <g fill="#10b981" opacity="0.6">
+      <ellipse cx="-20" cy="-12" rx="15" ry="5" transform="rotate(-25)"/>
+      <ellipse cx="18" cy="-18" rx="12" ry="4" transform="rotate(20)"/>
+      <ellipse cx="0" cy="-22" rx="14" ry="4.5" transform="rotate(-5)"/>
+      <ellipse cx="-8" cy="-15" rx="10" ry="3.5" transform="rotate(-12)"/>
+      <ellipse cx="12" cy="-10" rx="11" ry="3" transform="rotate(15)"/>
+    </g>
+  </g>
+  
+  <!-- Molecular structure illustration -->
+  <g transform="translate(600, 380)" opacity="0.4">
+    <!-- Withanolide molecular structure -->
+    <g stroke="#8b5cf6" stroke-width="1.8" fill="none">
+      <path d="M0 0 L18 10 L36 6 L54 18 L72 12"/>
+      <path d="M18 10 L30 30 L48 35 L66 30"/>
+      <path d="M36 6 L42 -12 L60 -8 L72 12"/>
+      <path d="M54 18 L64 38 L78 42"/>
+    </g>
+    
+    <!-- Molecular nodes -->
     <g fill="#6366f1" opacity="0.8">
-      <circle cx="0" cy="0" r="2"/>
-      <circle cx="5" cy="30" r="1.5"/>
-      <circle cx="15" cy="40" r="1.5"/>
-      <circle cx="10" cy="60" r="2"/>
-      <circle cx="0" cy="40" r="1"/>
-      <circle cx="20" cy="70" r="1.5"/>
+      <circle cx="0" cy="0" r="2.5"/>
+      <circle cx="18" cy="10" r="2.5"/>
+      <circle cx="36" cy="6" r="2.5"/>
+      <circle cx="54" cy="18" r="2.5"/>
+      <circle cx="72" cy="12" r="2.5"/>
+      <circle cx="30" cy="30" r="2"/>
+      <circle cx="48" cy="35" r="2"/>
+      <circle cx="42" cy="-12" r="2"/>
+      <circle cx="60" cy="-8" r="2"/>
     </g>
-    
-    <!-- Leaves -->
-    <g transform="translate(-10, -15)" opacity="0.4">
-      <path d="M0 0 Q8 -3 15 0 Q12 8 5 10 Q2 5 0 0" fill="#10b981"/>
-      <path d="M20 5 Q28 2 35 5 Q32 13 25 15 Q22 10 20 5" fill="#059669"/>
-      <path d="M10 -5 Q18 -8 25 -5 Q22 3 15 5 Q12 0 10 -5" fill="#10b981"/>
-    </g>
+  </g>
+  
+  <!-- Clinical research badge -->
+  <g transform="translate(120, 120)">
+    <circle cx="0" cy="0" r="35" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="0" y="-8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6366f1" font-weight="700">50+</text>
+    <text x="0" y="4" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#6366f1" font-weight="600">CLINICAL</text>
+    <text x="0" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#6366f1" font-weight="600">STUDIES</text>
   </g>
   
   <!-- Stress relief visualization -->
-  <g transform="translate(500, 350)" opacity="0.4">
-    <!-- Calm waves -->
-    <g stroke="#8b5cf6" stroke-width="1" fill="none" opacity="0.6">
-      <path d="M0 0 Q15 -5 30 0 Q45 5 60 0"/>
-      <path d="M0 10 Q20 5 40 10 Q55 15 70 10"/>
-      <path d="M0 20 Q25 15 50 20 Q65 25 80 20"/>
-    </g>
+  <g transform="translate(100, 480)" opacity="0.3">
+    <!-- Calming wave patterns -->
+    <path d="M0 0 Q50 -20 100 0 Q150 20 200 0 Q250 -15 300 0" stroke="#8b5cf6" stroke-width="2.5" fill="none"/>
+    <path d="M0 10 Q50 -10 100 10 Q150 30 200 10 Q250 -5 300 10" stroke="#a855f7" stroke-width="2" fill="none"/>
+    <path d="M0 20 Q50 0 100 20 Q150 40 200 20 Q250 5 300 20" stroke="#6366f1" stroke-width="1.5" fill="none"/>
     
-    <!-- Zen circles -->
-    <g fill="none" stroke="#6366f1" stroke-width="0.5" opacity="0.5">
-      <circle cx="40" cy="10" r="8"/>
-      <circle cx="40" cy="10" r="16"/>
-      <circle cx="40" cy="10" r="24"/>
+    <!-- Stress reduction indicators -->
+    <g opacity="0.7">
+      <path d="M80 -12 L70 -17 L70 -14 L60 -14 L60 -10 L70 -10 L70 -7 Z" fill="#8b5cf6"/>
+      <path d="M180 12 L170 7 L170 10 L160 10 L160 14 L170 14 L170 17 Z" fill="#6366f1"/>
+      <path d="M280 -8 L270 -13 L270 -10 L260 -10 L260 -6 L270 -6 L270 -3 Z" fill="#a855f7"/>
     </g>
-  </g>
-  
-  <!-- Typography -->
-  <g transform="translate(60, 330)">
-    <!-- Main heading -->
-    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="38" font-weight="300" fill="#374151" letter-spacing="1px">KSM-66</text>
-    <text x="0" y="45" font-family="system-ui, sans-serif" font-size="38" font-weight="600" fill="#1f2937">ASHWAGANDHA</text>
-    <text x="0" y="80" font-family="system-ui, sans-serif" font-size="22" font-weight="300" fill="#6366f1" letter-spacing="2px">EXTRACT</text>
-    
-    <!-- Subheading -->
-    <text x="0" y="115" font-family="system-ui, sans-serif" font-size="13" fill="#6b7280" letter-spacing="0.5px">Premium Full-Spectrum Root Extract</text>
-    
-    <!-- Benefits list -->
-    <g transform="translate(0, 145)" font-family="system-ui, sans-serif" font-size="11" fill="#4b5563">
-      <text x="0" y="0">• Clinically Proven Stress Relief</text>
-      <text x="0" y="18">• Enhanced Cognitive Function</text>
-      <text x="0" y="36">• Adaptogenic Support</text>
-      <text x="0" y="54">• 14 Years of Research</text>
-    </g>
-  </g>
-  
-  <!-- Clinical badge -->
-  <g transform="translate(580, 60)">
-    <circle cx="0" cy="0" r="32" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" filter="url(#calmGlow)"/>
-    <text x="0" y="-6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="#6366f1" font-weight="600">50+</text>
-    <text x="0" y="2" text-anchor="middle" font-family="system-ui, sans-serif" font-size="7" fill="#6366f1" font-weight="600">STUDIES</text>
-    <text x="0" y="14" text-anchor="middle" font-family="system-ui, sans-serif" font-size="5" fill="#8b5cf6">CLINICAL</text>
-  </g>
-  
-  <!-- Stress reduction arrows -->
-  <g transform="translate(520, 120)" opacity="0.3">
-    <path d="M0 0 L-10 -5 L-10 -2 L-20 -2 L-20 2 L-10 2 L-10 5 Z" fill="#8b5cf6"/>
-    <path d="M0 15 L-10 10 L-10 13 L-20 13 L-20 17 L-10 17 L-10 20 Z" fill="#6366f1"/>
-    <path d="M0 30 L-10 25 L-10 28 L-20 28 L-20 32 L-10 32 L-10 35 Z" fill="#a855f7"/>
   </g>
 </svg>
 `)}`;
