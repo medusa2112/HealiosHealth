@@ -494,7 +494,7 @@ export default function HomePage() {
                   <div className="inline-block bg-green-600 text-white px-3 py-1 text-xs font-medium uppercase tracking-wider mb-3">
                     New Launch
                   </div>
-                  <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-3">
+                  <h2 className="text-3xl lg:text-4xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-3">
                     <img 
                       src={haloGlowTextImg} 
                       alt="HALO Glow Collagen Product" 
