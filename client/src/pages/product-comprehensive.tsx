@@ -24,6 +24,7 @@ import sleepWellnessImg from '@assets/healios-health126.png';
 import energyVitalityImg from '@assets/healios-health127.png';
 import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
+import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
 
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {
@@ -38,6 +39,11 @@ const getProductUnit = (product: Product): string => {
 
 // Helper function to create custom SVG illustrations for each product
 const createProductSVG = (productId: string): string => {
+  // Return actual editorial image for Apple Cider Vinegar
+  if (productId === 'apple-cider-vinegar') {
+    return appleVinegarEditorialImg;
+  }
+  
   const svgs = {
     'halo-glow': `data:image/svg+xml;base64,${btoa(`
       <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
@@ -1047,7 +1053,7 @@ export default function ProductComprehensive() {
               )}
             </div>
             {/* Better Together Section - Only show for non-Children products and if recommended product is in stock */}
-            {product.category !== "Children" && (() => {
+            {!product.categories.includes("Children") && (() => {
               const bundleProduct = allProducts?.find(p => p.name === productContent.bundleWith);
               const showBundleSection = bundleProduct && bundleProduct.inStock;
               
@@ -1129,7 +1135,7 @@ export default function ProductComprehensive() {
             })()}
 
             {/* Special Discount Section - Only for Children products */}
-            {product.category === "Children" && (
+            {product.categories.includes("Children") && (
               <div className="border border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50 p-4 mb-6">
                 <div className="text-center">
                   <h3 className="font-medium text-sm mb-2">Stock Up & Save</h3>
