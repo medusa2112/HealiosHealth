@@ -177,51 +177,6 @@ export function Header() {
               </span>
             </Link>
             
-            {/* Support Buttons */}
-            <div className="flex items-center space-x-2">
-              {/* Email Support */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.location.href = 'mailto:support@healios.co.za'}
-                className="bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 px-3 py-1"
-              >
-                <span className={`font-medium transition-all duration-200 ${
-                  isScrolled ? 'text-xs' : 'text-sm'
-                }`}>
-                  📧 Email Support
-                </span>
-              </Button>
-
-              {/* PT Consultation */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.open('https://calendly.com/healios-pt', '_blank')}
-                className="bg-green-600 hover:bg-green-700 text-white transition-colors duration-200 px-3 py-1"
-              >
-                <span className={`font-medium transition-all duration-200 ${
-                  isScrolled ? 'text-xs' : 'text-sm'
-                }`}>
-                  🏃 PT Consultation
-                </span>
-              </Button>
-
-              {/* Nutrition */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.open('https://calendly.com/healios-nutrition', '_blank')}
-                className="bg-purple-600 hover:bg-purple-700 text-white transition-colors duration-200 px-3 py-1"
-              >
-                <span className={`font-medium transition-all duration-200 ${
-                  isScrolled ? 'text-xs' : 'text-sm'
-                }`}>
-                  💜 Nutrition
-                </span>
-              </Button>
-            </div>
-
             {/* Chat to Juliet */}
             <Button
               variant="ghost"
