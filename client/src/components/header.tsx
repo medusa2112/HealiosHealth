@@ -302,12 +302,12 @@ export function Header() {
                         <span className="text-sm text-white hover:text-healios-cyan transition-colors duration-200 flex items-center gap-2">
                           {item.label}
                           {item.isNew && (
-                            <span className="text-xs font-bold text-white bg-emerald-500 px-1.5 py-0.5 uppercase tracking-wider">
+                            <span className="text-[10px] font-semibold text-white bg-emerald-500 px-1 py-px uppercase tracking-wide">
                               NEW
                             </span>
                           )}
                           {item.comingSoon && (
-                            <span className="text-xs font-bold text-white bg-amber-500 px-1.5 py-0.5 uppercase tracking-wider">
+                            <span className="text-[10px] font-semibold text-white bg-amber-500 px-1 py-px uppercase tracking-wide">
                               SOON
                             </span>
                           )}
