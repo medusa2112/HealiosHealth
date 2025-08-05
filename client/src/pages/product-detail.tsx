@@ -124,9 +124,14 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'probiotics' ? {
     nutrient: [
-      { name: 'Live Bacterial Cultures', amount: '10 Billion CFU', nrv: '' },
-      { name: 'Lactobacillus acidophilus', amount: '3 Billion CFU', nrv: '' },
-      { name: 'Bifidobacterium longum', amount: '2 Billion CFU', nrv: '' },
+      { name: 'Active Live Culture Blend', amount: '10 Billion CFU', nrv: '' },
+      { name: 'Fructooligosaccharides (FOS)', amount: '40mg', nrv: '' },
+      { name: 'Bifidobacterium lactis', amount: '1.67 Billion CFU', nrv: '' },
+      { name: 'Bifidobacterium bifidum', amount: '1.67 Billion CFU', nrv: '' },
+      { name: 'Bifidobacterium longum', amount: '1.67 Billion CFU', nrv: '' },
+      { name: 'Lactobacillus acidophilus', amount: '1.67 Billion CFU', nrv: '' },
+      { name: 'Lactobacillus casei rhamnosus', amount: '1.67 Billion CFU', nrv: '' },
+      { name: 'Streptococcus thermophilus', amount: '1.65 Billion CFU', nrv: '' },
     ]
   } : product?.id === 'vitamin-d3' ? {
     nutrient: [
@@ -138,7 +143,32 @@ export default function ProductDetail() {
     nutrient: []
   };
 
-  const faqs = [
+  const faqs = product?.id === 'probiotics' ? [
+    {
+      question: "What makes this probiotic different?",
+      answer: "Healios Probiotic Complex uses a broad-spectrum blend of 6 well-studied bacterial strains with 10 billion live CFUs per capsule, plus FOS prebiotics to fuel their growth."
+    },
+    {
+      question: "What is FOS and why is it included?",
+      answer: "FOS (fructooligosaccharides) is a natural prebiotic fibre that feeds the friendly bacteria in your gut, helping them survive, thrive, and colonise more effectively."
+    },
+    {
+      question: "Do I need to refrigerate this probiotic?",
+      answer: "No — these capsules are shelf-stable and designed for daily use at room temperature."
+    },
+    {
+      question: "When is the best time to take it?",
+      answer: "Probiotics are best taken on an empty stomach, such as first thing in the morning or 30–60 minutes before meals. Take 1–2 capsules, once or twice a day with water. Do not take with hot drinks as this may harm live cultures."
+    },
+    {
+      question: "Is this suitable for vegans and people with allergies?",
+      answer: "Yes — the formula is 100% vegan, with no dairy, gluten, or soy. The capsule is plant-based and acid-resistant. Manufactured in a facility that handles allergens, but risk of cross-contamination is low and managed under validated controls."
+    },
+    {
+      question: "How long should I take it to see results?",
+      answer: "Some people feel benefits in a few days, especially with bloating or bowel regularity. For microbiome support, consistent daily use over 4–8 weeks is ideal."
+    }
+  ] : [
     {
       question: "How should I take this supplement?",
       answer: "Take 1-2 capsules daily with food, preferably with your main meal. For optimal absorption, take consistently at the same time each day."
@@ -470,8 +500,19 @@ export default function ProductDetail() {
           <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">How to take</h2>
           <div className="bg-gray-50 dark:bg-gray-800 p-8">
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              Take 1-2 capsules daily with food, preferably with your main meal. Take consistently 
-              at the same time each day. Do not exceed the recommended daily dose.
+              {product?.id === 'probiotics' ? (
+                <>
+                  <strong>Recommended Use:</strong> 1–2 capsules, once or twice a day<br/>
+                  <strong>Max Daily Intake:</strong> 4 capsules<br/>
+                  <strong>Best taken:</strong> On an empty stomach with water<br/><br/>
+                  Do not take with hot drinks (may harm live cultures). Do not exceed the recommended dose.
+                </>
+              ) : (
+                <>
+                  Take 1-2 {getProductUnit(product)} daily with food, preferably with your main meal. Take consistently 
+                  at the same time each day. Do not exceed the recommended daily dose.
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -517,7 +558,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Better Together Section - Only for non-Children products */}
-        {product.category !== "Children" && (
+        {!product.categories?.includes("Children") && (
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
               Better <em className="italic">together</em>
@@ -574,7 +615,7 @@ export default function ProductDetail() {
         )}
 
         {/* Special Discount Section - Only for Children products */}
-        {product.category === "Children" && (
+        {product.categories?.includes("Children") && (
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
               Stock Up & <em className="italic">Save</em>
