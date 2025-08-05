@@ -122,6 +122,14 @@ export default function ProductDetail() {
       { name: 'Magnesium Taurate', amount: '100mg', nrv: '27' },
       { name: 'Vitamin B6', amount: '1.4mg', nrv: '100' },
     ]
+  } : product?.id === 'magnesium-bisglycinate-b6' ? {
+    nutrient: [
+      { name: 'Magnesium (total elemental)', amount: '375mg', nrv: '100' },
+      { name: 'Magnesium Bisglycinate', amount: '180mg', nrv: '' },
+      { name: 'Magnesium Malate', amount: '165mg', nrv: '' },
+      { name: 'Magnesium Taurate', amount: '30mg', nrv: '' },
+      { name: 'Vitamin B6 (Pyridoxine HCl)', amount: '1.4mg', nrv: '100' },
+    ]
   } : product?.id === 'probiotics' ? {
     nutrient: [
       { name: 'Active Live Culture Blend', amount: '10 Billion CFU', nrv: '' },
@@ -167,6 +175,31 @@ export default function ProductDetail() {
     {
       question: "How long should I take it to see results?",
       answer: "Some people feel benefits in a few days, especially with bloating or bowel regularity. For microbiome support, consistent daily use over 4–8 weeks is ideal."
+    }
+  ] : product?.id === 'magnesium-bisglycinate-b6' ? [
+    {
+      question: "What makes this Magnesium Complex different?",
+      answer: "It combines three premium, highly bioavailable forms: bisglycinate (gentle on stomach), malate (energy), and taurate (cardiovascular and nervous system). Most supplements use cheaper, less absorbable forms like oxide or citrate."
+    },
+    {
+      question: "Why is Vitamin B6 included?",
+      answer: "Vitamin B6 supports the absorption and cellular transport of magnesium, and contributes to energy metabolism, hormonal balance, and nervous system function."
+    },
+    {
+      question: "What benefits can I expect?",
+      answer: "Magnesium contributes to reduced fatigue and tiredness, normal muscle function and recovery, improved sleep quality, stress resilience and mood balance, and bone and teeth maintenance."
+    },
+    {
+      question: "Is this safe for sensitive stomachs?",
+      answer: "Yes. Magnesium bisglycinate and malate are buffered, gentle forms that are better tolerated than magnesium oxide or citrate, which can cause loose stools in some users."
+    },
+    {
+      question: "When should I take magnesium — morning or night?",
+      answer: "It depends on your goal: For energy and muscle recovery — morning. For relaxation or sleep — evening. Split dosing is often best."
+    },
+    {
+      question: "Is it suitable for vegans and people with intolerances?",
+      answer: "Yes — it's 100% vegan, gluten-free, dairy-free, and free from artificial preservatives."
     }
   ] : [
     {
@@ -506,6 +539,12 @@ export default function ProductDetail() {
                   <strong>Max Daily Intake:</strong> 4 capsules<br/>
                   <strong>Best taken:</strong> On an empty stomach with water<br/><br/>
                   Do not take with hot drinks (may harm live cultures). Do not exceed the recommended dose.
+                </>
+              ) : product?.id === 'magnesium-bisglycinate-b6' ? (
+                <>
+                  <strong>Recommended Use:</strong> 1 capsule, 1–3 times daily<br/>
+                  <strong>With or after food</strong><br/><br/>
+                  <strong>Tip:</strong> Split across the day (morning and evening) for steady magnesium levels and better sleep support. Do not exceed the recommended dose.
                 </>
               ) : (
                 <>
