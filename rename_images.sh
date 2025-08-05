@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to rename all images in attached_assets to healios-health naming convention
+# Script to rename all images (including screenshots) in attached_assets to healios-health naming convention for SEO
 
 cd attached_assets
 
@@ -8,9 +8,8 @@ cd attached_assets
 counter=1
 
 # Create a list of image files (png, jpg, jpeg, webp, gif, bmp)
-# Exclude screenshots, text files, and videos
+# NOW INCLUDING screenshots for SEO benefits, exclude only text files and targeted elements
 find . -maxdepth 1 -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.bmp" \) \
-    ! -iname "screenshot*" \
     ! -iname "pasted*" \
     ! -iname "targeted_element*" \
     | sort > /tmp/image_list.txt
@@ -54,7 +53,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     done < /tmp/image_list.txt
     
     echo ""
-    echo "=== COMPLETED: $((counter-1)) files renamed ==="
+    echo "=== COMPLETED: $((counter-1)) files renamed (including screenshots) ==="
+    echo "📈 SEO Benefits: All images now have consistent 'healios-health' naming for better search optimization"
 else
     echo "Renaming cancelled."
 fi
