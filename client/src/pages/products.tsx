@@ -22,8 +22,14 @@ export default function Products() {
   const filteredProducts = products?.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
     const matchesCategory = selectedCategory === "All" || 
-                           product.category === selectedCategory;
+                           product.category === selectedCategory ||
+                           // Special case for Gummies: include products with "Gummies" or "Gummy" in name
+                           (selectedCategory === "Gummies" && 
+                            (product.name.toLowerCase().includes("gummies") || 
+                             product.name.toLowerCase().includes("gummy")));
+    
     return matchesSearch && matchesCategory;
   }) || [];
 
