@@ -128,7 +128,7 @@ export class MemStorage implements IStorage {
         description: "A powerful full-spectrum adaptogen using clinically validated <a href=\"https://www.ixoreal.com/ksm66-ashwagandha\" target=\"_blank\" rel=\"noopener noreferrer\">KSM-66®</a> extract to support stress resilience, energy, and hormonal balance. 500mg per capsule, suitable for vegetarians and vegans.",
         price: "429.00",
         originalPrice: null,
-        imageUrl: "/assets/KSM-66® Ashwagandha_1754395199504.png",
+        imageUrl: "/assets/Ashwagandha 600mg_1754395222286.png",
         category: "Adaptogens",
         rating: "4.7",
         reviewCount: 15,
