@@ -401,7 +401,7 @@ export class MemStorage implements IStorage {
         description: "Premium oversized black tee featuring the iconic 'HEALIOS HEALTHCLUB -1984-' design on the back in pink bubble lettering. Made from high-quality cotton blend for ultimate comfort and durability. Perfect for expressing your wellness lifestyle with retro-inspired style.",
         price: "750.00",
         originalPrice: null,
-        imageUrl: "/assets/healios-health128.png",
+        imageUrl: "/assets/Healios Oversized Tee (1)_1754417556142.png",
         categories: ["Apparel"],
         rating: "4.7",
         reviewCount: 8,
