@@ -418,9 +418,20 @@ export default function ProductDetail() {
         <div className="mb-16">
           <div className="bg-gray-50 dark:bg-gray-800 p-8">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">Description</h2>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-              {product.description}
-            </p>
+            <div 
+              className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6 prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{
+                __html: product.description
+                  .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-white">$1</strong>')
+                  .replace(/•\s(.*?)$/gm, '<li class="ml-4">$1</li>')
+                  .replace(/✔\s(.*?)(?=\s✔|$)/g, '<span class="inline-flex items-center gap-2 mr-4 mb-2"><svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>$1</span>')
+                  .replace(/\n\n/g, '</p><p class="mb-4">')
+                  .replace(/^/, '<p class="mb-4">')
+                  .replace(/$/, '</p>')
+                  .replace(/<p class="mb-4"><li/g, '<ul class="list-none mb-4"><li')
+                  .replace(/<\/li><\/p>/g, '</li></ul>')
+              }}
+            />
           </div>
         </div>
 
