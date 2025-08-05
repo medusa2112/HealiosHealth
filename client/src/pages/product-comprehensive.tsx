@@ -25,6 +25,101 @@ import energyVitalityImg from '@assets/healios-health127.png';
 import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
+import marineCollagenImg from '@assets/Collagen Complex__1754395222287.png';
+
+// Marine Collagen Editorial SVG as URL encoded data
+const marineCollagenEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" style="background: linear-gradient(135deg, #f8fdff 0%, #e8f4f8 100%);">
+  <defs>
+    <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#7bb3f0;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="powderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#f0f8ff;stop-opacity:0.7"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g opacity="0.3">
+    <circle cx="120" cy="80" r="2" fill="#7bb3f0"/>
+    <circle cx="680" cy="120" r="1.5" fill="#4a90e2"/>
+    <circle cx="720" cy="200" r="1" fill="#a8d0f0"/>
+    <circle cx="100" cy="180" r="1" fill="#7bb3f0"/>
+    <circle cx="750" cy="350" r="2" fill="#4a90e2"/>
+    <circle cx="80" cy="450" r="1.5" fill="#a8d0f0"/>
+  </g>
+  <g opacity="0.15">
+    <path d="M0 500 Q200 480 400 500 T800 500 L800 600 L0 600 Z" fill="url(#oceanGradient)"/>
+    <path d="M0 520 Q300 500 600 520 T800 520 L800 600 L0 600 Z" fill="url(#oceanGradient)"/>
+  </g>
+  <g transform="translate(250, 120)">
+    <rect x="0" y="40" width="120" height="160" rx="8" fill="url(#powderGradient)" stroke="#e0f2ff" stroke-width="2" filter="url(#softGlow)"/>
+    <ellipse cx="60" cy="40" rx="65" ry="12" fill="#f8fdff" stroke="#d0e8f0" stroke-width="1.5"/>
+    <ellipse cx="60" cy="35" rx="60" ry="10" fill="#ffffff" stroke="#e0f2ff" stroke-width="1"/>
+    <g opacity="0.4">
+      <circle cx="30" cy="120" r="8" fill="#ffffff"/>
+      <circle cx="90" cy="140" r="6" fill="#f0f8ff"/>
+      <circle cx="50" cy="160" r="5" fill="#ffffff"/>
+      <circle cx="80" cy="180" r="7" fill="#f8fdff"/>
+      <circle cx="40" cy="180" r="4" fill="#ffffff"/>
+    </g>
+    <g transform="translate(85, 60)">
+      <ellipse cx="0" cy="0" rx="15" ry="8" fill="#ffffff" stroke="#d0e8f0" stroke-width="1"/>
+      <rect x="-2" y="-15" width="4" height="15" fill="#e8f4f8" stroke="#d0e8f0" stroke-width="0.5"/>
+    </g>
+  </g>
+  <g transform="translate(450, 180)" opacity="0.6">
+    <g stroke="#7bb3f0" stroke-width="2" fill="none">
+      <path d="M0 0 Q20 10 40 0 Q60 -10 80 0 Q100 10 120 0" stroke-opacity="0.8"/>
+      <path d="M0 15 Q20 25 40 15 Q60 5 80 15 Q100 25 120 15" stroke-opacity="0.6"/>
+      <path d="M0 30 Q20 40 40 30 Q60 20 80 30 Q100 40 120 30" stroke-opacity="0.4"/>
+    </g>
+    <g fill="#4a90e2" opacity="0.7">
+      <circle cx="0" cy="0" r="3"/>
+      <circle cx="40" cy="0" r="3"/>
+      <circle cx="80" cy="0" r="3"/>
+      <circle cx="120" cy="0" r="3"/>
+      <circle cx="20" cy="15" r="2"/>
+      <circle cx="60" cy="15" r="2"/>
+      <circle cx="100" cy="15" r="2"/>
+    </g>
+  </g>
+  <g transform="translate(480, 350)" opacity="0.2">
+    <path d="M0 20 Q15 10 30 20 Q25 30 15 25 L5 35 Z" fill="#7bb3f0"/>
+    <circle cx="22" cy="20" r="1.5" fill="#4a90e2"/>
+    <g transform="translate(50, 0)">
+      <path d="M0 40 Q5 30 3 20 Q8 10 5 0" stroke="#a8d0f0" stroke-width="2" fill="none"/>
+      <path d="M10 40 Q15 25 12 10 Q18 5 15 0" stroke="#a8d0f0" stroke-width="1.5" fill="none"/>
+    </g>
+  </g>
+  <g transform="translate(50, 320)">
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="42" font-weight="300" fill="#2c5282" letter-spacing="1px">MARINE</text>
+    <text x="0" y="50" font-family="system-ui, sans-serif" font-size="42" font-weight="600" fill="#1a365d">COLLAGEN</text>
+    <text x="0" y="90" font-family="system-ui, sans-serif" font-size="24" font-weight="300" fill="#4a90e2" letter-spacing="2px">POWDER</text>
+    <text x="0" y="130" font-family="system-ui, sans-serif" font-size="14" fill="#5a6c7d" letter-spacing="0.5px">Premium Hydrolyzed Marine Peptides</text>
+    <g transform="translate(0, 160)" font-family="system-ui, sans-serif" font-size="12" fill="#4a5568">
+      <text x="0" y="0">• Enhanced Bioavailability</text>
+      <text x="0" y="20">• Skin Elasticity Support</text>
+      <text x="0" y="40">• Joint Health Benefits</text>
+      <text x="0" y="60">• Sustainably Sourced</text>
+    </g>
+  </g>
+  <g transform="translate(600, 50)">
+    <circle cx="0" cy="0" r="35" fill="#ffffff" stroke="#e0f2ff" stroke-width="2" filter="url(#softGlow)"/>
+    <text x="0" y="-8" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#4a90e2" font-weight="600">CLEAN</text>
+    <text x="0" y="4" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#4a90e2" font-weight="600">LABEL</text>
+    <text x="0" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="6" fill="#7bb3f0">2025</text>
+  </g>
+  <g transform="translate(500, 100)" opacity="0.3">
+    <path d="M0 0 Q10 -5 20 0 Q10 5 0 0" fill="#a8d0f0"/>
+    <path d="M0 0 L10 0" stroke="#7bb3f0" stroke-width="0.5"/>
+  </g>
+</svg>
+`)}`;
 
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {
@@ -39,9 +134,12 @@ const getProductUnit = (product: Product): string => {
 
 // Helper function to create custom SVG illustrations for each product
 const createProductSVG = (productId: string): string => {
-  // Return actual editorial image for Apple Cider Vinegar
+  // Return actual editorial images for specific products
   if (productId === 'apple-cider-vinegar') {
     return appleVinegarEditorialImg;
+  }
+  if (productId === 'collagen-powder' || productId === 'halo-glow') {
+    return marineCollagenEditorialSVG;
   }
   
   const svgs = {
