@@ -1934,7 +1934,6 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Are these as effective as liquid ACV?</strong> These gummies provide 500mg concentrated ACV powder equivalent to traditional liquid, but in a stomach-friendly format without enamel erosion.</li>
                                 <li>• <strong>When is the best time to take them?</strong> 15-30 minutes before meals for optimal digestive support and appetite management.</li>
                                 <li>• <strong>Can I take these on an empty stomach?</strong> Yes, unlike harsh liquid ACV, these gummies are gentle enough for empty stomach use.</li>
-                                <li>• <strong>Will these help with weight management?</strong> ACV may support appetite control and post-meal satisfaction, but it's not a weight loss product and should be combined with healthy diet and exercise.</li>
                               </ul>
                             </div>
                           ) : product.id === 'mind-memory-mushroom' ? (
