@@ -23,8 +23,13 @@ export default function Products() {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "All" || 
-                           product.category === selectedCategory ||
-                           product.category?.toLowerCase() === selectedCategory.toLowerCase();
+                           product.category === selectedCategory;
+    
+    // Debug logging
+    if (selectedCategory !== "All") {
+      console.log(`Product: ${product.name}, Category: "${product.category}", Selected: "${selectedCategory}", Matches: ${matchesCategory}`);
+    }
+    
     return matchesSearch && matchesCategory;
   }) || [];
 
