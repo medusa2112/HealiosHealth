@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import hannahImage from '@assets/Screenshot 2025-08-01 at 20.37.58_1754073484896.png';
+import hannahImage from '@assets/healios-health125.png';
 
 interface Message {
   id: string;

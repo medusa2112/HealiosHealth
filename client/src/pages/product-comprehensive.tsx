@@ -12,9 +12,9 @@ import { SEOHead } from "@/components/seo-head";
 import { PreOrderPopup } from "@/components/pre-order-popup";
 
 // Import images
-import healiosLogoImg from '@assets/healios-logo (1)_1753466737582.png';
+import healiosLogoImg from '@assets/healios-health26.png';
 import supplementLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png';
-import haloGlowImage from '@assets/HaloGlowB_1754157621693.png';
+import haloGlowImage from '@assets/healios-health20.png';
 
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {

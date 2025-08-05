@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Brain, Zap, Star } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
-import biotinProductImg from '@assets/Multivitamin & Mineral for Children (2)_1753633320058.png';
+import biotinProductImg from '@assets/healios-health53.png';
 
 export default function Science() {
   return (
@@ -81,7 +81,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Vitamin D3  4000 IU_1754056731371.png" 
+                  src="/assets/healios-health127.png" 
                   alt="Vitamin D3 4000 IU Gummies"
                   className="w-full h-full object-cover"
                 />
@@ -109,7 +109,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Iron + Vitamin C_1753615197739.png" 
+                  src="/assets/healios-health39.png" 
                   alt="Iron + Vitamin C Gummies"
                   className="w-full h-full object-cover"
                 />
@@ -137,7 +137,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Folic Acid 400µg_1753615197741.png" 
+                  src="/assets/healios-health14.png" 
                   alt="Folic Acid 400µg Gummies"
                   className="w-full h-full object-cover"
                 />
@@ -165,7 +165,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Biton_1753615197741.png" 
+                  src="/assets/healios-health8.png" 
                   alt="Biotin 5000µg Gummies"
                   className="w-full h-full object-cover"
                 />
@@ -193,7 +193,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Magnesium_1753615197741.png" 
+                  src="/assets/healios-health44.png" 
                   alt="Magnesium Citrate Gummies"
                   className="w-full h-full object-cover"
                 />
@@ -221,7 +221,7 @@ export default function Science() {
             <div className="text-center p-4">
               <div className="w-24 h-24 mx-auto mb-6">
                 <img 
-                  src="/assets/Ashwagandha 600mg_1753615197741.png" 
+                  src="/assets/healios-health3.png" 
                   alt="Ashwagandha 600mg Gummies"
                   className="w-full h-full object-cover"
                 />

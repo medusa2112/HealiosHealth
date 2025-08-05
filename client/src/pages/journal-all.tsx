@@ -71,16 +71,16 @@ export default function JournalAll() {
   // Helper function to get article image based on title
   const getArticleImage = (title: string): string => {
     const titleLower = title.toLowerCase();
-    if (titleLower.includes('magnesium')) return '/assets/Magnesium_1753615197741.png';
-    if (titleLower.includes('vitamin d')) return '/assets/Vitamin D3  4000 IU_1754056731371.png';
-    if (titleLower.includes('collagen')) return '/assets/Collagen Powder_1753469577639.webp';
-    if (titleLower.includes('ashwagandha')) return '/assets/Ashwagandha 600mg_1753615197741.png';
-    if (titleLower.includes('probiotic')) return '/assets/Probiotics_1753615197740.png';
-    if (titleLower.includes('biotin')) return '/assets/Biotin 5000µg_1753615197740.png';
-    if (titleLower.includes('iron')) return '/assets/Iron + Vitamin C_1753615197739.png';
-    if (titleLower.includes('folic acid')) return '/assets/Folic Acid 400µg_1753615197741.png';
-    if (titleLower.includes('apple cider vinegar')) return '/assets/Apple-Cider-Vinegar-X_1753469577640.png';
-    return '/assets/Healios_1753559079971.png'; // Default image
+    if (titleLower.includes('magnesium')) return '/assets/healios-health44.png';
+    if (titleLower.includes('vitamin d')) return '/assets/healios-health127.png';
+    if (titleLower.includes('collagen')) return '/assets/healios-health10.webp';
+    if (titleLower.includes('ashwagandha')) return '/assets/healios-health3.png';
+    if (titleLower.includes('probiotic')) return '/assets/healios-health74.png';
+    if (titleLower.includes('biotin')) return '/assets/healios-health8.png';
+    if (titleLower.includes('iron')) return '/assets/healios-health39.png';
+    if (titleLower.includes('folic acid')) return '/assets/healios-health14.png';
+    if (titleLower.includes('apple cider vinegar')) return '/assets/healios-health2.png';
+    return '/assets/healios-health27.png'; // Default image
   };
 
   // Convert articles to the format expected by the UI

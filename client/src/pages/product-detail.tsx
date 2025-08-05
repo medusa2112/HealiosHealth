@@ -519,7 +519,7 @@ export default function ProductDetail() {
               <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
                 <div className="mb-6 lg:mb-0">
                   <img
-                    src="/attached_assets/Healios_1753559079971.png"
+                    src="/assets/healios-health27.png"
                     alt="Supplement bundle recommendation"
                     className="w-full aspect-[4/3] object-cover"
                   />

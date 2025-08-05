@@ -5,18 +5,18 @@ import { Star, Leaf, Award, Microscope, FlaskConical, TestTube, Lightbulb, Exter
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { SEOHead } from '@/components/seo-head';
-import appleCiderVinegarImg from '@assets/Apple Cider Vinegar_1753615197742.png';
-import vitaminD3Img from '@assets/Vitamin D3  4000 IU_1754056731371.png';
-import ashwagandhaImg from '@assets/Ashwagandha 600mg_1753615197741.png';
-import probioticsImg from '@assets/Porbiotic_Vitamins_1753615197742.png';
-import magnesiumImg from '@assets/Magnesium_1753615197741.png';
+import appleCiderVinegarImg from '@assets/healios-health2.png';
+import vitaminD3Img from '@assets/healios-health127.png';
+import ashwagandhaImg from '@assets/healios-health3.png';
+import probioticsImg from '@assets/healios-health75.png';
+import magnesiumImg from '@assets/healios-health44.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
-import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
-import pharmacistsImg from '@assets/multiracial-pharmacists-mix-and-make-a-cure-in-mor-2025-04-01-13-08-39-utc (1) (1)_1753618338989.jpg';
+import nutritionistImg from '@assets/healios-health31.jpg';
+import pharmacistsImg from '@assets/healios-health48.jpg';
 import modernLabImg from '@assets/generated_images/Modern_pharmaceutical_research_facility_b73898e1.png';
-import childrenMultivitaminImg from '@assets/Multivitamin for Kids_1753615197742.png';
-import collagenComplexImg from '@assets/Collagen Complex__1753615197742.png';
-import haloGlowTextImg from '@assets/Screenshot 2025-08-04 at 11.21.18_1754299300310.png';
+import childrenMultivitaminImg from '@assets/healios-health49.png';
+import collagenComplexImg from '@assets/healios-health11.png';
+import haloGlowTextImg from '@assets/healios-health126.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
@@ -361,7 +361,7 @@ export default function HomePage() {
         title="Healios - Premium Wellness Supplements | Quality Ingredients, Third-Party Tested"
         description="Discover Healios premium wellness supplements made with quality ingredients. Carefully formulated to support your daily wellness routine. Third-party tested for purity."
         keywords="wellness supplements, natural vitamins, daily wellness, premium supplements, Healios, quality ingredients, third-party tested"
-        image="/attached_assets/Healios_1753559079971.png"
+        image="/assets/healios-health27.png"
       />
       {/* Wild Nutrition Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -481,7 +481,7 @@ export default function HomePage() {
               <div className="relative">
                 <div className="aspect-square bg-gray-50 dark:bg-gray-800 overflow-hidden">
                   <img 
-                    src="/assets/HaloGlowB_1754157621693.png"
+                    src="/assets/healios-health20.png"
                     alt="Halo Glow Collagen Complex"
                     className="w-full h-full object-cover"
                   />

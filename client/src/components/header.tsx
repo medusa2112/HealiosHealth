@@ -6,7 +6,7 @@ import { SiTrustpilot } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import healiosLogo from "@assets/healios-logo (1)_1753466737582.png";
+import healiosLogo from "@assets/healios-health27.png";
 import { LearningPopup } from './learning-popup';
 import { AssistantSidebar } from './assistant-sidebar';
 
@@ -421,7 +421,7 @@ export function Header() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/attached_assets/Healios_1753559079971.png" 
+                  src="/assets/healios-health27.png" 
                   alt="Take our wellness quiz" 
                   className="w-full h-24 object-cover"
                 />
@@ -442,7 +442,7 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/attached_assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg" 
+                  src="/assets/healios-health31.jpg" 
                   alt="A new journey" 
                   className="w-full h-24 object-cover"
                 />

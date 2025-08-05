@@ -1,9 +1,9 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain, Check } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
-import vitaminD3Img from '@assets/Multivitamin & Mineral for Children (1)_1753633010283.png';
-import teamCelebrationImg from '@assets/we-make-the-best-team-2025-04-05-22-51-36-utc (1) (1)_1753631002255.jpg';
-import nutritionistImg from '@assets/he-has-some-valuable-information-to-share-2025-04-06-07-11-37-utc (1) (1)_1753546950153.jpg';
+import vitaminD3Img from '@assets/healios-health51.png';
+import teamCelebrationImg from '@assets/healios-health130.jpg';
+import nutritionistImg from '@assets/healios-health31.jpg';
 
 export default function About() {
   return (
