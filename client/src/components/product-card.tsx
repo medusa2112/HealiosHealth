@@ -94,12 +94,13 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.inStock ? (
               <Button
                 onClick={handleAddToCart}
-                className="bg-white text-black px-6 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
+                className="bg-black/80 backdrop-blur-sm text-white px-6 py-3 text-sm font-medium hover:bg-white hover:text-black transition-all duration-300 border border-black/20 shadow-lg"
+                style={{ borderRadius: '0' }}
               >
                 Add to Cart
               </Button>
             ) : product.id === 'childrens-multivitamin' ? (
-              <div className="bg-red-600 text-white px-6 py-2 text-sm font-medium">
+              <div className="bg-red-600/80 backdrop-blur-sm text-white px-6 py-3 text-sm font-medium border border-red-600/20 shadow-lg">
                 Cap Reached
               </div>
             ) : (
@@ -109,7 +110,8 @@ export function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   setShowPreOrderModal(true);
                 }}
-                className="bg-red-600 text-white px-6 py-2 text-sm font-medium hover:bg-red-700 transition-colors"
+                className="bg-red-600/80 backdrop-blur-sm text-white px-6 py-3 text-sm font-medium hover:bg-white hover:text-red-600 transition-all duration-300 border border-red-600/20 shadow-lg"
+                style={{ borderRadius: '0' }}
               >
                 Pre-Order Now
               </Button>
