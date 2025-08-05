@@ -106,15 +106,13 @@ export default function ProductDetail() {
 
   const nutritionalData = product?.id === 'apple-cider-vinegar' ? {
     nutrient: [
-      { name: 'Apple Cider Vinegar', amount: '500mg', nrv: '' },
-      { name: 'Chromium', amount: '40μg', nrv: '100' },
-      { name: 'Vitamin B6', amount: '1.4mg', nrv: '100' },
+      { name: 'Apple Cider Vinegar (with the Mother)', amount: '500mg', nrv: '' },
+      { name: 'Ginger Extract', amount: '10mg', nrv: '' },
     ]
   } : product?.id === 'ashwagandha' ? {
     nutrient: [
-      { name: 'KSM-66® Ashwagandha Extract', amount: '600mg', nrv: '' },
-      { name: 'Withanolides', amount: '30mg', nrv: '' },
-      { name: 'Magnesium', amount: '56mg', nrv: '15' },
+      { name: 'KSM-66® Ashwagandha Root Extract', amount: '500mg', nrv: '' },
+      { name: 'Withanolides (5%)', amount: '25mg', nrv: '' },
     ]
   } : product?.id === 'magnesium' ? {
     nutrient: [
@@ -143,9 +141,7 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'vitamin-d3' ? {
     nutrient: [
-      { name: 'Vitamin D3 (Cholecalciferol)', amount: '4000 IU', nrv: '2000' },
-      { name: 'Vitamin K2 (MK-7)', amount: '100μg', nrv: '133' },
-      { name: 'Coconut Oil (MCT)', amount: '500mg', nrv: '' },
+      { name: 'Vitamin D3 (Cholecalciferol)', amount: '4000 IU (100μg)', nrv: '2000' },
     ]
   } : {
     nutrient: []
@@ -201,6 +197,81 @@ export default function ProductDetail() {
       question: "Is it suitable for vegans and people with intolerances?",
       answer: "Yes — it's 100% vegan, gluten-free, dairy-free, and free from artificial preservatives."
     }
+  ] : product?.id === 'ashwagandha' ? [
+    {
+      question: "What makes KSM-66® different from other ashwagandha extracts?",
+      answer: "KSM-66® is the most clinically studied ashwagandha extract with over 20 human clinical trials. It's a full-spectrum extract produced using a unique extraction process that preserves the natural balance of active compounds found in the ashwagandha root."
+    },
+    {
+      question: "How does ashwagandha help with stress?",
+      answer: "KSM-66® ashwagandha helps reduce cortisol levels (the stress hormone) by up to 27.9% according to clinical studies. This helps restore the body's natural stress response and promotes better overall health, sleep, and mood."
+    },
+    {
+      question: "When should I take ashwagandha?",
+      answer: "Take 1 capsule daily with food. Many people prefer taking it in the evening as it can promote relaxation and better sleep quality. For consistent results, take at the same time each day."
+    },
+    {
+      question: "How long before I see results?",
+      answer: "Some people notice improvements in stress levels and sleep quality within 2-4 weeks of consistent use. For optimal benefits related to energy and mood, continue for 8-12 weeks as shown in clinical studies."
+    },
+    {
+      question: "Are there any side effects?",
+      answer: "KSM-66® ashwagandha is generally well-tolerated. Some people may experience mild drowsiness initially. If you're pregnant, nursing, or taking medications, consult your healthcare provider before use."
+    },
+    {
+      question: "Is this suitable for vegetarians and vegans?",
+      answer: "Yes, this product is 100% suitable for both vegetarians and vegans. The capsules are plant-based and contain no animal-derived ingredients."
+    }
+  ] : product?.id === 'apple-cider-vinegar' ? [
+    {
+      question: "How is this different from liquid apple cider vinegar?",
+      answer: "Our gummies provide 500mg of ACV with the Mother in a convenient, tooth-friendly form without the harsh taste or potential enamel damage from liquid vinegar. Plus, we've added ginger extract for enhanced digestive support."
+    },
+    {
+      question: "What does 'with the Mother' mean?",
+      answer: "The Mother is a complex structure of beneficial proteins, enzymes, and friendly bacteria that gives raw, unfiltered ACV its cloudy appearance and health benefits. It's the most important component for gut health support."
+    },
+    {
+      question: "When should I take these gummies?",
+      answer: "Take 2 gummies daily, preferably 15-30 minutes before meals to support digestion and metabolism. They can be taken with or without food and won't irritate an empty stomach like liquid ACV can."
+    },
+    {
+      question: "Are these safe for teeth and stomach?",
+      answer: "Yes! Unlike liquid ACV which can erode tooth enamel and irritate the stomach, our gummies are pH-balanced and gentle. The natural apple flavor makes them enjoyable to take daily."
+    },
+    {
+      question: "How much sugar do these contain?",
+      answer: "Each serving (2 gummies) contains minimal natural sugars from the pectin base. We use natural apple flavoring and avoid artificial sweeteners while keeping sugar content low for daily use."
+    },
+    {
+      question: "Can I take these if I'm diabetic or watching my weight?",
+      answer: "Our ACV gummies have a minimal impact on blood sugar. However, if you have diabetes or specific dietary restrictions, consult your healthcare provider before starting any new supplement."
+    }
+  ] : product?.id === 'vitamin-d3' ? [
+    {
+      question: "Why do I need vitamin D3 supplementation?",
+      answer: "In the UK, limited sunlight exposure from October to March makes it difficult to maintain adequate vitamin D levels naturally. The NHS recommends supplementation for most people during these months to support immune function and bone health."
+    },
+    {
+      question: "What's the difference between D2 and D3?",
+      answer: "Vitamin D3 (cholecalciferol) is the same form your skin produces from sunlight and is more effective at raising and maintaining vitamin D blood levels compared to D2 (ergocalciferol)."
+    },
+    {
+      question: "Is 4000 IU safe for daily use?",
+      answer: "Yes, 4000 IU is well within safe limits for adults and teens 12+. The tolerable upper limit is 10,000 IU daily. Our dosage provides therapeutic benefits while maintaining a wide safety margin."
+    },
+    {
+      question: "When should I take vitamin D3?",
+      answer: "Take with a meal containing some fat for optimal absorption, as vitamin D is fat-soluble. Morning or lunch is ideal, as taking it late in the day may interfere with sleep for some people."
+    },
+    {
+      question: "How long before I see benefits?",
+      answer: "Vitamin D levels typically improve within 4-6 weeks of consistent supplementation. Immune and mood benefits may be noticed within 2-4 weeks, while bone health benefits occur over months of consistent use."
+    },
+    {
+      question: "Should I get my vitamin D levels tested?",
+      answer: "While not essential, testing can help confirm your starting levels and track improvement. Optimal blood levels are generally considered to be 75-125 nmol/L (30-50 ng/mL)."
+    }
   ] : [
     {
       question: "How should I take this supplement?",
@@ -221,6 +292,31 @@ export default function ProductDetail() {
     {
       question: "Is this suitable for vegetarians/vegans?",
       answer: product?.id === 'vitamin-d3' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
+    }
+  ] : product?.id === 'vitamin-d3' ? [
+    {
+      question: "Why do I need 4000 IU of Vitamin D3?",
+      answer: "4000 IU provides therapeutic levels for immune support and bone health, especially during UK winter months when sun exposure is limited. This dose is well within safe limits and helps maintain optimal blood levels."
+    },
+    {
+      question: "When should I take Vitamin D3?",
+      answer: "Take 1 gummy daily with a meal containing fat for optimal absorption. Morning is ideal as vitamin D can support natural energy levels and won't interfere with sleep."
+    },
+    {
+      question: "Can children take these gummies?",
+      answer: "These high-potency gummies are formulated for adults and teens 12+. For younger children, consult your healthcare provider for appropriate dosing recommendations."
+    },
+    {
+      question: "How long before I see benefits?",
+      answer: "Most people notice improved energy and mood within 4-6 weeks of consistent use. For immune benefits, maintaining steady levels year-round is most effective, especially during winter months."
+    },
+    {
+      question: "Should I get my vitamin D levels tested?",
+      answer: "A blood test can help determine your current vitamin D status. Optimal levels are 75-125 nmol/L (30-50 ng/mL). Your GP can arrange testing if you have concerns about deficiency."
+    },
+    {
+      question: "Is this suitable for vegetarians and vegans?",
+      answer: "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 derived from lanolin (sheep's wool), which is the most bioactive form of vitamin D."
     }
   ];
 
@@ -545,6 +641,24 @@ export default function ProductDetail() {
                   <strong>Recommended Use:</strong> 1 capsule, 1–3 times daily<br/>
                   <strong>With or after food</strong><br/><br/>
                   <strong>Tip:</strong> Split across the day (morning and evening) for steady magnesium levels and better sleep support. Do not exceed the recommended dose.
+                </>
+              ) : product?.id === 'ashwagandha' ? (
+                <>
+                  <strong>Recommended Use:</strong> 1 capsule daily with food<br/>
+                  <strong>Best Time:</strong> Evening for relaxation and sleep support<br/><br/>
+                  Take consistently at the same time each day for optimal results. Do not exceed the recommended dose.
+                </>
+              ) : product?.id === 'apple-cider-vinegar' ? (
+                <>
+                  <strong>Recommended Use:</strong> Take 2 gummies daily<br/>
+                  <strong>Can be taken:</strong> With or without food<br/><br/>
+                  For best results, take consistently at the same time each day. Do not exceed the recommended dose.
+                </>
+              ) : product?.id === 'vitamin-d3' ? (
+                <>
+                  <strong>Recommended Use:</strong> Take 1 gummy daily<br/>
+                  <strong>Can be taken:</strong> With or without food<br/><br/>
+                  For optimal absorption, take with a meal containing some fat. Do not exceed the recommended dose.
                 </>
               ) : (
                 <>
