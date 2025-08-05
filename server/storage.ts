@@ -82,8 +82,8 @@ export class MemStorage implements IStorage {
       // Healios Products matching frontend
       {
         id: "apple-cider-vinegar",
-        name: "Apple Cider Vinegar Gummies (Strawberry Flavour)",
-        description: "Daily metabolic & gut support with 500mg concentrated Apple Cider Vinegar powder per gummy. Stomach-friendly format without the burn or enamel erosion.",
+        name: "Apple Cider Vinegar + Ginger Gummies (Natural Apple Flavour) — 500mg ACV with the Mother",
+        description: "Support your gut daily with these delicious apple-flavoured gummies. Each serving delivers 500mg of raw Apple Cider Vinegar with the Mother plus 10mg of soothing ginger extract to support digestion, metabolism, and natural detox — without the harsh vinegar taste.\n\nMade for daily balance, these vegan-friendly gummies offer a gentler, more convenient way to experience the benefits of ACV — no enamel damage, no burning aftertaste.\n\n**Why it works:**\n• **ACV with the Mother** — promotes healthy gut flora & digestion\n• **Ginger extract** — traditionally used to ease bloating and support motility\n• **Natural flavour** — crisp apple taste with no artificial nasties\n\n✔ Vegan ✔ Gluten-Free ✔ Gelatin-Free ✔ No Artificial Colours or Preservatives\n\n**Nutritional Information (Per 2 Gummies / Daily Serving)**\n• Apple Cider Vinegar (with the Mother): 500mg\n• Ginger Extract: 10mg\n\n**Ingredients:** Glucose Syrup, Sugar, Water, Pre-mix (Ginger Extract, Mother Apple Cider Vinegar), Pectin, Citric Acid, Sodium Citrate, Anthocyanadins, Sodium Copper Chlorophyll, Coconut Oil, Carnauba Wax, Natural Apple Flavour.\n\n**How to Take:** Take two (2) gummies daily. Can be taken with or without food.",
         price: "299.00",
         originalPrice: null,
         imageUrl: "/assets/healios-health2.png",
