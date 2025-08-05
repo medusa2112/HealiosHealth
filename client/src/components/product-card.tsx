@@ -52,13 +52,13 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <>
     <Link href={`/products/${product.id}`}>
-      <div className="group cursor-pointer">
+      <div className={`group cursor-pointer ${!product.inStock ? 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100' : ''} transition-all duration-300`}>
         {/* Product Image */}
         <div className="relative aspect-square bg-gray-100 mb-4 overflow-hidden">
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${!product.inStock ? 'group-hover:filter-none' : ''}`}
           />
           
           {/* Supply Badge - Top Right - Only for supplements */}
@@ -121,7 +121,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Product Info */}
         <div className="space-y-2">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
+          <h3 className={`text-lg font-medium group-hover:transition-colors ${!product.inStock ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300'}`}>
             {product.name}
           </h3>
           
@@ -144,7 +144,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-gray-900 dark:text-white">
+            <span className={`text-lg font-semibold ${!product.inStock ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
               R{product.price}
             </span>
           </div>
