@@ -177,6 +177,22 @@ export function Header() {
               </span>
             </Link>
             
+            {/* Chat to Juliet */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsAssistantOpen(true)}
+              className="text-white hover:bg-transparent hover:text-healios-cyan transition-colors duration-200 flex items-center gap-2"
+            >
+              <MessageCircle className={`transition-all duration-300 ${
+                isScrolled ? 'h-3 w-3' : 'h-4 w-4'
+              }`} />
+              <span className={`font-medium transition-all duration-200 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
+                Chat to Juliet
+              </span>
+            </Button>
 
           </div>
           
@@ -241,18 +257,6 @@ export function Header() {
               </a>
             </div>
             
-            {/* Assistant */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsAssistantOpen(true)}
-              className="text-white hover:bg-transparent hover:text-healios-cyan transition-colors duration-200"
-            >
-              <MessageCircle className={`transition-all duration-300 ${
-                isScrolled ? 'h-4 w-4' : 'h-5 w-5'
-              }`} />
-            </Button>
-
             {/* Cart */}
             <Button
               variant="ghost"
