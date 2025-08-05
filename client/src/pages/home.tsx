@@ -500,7 +500,6 @@ export default function HomePage() {
                       alt="HALO Glow Collagen Product" 
                       className="h-12 lg:h-16 object-contain"
                     />
-                    <span>HALO Glow Collagen</span>
                   </h2>
                   <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                     Support your skin's natural radiance with HALO Glow Collagen — a daily high-purity peptide powder that boosts collagen and elastin production, reduces wrinkles and fine lines, and supports nail strength and hair thickness.
