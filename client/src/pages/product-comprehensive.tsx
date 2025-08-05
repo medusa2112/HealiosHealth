@@ -15,6 +15,15 @@ import { PreOrderPopup } from "@/components/pre-order-popup";
 import healiosLogoImg from '@assets/healios-health26.png';
 import supplementLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png';
 import haloGlowImage from '@assets/healios-health20.png';
+import wellnessLifestyleImg from '@assets/healios-health121.jpg';
+import immuneHealthImg from '@assets/healios-health122.png';
+import stressReliefImg from '@assets/healios-health123.png';
+import digestiveHealthImg from '@assets/healios-health124.png';
+import beautyWellnessImg from '@assets/healios-health125.png';
+import sleepWellnessImg from '@assets/healios-health126.png';
+import energyVitalityImg from '@assets/healios-health127.png';
+import prenatalWellnessImg from '@assets/healios-health128.png';
+import cognitiveHealthImg from '@assets/healios-health129.jpg';
 
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {
@@ -25,6 +34,38 @@ const getProductUnit = (product: Product): string => {
   if (name.includes('tablets')) return 'tablets';
   // Default for supplements
   return 'capsules';
+};
+
+// Helper function to get the appropriate image for each product
+const getProductImage = (productId: string): string => {
+  switch (productId) {
+    case 'collagen-powder':
+    case 'halo-glow':
+    case 'biotin-5000':
+    case 'collagen-complex':
+      return beautyWellnessImg;
+    case 'vitamin-d3':
+    case 'probiotics':
+    case 'probiotic-vitamins':
+    case 'gut-mind-energy':
+      return immuneHealthImg;
+    case 'ashwagandha':
+      return stressReliefImg;
+    case 'apple-cider-vinegar':
+      return digestiveHealthImg;
+    case 'magnesium':
+      return sleepWellnessImg;
+    case 'iron-vitamin-c':
+      return energyVitalityImg;
+    case 'folic-acid-400':
+      return prenatalWellnessImg;
+    case 'mind-memory-mushroom':
+      return cognitiveHealthImg;
+    case 'childrens-multivitamin':
+      return wellnessLifestyleImg;
+    default:
+      return supplementLabImg;
+  }
 };
 
 export default function ProductComprehensive() {
@@ -1760,8 +1801,8 @@ export default function ProductComprehensive() {
           {/* Image */}
           <div className="relative overflow-hidden">
             <img
-              src={supplementLabImg}
-              alt="Professional supplement laboratory with premium ingredients and modern equipment"
+              src={params?.id === 'halo-glow' ? haloGlowImage : getProductImage(params?.id || '')}
+              alt={`${product?.name} wellness lifestyle imagery`}
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
@@ -1801,8 +1842,8 @@ export default function ProductComprehensive() {
             </p>
             
             <img
-              src={supplementLabImg}
-              alt="Wellness lifestyle"
+              src={sleepWellnessImg}
+              alt="Sleep and wellness lifestyle"
               className="w-full h-64 object-cover"
             />
           </div>
