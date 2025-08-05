@@ -26,6 +26,7 @@ import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
 import marineCollagenImg from '@assets/Collagen Complex__1754395222287.png';
+import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 
 // KSM-66 Ashwagandha Editorial SVG as URL encoded data
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
@@ -191,7 +192,7 @@ const createProductSVG = (productId: string): string => {
     return marineCollagenEditorialSVG;
   }
   if (productId === 'ksm-66-ashwagandha' || productId === 'ashwagandha') {
-    return ashwagandhaEditorialSVG;
+    return ksm66EditorialImg;
   }
   
   const svgs = {
