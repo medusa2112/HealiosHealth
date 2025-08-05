@@ -359,7 +359,7 @@ export class MemStorage implements IStorage {
         description: "A high-potency vegan gummy combining 3 strains of friendly bacteria (400M CFU) with essential B-vitamins and vitamin C — supporting energy, psychological function, and the immune system. Perfect for both adults and kids aged 3+.",
         price: "549.00",
         originalPrice: null,
-        imageUrl: "/assets/healios-health7.png",
+        imageUrl: "/assets/Bio-Cultures Vitamin Plus Gummies_1754395066937.png",
         category: "Probiotics",
         rating: "4.9",
         reviewCount: 21,
