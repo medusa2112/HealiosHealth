@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Loader2, Bot, User, MessageCircle } from 'lucide-react';
+import { X, Send, Loader2, Bot, User, MessageCircle, Mail, Heart, DollarSign, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -29,6 +29,8 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPTModal, setShowPTModal] = useState(false);
+  const [showNutritionModal, setShowNutritionModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -116,6 +118,18 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
 
   const handleQuickQuestion = (question: string) => {
     setInputValue(question);
+  };
+
+  const handleEmailSupport = () => {
+    window.location.href = 'mailto:hello@thefourths.com?subject=Customer Support Inquiry&body=Hi, I need help with...';
+  };
+
+  const handlePTConsultation = () => {
+    setShowPTModal(true);
+  };
+
+  const handleNutritionConsultation = () => {
+    setShowNutritionModal(true);
   };
 
   return (
@@ -240,6 +254,33 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
           </div>
         )}
 
+        {/* Quick Action Buttons */}
+        <div className="px-3 sm:px-6 py-2 bg-black sm:bg-black/30 sm:backdrop-blur-xl border-t border-white/10">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={handleEmailSupport}
+              className="flex items-center gap-1.5 text-[10px] sm:text-xs px-2 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-200"
+            >
+              <Mail className="w-3 h-3" />
+              Email Support
+            </button>
+            <button
+              onClick={handlePTConsultation}
+              className="flex items-center gap-1.5 text-[10px] sm:text-xs px-2 py-1.5 bg-green-600 hover:bg-green-700 text-white font-medium transition-colors duration-200"
+            >
+              <User className="w-3 h-3" />
+              PT Consultation
+            </button>
+            <button
+              onClick={handleNutritionConsultation}
+              className="flex items-center gap-1.5 text-[10px] sm:text-xs px-2 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium transition-colors duration-200"
+            >
+              <Heart className="w-3 h-3" />
+              Nutrition
+            </button>
+          </div>
+        </div>
+
         {/* Input */}
         <div className="p-3 sm:p-6 bg-black sm:bg-black/60 sm:backdrop-blur-xl">
           <div className="relative">
@@ -267,6 +308,134 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
             </div>
           </div>
         </div>
+
+        {/* PT Modal */}
+        {showPTModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[100]">
+            <div className="bg-white dark:bg-gray-900 max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setShowPTModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-black text-white flex items-center justify-center mx-auto mb-4">
+                  <User className="w-8 h-8" />
+                </div>
+                <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-2">
+                  Personal Training Consultation
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Connect with a certified personal trainer for personalized fitness guidance tailored to your goals.
+                </p>
+              </div>
+
+              <div className="space-y-6 mb-8">
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">15-Minute Consultation</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Quick assessment of your fitness goals and current level</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <DollarSign className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">£10 Session Fee</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Professional consultation with certified trainer</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <User className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">What You'll Get</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Personalized workout recommendations, form guidance, and goal-setting strategies</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <button
+                  onClick={() => {
+                    window.location.href = 'mailto:hello@thefourths.com?subject=PT Consultation Booking&body=Hi, I would like to book a 15-minute Personal Training consultation for £10. Please let me know available times.';
+                    setShowPTModal(false);
+                  }}
+                  className="w-full bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors font-medium"
+                >
+                  Book Consultation - £10
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Nutrition Modal */}
+        {showNutritionModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[100]">
+            <div className="bg-white dark:bg-gray-900 max-w-md w-full p-8 relative max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setShowNutritionModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-black text-white flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8" />
+                </div>
+                <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-2">
+                  Nutrition Consultation
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Work with a qualified nutritionist to create a personalized nutrition plan that supports your wellness goals.
+                </p>
+              </div>
+
+              <div className="space-y-6 mb-8">
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">15-Minute Consultation</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Initial assessment of your dietary needs and health goals</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <DollarSign className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">£10 Session Fee</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Professional consultation with registered nutritionist</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Heart className="w-5 h-5 text-gray-600 dark:text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">What You'll Get</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Personalized nutrition advice, meal planning guidance, and supplement recommendations</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <button
+                  onClick={() => {
+                    window.location.href = 'mailto:hello@thefourths.com?subject=Nutrition Consultation Booking&body=Hi, I would like to book a 15-minute Nutrition consultation for £10. Please let me know available times.';
+                    setShowNutritionModal(false);
+                  }}
+                  className="w-full bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors font-medium"
+                >
+                  Book Consultation - £10
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );
