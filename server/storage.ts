@@ -105,7 +105,7 @@ export class MemStorage implements IStorage {
         id: "vitamin-d3",
         name: "Vitamin D3 4000 IU Gummies (Orange Flavour)",
         description: "Get your daily dose of sunshine in one delicious gummy. Healios Vitamin D3 Gummies deliver a high-strength 4000 IU (100μg) dose of vitamin D3 in a tangy natural orange flavour — designed to support immune system function, bone and muscle strength, calcium absorption, and mood and energy levels. Made with vegan-friendly cholecalciferol and no artificial nasties, these gummies are a tasty, easy way to stay topped up — especially during the darker winter months or when sun exposure is limited.",
-        price: "299.00",
+        price: "449.00",
         originalPrice: null,
         imageUrl: "/assets/Vitamin D3  4000 IU_1754395199505.png",
         categories: ["Vitamins", "Gummies"],
