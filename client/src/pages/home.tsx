@@ -496,7 +496,7 @@ export default function HomePage() {
                   </div>
                   <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-3">
                     <img 
-                      src={collagenComplexImg} 
+                      src={haloGlowTextImg} 
                       alt="HALO Glow Collagen Product" 
                       className="h-12 lg:h-16 object-contain"
                     />
