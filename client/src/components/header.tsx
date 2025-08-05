@@ -62,15 +62,15 @@ export function Header() {
         { href: "/products/probiotics", label: "Digestive Support" },
         { href: "/products/probiotic-vitamins", label: "Gut + Immune Support" },
         { href: "/products/iron-vitamin-c", label: "Energy & Focus" },
-        { href: "/products/folic-acid-400", label: "Pre-Pregnancy Support" },
+        { href: "/products/folic-acid-400", label: "Pre-pregnancy support", comingSoon: true },
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep & Muscle Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
         { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
         { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
-        { href: "/products/childrens-multivitamin", label: "Children's Development" },
+        { href: "/products/childrens-multivitamin", label: "Children's Development", comingSoon: true },
         { href: "/products/apple-cider-vinegar", label: "Metabolic Support" },
-      ]
+      ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
     },
     {
       title: "All Products",
