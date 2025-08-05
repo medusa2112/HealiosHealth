@@ -10,7 +10,7 @@ export const products = pgTable("products", {
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   originalPrice: decimal("original_price", { precision: 10, scale: 2 }),
   imageUrl: text("image_url").notNull(),
-  category: text("category").notNull(),
+  categories: text("categories").array().notNull(),
   rating: decimal("rating", { precision: 2, scale: 1 }).default("5.0"),
   reviewCount: integer("review_count").default(0),
   inStock: boolean("in_stock").default(true),

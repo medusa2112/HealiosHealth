@@ -24,11 +24,7 @@ export default function Products() {
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesCategory = selectedCategory === "All" || 
-                           product.category === selectedCategory ||
-                           // Special case for Gummies: include products with "Gummies" or "Gummy" in name
-                           (selectedCategory === "Gummies" && 
-                            (product.name.toLowerCase().includes("gummies") || 
-                             product.name.toLowerCase().includes("gummy")));
+                           product.categories?.includes(selectedCategory);
     
     return matchesSearch && matchesCategory;
   }) || [];
