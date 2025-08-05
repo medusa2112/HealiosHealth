@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Menu, ChevronDown, MessageCircle, Globe, Camera } from "lucide-react";
+import { ShoppingBag, Menu, ChevronDown, MessageCircle } from "lucide-react";
+import { FaInstagram, FaFacebook, FaTiktok, FaGoogle } from "react-icons/fa";
+import { SiTrustpilot } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -187,18 +189,53 @@ export function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#4285F4] transition-colors duration-200 p-1"
+                title="Google Reviews"
               >
-                <Globe className={`transition-all duration-300 ${
+                <FaGoogle className={`transition-all duration-300 ${
                   isScrolled ? 'h-3 w-3' : 'h-4 w-4'
                 }`} />
               </a>
               <a
-                href="https://www.instagram.com/thehealios_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                href="https://www.trustpilot.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#00B67A] transition-colors duration-200 p-1"
+                title="Trustpilot"
+              >
+                <SiTrustpilot className={`transition-all duration-300 ${
+                  isScrolled ? 'h-3 w-3' : 'h-4 w-4'
+                }`} />
+              </a>
+              <a
+                href="https://www.instagram.com/thehealios_?igsh=Nzgxc242a2JoODF2&utm_source=qr"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#E4405F] transition-colors duration-200 p-1"
+                title="Instagram"
               >
-                <Camera className={`transition-all duration-300 ${
+                <FaInstagram className={`transition-all duration-300 ${
+                  isScrolled ? 'h-3 w-3' : 'h-4 w-4'
+                }`} />
+              </a>
+              <a
+                href="https://www.facebook.com/share/1AhXK9ZyU5/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#1877F2] transition-colors duration-200 p-1"
+                title="Facebook"
+              >
+                <FaFacebook className={`transition-all duration-300 ${
+                  isScrolled ? 'h-3 w-3' : 'h-4 w-4'
+                }`} />
+              </a>
+              <a
+                href="https://www.tiktok.com/@thehealios?_t=ZS-8ycTZGuyvoe&_r=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-[#FF0050] transition-colors duration-200 p-1"
+                title="TikTok"
+              >
+                <FaTiktok className={`transition-all duration-300 ${
                   isScrolled ? 'h-3 w-3' : 'h-4 w-4'
                 }`} />
               </a>
