@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children", "Beauty", "Prenatal", "Mushrooms"];
+const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children", "Beauty", "Prenatal", "Mushrooms", "Apparel"];
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,7 +22,9 @@ export default function Products() {
   const filteredProducts = products?.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+    const matchesCategory = selectedCategory === "All" || 
+                           product.category === selectedCategory ||
+                           product.category?.toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   }) || [];
 

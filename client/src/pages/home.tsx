@@ -283,14 +283,14 @@ export default function HomePage() {
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'childrens-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom'],
-    VITAMINS: ['vitamin-d3', 'childrens-multivitamin', 'folic-acid-400'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'childrens-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom', 'bio-cultures-vitamin-plus'],
+    VITAMINS: ['vitamin-d3', 'childrens-multivitamin', 'folic-acid-400', 'bio-cultures-vitamin-plus'],
     ADAPTOGENS: ['ashwagandha', 'mind-memory-mushroom'],
-    PROBIOTICS: ['probiotics', 'probiotic-vitamins'],
+    PROBIOTICS: ['probiotics', 'probiotic-vitamins', 'bio-cultures-vitamin-plus'],
     MINERALS: ['magnesium', 'iron-vitamin-c'],
     BEAUTY: ['collagen-complex', 'biotin-5000', 'collagen-powder'],
     PRENATAL: ['folic-acid-400'],
-
+    APPAREL: ['healios-oversized-tee'],
   };
 
   const handleCategoryChange = async (category: string) => {
@@ -638,6 +638,16 @@ export default function HomePage() {
                   >
                     PRENATAL
                   </button>
+                  <button 
+                    onClick={() => handleCategoryChange('APPAREL')}
+                    className={`px-3 py-1 text-xs font-medium transition-colors ${
+                      selectedCategory === 'APPAREL' 
+                        ? 'bg-black text-white' 
+                        : 'border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    APPAREL
+                  </button>
 
                 </div>
               </div>
@@ -696,7 +706,8 @@ export default function HomePage() {
                     'folic-acid-400': 'Prenatal',
                     'mind-memory-mushroom': 'Focus',
                     'collagen-powder': 'Premium',
-
+                    'bio-cultures-vitamin-plus': 'Multi-Benefit',
+                    'healios-oversized-tee': 'Lifestyle',
                   };
 
 
