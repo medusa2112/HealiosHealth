@@ -86,12 +86,12 @@ export default function Products() {
 
         {/* Category Pills */}
         <div className="mb-8 sm:mb-12 flex justify-center px-4">
-          <div className="flex flex-wrap gap-2 justify-center max-w-4xl">
+          <div className="flex flex-wrap lg:flex-nowrap gap-2 justify-center max-w-6xl overflow-x-auto lg:overflow-x-visible">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                   selectedCategory === category
                     ? 'bg-black text-white'
                     : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
