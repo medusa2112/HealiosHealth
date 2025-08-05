@@ -147,7 +147,7 @@ export class MemStorage implements IStorage {
         id: "probiotics",
         name: "Probiotic Complex — 10 Billion CFU with FOS (6 Strains, Vegan, 60 Capsules)",
         description: "Support your gut health with Healios Probiotic Complex — a multi-strain formula delivering 10 billion CFU per capsule from 6 clinically recognised bacterial strains. Fortified with FOS (fructooligosaccharides) as a prebiotic to nourish your good gut bacteria.\n\nFormulated for:\n• Digestive balance and regularity\n• Gut flora diversity and microbiome support\n• Immune system modulation\n\nEach capsule is vegan, acid-resistant, and designed to survive the journey through your stomach to deliver live cultures where they're needed most. No refrigeration required.\n\n**Bacterial Strains Included:**\n• Bifidobacterium lactis\n• Bifidobacterium bifidum\n• Bifidobacterium longum\n• Lactobacillus acidophilus\n• Lactobacillus casei rhamnosus\n• Streptococcus thermophilus\n\n✔ Vegan ✔ Gluten-Free ✔ No Artificial Fillers ✔ Acid-Resistant Capsules",
-        price: "349.00",
+        price: "449.00",
         originalPrice: null,
         imageUrl: "/assets/Probiotic Complex 10 Billion CFU__1754396771851.png",
         categories: ["Probiotics"],
