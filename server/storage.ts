@@ -338,7 +338,7 @@ export class MemStorage implements IStorage {
         description: "A daily dose of clinically studied bioactive peptides to enhance skin elasticity, reduce wrinkle depth, and support healthy nails and hair — from the inside out.",
         price: "429.00",
         originalPrice: null,
-        imageUrl: "/assets/healios-health20.png",
+        imageUrl: "/assets/healios-health126.png",
         category: "Beauty",
         rating: "4.8",
         reviewCount: 192,

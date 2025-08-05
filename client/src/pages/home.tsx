@@ -706,12 +706,14 @@ export default function HomePage() {
                       <div className={`group cursor-pointer ${!(product.inStock && product.stockQuantity > 0) ? 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100' : ''} transition-all duration-300`} itemScope itemType="https://schema.org/Product">
                         {/* Clean White Background for Products - Wild Nutrition Style */}
                         <div className="relative bg-gray-50 dark:bg-gray-800 mb-6 aspect-square overflow-hidden group-hover:shadow-lg transition-all duration-300">
-                          {/* Supply Badge - Top Left */}
-                          <div className="absolute top-3 left-3 z-10">
-                            <span className="bg-white text-black px-3 py-1 text-xs font-medium">
-                              {product.supplyDays && product.supplyDays >= 60 ? `${Math.round(product.supplyDays / 30)}-month` : `${product.supplyDays || 30}-day`} supply
-                            </span>
-                          </div>
+                          {/* Supply Badge - Top Left - Only for supplements */}
+                          {product.type === 'supplement' && product.supplyDays && (
+                            <div className="absolute top-3 left-3 z-10">
+                              <span className="bg-white text-black px-3 py-1 text-xs font-medium">
+                                {product.supplyDays >= 60 ? `${Math.round(product.supplyDays / 30)}-month` : `${product.supplyDays}-day`} supply
+                              </span>
+                            </div>
+                          )}
 
                           {/* Product Image */}
                           <img

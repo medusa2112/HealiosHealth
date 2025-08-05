@@ -712,8 +712,8 @@ export default function ProductComprehensive() {
                 </span>
               </div>
 
-              {/* Supply Information Badges */}
-              {product.bottleCount && (
+              {/* Supply Information Badges - Only for supplements */}
+              {product.type === 'supplement' && product.bottleCount && (
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   <div className="bg-black text-white px-2 py-1 text-xs font-medium">
                     {product.bottleCount} {getProductUnit(product)}
@@ -743,7 +743,7 @@ export default function ProductComprehensive() {
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                       {product.inStock 
-                        ? `Get notified 10 days before your ${product.supplyDays}-day supply runs out.`
+                        ? (product.type === 'supplement' && product.supplyDays ? `Get notified 10 days before your ${product.supplyDays}-day supply runs out.` : 'Get notified when it\'s time to reorder.')
                         : `We'll email you as soon as ${product.name} is back in stock.`
                       }
                     </p>

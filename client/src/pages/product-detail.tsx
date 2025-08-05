@@ -277,8 +277,8 @@ export default function ProductDetail() {
                   </span>
                 </div>
 
-                {/* Supply Information Badge */}
-                {product.bottleCount && (
+                {/* Supply Information Badge - Only for supplements */}
+                {product.type === 'supplement' && product.bottleCount && (
                   <div className="bg-white border border-black text-black px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
                     <span>{product.bottleCount} {getProductUnit(product)}</span>
                     <span>•</span>
@@ -301,7 +301,7 @@ export default function ProductDetail() {
                     <div className="bg-white dark:bg-gray-800 p-6 max-w-sm w-full">
                       <h3 className="font-medium text-gray-900 dark:text-white mb-4">Reorder Reminder</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Get notified 10 days before your {product.supplyDays}-day supply runs out.
+                        Get notified 10 days before your {product.supplyDays && product.type === 'supplement' ? `${product.supplyDays}-day ` : ''}supply runs out.
                       </p>
                       <div className="flex gap-3">
                         <button 
@@ -309,7 +309,7 @@ export default function ProductDetail() {
                             setShowNotificationModal(false);
                             toast({
                               title: "Reminder set!",
-                              description: `We'll notify you on ${new Date(Date.now() + (product.supplyDays! - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}`
+                              description: product.type === 'supplement' && product.supplyDays ? `We'll notify you on ${new Date(Date.now() + (product.supplyDays - 10) * 24 * 60 * 60 * 1000).toLocaleDateString()}` : 'We\'ll notify you when it\'s time to reorder'
                             });
                           }}
                           className="bg-black text-white px-4 py-2 text-sm hover:bg-gray-800 transition-colors"
@@ -617,7 +617,7 @@ export default function ProductDetail() {
                 <ul className="space-y-2 mb-6 text-left max-w-md mx-auto">
                   <li className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">2+ month supply for your child</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{product.supplyDays && product.supplyDays >= 60 ? `${Math.floor(product.supplyDays / 30)}+ month` : `${product.supplyDays || 30}+ day`} supply for your child</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <Check className="w-4 h-4 text-green-600" />
