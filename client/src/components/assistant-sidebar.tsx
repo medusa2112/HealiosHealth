@@ -121,7 +121,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
   };
 
   const handleEmailSupport = () => {
-    window.location.href = 'mailto:hello@thefourths.com?subject=Customer Support Inquiry&body=Hi, I need help with...';
+    window.location.assign('mailto:hello@thefourths.com?subject=Customer Support Inquiry&body=Hi, I need help with...');
   };
 
   const handlePTConsultation = () => {
@@ -361,7 +361,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               <div className="text-center">
                 <button
                   onClick={() => {
-                    window.location.href = 'mailto:hello@thefourths.com?subject=PT Consultation Booking&body=Hi, I would like to book a 15-minute Personal Training consultation for £10. Please let me know available times.';
+                    window.location.assign('mailto:hello@thefourths.com?subject=PT Consultation Booking&body=Hi, I would like to book a 15-minute Personal Training consultation for £10. Please let me know available times.');
                     setShowPTModal(false);
                   }}
                   className="w-full bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors font-medium"
@@ -425,7 +425,7 @@ export function AssistantSidebar({ isOpen, onClose }: AssistantSidebarProps) {
               <div className="text-center">
                 <button
                   onClick={() => {
-                    window.location.href = 'mailto:hello@thefourths.com?subject=Nutrition Consultation Booking&body=Hi, I would like to book a 15-minute Nutrition consultation for £10. Please let me know available times.';
+                    window.location.assign('mailto:hello@thefourths.com?subject=Nutrition Consultation Booking&body=Hi, I would like to book a 15-minute Nutrition consultation for £10. Please let me know available times.');
                     setShowNutritionModal(false);
                   }}
                   className="w-full bg-black text-white py-3 px-6 hover:bg-gray-800 transition-colors font-medium"
