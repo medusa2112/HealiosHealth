@@ -307,7 +307,7 @@ export function Header() {
                             </span>
                           )}
                           {item.comingSoon && (
-                            <span className="text-[10px] font-semibold text-white bg-amber-500 px-1 py-px uppercase tracking-wide">
+                            <span className="text-[10px] font-semibold text-white bg-black border border-white px-1 py-px uppercase tracking-wide">
                               SOON
                             </span>
                           )}
