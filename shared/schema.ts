@@ -224,6 +224,22 @@ export const insertAdminLogSchema = createInsertSchema(adminLogs).omit({
   timestamp: true,
 });
 
+// Reorder tracking logs for funnel analytics (Phase 13)
+export const reorderLogs = pgTable("reorder_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  originalOrderId: varchar("original_order_id").notNull().references(() => orders.id),
+  status: varchar("status", { length: 32 }).notNull(), // started | success | failed
+  timestamp: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
+  metadata: text("metadata"), // JSON string for total amount, error details
+});
+
+export type ReorderLog = typeof reorderLogs.$inferSelect;
+export const insertReorderLogSchema = createInsertSchema(reorderLogs).omit({
+  id: true,
+  timestamp: true,
+});
+
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,
   subscribedAt: true,

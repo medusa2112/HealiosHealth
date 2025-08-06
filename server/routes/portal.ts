@@ -73,6 +73,32 @@ router.post("/orders/:id/reorder", async (req, res) => {
     if (!items || items.length === 0) {
       return res.status(400).json({ message: 'No items found in original order' });
     }
+
+    // Phase 13: Create comprehensive reorder log - INITIATED status
+    const initiatedLog = await storage.createReorderLog({
+      userId: userId,
+      originalOrderId: orderId,
+      status: 'initiated',
+      reorderType: 'manual_customer_portal',
+      channel: 'customer_portal_authenticated',
+      itemsCount: items.length,
+      originalAmount: parseFloat(order.totalAmount || '0'),
+      metadata: {
+        originalOrderDate: order.createdAt,
+        originalPaymentStatus: order.paymentStatus,
+        customerEmail: order.customerEmail,
+        initiatedFrom: 'authenticated_portal',
+        userAgent: req.headers['user-agent'],
+        ip: req.ip
+      }
+    });
+
+    console.log('📊 Phase 13: Authenticated reorder initiated with comprehensive tracking:', {
+      reorderLogId: initiatedLog.id,
+      originalOrderId: orderId,
+      userId: userId,
+      itemsCount: items.length
+    });
     
     // Get current product data and verify availability
     const lineItems = [];
@@ -139,10 +165,15 @@ router.post("/orders/:id/reorder", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${req.headers.origin}/order-confirmation?order_id=${newOrder.id}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin}/cart`,
+      success_url: `${req.headers.origin}/order-confirmation?order_id=${newOrder.id}&session_id={CHECKOUT_SESSION_ID}&reorder=true&original_order=${orderId}`,
+      cancel_url: `${req.headers.origin}/portal?reorder_cancelled=true`,
       customer_email: order.customerEmail,
       metadata: {
+        type: 'reorder',
+        original_order_id: orderId,
+        reorder_log_id: initiatedLog.id,
+        user_id: userId,
+        channel: 'authenticated_portal',
         orderId: newOrder.id,
         userId: userId,
         sessionToken: req.body.sessionToken || undefined,
@@ -154,21 +185,26 @@ router.post("/orders/:id/reorder", async (req, res) => {
       },
     });
 
-    // Send reorder confirmation email
-    if (order.customerEmail) {
-      try {
-        const { sendEmail } = await import("../lib/email");
-        await sendEmail(order.customerEmail, "reorder", {
-          amount: totalAmount / 100, // Convert back to Rand
-          id: session.id,
-          customerName: order.customerName
-        });
-        console.log("Reorder confirmation email sent to:", order.customerEmail);
-      } catch (emailError) {
-        console.error("Failed to send reorder email:", emailError);
-        // Don't fail the reorder if email fails
+    // Phase 13: Update reorder log with checkout session created
+    await storage.createReorderLog({
+      userId: userId,
+      originalOrderId: orderId,
+      status: 'checkout_created',
+      reorderType: 'manual_customer_portal',
+      channel: 'customer_portal_authenticated',
+      itemsCount: items.length,
+      originalAmount: parseFloat(order.totalAmount || '0'),
+      newAmount: totalAmount / 100,
+      stripeSessionId: session.id,
+      metadata: {
+        ...initiatedLog.metadata,
+        checkoutSessionCreated: new Date().toISOString(),
+        sessionUrl: session.url,
+        newOrderId: newOrder.id
       }
-    }
+    });
+
+    console.log('🔄 Phase 13: Reorder checkout session created with comprehensive tracking');
     
     res.json({ 
       url: session.url,

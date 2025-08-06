@@ -229,4 +229,99 @@ router.get('/quiz/analytics', async (req, res) => {
   }
 });
 
+// Phase 13: Reorder Analytics API Routes
+router.get("/reorder-logs", async (req, res) => {
+  try {
+    const { status, channel, limit = 100 } = req.query;
+    
+    const options: any = { limit: parseInt(limit as string) };
+    if (status && status !== 'all') options.status = status as string;
+    if (channel && channel !== 'all') options.channel = channel as string;
+    
+    const logs = await storage.getReorderLogs(options);
+    res.json(logs);
+  } catch (error) {
+    console.error("Error fetching reorder logs:", error);
+    res.status(500).json({ error: "Failed to fetch reorder logs" });
+  }
+});
+
+router.get("/reorder-analytics", async (req, res) => {
+  try {
+    const logs = await storage.getReorderLogs({ limit: 1000 }); // Get more data for analytics
+    
+    // Calculate analytics
+    const totalReorders = logs.length;
+    const completedReorders = logs.filter(log => log.status === 'completed').length;
+    const conversionRate = totalReorders > 0 ? completedReorders / totalReorders : 0;
+    
+    const completedLogs = logs.filter(log => log.status === 'completed' && log.newAmount);
+    const totalReorderValue = completedLogs.reduce((sum, log) => sum + (log.newAmount || 0), 0);
+    const avgReorderValue = completedReorders > 0 ? totalReorderValue / completedReorders : 0;
+    
+    // Channel analytics
+    const channelMap = new Map<string, { count: number; value: number }>();
+    logs.forEach(log => {
+      const existing = channelMap.get(log.channel) || { count: 0, value: 0 };
+      channelMap.set(log.channel, {
+        count: existing.count + 1,
+        value: existing.value + (log.newAmount || 0)
+      });
+    });
+    
+    const topChannels = Array.from(channelMap.entries()).map(([channel, data]) => ({
+      channel,
+      ...data
+    })).sort((a, b) => b.count - a.count);
+    
+    // Status analytics
+    const statusMap = new Map<string, number>();
+    logs.forEach(log => {
+      statusMap.set(log.status, (statusMap.get(log.status) || 0) + 1);
+    });
+    
+    const reordersByStatus = Array.from(statusMap.entries()).map(([status, count]) => ({
+      status,
+      count
+    }));
+    
+    // Daily reorders (last 7 days)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    const recentLogs = logs.filter(log => new Date(log.timestamp) >= sevenDaysAgo);
+    const dailyMap = new Map<string, { count: number; value: number }>();
+    
+    recentLogs.forEach(log => {
+      const date = new Date(log.timestamp).toISOString().split('T')[0];
+      const existing = dailyMap.get(date) || { count: 0, value: 0 };
+      dailyMap.set(date, {
+        count: existing.count + 1,
+        value: existing.value + (log.newAmount || 0)
+      });
+    });
+    
+    const dailyReorders = Array.from(dailyMap.entries()).map(([date, data]) => ({
+      date,
+      ...data
+    })).sort((a, b) => a.date.localeCompare(b.date));
+    
+    const analytics = {
+      totalReorders,
+      completedReorders,
+      conversionRate,
+      totalReorderValue,
+      avgReorderValue,
+      topChannels,
+      reordersByStatus,
+      dailyReorders
+    };
+    
+    res.json(analytics);
+  } catch (error) {
+    console.error("Error calculating reorder analytics:", error);
+    res.status(500).json({ error: "Failed to calculate reorder analytics" });
+  }
+});
+
 export default router;

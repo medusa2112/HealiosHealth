@@ -74,8 +74,64 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
           }
         }
 
-        // Send order confirmation email
-        if (orderData.customerEmail) {
+        // Phase 13: Enhanced Reorder Completion Tracking and Email Automation
+        if (session.metadata?.type === 'reorder') {
+          try {
+            const originalOrderId = session.metadata.original_order_id;
+            const reorderLogId = session.metadata.reorder_log_id;
+            const userId = session.metadata.user_id;
+            const channel = session.metadata.channel || 'customer_portal';
+
+            // Create comprehensive reorder completion log
+            await storage.createReorderLog({
+              userId: userId || 'guest',
+              originalOrderId: originalOrderId,
+              newOrderId: newOrder.id,
+              status: 'completed',
+              reorderType: 'manual_customer_portal',
+              channel: channel,
+              itemsCount: session.metadata.itemsCount ? parseInt(session.metadata.itemsCount) : 0,
+              originalAmount: session.metadata.originalAmount ? parseFloat(session.metadata.originalAmount) : 0,
+              newAmount: session.amount_total! / 100,
+              stripeSessionId: session.id,
+              stripePaymentIntentId: session.payment_intent as string || '',
+              metadata: {
+                completedAt: new Date().toISOString(),
+                paymentMethod: session.payment_method_types?.[0],
+                conversionTime: reorderLogId ? 'tracked_from_initiation' : 'direct_completion',
+                customerEmail: orderData.customerEmail,
+                reorderSuccess: true,
+                webhookProcessed: true
+              }
+            });
+
+            console.log('🎉 Phase 13: Reorder completed successfully with comprehensive webhook tracking:', {
+              newOrderId: newOrder.id,
+              originalOrderId: originalOrderId,
+              amount: session.amount_total! / 100,
+              channel: channel
+            });
+
+            // Send specialized reorder confirmation email
+            try {
+              const { sendEmail } = await import("../lib/email");
+              await sendEmail(orderData.customerEmail, "reorder", {
+                amount: session.amount_total! / 100,
+                id: newOrder.id,
+                customerName: orderData.customerName,
+                originalOrderId: originalOrderId
+              });
+              console.log('✅ Phase 13: Reorder confirmation email sent via webhook processing');
+            } catch (emailError) {
+              console.error('❌ Phase 13: Failed to send reorder email via webhook:', emailError);
+            }
+
+          } catch (reorderError) {
+            console.error('Phase 13: Failed to process reorder completion:', reorderError);
+          }
+        }
+        // Standard order confirmation email for non-reorder orders
+        else if (orderData.customerEmail) {
           try {
             const { sendEmail } = await import("../lib/email");
             

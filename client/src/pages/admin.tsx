@@ -293,12 +293,20 @@ export default function AdminDashboard() {
                   <p className="text-gray-600 dark:text-gray-400">
                     Access the full order management system to view orders, process refunds, and track order status.
                   </p>
-                  <Link href="/admin/orders">
-                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Open Order Management
-                    </Button>
-                  </Link>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Link href="/admin/orders">
+                      <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 w-full">
+                        <ShoppingCart className="mr-2 h-4 w-4" />
+                        Order Management
+                      </Button>
+                    </Link>
+                    <Link href="/admin/reorder-analytics">
+                      <Button variant="outline" className="w-full">
+                        <TrendingUp className="mr-2 h-4 w-4" />
+                        Phase 13: Reorder Analytics
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>

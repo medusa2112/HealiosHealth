@@ -36,6 +36,7 @@ import AdminDashboard from "@/pages/admin";
 import AdminOrders from "@/pages/admin/orders";
 import AdminCarts from "@/pages/admin/carts";
 import AdminLogs from "@/pages/admin/logs";
+import ReorderAnalytics from "@/pages/admin/reorder-analytics";
 import CustomerPortal from "@/pages/customer-portal";
 import NotFound from "@/pages/not-found";
 
@@ -87,6 +88,13 @@ function Router() {
         component={() => (
           <RequireRole role="admin">
             <AdminLogs />
+          </RequireRole>
+        )} 
+      />
+      <Route path="/admin/reorder-analytics" 
+        component={() => (
+          <RequireRole role="admin">
+            <ReorderAnalytics />
           </RequireRole>
         )} 
       />

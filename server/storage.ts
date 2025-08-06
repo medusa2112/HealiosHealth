@@ -92,6 +92,11 @@ export interface IStorage {
   getAdminLogs(limit?: number): Promise<AdminLog[]>;
   getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]>;
   getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]>;
+  
+  // Reorder logs (Phase 13)
+  createReorderLog(log: InsertReorderLog): Promise<ReorderLog>;
+  getReorderLogs(options?: { limit?: number; userId?: string; status?: string }): Promise<ReorderLog[]>;
+  getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -109,6 +114,7 @@ export class MemStorage implements IStorage {
   private orderItems: Map<string, OrderItem>;
   private carts: Map<string, Cart>;
   private adminLogs: Map<string, AdminLog>;
+  private reorderLogs: Map<string, ReorderLog>;
 
   constructor() {
     this.products = new Map();
@@ -125,9 +131,11 @@ export class MemStorage implements IStorage {
     this.orderItems = new Map();
     this.carts = new Map();
     this.adminLogs = new Map();
+    this.reorderLogs = new Map();
     this.seedData();
     this.seedAbandonedCarts();
     this.seedAdminLogs();
+    this.seedReorderLogs();
   }
 
   private seedData() {
@@ -1408,6 +1416,108 @@ export class MemStorage implements IStorage {
     console.log("✅ Seeded", sampleLogs.length, "admin logs for audit trail testing");
   }
 
+  // Phase 13: Seed reorder logs for analytics testing
+  private seedReorderLogs() {
+    const now = new Date();
+    const sampleReorders: ReorderLog[] = [
+      {
+        id: randomUUID(),
+        userId: 'user_test_123',
+        originalOrderId: 'order_456',
+        newOrderId: 'order_789',
+        status: 'completed',
+        reorderType: 'manual_customer_portal',
+        channel: 'customer_portal_authenticated',
+        itemsCount: 3,
+        originalAmount: 150.00,
+        newAmount: 165.50,
+        stripeSessionId: 'cs_test_123',
+        stripePaymentIntentId: 'pi_test_123',
+        timestamp: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
+        metadata: { 
+          completedAt: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(), 
+          conversionTime: '5m',
+          customerEmail: 'customer@healios.com',
+          paymentMethod: 'card'
+        }
+      },
+      {
+        id: randomUUID(),
+        userId: 'user_test_456',
+        originalOrderId: 'order_654',
+        status: 'checkout_created',
+        reorderType: 'manual_customer_portal',
+        channel: 'customer_portal_authenticated',
+        itemsCount: 2,
+        originalAmount: 89.99,
+        newAmount: 89.99,
+        stripeSessionId: 'cs_test_456',
+        timestamp: new Date(now.getTime() - 4 * 60 * 60 * 1000).toISOString(),
+        metadata: { 
+          checkoutCreatedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000).toISOString(),
+          sessionUrl: 'https://checkout.stripe.com/cs_test_456'
+        }
+      },
+      {
+        id: randomUUID(),
+        userId: 'user_test_789',
+        originalOrderId: 'order_321',
+        status: 'failed',
+        reorderType: 'manual_customer_portal',
+        channel: 'customer_portal',
+        itemsCount: 1,
+        originalAmount: 45.00,
+        timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString(),
+        metadata: { 
+          failedReason: 'payment_declined', 
+          failedAt: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString()
+        }
+      },
+      {
+        id: randomUUID(),
+        userId: 'user_test_123',
+        originalOrderId: 'order_987',
+        status: 'initiated',
+        reorderType: 'manual_customer_portal',
+        channel: 'customer_portal_authenticated',
+        itemsCount: 2,
+        originalAmount: 299.00,
+        timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
+        metadata: { 
+          initiatedAt: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
+          userAgent: 'Mozilla/5.0 (Test Browser)',
+          ip: '127.0.0.1'
+        }
+      },
+      {
+        id: randomUUID(),
+        userId: 'user_test_456',
+        originalOrderId: 'order_555',
+        newOrderId: 'order_777',
+        status: 'completed',
+        reorderType: 'automated',
+        channel: 'automated',
+        itemsCount: 1,
+        originalAmount: 449.00,
+        newAmount: 449.00,
+        stripeSessionId: 'cs_auto_123',
+        stripePaymentIntentId: 'pi_auto_123',
+        timestamp: new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString(),
+        metadata: { 
+          completedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString(),
+          automatedTrigger: 'subscription_renewal',
+          customerEmail: 'customer@healios.com'
+        }
+      }
+    ];
+
+    sampleReorders.forEach(reorder => {
+      this.reorderLogs.set(reorder.id, reorder);
+    });
+    
+    console.log("✅ Seeded", sampleReorders.length, "reorder logs for Phase 13 analytics testing");
+  }
+
   // Admin Activity Logging Implementation (Phase 12)
   async createAdminLog(logData: InsertAdminLog): Promise<AdminLog> {
     const id = randomUUID();
@@ -1440,6 +1550,40 @@ export class MemStorage implements IStorage {
     return Array.from(this.adminLogs.values())
       .filter(log => log.targetType === targetType && log.targetId === targetId)
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  // Phase 13: Reorder logging implementation
+  async createReorderLog(log: InsertReorderLog): Promise<ReorderLog> {
+    const newLog: ReorderLog = {
+      id: randomUUID(),
+      ...log,
+      timestamp: new Date().toISOString(),
+    };
+    this.reorderLogs.set(newLog.id, newLog);
+    return newLog;
+  }
+
+  async getReorderLogs(options: { limit?: number; userId?: string; status?: string } = {}): Promise<ReorderLog[]> {
+    const { limit = 100, userId, status } = options;
+    let logs = Array.from(this.reorderLogs.values());
+    
+    if (userId) {
+      logs = logs.filter(log => log.userId === userId);
+    }
+    
+    if (status) {
+      logs = logs.filter(log => log.status === status);
+    }
+    
+    return logs
+      .sort((a, b) => new Date(b.timestamp || '').getTime() - new Date(a.timestamp || '').getTime())
+      .slice(0, limit);
+  }
+
+  async getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]> {
+    return Array.from(this.reorderLogs.values())
+      .filter(log => log.originalOrderId === originalOrderId)
+      .sort((a, b) => new Date(b.timestamp || '').getTime() - new Date(a.timestamp || '').getTime());
   }
 }
 
