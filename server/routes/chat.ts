@@ -49,6 +49,22 @@ SPECIAL FEATURES:
 Always be helpful, accurate, and recommend consulting healthcare providers for specific health concerns. Focus on ingredient benefits backed by research rather than making medical claims.
 `;
 
+// Function to format text properly for frontend display
+function formatTextForFrontend(text: string): string {
+  return text
+    // Remove markdown asterisks and format properly
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    // Fix bullet points
+    .replace(/\* /g, '• ')
+    // Clean up extra spaces and line breaks
+    .replace(/\s+/g, ' ')
+    .replace(/\n\s*\n/g, '\n\n')
+    // Ensure proper spacing after punctuation
+    .replace(/([.!?])\s*([A-Z])/g, '$1 $2')
+    .trim();
+}
+
 export async function handleProductQuestion(req: Request, res: Response) {
   try {
     const { question, conversationHistory = [] }: ProductQuestionRequest = req.body;
@@ -72,7 +88,15 @@ ${conversationContext}
 
 User Question: ${question}
 
-Please provide a helpful, accurate response about Healios supplements. Be conversational but informative. If the question is about specific health conditions, remind them to consult their healthcare provider. Keep responses concise but comprehensive.`;
+Please provide a helpful, accurate response about Healios supplements. Be conversational but informative. If the question is about specific health conditions, remind them to consult their healthcare provider. Keep responses concise but comprehensive.
+
+IMPORTANT FORMATTING RULES:
+- Use proper sentence structure with correct punctuation
+- Write product names clearly without asterisks or markdown formatting
+- Use bullet points with • for lists, not asterisks
+- Format prices as "R349.00" not "R349.00"
+- Write naturally flowing text without raw markdown syntax
+- Use proper spacing between sentences and paragraphs`;
 
     // Call OpenAI API for intelligent responses
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -103,8 +127,11 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
     }
 
     const openaiData = await openaiResponse.json();
-    const answer = openaiData.choices[0]?.message?.content || 
+    const rawAnswer = openaiData.choices[0]?.message?.content || 
       'I apologize, but I\'m having trouble processing your question right now. Please try again or contact our support team.';
+    
+    // Format the answer properly for frontend display
+    const answer = formatTextForFrontend(rawAnswer);
 
     res.json({ answer });
 
@@ -127,6 +154,8 @@ Please provide a helpful, accurate response about Healios supplements. Be conver
       fallbackAnswer = 'I\'d be happy to help with information about our science-backed supplements! We offer premium gummy vitamins and supplements with authentic ingredients. What specific product or ingredient would you like to know more about?';
     }
     
-    res.json({ answer: fallbackAnswer });
+    // Format fallback answer too
+    const formattedFallback = formatTextForFrontend(fallbackAnswer);
+    res.json({ answer: formattedFallback });
   }
 }

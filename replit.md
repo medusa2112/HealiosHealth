@@ -32,6 +32,8 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Payment System**: Integrated Stripe checkout for secure payments.
 - **Product Filtering**: Dynamic product filtering system with loading effects.
 - **Content Management**: EFSA-backed research content, compliant product messaging, and authentic product data.
+- **AI Integration**: OpenAI GPT-4o-mini for intelligent chatbot responses and customer support.
+- **Text Processing**: Comprehensive text formatting system to ensure clean display of markdown, bullets, and special characters.
 
 ### Feature Specifications
 - Product display with detailed information, images, pricing, and nutritional data.
@@ -44,6 +46,8 @@ The application employs a monorepo structure, separating client, server, and sha
 - Currency localization (e.g., British Pounds to South African Rand).
 - Comprehensive SEO implementation (meta tags, structured data, sitemap, robots.txt).
 - Environmental initiative page (`/planet`) detailing sustainability efforts.
+- AI-powered chatbot "Juliet" for customer support and product inquiries.
+- Professional text formatting across all site sections (chat, product descriptions, articles).
 
 ### System Design Choices
 - **Monorepo Structure**: Clear separation of client, server, and shared code for maintainability.

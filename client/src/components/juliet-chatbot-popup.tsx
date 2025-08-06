@@ -248,9 +248,15 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
                           ? 'bg-black text-white border-black border'
                           : 'bg-white text-gray-800 border border-gray-200 shadow-sm'
                       }`}
-                    >
-                      {message.content}
-                    </div>
+                      dangerouslySetInnerHTML={{
+                        __html: message.content
+                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                          .replace(/•\s(.*?)$/gm, '<div class="flex items-start gap-2 mb-1"><span>•</span><span>$1</span></div>')
+                          .replace(/\n/g, '<br>')
+                          .replace(/R(\d+)\.(\d+)/g, 'R$1.$2')
+                      }}
+                    />
                   </div>
                 ))}
                 {isLoading && (
