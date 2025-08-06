@@ -152,6 +152,22 @@ router.post("/orders/:id/reorder", async (req, res) => {
         allowed_countries: ['ZA', 'US', 'GB'],
       },
     });
+
+    // Send reorder confirmation email
+    if (order.customerEmail) {
+      try {
+        const { sendEmail } = await import("../lib/email");
+        await sendEmail(order.customerEmail, "reorder", {
+          amount: totalAmount / 100, // Convert back to Rand
+          id: session.id,
+          customerName: order.customerName
+        });
+        console.log("Reorder confirmation email sent to:", order.customerEmail);
+      } catch (emailError) {
+        console.error("Failed to send reorder email:", emailError);
+        // Don't fail the reorder if email fails
+      }
+    }
     
     res.json({ 
       url: session.url,

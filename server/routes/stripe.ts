@@ -64,11 +64,26 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         const newOrder = await storage.createOrder(orderData);
         console.log("Created order:", newOrder.id);
 
-        // Send confirmation email if available
+        // Send order confirmation email
         if (orderData.customerEmail) {
           try {
-            // TODO: Integrate with email service
-            console.log("Order confirmation email should be sent to:", orderData.customerEmail);
+            const { sendEmail } = await import("../lib/email");
+            
+            // Parse order items for email
+            let orderItems = [];
+            try {
+              orderItems = JSON.parse(orderData.orderItems);
+            } catch (e) {
+              console.warn("Could not parse order items for email");
+            }
+
+            await sendEmail(orderData.customerEmail, "order_confirm", {
+              amount: session.amount_total! / 100,
+              id: session.id,
+              customerName: orderData.customerName,
+              items: orderItems
+            });
+            console.log("Order confirmation email sent to:", orderData.customerEmail);
           } catch (emailError) {
             console.error("Failed to send confirmation email:", emailError);
           }
@@ -83,6 +98,21 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         if (refundOrder) {
           await storage.updateOrderRefundStatus(refundOrder.id, "refunded");
           console.log("Updated refund status for order:", refundOrder.id);
+
+          // Send refund confirmation email
+          if (refundOrder.customerEmail) {
+            try {
+              const { sendEmail } = await import("../lib/email");
+              await sendEmail(refundOrder.customerEmail, "refund", {
+                amount: refundedCharge.amount_refunded / 100,
+                id: refundedCharge.payment_intent as string,
+                customerName: refundOrder.customerName
+              });
+              console.log("Refund email sent to:", refundOrder.customerEmail);
+            } catch (emailError) {
+              console.error("Failed to send refund email:", emailError);
+            }
+          }
         }
         break;
 
@@ -94,6 +124,21 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         if (disputeOrder) {
           await storage.updateOrderDisputeStatus(disputeOrder.id, "disputed");
           console.log("Updated dispute status for order:", disputeOrder.id);
+
+          // Send admin alert for dispute
+          try {
+            const { sendAdminAlert } = await import("../lib/email");
+            await sendAdminAlert("🚨 STRIPE DISPUTE DETECTED", {
+              chargeId: disputedCharge.id,
+              amount: disputedCharge.amount / 100,
+              orderId: disputeOrder.id,
+              customerEmail: disputeOrder.customerEmail,
+              disputeReason: disputedCharge.dispute?.reason || "unknown"
+            });
+            console.log("Admin dispute alert sent");
+          } catch (emailError) {
+            console.error("Failed to send dispute alert:", emailError);
+          }
         }
         break;
 
@@ -106,6 +151,21 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         if (failedOrder) {
           await storage.updateOrderPaymentStatus(failedOrder.id, "failed");
           console.log("Updated payment status to failed for order:", failedOrder.id);
+
+          // Send admin alert for failed payment
+          try {
+            const { sendAdminAlert } = await import("../lib/email");
+            await sendAdminAlert("⚠️ PAYMENT FAILED", {
+              paymentIntentId: failedPayment.id,
+              amount: failedPayment.amount / 100,
+              orderId: failedOrder?.id || "unknown",
+              customerEmail: failedOrder?.customerEmail || "unknown",
+              errorMessage: failedPayment.last_payment_error?.message || "unknown error"
+            });
+            console.log("Admin payment failure alert sent");
+          } catch (emailError) {
+            console.error("Failed to send payment failure alert:", emailError);
+          }
         }
         break;
 

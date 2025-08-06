@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
 import stripeRoutes from "./routes/stripe";
+import emailTestRoutes from "./routes/email-test";
 
 // Stripe imports moved to dedicated service
 import { stripe } from "./lib/stripe";
@@ -28,6 +29,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/auth', authRoutes);
   app.use('/admin', adminRoutes);
   app.use('/portal', portalRoutes);
+  
+  // Email system (development only)
+  if (process.env.NODE_ENV === 'development') {
+    app.use('/api/email', emailTestRoutes);
+  }
 
   // Get all products
   app.get("/api/products", async (req, res) => {
