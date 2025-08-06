@@ -52,6 +52,7 @@ export default {
         // Custom brand colors
         brandYellow: "#FFD700",
         darkText: "#2D2D2D",
+        'healios-purple': 'var(--healios-purple)',
         'healios-cyan': 'var(--healios-cyan)',
         chart: {
           "1": "var(--chart-1)",

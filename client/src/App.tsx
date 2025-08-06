@@ -11,6 +11,7 @@ import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
+import { JulietChatbotPopup } from "@/components/juliet-chatbot-popup";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductComprehensive from "@/pages/product-comprehensive";
@@ -67,6 +68,7 @@ function App() {
               <Footer />
               <CartSidebar />
               <StockNotification />
+              <JulietChatbotPopup />
             </div>
             <Toaster />
           </CartProvider>
