@@ -4,6 +4,62 @@ import { determineUserRole } from '../lib/auth';
 
 const router = express.Router();
 
+// Guest registration with order linking (Phase 8)
+router.post("/register", async (req, res) => {
+  try {
+    const { email, password, firstName, lastName, fromCheckout } = req.body;
+    
+    // Validate input
+    if (!email || !password || !firstName || !lastName) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists with this email" });
+    }
+
+    // Create new user
+    const role = determineUserRole(email);
+    const newUser = await storage.createUser({
+      email,
+      password, // In production, this should be hashed
+      firstName,
+      lastName,
+      role
+    });
+
+    // If registering from checkout, link existing orders
+    if (fromCheckout) {
+      try {
+        await storage.linkGuestOrdersToUser(email, newUser.id);
+      } catch (linkError) {
+        console.error('Failed to link guest orders:', linkError);
+        // Don't fail registration if linking fails
+      }
+    }
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = newUser.id;
+
+    res.json({ 
+      message: "Registration successful",
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        role: newUser.role
+      }
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({ message: "Registration failed" });
+  }
+});
+
 // Mock Replit Auth login - in production this would redirect to Replit OAuth
 router.get('/login', (req, res) => {
   // In a real implementation, this would redirect to Replit OAuth
@@ -91,12 +147,12 @@ router.post('/logout', (req, res) => {
 router.get('/me', async (req, res) => {
   try {
     if (!req.session?.userId) {
-      return res.status(401).json({ message: 'Not authenticated' });
+      return res.json(null); // Return null for unauthenticated users
     }
 
     const user = await storage.getUserById(req.session.userId);
     if (!user) {
-      return res.status(401).json({ message: 'Invalid session' });
+      return res.json(null);
     }
 
     res.json({ 
@@ -108,7 +164,7 @@ router.get('/me', async (req, res) => {
     });
   } catch (error) {
     console.error('Auth me error:', error);
-    res.status(500).json({ message: 'Failed to get user info' });
+    res.json(null);
   }
 });
 

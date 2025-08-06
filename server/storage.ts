@@ -83,6 +83,9 @@ export interface IStorage {
   getCartBySessionToken(sessionToken: string): Promise<Cart | undefined>;
   markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined>;
   getAbandonedCarts(hoursThreshold: number): Promise<Cart[]>;
+  
+  // Phase 8: Guest to User conversion
+  linkGuestOrdersToUser(email: string, userId: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -1216,6 +1219,24 @@ export class MemStorage implements IStorage {
       const lastUpdated = new Date(cart.lastUpdated || cart.createdAt);
       return lastUpdated < cutoffTime;
     });
+  }
+
+  // Phase 8: Guest to User conversion
+  async linkGuestOrdersToUser(email: string, userId: string): Promise<void> {
+    // Find all orders with matching email but no userId (guest orders)
+    const guestOrders = Array.from(this.orders.values()).filter(
+      order => order.customerEmail === email && !order.userId
+    );
+
+    // Update each guest order to link to the new user
+    for (const order of guestOrders) {
+      const updatedOrder: Order = {
+        ...order,
+        userId,
+        updatedAt: new Date().toISOString(),
+      };
+      this.orders.set(order.id, updatedOrder);
+    }
   }
 }
 

@@ -17,6 +17,7 @@ import Products from "@/pages/products";
 import ProductComprehensive from "@/pages/product-comprehensive";
 import Checkout from "@/pages/checkout";
 import OrderConfirmation from "@/pages/order-confirmation";
+import CheckoutSuccess from "@/pages/checkout-success";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Science from "@/pages/science";
@@ -27,6 +28,7 @@ import Article from "@/pages/article";
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
 import Login from "@/pages/login";
+import Register from "@/pages/register";
 import AdminDashboard from "@/pages/admin";
 import AdminOrders from "@/pages/admin/orders";
 import CustomerPortal from "@/pages/customer-portal";
@@ -42,6 +44,7 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/products/:id" component={ProductComprehensive} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/checkout-success" component={CheckoutSuccess} />
       <Route path="/order-confirmation" component={OrderConfirmation} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
@@ -53,6 +56,7 @@ function Router() {
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
       <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/orders" component={AdminOrders} />
       <Route path="/portal" component={CustomerPortal} />

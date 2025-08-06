@@ -82,7 +82,7 @@ const CheckoutForm = () => {
         body: JSON.stringify({
           orderData,
           lineItems,
-          successUrl: `${window.location.origin}/order-confirmation`,
+          successUrl: `${window.location.origin}/checkout-success`,
           cancelUrl: `${window.location.origin}/checkout`,
           sessionToken: localStorage.getItem('cart_session_token'),
         }),
