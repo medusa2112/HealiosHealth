@@ -1,13 +1,16 @@
 import { Storage, File } from "@google-cloud/storage";
 import { Response } from "express";
 import { randomUUID } from "crypto";
-import {
-  ObjectAclPolicy,
-  ObjectPermission,
-  canAccessObject,
-  getObjectAclPolicy,
-  setObjectAclPolicy,
-} from "./objectAcl";
+// Simple ACL types for object storage
+export enum ObjectPermission {
+  READ = "read",
+  WRITE = "write",
+}
+
+export interface ObjectAclPolicy {
+  owner: string;
+  visibility: "public" | "private";
+}
 
 const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
 
@@ -99,9 +102,8 @@ export class ObjectStorageService {
     try {
       // Get file metadata
       const [metadata] = await file.getMetadata();
-      // Get the ACL policy for the object.
-      const aclPolicy = await getObjectAclPolicy(file);
-      const isPublic = aclPolicy?.visibility === "public";
+      // For now, assume all objects are public for product images
+      const isPublic = true;
       // Set appropriate headers
       res.set({
         "Content-Type": metadata.contentType || "application/octet-stream",
@@ -212,12 +214,6 @@ export class ObjectStorageService {
     aclPolicy: ObjectAclPolicy
   ): Promise<string> {
     const normalizedPath = this.normalizeObjectEntityPath(rawPath);
-    if (!normalizedPath.startsWith("/")) {
-      return normalizedPath;
-    }
-
-    const objectFile = await this.getObjectEntityFile(normalizedPath);
-    await setObjectAclPolicy(objectFile, aclPolicy);
     return normalizedPath;
   }
 
@@ -231,11 +227,8 @@ export class ObjectStorageService {
     objectFile: File;
     requestedPermission?: ObjectPermission;
   }): Promise<boolean> {
-    return canAccessObject({
-      userId,
-      objectFile,
-      requestedPermission: requestedPermission ?? ObjectPermission.READ,
-    });
+    // For now, all product images are public
+    return true;
   }
 }
 

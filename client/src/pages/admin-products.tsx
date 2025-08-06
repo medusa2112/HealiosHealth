@@ -13,6 +13,7 @@ import { Plus, Edit, Trash2, Package, DollarSign, Eye, BarChart3 } from "lucide-
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import AdminImageUpload from "@/components/AdminImageUpload";
 
 interface ProductFormData {
   name: string;
@@ -280,14 +281,21 @@ export default function AdminProducts() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="imageUrl" className="text-black dark:text-white">Image URL</Label>
-                      <Input
-                        id="imageUrl"
-                        value={formData.imageUrl}
-                        onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
-                        required
-                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
+                      <AdminImageUpload
+                        label="Product Image"
+                        currentImageUrl={formData.imageUrl}
+                        onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, imageUrl }))}
                       />
+                      <div className="space-y-2">
+                        <Label htmlFor="imageUrl" className="text-black dark:text-white text-xs">Or paste image URL</Label>
+                        <Input
+                          id="imageUrl"
+                          value={formData.imageUrl}
+                          onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
+                          placeholder="https://example.com/image.jpg"
+                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white text-sm"
+                        />
+                      </div>
                     </div>
                   </div>
 

@@ -24,9 +24,7 @@ export default function AdminImageUpload({
 
   const handleGetUploadParameters = async () => {
     try {
-      const response = await apiRequest("/api/admin/images/upload-url", {
-        method: "POST",
-      });
+      const response = await apiRequest("/api/admin/images/upload-url", "POST") as any;
       
       if (!response.uploadURL) {
         throw new Error("No upload URL received");
@@ -63,11 +61,7 @@ export default function AdminImageUpload({
       }
 
       // Confirm the upload with our backend
-      const confirmResponse = await apiRequest("/api/admin/images/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uploadURL }),
-      });
+      const confirmResponse = await apiRequest("/api/admin/images/confirm", "POST", { uploadURL }) as any;
 
       if (!confirmResponse.imageUrl) {
         throw new Error("No image URL returned from confirmation");
