@@ -198,6 +198,17 @@ export const insertCartSchema = createInsertSchema(carts).omit({
   lastUpdated: true,
 });
 
+// Admin activity logging table for audit trail
+export const adminLogs = pgTable("admin_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  adminId: varchar("admin_id").notNull().references(() => users.id),
+  actionType: varchar("action_type", { length: 64 }).notNull(), // e.g. "refund", "edit_product"
+  targetType: varchar("target_type", { length: 64 }).notNull(), // e.g. "order", "product"
+  targetId: varchar("target_id").notNull(),
+  details: text("details"), // JSON string of metadata
+  timestamp: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
+});
+
 // Type exports
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
@@ -205,6 +216,13 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type Cart = typeof carts.$inferSelect;
 export type InsertCart = z.infer<typeof insertCartSchema>;
+export type AdminLog = typeof adminLogs.$inferSelect;
+export type InsertAdminLog = z.infer<typeof insertAdminLogSchema>;
+
+export const insertAdminLogSchema = createInsertSchema(adminLogs).omit({
+  id: true,
+  timestamp: true,
+});
 
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,

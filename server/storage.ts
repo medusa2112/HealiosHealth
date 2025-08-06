@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -86,6 +86,12 @@ export interface IStorage {
   
   // Phase 8: Guest to User conversion
   linkGuestOrdersToUser(email: string, userId: string): Promise<void>;
+  
+  // Admin Activity Logging (Phase 12)
+  createAdminLog(log: InsertAdminLog): Promise<AdminLog>;
+  getAdminLogs(limit?: number): Promise<AdminLog[]>;
+  getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]>;
+  getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -102,6 +108,7 @@ export class MemStorage implements IStorage {
   private addresses: Map<string, Address>;
   private orderItems: Map<string, OrderItem>;
   private carts: Map<string, Cart>;
+  private adminLogs: Map<string, AdminLog>;
 
   constructor() {
     this.products = new Map();
@@ -117,8 +124,10 @@ export class MemStorage implements IStorage {
     this.addresses = new Map();
     this.orderItems = new Map();
     this.carts = new Map();
+    this.adminLogs = new Map();
     this.seedData();
     this.seedAbandonedCarts();
+    this.seedAdminLogs();
   }
 
   private seedData() {
@@ -1310,6 +1319,127 @@ export class MemStorage implements IStorage {
     });
     
     console.log("✅ Seeded", sampleCarts.length, "abandoned carts for analytics testing");
+  }
+
+  // Seed admin logs for Phase 12 testing
+  private seedAdminLogs() {
+    const now = new Date();
+    const sampleLogs: AdminLog[] = [
+      {
+        id: randomUUID(),
+        adminId: "admin_user_123",
+        actionType: "create_product",
+        targetType: "product",
+        targetId: "vitamin-d3",
+        details: JSON.stringify({
+          name: "Vitamin D3 4000 IU Gummies",
+          price: "379.00",
+          categories: ["vitamins", "immunity"]
+        }),
+        timestamp: new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: randomUUID(),
+        adminId: "admin_user_123",
+        actionType: "update_product",
+        targetType: "product",
+        targetId: "ashwagandha",
+        details: JSON.stringify({
+          stockQuantity: 150,
+          originalStock: 100
+        }),
+        timestamp: new Date(now.getTime() - 4 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: randomUUID(),
+        adminId: "admin_user_456",
+        actionType: "refund_order",
+        targetType: "order",
+        targetId: "order_789",
+        details: JSON.stringify({
+          refundAmount: 86800,
+          reason: "Customer request",
+          stripeRefundId: "re_1234567890"
+        }),
+        timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: randomUUID(),
+        adminId: "admin_user_123",
+        actionType: "upload",
+        targetType: "product_image",
+        targetId: "collagen-complex",
+        details: JSON.stringify({
+          imageUrl: "https://example.com/collagen-complex-updated.jpg",
+          uploadMethod: "cloudinary"
+        }),
+        timestamp: new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: randomUUID(),
+        adminId: "admin_user_456",
+        actionType: "delete_product",
+        targetType: "product",
+        targetId: "discontinued_supplement",
+        details: JSON.stringify({
+          reason: "Product discontinued",
+          lastStockCount: 0
+        }),
+        timestamp: new Date(now.getTime() - 12 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: randomUUID(),
+        adminId: "admin_user_123",
+        actionType: "system_maintenance",
+        targetType: "system",
+        targetId: "N/A",
+        details: JSON.stringify({
+          action: "Database cleanup",
+          recordsProcessed: 1250
+        }),
+        timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
+      }
+    ];
+
+    sampleLogs.forEach(log => {
+      this.adminLogs.set(log.id, log);
+    });
+    
+    console.log("✅ Seeded", sampleLogs.length, "admin logs for audit trail testing");
+  }
+
+  // Admin Activity Logging Implementation (Phase 12)
+  async createAdminLog(logData: InsertAdminLog): Promise<AdminLog> {
+    const id = randomUUID();
+    const log: AdminLog = {
+      id,
+      adminId: logData.adminId,
+      actionType: logData.actionType,
+      targetType: logData.targetType,
+      targetId: logData.targetId,
+      details: logData.details,
+      timestamp: new Date().toISOString(),
+    };
+    this.adminLogs.set(id, log);
+    return log;
+  }
+
+  async getAdminLogs(limit: number = 100): Promise<AdminLog[]> {
+    return Array.from(this.adminLogs.values())
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .slice(0, limit);
+  }
+
+  async getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]> {
+    return Array.from(this.adminLogs.values())
+      .filter(log => log.adminId === adminId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  async getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]> {
+    return Array.from(this.adminLogs.values())
+      .filter(log => log.targetType === targetType && log.targetId === targetId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
 }
 

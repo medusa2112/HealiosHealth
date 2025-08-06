@@ -37,6 +37,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);
   
+  // Register admin logging routes
+  const adminLogsRoutes = await import('./routes/admin/logs');
+  app.use('/api/admin/logs', adminLogsRoutes.default);
+  
   // Email system (development only)
   if (process.env.NODE_ENV === 'development') {
     app.use('/api/email', emailTestRoutes);

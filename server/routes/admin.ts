@@ -1,6 +1,7 @@
 import express from 'express';
 import { protectRoute } from '../lib/auth';
 import { storage } from '../storage';
+import { AdminLogger } from '../lib/admin-logger';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
 
@@ -92,6 +93,15 @@ router.post('/products', async (req, res) => {
     };
 
     const product = await storage.createProduct(productData);
+    
+    // Log admin action
+    await AdminLogger.logProductAction(
+      (req as any).user.id,
+      'create',
+      product.id,
+      { name: product.name, price: product.price, categories: product.categories }
+    );
+    
     res.status(201).json(product);
   } catch (error) {
     console.error('Failed to create product:', error);
@@ -122,6 +132,14 @@ router.put('/products/:id', async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    
+    // Log admin action
+    await AdminLogger.logProductAction(
+      (req as any).user.id,
+      'update',
+      req.params.id,
+      updates
+    );
 
     res.json(product);
   } catch (error) {
@@ -136,6 +154,14 @@ router.delete('/products/:id', async (req, res) => {
     if (!success) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    
+    // Log admin action
+    await AdminLogger.logProductAction(
+      (req as any).user.id,
+      'delete',
+      req.params.id
+    );
+    
     res.status(204).end();
   } catch (error) {
     console.error('Failed to delete product:', error);
@@ -154,6 +180,14 @@ router.put('/products/:id/stock', async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    
+    // Log admin action
+    await AdminLogger.logProductAction(
+      (req as any).user.id,
+      'update',
+      req.params.id,
+      { stockUpdate: quantity }
+    );
 
     res.json(product);
   } catch (error) {
