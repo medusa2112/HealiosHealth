@@ -1,0 +1,120 @@
+Prompt 21 of X: AI-Powered Customer Service Assistant (Order Tracking, Returns, FAQs)
+Objective: Deploy a secure, scoped AI assistant that helps users:
+
+Track orders and delivery status
+
+Initiate returns or raise support tickets
+
+Answer FAQs about products, shipping, discounts, and policies
+
+This assistant reduces manual workload while improving customer satisfaction.
+
+✅ PHASE 1: SYSTEM SCOPE & SAFETY RULES
+Constraint	Value
+AI does not give advice or make legal/medical claims	✅ Enforced
+All outputs grounded in database or FAQ	✅ Scoped retrieval only
+Only logged-in users can request order data	✅ Role check: user.id
+Stripe/order status is pulled live (if possible)	✅ or fallback to internal orders table
+
+🧠 PHASE 2: DEFINE BOT CAPABILITIES
+Feature	Logic
+Track my order	Show latest order, Stripe status (fulfilled/unfulfilled), shipping ETA
+Return product	Validate within return window (e.g. 30 days), trigger admin alert
+Resend receipt or confirmation	Pull order and resend email via sendEmail()
+FAQ questions	Pull from structured Healios FAQs
+Check discount code	Validate via discounts table and return if active
+
+🧱 PHASE 3: DATABASE OR CONTEXT ENGINES
+Use AI retrieval from:
+
+User session + orders (if logged in)
+
+orders, order_items, discounts, products — scoped queries
+
+Static FAQ knowledge base — e.g.:
+
+ts
+Copy
+Edit
+[
+  { q: "What is your return policy?", a: "Returns are accepted within 30 days if unopened." },
+  { q: "Do you ship internationally?", a: "Currently we ship to South Africa only." },
+  ...
+]
+Optional: Integrate with Pinecone/n8n if moving toward neural retrieval later.
+
+💻 PHASE 4: FRONTEND INTEGRATION
+Add a floating chat widget or /portal/support page:
+
+tsx
+Copy
+Edit
+<ChatAssistant
+  userId={user.id}
+  context={[
+    { role: "system", content: "You are the Healios customer assistant. Answer only based on the database and FAQs." },
+    { role: "user", content: "Where is my order?" }
+  ]}
+/>
+Connect to OpenAI or local function-based AI handler.
+
+🤖 PHASE 5: PROMPT TEMPLATES — SMART AI ROUTING
+Intent	Prompt Structure
+Order tracking	“Track latest order for user ID {userId}. Return status, ETA, order summary.”
+Return request	“Check if order {orderId} is within return window. If yes, create support ticket and notify admin.”
+Discount validation	“Check if code ‘WELCOME10’ is valid in discounts table.”
+General FAQ	“Search structured FAQs for matching answer, fallback to generic ‘please contact us’.”
+
+🔁 PHASE 6: ADMIN HANDOFF + SUPPORT LOGGING
+If AI cannot answer → fallback:
+
+ts
+Copy
+Edit
+await db.insert(support_tickets).values({
+  user_id: user.id,
+  issue: "AI escalation",
+  transcript: last10Messages,
+  status: "open",
+});
+sendEmail("support@healios.com", "New AI escalation ticket", {...});
+You already have /admin/tickets from previous prompts — wire this in.
+
+🔒 PHASE 7: PRIVACY + DATA COMPLIANCE
+Risk	Solution
+User asks about someone else’s order	Only show orders where order.user_id === session.user.id
+Stripe webhook not synced	Fall back to internal order status: unfulfilled
+Email spoofing	All actions require logged-in session (Replit Auth)
+
+🔧 PHASE 8: DEPLOYMENT NOTES
+Integration	Action
+✅ OpenAI API	Use gpt-4o or gpt-3.5-turbo
+✅ Local model (optional)	Use llama.cpp, Ollama, or LiteLLM if going serverless
+✅ n8n fallback	Pipe failed queries to n8n + wait for admin response
+✅ Rate limit	Limit AI assistant to 10 requests/min per user session
+
+🧪 PHASE 9: TEST CASES
+User Input	Expected
+“Where’s my order?”	Latest order: #1234, fulfilled, shipped 2 days ago
+“I want to return this product”	“Sure, it’s eligible. We’ve raised a ticket for you.”
+“Does magnesium help with sleep?”	“I'm not allowed to give medical advice, but here's product info.”
+“How can I use my discount?”	“Enter WELCOME10 at checkout for 10% off.”
+“I didn’t get a confirmation email”	“Email resent to johndoe@gmail.com”
+
+📦 OUTPUT FROM THIS PROMPT
+AI customer service bot, scoped to:
+
+Order tracking
+
+Returns
+
+Receipts
+
+Discount help
+
+FAQ lookup
+
+Connected to orders, users, support_tickets
+
+Fully privacy-compliant and abuse-resistant
+

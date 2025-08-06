@@ -64,6 +64,16 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         const newOrder = await storage.createOrder(orderData);
         console.log("Created order:", newOrder.id);
 
+        // Phase 7: Mark cart as converted when checkout session is completed
+        if (session.metadata?.sessionToken) {
+          try {
+            await storage.markCartAsConverted(session.metadata.sessionToken, session.id);
+            console.log("Cart marked as converted for session:", session.metadata.sessionToken);
+          } catch (error) {
+            console.error('Failed to mark cart as converted:', error);
+          }
+        }
+
         // Send order confirmation email
         if (orderData.customerEmail) {
           try {

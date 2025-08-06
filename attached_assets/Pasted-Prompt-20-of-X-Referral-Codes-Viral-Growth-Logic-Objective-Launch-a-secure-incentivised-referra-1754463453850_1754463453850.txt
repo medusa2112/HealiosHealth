@@ -1,0 +1,134 @@
+Prompt 20 of X: Referral Codes + Viral Growth Logic
+Objective: Launch a secure, incentivised referral system where users can share unique links or codes with friends. Both parties get benefits (e.g. discounts, points, credit) on first purchase — driving trust-based viral acquisition.
+
+✅ PHASE 1: STRATEGY — HOW THE REFERRAL SYSTEM WORKS
+Actor	Action	Reward
+Referrer (existing user)	Shares code or link	Earns credit or discount when friend buys
+Referee (new user)	Enters referral code on first checkout	Gets discount (e.g. 10% off first order)
+System	Validates referrer, tracks referral ID, prevents abuse	Secure, idempotent logic
+
+🧱 PHASE 2: DATABASE SCHEMA
+ts
+Copy
+Edit
+export const referrals = pgTable("referrals", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  referrer_id: uuid("referrer_id").references(() => users.id),
+  code: varchar("code", { length: 12 }).unique().notNull(), // e.g. HEALIOS-RK7Q9D
+  reward_type: varchar("reward_type").default("discount"), // or "credit"
+  reward_value: integer("reward_value").default(10), // % or credit amount
+  created_at: timestamp("created_at").defaultNow(),
+});
+ts
+Copy
+Edit
+export const referral_claims = pgTable("referral_claims", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  referral_id: uuid("referral_id").references(() => referrals.id),
+  referee_id: uuid("referee_id").references(() => users.id),
+  order_id: uuid("order_id").references(() => orders.id),
+  claimed_at: timestamp("claimed_at").defaultNow(),
+});
+bash
+Copy
+Edit
+npx drizzle-kit push
+🔐 PHASE 3: REFERRAL CODE GENERATION
+At user registration or /portal/referrals:
+
+ts
+Copy
+Edit
+const code = `HEALIOS-${randomAlphanumeric(6)}`;
+await db.insert(referrals).values({
+  referrer_id: user.id,
+  code,
+});
+Displayed to user:
+
+ts
+Copy
+Edit
+Share this link: https://healios.com?ref=${code}
+🛒 PHASE 4: CHECKOUT INTEGRATION — REF CODE ENTRY
+Update /checkout:
+
+ts
+Copy
+Edit
+const referral = await db.select().from(referrals).where(eq(referrals.code, req.body.referral_code)).limit(1);
+
+if (referral.length > 0 && user.id !== referral[0].referrer_id) {
+  const discount = referral[0].reward_value;
+  const priceAfterDiscount = originalPrice * (1 - discount / 100);
+
+  // Tag this in metadata
+  stripeCheckout.metadata.referral_id = referral[0].id;
+  stripeCheckout.metadata.referee_id = user.id;
+
+  // Proceed with discounted price
+} else {
+  // Invalid or self-referral → ignore
+}
+⚙️ PHASE 5: STRIPE WEBHOOK HANDLING (checkout.session.completed)
+If metadata includes referral_id:
+
+ts
+Copy
+Edit
+await db.insert(referral_claims).values({
+  referral_id: metadata.referral_id,
+  referee_id: metadata.referee_id,
+  order_id: session.metadata.order_id,
+});
+Also credit the referrer:
+
+Add platform credit
+
+Or email their personal discount voucher
+
+🧠 PHASE 6: PORTAL UI — "MY REFERRALS"
+/portal/referrals shows:
+
+Your referral link/code
+
+How many people used it
+
+Total credits/discounts earned
+
+Invite CTA: “Copy Link”, “Send via WhatsApp”
+
+ts
+Copy
+Edit
+<div>
+  <h2>Your Referral Code: {userReferral.code}</h2>
+  <p>{referralClaims.length} people used your code</p>
+  <p>Total earned: R{referralClaims.length * 10}</p>
+  <button onClick={copyToClipboard}>Copy Referral Link</button>
+</div>
+💥 PHASE 7: FRAUD + ABUSE PROTECTION
+Risk	Protection
+User self-refers	Backend blocks if referee_id === referrer_id
+Duplicate emails	Use unique email + Replit Auth
+Fake accounts	Consider IP/device fingerprinting if needed
+Unlimited rewards	Cap per-user reward claims (e.g. 10 max)
+Manual code abuse	Log all usage to referral_claims, check for anomalies
+
+📩 PHASE 8: EMAIL FLOWS
+Referrer gets notified: "Your friend bought — you've earned R10 off!"
+
+Referee sees success: "You've unlocked 10% off your first order"
+
+Optional: Email reminder if referred user hasn’t ordered yet (e.g. after 3 days)
+
+📦 OUTPUT FROM THIS PROMPT
+Secure, scalable referral infrastructure
+
+2-way rewards (first-time discount + referrer incentive)
+
+Shareable link + manual code entry
+
+Admin-safe tracking of claims
+
+Full UI + Stripe integration

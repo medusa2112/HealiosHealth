@@ -145,6 +145,7 @@ router.post("/orders/:id/reorder", async (req, res) => {
       metadata: {
         orderId: newOrder.id,
         userId: userId,
+        sessionToken: req.body.sessionToken || undefined,
         reorderId: orderId, // Track that this is a reorder
       },
       billing_address_collection: 'required',

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import AdminProducts from "./admin-products";
+import AbandonedCartsPage from "./admin/abandoned-carts";
 
 interface AdminStats {
   totalProducts: number;
@@ -112,11 +113,12 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="product-crud">Product CRUD</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="abandoned-carts">Abandoned Carts</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
@@ -302,6 +304,10 @@ export default function AdminDashboard() {
 
           <TabsContent value="product-crud">
             <AdminProducts />
+          </TabsContent>
+
+          <TabsContent value="abandoned-carts">
+            <AbandonedCartsPage />
           </TabsContent>
 
           <TabsContent value="analytics">

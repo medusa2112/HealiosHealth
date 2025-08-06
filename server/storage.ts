@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -76,6 +76,13 @@ export interface IStorage {
   getAllOrders(): Promise<Order[]>;
   getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>;
   updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
+  
+  // Cart methods (Phase 7: Abandoned Cart Tracking)
+  upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart>;
+  getCartById(id: string): Promise<Cart | undefined>;
+  getCartBySessionToken(sessionToken: string): Promise<Cart | undefined>;
+  markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined>;
+  getAbandonedCarts(hoursThreshold: number): Promise<Cart[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -91,6 +98,7 @@ export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private addresses: Map<string, Address>;
   private orderItems: Map<string, OrderItem>;
+  private carts: Map<string, Cart>;
 
   constructor() {
     this.products = new Map();
@@ -105,6 +113,7 @@ export class MemStorage implements IStorage {
     this.users = new Map();
     this.addresses = new Map();
     this.orderItems = new Map();
+    this.carts = new Map();
     this.seedData();
   }
 
@@ -1133,6 +1142,80 @@ export class MemStorage implements IStorage {
     const updatedOrder = { ...order, refundStatus: status };
     this.orders.set(orderId, updatedOrder);
     return updatedOrder;
+  }
+
+  // Cart methods (Phase 7: Abandoned Cart Tracking)
+  async upsertCart(cartData: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> {
+    // Look for existing cart by session token
+    const existingCart = Array.from(this.carts.values()).find(
+      cart => cart.sessionToken === cartData.sessionToken
+    );
+
+    if (existingCart) {
+      // Update existing cart
+      const updatedCart: Cart = {
+        ...existingCart,
+        items: cartData.items || existingCart.items,
+        totalAmount: cartData.totalAmount || existingCart.totalAmount || null,
+        currency: cartData.currency || existingCart.currency || null,
+        userId: cartData.userId || existingCart.userId || null,
+        lastUpdated: new Date().toISOString(),
+      };
+      this.carts.set(existingCart.id, updatedCart);
+      return updatedCart;
+    }
+
+    // Create new cart
+    const id = randomUUID();
+    const cart: Cart = {
+      id,
+      userId: cartData.userId || null,
+      sessionToken: cartData.sessionToken,
+      items: cartData.items || "[]",
+      totalAmount: cartData.totalAmount || null,
+      currency: cartData.currency || null,
+      createdAt: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      convertedToOrder: cartData.convertedToOrder || null,
+      stripeSessionId: cartData.stripeSessionId || null,
+    };
+    this.carts.set(id, cart);
+    return cart;
+  }
+
+  async getCartById(id: string): Promise<Cart | undefined> {
+    return this.carts.get(id);
+  }
+
+  async getCartBySessionToken(sessionToken: string): Promise<Cart | undefined> {
+    return Array.from(this.carts.values()).find(
+      cart => cart.sessionToken === sessionToken
+    );
+  }
+
+  async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> {
+    const cart = this.carts.get(cartId);
+    if (!cart) return undefined;
+
+    const updatedCart: Cart = {
+      ...cart,
+      convertedToOrder: true,
+      stripeSessionId: stripeSessionId || cart.stripeSessionId,
+      lastUpdated: new Date().toISOString(),
+    };
+    this.carts.set(cartId, updatedCart);
+    return updatedCart;
+  }
+
+  async getAbandonedCarts(hoursThreshold: number = 24): Promise<Cart[]> {
+    const cutoffTime = new Date(Date.now() - hoursThreshold * 60 * 60 * 1000);
+    
+    return Array.from(this.carts.values()).filter(cart => {
+      if (cart.convertedToOrder) return false;
+      
+      const lastUpdated = new Date(cart.lastUpdated || cart.createdAt);
+      return lastUpdated < cutoffTime;
+    });
   }
 }
 

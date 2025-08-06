@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { type Product } from "@shared/schema";
 import { type CartItem, type CartState } from "@/lib/types";
+import { apiRequest } from "@/lib/queryClient";
 
 // Extend Window interface for Google Analytics
 declare global {
@@ -28,6 +29,37 @@ export function CartProvider({ children }: { children: ReactNode }) {
     isOpen: false,
   });
 
+  // Generate or retrieve session token for cart tracking
+  const [sessionToken] = useState(() => {
+    if (typeof window !== 'undefined') {
+      let token = localStorage.getItem('cart_session_token');
+      if (!token) {
+        token = crypto.randomUUID();
+        localStorage.setItem('cart_session_token', token);
+      }
+      return token;
+    }
+    return crypto.randomUUID();
+  });
+
+  // Sync cart to server whenever it changes
+  const syncCartToServer = async (cartItems: CartItem[]) => {
+    try {
+      const totalAmount = cartItems.reduce((sum, item) => {
+        return sum + (parseFloat(item.product.price) * item.quantity);
+      }, 0);
+
+      await apiRequest('/api/cart/sync', 'POST', {
+        session_token: sessionToken,
+        items: cartItems,
+        totalAmount,
+        currency: 'ZAR'
+      });
+    } catch (error) {
+      console.error('Failed to sync cart to server:', error);
+    }
+  };
+
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existingItem = prev.items.find((item) => item.product.id === product.id);
@@ -41,36 +73,46 @@ export function CartProvider({ children }: { children: ReactNode }) {
           items: [{
             item_id: product.id,
             item_name: product.name,
-            category: product.category || 'Supplements',
+            category: product.categories?.[0] || 'Supplements',
             quantity: 1,
             price: parseFloat(product.price)
           }]
         });
       }
       
+      let newItems: CartItem[];
       if (existingItem) {
-        return {
-          ...prev,
-          items: prev.items.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-        };
+        newItems = prev.items.map((item) =>
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        newItems = [...prev.items, { product, quantity: 1 }];
       }
+      
+      // Sync to server in background
+      syncCartToServer(newItems);
       
       return {
         ...prev,
-        items: [...prev.items, { product, quantity: 1 }],
+        items: newItems,
       };
     });
   };
 
   const removeFromCart = (productId: string) => {
-    setCart((prev) => ({
-      ...prev,
-      items: prev.items.filter((item) => item.product.id !== productId),
-    }));
+    setCart((prev) => {
+      const newItems = prev.items.filter((item) => item.product.id !== productId);
+      
+      // Sync to server in background
+      syncCartToServer(newItems);
+      
+      return {
+        ...prev,
+        items: newItems,
+      };
+    });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -79,18 +121,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    setCart((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
+    setCart((prev) => {
+      const newItems = prev.items.map((item) =>
         item.product.id === productId
           ? { ...item, quantity }
           : item
-      ),
-    }));
+      );
+      
+      // Sync to server in background
+      syncCartToServer(newItems);
+      
+      return {
+        ...prev,
+        items: newItems,
+      };
+    });
   };
 
   const clearCart = () => {
-    setCart((prev) => ({ ...prev, items: [] }));
+    setCart((prev) => {
+      // Sync empty cart to server in background
+      syncCartToServer([]);
+      
+      return { ...prev, items: [] };
+    });
   };
 
   const toggleCart = () => {

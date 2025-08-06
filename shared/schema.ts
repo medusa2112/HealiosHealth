@@ -163,6 +163,20 @@ export const orderItems = pgTable("order_items", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+// Abandoned cart tracking table
+export const carts = pgTable("carts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id), // nullable for guest users
+  sessionToken: varchar("session_token", { length: 128 }).notNull(),
+  items: text("items").notNull(), // JSON string of cart items
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }),
+  currency: text("currency").default("ZAR"),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  lastUpdated: text("last_updated").default(sql`CURRENT_TIMESTAMP`),
+  convertedToOrder: boolean("converted_to_order").default(false),
+  stripeSessionId: text("stripe_session_id"), // For linking to successful checkouts
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -177,11 +191,19 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   createdAt: true,
 });
 
+export const insertCartSchema = createInsertSchema(carts).omit({
+  id: true,
+  createdAt: true,
+  lastUpdated: true,
+});
+
 // Type exports
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
+export type Cart = typeof carts.$inferSelect;
+export type InsertCart = z.infer<typeof insertCartSchema>;
 
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,

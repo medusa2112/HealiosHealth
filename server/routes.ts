@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
 import stripeRoutes from "./routes/stripe";
+import cartRoutes from "./routes/cart";
 import emailTestRoutes from "./routes/email-test";
 
 // Stripe imports moved to dedicated service
@@ -29,6 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/auth', authRoutes);
   app.use('/admin', adminRoutes);
   app.use('/portal', portalRoutes);
+  app.use('/api/cart', cartRoutes);
   
   // Email system (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -179,7 +181,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create Stripe Checkout Session for external payment processing
   app.post("/api/create-checkout-session", async (req, res) => {
     try {
-      const { orderData, lineItems, successUrl, cancelUrl } = req.body;
+      const { orderData, lineItems, successUrl, cancelUrl, sessionToken } = req.body;
       
       if (!lineItems || !lineItems.length) {
         return res.status(400).json({ message: "Line items are required" });
@@ -210,6 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           customerPhone: orderData.customerPhone || null,
           orderItems: orderData.orderItems,
           notes: orderData.notes || null,
+          sessionToken: sessionToken || null,
         },
         billing_address_collection: 'required',
         shipping_address_collection: {

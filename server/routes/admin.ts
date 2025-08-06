@@ -2,6 +2,7 @@ import express from 'express';
 import { protectRoute } from '../lib/auth';
 import { storage } from '../storage';
 import ordersRouter from './admin/orders';
+import abandonedCartsRouter from './admin/abandoned-carts';
 
 const router = express.Router();
 
@@ -10,6 +11,9 @@ router.use(protectRoute(['admin']));
 
 // Mount orders subrouter
 router.use('/orders', ordersRouter);
+
+// Mount abandoned carts subrouter
+router.use('/abandoned-carts', abandonedCartsRouter);
 
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {

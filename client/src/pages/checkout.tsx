@@ -84,6 +84,7 @@ const CheckoutForm = () => {
           lineItems,
           successUrl: `${window.location.origin}/order-confirmation`,
           cancelUrl: `${window.location.origin}/checkout`,
+          sessionToken: localStorage.getItem('cart_session_token'),
         }),
       });
 
