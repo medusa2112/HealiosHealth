@@ -135,6 +135,13 @@ export interface IStorage {
   createSubscription(subscription: InsertSubscription): Promise<Subscription>;
   updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined>;
   getAllSubscriptions(): Promise<Subscription[]>;
+  
+  // Phase 19: Email Events Tracking (Abandoned Cart + Reorder Reminders)
+  createEmailEvent(event: { userId?: string; emailType: string; relatedId: string; emailAddress: string; }): Promise<void>;
+  getEmailEventsByType(emailType: string): Promise<any[]>;
+  hasEmailBeenSent(emailType: string, relatedId: string): Promise<boolean>;
+  getAbandonedCarts(hoursCutoff?: number): Promise<any[]>;
+  getReorderCandidates(daysBack?: number): Promise<any[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -158,6 +165,7 @@ export class MemStorage implements IStorage {
   private productBundles: Map<string, ProductBundle>; // Phase 16
   private bundleItems: Map<string, BundleItem>; // Phase 16
   private subscriptions: Map<string, Subscription>; // Phase 18
+  private emailEvents: Map<string, any>; // Phase 19
 
   constructor() {
     this.products = new Map();
@@ -180,6 +188,7 @@ export class MemStorage implements IStorage {
     this.productBundles = new Map(); // Phase 16
     this.bundleItems = new Map(); // Phase 16
     this.subscriptions = new Map(); // Phase 18
+    this.emailEvents = new Map(); // Phase 19
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
@@ -2303,6 +2312,110 @@ export class MemStorage implements IStorage {
     const updatedUser = { ...user, ...updates };
     this.users.set(id, updatedUser);
     return updatedUser;
+  }
+
+  // Phase 19: Email Events Tracking Methods
+  async createEmailEvent(event: { userId?: string; emailType: string; relatedId: string; emailAddress: string; }): Promise<void> {
+    const id = randomUUID();
+    const emailEvent = {
+      id,
+      userId: event.userId || null,
+      emailType: event.emailType,
+      relatedId: event.relatedId,
+      emailAddress: event.emailAddress,
+      sentAt: new Date().toISOString(),
+    };
+    this.emailEvents.set(id, emailEvent);
+  }
+
+  async getEmailEventsByType(emailType: string): Promise<any[]> {
+    return Array.from(this.emailEvents.values())
+      .filter(event => event.emailType === emailType)
+      .sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
+  }
+
+  async hasEmailBeenSent(emailType: string, relatedId: string): Promise<boolean> {
+    return Array.from(this.emailEvents.values())
+      .some(event => event.emailType === emailType && event.relatedId === relatedId);
+  }
+
+  async getAbandonedCarts(hoursCutoff: number = 1): Promise<any[]> {
+    const cutoffTime = new Date(Date.now() - hoursCutoff * 60 * 60 * 1000);
+    
+    return Array.from(this.carts.values())
+      .filter(cart => {
+        if (cart.convertedToOrder) return false; // Skip converted carts
+        
+        const lastUpdated = new Date(cart.lastUpdated || cart.createdAt || '');
+        return lastUpdated < cutoffTime;
+      })
+      .map(cart => {
+        const user = cart.userId ? this.users.get(cart.userId) : null;
+        return {
+          ...cart,
+          user: user || { email: cart.guestEmail || '' }
+        };
+      });
+  }
+
+  async getReorderCandidates(daysBack: number = 45): Promise<any[]> {
+    const cutoffDate = new Date(Date.now() - daysBack * 24 * 60 * 60 * 1000);
+    
+    // Get orders from the last specified days
+    const recentOrders = Array.from(this.orders.values())
+      .filter(order => {
+        const orderDate = new Date(order.createdAt || '');
+        return orderDate > cutoffDate && order.status === 'completed';
+      });
+
+    const candidates: any[] = [];
+    
+    for (const order of recentOrders) {
+      const orderAge = Math.floor((Date.now() - new Date(order.createdAt || '').getTime()) / (1000 * 60 * 60 * 24));
+      const user = order.userId ? this.users.get(order.userId) : null;
+      
+      if (!user?.email) continue;
+      
+      const orderItems = Array.from(this.orderItems.values())
+        .filter(item => item.orderId === order.id);
+
+      for (const item of orderItems) {
+        const variant = this.productVariants.get(item.productId);
+        if (!variant) continue;
+        
+        // Estimate reorder interval (default 30 days for supplements)
+        const intervalDays = variant.subscriptionIntervalDays || 30;
+        
+        // Check if it's time for reorder (within ±5 days of interval)
+        if (orderAge >= intervalDays - 5 && orderAge <= intervalDays + 5) {
+          // Check if already reordered
+          const hasReordered = Array.from(this.orders.values())
+            .some(laterOrder => {
+              const laterOrderDate = new Date(laterOrder.createdAt || '');
+              const originalOrderDate = new Date(order.createdAt || '');
+              return laterOrder.userId === order.userId && 
+                     laterOrderDate > originalOrderDate &&
+                     Array.from(this.orderItems.values())
+                       .some(laterItem => laterItem.orderId === laterOrder.id && 
+                                         laterItem.productId === item.productId);
+            });
+          
+          if (!hasReordered) {
+            candidates.push({
+              order,
+              user,
+              item,
+              variant,
+              orderAge,
+              intervalDays,
+              estimatedRunOut: orderAge
+            });
+          }
+        }
+      }
+    }
+    
+    return candidates;
   }
 }
 

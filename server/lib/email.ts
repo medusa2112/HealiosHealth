@@ -6,7 +6,7 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final";
 
 interface EmailData {
   amount: number;
@@ -22,6 +22,10 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     refund: "Your Healios Refund Has Been Processed",
     reorder: "Your Healios Reorder Is Complete",
     admin_alert: "⚠️ Healios Admin Alert",
+    abandoned_cart_1h: "Still thinking it over?",
+    abandoned_cart_24h: "Your wellness journey is waiting (10% off inside!)",
+    reorder_reminder: "Running low on {productName}?",
+    reorder_final: "Last chance to reorder your supplements",
   };
 
   const bodyMap: Record<EmailType, (data: EmailData) => string> = {
@@ -82,6 +86,90 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
           <p><strong>Details:</strong> ${JSON.stringify(data, null, 2)}</p>
         </div>
         <p>Please review this alert and take appropriate action if necessary.</p>
+      </div>
+    `,
+    abandoned_cart_1h: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Still thinking it over?</h1>
+        <p>Hi ${data.userName},</p>
+        <p>You've left some amazing products in your cart. We thought you might want to complete your wellness journey with us.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${data.resumeCheckoutUrl}" 
+             style="background-color: #000; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+            Resume Checkout
+          </a>
+        </div>
+        <p>Questions? Just reply to this email and we'll be happy to help!</p>
+        <p>The Healios Team</p>
+      </div>
+    `,
+    abandoned_cart_24h: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Your wellness journey is waiting!</h1>
+        <p>Hi ${data.userName},</p>
+        <p>We noticed you haven't completed your order yet. Don't miss out on these premium supplements!</p>
+        
+        <div style="background-color: #e8f5e8; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #28a745;">
+          <h3 style="color: #28a745; margin-top: 0;">🎉 Special Offer Just For You!</h3>
+          <p><strong>Use code: ${data.discountCode}</strong> for <strong>${data.discountAmount} OFF</strong> your order</p>
+          <p style="font-size: 14px; color: #666;">This offer expires in 24 hours</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${data.resumeCheckoutUrl}" 
+             style="background-color: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+            Complete Your Order & Save ${data.discountAmount}
+          </a>
+        </div>
+        <p>This exclusive offer won't last long. Complete your purchase now and start your wellness transformation!</p>
+        <p>The Healios Team</p>
+      </div>
+    `,
+    reorder_reminder: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Running low on ${data.productName}?</h1>
+        <p>Hi ${data.userName},</p>
+        <p>It's been ${data.orderAge} days since your last order of <strong>${data.productName}</strong>.</p>
+        
+        <div style="background-color: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ffc107;">
+          <p><strong>Reorder Reminder:</strong></p>
+          <p>Based on typical usage, you might be running low in about <strong>${data.daysRemaining} days</strong>.</p>
+          <p>Don't let your wellness routine be interrupted!</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${data.reorderUrl}" 
+             style="background-color: #000; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+            Reorder ${data.productName}
+          </a>
+        </div>
+        <p><small>Original order #${data.originalOrderId} placed on ${data.originalOrderDate}</small></p>
+        <p>The Healios Team</p>
+      </div>
+    `,
+    reorder_final: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">Last chance to reorder your supplements</h1>
+        <p>Hi ${data.userName},</p>
+        <p>${data.isRunningLow ? 
+          `You should be running low on <strong>${data.productName}</strong> by now.` :
+          `You'll likely run out of <strong>${data.productName}</strong> very soon.`
+        }</p>
+        
+        <div style="background-color: #f8d7da; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #dc3545;">
+          <p><strong>Don't let your routine be disrupted!</strong></p>
+          <p>It's been <strong>${data.orderAge} days</strong> since your last order. Reorder now to maintain your wellness journey.</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${data.reorderUrl}" 
+             style="background-color: #dc3545; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+            Reorder ${data.productName} Now
+          </a>
+        </div>
+        <p><small>Original order #${data.originalOrderId} placed on ${data.originalOrderDate}</small></p>
+        <p>The Healios Team</p>
       </div>
     `
   };

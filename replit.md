@@ -49,6 +49,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - AI-powered chatbot "Juliet" for customer support and product inquiries.
 - Professional text formatting across all site sections (chat, product descriptions, articles).
 - **Phase 14 Complete**: Product Variant Support with comprehensive SKU management for size, flavour, strength, and bundle variations.
+- **Phase 18 Complete**: Subscription Product Support with auto-refill functionality using Stripe's native subscription APIs, comprehensive email automation, customer portal management, and webhook integration.
 
 ### System Design Choices
 - **Monorepo Structure**: Clear separation of client, server, and shared code for maintainability.

@@ -73,6 +73,16 @@ export const subscriptions = pgTable("subscriptions", {
   metadata: text("metadata"), // JSON for additional tracking data
 });
 
+// Phase 19: Email events tracking for automated flows (abandoned cart, reorder reminders)
+export const emailEvents = pgTable("email_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id),
+  emailType: varchar("email_type", { length: 64 }).notNull(), // "abandoned_cart", "reorder", "abandoned_cart_24h"
+  relatedId: varchar("related_id").notNull(), // cart_id or order_id
+  sentAt: text("sent_at").default(sql`CURRENT_TIMESTAMP`),
+  emailAddress: text("email_address").notNull(), // For tracking purposes
+});
+
 export const quizResults = pgTable("quiz_results", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull(),
@@ -423,3 +433,12 @@ export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
 
 export type Subscription = typeof subscriptions.$inferSelect;
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+
+// Phase 19: Email events schemas
+export const insertEmailEventSchema = createInsertSchema(emailEvents).omit({
+  id: true,
+  sentAt: true,
+});
+
+export type EmailEvent = typeof emailEvents.$inferSelect;
+export type InsertEmailEvent = z.infer<typeof insertEmailEventSchema>;

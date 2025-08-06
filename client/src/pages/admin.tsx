@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import AdminProducts from "./admin-products";
+import AdminEmailJobs from "./admin/EmailJobs";
 import { Link } from "wouter";
-import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp } from "lucide-react";
+import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp, Mail } from "lucide-react";
 
 interface AdminStats {
   totalProducts: number;
@@ -114,7 +115,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="product-crud">Product CRUD</TabsTrigger>
@@ -122,6 +123,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="abandoned-carts">Abandoned Carts</TabsTrigger>
             <TabsTrigger value="discount-codes">Discount Codes</TabsTrigger>
             <TabsTrigger value="admin-logs">Activity Logs</TabsTrigger>
+            <TabsTrigger value="email-jobs">Email Jobs</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
@@ -381,6 +383,10 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="email-jobs">
+            <AdminEmailJobs />
           </TabsContent>
 
           <TabsContent value="analytics">

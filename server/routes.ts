@@ -48,6 +48,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const subscriptionRoutes = await import('./routes/subscriptions');
   app.use('/api/subscriptions', subscriptionRoutes.subscriptionRoutes);
   
+  // Register email job routes (Phase 19) - Admin only
+  const emailJobsRoutes = await import('./routes/email-jobs');
+  app.use('/api/admin/email-jobs', requireAuth, protectRoute(['admin']), emailJobsRoutes.default);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);
@@ -1032,6 +1036,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   const httpServer = createServer(app);
+
+  // Phase 19: Start email scheduler in development mode
+  if (process.env.NODE_ENV === 'development') {
+    const { emailScheduler } = await import('./jobs/scheduler');
+    console.log("[SERVER] Starting email job scheduler in development mode...");
+    emailScheduler.start();
+  }
+
   return httpServer;
 }
 
