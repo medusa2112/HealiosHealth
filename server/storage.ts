@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -105,6 +105,15 @@ export interface IStorage {
   createReorderLog(log: InsertReorderLog): Promise<ReorderLog>;
   getReorderLogs(options?: { limit?: number; userId?: string; status?: string }): Promise<ReorderLog[]>;
   getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]>;
+  
+  // Phase 15: Discount codes
+  getDiscountCodes(): Promise<DiscountCode[]>;
+  getDiscountCodeByCode(code: string): Promise<DiscountCode | undefined>;
+  createDiscountCode(discountCode: InsertDiscountCode): Promise<DiscountCode>;
+  updateDiscountCode(id: string, updates: Partial<DiscountCode>): Promise<DiscountCode | undefined>;
+  deleteDiscountCode(id: string): Promise<boolean>;
+  validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }>;
+  incrementDiscountCodeUsage(id: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -124,6 +133,7 @@ export class MemStorage implements IStorage {
   private carts: Map<string, Cart>;
   private adminLogs: Map<string, AdminLog>;
   private reorderLogs: Map<string, ReorderLog>;
+  private discountCodes: Map<string, DiscountCode>; // Phase 15
 
   constructor() {
     this.products = new Map();
@@ -142,11 +152,13 @@ export class MemStorage implements IStorage {
     this.carts = new Map();
     this.adminLogs = new Map();
     this.reorderLogs = new Map();
+    this.discountCodes = new Map(); // Phase 15
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
     this.seedAdminLogs();
     this.seedReorderLogs();
+    this.seedDiscountCodes(); // Phase 15
   }
 
   private seedData() {
@@ -1798,6 +1810,74 @@ export class MemStorage implements IStorage {
     console.log("✅ Seeded", sampleReorders.length, "reorder logs for Phase 13 analytics testing");
   }
 
+  // Seed discount codes for Phase 15 testing
+  private seedDiscountCodes() {
+    const now = new Date();
+    const sampleCodes = [
+      {
+        id: randomUUID(),
+        code: "WELCOME10",
+        type: "percent",
+        value: "10.00",
+        usageLimit: 100,
+        usageCount: 15,
+        expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+        createdAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
+        isActive: true,
+      },
+      {
+        id: randomUUID(),
+        code: "SAVE50",
+        type: "fixed",
+        value: "50.00",
+        usageLimit: null,
+        usageCount: 3,
+        expiresAt: null,
+        createdAt: new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days ago
+        isActive: true,
+      },
+      {
+        id: randomUUID(),
+        code: "EXPIRED20",
+        type: "percent",
+        value: "20.00",
+        usageLimit: 50,
+        usageCount: 5,
+        expiresAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(), // Expired yesterday
+        createdAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
+        isActive: true,
+      },
+      {
+        id: randomUUID(),
+        code: "LIMITREACHED",
+        type: "percent",
+        value: "15.00",
+        usageLimit: 5,
+        usageCount: 5, // Limit reached
+        expiresAt: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days
+        createdAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+        isActive: true,
+      },
+      {
+        id: randomUUID(),
+        code: "INACTIVE25",
+        type: "percent",
+        value: "25.00",
+        usageLimit: 20,
+        usageCount: 2,
+        expiresAt: new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000).toISOString(), // 15 days
+        createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
+        isActive: false, // Inactive
+      }
+    ] as DiscountCode[];
+
+    sampleCodes.forEach(code => {
+      this.discountCodes.set(code.id, code);
+    });
+    
+    console.log("✅ Seeded", sampleCodes.length, "discount codes for Phase 15 testing");
+  }
+
   // Admin Activity Logging Implementation (Phase 12)
   async createAdminLog(logData: InsertAdminLog): Promise<AdminLog> {
     const id = randomUUID();
@@ -1864,6 +1944,75 @@ export class MemStorage implements IStorage {
     return Array.from(this.reorderLogs.values())
       .filter(log => log.originalOrderId === originalOrderId)
       .sort((a, b) => new Date(b.timestamp || '').getTime() - new Date(a.timestamp || '').getTime());
+  }
+
+  // Phase 15: Discount code methods
+  async getDiscountCodes(): Promise<DiscountCode[]> {
+    return Array.from(this.discountCodes.values())
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+
+  async getDiscountCodeByCode(code: string): Promise<DiscountCode | undefined> {
+    return Array.from(this.discountCodes.values()).find(discount => 
+      discount.code.toLowerCase() === code.toLowerCase()
+    );
+  }
+
+  async createDiscountCode(discountCode: InsertDiscountCode): Promise<DiscountCode> {
+    const id = randomUUID();
+    const newDiscountCode: DiscountCode = {
+      ...discountCode,
+      id,
+      code: discountCode.code.toUpperCase(),
+      usageCount: 0,
+      createdAt: new Date().toISOString(),
+    };
+    this.discountCodes.set(id, newDiscountCode);
+    return newDiscountCode;
+  }
+
+  async updateDiscountCode(id: string, updates: Partial<DiscountCode>): Promise<DiscountCode | undefined> {
+    const existingCode = this.discountCodes.get(id);
+    if (!existingCode) return undefined;
+
+    const updatedCode = { ...existingCode, ...updates };
+    this.discountCodes.set(id, updatedCode);
+    return updatedCode;
+  }
+
+  async deleteDiscountCode(id: string): Promise<boolean> {
+    return this.discountCodes.delete(id);
+  }
+
+  async validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }> {
+    const discount = await this.getDiscountCodeByCode(code);
+    
+    if (!discount) {
+      return { valid: false, error: "Invalid discount code" };
+    }
+
+    if (!discount.isActive) {
+      return { valid: false, error: "Discount code is inactive" };
+    }
+
+    const now = new Date();
+    if (discount.expiresAt && new Date(discount.expiresAt) < now) {
+      return { valid: false, error: "Discount code has expired" };
+    }
+
+    if (discount.usageLimit && discount.usageCount >= discount.usageLimit) {
+      return { valid: false, error: "Discount code usage limit reached" };
+    }
+
+    return { valid: true, discount };
+  }
+
+  async incrementDiscountCodeUsage(id: string): Promise<void> {
+    const discount = this.discountCodes.get(id);
+    if (discount) {
+      discount.usageCount = (discount.usageCount || 0) + 1;
+      this.discountCodes.set(id, discount);
+    }
   }
 }
 

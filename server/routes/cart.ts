@@ -1,10 +1,11 @@
 import express from "express";
 import { storage } from "../storage";
+import { requireSessionOrAuth, rateLimit } from "../lib/session-auth";
 
 const router = express.Router();
 
 // Sync cart data to database (for both guest and logged-in users)
-router.post("/sync", async (req, res) => {
+router.post("/sync", requireSessionOrAuth, rateLimit(20, 60000), async (req, res) => {
   try {
     const { session_token, items, totalAmount, currency = "ZAR" } = req.body;
     const userId = req.user?.id || null;

@@ -5,7 +5,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, ShoppingBag } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, ShoppingBag, Tag, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 
@@ -29,6 +31,69 @@ const CheckoutForm = () => {
     phone: '',
     address: ''
   });
+  const [discountCode, setDiscountCode] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    code: string;
+    type: 'percent' | 'fixed';
+    value: string;
+    discountAmount: number;
+  } | null>(null);
+  const [isValidatingDiscount, setIsValidatingDiscount] = useState(false);
+
+  // Calculate totals with discount
+  const subtotal = cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
+  const discountAmount = appliedDiscount ? appliedDiscount.discountAmount : 0;
+  const total = Math.max(0, subtotal - discountAmount);
+
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+    
+    setIsValidatingDiscount(true);
+    try {
+      const response = await fetch('/api/validate-discount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          code: discountCode.toUpperCase().trim(),
+          subtotal 
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Invalid discount code');
+      }
+
+      const result = await response.json();
+      setAppliedDiscount({
+        code: result.code,
+        type: result.type,
+        value: result.value,
+        discountAmount: result.discountAmount
+      });
+      
+      toast({
+        title: "Discount Applied!",
+        description: `${result.type === 'percent' ? `${result.value}% off` : `R${result.discountAmount.toFixed(2)} off`} your order`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Invalid Discount Code",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsValidatingDiscount(false);
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
+    setDiscountCode('');
+    toast({
+      description: "Discount code removed",
+    });
+  };
 
   const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +118,9 @@ const CheckoutForm = () => {
         shippingAddress: customerInfo.address,
         billingAddress: customerInfo.address,
         orderItems: JSON.stringify(cart.items),
-        totalAmount: cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0).toFixed(2),
+        totalAmount: total.toFixed(2),
+        discountCode: appliedDiscount?.code || null,
+        discountAmount: discountAmount.toFixed(2),
         currency: 'ZAR',
         paymentStatus: 'pending',
         orderStatus: 'processing'
@@ -134,7 +201,9 @@ const CheckoutForm = () => {
         shippingAddress: customerInfo.address || 'To be collected at checkout',
         billingAddress: customerInfo.address || 'To be collected at checkout',
         orderItems: JSON.stringify(cart.items),
-        totalAmount: cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0).toFixed(2),
+        totalAmount: total.toFixed(2),
+        discountCode: appliedDiscount?.code || null,
+        discountAmount: discountAmount.toFixed(2),
         currency: 'ZAR',
         paymentStatus: 'pending',
         orderStatus: 'processing'
@@ -175,7 +244,7 @@ const CheckoutForm = () => {
     }
   };
 
-  const total = cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -207,9 +276,66 @@ const CheckoutForm = () => {
           
           <Separator />
           
-          <div className="flex items-center justify-between text-lg font-bold">
-            <span>Total:</span>
-            <span>R{total.toFixed(2)}</span>
+          {/* Discount Code Section */}
+          <div className="space-y-3">
+            {!appliedDiscount ? (
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Discount code"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                  className="flex-1"
+                />
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  onClick={handleApplyDiscount}
+                  disabled={isValidatingDiscount || !discountCode.trim()}
+                  className="px-4"
+                >
+                  {isValidatingDiscount ? 'Validating...' : 'Apply'}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
+                <div className="flex items-center gap-2">
+                  <Tag className="w-4 h-4 text-green-600" />
+                  <span className="font-mono text-sm font-medium">{appliedDiscount.code}</span>
+                  <span className="text-sm text-green-600">
+                    -{appliedDiscount.type === 'percent' ? `${appliedDiscount.value}%` : `R${appliedDiscount.discountAmount.toFixed(2)}`}
+                  </span>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRemoveDiscount}
+                  className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </div>
+          
+          <Separator />
+          
+          {/* Order Totals */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span>Subtotal:</span>
+              <span>R{subtotal.toFixed(2)}</span>
+            </div>
+            {appliedDiscount && (
+              <div className="flex items-center justify-between text-green-600">
+                <span>Discount ({appliedDiscount.code}):</span>
+                <span>-R{discountAmount.toFixed(2)}</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between text-lg font-bold">
+              <span>Total:</span>
+              <span>R{total.toFixed(2)}</span>
+            </div>
           </div>
         </CardContent>
       </Card>

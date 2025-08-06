@@ -10,7 +10,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import AdminProducts from "./admin-products";
 import { Link } from "wouter";
-import { ShoppingCart, Package, Users, DollarSign, FileText } from "lucide-react";
+import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp } from "lucide-react";
 
 interface AdminStats {
   totalProducts: number;
@@ -114,12 +114,13 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="product-crud">Product CRUD</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="abandoned-carts">Abandoned Carts</TabsTrigger>
+            <TabsTrigger value="discount-codes">Discount Codes</TabsTrigger>
             <TabsTrigger value="admin-logs">Activity Logs</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
@@ -331,6 +332,28 @@ export default function AdminDashboard() {
                     <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
                       <ShoppingCart className="mr-2 h-4 w-4" />
                       Open Cart Analytics
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="discount-codes">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-black dark:text-white">Discount Code Management</CardTitle>
+                <CardDescription>Create and manage promotional discount codes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Access the complete discount code management system to create, edit, and track promotional codes.
+                  </p>
+                  <Link href="/admin/discount-codes">
+                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
+                      <Percent className="mr-2 h-4 w-4" />
+                      Manage Discount Codes
                     </Button>
                   </Link>
                 </div>

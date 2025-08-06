@@ -305,6 +305,25 @@ export const insertConsultationBookingSchema = createInsertSchema(consultationBo
   status: true,
 });
 
+// Phase 15: Discount codes table for promotions and coupon management
+export const discountCodes = pgTable("discount_codes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: varchar("code", { length: 64 }).notNull().unique(), // e.g. "WELCOME10"
+  type: varchar("type", { length: 16 }).notNull(), // "percent" | "fixed"
+  value: decimal("value", { precision: 10, scale: 2 }).notNull(), // 10 = 10% or $10
+  usageLimit: integer("usage_limit"), // null = unlimited
+  usageCount: integer("usage_count").default(0),
+  expiresAt: text("expires_at"), // ISO date string
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  isActive: boolean("is_active").default(true),
+});
+
+export const insertDiscountCodeSchema = createInsertSchema(discountCodes).omit({
+  id: true,
+  createdAt: true,
+  usageCount: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -333,3 +352,5 @@ export type InsertConsultationBooking = z.infer<typeof insertConsultationBooking
 export type ConsultationBooking = typeof consultationBookings.$inferSelect;
 export type InsertRestockNotification = z.infer<typeof insertRestockNotificationSchema>;
 export type RestockNotification = typeof restockNotifications.$inferSelect;
+export type InsertDiscountCode = z.infer<typeof insertDiscountCodeSchema>;
+export type DiscountCode = typeof discountCodes.$inferSelect;

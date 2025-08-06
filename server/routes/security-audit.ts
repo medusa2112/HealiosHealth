@@ -1,0 +1,38 @@
+import express from 'express';
+import { protectRoute } from '../lib/auth';
+import { SecurityValidator } from '../lib/security-validator';
+
+const router = express.Router();
+
+// Protect security audit routes - admin only
+router.use(protectRoute(['admin']));
+
+// Run comprehensive security audit
+router.get('/audit', async (req, res) => {
+  try {
+    const results = await SecurityValidator.runSecurityAudit();
+    const report = SecurityValidator.generateSecurityReport(results);
+    
+    res.json({
+      success: true,
+      timestamp: new Date().toISOString(),
+      results,
+      report,
+      summary: {
+        totalTests: results.length,
+        passed: results.filter(r => r.passed).length,
+        failed: results.filter(r => !r.passed).length,
+        criticalIssues: results.filter(r => !r.passed && r.severity === 'critical').length
+      }
+    });
+  } catch (error) {
+    console.error('Security audit error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to run security audit',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+export default router;

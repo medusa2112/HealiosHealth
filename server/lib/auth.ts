@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { storage } from '../storage';
+import { SecurityLogger } from './security-logger';
 import type { User } from '@shared/schema';
 
 // Extend Express Request to include user and session
@@ -28,6 +29,12 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
       const user = await storage.getUserById(userId);
       
       if (!user || !roles.includes(user.role as 'admin' | 'customer' | 'guest')) {
+        // Log unauthorized access attempt
+        if (user) {
+          await SecurityLogger.logRoleEscalationAttempt(req, user.role, roles.join('|'));
+        } else {
+          await SecurityLogger.logUnauthorizedAccess(req, roles.join('|'));
+        }
         return res.status(403).json({ message: 'Access denied' });
       }
       

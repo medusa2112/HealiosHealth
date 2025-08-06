@@ -4,6 +4,7 @@ import { storage } from '../storage';
 import { AdminLogger } from '../lib/admin-logger';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
+import discountCodesRouter from './adminDiscounts';
 
 const router = express.Router();
 
@@ -15,6 +16,9 @@ router.use('/orders', ordersRouter);
 
 // Mount abandoned carts subrouter
 router.use('/abandoned-carts', abandonedCartsRouter);
+
+// Mount discount codes subrouter
+router.use('/discount-codes', discountCodesRouter);
 
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {

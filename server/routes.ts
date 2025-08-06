@@ -9,6 +9,7 @@ import { z } from "zod";
 import express from "express";
 import path from "path";
 import { protectRoute, requireAuth } from "./lib/auth";
+import { rateLimit, secureHeaders, validateOrderAccess } from "./lib/session-auth";
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
@@ -20,6 +21,9 @@ import emailTestRoutes from "./routes/email-test";
 import { stripe } from "./lib/stripe";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Apply secure headers to all routes
+  app.use(secureHeaders);
+  
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
   
@@ -40,6 +44,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register admin logging routes
   const adminLogsRoutes = await import('./routes/admin/logs');
   app.use('/api/admin/logs', adminLogsRoutes.default);
+  
+  // Register security audit routes (admin only)
+  const securityAuditRoutes = await import('./routes/security-audit');
+  app.use('/api/admin/security', securityAuditRoutes.default);
   
   // Email system (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -90,7 +98,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Book consultation (trainer or nutritionist)
-  app.post("/api/consultations/book", async (req, res) => {
+  app.post("/api/consultations/book", rateLimit(5, 300000), async (req, res) => {
     try {
       const validatedData = insertConsultationBookingSchema.parse(req.body);
       const booking = await storage.createConsultationBooking(validatedData);
@@ -227,17 +235,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create Stripe Checkout Session for external payment processing
-  app.post("/api/create-checkout-session", async (req, res) => {
+  // Phase 15: Validate discount code endpoint (public access for checkout)
+  app.post("/api/validate-discount", async (req, res) => {
     try {
-      const { orderData, lineItems, successUrl, cancelUrl, sessionToken } = req.body;
+      const { code, cartTotal } = req.body;
+      
+      if (!code || typeof code !== "string") {
+        return res.status(400).json({ error: "Code is required" });
+      }
+
+      const validation = await storage.validateDiscountCode(code.trim());
+      
+      if (!validation.valid) {
+        return res.json({
+          valid: false,
+          error: validation.error
+        });
+      }
+
+      const discount = validation.discount!;
+      let discountAmount = 0;
+
+      // Calculate discount amount for preview
+      if (cartTotal && cartTotal > 0) {
+        if (discount.type === "percent") {
+          discountAmount = (cartTotal * parseFloat(discount.value)) / 100;
+        } else if (discount.type === "fixed") {
+          discountAmount = parseFloat(discount.value);
+        }
+        
+        // Ensure discount doesn't exceed total
+        discountAmount = Math.min(discountAmount, cartTotal);
+      }
+
+      res.json({
+        valid: true,
+        discount: {
+          code: discount.code,
+          type: discount.type,
+          value: discount.value,
+          discountAmount,
+          finalTotal: cartTotal ? Math.max(0, cartTotal - discountAmount) : 0
+        }
+      });
+    } catch (error) {
+      console.error("Error validating discount code:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Create Stripe Checkout Session for external payment processing
+  app.post("/api/create-checkout-session", validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
+    try {
+      const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = req.body;
       
       if (!lineItems || !lineItems.length) {
         return res.status(400).json({ message: "Line items are required" });
       }
 
+      let discountAmount = 0;
+      let appliedDiscountCode = null;
+      let originalTotal = 0;
+
+      // Calculate original total
+      originalTotal = lineItems.reduce((sum: number, item: any) => {
+        return sum + (item.price_data.unit_amount * item.quantity);
+      }, 0);
+
+      // Phase 15: Validate and apply discount code if provided
+      if (discountCode && discountCode.trim()) {
+        const validation = await storage.validateDiscountCode(discountCode.trim());
+        
+        if (!validation.valid) {
+          return res.status(400).json({ 
+            message: validation.error || "Invalid discount code" 
+          });
+        }
+
+        const discount = validation.discount!;
+        appliedDiscountCode = discount;
+
+        // Calculate discount amount in cents (Stripe uses cents)
+        if (discount.type === "percent") {
+          discountAmount = Math.round(originalTotal * (parseFloat(discount.value) / 100));
+        } else if (discount.type === "fixed") {
+          // Convert fixed amount to cents (assuming ZAR)
+          discountAmount = Math.round(parseFloat(discount.value) * 100);
+        }
+
+        // Ensure discount doesn't exceed total
+        discountAmount = Math.min(discountAmount, originalTotal);
+
+        // Increment usage count immediately (before checkout)
+        await storage.incrementDiscountCodeUsage(discount.id);
+
+        console.log('🎟️ Applied discount code:', {
+          code: discount.code,
+          type: discount.type,
+          value: discount.value,
+          originalTotal: originalTotal / 100,
+          discountAmount: discountAmount / 100,
+          finalTotal: (originalTotal - discountAmount) / 100
+        });
+      }
+
       // Create order first to get order ID for success URL
-      const order = await storage.createOrder(orderData);
+      const finalOrderData = {
+        ...orderData,
+        // Update total amount with discount applied
+        totalAmount: discountAmount > 0 
+          ? ((originalTotal - discountAmount) / 100).toString()
+          : orderData.totalAmount
+      };
+
+      const order = await storage.createOrder(finalOrderData);
       
       // Update stock for each item
       const orderItems = JSON.parse(orderData.orderItems);
@@ -245,8 +356,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.decreaseProductStock(item.product.id, item.quantity);
       }
 
-      // Create Stripe Checkout Session
-      const session = await stripe.checkout.sessions.create({
+      // Prepare Stripe session configuration
+      const sessionConfig: any = {
         payment_method_types: ['card'],
         line_items: lineItems,
         mode: 'payment',
@@ -262,17 +373,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
           orderItems: orderData.orderItems,
           notes: orderData.notes || null,
           sessionToken: sessionToken || null,
+          discountCode: appliedDiscountCode?.code || null,
+          discountAmount: discountAmount > 0 ? (discountAmount / 100).toString() : null,
         },
         billing_address_collection: 'required',
         shipping_address_collection: {
           allowed_countries: ['ZA', 'US', 'GB'], // Add countries as needed
         },
-      });
+      };
+
+      // Apply discount through Stripe if applicable
+      if (discountAmount > 0) {
+        // Create a one-time coupon for this discount
+        const coupon = await stripe.coupons.create({
+          amount_off: discountAmount,
+          currency: 'zar',
+          duration: 'once',
+          name: `Discount Code: ${appliedDiscountCode!.code}`,
+        });
+
+        sessionConfig.discounts = [{
+          coupon: coupon.id,
+        }];
+      }
+
+      // Create Stripe Checkout Session
+      const session = await stripe.checkout.sessions.create(sessionConfig);
       
       res.json({ 
         sessionUrl: session.url,
         orderId: order.id,
-        sessionId: session.id
+        sessionId: session.id,
+        discountApplied: discountAmount > 0,
+        discountAmount: discountAmount > 0 ? discountAmount / 100 : 0,
+        discountCode: appliedDiscountCode?.code || null,
       });
     } catch (error: any) {
       console.error("Stripe checkout session error:", error);
@@ -319,7 +453,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create order endpoint
-  app.post("/api/orders", async (req, res) => {
+  // Validate discount code endpoint
+  app.post("/api/validate-discount", rateLimit(30, 60000), async (req, res) => {
+    try {
+      const { code, subtotal } = req.body;
+      
+      if (!code || typeof subtotal !== 'number') {
+        return res.status(400).json({ message: "Code and subtotal are required" });
+      }
+
+      const discountCode = await storage.getDiscountCodeByCode(code);
+      
+      if (!discountCode) {
+        return res.status(400).json({ message: "Invalid discount code" });
+      }
+
+      if (!discountCode.isActive) {
+        return res.status(400).json({ message: "Discount code is inactive" });
+      }
+
+      if (discountCode.expiresAt && new Date(discountCode.expiresAt) < new Date()) {
+        return res.status(400).json({ message: "Discount code has expired" });
+      }
+
+      if (discountCode.usageLimit && (discountCode.usageCount || 0) >= discountCode.usageLimit) {
+        return res.status(400).json({ message: "Discount code usage limit reached" });
+      }
+
+      // Calculate discount amount
+      let discountAmount = 0;
+      if (discountCode.type === 'percent') {
+        const percentage = parseFloat(discountCode.value);
+        discountAmount = (subtotal * percentage) / 100;
+      } else {
+        discountAmount = parseFloat(discountCode.value);
+      }
+
+      // Ensure discount doesn't exceed subtotal
+      discountAmount = Math.min(discountAmount, subtotal);
+
+      res.json({
+        code: discountCode.code,
+        type: discountCode.type,
+        value: discountCode.value,
+        discountAmount
+      });
+    } catch (error) {
+      console.error('Discount validation error:', error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/orders", validateOrderAccess, rateLimit(10, 300000), async (req, res) => {
     try {
       const validatedData = insertOrderSchema.parse(req.body);
       
@@ -333,6 +518,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create the order
       const order = await storage.createOrder(validatedData);
+
+      // If a discount code was used, increment its usage count
+      if (validatedData.discountCode) {
+        try {
+          await storage.incrementDiscountCodeUsage(validatedData.discountCode);
+        } catch (discountError) {
+          console.error('Failed to increment discount code usage:', discountError);
+          // Don't fail the order creation for this
+        }
+      }
 
       // Update stock for each item
       for (const item of orderItems) {
