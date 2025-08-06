@@ -1,0 +1,194 @@
+Prompt 2 of X: Admin Dashboard + Product CRUD (Replit-Stable Injection)
+Objective: Create the Admin Products Dashboard with full product management (Add/Edit/Delete), connected to Drizzle ORM, and protected via role-based auth.
+
+✅ PHASE 1: SYSTEM SCAN (BEFORE INJECTION)
+Scan the entire system for:
+
+❌ Inline or duplicated product logic:
+
+Hardcoded products in frontend
+
+Static JSON product lists
+
+Pre-rendered product cards without data source
+
+products[] or mock arrays in UI code
+
+❌ Drizzle conflicts:
+
+Look for any prior products table
+
+Check for mismatched field types (price: string, etc.)
+
+❌ Unscoped API calls:
+
+Any fetch('/products') calls from the frontend must be mapped to /api/products
+
+Validate that api/products.ts or routes/products.ts doesn't already exist and conflict
+
+❌ Admin route leakage:
+
+Search for any /admin route exposure without auth guard
+
+Confirm that /admin/products.tsx or similar is not already present
+
+🛠️ PHASE 2: PRODUCT CRUD IMPLEMENTATION (STAGED)
+1. 📦 Update Drizzle Schema (if not already done)
+In /db/schema.ts:
+
+ts
+Copy
+Edit
+import { pgTable, varchar, text, numeric, timestamp, uuid } from "drizzle-orm/pg-core";
+
+export const products = pgTable("products", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  image_url: text("image_url"),
+  tags: text("tags").array(), // optional
+  created_at: timestamp("created_at").defaultNow(),
+});
+Run your migration:
+
+bash
+Copy
+Edit
+npx drizzle-kit push
+2. 🧠 Backend Routes /routes/admin/products.ts
+ts
+Copy
+Edit
+import express from "express";
+import { db } from "../../db";
+import { products } from "../../db/schema";
+import { protectRoute } from "../../lib/auth";
+import { eq } from "drizzle-orm";
+
+const router = express.Router();
+
+router.use(protectRoute(["admin"]));
+
+router.get("/", async (req, res) => {
+  const data = await db.select().from(products);
+  res.json(data);
+});
+
+router.post("/", async (req, res) => {
+  const { name, description, price, image_url, tags } = req.body;
+  const result = await db.insert(products).values({ name, description, price, image_url, tags });
+  res.status(201).json(result);
+});
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+  const result = await db.update(products).set(updates).where(eq(products.id, id));
+  res.status(200).json(result);
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  await db.delete(products).where(eq(products.id, id));
+  res.status(204).end();
+});
+
+export default router;
+Add this to your main server.ts:
+
+ts
+Copy
+Edit
+import adminProducts from "./routes/admin/products";
+app.use("/admin/products", adminProducts);
+3. 💻 Admin Frontend UI: /pages/admin/products.tsx
+Create a React page using Tailwind + Preline:
+
+tsx
+Copy
+Edit
+import { useEffect, useState } from "react";
+
+export default function AdminProducts() {
+  const [products, setProducts] = useState([]);
+  const [form, setForm] = useState({ name: "", description: "", price: "", image_url: "", tags: "" });
+
+  useEffect(() => {
+    fetch("/admin/products").then(res => res.json()).then(setProducts);
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    await fetch("/admin/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, price: parseFloat(form.price), tags: form.tags.split(",") }),
+    });
+    window.location.reload();
+  };
+
+  const handleDelete = async (id: string) => {
+    await fetch(`/admin/products/${id}`, { method: "DELETE" });
+    setProducts(products.filter(p => p.id !== id));
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      <h2 className="text-xl font-semibold">Product Management</h2>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input placeholder="Name" className="input" onChange={e => setForm({ ...form, name: e.target.value })} />
+        <textarea placeholder="Description" className="textarea" onChange={e => setForm({ ...form, description: e.target.value })} />
+        <input placeholder="Price" className="input" type="number" step="0.01" onChange={e => setForm({ ...form, price: e.target.value })} />
+        <input placeholder="Image URL" className="input" onChange={e => setForm({ ...form, image_url: e.target.value })} />
+        <input placeholder="Tags (comma-separated)" className="input" onChange={e => setForm({ ...form, tags: e.target.value })} />
+        <button type="submit" className="btn btn-primary">Add Product</button>
+      </form>
+
+      <div className="space-y-4">
+        {products.map((product: any) => (
+          <div key={product.id} className="border p-4 rounded">
+            <div className="font-bold">{product.name} - ${product.price}</div>
+            <div className="text-sm">{product.description}</div>
+            <button onClick={() => handleDelete(product.id)} className="btn btn-danger mt-2">Delete</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+✅ Use your UI framework to wrap inputs (.input, .btn, etc.) in Preline if needed.
+
+4. 🔐 Route Protection
+Add the following in your routing logic (if using react-router-dom):
+
+tsx
+Copy
+Edit
+<Route path="/admin/products" element={<RequireRole role="admin"><AdminProducts /></RequireRole>} />
+Your <RequireRole> component should fetch user info and verify session/role before rendering.
+
+🔁 PHASE 3: POST-BUILD INTEGRITY CHECK
+✅ Confirm all migrations pushed successfully and table exists
+
+✅ Test all admin CRUD functions:
+
+Add product → shows on page
+
+Delete → removes product
+
+✅ No hardcoded product data remains
+
+✅ Product list page uses API only, not static logic
+
+✅ Admin auth still enforced on all routes
+
+📦 DELIVERABLES AFTER THIS PROMPT
+products table in DB
+
+/admin/products backend endpoint
+
+Admin-only frontend product manager page
+
+Secure CRUD flow, no inline logic, zero leakage

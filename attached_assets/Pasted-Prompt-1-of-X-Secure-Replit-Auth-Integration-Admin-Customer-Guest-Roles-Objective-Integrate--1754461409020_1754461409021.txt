@@ -1,0 +1,161 @@
+Prompt 1 of X: Secure Replit Auth Integration (Admin + Customer + Guest Roles)
+Objective: Integrate role-based Replit Auth across your app using best-practice access control, rogue code scanning, and stability protection.
+
+✅ PHASE 1: SYSTEM SCAN (DO NOT SKIP)
+Before applying any changes, scan the full repo for:
+
+Rogue or unstable code:
+
+❌ console.log, debugger, TODO, FIXME
+
+❌ Inline user.role = 'admin' checks
+
+❌ Hardcoded admin emails
+
+❌ Test-only routes or leftover mocks
+
+Drizzle schema compatibility:
+
+Confirm existence of users table with at least:
+
+ts
+Copy
+Edit
+id, email, role (admin/customer/guest), created_at
+Frontend routing check:
+
+Ensure there is a working routing system (react-router-dom or equivalent)
+
+Check for conflicting /admin, /portal, or /auth/* routes
+
+.env check:
+
+Validate that REPLIT_AUTH_CLIENT_ID and REPLIT_AUTH_SECRET (or equivalents) are NOT hardcoded anywhere in the app
+
+🛠️ PHASE 2: APPLY THE AUTH INTEGRATION (Safely)
+1. Install Replit Auth SDK
+bash
+Copy
+Edit
+npm install replit-auth-lib
+2. Add lib/auth.ts:
+ts
+Copy
+Edit
+import { ReplitAuthClient } from 'replit-auth-lib';
+import { Request, Response, NextFunction } from 'express';
+
+const authClient = new ReplitAuthClient({
+  clientId: process.env.REPLIT_AUTH_CLIENT_ID!,
+  secret: process.env.REPLIT_AUTH_SECRET!,
+  redirectUri: process.env.REPLIT_AUTH_REDIRECT_URI!,
+});
+
+export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await authClient.getUserFromRequest(req);
+      if (!user || !roles.includes(user.role)) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+      req.user = user;
+      next();
+    } catch (err) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
+  };
+};
+
+export default authClient;
+3. Add /routes/auth.ts:
+ts
+Copy
+Edit
+import express from 'express';
+import authClient from '../lib/auth';
+
+const router = express.Router();
+
+router.get('/login', (req, res) => {
+  const url = authClient.getLoginUrl();
+  res.redirect(url);
+});
+
+router.get('/callback', async (req, res) => {
+  const user = await authClient.handleCallback(req);
+  // Store user in DB if new
+  // Redirect based on role
+  if (user.role === 'admin') return res.redirect('/admin');
+  if (user.role === 'customer') return res.redirect('/portal');
+  return res.redirect('/');
+});
+
+router.get('/logout', (req, res) => {
+  authClient.logout(req, res);
+});
+
+export default router;
+4. Add middleware to /routes/admin.ts and /routes/portal.ts:
+ts
+Copy
+Edit
+import { protectRoute } from '../lib/auth';
+
+router.use(protectRoute(['admin']));     // for admin.ts
+router.use(protectRoute(['customer']));  // for portal.ts
+5. Seed Admin Emails (temporary logic)
+Create a server-safe .env value like:
+
+env
+Copy
+Edit
+ALLOWED_ADMIN_EMAILS=admin1@healios.com,admin2@healios.com
+Then in the /callback route, assign role = admin if matched:
+
+ts
+Copy
+Edit
+const adminEmails = process.env.ALLOWED_ADMIN_EMAILS!.split(',');
+const role = adminEmails.includes(user.email) ? 'admin' : 'customer';
+🔁 PHASE 3: POST-INTEGRATION VALIDATION
+✅ Create test logins for:
+
+One admin email
+
+One customer email
+
+One Stripe checkout session (guest)
+
+✅ Manually test these routes:
+
+/admin → blocked for customer/guest
+
+/portal → blocked for guest
+
+/auth/login and /auth/logout routes function correctly
+
+✅ Confirm:
+
+User data is saved in users table
+
+Roles are correctly assigned on login
+
+.env is not leaked or committed
+
+🔒 PROTECTED ROUTES SUMMARY (MINIMUM VIABLE)
+Route	Method	Role Allowed	Auth Required
+/admin/*	GET/POST	admin only	✅ Yes
+/portal/*	GET/POST	customer only	✅ Yes
+/auth/login	GET	All	❌ No
+/auth/logout	GET	All	❌ No
+
+✅ OUTPUT
+After completing this prompt, the system should:
+
+Enforce Replit Auth login across all sensitive endpoints
+
+Route users to /admin or /portal based on role
+
+Reject rogue access attempts
+
+Fully segregate guest access
