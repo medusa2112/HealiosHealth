@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 import { ShoppingCart, Package, MapPin, Plus, Edit, Trash2, User, Clock, CreditCard } from "lucide-react";
+import ReferralsPage from "./portal/Referrals";
 
 interface CustomerPortalData {
   user: {
@@ -324,8 +325,9 @@ export default function CustomerPortal() {
 
         {/* Main Content */}
         <Tabs defaultValue="orders" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-900">
-            <TabsTrigger value="orders">Order History</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-900">
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="referrals">Referrals</TabsTrigger>
             <TabsTrigger value="addresses">Addresses</TabsTrigger>
             <TabsTrigger value="account">Account</TabsTrigger>
           </TabsList>
@@ -404,6 +406,11 @@ export default function CustomerPortal() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Referrals Tab */}
+          <TabsContent value="referrals" className="space-y-6">
+            <ReferralsPage />
           </TabsContent>
 
           {/* Addresses Tab */}

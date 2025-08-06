@@ -52,6 +52,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const emailJobsRoutes = await import('./routes/email-jobs');
   app.use('/api/admin/email-jobs', requireAuth, protectRoute(['admin']), emailJobsRoutes.default);
   
+  // Register referral routes (Phase 20)
+  const referralRoutes = await import('./routes/referrals');
+  app.use('/api/referrals', referralRoutes.default);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);

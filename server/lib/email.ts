@@ -6,7 +6,7 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome";
 
 interface EmailData {
   amount: number;
@@ -22,10 +22,12 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     refund: "Your Healios Refund Has Been Processed",
     reorder: "Your Healios Reorder Is Complete",
     admin_alert: "⚠️ Healios Admin Alert",
-    abandoned_cart_1h: "Still thinking it over?",
-    abandoned_cart_24h: "Your wellness journey is waiting (10% off inside!)",
-    reorder_reminder: "Running low on {productName}?",
-    reorder_final: "Last chance to reorder your supplements",
+    abandoned_cart_1h: "We're here when you're ready",
+    abandoned_cart_24h: "A gentle reminder about your wellness selections",
+    reorder_reminder: "A thoughtful reminder about your wellness routine",
+    reorder_final: "A final gentle reminder from Healios",
+    referral_reward: "Great news! You've earned a reward",
+    referral_welcome: "Welcome to Healios! Your discount has been applied",
   };
 
   const bodyMap: Record<EmailType, (data: EmailData) => string> = {
@@ -176,6 +178,55 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         <p style="font-size: 12px; color: #999;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
         <p style="font-size: 14px; color: #6c757d;">Thank you for being part of our wellness community. Whether you reorder or not, we appreciate the trust you've placed in us.</p>
         <p>With gratitude,<br>The Healios Team</p>
+      </div>
+    `,
+    referral_reward: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 10px;">🎉 You've Earned a Reward!</h1>
+        <p>Hi ${data.userName},</p>
+        <p>Wonderful news! ${data.refereeFirstName} just used your referral code <strong>${data.code}</strong> and made their first Healios purchase.</p>
+        
+        <div style="background-color: #d4edda; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #28a745;">
+          <p style="margin-top: 0;"><strong>Your Reward:</strong></p>
+          <p style="font-size: 18px; font-weight: bold; color: #155724; margin-bottom: 0;">R${data.rewardAmount} Credit</p>
+          <p style="font-size: 14px; color: #6c757d; margin-bottom: 0;">This will be automatically applied to your next order</p>
+        </div>
+        
+        <p style="color: #6c757d; font-style: italic;">Thank you for sharing Healios with your friends and helping us grow our wellness community. Your support means everything to us!</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://healios.com/portal/referrals" 
+             style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Share Your Code Again
+          </a>
+        </div>
+        
+        <p>Keep sharing the wellness,<br>The Healios Team</p>
+      </div>
+    `,
+    referral_welcome: (data) => `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Welcome to Healios!</h1>
+        <p>Hi ${data.userName},</p>
+        <p>What a great way to start your wellness journey! ${data.referrerFirstName} referred you to Healios, and we've applied your ${data.discountUsed} discount to your first order.</p>
+        
+        <div style="background-color: #cce5ff; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #007bff;">
+          <p style="margin-top: 0;"><strong>Your First Order Benefits:</strong></p>
+          <p>✓ ${data.discountUsed} discount applied automatically</p>
+          <p>✓ Welcome to our wellness community</p>
+          <p style="margin-bottom: 0;">✓ Access to premium supplements and expert guidance</p>
+        </div>
+        
+        <p style="color: #6c757d; font-style: italic;">When you're ready, you can also create your own referral code and earn rewards when you share Healios with friends!</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://healios.com/portal" 
+             style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Explore Your Portal
+          </a>
+        </div>
+        
+        <p>Welcome to the family,<br>The Healios Team</p>
       </div>
     `
   };

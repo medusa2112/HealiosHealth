@@ -442,3 +442,44 @@ export const insertEmailEventSchema = createInsertSchema(emailEvents).omit({
 
 export type EmailEvent = typeof emailEvents.$inferSelect;
 export type InsertEmailEvent = z.infer<typeof insertEmailEventSchema>;
+
+// Phase 20: Referral system for viral growth
+export const referrals = pgTable("referrals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referrerId: varchar("referrer_id").notNull().references(() => users.id),
+  code: varchar("code", { length: 16 }).unique().notNull(), // e.g. HEALIOS-RK7Q9D
+  rewardType: varchar("reward_type", { length: 32 }).default("discount"), // "discount" or "credit"
+  rewardValue: integer("reward_value").default(10), // % for discount or amount for credit
+  maxUses: integer("max_uses").default(50), // Fraud protection: limit total uses
+  usedCount: integer("used_count").default(0), // Track current usage
+  active: boolean("active").default(true), // Can be deactivated
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const referralClaims = pgTable("referral_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referralId: varchar("referral_id").notNull().references(() => referrals.id),
+  refereeId: varchar("referee_id").notNull().references(() => users.id),
+  orderId: varchar("order_id").notNull().references(() => orders.id),
+  referrerRewardType: varchar("referrer_reward_type", { length: 32 }).default("credit"), // What referrer gets
+  referrerRewardAmount: integer("referrer_reward_amount").default(1000), // In cents (R10.00)
+  refereeDiscountAmount: integer("referee_discount_amount").default(1000), // In cents (R10.00)
+  processed: boolean("processed").default(false), // Has referrer reward been given?
+  claimedAt: text("claimed_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const insertReferralSchema = createInsertSchema(referrals).omit({
+  id: true,
+  usedCount: true,
+  createdAt: true,
+});
+
+export const insertReferralClaimSchema = createInsertSchema(referralClaims).omit({
+  id: true,
+  claimedAt: true,
+});
+
+export type Referral = typeof referrals.$inferSelect;
+export type ReferralClaim = typeof referralClaims.$inferSelect;
+export type InsertReferral = z.infer<typeof insertReferralSchema>;
+export type InsertReferralClaim = z.infer<typeof insertReferralClaimSchema>;

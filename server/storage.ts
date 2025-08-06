@@ -142,6 +142,14 @@ export interface IStorage {
   hasEmailBeenSent(emailType: string, relatedId: string): Promise<boolean>;
   getAbandonedCarts(hoursCutoff?: number): Promise<any[]>;
   getReorderCandidates(daysBack?: number): Promise<any[]>;
+  
+  // Phase 20: Referral System
+  createReferral(referral: { referrerId: string; code: string; rewardType: string; rewardValue: number; isActive: boolean; usedCount: number; maxUses: number; }): Promise<any>;
+  getReferralByCode(code: string): Promise<any | undefined>;
+  getReferralByReferrerId(referrerId: string): Promise<any | undefined>;
+  updateReferralUsageCount(id: string, count: number): Promise<any | undefined>;
+  createReferralClaim(claim: { referralId: string; refereeId: string; orderId: string; orderAmount: number; refereeDiscount: number; referrerRewardAmount: number; processed: boolean; claimedAt: string; }): Promise<any>;
+  getReferralClaimsByReferralId(referralId: string): Promise<any[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -166,6 +174,8 @@ export class MemStorage implements IStorage {
   private bundleItems: Map<string, BundleItem>; // Phase 16
   private subscriptions: Map<string, Subscription>; // Phase 18
   private emailEvents: Map<string, any>; // Phase 19
+  private referrals: Map<string, any>; // Phase 20
+  private referralClaims: Map<string, any>; // Phase 20
 
   constructor() {
     this.products = new Map();
@@ -189,6 +199,8 @@ export class MemStorage implements IStorage {
     this.bundleItems = new Map(); // Phase 16
     this.subscriptions = new Map(); // Phase 18
     this.emailEvents = new Map(); // Phase 19
+    this.referrals = new Map(); // Phase 20
+    this.referralClaims = new Map(); // Phase 20
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
@@ -2416,6 +2428,54 @@ export class MemStorage implements IStorage {
     }
     
     return candidates;
+  }
+
+  // Phase 20: Referral System Methods
+  async createReferral(referral: { referrerId: string; code: string; rewardType: string; rewardValue: number; isActive: boolean; usedCount: number; maxUses: number; }): Promise<any> {
+    const id = randomUUID();
+    const newReferral = {
+      id,
+      ...referral,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.referrals.set(id, newReferral);
+    return newReferral;
+  }
+
+  async getReferralByCode(code: string): Promise<any | undefined> {
+    return Array.from(this.referrals.values()).find(r => r.code === code);
+  }
+
+  async getReferralByReferrerId(referrerId: string): Promise<any | undefined> {
+    return Array.from(this.referrals.values()).find(r => r.referrerId === referrerId);
+  }
+
+  async updateReferralUsageCount(id: string, count: number): Promise<any | undefined> {
+    const referral = this.referrals.get(id);
+    if (!referral) return undefined;
+    
+    const updated = {
+      ...referral,
+      usedCount: count,
+      updatedAt: new Date().toISOString(),
+    };
+    this.referrals.set(id, updated);
+    return updated;
+  }
+
+  async createReferralClaim(claim: { referralId: string; refereeId: string; orderId: string; orderAmount: number; refereeDiscount: number; referrerRewardAmount: number; processed: boolean; claimedAt: string; }): Promise<any> {
+    const id = randomUUID();
+    const newClaim = {
+      id,
+      ...claim,
+    };
+    this.referralClaims.set(id, newClaim);
+    return newClaim;
+  }
+
+  async getReferralClaimsByReferralId(referralId: string): Promise<any[]> {
+    return Array.from(this.referralClaims.values()).filter(c => c.referralId === referralId);
   }
 }
 
