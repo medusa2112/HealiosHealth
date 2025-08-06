@@ -119,3 +119,161 @@ export async function sendAdminAlert(message: string, data?: any) {
     }
   }
 }
+
+// Subscription-specific email functions (Phase 18)
+export async function sendSubscriptionCancelled(data: {
+  customerEmail: string;
+  customerName: string;
+  productName: string;
+  subscriptionId: string;
+  cancellationDate: Date;
+}) {
+  const subject = "Your Healios Subscription Has Been Cancelled";
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Subscription Cancelled</h1>
+      <p>Hi ${data.customerName},</p>
+      <p>We've successfully cancelled your subscription for <strong>${data.productName}</strong>.</p>
+      
+      <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #000; margin: 20px 0;">
+        <p><strong>Subscription ID:</strong> ${data.subscriptionId}</p>
+        <p><strong>Product:</strong> ${data.productName}</p>
+        <p><strong>Cancellation Date:</strong> ${data.cancellationDate.toLocaleDateString()}</p>
+      </div>
+      
+      <p>You won't be charged for any future deliveries. If you have any remaining deliveries from previous charges, they will still be fulfilled.</p>
+      <p>We're sad to see you go! If you'd like to restart your subscription in the future, you can easily do so from your account.</p>
+      
+      <div style="margin: 30px 0; padding: 20px; background-color: #f1f3f4; border-radius: 8px;">
+        <p style="margin: 0; color: #666;">Need help or have questions? Contact our support team anytime.</p>
+      </div>
+      
+      <p>Thank you for being a valued Healios customer!</p>
+    </div>
+  `;
+
+  try {
+    const result = await resend.emails.send({
+      from: "Healios <onboarding@resend.dev>",
+      to: data.customerEmail,
+      subject,
+      html,
+    });
+    console.log(`Subscription cancellation email sent to ${data.customerEmail}`, result);
+    return result;
+  } catch (error) {
+    console.error(`Failed to send subscription cancellation email to ${data.customerEmail}`, error);
+    throw error;
+  }
+}
+
+export async function sendSubscriptionPaymentFailed(data: {
+  customerEmail: string;
+  customerName: string;
+  subscriptionId: string;
+  productName: string;
+  amount: string;
+  nextRetryDate: Date;
+}) {
+  const subject = "Payment Failed - Action Required for Your Healios Subscription";
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h1 style="color: #dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">Payment Failed</h1>
+      <p>Hi ${data.customerName},</p>
+      <p>We weren't able to process the payment for your <strong>${data.productName}</strong> subscription.</p>
+      
+      <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin: 20px 0;">
+        <p><strong>Subscription ID:</strong> ${data.subscriptionId}</p>
+        <p><strong>Product:</strong> ${data.productName}</p>
+        <p><strong>Amount:</strong> R${data.amount}</p>
+        <p><strong>Next Retry:</strong> ${data.nextRetryDate.toLocaleDateString()}</p>
+      </div>
+      
+      <p><strong>What happens next?</strong></p>
+      <ul>
+        <li>We'll automatically retry the payment in 3 days</li>
+        <li>You can update your payment method in your account anytime</li>
+        <li>Your subscription remains active during the retry period</li>
+      </ul>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="/portal/subscriptions" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 4px;">Update Payment Method</a>
+      </div>
+      
+      <p>If you need assistance, please don't hesitate to contact our support team.</p>
+      <p>Thank you for your understanding!</p>
+    </div>
+  `;
+
+  try {
+    const result = await resend.emails.send({
+      from: "Healios <onboarding@resend.dev>",
+      to: data.customerEmail,
+      subject,
+      html,
+    });
+    console.log(`Subscription payment failed email sent to ${data.customerEmail}`, result);
+    return result;
+  } catch (error) {
+    console.error(`Failed to send subscription payment failed email to ${data.customerEmail}`, error);
+    throw error;
+  }
+}
+
+export async function sendSubscriptionCreated(data: {
+  customerEmail: string;
+  customerName: string;
+  subscriptionId: string;
+  productName: string;
+  intervalDays: number;
+  nextBillingDate: Date;
+  amount: string;
+}) {
+  const subject = "Your Healios Subscription Is Active!";
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Subscription Active</h1>
+      <p>Hi ${data.customerName},</p>
+      <p>Great news! Your subscription for <strong>${data.productName}</strong> is now active.</p>
+      
+      <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <p><strong>Subscription Details:</strong></p>
+        <p><strong>Product:</strong> ${data.productName}</p>
+        <p><strong>Delivery Schedule:</strong> Every ${data.intervalDays} days</p>
+        <p><strong>Amount:</strong> R${data.amount} per delivery</p>
+        <p><strong>Next Billing:</strong> ${data.nextBillingDate.toLocaleDateString()}</p>
+      </div>
+      
+      <p><strong>What's next?</strong></p>
+      <ul>
+        <li>Your first order will be processed and shipped within 1-2 business days</li>
+        <li>You'll automatically receive your next delivery every ${data.intervalDays} days</li>
+        <li>You can manage your subscription anytime in your account</li>
+        <li>Cancel or modify your subscription without any fees</li>
+      </ul>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="/portal/subscriptions" style="display: inline-block; background-color: #000; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 4px;">Manage Subscription</a>
+      </div>
+      
+      <p>Thank you for choosing Healios for your wellness journey!</p>
+    </div>
+  `;
+
+  try {
+    const result = await resend.emails.send({
+      from: "Healios <onboarding@resend.dev>",
+      to: data.customerEmail,
+      subject,
+      html,
+    });
+    console.log(`Subscription created email sent to ${data.customerEmail}`, result);
+    return result;
+  } catch (error) {
+    console.error(`Failed to send subscription created email to ${data.customerEmail}`, error);
+    throw error;
+  }
+}

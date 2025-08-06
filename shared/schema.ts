@@ -10,6 +10,7 @@ export const users = pgTable("users", {
   role: text("role").notNull().default("guest"), // 'admin', 'customer', 'guest'
   firstName: text("first_name"),
   lastName: text("last_name"),
+  stripeCustomerId: text("stripe_customer_id"), // Phase 18: Stripe customer tracking
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
@@ -48,7 +49,28 @@ export const productVariants = pgTable("product_variants", {
   stockQuantity: integer("stock_quantity").default(0),
   inStock: boolean("in_stock").default(true),
   isDefault: boolean("is_default").default(false), // Mark one variant as default
+  // Phase 18: Subscription support
+  subscriptionPriceId: varchar("subscription_price_id", { length: 128 }), // Stripe Price ID for subscriptions
+  subscriptionIntervalDays: integer("subscription_interval_days").default(30), // Default 30-day refill
+  subscriptionEnabled: boolean("subscription_enabled").default(false),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Phase 18: Subscriptions table for auto-refill functionality
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  productVariantId: varchar("product_variant_id").notNull().references(() => productVariants.id),
+  stripeSubscriptionId: varchar("stripe_subscription_id", { length: 128 }).notNull(),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 128 }).notNull(),
+  status: varchar("status", { length: 32 }).default("active"), // active, canceled, paused, past_due
+  intervalDays: integer("interval_days").notNull(), // e.g. 30 for monthly
+  currentPeriodStart: text("current_period_start"),
+  currentPeriodEnd: text("current_period_end"),
+  cancelAt: text("cancel_at"), // When it will be canceled
+  canceledAt: text("canceled_at"), // When it was actually canceled
+  startDate: text("start_date").default(sql`CURRENT_TIMESTAMP`),
+  metadata: text("metadata"), // JSON for additional tracking data
 });
 
 export const quizResults = pgTable("quiz_results", {
@@ -392,3 +414,12 @@ export type InsertProductBundle = z.infer<typeof insertProductBundleSchema>;
 export type ProductBundle = typeof productBundles.$inferSelect;
 export type InsertBundleItem = z.infer<typeof insertBundleItemSchema>;
 export type BundleItem = typeof bundleItems.$inferSelect;
+
+// Phase 18: Subscription types and schemas
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
+  id: true,
+  startDate: true,
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;

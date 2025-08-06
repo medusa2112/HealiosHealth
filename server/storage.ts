@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -61,9 +61,11 @@ export interface IStorage {
   getRestockNotificationsByProduct(productId: string): Promise<RestockNotification[]>;
   
   // Users (Auth)
+  getUser(id: string): Promise<User | undefined>;
   getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: string, user: Partial<User>): Promise<User | undefined>;
   
   // Addresses (Customer Portal)
   getAddressesByUserId(userId: string): Promise<Address[]>;
@@ -126,6 +128,13 @@ export interface IStorage {
   deleteBundleItem(id: string): Promise<boolean>;
   getBundleWithItems(id: string): Promise<(ProductBundle & { items: (BundleItem & { variant: ProductVariant })[] }) | undefined>;
   getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]>;
+
+  // Phase 18: Subscriptions
+  getUserSubscriptions(userId: string): Promise<Subscription[]>;
+  getSubscription(id: string): Promise<Subscription | undefined>;
+  createSubscription(subscription: InsertSubscription): Promise<Subscription>;
+  updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined>;
+  getAllSubscriptions(): Promise<Subscription[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -148,6 +157,7 @@ export class MemStorage implements IStorage {
   private discountCodes: Map<string, DiscountCode>; // Phase 15
   private productBundles: Map<string, ProductBundle>; // Phase 16
   private bundleItems: Map<string, BundleItem>; // Phase 16
+  private subscriptions: Map<string, Subscription>; // Phase 18
 
   constructor() {
     this.products = new Map();
@@ -169,6 +179,7 @@ export class MemStorage implements IStorage {
     this.discountCodes = new Map(); // Phase 15
     this.productBundles = new Map(); // Phase 16
     this.bundleItems = new Map(); // Phase 16
+    this.subscriptions = new Map(); // Phase 18
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
@@ -2232,6 +2243,66 @@ export class MemStorage implements IStorage {
     }
     
     return eligibleVariants;
+  }
+
+  // Phase 18: Subscription methods
+  async getUserSubscriptions(userId: string): Promise<Subscription[]> {
+    return Array.from(this.subscriptions.values())
+      .filter(sub => sub.userId === userId)
+      .sort((a, b) => new Date(b.startDate || '').getTime() - new Date(a.startDate || '').getTime());
+  }
+
+  async getSubscription(id: string): Promise<Subscription | undefined> {
+    return this.subscriptions.get(id);
+  }
+
+  async createSubscription(insertSubscription: InsertSubscription): Promise<Subscription> {
+    const id = randomUUID();
+    const subscription: Subscription = {
+      id,
+      userId: insertSubscription.userId,
+      productVariantId: insertSubscription.productVariantId,
+      stripeSubscriptionId: insertSubscription.stripeSubscriptionId,
+      stripeCustomerId: insertSubscription.stripeCustomerId,
+      status: insertSubscription.status || 'active',
+      intervalDays: insertSubscription.intervalDays,
+      currentPeriodStart: insertSubscription.currentPeriodStart || null,
+      currentPeriodEnd: insertSubscription.currentPeriodEnd || null,
+      cancelAt: insertSubscription.cancelAt || null,
+      canceledAt: insertSubscription.canceledAt || null,
+      startDate: new Date().toISOString(),
+      metadata: insertSubscription.metadata || null,
+    };
+    this.subscriptions.set(id, subscription);
+    return subscription;
+  }
+
+  async updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined> {
+    const subscription = this.subscriptions.get(id);
+    if (!subscription) return undefined;
+
+    const updatedSubscription = { ...subscription, ...updates };
+    this.subscriptions.set(id, updatedSubscription);
+    return updatedSubscription;
+  }
+
+  async getAllSubscriptions(): Promise<Subscription[]> {
+    return Array.from(this.subscriptions.values())
+      .sort((a, b) => new Date(b.startDate || '').getTime() - new Date(a.startDate || '').getTime());
+  }
+
+  // Update user to support getUser method and stripeCustomerId
+  async getUser(id: string): Promise<User | undefined> {
+    return this.getUserById(id);
+  }
+
+  async updateUser(id: string, updates: Partial<User>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+
+    const updatedUser = { ...user, ...updates };
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 }
 

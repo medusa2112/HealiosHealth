@@ -235,6 +235,105 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         }
         break;
 
+      // Subscription webhook events (Phase 18)
+      case "customer.subscription.created":
+        const subscriptionCreated = data as Stripe.Subscription;
+        console.log("Subscription created:", subscriptionCreated.id);
+        await handleSubscriptionWebhook(subscriptionCreated, 'created');
+        break;
+
+      case "customer.subscription.updated":
+        const subscriptionUpdated = data as Stripe.Subscription;
+        console.log("Subscription updated:", subscriptionUpdated.id);
+        await handleSubscriptionWebhook(subscriptionUpdated, 'updated');
+        break;
+
+      case "customer.subscription.deleted":
+        const subscriptionDeleted = data as Stripe.Subscription;
+        console.log("Subscription cancelled:", subscriptionDeleted.id);
+        await handleSubscriptionWebhook(subscriptionDeleted, 'deleted');
+        break;
+
+      case "invoice.payment_succeeded":
+        const invoiceSucceeded = data as Stripe.Invoice;
+        console.log("Subscription payment succeeded:", invoiceSucceeded.id);
+        
+        if (invoiceSucceeded.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(invoiceSucceeded.subscription as string);
+          const dbSubscription = await storage.getSubscriptionByStripeId(subscription.id);
+          
+          if (dbSubscription) {
+            // Update next billing date
+            const nextBillingDate = new Date(subscription.current_period_end * 1000);
+            await storage.updateSubscriptionNextBilling(dbSubscription.id, nextBillingDate);
+            console.log("Updated next billing date for subscription:", dbSubscription.id);
+
+            // Create order for recurring payment
+            if (invoiceSucceeded.billing_reason === 'subscription_cycle') {
+              try {
+                const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
+                const orderData = {
+                  userId: dbSubscription.userId,
+                  customerEmail: customer.email || '',
+                  customerName: customer.name || '',
+                  customerPhone: customer.phone || '',
+                  shippingAddress: JSON.stringify(customer.address || {}),
+                  billingAddress: JSON.stringify(customer.address || {}),
+                  orderItems: JSON.stringify([{
+                    productId: dbSubscription.variant.productId,
+                    variantId: dbSubscription.variantId,
+                    quantity: dbSubscription.quantity,
+                    price: (invoiceSucceeded.amount_paid / 100).toString()
+                  }]),
+                  totalAmount: (invoiceSucceeded.amount_paid / 100).toString(),
+                  currency: invoiceSucceeded.currency?.toUpperCase() || "ZAR",
+                  paymentStatus: "completed",
+                  orderStatus: "processing",
+                  refundStatus: "none",
+                  disputeStatus: "none",
+                  stripePaymentIntentId: invoiceSucceeded.payment_intent as string || null,
+                  stripeSessionId: invoiceSucceeded.id,
+                  notes: `Subscription renewal - ${dbSubscription.id}`,
+                };
+
+                await storage.createOrder(orderData);
+                console.log("Created order for subscription renewal:", dbSubscription.id);
+              } catch (orderError) {
+                console.error("Failed to create order for subscription renewal:", orderError);
+              }
+            }
+          }
+        }
+        break;
+
+      case "invoice.payment_failed":
+        const invoiceFailed = data as Stripe.Invoice;
+        console.log("Subscription payment failed:", invoiceFailed.id);
+        
+        if (invoiceFailed.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(invoiceFailed.subscription as string);
+          const dbSubscription = await storage.getSubscriptionByStripeId(subscription.id);
+          
+          if (dbSubscription) {
+            // Send payment failed notification
+            try {
+              const { sendSubscriptionPaymentFailed } = await import("../lib/email");
+              await sendSubscriptionPaymentFailed({
+                customerEmail: dbSubscription.user?.email || '',
+                customerName: dbSubscription.user?.username || '',
+                subscriptionId: dbSubscription.id,
+                productName: dbSubscription.variant.product?.name || 'Product',
+                amount: (invoiceFailed.amount_due / 100).toString(),
+                nextRetryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) // 3 days
+              });
+              console.log("Payment failed email sent");
+            } catch (emailError) {
+              console.error("Failed to send payment failed email:", emailError);
+            }
+          }
+        }
+        break;
+
       default:
         console.log(`Unhandled Stripe webhook event: ${event.type}`);
     }
@@ -246,5 +345,63 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
   // Acknowledge receipt of the event
   res.status(200).json({ received: true });
 });
+
+// Helper function to handle subscription webhook events
+async function handleSubscriptionWebhook(subscription: Stripe.Subscription, eventType: 'created' | 'updated' | 'deleted') {
+  try {
+    const dbSubscription = await storage.getSubscriptionByStripeId(subscription.id);
+    
+    if (!dbSubscription) {
+      console.warn(`No database subscription found for Stripe subscription: ${subscription.id}`);
+      return;
+    }
+
+    switch (eventType) {
+      case 'created':
+        await storage.updateSubscriptionStatus(dbSubscription.id, 'active');
+        console.log(`Activated subscription: ${dbSubscription.id}`);
+        break;
+      
+      case 'updated':
+        // Update subscription details
+        const nextBillingDate = new Date(subscription.current_period_end * 1000);
+        await storage.updateSubscriptionNextBilling(dbSubscription.id, nextBillingDate);
+        
+        // Update status based on Stripe status
+        let status: 'active' | 'paused' | 'cancelled' = 'active';
+        if (subscription.status === 'canceled') {
+          status = 'cancelled';
+        } else if (subscription.status === 'paused') {
+          status = 'paused';
+        }
+        
+        await storage.updateSubscriptionStatus(dbSubscription.id, status);
+        console.log(`Updated subscription ${dbSubscription.id} status to: ${status}`);
+        break;
+      
+      case 'deleted':
+        await storage.updateSubscriptionStatus(dbSubscription.id, 'cancelled');
+        console.log(`Cancelled subscription: ${dbSubscription.id}`);
+        
+        // Send cancellation confirmation email
+        try {
+          const { sendSubscriptionCancelled } = await import("../lib/email");
+          await sendSubscriptionCancelled({
+            customerEmail: dbSubscription.user?.email || '',
+            customerName: dbSubscription.user?.username || '',
+            productName: dbSubscription.variant.product?.name || 'Product',
+            subscriptionId: dbSubscription.id,
+            cancellationDate: new Date()
+          });
+          console.log("Cancellation email sent");
+        } catch (emailError) {
+          console.error("Failed to send cancellation email:", emailError);
+        }
+        break;
+    }
+  } catch (error) {
+    console.error(`Error handling subscription ${eventType} webhook:`, error);
+  }
+}
 
 export default router;

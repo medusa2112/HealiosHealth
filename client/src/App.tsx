@@ -40,6 +40,7 @@ import AdminBundles from "@/pages/AdminBundles";
 import ReorderAnalytics from "@/pages/admin/reorder-analytics";
 import AdminDiscountCodes from "@/pages/AdminDiscountCodes";
 import CustomerPortal from "@/pages/customer-portal";
+import PortalSubscriptions from "@/pages/PortalSubscriptions";
 import { FAQ } from "@/pages/faq";
 import { ShippingReturns } from "@/pages/shipping-returns";
 import { Terms } from "@/pages/terms";
@@ -124,6 +125,13 @@ function Router() {
         component={() => (
           <RequireRole role="customer">
             <CustomerPortal />
+          </RequireRole>
+        )} 
+      />
+      <Route path="/portal/subscriptions" 
+        component={() => (
+          <RequireRole role="customer">
+            <PortalSubscriptions />
           </RequireRole>
         )} 
       />

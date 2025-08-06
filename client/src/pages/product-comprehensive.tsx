@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { SEOHead } from "@/components/seo-head";
 import { PreOrderPopup } from "@/components/pre-order-popup";
+import { SubscriptionSection } from "@/components/SubscriptionSection";
 
 // Import images
 import healiosLogoImg from '@assets/healios-health26.png';
@@ -1394,7 +1395,22 @@ export default function ProductComprehensive() {
               </div>
             )}
 
-
+            {/* Subscription Section - Show for products that support subscriptions */}
+            {product.inStock && (() => {
+              // Check if this product has subscription-enabled variants
+              const subscriptionVariant = allProducts?.find(p => p.id === product.id)?.variants?.find(v => v.isSubscriptionAvailable);
+              
+              if (!subscriptionVariant) return null;
+              
+              return (
+                <div className="mb-6">
+                  <SubscriptionSection 
+                    variant={subscriptionVariant} 
+                    productName={product.name} 
+                  />
+                </div>
+              );
+            })()}
 
             {/* Expandable Sections */}
             <div className="space-y-2">
