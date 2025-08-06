@@ -282,11 +282,19 @@ export default function AdminDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-black dark:text-white">Order Management</CardTitle>
-                <CardDescription>Coming soon</CardDescription>
+                <CardDescription>View and manage all customer orders</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-gray-600 dark:text-gray-400">
-                  Order management features will be implemented in the next phase.
+                <div className="space-y-4">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Access the full order management system to view orders, process refunds, and track order status.
+                  </p>
+                  <Link href="/admin/orders">
+                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Open Order Management
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

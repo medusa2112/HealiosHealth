@@ -1,11 +1,15 @@
 import express from 'express';
 import { protectRoute } from '../lib/auth';
 import { storage } from '../storage';
+import ordersRouter from './admin/orders';
 
 const router = express.Router();
 
 // Protect all admin routes - only admin role allowed
 router.use(protectRoute(['admin']));
+
+// Mount orders subrouter
+router.use('/orders', ordersRouter);
 
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {

@@ -1,0 +1,395 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { apiRequest } from "@/lib/queryClient";
+import { ArrowLeft, RefreshCw, DollarSign, Package, AlertTriangle, CheckCircle, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { formatCurrency } from "@/lib/utils";
+
+interface Order {
+  id: string;
+  customerEmail: string;
+  customerName?: string;
+  totalAmount: string;
+  currency: string;
+  paymentStatus: string;
+  orderStatus: string;
+  refundStatus: string;
+  disputeStatus: string;
+  stripePaymentIntentId?: string;
+  stripeSessionId?: string;
+  createdAt: string;
+  updatedAt?: string;
+  orderItems: string;
+}
+
+interface OrderStats {
+  totalOrders: number;
+  completedOrders: number;
+  refundedOrders: number;
+  disputedOrders: number;
+  totalRevenue: number;
+  pendingOrders: number;
+  processingOrders: number;
+  shippedOrders: number;
+}
+
+export default function AdminOrders() {
+  const [filter, setFilter] = useState("all");
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch orders
+  const { data: orders = [], isLoading: ordersLoading, error: ordersError } = useQuery({
+    queryKey: ['/admin/orders'],
+  });
+
+  // Fetch order statistics  
+  const { data: stats, isLoading: statsLoading } = useQuery({
+    queryKey: ['/admin/orders', 'stats'],
+  });
+
+  // Refund mutation
+  const refundMutation = useMutation({
+    mutationFn: async ({ orderId, amount, reason }: { orderId: string; amount?: number; reason?: string }) => {
+      return apiRequest(`/admin/orders/${orderId}/refund`, 'POST', { amount, reason });
+    },
+    onSuccess: (data, variables) => {
+      toast({
+        title: "Refund Processed",
+        description: `Successfully processed refund for order ${variables.orderId}`,
+      });
+      // Refetch orders to get updated data
+      queryClient.invalidateQueries({ queryKey: ['/admin/orders'] });
+      queryClient.invalidateQueries({ queryKey: ['/admin/orders/stats/summary'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Refund Failed",
+        description: error.message || "Failed to process refund",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Update status mutation
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ orderId, status }: { orderId: string; status: string }) => {
+      return apiRequest(`/admin/orders/${orderId}/status`, 'PUT', { status });
+    },
+    onSuccess: (data, variables) => {
+      toast({
+        title: "Status Updated",
+        description: `Order status updated to ${variables.status}`,
+      });
+      queryClient.invalidateQueries({ queryKey: ['/admin/orders'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update Failed",
+        description: error.message || "Failed to update status",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Filter orders
+  const filteredOrders = orders.filter((order: Order) => {
+    if (filter === "all") return true;
+    return order.paymentStatus === filter || 
+           order.refundStatus === filter || 
+           order.disputeStatus === filter ||
+           order.orderStatus === filter;
+  });
+
+  const handleRefund = async (orderId: string, totalAmount: string) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to process a full refund for this order? Amount: ${formatCurrency(parseFloat(totalAmount))}`
+    );
+    if (!confirmed) return;
+
+    refundMutation.mutate({ orderId });
+  };
+
+  const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+    updateStatusMutation.mutate({ orderId, status: newStatus });
+  };
+
+  const getStatusBadge = (status: string, type: 'payment' | 'order' | 'refund' | 'dispute') => {
+    const getVariant = () => {
+      switch (status) {
+        case 'completed': case 'delivered': case 'paid': return 'default';
+        case 'processing': case 'shipped': case 'pending': return 'secondary';
+        case 'refunded': case 'cancelled': return 'outline';
+        case 'disputed': case 'failed': return 'destructive';
+        case 'none': return 'secondary';
+        default: return 'secondary';
+      }
+    };
+
+    return (
+      <Badge variant={getVariant()} className="text-xs">
+        {status === 'none' ? 'N/A' : status}
+      </Badge>
+    );
+  };
+
+  const parseOrderItems = (orderItemsJson: string) => {
+    try {
+      return JSON.parse(orderItemsJson);
+    } catch {
+      return [];
+    }
+  };
+
+  if (ordersError) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="flex items-center mb-6">
+          <Link href="/admin" className="mr-4">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-bold">Order Management</h1>
+        </div>
+        <div className="text-center py-8">
+          <p className="text-red-600">Failed to load orders. Please try again.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Link href="/admin" className="mr-4">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-bold">Order Management</h1>
+        </div>
+        <Button 
+          onClick={() => queryClient.invalidateQueries({ queryKey: ['/admin/orders'] })}
+          variant="outline" 
+          size="sm"
+          disabled={ordersLoading}
+        >
+          <RefreshCw className={`h-4 w-4 mr-2 ${ordersLoading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
+
+      {/* Statistics Cards */}
+      {stats && !statsLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Completed</CardTitle>
+              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.completedOrders}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Disputes</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.disputedOrders}</div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Filters */}
+      <div className="flex items-center gap-4">
+        <label className="text-sm font-medium">Filter by status:</label>
+        <Select value={filter} onValueChange={setFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select filter" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Orders</SelectItem>
+            <SelectItem value="pending">Pending Payment</SelectItem>
+            <SelectItem value="completed">Paid Orders</SelectItem>
+            <SelectItem value="processing">Processing</SelectItem>
+            <SelectItem value="shipped">Shipped</SelectItem>
+            <SelectItem value="delivered">Delivered</SelectItem>
+            <SelectItem value="refunded">Refunded</SelectItem>
+            <SelectItem value="disputed">Disputed</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="text-sm text-muted-foreground">
+          Showing {filteredOrders.length} of {orders.length} orders
+        </div>
+      </div>
+
+      {/* Orders List */}
+      <div className="space-y-4">
+        {ordersLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+            <p className="mt-2 text-muted-foreground">Loading orders...</p>
+          </div>
+        ) : filteredOrders.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No orders found matching the current filter.</p>
+          </div>
+        ) : (
+          filteredOrders.map((order: Order) => {
+            const orderItems = parseOrderItems(order.orderItems);
+            return (
+              <Card key={order.id} className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-lg">Order #{order.id.slice(0, 8)}</h3>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/admin/orders/${order.id}`}>
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </Link>
+                      </Button>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Customer: {order.customerName || order.customerEmail}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Created: {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString()}
+                    </div>
+                  </div>
+                  
+                  <div className="text-right space-y-2">
+                    <div className="text-xl font-bold">
+                      {formatCurrency(parseFloat(order.totalAmount), order.currency)}
+                    </div>
+                    <div className="flex gap-2">
+                      {getStatusBadge(order.paymentStatus, 'payment')}
+                      {getStatusBadge(order.orderStatus, 'order')}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Items Preview */}
+                {orderItems.length > 0 && (
+                  <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-900 rounded">
+                    <h4 className="font-medium mb-2">Items ({orderItems.length}):</h4>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      {orderItems.slice(0, 3).map((item: any, idx: number) => (
+                        <div key={idx}>
+                          {item.name} × {item.quantity}
+                        </div>
+                      ))}
+                      {orderItems.length > 3 && (
+                        <div>+ {orderItems.length - 3} more items</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Status Badges */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="text-xs">
+                    <span className="text-muted-foreground mr-1">Refund:</span>
+                    {getStatusBadge(order.refundStatus, 'refund')}
+                  </div>
+                  <div className="text-xs">
+                    <span className="text-muted-foreground mr-1">Dispute:</span>
+                    {getStatusBadge(order.disputeStatus, 'dispute')}
+                  </div>
+                  {order.stripePaymentIntentId && (
+                    <div className="text-xs">
+                      <span className="text-muted-foreground mr-1">Stripe:</span>
+                      <Badge variant="outline" className="text-xs">
+                        {order.stripePaymentIntentId.slice(0, 20)}...
+                      </Badge>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-2">
+                  {/* Order Status Updates */}
+                  {order.paymentStatus === 'completed' && order.orderStatus === 'processing' && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleStatusUpdate(order.id, 'shipped')}
+                      disabled={updateStatusMutation.isPending}
+                    >
+                      Mark as Shipped
+                    </Button>
+                  )}
+                  
+                  {order.orderStatus === 'shipped' && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleStatusUpdate(order.id, 'delivered')}
+                      disabled={updateStatusMutation.isPending}
+                    >
+                      Mark as Delivered
+                    </Button>
+                  )}
+
+                  {/* Refund Button */}
+                  {order.paymentStatus === 'completed' && 
+                   order.refundStatus !== 'refunded' && 
+                   order.stripePaymentIntentId && (
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleRefund(order.id, order.totalAmount)}
+                      disabled={refundMutation.isPending}
+                    >
+                      {refundMutation.isPending ? 'Processing...' : 'Process Refund'}
+                    </Button>
+                  )}
+
+                  {order.refundStatus === 'refunded' && (
+                    <Badge variant="outline" className="text-green-600">
+                      Refunded
+                    </Badge>
+                  )}
+                </div>
+              </Card>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}

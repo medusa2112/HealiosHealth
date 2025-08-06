@@ -28,6 +28,7 @@ import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
 import Login from "@/pages/login";
 import AdminDashboard from "@/pages/admin";
+import AdminOrders from "@/pages/admin/orders";
 import CustomerPortal from "@/pages/customer-portal";
 import NotFound from "@/pages/not-found";
 
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/planet" component={Planet} />
       <Route path="/login" component={Login} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/orders" component={AdminOrders} />
       <Route path="/portal" component={CustomerPortal} />
       <Route component={NotFound} />
     </Switch>

@@ -71,6 +71,11 @@ export interface IStorage {
   getOrdersByUserId(userId: string): Promise<Order[]>;
   getOrderByIdAndUserId(orderId: string, userId: string): Promise<Order | undefined>;
   updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined>;
+  
+  // Admin Order methods
+  getAllOrders(): Promise<Order[]>;
+  getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>;
+  updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -1108,6 +1113,26 @@ export class MemStorage implements IStorage {
     const order = this.orders.get(orderId);
     if (!order || order.userId !== userId) return undefined;
     return order;
+  }
+
+  // Admin Order methods
+  async getAllOrders(): Promise<Order[]> {
+    return Array.from(this.orders.values());
+  }
+
+  async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined> {
+    return Array.from(this.orders.values()).find(order => 
+      order.stripePaymentIntentId === paymentIntentId
+    );
+  }
+
+  async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+
+    const updatedOrder = { ...order, refundStatus: status };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
   }
 }
 
