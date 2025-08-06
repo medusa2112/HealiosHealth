@@ -13,7 +13,7 @@ import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
-import { JulietChatbotPopup } from "@/components/juliet-chatbot-popup";
+// Chat functionality removed as requested
 import { AdminTestButton } from "@/components/AdminTestButton";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
@@ -157,7 +157,7 @@ function App() {
               <Footer />
               <CartSidebar />
               <StockNotification />
-              <JulietChatbotPopup />
+              {/* Chat functionality removed as requested */}
               <AdminTestButton />
             </div>
             <Toaster />
