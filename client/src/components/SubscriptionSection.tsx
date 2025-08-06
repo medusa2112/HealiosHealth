@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { RefreshCw, Calendar, Package, CreditCard } from "lucide-react";
 // Import auth context
-import { useUser } from "@/hooks/use-user";
+import { useUser } from "@/hooks/use-auth";
 import { toast } from "@/hooks/use-toast";
 import type { ProductVariant } from "@shared/schema";
 

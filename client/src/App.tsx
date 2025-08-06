@@ -55,10 +55,6 @@ function Router() {
   // Automatically scroll to top on page navigation
   useScrollToTop();
   
-  // AI Assistant state
-  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
-  const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
-  
   return (
     <Switch>
       <Route path="/" component={Home} />

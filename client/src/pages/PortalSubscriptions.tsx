@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Package, Calendar, CreditCard, X, RotateCcw } from "lucide-react";
 import type { Subscription, ProductVariant, Product } from "@shared/schema";
@@ -18,6 +18,7 @@ interface SubscriptionWithDetails extends Subscription {
 export default function PortalSubscriptions() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { data: subscriptions = [], isLoading } = useQuery({
     queryKey: ['/api/subscriptions'],
@@ -71,7 +72,8 @@ export default function PortalSubscriptions() {
     });
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
+    if (!status) return <Badge variant="outline">Unknown</Badge>;
     switch (status) {
       case 'active':
         return <Badge className="bg-green-100 text-green-800 border-green-200">Active</Badge>;
