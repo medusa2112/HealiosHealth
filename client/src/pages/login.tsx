@@ -4,14 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLocation } from "wouter";
+import { useUser } from "../hooks/use-auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [, setLocation] = useLocation();
+  const { login } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,18 +20,13 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch('/auth/mock-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, firstName, lastName }),
-      });
+      const success = await login({ username: email, password });
       
-      const data = await response.json();
-
-      if (data.success) {
-        window.location.href = data.redirectUrl;
+      if (success) {
+        // Redirect based on role will be handled by RequireRole components
+        setLocation('/');
       } else {
-        setError(data.message || 'Login failed');
+        setError('Invalid credentials. Please try again.');
       }
     } catch (err: any) {
       setError(err.message || "Login failed");
@@ -67,49 +63,40 @@ export default function Login() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="firstName" className="text-black dark:text-white">
-                First Name
+              <Label htmlFor="password" className="text-black dark:text-white">
+                Password
               </Label>
               <Input
-                id="firstName"
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
                 className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white"
-                placeholder="Your first name"
+                placeholder="Enter your password"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName" className="text-black dark:text-white">
-                Last Name
-              </Label>
-              <Input
-                id="lastName"
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white"
-                placeholder="Your last name"
-              />
+            
+            <div className="text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-3 rounded">
+              <strong>Test Accounts:</strong><br/>
+              Admin: admin@healios.com / admin123<br/>
+              Customer: customer@healios.com / customer123
             </div>
+
             {error && (
-              <div className="text-red-600 dark:text-red-400 text-sm text-center">
+              <div className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-3 rounded text-sm">
                 {error}
               </div>
             )}
-            <Button
-              type="submit"
-              disabled={isLoading || !email}
-              className="w-full bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
+
+            <Button 
+              type="submit" 
+              className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
+              disabled={isLoading}
             >
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              This is a demo login. In production, this would redirect to Replit OAuth.
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>

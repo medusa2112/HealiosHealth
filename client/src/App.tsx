@@ -6,12 +6,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/hooks/use-cart";
 import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/hooks/use-auth";
+import { RequireRole } from "@/components/RequireRole";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
 import { JulietChatbotPopup } from "@/components/juliet-chatbot-popup";
+import { AdminTestButton } from "@/components/AdminTestButton";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductComprehensive from "@/pages/product-comprehensive";
@@ -57,9 +60,27 @@ function Router() {
       <Route path="/planet" component={Planet} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/orders" component={AdminOrders} />
-      <Route path="/portal" component={CustomerPortal} />
+      <Route path="/admin" 
+        component={() => (
+          <RequireRole role="admin">
+            <AdminDashboard />
+          </RequireRole>
+        )} 
+      />
+      <Route path="/admin/orders" 
+        component={() => (
+          <RequireRole role="admin">
+            <AdminOrders />
+          </RequireRole>
+        )} 
+      />
+      <Route path="/portal" 
+        component={() => (
+          <RequireRole role="customer">
+            <CustomerPortal />
+          </RequireRole>
+        )} 
+      />
       <Route component={NotFound} />
     </Switch>
   );
@@ -70,7 +91,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
-          <CartProvider>
+          <AuthProvider>
+            <CartProvider>
             <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
               <StockUpdateBanner />
               <Header />
@@ -81,9 +103,11 @@ function App() {
               <CartSidebar />
               <StockNotification />
               <JulietChatbotPopup />
+              <AdminTestButton />
             </div>
             <Toaster />
           </CartProvider>
+        </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>

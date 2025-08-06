@@ -4,6 +4,34 @@ import { determineUserRole } from '../lib/auth';
 
 const router = express.Router();
 
+// Get current user endpoint for frontend auth
+router.get("/me", async (req, res) => {
+  try {
+    const userId = req.session?.userId;
+    
+    if (!userId) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    const user = await storage.getUserById(userId);
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid session' });
+    }
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role
+    });
+  } catch (error) {
+    console.error("Get current user error:", error);
+    res.status(500).json({ message: "Failed to get user info" });
+  }
+});
+
 // Guest registration with order linking (Phase 8)
 router.post("/register", async (req, res) => {
   try {
@@ -68,6 +96,53 @@ router.get('/login', (req, res) => {
     message: "In production, this would redirect to Replit OAuth",
     loginUrl: "/auth/mock-login" 
   });
+});
+
+// Standard login endpoint  
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and password are required" });
+    }
+
+    // Find user by email (username field)
+    const user = await storage.getUserByEmail(username);
+    
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // In production, verify hashed password here
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = user.id;
+
+    res.json({ 
+      message: "Login successful",
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Login failed" });
+  }
+});
+
+// Logout endpoint
+router.post('/logout', (req, res) => {
+  req.session = null;
+  res.json({ message: "Logged out successfully" });
 });
 
 // Mock login endpoint for development/testing

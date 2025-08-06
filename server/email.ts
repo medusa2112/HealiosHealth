@@ -48,8 +48,8 @@ interface EnhancedQuizRecommendations {
 }
 
 export class EmailService {
-  private static readonly FROM_EMAIL = 'dn@thefourths.com';
-  private static readonly ADMIN_EMAILS = ['dn@thefourths.com', 'ms@thefourths.com'];
+  private static readonly FROM_EMAIL = 'marketing@thehealios.com';
+  private static readonly ADMIN_EMAILS = ['marketing@thehealios.com'];
   private static readonly BASE_URL = process.env.NODE_ENV === 'production' ? 'https://healios.com' : 'http://localhost:5000';
   private static readonly EMAIL_IMAGE_BASE = process.env.NODE_ENV === 'production' ? 'https://healios.com' : 'https://via.placeholder.com/120x120/f3f4f6/6b7280?text=';
 

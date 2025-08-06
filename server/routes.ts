@@ -8,6 +8,7 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
+import { protectRoute, requireAuth } from "./lib/auth";
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
@@ -325,9 +326,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get orders by email
-  app.get("/api/orders/customer/:email", async (req, res) => {
+  // Get orders by email (protected - customers can only access their own orders)
+  app.get("/api/orders/customer/:email", requireAuth, async (req, res) => {
     try {
+      // Security check: customers can only access their own orders, admins can access any
+      if (req.user?.role !== 'admin' && req.user?.email !== req.params.email) {
+        return res.status(403).json({ message: "Access denied: can only view your own orders" });
+      }
+      
       const orders = await storage.getOrdersByEmail(req.params.email);
       res.json(orders);
     } catch (error) {
@@ -416,7 +422,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update order status (admin endpoint)
-  app.patch("/api/orders/:id/status", async (req, res) => {
+  app.patch("/api/orders/:id/status", protectRoute(['admin']), async (req, res) => {
     try {
       const { status } = req.body;
       const order = await storage.updateOrderStatus(req.params.id, status);
@@ -430,7 +436,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Stock management endpoints
-  app.patch("/api/products/:id/stock", async (req, res) => {
+  app.patch("/api/products/:id/stock", protectRoute(['admin']), async (req, res) => {
     try {
       const { quantity } = req.body;
       if (typeof quantity !== 'number' || quantity < 0) {
@@ -449,7 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get stock alerts
-  app.get("/api/stock-alerts", async (req, res) => {
+  app.get("/api/stock-alerts", protectRoute(['admin']), async (req, res) => {
     try {
       const alerts = await storage.getStockAlerts();
       res.json(alerts);
@@ -459,7 +465,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Send low stock alert manually
-  app.post("/api/stock-alerts/send", async (req, res) => {
+  app.post("/api/stock-alerts/send", protectRoute(['admin']), async (req, res) => {
     try {
       const { productId, productName, currentStock } = req.body;
       
@@ -626,7 +632,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get quiz statistics (admin only)
-  app.get("/api/quiz/stats", async (req, res) => {
+  app.get("/api/quiz/stats", protectRoute(['admin']), async (req, res) => {
     try {
       const quizResults = await storage.getQuizResults();
       
