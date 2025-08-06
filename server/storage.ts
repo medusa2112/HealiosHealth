@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -10,6 +10,14 @@ export interface IStorage {
   createProduct(product: InsertProduct): Promise<Product>;
   updateProductStock(productId: string, quantity: number): Promise<Product | undefined>;
   decreaseProductStock(productId: string, quantity: number): Promise<Product | undefined>;
+  
+  // Phase 14: Product Variants
+  getProductVariants(productId: string): Promise<ProductVariant[]>;
+  getProductVariant(id: string): Promise<ProductVariant | undefined>;
+  createProductVariant(variant: InsertProductVariant): Promise<ProductVariant>;
+  updateProductVariant(id: string, variant: Partial<ProductVariant>): Promise<ProductVariant | undefined>;
+  deleteProductVariant(id: string): Promise<boolean>;
+  getProductWithVariants(id: string): Promise<(Product & { variants: ProductVariant[] }) | undefined>;
   
   // Newsletter
   subscribeToNewsletter(email: InsertNewsletter): Promise<Newsletter>;
@@ -101,6 +109,7 @@ export interface IStorage {
 
 export class MemStorage implements IStorage {
   private products: Map<string, Product>;
+  private productVariants: Map<string, ProductVariant>; // Phase 14
   private newsletters: Map<string, Newsletter>;
   private preOrders: Map<string, PreOrder>;
   private consultationBookings: Map<string, ConsultationBooking>;
@@ -118,6 +127,7 @@ export class MemStorage implements IStorage {
 
   constructor() {
     this.products = new Map();
+    this.productVariants = new Map(); // Phase 14
     this.newsletters = new Map();
     this.preOrders = new Map();
     this.articles = new Map();
@@ -133,6 +143,7 @@ export class MemStorage implements IStorage {
     this.adminLogs = new Map();
     this.reorderLogs = new Map();
     this.seedData();
+    this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
     this.seedAdminLogs();
     this.seedReorderLogs();
@@ -483,6 +494,91 @@ export class MemStorage implements IStorage {
     sampleProducts.forEach(product => {
       this.products.set(product.id, product);
     });
+  }
+
+  // Phase 14: Seed product variants data
+  private seedProductVariants() {
+    const variants: ProductVariant[] = [
+      // Magnesium variants (60 caps vs 90 caps)
+      {
+        id: "magnesium-60-caps",
+        productId: "magnesium-gummies",
+        name: "60 Caps",
+        price: "349.00",
+        sku: "MAG-60-CAPS",
+        imageUrl: null,
+        stockQuantity: 25,
+        inStock: true,
+        isDefault: true,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "magnesium-90-caps",
+        productId: "magnesium-gummies",
+        name: "90 Caps",
+        price: "469.00",
+        sku: "MAG-90-CAPS",
+        imageUrl: null,
+        stockQuantity: 15,
+        inStock: true,
+        isDefault: false,
+        createdAt: new Date().toISOString(),
+      },
+      // Vitamin D3 flavour variants (Orange vs Lemon)
+      {
+        id: "vitamin-d3-orange",
+        productId: "vitamin-d3",
+        name: "Orange Flavour",
+        price: "299.00",
+        sku: "VD3-ORG-60",
+        imageUrl: null,
+        stockQuantity: 30,
+        inStock: true,
+        isDefault: true,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "vitamin-d3-lemon",
+        productId: "vitamin-d3",
+        name: "Lemon Flavour",
+        price: "299.00",
+        sku: "VD3-LEM-60",
+        imageUrl: null,
+        stockQuantity: 20,
+        inStock: true,
+        isDefault: false,
+        createdAt: new Date().toISOString(),
+      },
+      // Apple Cider Vinegar variants (500mg vs 1000mg)
+      {
+        id: "acv-500mg",
+        productId: "apple-cider-vinegar",
+        name: "500mg ACV",
+        price: "299.00",
+        sku: "ACV-500-60",
+        imageUrl: null,
+        stockQuantity: 15,
+        inStock: true,
+        isDefault: true,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "acv-1000mg",
+        productId: "apple-cider-vinegar",
+        name: "1000mg ACV",
+        price: "399.00",
+        sku: "ACV-1000-60",
+        imageUrl: null,
+        stockQuantity: 8,
+        inStock: true,
+        isDefault: false,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+
+    for (const variant of variants) {
+      this.productVariants.set(variant.id, variant);
+    }
 
     // Seed sample articles
     const sampleArticles: Article[] = [
@@ -635,6 +731,138 @@ export class MemStorage implements IStorage {
     sampleArticles.forEach(article => {
       this.articles.set(article.id, article);
     });
+
+    // Seed product variants for Phase 14 testing
+    this.seedProductVariants();
+  }
+
+  private seedProductVariants() {
+    const sampleVariants: ProductVariant[] = [
+      // Vitamin D3 variants (different strengths)
+      {
+        id: "vitamin-d3-1000iu-variant",
+        productId: "vitamin-d3",
+        name: "1000 IU",
+        sku: "VD3-1000",
+        type: "strength",
+        attributes: { strength: "1000 IU", quantity: 60 },
+        price: 14.99,
+        stockQuantity: 100,
+        inStock: true,
+        isDefault: true,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      {
+        id: "vitamin-d3-2000iu-variant",
+        productId: "vitamin-d3",
+        name: "2000 IU",
+        sku: "VD3-2000",
+        type: "strength",
+        attributes: { strength: "2000 IU", quantity: 60 },
+        price: 19.99,
+        stockQuantity: 85,
+        inStock: true,
+        isDefault: false,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      {
+        id: "vitamin-d3-4000iu-variant",
+        productId: "vitamin-d3",
+        name: "4000 IU",
+        sku: "VD3-4000",
+        type: "strength",
+        attributes: { strength: "4000 IU", quantity: 60 },
+        price: 24.99,
+        stockQuantity: 120,
+        inStock: true,
+        isDefault: false,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      // Magnesium variants (different sizes)
+      {
+        id: "magnesium-30-gummies-variant",
+        productId: "magnesium",
+        name: "30 Gummies",
+        sku: "MAG-30",
+        type: "size",
+        attributes: { size: "30 gummies", supply_days: "30 days" },
+        price: 16.99,
+        stockQuantity: 75,
+        inStock: true,
+        isDefault: true,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      {
+        id: "magnesium-60-gummies-variant",
+        productId: "magnesium",
+        name: "60 Gummies",
+        sku: "MAG-60",
+        type: "size",
+        attributes: { size: "60 gummies", supply_days: "60 days" },
+        price: 29.99,
+        stockQuantity: 92,
+        inStock: true,
+        isDefault: false,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      // Collagen variants (different flavours)
+      {
+        id: "collagen-orange-variant",
+        productId: "collagen-complex",
+        name: "Orange Flavour",
+        sku: "COL-ORANGE",
+        type: "flavour",
+        attributes: { flavour: "Orange", quantity: 60 },
+        price: 24.99,
+        stockQuantity: 88,
+        inStock: true,
+        isDefault: true,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      {
+        id: "collagen-berry-variant",
+        productId: "collagen-complex",
+        name: "Mixed Berry Flavour",
+        sku: "COL-BERRY",
+        type: "flavour",
+        attributes: { flavour: "Mixed Berry", quantity: 60 },
+        price: 24.99,
+        stockQuantity: 67,
+        inStock: true,
+        isDefault: false,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      },
+      // Bundle variants
+      {
+        id: "immunity-bundle-variant",
+        productId: "immunity-bundle",
+        name: "Immunity Trio Bundle",
+        sku: "IMMUNITY-BUNDLE-3",
+        type: "bundle",
+        attributes: { 
+          products: ["vitamin-d3", "vitamin-c", "zinc"],
+          bundle_size: "3 products",
+          savings: "15%"
+        },
+        price: 44.99,
+        stockQuantity: 25,
+        inStock: true,
+        isDefault: true,
+        imageUrl: null,
+        createdAt: "2025-08-06T00:00:00Z"
+      }
+    ];
+
+    sampleVariants.forEach(variant => {
+      this.productVariants.set(variant.id, variant);
+    });
   }
 
   async getProducts(): Promise<Product[]> {
@@ -738,6 +966,58 @@ export class MemStorage implements IStorage {
     }
     
     return updatedProduct;
+  }
+
+  // Phase 14: Product Variant Methods
+  async getProductVariants(productId: string): Promise<ProductVariant[]> {
+    return Array.from(this.productVariants.values())
+      .filter(variant => variant.productId === productId)
+      .sort((a, b) => {
+        // Default variant first, then by name
+        if (a.isDefault && !b.isDefault) return -1;
+        if (!a.isDefault && b.isDefault) return 1;
+        return a.name.localeCompare(b.name);
+      });
+  }
+
+  async getProductVariant(id: string): Promise<ProductVariant | undefined> {
+    return this.productVariants.get(id);
+  }
+
+  async createProductVariant(variant: InsertProductVariant): Promise<ProductVariant> {
+    const id = randomUUID();
+    const newVariant: ProductVariant = {
+      ...variant,
+      id,
+      imageUrl: variant.imageUrl || null,
+      stockQuantity: variant.stockQuantity ?? 0,
+      inStock: variant.inStock ?? true,
+      isDefault: variant.isDefault ?? false,
+      createdAt: new Date().toISOString(),
+    };
+    this.productVariants.set(id, newVariant);
+    return newVariant;
+  }
+
+  async updateProductVariant(id: string, variant: Partial<ProductVariant>): Promise<ProductVariant | undefined> {
+    const existingVariant = this.productVariants.get(id);
+    if (!existingVariant) return undefined;
+
+    const updatedVariant = { ...existingVariant, ...variant };
+    this.productVariants.set(id, updatedVariant);
+    return updatedVariant;
+  }
+
+  async deleteProductVariant(id: string): Promise<boolean> {
+    return this.productVariants.delete(id);
+  }
+
+  async getProductWithVariants(id: string): Promise<(Product & { variants: ProductVariant[] }) | undefined> {
+    const product = await this.getProductById(id);
+    if (!product) return undefined;
+
+    const variants = await this.getProductVariants(id);
+    return { ...product, variants };
   }
 
   async subscribeToNewsletter(insertNewsletter: InsertNewsletter): Promise<Newsletter> {

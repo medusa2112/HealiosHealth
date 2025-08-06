@@ -36,6 +36,20 @@ export const products = pgTable("products", {
   supplyDays: integer("supply_days"),
 });
 
+// Phase 14: Product variants table for SKUs, sizes, flavours, bundles
+export const productVariants = pgTable("product_variants", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: varchar("product_id").notNull().references(() => products.id),
+  name: varchar("name", { length: 128 }).notNull(), // e.g. "60 Caps", "Vanilla", "Berry"
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  sku: varchar("sku", { length: 64 }).notNull().unique(),
+  imageUrl: text("image_url"), // Optional variant-specific image override
+  stockQuantity: integer("stock_quantity").default(0),
+  inStock: boolean("in_stock").default(true),
+  isDefault: boolean("is_default").default(false), // Mark one variant as default
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const quizResults = pgTable("quiz_results", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull(),
@@ -158,9 +172,12 @@ export const orderItems = pgTable("order_items", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   orderId: varchar("order_id").notNull().references(() => orders.id),
   productId: varchar("product_id").notNull().references(() => products.id),
+  productVariantId: varchar("product_variant_id").references(() => productVariants.id), // Phase 14: Variant support
   quantity: integer("quantity").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   productName: text("product_name").notNull(), // Snapshot at time of order
+  variantName: text("variant_name"), // Phase 14: Variant name snapshot
+  variantSku: text("variant_sku"), // Phase 14: SKU snapshot
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
@@ -180,6 +197,12 @@ export const carts = pgTable("carts", {
 
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
+});
+
+// Phase 14: Product variant schema
+export const insertProductVariantSchema = createInsertSchema(productVariants).omit({
+  id: true,
+  createdAt: true,
 });
 
 export const insertAddressSchema = createInsertSchema(addresses).omit({
@@ -289,9 +312,11 @@ export const insertUserSchema = createInsertSchema(users).omit({
 });
 
 export type InsertProduct = z.infer<typeof insertProductSchema>;
+export type InsertProductVariant = z.infer<typeof insertProductVariantSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Product = typeof products.$inferSelect;
+export type ProductVariant = typeof productVariants.$inferSelect;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 export type Newsletter = typeof newsletterSubscriptions.$inferSelect;
 export type InsertPreOrder = z.infer<typeof insertPreOrderSchema>;

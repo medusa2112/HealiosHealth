@@ -324,4 +324,141 @@ router.get("/reorder-analytics", async (req, res) => {
   }
 });
 
+// Phase 14: Product Variant Management
+router.get('/products/:id/variants', async (req, res) => {
+  try {
+    const variants = await storage.getProductVariants(req.params.id);
+    res.json(variants);
+  } catch (error) {
+    console.error('Failed to fetch product variants:', error);
+    res.status(500).json({ message: 'Failed to fetch product variants' });
+  }
+});
+
+router.post('/products/:id/variants', async (req, res) => {
+  try {
+    const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
+    const productId = req.params.id;
+    
+    // Validate required fields
+    if (!name || !type) {
+      return res.status(400).json({ message: 'Missing required fields: name, type' });
+    }
+    
+    const variantData = {
+      productId,
+      name,
+      sku: sku || `${productId}-${name.toLowerCase().replace(/\s+/g, '-')}`,
+      type,
+      attributes: attributes || {},
+      price: price || 0,
+      imageUrl: imageUrl || null,
+      stockQuantity: stockQuantity || 0,
+      inStock: inStock ?? true,
+      isDefault: isDefault ?? false
+    };
+    
+    const variant = await storage.createProductVariant(variantData);
+    
+    // Log the action
+    await AdminLogger.logAction({
+      adminId: req.user?.id || 'system',
+      adminEmail: req.user?.email || 'system@healios.com',
+      action: 'CREATE_PRODUCT_VARIANT',
+      resourceType: 'PRODUCT_VARIANT',
+      resourceId: variant.id,
+      details: {
+        productId,
+        variantName: name,
+        variantType: type,
+        sku: variant.sku
+      }
+    });
+    
+    res.status(201).json(variant);
+  } catch (error) {
+    console.error('Failed to create product variant:', error);
+    res.status(500).json({ message: 'Failed to create product variant' });
+  }
+});
+
+router.put('/product-variants/:id', async (req, res) => {
+  try {
+    const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
+    const variantId = req.params.id;
+    
+    const existingVariant = await storage.getProductVariant(variantId);
+    if (!existingVariant) {
+      return res.status(404).json({ message: 'Product variant not found' });
+    }
+    
+    const updateData = {
+      name: name || existingVariant.name,
+      sku: sku || existingVariant.sku,
+      type: type || existingVariant.type,
+      attributes: attributes !== undefined ? attributes : existingVariant.attributes,
+      price: price !== undefined ? price : existingVariant.price,
+      imageUrl: imageUrl !== undefined ? imageUrl : existingVariant.imageUrl,
+      stockQuantity: stockQuantity !== undefined ? stockQuantity : existingVariant.stockQuantity,
+      inStock: inStock !== undefined ? inStock : existingVariant.inStock,
+      isDefault: isDefault !== undefined ? isDefault : existingVariant.isDefault
+    };
+    
+    const variant = await storage.updateProductVariant(variantId, updateData);
+    
+    // Log the action
+    await AdminLogger.logAction({
+      adminId: req.user?.id || 'system',
+      adminEmail: req.user?.email || 'system@healios.com',
+      action: 'UPDATE_PRODUCT_VARIANT',
+      resourceType: 'PRODUCT_VARIANT',
+      resourceId: variantId,
+      details: {
+        productId: existingVariant.productId,
+        changes: updateData
+      }
+    });
+    
+    res.json(variant);
+  } catch (error) {
+    console.error('Failed to update product variant:', error);
+    res.status(500).json({ message: 'Failed to update product variant' });
+  }
+});
+
+router.delete('/product-variants/:id', async (req, res) => {
+  try {
+    const variantId = req.params.id;
+    
+    const existingVariant = await storage.getProductVariant(variantId);
+    if (!existingVariant) {
+      return res.status(404).json({ message: 'Product variant not found' });
+    }
+    
+    const deleted = await storage.deleteProductVariant(variantId);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Product variant not found' });
+    }
+    
+    // Log the action
+    await AdminLogger.logAction({
+      adminId: req.user?.id || 'system',
+      adminEmail: req.user?.email || 'system@healios.com',
+      action: 'DELETE_PRODUCT_VARIANT',
+      resourceType: 'PRODUCT_VARIANT',
+      resourceId: variantId,
+      details: {
+        productId: existingVariant.productId,
+        variantName: existingVariant.name,
+        variantSku: existingVariant.sku
+      }
+    });
+    
+    res.json({ message: 'Product variant deleted successfully' });
+  } catch (error) {
+    console.error('Failed to delete product variant:', error);
+    res.status(500).json({ message: 'Failed to delete product variant' });
+  }
+});
+
 export default router;

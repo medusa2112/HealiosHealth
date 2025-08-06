@@ -137,6 +137,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Phase 14: Product Variants endpoints
+  app.get("/api/products/:id/variants", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const variants = await storage.getProductVariants(id);
+      res.json(variants);
+    } catch (error) {
+      console.error('Error fetching product variants:', error);
+      res.status(500).json({ message: "Failed to fetch product variants" });
+    }
+  });
+
+  app.get("/api/product-variants/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const variant = await storage.getProductVariant(id);
+      if (!variant) {
+        return res.status(404).json({ message: "Product variant not found" });
+      }
+      res.json(variant);
+    } catch (error) {
+      console.error('Error fetching product variant:', error);
+      res.status(500).json({ message: "Failed to fetch product variant" });
+    }
+  });
+
+  app.get("/api/products/:id/with-variants", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const productWithVariants = await storage.getProductWithVariants(id);
+      if (!productWithVariants) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(productWithVariants);
+    } catch (error) {
+      console.error('Error fetching product with variants:', error);
+      res.status(500).json({ message: "Failed to fetch product with variants" });
+    }
+  });
+
   // Newsletter subscription
   app.post("/api/newsletter/subscribe", async (req, res) => {
     try {

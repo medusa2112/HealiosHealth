@@ -48,6 +48,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - Environmental initiative page (`/planet`) detailing sustainability efforts.
 - AI-powered chatbot "Juliet" for customer support and product inquiries.
 - Professional text formatting across all site sections (chat, product descriptions, articles).
+- **Phase 14 Complete**: Product Variant Support with comprehensive SKU management for size, flavour, strength, and bundle variations.
 
 ### System Design Choices
 - **Monorepo Structure**: Clear separation of client, server, and shared code for maintainability.
