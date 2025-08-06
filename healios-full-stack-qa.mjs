@@ -6,11 +6,15 @@
  * Comprehensive security and functionality audit for the Healios e-commerce system
  * Based on the Final QA Prompt for Phases 1-21
  * 
- * Run with: node healios-full-stack-qa.js
+ * Run with: node healios-full-stack-qa.mjs
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Color codes for console output
 const colors = {
@@ -512,16 +516,4 @@ function main() {
 }
 
 // Run the audit
-if (require.main === module) {
-  main();
-}
-
-module.exports = {
-  auditAuthSecurity,
-  auditFrontendRoutes,
-  auditBackendAPI,
-  auditEmailAI,
-  auditTestData,
-  auditFinalVerification,
-  auditPhase21Specific
-};
+main();
