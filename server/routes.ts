@@ -33,6 +33,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
   
+  // Register admin cart analytics routes
+  const adminCartsRoutes = await import('./routes/admin/carts');
+  app.use('/api/admin/carts', adminCartsRoutes.default);
+  
   // Email system (development only)
   if (process.env.NODE_ENV === 'development') {
     app.use('/api/email', emailTestRoutes);

@@ -118,6 +118,7 @@ export class MemStorage implements IStorage {
     this.orderItems = new Map();
     this.carts = new Map();
     this.seedData();
+    this.seedAbandonedCarts();
   }
 
   private seedData() {
@@ -1237,6 +1238,78 @@ export class MemStorage implements IStorage {
       };
       this.orders.set(order.id, updatedOrder);
     }
+  }
+
+  // Seed abandoned carts for Phase 11 testing
+  private seedAbandonedCarts() {
+    const now = new Date();
+    const sampleCarts = [
+      {
+        id: "cart_abandoned_1h",
+        userId: null,
+        sessionToken: "sess_guest_1h_ago",
+        items: JSON.stringify([
+          { productId: "vitamin-d3", name: "Vitamin D3 4000 IU Gummies", price: 379, quantity: 2 },
+          { productId: "magnesium", name: "Magnesium Complex", price: 329, quantity: 1 }
+        ]),
+        totalAmount: "1087.00",
+        currency: "ZAR",
+        createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
+        lastUpdated: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
+        convertedToOrder: false,
+        stripeSessionId: null,
+      },
+      {
+        id: "cart_abandoned_6h",
+        userId: "user_registered_123",
+        sessionToken: "sess_user_6h_ago",
+        items: JSON.stringify([
+          { productId: "ashwagandha", name: "KSM-66® Ashwagandha Gummies", price: 419, quantity: 1 },
+          { productId: "probiotics", name: "Probiotic Complex — 10 Billion CFU", price: 449, quantity: 1 }
+        ]),
+        totalAmount: "868.00",
+        currency: "ZAR",
+        createdAt: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString(),
+        lastUpdated: new Date(now.getTime() - 6 * 60 * 60 * 1000).toISOString(),
+        convertedToOrder: false,
+        stripeSessionId: null,
+      },
+      {
+        id: "cart_abandoned_24h",
+        userId: null,
+        sessionToken: "sess_guest_24h_ago",
+        items: JSON.stringify([
+          { productId: "collagen-complex", name: "Collagen + C + Zinc + Selenium", price: 379, quantity: 3 }
+        ]),
+        totalAmount: "1137.00",
+        currency: "ZAR",
+        createdAt: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
+        lastUpdated: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
+        convertedToOrder: false,
+        stripeSessionId: null,
+      },
+      {
+        id: "cart_abandoned_72h",
+        userId: "user_registered_456",
+        sessionToken: "sess_user_72h_ago",
+        items: JSON.stringify([
+          { productId: "apple-cider-vinegar", name: "Apple Cider Vinegar + Ginger Gummies", price: 299, quantity: 2 },
+          { productId: "childrens-multivitamin", name: "Kids Multivitamin & Mineral Gummies", price: 749, quantity: 1 }
+        ]),
+        totalAmount: "1347.00",
+        currency: "ZAR",
+        createdAt: new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString(),
+        lastUpdated: new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString(),
+        convertedToOrder: false,
+        stripeSessionId: null,
+      }
+    ];
+
+    sampleCarts.forEach(cart => {
+      this.carts.set(cart.id, cart as Cart);
+    });
+    
+    console.log("✅ Seeded", sampleCarts.length, "abandoned carts for analytics testing");
   }
 }
 

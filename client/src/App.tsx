@@ -34,6 +34,7 @@ import Login from "@/pages/login";
 import Register from "@/pages/register";
 import AdminDashboard from "@/pages/admin";
 import AdminOrders from "@/pages/admin/orders";
+import AdminCarts from "@/pages/admin/carts";
 import CustomerPortal from "@/pages/customer-portal";
 import NotFound from "@/pages/not-found";
 
@@ -71,6 +72,13 @@ function Router() {
         component={() => (
           <RequireRole role="admin">
             <AdminOrders />
+          </RequireRole>
+        )} 
+      />
+      <Route path="/admin/carts" 
+        component={() => (
+          <RequireRole role="admin">
+            <AdminCarts />
           </RequireRole>
         )} 
       />

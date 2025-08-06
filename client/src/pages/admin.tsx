@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import AdminProducts from "./admin-products";
-import AbandonedCartsPage from "./admin/abandoned-carts";
+import { Link } from "wouter";
+import { ShoppingCart, Package, Users, DollarSign } from "lucide-react";
 
 interface AdminStats {
   totalProducts: number;
@@ -307,7 +308,25 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="abandoned-carts">
-            <AbandonedCartsPage />
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-black dark:text-white">Abandoned Cart Analytics</CardTitle>
+                <CardDescription>Track and analyze abandoned shopping carts</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Access detailed abandoned cart analytics to identify recovery opportunities and track conversion rates.
+                  </p>
+                  <Link href="/admin/carts">
+                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Open Cart Analytics
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="analytics">
