@@ -122,9 +122,19 @@ export function Footer() {
               </button>
             </div>
 
-            <p className="text-sm text-gray-400">
-              © 2025 Healios Ltd
-            </p>
+            <div className="text-center md:text-right">
+              <p className="text-sm text-gray-400">
+                © 2025 The Healios. All rights reserved.
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Registered in South Africa and the United Kingdom (Company No. 16183276)
+              </p>
+              <div className="text-xs text-gray-500 mt-1">
+                <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+                <span className="mx-2">|</span>
+                <Link href="#" className="hover:text-white transition-colors">Terms of Use</Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -68,11 +68,49 @@ export default function Contact() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-start space-x-3">
-                  <Phone className="h-5 w-5 text-brand-yellow mt-1" />
-                  <div>
-                    <p className="font-medium text-dark-text">Phone</p>
-                    <p className="text-gray-600">+44 20 7946 0958</p>
+                {/* South Africa Office */}
+                <div>
+                  <h4 className="font-medium text-dark-text mb-3">🇿🇦 South Africa Office</h4>
+                  <div className="space-y-3 pl-6">
+                    <div className="flex items-start space-x-3">
+                      <MapPin className="h-4 w-4 text-brand-yellow mt-1" />
+                      <div>
+                        <p className="text-sm text-gray-600">
+                          The Healios Health (Pty) Ltd<br />
+                          6A 2nd Street, Linden<br />
+                          Johannesburg, Gauteng, South Africa
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Phone className="h-4 w-4 text-brand-yellow mt-1" />
+                      <div>
+                        <p className="text-sm text-gray-600">+27 82 691 4852</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* UK Office */}
+                <div>
+                  <h4 className="font-medium text-dark-text mb-3">🇬🇧 United Kingdom Office</h4>
+                  <div className="space-y-3 pl-6">
+                    <div className="flex items-start space-x-3">
+                      <MapPin className="h-4 w-4 text-brand-yellow mt-1" />
+                      <div>
+                        <p className="text-sm text-gray-600">
+                          The Healios Health Ltd<br />
+                          69 High Street, Southgate<br />
+                          London N14 6LD, England
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Phone className="h-4 w-4 text-brand-yellow mt-1" />
+                      <div>
+                        <p className="text-sm text-gray-600">+44 7947 730436</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -80,18 +118,7 @@ export default function Contact() {
                   <Mail className="h-5 w-5 text-brand-yellow mt-1" />
                   <div>
                     <p className="font-medium text-dark-text">Email</p>
-                    <p className="text-gray-600">support@healios.health</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <MapPin className="h-5 w-5 text-brand-yellow mt-1" />
-                  <div>
-                    <p className="font-medium text-dark-text">Address</p>
-                    <p className="text-gray-600">
-                      Healios Health<br />
-                      London, United Kingdom
-                    </p>
+                    <p className="text-gray-600">marketing@thehealios.com</p>
                   </div>
                 </div>
 
@@ -233,10 +260,10 @@ export default function Contact() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="brand-yellow hover:bg-brand-yellow-dark text-dark-text">
-              Call Now: 1-800-WILD-NUT
+              🇿🇦 Call SA: +27 82 691 4852
             </Button>
             <Button variant="outline">
-              Live Chat Support
+              🇬🇧 Call UK: +44 7947 730436
             </Button>
           </div>
         </div>
