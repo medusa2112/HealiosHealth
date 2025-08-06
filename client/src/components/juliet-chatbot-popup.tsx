@@ -143,50 +143,50 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
       {/* Backdrop for expanded mode */}
       {isExpanded && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="fixed inset-0 bg-black bg-opacity-10 z-40 backdrop-blur-sm"
           onClick={handleMinimize}
         />
       )}
 
-      <div className={`fixed transition-all duration-300 z-50 ${
+      <div className={`fixed transition-all duration-500 ease-out z-50 ${
         isExpanded 
-          ? 'bottom-4 left-4 w-96 h-[32rem]' 
-          : 'bottom-6 left-6 w-80 h-auto'
+          ? 'bottom-6 left-6 w-96 h-[36rem] shadow-2xl' 
+          : 'bottom-6 left-6 w-80 h-auto shadow-xl'
       }`}>
         
         {/* Minimized State */}
         {!isExpanded && (
-          <div className="bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-healios-purple to-healios-cyan p-4 text-white">
+          <div className="bg-white border-2 border-black overflow-hidden transition-all duration-300 hover:shadow-2xl">
+            <div className="bg-black p-5 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-10 h-10 bg-white bg-opacity-10 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm">Juliet</h4>
-                    <p className="text-xs opacity-90">Wellness Assistant</p>
+                    <h4 className="font-bold text-base tracking-wide">JULIET</h4>
+                    <p className="text-xs opacity-80 font-medium">Wellness Assistant</p>
                   </div>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleClose}
-                  className="text-white hover:bg-white hover:bg-opacity-20 h-6 w-6 p-0"
+                  className="text-white hover:bg-white hover:bg-opacity-20 h-8 w-8 p-0 transition-all duration-200"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
             </div>
             
-            <div className="p-4">
-              <p className="text-sm text-gray-600 mb-3">
-                Hi! I'm Juliet 👋 I can help you find the perfect supplements for your health goals.
+            <div className="p-6">
+              <p className="text-sm text-gray-700 mb-4 leading-relaxed font-medium">
+                Hi! I'm Juliet. I can help you find the perfect supplements for your health goals.
               </p>
               <Button 
                 onClick={handleExpand}
-                className="w-full bg-healios-purple hover:bg-healios-purple/90 text-white"
-                size="sm"
+                className="w-full bg-black hover:bg-gray-800 text-white font-semibold py-3 transition-all duration-200 border-0"
+                size="default"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Start Chat
@@ -197,42 +197,45 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
 
         {/* Expanded State */}
         {isExpanded && (
-          <div className="bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col h-full">
+          <div className="bg-white border-2 border-black flex flex-col h-full transition-all duration-300">
             {/* Header */}
-            <div className="bg-gradient-to-r from-healios-purple to-healios-cyan p-4 text-white rounded-t-lg">
+            <div className="bg-black p-5 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-10 h-10 bg-white bg-opacity-10 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Juliet</h4>
-                    <p className="text-xs opacity-90">Online • Wellness Assistant</p>
+                    <h4 className="font-bold text-base tracking-wide">JULIET</h4>
+                    <p className="text-xs opacity-80 font-medium flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      Online • Wellness Assistant
+                    </p>
                   </div>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-2">
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleMinimize}
-                    className="text-white hover:bg-white hover:bg-opacity-20 h-6 w-6 p-0"
+                    className="text-white hover:bg-white hover:bg-opacity-20 h-8 w-8 p-0 transition-all duration-200"
                   >
-                    <Minimize2 className="h-3 w-3" />
+                    <Minimize2 className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleClose}
-                    className="text-white hover:bg-white hover:bg-opacity-20 h-6 w-6 p-0"
+                    className="text-white hover:bg-white hover:bg-opacity-20 h-8 w-8 p-0 transition-all duration-200"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
+            <ScrollArea className="flex-1 p-5 bg-gray-50">
               <div className="space-y-4">
                 {messages.map((message) => (
                   <div
@@ -240,10 +243,10 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
                     className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
+                      className={`max-w-[85%] px-4 py-3 text-sm font-medium leading-relaxed transition-all duration-200 ${
                         message.isUser
-                          ? 'bg-healios-purple text-white'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-black text-white border-black border'
+                          : 'bg-white text-gray-800 border border-gray-200 shadow-sm'
                       }`}
                     >
                       {message.content}
@@ -252,8 +255,8 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 text-gray-800 rounded-lg px-3 py-2 text-sm flex items-center gap-2">
-                      <Loader2 className="h-3 w-3 animate-spin" />
+                    <div className="bg-white text-gray-800 border border-gray-200 shadow-sm px-4 py-3 text-sm flex items-center gap-3 font-medium">
+                      <Loader2 className="h-4 w-4 animate-spin" />
                       Juliet is typing...
                     </div>
                   </div>
@@ -264,8 +267,8 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
 
             {/* Quick Suggestions */}
             {messages.length === 1 && !isLoading && (
-              <div className="px-4 pb-2">
-                <div className="text-xs text-gray-500 mb-2">Quick questions:</div>
+              <div className="px-5 py-3 bg-gray-50 border-t border-gray-200">
+                <div className="text-xs text-gray-500 mb-3 font-semibold uppercase tracking-wide">Quick Questions:</div>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "What's in stock?",
@@ -275,7 +278,7 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
                     <button
                       key={suggestion}
                       onClick={() => setInputValue(suggestion)}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded transition-colors"
+                      className="text-xs bg-white hover:bg-black hover:text-white text-gray-700 px-3 py-2 border border-gray-200 transition-all duration-200 font-medium"
                     >
                       {suggestion}
                     </button>
@@ -285,8 +288,8 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
             )}
 
             {/* Input */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex gap-2">
+            <div className="p-5 border-t border-gray-200 bg-white">
+              <div className="flex gap-3">
                 <Input
                   ref={inputRef}
                   type="text"
@@ -295,13 +298,13 @@ export function JulietChatbotPopup({ onClose }: JulietChatbotPopupProps) {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   disabled={isLoading}
-                  className="flex-1 text-sm"
+                  className="flex-1 text-sm font-medium border-2 border-gray-200 focus:border-black rounded-none px-4 py-3 transition-all duration-200"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
-                  size="sm"
-                  className="bg-healios-purple hover:bg-healios-purple/90"
+                  size="default"
+                  className="bg-black hover:bg-gray-800 px-4 py-3 transition-all duration-200 border-0 rounded-none"
                 >
                   <Send className="h-4 w-4" />
                 </Button>
