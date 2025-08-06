@@ -90,86 +90,92 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     `,
     abandoned_cart_1h: (data) => `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Still thinking it over?</h1>
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">We're here when you're ready</h1>
         <p>Hi ${data.userName},</p>
-        <p>You've left some amazing products in your cart. We thought you might want to complete your wellness journey with us.</p>
+        <p>We noticed you were exploring some of our wellness products earlier. There's absolutely no rush – we just wanted to let you know we've saved everything in your cart for whenever you're ready to continue.</p>
+        
+        <div style="background-color: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #6c757d;">
+          <p style="margin: 0; color: #495057;">Take your time to make the right choice for your wellness journey. We're here to support you, not pressure you.</p>
+        </div>
         
         <div style="text-align: center; margin: 30px 0;">
           <a href="${data.resumeCheckoutUrl}" 
-             style="background-color: #000; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
-            Resume Checkout
+             style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Continue When Ready
           </a>
         </div>
-        <p>Questions? Just reply to this email and we'll be happy to help!</p>
-        <p>The Healios Team</p>
+        <p style="font-size: 14px; color: #6c757d;">Have questions about any products? Just reply to this email – we'd love to help you find exactly what you're looking for.</p>
+        <p>Warmly,<br>The Healios Team</p>
       </div>
     `,
     abandoned_cart_24h: (data) => `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Your wellness journey is waiting!</h1>
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">A gentle reminder about your wellness selections</h1>
         <p>Hi ${data.userName},</p>
-        <p>We noticed you haven't completed your order yet. Don't miss out on these premium supplements!</p>
+        <p>We hope you've had time to consider the wellness products you were exploring yesterday. We understand that choosing the right supplements is an important decision.</p>
         
-        <div style="background-color: #e8f5e8; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #28a745;">
-          <h3 style="color: #28a745; margin-top: 0;">🎉 Special Offer Just For You!</h3>
-          <p><strong>Use code: ${data.discountCode}</strong> for <strong>${data.discountAmount} OFF</strong> your order</p>
-          <p style="font-size: 14px; color: #666;">This offer expires in 24 hours</p>
+        <p style="color: #6c757d; font-style: italic;">Why we reach out gently: We believe wellness is a personal journey that shouldn't be rushed. We're simply here to remind you of the products you showed interest in, in case you'd like to continue exploring them.</p>
+        
+        <div style="background-color: #e8f4fd; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #4dabf7;">
+          <h3 style="color: #1864ab; margin-top: 0; font-size: 16px;">As a thank you for considering us</h3>
+          <p style="margin-bottom: 0;">If you do decide to proceed, use <strong>${data.discountCode}</strong> for <strong>${data.discountAmount} off</strong> your order as our way of saying thank you for taking the time to explore our products.</p>
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
           <a href="${data.resumeCheckoutUrl}" 
-             style="background-color: #28a745; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
-            Complete Your Order & Save ${data.discountAmount}
+             style="background-color: #4dabf7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Review Your Selections
           </a>
         </div>
-        <p>This exclusive offer won't last long. Complete your purchase now and start your wellness transformation!</p>
-        <p>The Healios Team</p>
+        <p style="font-size: 14px; color: #6c757d;">Remember, there's no pressure at all. We'll keep your selections safe for a few more days, and if you decide not to proceed, that's perfectly okay too.</p>
+        <p>With care,<br>The Healios Team</p>
       </div>
     `,
     reorder_reminder: (data) => `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Running low on ${data.productName}?</h1>
+        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">A thoughtful reminder about your ${data.productName}</h1>
         <p>Hi ${data.userName},</p>
-        <p>It's been ${data.orderAge} days since your last order of <strong>${data.productName}</strong>.</p>
+        <p>We hope your wellness journey with <strong>${data.productName}</strong> has been going well! It's been ${data.orderAge} days since your last order, and we wanted to gently remind you that you might be running low soon.</p>
         
-        <div style="background-color: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ffc107;">
-          <p><strong>Reorder Reminder:</strong></p>
-          <p>Based on typical usage, you might be running low in about <strong>${data.daysRemaining} days</strong>.</p>
-          <p>Don't let your wellness routine be interrupted!</p>
+        <p style="color: #6c757d; font-style: italic;">Why we send these gentle reminders: We don't want your wellness routine to be interrupted unexpectedly. This is simply a helpful nudge based on typical usage patterns – not a sales push.</p>
+        
+        <div style="background-color: #fff8e1; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ffb74d;">
+          <p style="margin-top: 0;"><strong>Gentle timing reminder:</strong></p>
+          <p style="margin-bottom: 0;">Based on typical usage, you might want to consider reordering in about <strong>${data.daysRemaining} days</strong>. Of course, you know your routine best, so please adjust this timing as needed.</p>
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
           <a href="${data.reorderUrl}" 
-             style="background-color: #000; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
-            Reorder ${data.productName}
+             style="background-color: #ffb74d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Reorder When Ready
           </a>
         </div>
-        <p><small>Original order #${data.originalOrderId} placed on ${data.originalOrderDate}</small></p>
-        <p>The Healios Team</p>
+        <p style="font-size: 12px; color: #999;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
+        <p>Supporting your wellness journey,<br>The Healios Team</p>
       </div>
     `,
     reorder_final: (data) => `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">Last chance to reorder your supplements</h1>
+        <h1 style="color: #6c757d; border-bottom: 2px solid #6c757d; padding-bottom: 10px;">A final gentle reminder about your ${data.productName}</h1>
         <p>Hi ${data.userName},</p>
-        <p>${data.isRunningLow ? 
-          `You should be running low on <strong>${data.productName}</strong> by now.` :
-          `You'll likely run out of <strong>${data.productName}</strong> very soon.`
-        }</p>
+        <p>We hope this message finds you well. It's been <strong>${data.orderAge} days</strong> since your last <strong>${data.productName}</strong> order, and you might be running low by now.</p>
         
-        <div style="background-color: #f8d7da; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #dc3545;">
-          <p><strong>Don't let your routine be disrupted!</strong></p>
-          <p>It's been <strong>${data.orderAge} days</strong> since your last order. Reorder now to maintain your wellness journey.</p>
+        <p style="color: #6c757d; font-style: italic;">Why this is our final reminder: We believe in respecting your choices. This will be our last gentle nudge about reordering – we trust you to manage your wellness routine in the way that works best for you.</p>
+        
+        <div style="background-color: #f1f3f4; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #9e9e9e;">
+          <p style="margin-top: 0;"><strong>If you're still using ${data.productName}:</strong></p>
+          <p style="margin-bottom: 0;">You might want to consider reordering soon to avoid any gap in your routine. If your needs have changed or you're taking a break, that's perfectly fine too.</p>
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
           <a href="${data.reorderUrl}" 
-             style="background-color: #dc3545; color: white; padding: 15px 30px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
-            Reorder ${data.productName} Now
+             style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+            Reorder If Needed
           </a>
         </div>
-        <p><small>Original order #${data.originalOrderId} placed on ${data.originalOrderDate}</small></p>
-        <p>The Healios Team</p>
+        <p style="font-size: 12px; color: #999;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
+        <p style="font-size: 14px; color: #6c757d;">Thank you for being part of our wellness community. Whether you reorder or not, we appreciate the trust you've placed in us.</p>
+        <p>With gratitude,<br>The Healios Team</p>
       </div>
     `
   };
