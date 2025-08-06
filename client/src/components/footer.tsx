@@ -124,7 +124,7 @@ export function Footer() {
                 © 2025 The Healios. All rights reserved.
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Registered in South Africa and the United Kingdom (Company No. 16183276)
+                RSA: 2024/676815/07 | UK: 16183276
               </p>
               <div className="text-xs text-gray-500 mt-1">
                 <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
