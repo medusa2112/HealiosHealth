@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -114,6 +114,18 @@ export interface IStorage {
   deleteDiscountCode(id: string): Promise<boolean>;
   validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }>;
   incrementDiscountCodeUsage(id: string): Promise<void>;
+  
+  // Phase 16: Product Bundles with Children's Product Exclusion
+  getProductBundles(): Promise<ProductBundle[]>;
+  getProductBundleById(id: string): Promise<ProductBundle | undefined>;
+  createProductBundle(bundle: InsertProductBundle): Promise<ProductBundle>;
+  updateProductBundle(id: string, updates: Partial<ProductBundle>): Promise<ProductBundle | undefined>;
+  deleteProductBundle(id: string): Promise<boolean>;
+  getBundleItems(bundleId: string): Promise<BundleItem[]>;
+  createBundleItem(item: InsertBundleItem): Promise<BundleItem>;
+  deleteBundleItem(id: string): Promise<boolean>;
+  getBundleWithItems(id: string): Promise<(ProductBundle & { items: (BundleItem & { variant: ProductVariant })[] }) | undefined>;
+  getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -134,6 +146,8 @@ export class MemStorage implements IStorage {
   private adminLogs: Map<string, AdminLog>;
   private reorderLogs: Map<string, ReorderLog>;
   private discountCodes: Map<string, DiscountCode>; // Phase 15
+  private productBundles: Map<string, ProductBundle>; // Phase 16
+  private bundleItems: Map<string, BundleItem>; // Phase 16
 
   constructor() {
     this.products = new Map();
@@ -153,12 +167,15 @@ export class MemStorage implements IStorage {
     this.adminLogs = new Map();
     this.reorderLogs = new Map();
     this.discountCodes = new Map(); // Phase 15
+    this.productBundles = new Map(); // Phase 16
+    this.bundleItems = new Map(); // Phase 16
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
     this.seedAdminLogs();
     this.seedReorderLogs();
     this.seedDiscountCodes(); // Phase 15
+    this.seedBundles(); // Phase 16
   }
 
   private seedData() {
@@ -184,6 +201,7 @@ export class MemStorage implements IStorage {
         bottleCount: 60,
         dailyDosage: 2,
         supplyDays: 30,
+        tags: ["digestive", "gut-health", "adult"],
       },
       {
         id: "vitamin-d3",
@@ -205,6 +223,7 @@ export class MemStorage implements IStorage {
         bottleCount: 60,
         dailyDosage: 1,
         supplyDays: 60,
+        tags: ["vitamins", "immunity", "adult"],
       },
       {
         id: "ashwagandha",
@@ -226,6 +245,7 @@ export class MemStorage implements IStorage {
         bottleCount: 60,
         dailyDosage: 1,
         supplyDays: 60,
+        tags: ["adaptogens", "stress", "adult"],
       },
       {
         id: "probiotics",
@@ -247,6 +267,7 @@ export class MemStorage implements IStorage {
         bottleCount: 60,
         dailyDosage: 1,
         supplyDays: 60,
+        tags: ["probiotics", "gut-health", "adult"],
       },
       {
         id: "magnesium",
@@ -415,6 +436,7 @@ export class MemStorage implements IStorage {
         bottleCount: 60,
         dailyDosage: 2,
         supplyDays: 30,
+        tags: ["nootropics", "brain-health", "adult"],
       },
       {
         id: "collagen-powder",
@@ -436,6 +458,7 @@ export class MemStorage implements IStorage {
         bottleCount: 30,
         dailyDosage: 1,
         supplyDays: 30,
+        tags: ["beauty", "collagen", "adult"],
       },
       {
         id: "bio-cultures-vitamin-plus",
@@ -457,6 +480,7 @@ export class MemStorage implements IStorage {
         bottleCount: 150,
         dailyDosage: 2,
         supplyDays: 75,
+        tags: ["probiotics", "vitamins", "adult-kids-safe"],
       },
       {
         id: "magnesium-bisglycinate-b6",
@@ -478,6 +502,7 @@ export class MemStorage implements IStorage {
         bottleCount: 120,
         dailyDosage: 3,
         supplyDays: 40,
+        tags: ["magnesium", "energy", "adult"],
       },
       {
         id: "healios-oversized-tee",
@@ -499,6 +524,29 @@ export class MemStorage implements IStorage {
         bottleCount: null,
         dailyDosage: null,
         supplyDays: null,
+        tags: ["apparel"],
+      },
+      {
+        id: "childrens-multivitamin",
+        name: "Multivitamin & Mineral for Children (3+ Years)",
+        description: "Complete daily nutrient support for growing bodies. Our children's multivitamin contains 11 essential vitamins and minerals in delicious berry-flavoured gummies. Perfect for children aged 3+ who need extra nutritional support for healthy growth and development.",
+        price: "299.00",
+        originalPrice: null,
+        imageUrl: "/assets/Multivitamin for Kids_1754395222288.png",
+        categories: ["Children", "Multivitamins", "Gummies"],
+        rating: "4.9",
+        reviewCount: 45,
+        inStock: true,
+        stockQuantity: 25,
+        featured: true,
+        sizes: null,
+        colors: null,
+        gender: null,
+        type: 'supplement',
+        bottleCount: 60,
+        dailyDosage: 2,
+        supplyDays: 30,
+        tags: ["children", "multivitamin", "kids-safe", "under-16"],
       },
 
     ];
@@ -1810,6 +1858,66 @@ export class MemStorage implements IStorage {
     console.log("✅ Seeded", sampleReorders.length, "reorder logs for Phase 13 analytics testing");
   }
 
+  // Phase 16: Seed bundles for testing
+  private seedBundles() {
+    const sampleBundles: InsertBundle[] = [
+      {
+        id: "wellness-starter-pack",
+        name: "Wellness Starter Pack",
+        description: "Perfect for beginning your health journey. This bundle combines essential supplements for digestive health, immunity, and energy support. Excludes children's products.",
+        price: "799.00",
+        originalPrice: "1127.00",
+        type: "percentage",
+        discountValue: "20",
+        isActive: true,
+        maxQuantity: 50,
+        expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+        imageUrl: "/assets/bundle-wellness-starter.png"
+      },
+      {
+        id: "energy-focus-bundle",
+        name: "Energy & Focus Bundle",
+        description: "Boost your daily energy and mental clarity with this powerful combination of B-vitamins, magnesium, and nootropic mushrooms. For adults only.",
+        price: "899.00",
+        originalPrice: "1248.00",
+        type: "fixed",
+        discountValue: "349.00",
+        isActive: true,
+        maxQuantity: 30,
+        expiresAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+        imageUrl: "/assets/bundle-energy-focus.png"
+      }
+    ];
+
+    const bundleProducts = [
+      // Wellness Starter Pack products
+      { bundleId: "wellness-starter-pack", variantId: "apple-cider-vinegar-strawberry-default", quantity: 1 },
+      { bundleId: "wellness-starter-pack", variantId: "vitamin-d3-lemon-default", quantity: 1 },
+      { bundleId: "wellness-starter-pack", variantId: "probiotics-default-default", quantity: 1 },
+      
+      // Energy & Focus Bundle products
+      { bundleId: "energy-focus-bundle", variantId: "bio-cultures-vitamin-plus-pineapple-default", quantity: 1 },
+      { bundleId: "energy-focus-bundle", variantId: "magnesium-bisglycinate-b6-default-default", quantity: 1 },
+      { bundleId: "energy-focus-bundle", variantId: "mind-memory-mushroom-berry-default", quantity: 1 }
+    ];
+
+    sampleBundles.forEach(bundle => {
+      this.productBundles.set(bundle.id, { ...bundle, createdAt: new Date().toISOString() });
+    });
+
+    bundleProducts.forEach((item, index) => {
+      this.bundleItems.set(`bundle-item-${index + 1}`, {
+        id: `bundle-item-${index + 1}`,
+        bundleId: item.bundleId,
+        variantId: item.variantId,
+        quantity: item.quantity,
+        createdAt: new Date().toISOString()
+      });
+    });
+
+    console.log(`✅ Seeded ${sampleBundles.length} bundles with ${bundleProducts.length} products`);
+  }
+
   // Seed discount codes for Phase 15 testing
   private seedDiscountCodes() {
     const now = new Date();
@@ -2013,6 +2121,117 @@ export class MemStorage implements IStorage {
       discount.usageCount = (discount.usageCount || 0) + 1;
       this.discountCodes.set(id, discount);
     }
+  }
+
+  // Phase 16: Product Bundle Methods with Children's Product Exclusion
+  async getProductBundles(): Promise<ProductBundle[]> {
+    return Array.from(this.productBundles.values())
+      .filter(bundle => bundle.isActive)
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+
+  async getProductBundleById(id: string): Promise<ProductBundle | undefined> {
+    return this.productBundles.get(id);
+  }
+
+  async createProductBundle(insertBundle: InsertProductBundle): Promise<ProductBundle> {
+    const id = randomUUID();
+    const bundle: ProductBundle = {
+      id,
+      name: insertBundle.name,
+      description: insertBundle.description || null,
+      price: insertBundle.price,
+      originalPrice: insertBundle.originalPrice || null,
+      imageUrl: insertBundle.imageUrl || null,
+      isActive: insertBundle.isActive ?? true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.productBundles.set(id, bundle);
+    return bundle;
+  }
+
+  async updateProductBundle(id: string, updates: Partial<ProductBundle>): Promise<ProductBundle | undefined> {
+    const bundle = this.productBundles.get(id);
+    if (!bundle) return undefined;
+
+    const updatedBundle: ProductBundle = {
+      ...bundle,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.productBundles.set(id, updatedBundle);
+    return updatedBundle;
+  }
+
+  async deleteProductBundle(id: string): Promise<boolean> {
+    // Also delete all bundle items
+    const items = Array.from(this.bundleItems.values()).filter(item => item.bundleId === id);
+    items.forEach(item => this.bundleItems.delete(item.id));
+    
+    return this.productBundles.delete(id);
+  }
+
+  async getBundleItems(bundleId: string): Promise<BundleItem[]> {
+    return Array.from(this.bundleItems.values())
+      .filter(item => item.bundleId === bundleId)
+      .sort((a, b) => new Date(a.createdAt || '').getTime() - new Date(b.createdAt || '').getTime());
+  }
+
+  async createBundleItem(insertItem: InsertBundleItem): Promise<BundleItem> {
+    const id = randomUUID();
+    const item: BundleItem = {
+      id,
+      bundleId: insertItem.bundleId,
+      variantId: insertItem.variantId,
+      quantity: insertItem.quantity,
+      createdAt: new Date().toISOString(),
+    };
+    this.bundleItems.set(id, item);
+    return item;
+  }
+
+  async deleteBundleItem(id: string): Promise<boolean> {
+    return this.bundleItems.delete(id);
+  }
+
+  async getBundleWithItems(id: string): Promise<(ProductBundle & { items: (BundleItem & { variant: ProductVariant })[] }) | undefined> {
+    const bundle = this.productBundles.get(id);
+    if (!bundle) return undefined;
+
+    const items = await this.getBundleItems(id);
+    const itemsWithVariants = await Promise.all(
+      items.map(async (item) => {
+        const variant = this.productVariants.get(item.variantId);
+        return variant ? { ...item, variant } : null;
+      })
+    );
+
+    return {
+      ...bundle,
+      items: itemsWithVariants.filter(Boolean) as (BundleItem & { variant: ProductVariant })[]
+    };
+  }
+
+  // Critical method for children's product exclusion
+  async getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]> {
+    const eligibleVariants = [];
+    
+    for (const variant of this.productVariants.values()) {
+      const product = this.products.get(variant.productId);
+      if (!product) continue;
+      
+      // Check if product has any excluded tags
+      const hasExcludedTag = excludeTags.some(tag => 
+        product.tags?.includes(tag.toLowerCase())
+      );
+      
+      if (!hasExcludedTag && variant.inStock) {
+        eligibleVariants.push(variant);
+      }
+    }
+    
+    return eligibleVariants;
   }
 }
 

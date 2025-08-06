@@ -1,0 +1,130 @@
+✅ vibe_audit.js — Vibe Compliance Checker
+Save as vibe_audit.js and run via node vibe_audit.js
+
+js
+Copy
+Edit
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+// Settings
+const REQUIRED_ENV_VARS = ['DATABASE_URL', 'STRIPE_SECRET_KEY', 'RESEND_API_KEY', 'OPENAI_API_KEY', 'SUPABASE_URL'];
+const REQUIRED_PACKAGES = [
+  'next', 'react', 'tailwindcss', '@supabase/supabase-js', 'next-auth',
+  'drizzle-orm', 'prisma', 'helmet', 'express-rate-limit', '@stripe/stripe-js',
+  'resend', '@mailchimp/mailchimp_marketing', 'openai', 'adminjs'
+];
+const REQUIRED_DIRECTORIES = ['src', 'src/pages', 'src/components', 'src/app'];
+const SECURE_HEADERS = ['Content-Security-Policy', 'Strict-Transport-Security', 'X-Frame-Options'];
+
+function checkSecretsManager() {
+  console.log('🔐 Checking secrets manager usage...');
+  const envPath = path.join(process.cwd(), '.env');
+  if (fs.existsSync(envPath)) {
+    const contents = fs.readFileSync(envPath, 'utf8');
+    const hardcoded = REQUIRED_ENV_VARS.filter(key => contents.includes(key));
+    if (hardcoded.length > 0) {
+      console.warn('⚠️  Found secrets in .env file:', hardcoded);
+    } else {
+      console.log('✅ Secrets manager enforced.');
+    }
+  } else {
+    console.warn('⚠️  No .env file found. Ensure secrets are handled via Replit secrets manager.');
+  }
+}
+
+function checkRequiredPackages() {
+  console.log('\n📦 Checking required dependencies...');
+  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+  const missing = REQUIRED_PACKAGES.filter(p => !deps[p]);
+  if (missing.length > 0) {
+    console.warn('⚠️  Missing important packages:', missing);
+  } else {
+    console.log('✅ All required packages are present.');
+  }
+}
+
+function checkProjectStructure() {
+  console.log('\n🧱 Checking project structure...');
+  const missingDirs = REQUIRED_DIRECTORIES.filter(dir => !fs.existsSync(dir));
+  if (missingDirs.length > 0) {
+    console.warn('⚠️  Missing directories:', missingDirs);
+  } else {
+    console.log('✅ Core project structure is intact.');
+  }
+}
+
+function checkSecurityHeaders() {
+  console.log('\n🛡️ Checking security headers...');
+  const middlewarePath = path.join(process.cwd(), 'src', 'middleware.js');
+  if (!fs.existsSync(middlewarePath)) {
+    console.warn('⚠️  No `middleware.js` found. Security headers may be missing.');
+    return;
+  }
+
+  const content = fs.readFileSync(middlewarePath, 'utf8');
+  const missingHeaders = SECURE_HEADERS.filter(header => !content.includes(header));
+  if (missingHeaders.length > 0) {
+    console.warn('⚠️  Missing HTTP security headers in middleware:', missingHeaders);
+  } else {
+    console.log('✅ Secure HTTP headers are present.');
+  }
+}
+
+function checkHTTPSDeployment() {
+  console.log('\n🔒 Checking HTTPS enforcement...');
+  try {
+    const result = execSync('curl -I https://localhost:3000', { stdio: 'pipe' }).toString();
+    if (result.includes('Strict-Transport-Security')) {
+      console.log('✅ HTTPS and HSTS are enforced.');
+    } else {
+      console.warn('⚠️  HTTPS not enforced in local headers.');
+    }
+  } catch (err) {
+    console.warn('⚠️  Could not verify HTTPS locally. Ensure Replit auto-deploy uses HTTPS.');
+  }
+}
+
+function checkRBACImplementation() {
+  console.log('\n🧑‍⚖️ Checking for RBAC roles...');
+  const authDir = path.join(process.cwd(), 'src', 'auth');
+  if (!fs.existsSync(authDir)) {
+    console.warn('⚠️  No auth directory found.');
+    return;
+  }
+  const files = fs.readdirSync(authDir).join(' ');
+  if (files.includes('role') || files.includes('rbac')) {
+    console.log('✅ RBAC implementation detected.');
+  } else {
+    console.warn('⚠️  No RBAC-related logic found.');
+  }
+}
+
+function runAudit() {
+  console.log('🔍 Running Vibe Coding Compliance Audit...\n');
+  checkSecretsManager();
+  checkRequiredPackages();
+  checkProjectStructure();
+  checkSecurityHeaders();
+  checkHTTPSDeployment();
+  checkRBACImplementation();
+  console.log('\n✅ Audit complete.\n');
+}
+
+runAudit();
+✅ What This Script Checks
+Checkpoint	Description
+Secrets Hygiene	Ensures no API keys are hardcoded.
+Dependencies	Validates installation of all key libraries from the Vibe manual.
+Project Structure	Verifies essential folders for modular builds.
+Security Headers	Detects presence of CSP, HSTS, etc.
+HTTPS Enforcement	Checks local response for HTTPS headers.
+RBAC Roles	Looks for basic role logic in your src/auth folder.
+
+✅ Recommended Run Command (Replit)
+bash
+Copy
+Edit
+node vibe_audit.js

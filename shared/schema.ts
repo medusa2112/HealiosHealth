@@ -34,6 +34,7 @@ export const products = pgTable("products", {
   bottleCount: integer("bottle_count"),
   dailyDosage: integer("daily_dosage"),
   supplyDays: integer("supply_days"),
+  tags: text("tags").array().default([]), // For children's exclusion and other categorization
 });
 
 // Phase 14: Product variants table for SKUs, sizes, flavours, bundles
@@ -324,6 +325,39 @@ export const insertDiscountCodeSchema = createInsertSchema(discountCodes).omit({
   usageCount: true,
 });
 
+// Phase 16: Product bundles for bundling multiple variants together
+export const productBundles = pgTable("product_bundles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: varchar("name", { length: 128 }).notNull(), // e.g. "Immunity Boost Bundle"
+  description: text("description"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  originalPrice: decimal("original_price", { precision: 10, scale: 2 }), // Total individual prices
+  imageUrl: text("image_url"),
+  isActive: boolean("is_active").default(true),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Junction table for bundle items
+export const bundleItems = pgTable("bundle_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  bundleId: varchar("bundle_id").notNull().references(() => productBundles.id, { onDelete: "cascade" }),
+  variantId: varchar("variant_id").notNull().references(() => productVariants.id),
+  quantity: integer("quantity").notNull().default(1),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const insertProductBundleSchema = createInsertSchema(productBundles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertBundleItemSchema = createInsertSchema(bundleItems).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -354,3 +388,7 @@ export type InsertRestockNotification = z.infer<typeof insertRestockNotification
 export type RestockNotification = typeof restockNotifications.$inferSelect;
 export type InsertDiscountCode = z.infer<typeof insertDiscountCodeSchema>;
 export type DiscountCode = typeof discountCodes.$inferSelect;
+export type InsertProductBundle = z.infer<typeof insertProductBundleSchema>;
+export type ProductBundle = typeof productBundles.$inferSelect;
+export type InsertBundleItem = z.infer<typeof insertBundleItemSchema>;
+export type BundleItem = typeof bundleItems.$inferSelect;

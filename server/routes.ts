@@ -37,6 +37,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
   
+  // Register bundle routes (Phase 16)
+  const bundleRoutes = await import('./routes/bundles');
+  app.use('/api/bundles', bundleRoutes.default);
+  
+  const adminBundleRoutes = await import('./routes/adminBundles');
+  app.use('/api/admin/bundles', requireAuth, protectRoute(['admin']), adminBundleRoutes.default);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);
