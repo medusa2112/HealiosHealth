@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import healiosLogo from "@assets/healios-health27.png";
-import { LearningPopup } from './learning-popup';
 
 export function Header() {
   const [location, setLocation] = useLocation();
@@ -550,8 +549,7 @@ export function Header() {
         </div>
       </div>
       
-      {/* Learning Popup */}
-      <LearningPopup />
+
 
 
     </header>

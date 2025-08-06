@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "totalAssets": 37,
+    "usedAssets": 42,
+    "unusedAssets": -5,
+    "potentialSavingsMB": "0.1"
+  },
+  "usedAssets": [
+    "Collagen",
+    "HaloGlow_1754394641788.png",
+    "Healios",
+    "TheFourths_1753620348483.mov",
+    "bundle-image.png",
+    "generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png",
+    "generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png",
+    "generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png",
+    "generated_images/Modern_pharmaceutical_research_facility_b73898e1.png",
+    "healios-health10.webp",
+    "healios-health11.png",
+    "healios-health121.jpg",
+    "healios-health122.png",
+    "healios-health123.png",
+    "healios-health124.png",
+    "healios-health125.png",
+    "healios-health126.png",
+    "healios-health127.png",
+    "healios-health128.png",
+    "healios-health129.jpg",
+    "healios-health130.jpg",
+    "healios-health132.jpeg",
+    "healios-health14.png",
+    "healios-health2.png",
+    "healios-health20.png",
+    "healios-health26.png",
+    "healios-health27.png",
+    "healios-health3.png",
+    "healios-health31.jpg",
+    "healios-health39.png",
+    "healios-health44.png",
+    "healios-health48.jpg",
+    "healios-health49.png",
+    "healios-health51.png",
+    "healios-health53.png",
+    "healios-health74.png",
+    "healios-health75.png",
+    "healios-health8.png",
+    "home-header-1080p-v3_1753639749380.webm",
+    "title-video-compressed.mp4",
+    "title-video.mp4",
+    "title-video.webm"
+  ],
+  "unusedAssets": {
+    "images": [
+      "generated_images/Marine_collagen_powder_editorial_lifestyle_9206g445.svg",
+      "healios-health5.webp"
+    ],
+    "videos": [],
+    "text": [],
+    "other": []
+  }
+}
