@@ -1,0 +1,174 @@
+Prompt 3 of X: Stripe Webhooks + Order Creation (Safe Checkout Logic)
+Objective: Implement a secure, idempotent Stripe webhook system for tracking completed checkouts, creating orders, handling refunds/disputes, and protecting against replay or forged events.
+
+✅ PHASE 1: SYSTEM SCAN (MANDATORY BEFORE BUILD)
+Scan the codebase for:
+
+❌ Duplicate webhook handlers:
+
+Check for existing /webhook, /stripe/webhook, or similar routes.
+
+Abort if Stripe events are handled in multiple locations.
+
+❌ Missing or unsafe webhook secret:
+
+Look for hardcoded STRIPE_SECRET, STRIPE_WEBHOOK_SECRET
+
+Validate .env contains STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET only
+
+❌ Direct fetch() of Stripe API in frontend
+
+These must be proxy-called via backend, not exposed
+
+❌ Order table conflicts:
+
+Confirm orders table includes:
+
+id, user_id, stripe_session_id, status, refund_status, dispute_status, total_amount, created_at
+
+🧠 STRIPE EVENT FLOW (LOGIC MAP)
+Stripe Event	Action
+checkout.session.completed	✅ Create order in DB if not exists
+charge.refunded	✅ Update order → refund_status = refunded
+charge.dispute.created	⚠️ Update order → dispute_status = disputed
+payment_intent.failed	❌ Log failed charge
+
+🛠️ PHASE 2: WEBHOOK + ORDER CREATION
+1. Install Stripe SDK
+bash
+Copy
+Edit
+npm install stripe
+2. Add lib/stripe.ts
+ts
+Copy
+Edit
+import Stripe from "stripe";
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16", // use latest compatible version
+});
+3. Add /routes/stripe.ts (Webhook Handler)
+ts
+Copy
+Edit
+import express from "express";
+import { stripe } from "../lib/stripe";
+import { db } from "../db";
+import { orders } from "../db/schema";
+import { eq } from "drizzle-orm";
+
+const router = express.Router();
+
+// Use raw body parser
+router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig!,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (err) {
+    console.error("Webhook signature failed:", err);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  const data = event.data.object;
+
+  switch (event.type) {
+    case "checkout.session.completed":
+      const session = data as Stripe.Checkout.Session;
+      const existing = await db.select().from(orders).where(eq(orders.stripe_session_id, session.id));
+      if (existing.length === 0) {
+        await db.insert(orders).values({
+          user_id: session.metadata?.user_id ?? null,
+          stripe_session_id: session.id,
+          status: "paid",
+          refund_status: "none",
+          dispute_status: "none",
+          total_amount: parseFloat(session.amount_total!.toString()) / 100,
+        });
+      }
+      break;
+
+    case "charge.refunded":
+      const refundedCharge = data as Stripe.Charge;
+      await db.update(orders).set({ refund_status: "refunded" }).where(eq(orders.stripe_session_id, refundedCharge.payment_intent as string));
+      break;
+
+    case "charge.dispute.created":
+      const disputedCharge = data as Stripe.Charge;
+      await db.update(orders).set({ dispute_status: "disputed" }).where(eq(orders.stripe_session_id, disputedCharge.payment_intent as string));
+      break;
+
+    case "payment_intent.payment_failed":
+      console.warn("Payment failed:", data);
+      break;
+
+    default:
+      console.log(`Unhandled event: ${event.type}`);
+  }
+
+  res.status(200).json({ received: true });
+});
+
+export default router;
+4. Wire It Up in server.ts:
+ts
+Copy
+Edit
+import stripeWebhook from "./routes/stripe";
+app.use("/stripe", stripeWebhook);
+Add this early before other body parsers if you use express.json(), to avoid breaking express.raw() for Stripe.
+
+5. Update .env:
+env
+Copy
+Edit
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+You’ll get the webhook secret from Stripe Dashboard → Developers → Webhooks → Create Endpoint
+
+6. Stripe Dashboard: Webhook Config
+Webhook URL:
+
+arduino
+Copy
+Edit
+https://yourapp.repl.co/stripe/webhook
+Events to subscribe to:
+
+checkout.session.completed
+
+charge.refunded
+
+charge.dispute.created
+
+payment_intent.payment_failed
+
+🔁 PHASE 3: POST-BUILD STABILITY VALIDATION
+✅ Create a test purchase (real or test key)
+
+✅ Confirm order is added to orders table
+
+✅ Trigger refund in Stripe Dashboard → DB updates
+
+✅ Trigger dispute in test mode (use pm_card_dispute test card)
+
+✅ Verify webhook signature validation works — no unverified events accepted
+
+✅ Confirm route /stripe/webhook is not publicly documented
+
+📦 OUTPUT FROM THIS PROMPT
+Stripe webhook handling route /stripe/webhook
+
+Drizzle-linked order creation on successful checkout
+
+Refund/dispute flag updates
+
+Stable, secured webhook integration with idempotency
+
+Verified .env usage, no secret leaks

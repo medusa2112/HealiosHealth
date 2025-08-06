@@ -8,6 +8,9 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
+import authRoutes from "./routes/auth";
+import adminRoutes from "./routes/admin";
+import portalRoutes from "./routes/portal";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -17,6 +20,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
+  
+  // Register auth routes
+  app.use('/auth', authRoutes);
+  app.use('/admin', adminRoutes);
+  app.use('/portal', portalRoutes);
 
   // Get all products
   app.get("/api/products", async (req, res) => {

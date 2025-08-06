@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -51,6 +51,12 @@ export interface IStorage {
   createRestockNotification(notification: InsertRestockNotification): Promise<RestockNotification>;
   getRestockNotifications(): Promise<RestockNotification[]>;
   getRestockNotificationsByProduct(productId: string): Promise<RestockNotification[]>;
+  
+  // Users (Auth)
+  getUserById(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -63,6 +69,7 @@ export class MemStorage implements IStorage {
   private stockAlerts: Map<string, StockAlert>;
   private quizResults: Map<string, QuizResult>;
   private restockNotifications: Map<string, RestockNotification>;
+  private users: Map<string, User>;
 
   constructor() {
     this.products = new Map();
@@ -74,6 +81,7 @@ export class MemStorage implements IStorage {
     this.stockAlerts = new Map();
     this.quizResults = new Map();
     this.restockNotifications = new Map();
+    this.users = new Map();
     this.seedData();
   }
 
@@ -617,6 +625,28 @@ export class MemStorage implements IStorage {
     return product;
   }
 
+  async updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
+    const product = this.products.get(id);
+    if (!product) return undefined;
+
+    const updatedProduct = { ...product, ...updates };
+    this.products.set(id, updatedProduct);
+    return updatedProduct;
+  }
+
+  async updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
+    const product = this.products.get(id);
+    if (!product) return undefined;
+
+    const updatedProduct = { ...product, ...updates };
+    this.products.set(id, updatedProduct);
+    return updatedProduct;
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+    return this.products.delete(id);
+  }
+
   async updateProductStock(productId: string, quantity: number): Promise<Product | undefined> {
     const product = this.products.get(productId);
     if (!product) return undefined;
@@ -904,6 +934,43 @@ export class MemStorage implements IStorage {
     return Array.from(this.restockNotifications.values()).filter(
       notification => notification.productId === productId && !notification.notified
     );
+  }
+
+  // Users (Auth) Implementation
+  async getUserById(id: string): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.email === email);
+  }
+
+  async createUser(userData: InsertUser): Promise<User> {
+    const id = randomUUID();
+    const user: User = {
+      id,
+      email: userData.email,
+      role: userData.role || "guest",
+      firstName: userData.firstName ?? null,
+      lastName: userData.lastName ?? null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.users.set(id, user);
+    return user;
+  }
+
+  async updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+    
+    const updatedUser: User = {
+      ...user,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 }
 

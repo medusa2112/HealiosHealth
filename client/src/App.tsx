@@ -26,6 +26,9 @@ import Article from "@/pages/article";
 
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
+import Login from "@/pages/login";
+import AdminDashboard from "@/pages/admin";
+import CustomerPortal from "@/pages/portal";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -48,6 +51,9 @@ function Router() {
 
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
+      <Route path="/login" component={Login} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/portal" component={CustomerPortal} />
       <Route component={NotFound} />
     </Switch>
   );

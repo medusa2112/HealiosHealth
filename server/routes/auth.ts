@@ -1,0 +1,115 @@
+import express from 'express';
+import { storage } from '../storage';
+import { determineUserRole } from '../lib/auth';
+
+const router = express.Router();
+
+// Mock Replit Auth login - in production this would redirect to Replit OAuth
+router.get('/login', (req, res) => {
+  // In a real implementation, this would redirect to Replit OAuth
+  // For now, we'll provide a simple form for testing
+  res.json({ 
+    message: "In production, this would redirect to Replit OAuth",
+    loginUrl: "/auth/mock-login" 
+  });
+});
+
+// Mock login endpoint for development/testing
+router.post('/mock-login', async (req, res) => {
+  try {
+    const { email, firstName, lastName } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    // Check if user exists
+    let user = await storage.getUserByEmail(email);
+    
+    if (!user) {
+      // Create new user
+      const role = determineUserRole(email);
+      user = await storage.createUser({
+        email,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        role
+      });
+    }
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = user.id;
+
+    // Redirect based on role
+    const redirectUrl = user.role === 'admin' ? '/admin' : 
+                       user.role === 'customer' ? '/portal' : '/';
+    
+    res.json({ 
+      success: true, 
+      user: { id: user.id, email: user.email, role: user.role },
+      redirectUrl 
+    });
+  } catch (error) {
+    console.error('Auth error:', error);
+    res.status(500).json({ message: 'Authentication failed' });
+  }
+});
+
+// Real callback endpoint (would handle Replit OAuth callback in production)
+router.get('/callback', async (req, res) => {
+  try {
+    // In production, this would:
+    // 1. Verify the authorization code with Replit
+    // 2. Get user info from Replit API
+    // 3. Create or update user in database
+    // 4. Set session
+    // 5. Redirect based on role
+    
+    res.redirect('/auth/login');
+  } catch (error) {
+    console.error('Callback error:', error);
+    res.redirect('/auth/login');
+  }
+});
+
+router.post('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid'); // Default session cookie name
+      res.json({ success: true, message: 'Logged out successfully' });
+    });
+  } else {
+    res.json({ success: true, message: 'No active session' });
+  }
+});
+
+// Get current user info
+router.get('/me', async (req, res) => {
+  try {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    const user = await storage.getUserById(req.session.userId);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid session' });
+    }
+
+    res.json({ 
+      id: user.id, 
+      email: user.email, 
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName
+    });
+  } catch (error) {
+    console.error('Auth me error:', error);
+    res.status(500).json({ message: 'Failed to get user info' });
+  }
+});
+
+export default router;

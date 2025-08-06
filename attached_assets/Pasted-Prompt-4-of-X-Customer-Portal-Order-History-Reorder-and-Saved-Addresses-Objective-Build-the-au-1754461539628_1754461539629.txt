@@ -1,0 +1,199 @@
+Prompt 4 of X: Customer Portal — Order History, Reorder, and Saved Addresses
+Objective: Build the authenticated customer portal at /portal with secure order tracking, reorder functionality, and saved shipping address management — all scoped to the logged-in user.
+
+✅ PHASE 1: SYSTEM SCAN (PRIOR TO BUILD)
+Run a safe injection scan across the codebase for:
+
+❌ Hardcoded or global order logic
+
+Any orders[] arrays or mocks in frontend
+
+Static order data on thank-you or history pages
+
+❌ Missing or broken user_id joins:
+
+Orders not linked to user_id
+
+Address table not scoped to user
+
+❌ Inline role logic:
+
+Any if user.email.includes('customer') or similar — should be via role field only
+
+✅ Confirm:
+
+orders table includes user_id
+
+order_items table links to order_id
+
+addresses table exists or will be created now
+
+🧱 PHASE 2: DB + BACKEND ROUTES
+1. 🔧 Add addresses table to /db/schema.ts
+ts
+Copy
+Edit
+export const addresses = pgTable("addresses", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  user_id: uuid("user_id").notNull().references(() => users.id),
+  type: varchar("type", { length: 10 }).notNull(), // 'shipping' | 'billing'
+  line1: text("line1").notNull(),
+  line2: text("line2"),
+  city: varchar("city", { length: 100 }),
+  zip: varchar("zip", { length: 20 }),
+  country: varchar("country", { length: 100 }),
+  created_at: timestamp("created_at").defaultNow(),
+});
+Run:
+
+bash
+Copy
+Edit
+npx drizzle-kit push
+2. 🧠 Add /routes/portal.ts — all customer-only
+ts
+Copy
+Edit
+import express from "express";
+import { protectRoute } from "../lib/auth";
+import { db } from "../db";
+import { orders, addresses, order_items, products } from "../db/schema";
+import { eq, and } from "drizzle-orm";
+
+const router = express.Router();
+
+router.use(protectRoute(["customer"]));
+
+router.get("/orders", async (req, res) => {
+  const userId = req.user.id;
+  const result = await db.select().from(orders).where(eq(orders.user_id, userId));
+  res.json(result);
+});
+
+router.get("/orders/:id", async (req, res) => {
+  const userId = req.user.id;
+  const orderId = req.params.id;
+  const order = await db.select().from(orders).where(and(eq(orders.id, orderId), eq(orders.user_id, userId)));
+  const items = await db.select().from(order_items).where(eq(order_items.order_id, orderId));
+  res.json({ order: order[0], items });
+});
+
+router.post("/orders/:id/reorder", async (req, res) => {
+  const userId = req.user.id;
+  const orderId = req.params.id;
+  const oldItems = await db.select().from(order_items).where(eq(order_items.order_id, orderId));
+
+  // Logic to recreate checkout session or cart
+  const newSession = await createCheckoutSession(oldItems, userId); // You must define this elsewhere
+  res.json({ url: newSession.url });
+});
+
+router.get("/addresses", async (req, res) => {
+  const result = await db.select().from(addresses).where(eq(addresses.user_id, req.user.id));
+  res.json(result);
+});
+
+router.post("/addresses", async (req, res) => {
+  const { type, line1, line2, city, zip, country } = req.body;
+  const result = await db.insert(addresses).values({
+    user_id: req.user.id, type, line1, line2, city, zip, country
+  }).returning();
+  res.status(201).json(result[0]);
+});
+
+router.put("/addresses/:id", async (req, res) => {
+  const { id } = req.params;
+  const updated = await db.update(addresses).set(req.body).where(eq(addresses.id, id));
+  res.json(updated);
+});
+
+router.delete("/addresses/:id", async (req, res) => {
+  const { id } = req.params;
+  await db.delete(addresses).where(eq(addresses.id, id));
+  res.status(204).end();
+});
+
+export default router;
+Wire it up:
+
+ts
+Copy
+Edit
+import portalRoutes from "./routes/portal";
+app.use("/portal", portalRoutes);
+💻 PHASE 3: FRONTEND UI — /pages/portal/index.tsx
+Create a simple tabbed dashboard:
+
+tsx
+Copy
+Edit
+import { useEffect, useState } from "react";
+
+export default function Portal() {
+  const [orders, setOrders] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    fetch("/portal/orders").then(res => res.json()).then(setOrders);
+    fetch("/portal/addresses").then(res => res.json()).then(setAddresses);
+  }, []);
+
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-xl font-semibold">My Account</h1>
+
+      <section>
+        <h2 className="text-lg font-bold mb-2">Order History</h2>
+        <ul className="space-y-2">
+          {orders.map((order: any) => (
+            <li key={order.id} className="border p-4 rounded">
+              <div>Status: {order.status}</div>
+              <div>Total: ${order.total_amount}</div>
+              <div>Stripe ID: {order.stripe_session_id}</div>
+              <a className="text-blue-600" href={`/portal/orders/${order.id}`}>View</a>
+              <button
+                className="btn btn-secondary ml-4"
+                onClick={() => fetch(`/portal/orders/${order.id}/reorder`, { method: "POST" }).then(res => res.json()).then(data => window.location.href = data.url)}
+              >
+                Reorder
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-bold mt-6 mb-2">Saved Addresses</h2>
+        <ul className="space-y-2">
+          {addresses.map((addr: any) => (
+            <li key={addr.id} className="border p-4 rounded">
+              <div>{addr.line1}, {addr.city}, {addr.country}</div>
+            </li>
+          ))}
+        </ul>
+        {/* Add/Edit form skipped for brevity, but hook into /portal/addresses */}
+      </section>
+    </div>
+  );
+}
+🔁 PHASE 4: STABILITY + LOGIC VALIDATION
+✅ Confirm all routes behind protectRoute(["customer"])
+
+✅ Create 2+ customer accounts → test address isolation
+
+✅ Reorder logic properly fetches items and redirects to new Stripe session
+
+✅ User only sees their own orders/addresses
+
+✅ Error on accessing another user’s data (401 or 403)
+
+✅ Orders update with correct user_id on webhook creation
+
+📦 OUTPUT FROM THIS PROMPT
+Working customer dashboard at /portal
+
+Linked orders, reorder function, and saved address CRUD
+
+All requests protected and scoped to user.id
+
+Clean separation of backend + frontend logic

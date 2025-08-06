@@ -1,0 +1,156 @@
+Prompt 6 of X: Admin Order Management Panel — Stripe Status, Refunds, Disputes
+Objective: Extend the admin dashboard to view all Stripe-linked orders, filter by status, view disputes/refunds, and trigger manual refunds directly from the dashboard (via Stripe API).
+
+✅ PHASE 1: SYSTEM SCAN (PRE-INJECTION STRIPE CHECKS)
+Check system for:
+
+❌ Duplicate Stripe API calls
+
+Ensure no redundant stripe.refund(...) logic exists outside webhook or test handlers
+
+❌ Unscoped order fetch logic
+
+Avoid exposing all orders without admin check
+
+Confirm all /admin/orders* routes are wrapped in protectRoute(["admin"])
+
+✅ orders table must include:
+
+stripe_session_id, status, refund_status, dispute_status, total_amount
+
+✅ Stripe API keys are only pulled from process.env.STRIPE_SECRET_KEY
+
+🧠 PHASE 2: BACKEND ROUTES FOR ADMIN ORDERS
+Add to /routes/admin/orders.ts:
+
+ts
+Copy
+Edit
+import express from "express";
+import { db } from "../../db";
+import { orders } from "../../db/schema";
+import { stripe } from "../../lib/stripe";
+import { protectRoute } from "../../lib/auth";
+import { eq } from "drizzle-orm";
+
+const router = express.Router();
+router.use(protectRoute(["admin"]));
+
+router.get("/", async (req, res) => {
+  const result = await db.select().from(orders);
+  res.json(result);
+});
+
+router.post("/:id/refund", async (req, res) => {
+  const orderId = req.params.id;
+  const result = await db.select().from(orders).where(eq(orders.id, orderId));
+
+  if (!result.length) return res.status(404).json({ message: "Order not found" });
+  const order = result[0];
+
+  try {
+    const refund = await stripe.refunds.create({
+      payment_intent: order.stripe_session_id,
+    });
+
+    await db.update(orders).set({ refund_status: "refunded" }).where(eq(orders.id, orderId));
+
+    res.status(200).json({ success: true, refund });
+  } catch (e) {
+    console.error("Refund failed:", e);
+    res.status(500).json({ error: "Refund failed" });
+  }
+});
+
+export default router;
+Mount in server.ts:
+
+ts
+Copy
+Edit
+import adminOrders from "./routes/admin/orders";
+app.use("/admin/orders", adminOrders);
+💻 PHASE 3: ADMIN UI — /pages/admin/orders.tsx
+Create a dashboard UI with status filters + refund buttons:
+
+tsx
+Copy
+Edit
+import { useEffect, useState } from "react";
+
+export default function AdminOrders() {
+  const [orders, setOrders] = useState([]);
+  const [filter, setFilter] = useState("all");
+
+  useEffect(() => {
+    fetch("/admin/orders").then(res => res.json()).then(setOrders);
+  }, []);
+
+  const filtered = orders.filter((o: any) => {
+    if (filter === "all") return true;
+    return o.status === filter || o.refund_status === filter || o.dispute_status === filter;
+  });
+
+  const handleRefund = async (id: string) => {
+    const confirm = window.confirm("Refund this order?");
+    if (!confirm) return;
+    await fetch(`/admin/orders/${id}/refund`, { method: "POST" });
+    window.location.reload();
+  };
+
+  return (
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-bold">Orders</h1>
+      <select onChange={(e) => setFilter(e.target.value)} className="input">
+        <option value="all">All</option>
+        <option value="paid">Paid</option>
+        <option value="refunded">Refunded</option>
+        <option value="disputed">Disputed</option>
+      </select>
+
+      <div className="space-y-4">
+        {filtered.map((order: any) => (
+          <div key={order.id} className="border p-4 rounded">
+            <div>Amount: ${order.total_amount}</div>
+            <div>Status: {order.status}</div>
+            <div>Refund: {order.refund_status}</div>
+            <div>Dispute: {order.dispute_status}</div>
+            <div>Stripe: {order.stripe_session_id}</div>
+            {order.refund_status !== "refunded" && (
+              <button onClick={() => handleRefund(order.id)} className="btn btn-danger mt-2">
+                Refund Order
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+🔁 PHASE 4: INTEGRITY CHECK
+✅ Trigger successful Stripe refund → confirm refund in dashboard + webhook
+
+✅ Refund buttons disabled once order is refunded
+
+✅ Order filtering works for paid, refunded, disputed
+
+✅ Access to /admin/orders is strictly admin-only
+
+✅ Error state properly handled if refund fails
+
+🧠 Optional Future Add-ons
+Feature	Reason
+Stripe receipt link	For quick order validation
+Pagination or date filter	Once order volume grows
+Dispute evidence upload	Needed if fighting Stripe disputes manually
+
+📦 OUTPUT FROM THIS PROMPT
+Admin panel to list all orders
+
+Refunds triggered via Stripe securely
+
+Filter by refund, dispute, or payment status
+
+Fully linked to webhook system
+
+No unauthenticated access to any order logic
