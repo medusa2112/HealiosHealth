@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Menu, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, ChevronDown, User, LogOut, Settings } from "lucide-react";
 import { FaInstagram, FaFacebook, FaTiktok, FaGoogle } from "react-icons/fa";
 import { SiTrustpilot } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
+import { useUser } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import healiosLogo from "@assets/healios-health27.png";
 import { LearningPopup } from './learning-popup';
 
 export function Header() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { toggleCart, getTotalItems } = useCart();
+  const { user, logout } = useUser();
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
   const totalItems = getTotalItems();
+
+  const handleLogout = async () => {
+    await logout();
+    setLocation('/');
+  };
 
   // Handle scroll to shrink header
   useEffect(() => {
@@ -175,13 +183,55 @@ export function Header() {
               </span>
             </Link>
 
-            <Link href="/portal">
-              <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
-                isScrolled ? 'text-xs' : 'text-sm'
-              }`}>
-                My Account
-              </span>
-            </Link>
+            {/* User Account Menu */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    className={`font-medium text-white hover:text-gray-300 transition-all duration-200 flex items-center gap-2 ${
+                      isScrolled ? 'text-xs' : 'text-sm'
+                    }`}
+                  >
+                    <User className="h-4 w-4" />
+                    {user.firstName || 'Account'}
+                    <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-black border-gray-700">
+                  <DropdownMenuItem className="text-white hover:bg-gray-800 hover:text-white">
+                    <Link href="/portal" className="flex items-center gap-2 w-full">
+                      <User className="h-4 w-4" />
+                      My Account
+                    </Link>
+                  </DropdownMenuItem>
+                  {user.role === 'admin' && (
+                    <DropdownMenuItem className="text-white hover:bg-gray-800 hover:text-white">
+                      <Link href="/admin" className="flex items-center gap-2 w-full">
+                        <Settings className="h-4 w-4" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator className="bg-gray-700" />
+                  <DropdownMenuItem 
+                    onClick={handleLogout}
+                    className="text-white hover:bg-gray-800 hover:text-white flex items-center gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
+                  isScrolled ? 'text-xs' : 'text-sm'
+                }`}>
+                  Sign In
+                </span>
+              </Link>
+            )}
             
 
 
@@ -288,7 +338,6 @@ export function Header() {
                       Supplement Quiz
                     </span>
                   </Link>
-
                   <Link href="/about">
                     <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
                       About
@@ -299,6 +348,51 @@ export function Header() {
                       Science
                     </span>
                   </Link>
+                  
+                  {/* Mobile User Menu */}
+                  <div className="border-t border-gray-700 pt-4 mt-4">
+                    {user ? (
+                      <>
+                        <div className="px-3 py-2 text-sm text-gray-400">
+                          Welcome, {user.firstName || 'User'}
+                        </div>
+                        <Link href="/portal">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            My Account
+                          </span>
+                        </Link>
+                        {user.role === 'admin' && (
+                          <Link href="/admin">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2">
+                              <Settings className="h-4 w-4" />
+                              Admin Dashboard
+                            </span>
+                          </Link>
+                        )}
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/login">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            Sign In
+                          </span>
+                        </Link>
+                        <Link href="/register">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            Create Account
+                          </span>
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>
