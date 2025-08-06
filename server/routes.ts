@@ -56,6 +56,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const referralRoutes = await import('./routes/referrals');
   app.use('/api/referrals', referralRoutes.default);
   
+  // Register AI assistant routes (Phase 21)
+  const aiAssistantRoutes = await import('./routes/aiAssistant');
+  app.use('/api/ai-assistant', aiAssistantRoutes.aiAssistantRoutes);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);

@@ -483,3 +483,52 @@ export type Referral = typeof referrals.$inferSelect;
 export type ReferralClaim = typeof referralClaims.$inferSelect;
 export type InsertReferral = z.infer<typeof insertReferralSchema>;
 export type InsertReferralClaim = z.infer<typeof insertReferralClaimSchema>;
+
+// Phase 21: AI Customer Service Assistant - Support Tickets
+export const supportTickets = pgTable("support_tickets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id),
+  email: text("email").notNull(), // For guest users
+  subject: text("subject").notNull(),
+  message: text("message").notNull(),
+  status: varchar("status", { length: 32 }).default("open"), // "open", "in_progress", "resolved", "closed"
+  priority: varchar("priority", { length: 32 }).default("medium"), // "low", "medium", "high", "urgent"
+  category: varchar("category", { length: 64 }).default("general"), // "order", "return", "product", "technical", "general"
+  orderId: varchar("order_id").references(() => orders.id), // Optional: link to specific order
+  assignedTo: varchar("assigned_to").references(() => users.id), // Admin user assigned
+  transcript: text("transcript"), // JSON: chat history if escalated from AI
+  aiHandled: boolean("ai_handled").default(false), // Track AI involvement
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Phase 21: AI Chat Sessions for tracking conversations
+export const chatSessions = pgTable("chat_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id),
+  sessionToken: varchar("session_token", { length: 128 }), // For anonymous users
+  messages: text("messages").notNull(), // JSON: array of message objects
+  lastActivity: text("last_activity").default(sql`CURRENT_TIMESTAMP`),
+  resolved: boolean("resolved").default(false),
+  escalated: boolean("escalated").default(false), // Escalated to human support
+  supportTicketId: varchar("support_ticket_id").references(() => supportTickets.id),
+  metadata: text("metadata"), // JSON: additional context (user agent, referrer, etc.)
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const insertSupportTicketSchema = createInsertSchema(supportTickets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertChatSessionSchema = createInsertSchema(chatSessions).omit({
+  id: true,
+  createdAt: true,
+  lastActivity: true,
+});
+
+export type SupportTicket = typeof supportTickets.$inferSelect;
+export type ChatSession = typeof chatSessions.$inferSelect;
+export type InsertSupportTicket = z.infer<typeof insertSupportTicketSchema>;
+export type InsertChatSession = z.infer<typeof insertChatSessionSchema>;

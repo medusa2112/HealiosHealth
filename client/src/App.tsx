@@ -1,4 +1,5 @@
 import { Switch, Route } from "wouter";
+import { useState } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -48,10 +49,15 @@ import { Careers } from "@/pages/careers";
 import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
 import NotFound from "@/pages/not-found";
+import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 
 function Router() {
   // Automatically scroll to top on page navigation
   useScrollToTop();
+  
+  // AI Assistant state
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
   
   return (
     <Switch>
@@ -150,6 +156,9 @@ function Router() {
 }
 
 function App() {
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
@@ -165,8 +174,19 @@ function App() {
               <Footer />
               <CartSidebar />
               <StockNotification />
-              {/* Chat functionality removed as requested */}
               <AdminTestButton />
+              
+              {/* AI Assistant */}
+              {!isAIAssistantOpen && (
+                <ChatBubble onClick={() => setIsAIAssistantOpen(true)} />
+              )}
+              
+              <AIAssistant 
+                isOpen={isAIAssistantOpen}
+                onToggle={() => setIsAIAssistantOpen(!isAIAssistantOpen)}
+                isMinimized={isAIAssistantMinimized}
+                onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
+              />
             </div>
             <Toaster />
           </CartProvider>

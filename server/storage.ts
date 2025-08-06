@@ -150,6 +150,19 @@ export interface IStorage {
   updateReferralUsageCount(id: string, count: number): Promise<any | undefined>;
   createReferralClaim(claim: { referralId: string; refereeId: string; orderId: string; orderAmount: number; refereeDiscount: number; referrerRewardAmount: number; processed: boolean; claimedAt: string; }): Promise<any>;
   getReferralClaimsByReferralId(referralId: string): Promise<any[]>;
+  
+  // Phase 21: AI Customer Service Assistant
+  createSupportTicket(ticket: { userId?: string; email: string; subject: string; message: string; status?: string; priority?: string; category?: string; orderId?: string; transcript?: string; aiHandled?: boolean; }): Promise<any>;
+  getSupportTicket(id: string): Promise<any | undefined>;
+  getSupportTicketsByUserId(userId: string): Promise<any[]>;
+  getSupportTicketsByEmail(email: string): Promise<any[]>;
+  updateSupportTicket(id: string, updates: Partial<any>): Promise<any | undefined>;
+  getAllSupportTickets(): Promise<any[]>;
+  createChatSession(session: { userId?: string; sessionToken?: string; messages: string; metadata?: string; }): Promise<any>;
+  getChatSession(id: string): Promise<any | undefined>;
+  getChatSessionByToken(token: string): Promise<any | undefined>;
+  getChatSessionsByUserId(userId: string): Promise<any[]>;
+  updateChatSession(id: string, updates: Partial<any>): Promise<any | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -176,6 +189,8 @@ export class MemStorage implements IStorage {
   private emailEvents: Map<string, any>; // Phase 19
   private referrals: Map<string, any>; // Phase 20
   private referralClaims: Map<string, any>; // Phase 20
+  private supportTickets: Map<string, any>; // Phase 21
+  private chatSessions: Map<string, any>; // Phase 21
 
   constructor() {
     this.products = new Map();
@@ -201,6 +216,8 @@ export class MemStorage implements IStorage {
     this.emailEvents = new Map(); // Phase 19
     this.referrals = new Map(); // Phase 20
     this.referralClaims = new Map(); // Phase 20
+    this.supportTickets = new Map(); // Phase 21
+    this.chatSessions = new Map(); // Phase 21
     this.seedData();
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
@@ -2476,6 +2493,101 @@ export class MemStorage implements IStorage {
 
   async getReferralClaimsByReferralId(referralId: string): Promise<any[]> {
     return Array.from(this.referralClaims.values()).filter(c => c.referralId === referralId);
+  }
+
+  // Phase 21: AI Customer Service Assistant Methods
+  async createSupportTicket(ticket: { userId?: string; email: string; subject: string; message: string; status?: string; priority?: string; category?: string; orderId?: string; transcript?: string; aiHandled?: boolean; }): Promise<any> {
+    const id = randomUUID();
+    const newTicket = {
+      id,
+      userId: ticket.userId || null,
+      email: ticket.email,
+      subject: ticket.subject,
+      message: ticket.message,
+      status: ticket.status || "open",
+      priority: ticket.priority || "medium",
+      category: ticket.category || "general",
+      orderId: ticket.orderId || null,
+      assignedTo: null,
+      transcript: ticket.transcript || null,
+      aiHandled: ticket.aiHandled || false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.supportTickets.set(id, newTicket);
+    return newTicket;
+  }
+
+  async getSupportTicket(id: string): Promise<any | undefined> {
+    return this.supportTickets.get(id);
+  }
+
+  async getSupportTicketsByUserId(userId: string): Promise<any[]> {
+    return Array.from(this.supportTickets.values()).filter(t => t.userId === userId);
+  }
+
+  async getSupportTicketsByEmail(email: string): Promise<any[]> {
+    return Array.from(this.supportTickets.values()).filter(t => t.email === email);
+  }
+
+  async updateSupportTicket(id: string, updates: Partial<any>): Promise<any | undefined> {
+    const ticket = this.supportTickets.get(id);
+    if (!ticket) return undefined;
+    
+    const updated = {
+      ...ticket,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.supportTickets.set(id, updated);
+    return updated;
+  }
+
+  async getAllSupportTickets(): Promise<any[]> {
+    return Array.from(this.supportTickets.values());
+  }
+
+  async createChatSession(session: { userId?: string; sessionToken?: string; messages: string; metadata?: string; }): Promise<any> {
+    const id = randomUUID();
+    const newSession = {
+      id,
+      userId: session.userId || null,
+      sessionToken: session.sessionToken || null,
+      messages: session.messages,
+      lastActivity: new Date().toISOString(),
+      resolved: false,
+      escalated: false,
+      supportTicketId: null,
+      metadata: session.metadata || null,
+      createdAt: new Date().toISOString(),
+    };
+    this.chatSessions.set(id, newSession);
+    return newSession;
+  }
+
+  async getChatSession(id: string): Promise<any | undefined> {
+    return this.chatSessions.get(id);
+  }
+
+  async getChatSessionByToken(token: string): Promise<any | undefined> {
+    return Array.from(this.chatSessions.values()).find(s => s.sessionToken === token);
+  }
+
+  async getChatSessionsByUserId(userId: string): Promise<any[]> {
+    return Array.from(this.chatSessions.values()).filter(s => s.userId === userId);
+  }
+
+  async updateChatSession(id: string, updates: Partial<any>): Promise<any | undefined> {
+    const session = this.chatSessions.get(id);
+    if (!session) return undefined;
+    
+    const updated = {
+      ...session,
+      ...updates,
+      lastActivity: new Date().toISOString(),
+    };
+    this.chatSessions.set(id, updated);
+    return updated;
   }
 }
 
