@@ -29,8 +29,6 @@ export function Footer() {
               <li><Link href="/about" className="hover:text-white transition-colors">About Healios</Link></li>
               <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
               <li><Link href="/journal/all" className="hover:text-white transition-colors">Healios Journal</Link></li>
-              <li><span className="text-gray-500 cursor-not-allowed">For Practitioners (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Healios Sessions Podcast (Coming Soon)</span></li>
             </ul>
           </div>
 
@@ -40,9 +38,9 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/quiz" className="hover:text-white transition-colors">Supplement Quiz</Link></li>
-              <li><span className="text-gray-500 cursor-not-allowed">FAQ (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Shipping & Returns (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Terms & Conditions (Coming Soon)</span></li>
+              <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link href="/shipping-returns" className="hover:text-white transition-colors">Shipping & Returns</Link></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
             </ul>
           </div>
 
@@ -51,11 +49,10 @@ export function Footer() {
             <h3 className="text-white font-medium mb-6">Company</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
-              <li><Link href="/planet" className="hover:text-white transition-colors">Sustainability</Link></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Careers (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Privacy Policy (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Newsletter (Coming Soon)</span></li>
-              <li><span className="text-gray-500 cursor-not-allowed">Affiliate Program (Coming Soon)</span></li>
+              <li><Link href="/planet" className="hover:text-white transition-colors">Our Ocean Impact</Link></li>
+              <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/affiliate" className="hover:text-white transition-colors">Affiliate Program</Link></li>
             </ul>
           </div>
         </div>

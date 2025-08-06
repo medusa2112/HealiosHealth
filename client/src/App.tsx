@@ -39,6 +39,12 @@ import AdminLogs from "@/pages/admin/logs";
 import ReorderAnalytics from "@/pages/admin/reorder-analytics";
 import AdminDiscountCodes from "@/pages/AdminDiscountCodes";
 import CustomerPortal from "@/pages/customer-portal";
+import { FAQ } from "@/pages/faq";
+import { ShippingReturns } from "@/pages/shipping-returns";
+import { Terms } from "@/pages/terms";
+import { Careers } from "@/pages/careers";
+import { Privacy } from "@/pages/privacy";
+import { Affiliate } from "@/pages/affiliate";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -113,6 +119,15 @@ function Router() {
           </RequireRole>
         )} 
       />
+      
+      {/* Legal and Informational Pages */}
+      <Route path="/faq" component={FAQ} />
+      <Route path="/shipping-returns" component={ShippingReturns} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/careers" component={Careers} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/affiliate" component={Affiliate} />
+      
       <Route component={NotFound} />
     </Switch>
   );
