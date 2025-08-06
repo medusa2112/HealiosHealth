@@ -11,16 +11,19 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
+import stripeRoutes from "./routes/stripe";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Stripe imports moved to dedicated service
+import { stripe } from "./lib/stripe";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
   
+  // Register Stripe webhook routes BEFORE body parsing middleware
+  // This is critical for webhook signature verification
+  app.use('/stripe', stripeRoutes);
+
   // Register auth routes
   app.use('/auth', authRoutes);
   app.use('/admin', adminRoutes);
@@ -195,7 +198,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         customer_email: orderData.customerEmail,
         metadata: {
           orderId: order.id,
-          orderData: JSON.stringify(orderData),
+          userId: orderData.userId || null,
+          customerEmail: orderData.customerEmail,
+          customerName: orderData.customerName || null,
+          customerPhone: orderData.customerPhone || null,
+          orderItems: orderData.orderItems,
+          notes: orderData.notes || null,
         },
         billing_address_collection: 'required',
         shipping_address_collection: {
@@ -214,58 +222,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webhook endpoint for Stripe payment confirmation
-  app.post("/api/stripe-webhook", express.raw({type: 'application/json'}), async (req, res) => {
-    const sig = req.headers['stripe-signature'] as string;
-    let event;
-
-    try {
-      // Verify webhook signature (add STRIPE_WEBHOOK_SECRET to env)
-      if (process.env.STRIPE_WEBHOOK_SECRET) {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-      } else {
-        event = JSON.parse(req.body.toString());
-      }
-    } catch (err: any) {
-      console.error('Webhook signature verification failed:', err.message);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    // Handle the event
-    switch (event.type) {
-      case 'checkout.session.completed':
-        const session = event.data.object;
-        const orderId = session.metadata?.orderId;
-        
-        if (orderId) {
-          try {
-            // Update order status to paid
-            await storage.updateOrderStatus(orderId, 'completed');
-            
-            // Get order details for email
-            const order = await storage.getOrderById(orderId);
-            if (order) {
-              const orderItems = JSON.parse(order.orderItems);
-              
-              // Send confirmation emails
-              try {
-                await EmailService.sendOrderConfirmation({ order, orderItems });
-              } catch (emailError) {
-                console.error('Failed to send order emails:', emailError);
-              }
-            }
-          } catch (error) {
-            console.error('Error processing completed checkout:', error);
-          }
-        }
-        break;
-        
-      default:
-        console.log(`Unhandled event type ${event.type}`);
-    }
-
-    res.json({received: true});
-  });
+  // Legacy webhook endpoint - DEPRECATED
+  // Use /stripe/webhook for secure webhook handling
 
   // Create Shopify redirect endpoint
   app.post("/api/create-shopify-checkout", async (req, res) => {

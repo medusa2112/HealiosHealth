@@ -96,6 +96,7 @@ export const articles = pgTable("articles", {
 
 export const orders = pgTable("orders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id"), // Reference to users table
   customerEmail: text("customer_email").notNull(),
   customerName: text("customer_name"),
   customerPhone: text("customer_phone"),
@@ -106,7 +107,10 @@ export const orders = pgTable("orders", {
   currency: text("currency").default("ZAR"),
   paymentStatus: text("payment_status").default("pending"), // pending, completed, failed, refunded
   orderStatus: text("order_status").default("processing"), // processing, shipped, delivered, cancelled
+  refundStatus: text("refund_status").default("none"), // none, partial, full, refunded
+  disputeStatus: text("dispute_status").default("none"), // none, disputed, resolved
   stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeSessionId: text("stripe_session_id"), // For webhook correlation
   trackingNumber: text("tracking_number"),
   notes: text("notes"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),

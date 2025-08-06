@@ -773,23 +773,27 @@ export class MemStorage implements IStorage {
   }
 
   // Order methods
-  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+  async createOrder(orderData: any): Promise<any> {
     const id = randomUUID();
-    const order: Order = {
+    const order = {
       id,
-      customerEmail: insertOrder.customerEmail,
-      customerName: insertOrder.customerName || null,
-      customerPhone: insertOrder.customerPhone || null,
-      shippingAddress: insertOrder.shippingAddress,
-      billingAddress: insertOrder.billingAddress || null,
-      orderItems: insertOrder.orderItems,
-      totalAmount: insertOrder.totalAmount,
-      currency: insertOrder.currency || null,
-      paymentStatus: insertOrder.paymentStatus || null,
-      orderStatus: insertOrder.orderStatus || null,
-      stripePaymentIntentId: insertOrder.stripePaymentIntentId || null,
-      trackingNumber: insertOrder.trackingNumber || null,
-      notes: insertOrder.notes || null,
+      userId: orderData.userId || null,
+      customerEmail: orderData.customerEmail,
+      customerName: orderData.customerName || null,
+      customerPhone: orderData.customerPhone || null,
+      shippingAddress: orderData.shippingAddress,
+      billingAddress: orderData.billingAddress || null,
+      orderItems: orderData.orderItems,
+      totalAmount: orderData.totalAmount,
+      currency: orderData.currency || 'ZAR',
+      paymentStatus: orderData.paymentStatus || 'pending',
+      orderStatus: orderData.orderStatus || 'processing',
+      refundStatus: orderData.refundStatus || 'none',
+      disputeStatus: orderData.disputeStatus || 'none',
+      stripePaymentIntentId: orderData.stripePaymentIntentId || null,
+      stripeSessionId: orderData.stripeSessionId || null,
+      trackingNumber: orderData.trackingNumber || null,
+      notes: orderData.notes || null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -824,6 +828,53 @@ export class MemStorage implements IStorage {
     
     const updatedOrder = {
       ...order,
+      paymentStatus: status,
+      updatedAt: new Date().toISOString()
+    };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+
+  async getOrderByStripeSessionId(sessionId: string): Promise<any | undefined> {
+    return Array.from(this.orders.values()).find(order => order.stripeSessionId === sessionId);
+  }
+
+  async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<any | undefined> {
+    return Array.from(this.orders.values()).find(order => order.stripePaymentIntentId === paymentIntentId);
+  }
+
+  async updateOrderRefundStatus(orderId: string, status: string): Promise<any | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+
+    const updatedOrder = { 
+      ...order, 
+      refundStatus: status,
+      updatedAt: new Date().toISOString()
+    };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+
+  async updateOrderDisputeStatus(orderId: string, status: string): Promise<any | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+
+    const updatedOrder = { 
+      ...order, 
+      disputeStatus: status,
+      updatedAt: new Date().toISOString()
+    };
+    this.orders.set(orderId, updatedOrder);
+    return updatedOrder;
+  }
+
+  async updateOrderPaymentStatus(orderId: string, status: string): Promise<any | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order) return undefined;
+
+    const updatedOrder = { 
+      ...order, 
       paymentStatus: status,
       updatedAt: new Date().toISOString()
     };
