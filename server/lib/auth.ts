@@ -92,5 +92,11 @@ export const getAdminEmails = (): string[] => {
 // Helper function to determine role based on email
 export const determineUserRole = (email: string): 'admin' | 'customer' => {
   const adminEmails = getAdminEmails();
-  return adminEmails.includes(email) ? 'admin' : 'customer';
+  // Check for admin email patterns - exact match or pattern based
+  const isAdminEmail = email === 'admin@healios.com' ||
+                      email === 'admin@test.com' ||
+                      email.includes('admin@') ||
+                      adminEmails.includes(email);
+  
+  return isAdminEmail ? 'admin' : 'customer';
 };

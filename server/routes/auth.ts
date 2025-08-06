@@ -141,7 +141,11 @@ router.post('/login', async (req, res) => {
 
 // Logout endpoint
 router.post('/logout', (req, res) => {
-  req.session = null;
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) console.error('Session destroy error:', err);
+    });
+  }
   res.json({ message: "Logged out successfully" });
 });
 
@@ -206,7 +210,7 @@ router.get('/callback', async (req, res) => {
 
 router.post('/logout', (req, res) => {
   if (req.session) {
-    req.session.destroy((err) => {
+    req.session.destroy((err: any) => {
       if (err) {
         return res.status(500).json({ message: 'Logout failed' });
       }
@@ -219,7 +223,7 @@ router.post('/logout', (req, res) => {
 });
 
 // Get current user info
-router.get('/me', async (req, res) => {
+router.get('/user', async (req, res) => {
   try {
     if (!req.session?.userId) {
       return res.json(null); // Return null for unauthenticated users

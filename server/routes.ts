@@ -32,7 +32,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/stripe', stripeRoutes);
 
   // Register auth routes
-  app.use('/auth', authRoutes);
+  app.use('/api/auth', authRoutes);
   app.use('/admin', adminRoutes);
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
