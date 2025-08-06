@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser } from "@shared/schema";
+import { type Product, type InsertProduct, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -56,6 +56,20 @@ export interface IStorage {
   getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  // Addresses (Customer Portal)
+  getAddressesByUserId(userId: string): Promise<Address[]>;
+  createAddress(address: InsertAddress): Promise<Address>;
+  updateAddress(addressId: string, address: Partial<InsertAddress>): Promise<Address | undefined>;
+  deleteAddress(addressId: string): Promise<void>;
+  
+  // Order Items (Customer Portal)
+  getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]>;
+  createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
+  
+  // Enhanced Order methods (Customer Portal)
+  getOrdersByUserId(userId: string): Promise<Order[]>;
+  getOrderByIdAndUserId(orderId: string, userId: string): Promise<Order | undefined>;
   updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined>;
 }
 
@@ -70,6 +84,8 @@ export class MemStorage implements IStorage {
   private quizResults: Map<string, QuizResult>;
   private restockNotifications: Map<string, RestockNotification>;
   private users: Map<string, User>;
+  private addresses: Map<string, Address>;
+  private orderItems: Map<string, OrderItem>;
 
   constructor() {
     this.products = new Map();
@@ -82,6 +98,8 @@ export class MemStorage implements IStorage {
     this.quizResults = new Map();
     this.restockNotifications = new Map();
     this.users = new Map();
+    this.addresses = new Map();
+    this.orderItems = new Map();
     this.seedData();
   }
 
@@ -1022,6 +1040,74 @@ export class MemStorage implements IStorage {
     };
     this.users.set(id, updatedUser);
     return updatedUser;
+  }
+
+  // Customer Portal - Address Management
+  async getAddressesByUserId(userId: string): Promise<Address[]> {
+    return Array.from(this.addresses.values()).filter(address => address.userId === userId);
+  }
+
+  async createAddress(insertAddress: InsertAddress): Promise<Address> {
+    const id = randomUUID();
+    const address: Address = {
+      id,
+      userId: insertAddress.userId,
+      type: insertAddress.type,
+      line1: insertAddress.line1,
+      line2: insertAddress.line2 || null,
+      city: insertAddress.city || null,
+      zip: insertAddress.zip || null,
+      country: insertAddress.country || null,
+      createdAt: new Date().toISOString(),
+    };
+    this.addresses.set(id, address);
+    return address;
+  }
+
+  async updateAddress(addressId: string, updates: Partial<InsertAddress>): Promise<Address | undefined> {
+    const address = this.addresses.get(addressId);
+    if (!address) return undefined;
+
+    const updatedAddress = { ...address, ...updates };
+    this.addresses.set(addressId, updatedAddress);
+    return updatedAddress;
+  }
+
+  async deleteAddress(addressId: string): Promise<void> {
+    this.addresses.delete(addressId);
+  }
+
+  // Customer Portal - Order Items Management
+  async getOrderItemsByOrderId(orderId: string): Promise<OrderItem[]> {
+    return Array.from(this.orderItems.values()).filter(item => item.orderId === orderId);
+  }
+
+  async createOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
+    const id = randomUUID();
+    const orderItem: OrderItem = {
+      id,
+      orderId: insertOrderItem.orderId,
+      productId: insertOrderItem.productId,
+      quantity: insertOrderItem.quantity,
+      price: insertOrderItem.price,
+      productName: insertOrderItem.productName,
+      createdAt: new Date().toISOString(),
+    };
+    this.orderItems.set(id, orderItem);
+    return orderItem;
+  }
+
+  // Customer Portal - Enhanced Order Methods
+  async getOrdersByUserId(userId: string): Promise<Order[]> {
+    return Array.from(this.orders.values())
+      .filter(order => order.userId === userId)
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+
+  async getOrderByIdAndUserId(orderId: string, userId: string): Promise<Order | undefined> {
+    const order = this.orders.get(orderId);
+    if (!order || order.userId !== userId) return undefined;
+    return order;
   }
 }
 

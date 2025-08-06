@@ -174,6 +174,14 @@ export function Header() {
                 Supplement Quiz
               </span>
             </Link>
+
+            <Link href="/portal">
+              <span className={`font-medium text-white hover:text-gray-300 transition-all duration-200 ${
+                isScrolled ? 'text-xs' : 'text-sm'
+              }`}>
+                My Account
+              </span>
+            </Link>
             
 
 

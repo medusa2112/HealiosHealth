@@ -1,0 +1,131 @@
+Prompt 11 of X: Admin Abandoned Cart Analytics Dashboard
+Objective: Build an internal dashboard for admins to view and track abandoned carts, identify users who didn’t complete checkout, and segment them by cart value, last activity, and conversion status.
+
+✅ PHASE 1: SYSTEM SCAN (DATA INTEGRITY CHECK)
+Before building the dashboard:
+
+✅ Confirm that:
+
+carts table includes converted_to_order (Prompt 7)
+
+last_updated is populated correctly
+
+Each cart includes session_token, user_id, and items[] (with price, qty, product_id)
+
+❌ If items are stored with insufficient detail (e.g. just IDs), this dashboard cannot calculate cart value. Add:
+
+ts
+Copy
+Edit
+product_id, price, quantity
+✅ Confirm admin routes are locked with protectRoute(["admin"]) — no public exposure
+
+📊 PHASE 2: BACKEND ROUTE FOR ABANDONED CARTS
+Create /routes/admin/carts.ts:
+
+ts
+Copy
+Edit
+import express from "express";
+import { db } from "../../db";
+import { carts } from "../../db/schema";
+import { and, eq, lt } from "drizzle-orm";
+import { protectRoute } from "../../lib/auth";
+
+const router = express.Router();
+router.use(protectRoute(["admin"]));
+
+router.get("/", async (req, res) => {
+  const oneHourAgo = new Date(Date.now() - 1000 * 60 * 60); // 1 hour
+
+  const result = await db.select().from(carts).where(
+    and(
+      eq(carts.converted_to_order, false),
+      lt(carts.last_updated, oneHourAgo)
+    )
+  );
+
+  res.json(result);
+});
+
+export default router;
+Mount in server.ts:
+
+ts
+Copy
+Edit
+import adminCarts from "./routes/admin/carts";
+app.use("/admin/carts", adminCarts);
+📈 PHASE 3: ADMIN UI — /pages/admin/carts.tsx
+Basic UI with time, value, and segmentation:
+
+tsx
+Copy
+Edit
+import { useEffect, useState } from "react";
+
+export default function AdminCarts() {
+  const [carts, setCarts] = useState([]);
+
+  useEffect(() => {
+    fetch("/admin/carts").then(res => res.json()).then(setCarts);
+  }, []);
+
+  const getTotalValue = (items: any[]) => {
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
+  };
+
+  return (
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-bold">Abandoned Carts (Past Hour)</h1>
+      <p className="text-sm text-gray-500">Showing carts not converted after 1 hour.</p>
+
+      {carts.length === 0 && <p>No abandoned carts yet 🎉</p>}
+
+      {carts.map((cart: any) => (
+        <div key={cart.id} className="border p-4 rounded">
+          <div>🧾 Cart ID: {cart.id}</div>
+          <div>📧 User ID: {cart.user_id ?? "Guest"}</div>
+          <div>🛒 Total: ${getTotalValue(cart.items)}</div>
+          <div>⏰ Last Updated: {new Date(cart.last_updated).toLocaleString()}</div>
+          <div>🧃 Items: {cart.items.map(i => `${i.quantity}x ${i.name}`).join(", ")}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+Optional: Add filters for “Guest only”, “> $100”, or “Last 24h”
+
+🔁 PHASE 4: OPTIONAL RE-TARGETING EXPORT
+Add a Download CSV button to export:
+
+tsx
+Copy
+Edit
+const downloadCSV = () => {
+  const headers = "Cart ID,User ID,Total Value,Last Updated\n";
+  const rows = carts.map(c => `${c.id},${c.user_id ?? "Guest"},${getTotalValue(c.items)},${c.last_updated}`).join("\n");
+  const blob = new Blob([headers + rows], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "abandoned-carts.csv";
+  link.click();
+};
+🧪 PHASE 5: STABILITY + ACCURACY TESTS
+Test Case	Expected
+Cart idle for > 1 hour, not converted	✅ Shows in dashboard
+Cart converted → converted_to_order = true	❌ Does NOT show
+Admin access required	✅ Yes
+Guest carts tracked	✅ Yes
+CSV contains accurate value + timestamps	✅ Confirmed
+
+📦 OUTPUT FROM THIS PROMPT
+/admin/carts route for retrieving abandoned carts
+
+Admin UI with cart ID, user, value, time, and item list
+
+Optional CSV export for marketing re-targeting
+
+All logic scoped to converted_to_order === false && last_updated < now - 1h
+

@@ -1,0 +1,139 @@
+ Prompt 9 of X: Admin Product Image Upload (Cloudinary CDN Integration)
+Objective: Allow admin users to upload product images securely, store them in Cloudinary, validate file types and sizes, and avoid local storage vulnerabilities.
+
+✅ PHASE 1: SECURITY SCAN (IMAGE RISK CHECK)
+Scan for:
+
+❌ multer or similar configured to upload to ./public, ./uploads, or any local path
+
+If found, disable it immediately
+
+❌ image_url fields storing relative paths like /uploads/foo.png
+
+Should use full Cloudinary URLs
+
+✅ .env includes:
+
+CLOUDINARY_CLOUD_NAME
+
+CLOUDINARY_API_KEY
+
+CLOUDINARY_API_SECRET
+
+🧱 PHASE 2: INSTALL CLOUDINARY SDK + LIB
+1. Install
+bash
+Copy
+Edit
+npm install cloudinary multer multer-storage-cloudinary
+2. Create /lib/cloudinary.ts
+ts
+Copy
+Edit
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
+
+export default cloudinary;
+3. Add /routes/admin/uploads.ts
+ts
+Copy
+Edit
+import express from "express";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../../lib/cloudinary";
+import { protectRoute } from "../../lib/auth";
+
+const router = express.Router();
+router.use(protectRoute(["admin"]));
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "healios-products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 800, crop: "limit" }],
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+});
+
+router.post("/", upload.single("image"), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  res.status(200).json({ image_url: (req.file as any).path });
+});
+
+export default router;
+Mount in server.ts:
+
+ts
+Copy
+Edit
+import uploadRoutes from "./routes/admin/uploads";
+app.use("/admin/uploads", uploadRoutes);
+💻 PHASE 3: ADMIN UI UPLOAD COMPONENT
+On /admin/products.tsx, add an upload step before product creation:
+
+tsx
+Copy
+Edit
+const [imageUrl, setImageUrl] = useState("");
+
+const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const form = new FormData();
+  form.append("image", file);
+
+  const res = await fetch("/admin/uploads", {
+    method: "POST",
+    body: form,
+  });
+
+  const data = await res.json();
+  setImageUrl(data.image_url);
+};
+Add to form:
+
+tsx
+Copy
+Edit
+<input type="file" accept="image/*" onChange={handleImageUpload} />
+<input type="hidden" value={imageUrl} onChange={e => setForm({ ...form, image_url: e.target.value })} />
+🛡️ PHASE 4: SAFETY AND STABILITY VALIDATION
+✅ Uploaded files are NOT saved locally
+
+✅ Only admins can access /admin/uploads
+
+✅ Non-image files are rejected (via allowed_formats)
+
+✅ All image URLs are full https://res.cloudinary.com/...
+
+✅ Product form still submits with image attached
+
+✅ OPTIONAL: Image Management Best Practices
+Feature	Why
+Transform to 800x800 max	Prevent huge images eating bandwidth
+Auto webp	Smaller files for modern browsers
+Add alt text support	Helps SEO and accessibility
+
+📦 OUTPUT FROM THIS PROMPT
+Admin-only image upload route
+
+Images stored in Cloudinary (healios-products folder)
+
+2MB file size cap + JPEG/PNG/WebP only
+
+UI flow integrated into product creation
+
+No local upload logic remains
+

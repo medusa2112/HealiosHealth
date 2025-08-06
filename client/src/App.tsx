@@ -28,7 +28,7 @@ import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
 import Login from "@/pages/login";
 import AdminDashboard from "@/pages/admin";
-import CustomerPortal from "@/pages/portal";
+import CustomerPortal from "@/pages/customer-portal";
 import NotFound from "@/pages/not-found";
 
 function Router() {

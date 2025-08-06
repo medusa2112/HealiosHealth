@@ -1,0 +1,134 @@
+Prompt 10 of X: Full Role-Based Route Protection Audit (Admin / Customer / Guest)
+Objective: Enforce strict, bulletproof access control across all routes (API and frontend), ensuring that no endpoint or page leaks to unauthorised users. Prevents role spoofing, frontend exposure, and backend bypass.
+
+✅ PHASE 1: FULL SYSTEM SCAN (AUTHORITY LAYER CHECKLIST)
+Audit the system for:
+
+1. 🔐 Unprotected routes
+❌ Any backend API (/admin, /portal, /cart, /orders) missing a protectRoute(...) middleware
+
+❌ Any frontend route rendered without user role check
+
+2. 🎭 Role spoofing or weak checks
+❌ Inline checks like if (user.email.includes('admin')) or if user === "admin"
+
+✅ Role must only be checked via:
+
+ts
+Copy
+Edit
+protectRoute(["admin"]) // on server
+3. 🧩 Frontend route leaks
+❌ Public routes that render components like:
+
+tsx
+Copy
+Edit
+<Route path="/admin/orders" element={<AdminOrders />} />
+Without a guard like <RequireRole role="admin" />
+
+4. ✅ Fallback protection
+If the frontend is bypassed (e.g. manual request via Postman), server still blocks unauthorised access
+
+🔐 PHASE 2: BACKEND ROUTE WRAPPING (EXAMPLES)
+1. Secure all admin routes
+ts
+Copy
+Edit
+// routes/admin/products.ts
+router.use(protectRoute(["admin"]));
+2. Secure all customer routes
+ts
+Copy
+Edit
+// routes/portal.ts
+router.use(protectRoute(["customer"]));
+3. Secure sensitive shared routes (e.g. cart, orders)
+ts
+Copy
+Edit
+// routes/cart.ts
+router.use((req, res, next) => {
+  if (!req.body.session_token && !req.user?.id) {
+    return res.status(403).json({ error: "No session or user" });
+  }
+  next();
+});
+🧱 PHASE 3: FRONTEND GUARD COMPONENT
+Create /components/RequireRole.tsx:
+
+tsx
+Copy
+Edit
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser"; // Assume this fetches or context-loads user
+
+export function RequireRole({ role, children }: { role: string, children: JSX.Element }) {
+  const { user, loading } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && (!user || user.role !== role)) {
+      navigate("/auth/login");
+    }
+  }, [loading, user]);
+
+  if (loading || !user) return null;
+  return children;
+}
+🚧 PHASE 4: WRAP ALL ROUTES
+Admin
+tsx
+Copy
+Edit
+<Route path="/admin/products" element={
+  <RequireRole role="admin"><AdminProducts /></RequireRole>
+} />
+Customer
+tsx
+Copy
+Edit
+<Route path="/portal" element={
+  <RequireRole role="customer"><Portal /></RequireRole>
+} />
+🧪 PHASE 5: VALIDATION TEST MATRIX
+User Role	Route	Expected Result
+Admin	/admin/products	✅ Access
+Customer	/admin/products	❌ Blocked
+Guest	/admin/products	❌ Blocked
+Customer	/portal	✅ Access
+Guest	/portal	❌ Redirect
+Admin	/portal	❌ Redirect
+Anyone	/cart/sync	✅ (requires session token)
+
+🧠 OPTIONAL FUTURE HARDENING
+Feature	Why
+2FA on admin	Prevent account compromise
+IP allowlist for admin	Only known IPs can access panel
+Role elevation log	Track if a user is granted admin
+Rate limiting	Prevent brute-force auth
+
+📦 OUTPUT FROM THIS PROMPT
+🔒 All API routes protected with protectRoute(...) or equivalent
+
+🔐 Frontend routes protected with <RequireRole />
+
+🛡️ No path or data leaks possible via unauthorised access
+
+✅ Role spoofing impossible without DB compromise
+
+✅ SYSTEM COMPLETE (MVP HARDENED)
+You now have:
+
+Full role-auth separation
+
+Product, order, Stripe, cart, and image flows fully scoped
+
+Admin-only access enforced throughout
+
+Guest checkout with email → register upgrade path
+
+Webhooks, refund triggers, and cart conversion tracking
+
+Transactional emails linked to core events

@@ -96,7 +96,7 @@ export const articles = pgTable("articles", {
 
 export const orders = pgTable("orders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id"), // Reference to users table
+  userId: varchar("user_id").references(() => users.id), // Proper foreign key reference
   customerEmail: text("customer_email").notNull(),
   customerName: text("customer_name"),
   customerPhone: text("customer_phone"),
@@ -139,9 +139,49 @@ export const restockNotifications = pgTable("restock_notifications", {
   requestedAt: text("requested_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
+// Addresses table for customer saved addresses
+export const addresses = pgTable("addresses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  type: varchar("type", { length: 10 }).notNull(), // 'shipping' | 'billing'
+  line1: text("line1").notNull(),
+  line2: text("line2"),
+  city: varchar("city", { length: 100 }),
+  zip: varchar("zip", { length: 20 }),
+  country: varchar("country", { length: 100 }),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Order items table for proper order-product relationships
+export const orderItems = pgTable("order_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  orderId: varchar("order_id").notNull().references(() => orders.id),
+  productId: varchar("product_id").notNull().references(() => products.id),
+  quantity: integer("quantity").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  productName: text("product_name").notNull(), // Snapshot at time of order
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
+
+export const insertAddressSchema = createInsertSchema(addresses).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Type exports
+export type Address = typeof addresses.$inferSelect;
+export type InsertAddress = z.infer<typeof insertAddressSchema>;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,
