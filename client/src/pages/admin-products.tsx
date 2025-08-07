@@ -91,101 +91,104 @@ export default function AdminProducts() {
         title="Product Management" 
         subtitle={`Manage your product catalog - ${filteredProducts.length} of ${products?.length || 0} products`}
       />
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header Actions */}
-        <div className="mb-8 flex justify-end">
-          <Button 
-            onClick={handleCreateNew}
-            className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add New Product
-          </Button>
+      <div className="w-full px-4">
+        {/* Compact Header with Filters and Actions */}
+        <div className="mb-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+                {/* Search and Filters */}
+                <div className="flex flex-col sm:flex-row gap-3 flex-1 min-w-0">
+                  <div className="flex-1 max-w-md">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        placeholder="Search products..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white"
+                      />
+                    </div>
+                  </div>
+                  <Select value={filterCategory} onValueChange={setFilterCategory}>
+                    <SelectTrigger className="w-full sm:w-40 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {availableCategories.map(category => (
+                        <SelectItem key={category} value={category}>{category}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-full sm:w-36 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                      <SelectValue placeholder="Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="supplement">Supplements</SelectItem>
+                      <SelectItem value="apparel">Apparel</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* Actions */}
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <div className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
+                    {filteredProducts.length} products
+                  </div>
+                  <Button 
+                    onClick={handleCreateNew}
+                    size="sm"
+                    className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 flex-1 sm:flex-initial"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Product
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Filters */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-lg text-black dark:text-white flex items-center gap-2">
-              <Search className="w-5 h-5" />
-              Search & Filter Products
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <Input
-                  placeholder="Search by name or description..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white"
-                />
-              </div>
-              <Select value={filterCategory} onValueChange={setFilterCategory}>
-                <SelectTrigger className="w-full sm:w-48 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white">
-                  <SelectValue placeholder="Filter by category" />
-                </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700">
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {availableCategories.map(category => (
-                    <SelectItem key={category} value={category}>{category}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="w-full sm:w-48 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-black dark:text-white">
-                  <SelectValue placeholder="Filter by type" />
-                </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700">
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="supplement">Supplements</SelectItem>
-                  <SelectItem value="apparel">Apparel</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Products Table */}
+        {/* Products Grid/Table */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-black dark:text-white flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              Products ({filteredProducts.length})
-            </CardTitle>
-            <CardDescription>
-              Click on any product to edit its details, pricing, and SEO settings
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                {products?.length === 0 ? "No products found. Create your first product!" : "No products match your search criteria."}
+              <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+                <Package className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <div className="text-lg font-medium mb-2">
+                  {products?.length === 0 ? "No products found" : "No products match your filters"}
+                </div>
+                <div className="text-sm">
+                  {products?.length === 0 ? "Create your first product to get started!" : "Try adjusting your search or filter criteria."}
+                </div>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-gray-200 dark:border-gray-700">
-                      <TableHead className="text-black dark:text-white">Product</TableHead>
-                      <TableHead className="text-black dark:text-white">Type</TableHead>
-                      <TableHead className="text-black dark:text-white">Categories</TableHead>
-                      <TableHead className="text-black dark:text-white">Price</TableHead>
-                      <TableHead className="text-black dark:text-white">Stock</TableHead>
-                      <TableHead className="text-black dark:text-white">Status</TableHead>
-                      <TableHead className="text-black dark:text-white text-right">Actions</TableHead>
+                    <TableRow className="border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                      <TableHead className="text-black dark:text-white font-semibold w-[300px]">Product</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[80px]">Type</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[180px]">Categories</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[100px]">Price</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[80px] text-center">Stock</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[140px]">Status</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold w-[120px] text-center">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredProducts.map((product) => (
                       <TableRow 
                         key={product.id} 
-                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer"
+                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 cursor-pointer transition-colors"
                         onClick={() => handleEdit(product.id)}
                       >
-                        <TableCell className="py-4">
+                        <TableCell className="py-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
+                            <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
                               <img
                                 src={product.imageUrl}
                                 alt={product.name}
@@ -196,12 +199,12 @@ export default function AdminProducts() {
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="font-medium text-black dark:text-white truncate">
+                              <div className="font-medium text-black dark:text-white truncate text-sm">
                                 {product.name}
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                {product.description.length > 60 
-                                  ? product.description.substring(0, 60) + "..."
+                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                {product.description.length > 50 
+                                  ? product.description.substring(0, 50) + "..."
                                   : product.description
                                 }
                               </div>
@@ -209,19 +212,19 @@ export default function AdminProducts() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="capitalize">
-                            {product.type || 'supplement'}
+                          <Badge variant="outline" className="capitalize text-xs">
+                            {product.type === 'supplement' ? 'Supp' : product.type || 'Supp'}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <div className="flex flex-wrap gap-1 max-w-48">
+                          <div className="flex flex-wrap gap-1">
                             {product.categories?.slice(0, 2).map((category) => (
-                              <Badge key={category} variant="secondary" className="text-xs">
-                                {category}
+                              <Badge key={category} variant="secondary" className="text-xs px-1.5 py-0.5">
+                                {category.length > 8 ? category.substring(0, 8) + '...' : category}
                               </Badge>
                             ))}
                             {(product.categories?.length || 0) > 2 && (
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
                                 +{(product.categories?.length || 0) - 2}
                               </Badge>
                             )}
@@ -229,65 +232,67 @@ export default function AdminProducts() {
                         </TableCell>
                         <TableCell>
                           <div className="text-black dark:text-white">
-                            <div className="font-medium">R{product.price}</div>
+                            <div className="font-medium text-sm">R{product.price}</div>
                             {product.originalPrice && (
-                              <div className="text-sm text-gray-500 line-through">
+                              <div className="text-xs text-gray-500 line-through">
                                 R{product.originalPrice}
                               </div>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            <Package className="w-4 h-4 text-gray-500" />
-                            <span className={`${
-                              (product.stockQuantity || 0) > 10 
-                                ? 'text-green-600 dark:text-green-400' 
-                                : (product.stockQuantity || 0) > 0 
-                                ? 'text-yellow-600 dark:text-yellow-400'
-                                : 'text-red-600 dark:text-red-400'
-                            }`}>
-                              {product.stockQuantity || 0}
-                            </span>
+                        <TableCell className="text-center">
+                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
+                            (product.stockQuantity || 0) > 10 
+                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                              : (product.stockQuantity || 0) > 0 
+                              ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                              : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                          }">
+                            <Package className="w-3 h-3" />
+                            {product.stockQuantity || 0}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
-                            {product.featured && (
-                              <Badge className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                Featured
-                              </Badge>
-                            )}
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1">
+                              {product.featured && (
+                                <Badge className="text-xs px-1.5 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">
+                                  Featured
+                                </Badge>
+                              )}
+                            </div>
                             <Badge 
                               variant={product.inStock ? "default" : "destructive"} 
-                              className="text-xs"
+                              className="text-xs px-1.5 py-0.5 w-fit"
                             >
-                              {product.inStock ? "In Stock" : "Out of Stock"}
+                              {product.inStock ? "In Stock" : "Out"}
                             </Badge>
                           </div>
                         </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
+                        <TableCell>
+                          <div className="flex items-center justify-center gap-1">
                             <Button
                               size="sm"
-                              variant="outline"
+                              variant="ghost"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleEdit(product.id);
                               }}
-                              className="border-gray-300 dark:border-gray-700 text-black dark:text-white"
+                              className="h-8 w-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
+                              title="Edit product"
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
                             <Button
                               size="sm"
-                              variant="outline"
+                              variant="ghost"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDelete(product);
                               }}
-                              className="border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900"
+                              className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400"
                               disabled={deleteProductMutation.isPending}
+                              title="Delete product"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
