@@ -33,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Register auth routes
   app.use('/api/auth', authRoutes);
-  app.use('/admin', adminRoutes);
+  app.use('/api/admin', adminRoutes);
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
   
