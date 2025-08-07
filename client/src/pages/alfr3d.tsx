@@ -280,7 +280,7 @@ export default function Alfr3dDashboard() {
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-sm">
-                        {issue.file.replace(process.cwd?.() || '', '')}
+                        {issue.file.replace(/^.*\/workspace\//, '')}
                       </TableCell>
                       <TableCell>{issue.line || '-'}</TableCell>
                       <TableCell className="text-sm">
