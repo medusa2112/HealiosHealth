@@ -289,7 +289,7 @@ Please implement this security fix following the expert recommendations above.`;
                       <TableHead className="w-12">Line</TableHead>
                       <TableHead className="w-16">Time</TableHead>
                       <TableHead className="w-16">Status</TableHead>
-                      <TableHead className="w-20">Actions</TableHead>
+                      <TableHead className="w-24">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -376,53 +376,67 @@ Please implement this security fix following the expert recommendations above.`;
                             </Button>
 
                             {generatedPrompts[issue.id] && (
-                              <Dialog open={dialogOpen === issue.id} onOpenChange={(open) => setDialogOpen(open ? issue.id : null)}>
-                                <DialogTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200 h-6 px-2 text-xs"
-                                  >
-                                    <FileText className="w-3 h-3" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                                  <DialogHeader>
-                                    <DialogTitle className="flex items-center gap-2">
-                                      <Brain className="w-5 h-5" />
-                                      AI Expert Fix Prompt - {issue.title}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                      Generated security fix instructions ready to use with AI assistant
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <div className="space-y-4">
-                                    <Textarea
-                                      value={generatedPrompts[issue.id]}
-                                      readOnly
-                                      className="min-h-96 font-mono text-sm"
-                                    />
-                                    <div className="flex gap-2">
-                                      <Button
-                                        onClick={() => copyPromptToClipboard(issue.id)}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                                      >
-                                        <Copy className="w-4 h-4 mr-2" />
-                                        Copy & Use with AI Assistant
-                                      </Button>
-                                      <Button
-                                        variant="outline"
-                                        onClick={() => setDialogOpen(null)}
-                                      >
-                                        Close
-                                      </Button>
+                              <>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => copyPromptToClipboard(issue.id)}
+                                  className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200 h-6 px-2 text-xs"
+                                  title="📋 Copy AI prompt"
+                                >
+                                  <Copy className="w-3 h-3" />
+                                </Button>
+                                
+                                <Dialog open={dialogOpen === issue.id} onOpenChange={(open) => setDialogOpen(open ? issue.id : null)}>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 border-yellow-200 h-6 px-2 text-xs"
+                                      title="View full prompt"
+                                    >
+                                      <FileText className="w-3 h-3" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                    <DialogHeader>
+                                      <DialogTitle className="flex items-center gap-2">
+                                        <Brain className="w-5 h-5" />
+                                        AI Expert Fix Prompt - {issue.title}
+                                      </DialogTitle>
+                                      <DialogDescription>
+                                        Generated security fix instructions ready to use with AI assistant
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                      <Textarea
+                                        value={generatedPrompts[issue.id]}
+                                        readOnly
+                                        className="min-h-96 font-mono text-sm"
+                                      />
+                                      <div className="flex gap-2">
+                                        <Button
+                                          onClick={() => copyPromptToClipboard(issue.id)}
+                                          className="bg-blue-600 hover:bg-blue-700 text-white flex-1"
+                                          size="lg"
+                                        >
+                                          <Copy className="w-4 h-4 mr-2" />
+                                          📋 COPY PROMPT
+                                        </Button>
+                                        <Button
+                                          variant="outline"
+                                          onClick={() => setDialogOpen(null)}
+                                        >
+                                          Close
+                                        </Button>
+                                      </div>
+                                      <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
+                                        💡 <strong>How to use:</strong> Click "📋 COPY PROMPT" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
+                                      </div>
                                     </div>
-                                    <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
-                                      💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
-                                    </div>
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
+                                  </DialogContent>
+                                </Dialog>
+                              </>
                             )}
                           </div>
                         </TableCell>
@@ -434,7 +448,6 @@ Please implement this security fix following the expert recommendations above.`;
             )}
           </CardContent>
         </Card>
-        
       </div>
     </div>
   );
