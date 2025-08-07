@@ -38,15 +38,15 @@ export default function AdminDashboard() {
   const queryClient = useQueryClient();
 
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
-    queryKey: ["/admin"],
+    queryKey: ["/api/admin"],
   });
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
-    queryKey: ["/admin/products"],
+    queryKey: ["/api/admin/products"],
   });
 
   const { data: quizAnalytics, isLoading: quizLoading } = useQuery<QuizAnalytics>({
-    queryKey: ["/admin/quiz/analytics"],
+    queryKey: ["/api/admin/quiz/analytics"],
   });
 
   const updateStockMutation = useMutation({
@@ -54,8 +54,8 @@ export default function AdminDashboard() {
       return apiRequest("PUT", `/admin/products/${productId}/stock`, { quantity });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/admin/products"] });
-      queryClient.invalidateQueries({ queryKey: ["/admin"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin"] });
       setSelectedProductId("");
       setNewStock(0);
     },
