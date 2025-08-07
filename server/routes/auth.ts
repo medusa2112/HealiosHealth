@@ -153,4 +153,43 @@ router.get('/callback', async (req, res) => {
 
 
 
+// Development-only demo login (admin access)
+if (process.env.NODE_ENV === 'development') {
+  router.post('/demo-admin-login', async (req, res) => {
+    try {
+      console.log('[DEMO_LOGIN] Admin demo login requested');
+      
+      // Get the admin user from storage
+      const adminUser = await storage.getUserById('admin-user-id');
+      if (!adminUser) {
+        return res.status(404).json({ message: 'Admin demo user not found' });
+      }
+      
+      // Set up the session manually for demo purposes
+      req.login(adminUser, (err) => {
+        if (err) {
+          console.error('[DEMO_LOGIN] Login error:', err);
+          return res.status(500).json({ message: 'Demo login failed' });
+        }
+        
+        console.log(`[DEMO_LOGIN] Successfully logged in as admin: ${adminUser.email}`);
+        res.json({ 
+          message: 'Demo login successful', 
+          user: {
+            id: adminUser.id,
+            email: adminUser.email,
+            role: adminUser.role,
+            firstName: adminUser.firstName,
+            lastName: adminUser.lastName
+          }
+        });
+      });
+      
+    } catch (error) {
+      console.error('[DEMO_LOGIN] Demo login error:', error);
+      res.status(500).json({ message: 'Demo login failed' });
+    }
+  });
+}
+
 export default router;
