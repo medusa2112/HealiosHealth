@@ -75,32 +75,34 @@ export default function Alfr3dDashboard() {
       setSelectedIssue(issue);
       return apiRequest("POST", `/api/alfr3d/issues/${issueId}/fix-prompt`);
     },
-    onSuccess: (data, variables) => {
-      if (selectedIssue && data.fixPrompt) {
+    onSuccess: (data: any, variables) => {
+      const { issue } = variables;
+      if (issue && data && data.fixPrompt) {
+        const fixPrompt = data.fixPrompt;
         const prompt = `🔒 SECURITY FIX REQUEST
 
-ISSUE: ${selectedIssue.title}
-FILE: ${selectedIssue.file}
-LINE: ${selectedIssue.line || 'N/A'}
-SEVERITY: ${selectedIssue.severity.toUpperCase()}
+ISSUE: ${issue.title}
+FILE: ${issue.file}
+LINE: ${issue.line || 'N/A'}
+SEVERITY: ${issue.severity.toUpperCase()}
 
 DESCRIPTION:
-${selectedIssue.description}
+${issue.description}
 
 AI EXPERT ANALYSIS:
-${data.fixPrompt.analysis}
+${fixPrompt.analysis || 'Analysis not available'}
 
 RECOMMENDED STEPS:
-${data.fixPrompt.steps.map((step: string, i: number) => `${i + 1}. ${step}`).join('\n')}
+${(fixPrompt.steps || []).map((step: string, i: number) => `${i + 1}. ${step}`).join('\n')}
 
-RISK LEVEL: ${data.fixPrompt.riskLevel.toUpperCase()}
-ESTIMATED TIME: ${data.fixPrompt.estimatedTime}
+RISK LEVEL: ${(fixPrompt.riskLevel || 'medium').toUpperCase()}
+ESTIMATED TIME: ${fixPrompt.estimatedTime || 'Unknown'}
 
 PREREQUISITES:
-${data.fixPrompt.prerequisites.map((req: string) => `• ${req}`).join('\n')}
+${(fixPrompt.prerequisites || []).map((req: string) => `• ${req}`).join('\n')}
 
 TESTING APPROACH:
-${data.fixPrompt.testingApproach}
+${fixPrompt.testingApproach || 'Manual verification required'}
 
 ---
 Please implement this security fix following the expert recommendations above.`;
@@ -110,11 +112,18 @@ Please implement this security fix following the expert recommendations above.`;
           [variables.issueId]: prompt
         }));
         setDialogOpen(variables.issueId);
+        
+        toast({
+          title: "AI Fix Prompt Generated",
+          description: "Expert analysis completed. View and copy the prompt.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Invalid response format from AI expert.",
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "AI Fix Prompt Generated",
-        description: "Expert analysis completed. View and copy the prompt.",
-      });
     },
     onError: () => {
       toast({
@@ -354,7 +363,11 @@ Please implement this security fix following the expert recommendations above.`;
                                   size="sm"
                                   variant="outline"
                                   className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-6 px-2 text-xs"
-                                  onClick={() => generateFixMutation.mutate({ issueId: issue.id, issue })}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    generateFixMutation.mutate({ issueId: issue.id, issue });
+                                  }}
                                   disabled={generateFixMutation.isPending}
                                 >
                                   {generateFixMutation.isPending ? (
