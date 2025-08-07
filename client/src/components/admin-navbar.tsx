@@ -48,9 +48,6 @@ export function AdminNavbar({ activeTab, onTabChange }: AdminNavbarProps) {
         <div className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <div className="flex items-center space-x-4">
-            <Link href="/admin" className="text-xl font-bold text-white hover:text-gray-300">
-              Admin Portal
-            </Link>
             <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600">
               Development
             </Badge>
