@@ -1,6 +1,6 @@
 import express from "express";
 import { storage } from "../storage";
-import { requireSessionOrAuth, rateLimit } from "../lib/session-auth";
+import { requireSessionOrAuth, rateLimit } from "../lib/auth";
 
 const router = express.Router();
 

@@ -16,6 +16,11 @@ declare global {
   }
 }
 
+/**
+ * UNIFIED AUTHENTICATION MIDDLEWARE
+ * Consolidates all auth functionality into one clean file
+ */
+
 export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -54,9 +59,10 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   };
 };
 
+// Simple auth check - just verifies user exists
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.session?.userId;
+    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
     
     if (!userId) {
       return res.status(401).json({ message: 'Authentication required' });
@@ -74,6 +80,91 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     console.error('Auth error:', err);
     return res.status(401).json({ message: 'Authentication failed' });
   }
+};
+
+// Enhanced auth for guest checkout support
+export const requireSessionOrAuth = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Check for authenticated user first
+    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    if (userId) {
+      const user = await storage.getUserById(userId);
+      if (user) {
+        req.user = user;
+        return next();
+      }
+    }
+
+    // Check for session token for guest checkout
+    const sessionToken = req.body.sessionToken || req.headers['x-session-token'];
+    if (sessionToken && typeof sessionToken === 'string' && sessionToken.length > 10) {
+      (req as any).sessionToken = sessionToken;
+      return next();
+    }
+
+    return res.status(401).json({ message: 'Authentication or valid session token required' });
+  } catch (error) {
+    console.error('Session auth error:', error);
+    return res.status(401).json({ message: 'Authentication failed' });
+  }
+};
+
+// Order access validation
+export const validateOrderAccess = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { customerEmail } = req.body;
+    
+    // If user is authenticated, must match their email
+    if (req.user && req.user.email !== customerEmail) {
+      return res.status(403).json({ message: 'Email mismatch with authenticated user' });
+    }
+    
+    next();
+  } catch (error) {
+    console.error('Order access validation error:', error);
+    return res.status(500).json({ message: 'Validation failed' });
+  }
+};
+
+// Rate limiting store
+const rateLimitStore = new Map<string, { count: number; lastReset: number }>();
+
+export const rateLimit = (maxRequests: number = 10, windowMs: number = 60000) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const identifier = req.ip || req.session?.userId || 'anonymous';
+    const now = Date.now();
+    
+    const record = rateLimitStore.get(identifier);
+    if (!record || now - record.lastReset > windowMs) {
+      rateLimitStore.set(identifier, { count: 1, lastReset: now });
+      return next();
+    }
+    
+    if (record.count >= maxRequests) {
+      SecurityLogger.logRateLimitExceeded(req, req.path);
+      return res.status(429).json({ 
+        message: 'Too many requests. Please try again later.',
+        retryAfter: Math.ceil((record.lastReset + windowMs - now) / 1000)
+      });
+    }
+    
+    record.count++;
+    next();
+  };
+};
+
+// Security headers
+export const secureHeaders = (req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  
+  next();
 };
 
 export const checkRole = (allowedRoles: string[]) => {

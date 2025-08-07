@@ -8,10 +8,10 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
-import { protectRoute, requireAuth } from "./lib/auth";
-import { rateLimit, secureHeaders, validateOrderAccess } from "./lib/session-auth";
+import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess } from "./lib/auth";
 import { setupAuth } from "./replitAuth";
 import authRoutes from "./routes/auth";
+// All auth middleware now consolidated in ./lib/auth
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
 import stripeRoutes from "./routes/stripe";

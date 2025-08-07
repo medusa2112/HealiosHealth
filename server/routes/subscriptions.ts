@@ -6,18 +6,7 @@ import Stripe from "stripe";
 import { db } from "../db";
 import { subscriptions, productVariants, insertSubscriptionSchema } from "@shared/schema";
 import { eq } from "drizzle-orm";
-// Authentication middleware inline since we don't have a separate auth module
-const protectRoute = (roles: string[]) => {
-  return (req: any, res: any, next: any) => {
-    if (!req.user) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: "Insufficient permissions" });
-    }
-    next();
-  };
-};
+import { protectRoute } from "../lib/auth";
 import { storage } from "../storage";
 
 const router = Router();
