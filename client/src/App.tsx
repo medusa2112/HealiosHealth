@@ -48,6 +48,7 @@ import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 function Router() {
   // Automatically scroll to top on page navigation
@@ -70,17 +71,17 @@ function Router() {
 
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/orders" component={AdminOrders} />
-      <Route path="/admin/carts" component={AdminCarts} />
-      <Route path="/admin/logs" component={AdminLogs} />
-      <Route path="/admin/reorder-analytics" component={ReorderAnalytics} />
-      <Route path="/admin/discount-codes" component={AdminDiscountCodes} />
-      <Route path="/admin/bundles" component={AdminBundles} />
-      <Route path="/admin/products" component={AdminProducts} />
-      <Route path="/admin/products/:id" component={AdminProductEdit} />
-      <Route path="/portal" component={CustomerPortal} />
-      <Route path="/portal/subscriptions" component={PortalSubscriptions} />
+      <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><AdminOrders /></ProtectedRoute>} />
+      <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><AdminCarts /></ProtectedRoute>} />
+      <Route path="/admin/logs" component={() => <ProtectedRoute requiredRole="admin"><AdminLogs /></ProtectedRoute>} />
+      <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><ReorderAnalytics /></ProtectedRoute>} />
+      <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><AdminDiscountCodes /></ProtectedRoute>} />
+      <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><AdminBundles /></ProtectedRoute>} />
+      <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminProducts /></ProtectedRoute>} />
+      <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminProductEdit /></ProtectedRoute>} />
+      <Route path="/portal" component={() => <ProtectedRoute requiredRole="customer"><CustomerPortal /></ProtectedRoute>} />
+      <Route path="/portal/subscriptions" component={() => <ProtectedRoute requiredRole="customer"><PortalSubscriptions /></ProtectedRoute>} />
       
       {/* Legal and Informational Pages */}
       <Route path="/faq" component={FAQ} />

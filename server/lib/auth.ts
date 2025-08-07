@@ -14,10 +14,10 @@ declare global {
         refresh_token?: string;
         expires_at?: number;
       };
-      session?: {
-        userId?: string;
-        [key: string]: any;
-      };
+    }
+    interface Session {
+      userId?: string;
+      [key: string]: any;
     }
     interface User {
       id: string;
@@ -43,10 +43,10 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Get user from session or passport user (OAuth)
-      const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+      const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
       
       console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
-      console.log(`[PROTECT_ROUTE] Session userId: ${req.session?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
+      console.log(`[PROTECT_ROUTE] Session userId: ${(req.session as any)?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
       console.log(`[PROTECT_ROUTE] Request user object:`, req.user ? { id: (req.user as any).id, email: req.user.email, role: req.user.role } : 'null');
       
       if (!userId) {
@@ -81,10 +81,10 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
 // Simple auth check - just verifies user exists
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
     
     console.log(`[REQUIRE_AUTH] Checking auth for userId: ${userId}`);
-    console.log(`[REQUIRE_AUTH] Session:`, req.session?.userId ? 'present' : 'missing');
+    console.log(`[REQUIRE_AUTH] Session:`, (req.session as any)?.userId ? 'present' : 'missing');
     console.log(`[REQUIRE_AUTH] Passport user:`, req.user ? 'present' : 'missing');
     
     if (!userId) {
@@ -112,7 +112,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 export const requireSessionOrAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Check for authenticated user first
-    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
     if (userId) {
       const user = await storage.getUserById(userId);
       if (user) {
@@ -157,7 +157,7 @@ const rateLimitStore = new Map<string, { count: number; lastReset: number }>();
 
 export const rateLimit = (maxRequests: number = 10, windowMs: number = 60000) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const identifier = req.ip || req.session?.userId || 'anonymous';
+    const identifier = req.ip || (req.session as any)?.userId || 'anonymous';
     const now = Date.now();
     
     const record = rateLimitStore.get(identifier);

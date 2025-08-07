@@ -1,29 +1,43 @@
 import { createContext, useContext, ReactNode } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import type { User } from '@shared/schema';
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   logout: () => Promise<void>;
+  login: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // No authentication - always return null user
-  const user = null;
-  const isLoading = false;
+  // Check authentication status
+  const { data: user, isLoading } = useQuery<User | null>({
+    queryKey: ['/api/auth/me'],
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   const logout = async (): Promise<void> => {
-    // No-op since no auth
+    await fetch('/api/auth/logout', { 
+      method: 'POST', 
+      credentials: 'include' 
+    });
+    window.location.href = '/';
+  };
+
+  const login = () => {
+    window.location.href = '/api/auth/login';
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: user || null,
         isLoading,
         logout,
+        login,
       }}
     >
       {children}
