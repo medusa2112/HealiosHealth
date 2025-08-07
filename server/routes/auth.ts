@@ -1,91 +1,38 @@
 import express from 'express';
 import { storage } from '../storage';
-import { determineUserRole } from '../lib/auth';
+import { setupAuth, isAuthenticated } from '../replitAuth';
 
 const router = express.Router();
 
-// Get current user endpoint for frontend auth
-router.get("/me", async (req, res) => {
+// Get current user info via Replit Auth
+router.get('/user', isAuthenticated, async (req, res) => {
   try {
-    const userId = req.session?.userId;
-    
+    const userId = req.user?.claims?.sub;
     if (!userId) {
-      return res.status(401).json({ message: 'Not authenticated' });
+      return res.json(null);
     }
 
-    const user = await storage.getUserById(userId);
-    
+    const user = await storage.getUser(userId);
     if (!user) {
-      return res.status(401).json({ message: 'Invalid session' });
+      return res.json(null);
     }
 
-    res.json({
-      id: user.id,
-      email: user.email,
+    res.json({ 
+      id: user.id, 
+      email: user.email, 
+      role: user.role,
       firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role
+      lastName: user.lastName
     });
   } catch (error) {
-    console.error("Get current user error:", error);
-    res.status(500).json({ message: "Failed to get user info" });
+    console.error('Auth me error:', error);
+    res.json(null);
   }
 });
 
-// Guest registration with order linking (Phase 8)
-router.post("/register", async (req, res) => {
-  try {
-    const { email, password, firstName, lastName, fromCheckout } = req.body;
-    
-    // Validate input
-    if (!email || !password || !firstName || !lastName) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // Check if user already exists
-    const existingUser = await storage.getUserByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists with this email" });
-    }
-
-    // Create new user
-    const role = determineUserRole(email);
-    const newUser = await storage.createUser({
-      email,
-      password, // In production, this should be hashed
-      firstName,
-      lastName,
-      role
-    });
-
-    // If registering from checkout, link existing orders
-    if (fromCheckout) {
-      try {
-        await storage.linkGuestOrdersToUser(email, newUser.id);
-      } catch (linkError) {
-        console.error('Failed to link guest orders:', linkError);
-        // Don't fail registration if linking fails
-      }
-    }
-
-    // Set session
-    req.session = req.session || {};
-    req.session.userId = newUser.id;
-
-    res.json({ 
-      message: "Registration successful",
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        role: newUser.role
-      }
-    });
-  } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "Registration failed" });
-  }
+// Registration handled by Replit Auth
+router.post("/register", (req, res) => {
+  res.status(501).json({ message: "Registration handled by Replit Auth" });
 });
 
 // Mock Replit Auth login - in production this would redirect to Replit OAuth
@@ -98,57 +45,9 @@ router.get('/login', (req, res) => {
   });
 });
 
-// Standard login endpoint  
-router.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    
-    console.log(`[DEBUG LOGIN] Attempt - Email: "${username}", Password: "${password}"`);
-    
-    if (!username || !password) {
-      console.log(`[DEBUG LOGIN] Missing credentials`);
-      return res.status(400).json({ message: "Username and password are required" });
-    }
-
-    // Find user by email (username field)
-    const user = await storage.getUserByEmail(username);
-    
-    console.log(`[DEBUG LOGIN] User lookup result:`, user ? `Found user: ${user.email}, password: "${user.password}", role: ${user.role}` : 'User not found');
-    
-    if (!user) {
-      console.log(`[DEBUG LOGIN] User not found for email: "${username}"`);
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    
-    // In production, verify hashed password here
-    console.log(`[DEBUG LOGIN] Password comparison - Stored: "${user.password}", Provided: "${password}", Match: ${user.password === password}`);
-    if (user.password !== password) {
-      console.log(`[DEBUG LOGIN] Password mismatch`);
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    
-    console.log(`[DEBUG LOGIN] Login successful for ${user.email}`);
-
-    // Set session
-    req.session = req.session || {};
-    req.session.userId = user.id;
-    
-    console.log(`[DEBUG LOGIN] Session set - userId: ${req.session.userId}`);
-
-    res.json({ 
-      message: "Login successful",
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role
-      }
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Login failed" });
-  }
+// Redirect to Replit Auth for login
+router.get('/login', (req, res) => {
+  res.redirect('/api/login');
 });
 
 // Logout endpoint
@@ -234,29 +133,5 @@ router.post('/logout', (req, res) => {
   }
 });
 
-// Get current user info
-router.get('/user', async (req, res) => {
-  try {
-    if (!req.session?.userId) {
-      return res.json(null); // Return null for unauthenticated users
-    }
-
-    const user = await storage.getUserById(req.session.userId);
-    if (!user) {
-      return res.json(null);
-    }
-
-    res.json({ 
-      id: user.id, 
-      email: user.email, 
-      role: user.role,
-      firstName: user.firstName,
-      lastName: user.lastName
-    });
-  } catch (error) {
-    console.error('Auth me error:', error);
-    res.json(null);
-  }
-});
 
 export default router;

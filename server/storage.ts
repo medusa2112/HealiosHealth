@@ -60,8 +60,9 @@ export interface IStorage {
   getRestockNotifications(): Promise<RestockNotification[]>;
   getRestockNotificationsByProduct(productId: string): Promise<RestockNotification[]>;
   
-  // Users (Auth)
+  // Users (Replit Auth)
   getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
   getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
