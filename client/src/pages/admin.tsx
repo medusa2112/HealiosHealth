@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AdminNavbar } from "@/components/admin-navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +36,7 @@ interface QuizAnalytics {
 export default function AdminDashboard() {
   const [selectedProductId, setSelectedProductId] = useState<string>("");
   const [newStock, setNewStock] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<string>("overview");
   const queryClient = useQueryClient();
 
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
@@ -71,23 +72,12 @@ export default function AdminDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white dark:bg-black">
+      <AdminNavbar activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="max-w-7xl mx-auto p-6">
 
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-9">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="abandoned-carts">Abandoned Carts</TabsTrigger>
-            <TabsTrigger value="discount-codes">Discount Codes</TabsTrigger>
-            <TabsTrigger value="admin-logs">Activity Logs</TabsTrigger>
-            <TabsTrigger value="email-jobs">Email Jobs</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="space-y-6">
+        {activeTab === "overview" && (
+          <div className="space-y-6">
             {statsLoading ? (
               <div className="text-black dark:text-white">Loading stats...</div>
             ) : (
@@ -202,13 +192,14 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
             )}
-          </TabsContent>
+          </div>
+        )}
 
-          <TabsContent value="products">
-            <AdminProducts />
-          </TabsContent>
+        {activeTab === "products" && (
+          <AdminProducts />
+        )}
 
-          <TabsContent value="orders">
+        {activeTab === "orders" && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-black dark:text-white">Order Management</CardTitle>
@@ -236,10 +227,9 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+        )}
 
-
-          <TabsContent value="abandoned-carts">
+        {activeTab === "abandoned-carts" && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-black dark:text-white">Abandoned Cart Analytics</CardTitle>
@@ -259,9 +249,9 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+        )}
 
-          <TabsContent value="discount-codes">
+        {activeTab === "discount-codes" && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-black dark:text-white">Discount Code Management</CardTitle>
@@ -281,9 +271,9 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+        )}
 
-          <TabsContent value="admin-logs">
+        {activeTab === "admin-logs" && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-black dark:text-white">Admin Activity Logs</CardTitle>
@@ -303,13 +293,13 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+        )}
 
-          <TabsContent value="email-jobs">
-            <AdminEmailJobs />
-          </TabsContent>
+        {activeTab === "email-jobs" && (
+          <AdminEmailJobs />
+        )}
 
-          <TabsContent value="analytics">
+        {activeTab === "analytics" && (
             <div className="space-y-6">
               <Card>
                 <CardHeader>
@@ -354,14 +344,13 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+        )}
 
-          <TabsContent value="security">
-            <div className="space-y-6">
-              <Alfr3dDashboard />
-            </div>
-          </TabsContent>
-        </Tabs>
+        {activeTab === "security" && (
+          <div className="space-y-6">
+            <Alfr3dDashboard />
+          </div>
+        )}
       </div>
     </div>
   );
