@@ -400,6 +400,15 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertProductVariant = z.infer<typeof insertProductVariantSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
+// UpsertUser type for authentication - allows creating or updating with optional fields
+export type UpsertUser = {
+  id: string;
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  profileImageUrl?: string | null;
+};
 export type User = typeof users.$inferSelect;
 export type Product = typeof products.$inferSelect;
 export type ProductVariant = typeof productVariants.$inferSelect;

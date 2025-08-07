@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -1466,6 +1466,39 @@ export class MemStorage implements IStorage {
     };
     this.users.set(id, updatedUser);
     return updatedUser;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    // Check if user exists
+    const existingUser = this.users.get(userData.id);
+    
+    if (existingUser) {
+      // Update existing user
+      const updatedUser: User = {
+        ...existingUser,
+        email: userData.email,
+        firstName: userData.firstName ?? existingUser.firstName,
+        lastName: userData.lastName ?? existingUser.lastName,
+        updatedAt: new Date().toISOString(),
+      };
+      this.users.set(userData.id, updatedUser);
+      return updatedUser;
+    } else {
+      // Create new user
+      const newUser: User = {
+        id: userData.id,
+        email: userData.email,
+        role: "customer", // Default role for OAuth users
+        firstName: userData.firstName ?? null,
+        lastName: userData.lastName ?? null,
+        password: null, // OAuth users don't have passwords
+        stripeCustomerId: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      this.users.set(userData.id, newUser);
+      return newUser;
+    }
   }
 
   // Customer Portal - Address Management
