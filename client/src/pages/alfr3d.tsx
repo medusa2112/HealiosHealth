@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, AlertTriangle, Bug, Database, Zap, RefreshCw, Eye, Check, Clock } from "lucide-react";
+import { Shield, AlertTriangle, Bug, Database, Zap, RefreshCw, Eye, Check, Clock, Brain, Archive, ArchiveRestore, TrendingUp, FileText } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { SecurityIssue } from "../../../types/alfr3d";

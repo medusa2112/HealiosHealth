@@ -1,5 +1,6 @@
 import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
-import { type SecurityIssue, type InsertSecurityIssue } from "@shared/alfr3d-schema";
+import { type SecurityIssue, type InsertSecurityIssue, type FixAttempt, type InsertFixAttempt } from "@shared/alfr3d-schema";
+import { type FixPrompt, type FixEffectivenessAnalysis } from "../types/alfr3d";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -146,6 +147,15 @@ export interface IStorage {
   getLastScanTimestamp(): Promise<string | null>;
   updateLastScanTimestamp(): Promise<void>;
   
+  // ALFR3D Expert Features
+  updateSecurityIssueWithFixPrompt(id: string, fixPrompt: FixPrompt): Promise<SecurityIssue | undefined>;
+  archiveSecurityIssue(id: string, archivedBy: string): Promise<SecurityIssue | undefined>;
+  unarchiveSecurityIssue(id: string): Promise<SecurityIssue | undefined>;
+  getArchivedSecurityIssues(): Promise<SecurityIssue[]>;
+  recordFixAttempt(issueId: string, attempt: Omit<InsertFixAttempt, 'issueId'>): Promise<FixAttempt>;
+  getFixAttempts(issueId: string): Promise<FixAttempt[]>;
+  getSecurityIssueById(id: string): Promise<SecurityIssue | undefined>;
+  
   // Phase 19: Email Events Tracking (Abandoned Cart + Reorder Reminders)
   createEmailEvent(event: { userId?: string; emailType: string; relatedId: string; emailAddress: string; }): Promise<void>;
   getEmailEventsByType(emailType: string): Promise<any[]>;
@@ -202,6 +212,7 @@ export class MemStorage implements IStorage {
   private supportTickets: Map<string, any>; // Phase 21
   private chatSessions: Map<string, any>; // Phase 21
   private securityIssues: Map<string, SecurityIssue>; // ALFR3D
+  private fixAttempts: Map<string, FixAttempt>; // ALFR3D Fix Attempts
   private lastScanTimestamp: string | null = null; // ALFR3D
 
   constructor() {
@@ -231,6 +242,7 @@ export class MemStorage implements IStorage {
     this.supportTickets = new Map(); // Phase 21
     this.chatSessions = new Map(); // Phase 21
     this.securityIssues = new Map(); // ALFR3D
+    this.fixAttempts = new Map(); // ALFR3D Fix Attempts
     this.seedData();
     this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
@@ -2698,6 +2710,8 @@ export class MemStorage implements IStorage {
     const securityIssue: SecurityIssue = {
       id,
       ...issue,
+      archived: false,
+      fixAttempts: [],
       createdAt: timestamp,
       updatedAt: timestamp,
     };
@@ -2730,6 +2744,93 @@ export class MemStorage implements IStorage {
   
   async updateLastScanTimestamp(): Promise<void> {
     this.lastScanTimestamp = new Date().toISOString();
+  }
+  
+  // ALFR3D Expert Methods
+  async updateSecurityIssueWithFixPrompt(id: string, fixPrompt: FixPrompt): Promise<SecurityIssue | undefined> {
+    const issue = this.securityIssues.get(id);
+    if (!issue) return undefined;
+    
+    const updated: SecurityIssue = {
+      ...issue,
+      fixPrompt,
+      updatedAt: new Date().toISOString(),
+    };
+    this.securityIssues.set(id, updated);
+    return updated;
+  }
+  
+  async archiveSecurityIssue(id: string, archivedBy: string): Promise<SecurityIssue | undefined> {
+    const issue = this.securityIssues.get(id);
+    if (!issue) return undefined;
+    
+    const updated: SecurityIssue = {
+      ...issue,
+      archived: true,
+      archivedAt: new Date().toISOString(),
+      archivedBy,
+      updatedAt: new Date().toISOString(),
+    };
+    this.securityIssues.set(id, updated);
+    return updated;
+  }
+  
+  async unarchiveSecurityIssue(id: string): Promise<SecurityIssue | undefined> {
+    const issue = this.securityIssues.get(id);
+    if (!issue) return undefined;
+    
+    const updated: SecurityIssue = {
+      ...issue,
+      archived: false,
+      archivedAt: null,
+      archivedBy: null,
+      updatedAt: new Date().toISOString(),
+    };
+    this.securityIssues.set(id, updated);
+    return updated;
+  }
+  
+  async getArchivedSecurityIssues(): Promise<SecurityIssue[]> {
+    return Array.from(this.securityIssues.values())
+      .filter(issue => issue.archived)
+      .sort((a, b) => new Date(b.archivedAt || '').getTime() - new Date(a.archivedAt || '').getTime());
+  }
+  
+  async recordFixAttempt(issueId: string, attempt: Omit<InsertFixAttempt, 'issueId'>): Promise<FixAttempt> {
+    const id = randomUUID();
+    const timestamp = new Date().toISOString();
+    const fixAttempt: FixAttempt = {
+      id,
+      issueId,
+      ...attempt,
+      createdAt: timestamp,
+    };
+    this.fixAttempts.set(id, fixAttempt);
+    
+    // Update the issue with the new fix attempt
+    const issue = this.securityIssues.get(issueId);
+    if (issue) {
+      const attempts = (issue.fixAttempts as any[]) || [];
+      attempts.push(fixAttempt);
+      const updated: SecurityIssue = {
+        ...issue,
+        fixAttempts: attempts,
+        updatedAt: new Date().toISOString(),
+      };
+      this.securityIssues.set(issueId, updated);
+    }
+    
+    return fixAttempt;
+  }
+  
+  async getFixAttempts(issueId: string): Promise<FixAttempt[]> {
+    return Array.from(this.fixAttempts.values())
+      .filter(attempt => attempt.issueId === issueId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+  
+  async getSecurityIssueById(id: string): Promise<SecurityIssue | undefined> {
+    return this.securityIssues.get(id);
   }
 }
 

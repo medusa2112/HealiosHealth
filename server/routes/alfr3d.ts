@@ -1,5 +1,6 @@
 import express from "express";
 import { Alfr3dScanner } from "../../lib/alfr3d/scanner";
+import { alfr3dExpert } from "../../lib/alfr3d/expert";
 import { storage } from "../storage";
 import { requireAuth, protectRoute } from "../lib/auth";
 import type { SecurityFinding } from "../../types/alfr3d";
@@ -108,6 +109,138 @@ router.patch("/issues/:id", async (req, res) => {
   } catch (error) {
     console.error("Error updating issue:", error);
     res.status(500).json({ error: "Failed to update issue" });
+  }
+});
+
+// Generate AI fix prompt for an issue
+router.post("/issues/:id/fix-prompt", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const issue = await storage.getSecurityIssueById(id);
+    
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+    
+    console.log(`[ALFR3D Expert] Generating fix prompt for issue: ${issue.title}`);
+    const fixPrompt = await alfr3dExpert.generateFixPrompt(issue);
+    
+    // Add metadata to fix prompt
+    const promptWithMetadata = {
+      ...fixPrompt,
+      generatedAt: new Date().toISOString(),
+      generatedBy: req.user?.email || 'system'
+    };
+    
+    const updated = await storage.updateSecurityIssueWithFixPrompt(id, promptWithMetadata);
+    
+    if (!updated) {
+      return res.status(500).json({ error: "Failed to save fix prompt" });
+    }
+    
+    res.json({ fixPrompt: promptWithMetadata, message: "Fix prompt generated successfully" });
+  } catch (error) {
+    console.error("Error generating fix prompt:", error);
+    res.status(500).json({ error: "Failed to generate fix prompt" });
+  }
+});
+
+// Archive/unarchive issue
+router.patch("/issues/:id/archive", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { archived } = req.body;
+    
+    if (typeof archived !== 'boolean') {
+      return res.status(400).json({ error: "archived must be a boolean" });
+    }
+    
+    const updated = archived 
+      ? await storage.archiveSecurityIssue(id, req.user?.email || 'system')
+      : await storage.unarchiveSecurityIssue(id);
+    
+    if (!updated) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+    
+    res.json({ message: archived ? "Issue archived successfully" : "Issue unarchived successfully" });
+  } catch (error) {
+    console.error("Error archiving/unarchiving issue:", error);
+    res.status(500).json({ error: "Failed to update archive status" });
+  }
+});
+
+// Get archived issues
+router.get("/archived", async (req, res) => {
+  try {
+    const archivedIssues = await storage.getArchivedSecurityIssues();
+    res.json(archivedIssues);
+  } catch (error) {
+    console.error("Error fetching archived issues:", error);
+    res.status(500).json({ error: "Failed to fetch archived issues" });
+  }
+});
+
+// Record fix attempt
+router.post("/issues/:id/fix-attempts", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { success, notes, scanResultBefore, scanResultAfter, newIssuesIntroduced } = req.body;
+    
+    if (typeof success !== 'boolean' || 
+        typeof scanResultBefore !== 'number' || 
+        typeof scanResultAfter !== 'number' || 
+        typeof newIssuesIntroduced !== 'number') {
+      return res.status(400).json({ error: "Invalid fix attempt data" });
+    }
+    
+    const issue = await storage.getSecurityIssueById(id);
+    if (!issue) {
+      return res.status(404).json({ error: "Issue not found" });
+    }
+    
+    const fixAttempt = await storage.recordFixAttempt(id, {
+      appliedBy: req.user?.email || 'system',
+      success,
+      notes,
+      scanResultBefore,
+      scanResultAfter,
+      newIssuesIntroduced
+    });
+    
+    res.json({ fixAttempt, message: "Fix attempt recorded successfully" });
+  } catch (error) {
+    console.error("Error recording fix attempt:", error);
+    res.status(500).json({ error: "Failed to record fix attempt" });
+  }
+});
+
+// Get fix attempts for an issue
+router.get("/issues/:id/fix-attempts", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const fixAttempts = await storage.getFixAttempts(id);
+    res.json(fixAttempts);
+  } catch (error) {
+    console.error("Error fetching fix attempts:", error);
+    res.status(500).json({ error: "Failed to fetch fix attempts" });
+  }
+});
+
+// Compare scan results for fix effectiveness
+router.post("/compare", async (req, res) => {
+  try {
+    const { beforeIssues, afterIssues } = req.body;
+    
+    if (!Array.isArray(beforeIssues) || !Array.isArray(afterIssues)) {
+      return res.status(400).json({ error: "beforeIssues and afterIssues must be arrays" });
+    }
+    
+    const analysis = await alfr3dExpert.analyzeFixEffectiveness(beforeIssues, afterIssues);
+    res.json(analysis);
+  } catch (error) {
+    console.error("Error comparing scan results:", error);
+    res.status(500).json({ error: "Failed to compare scan results" });
   }
 });
 

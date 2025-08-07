@@ -12,6 +12,34 @@ export interface SecurityIssue {
   reviewed: boolean;
   reviewedAt?: string;
   reviewedBy?: string;
+  archived: boolean;
+  archivedAt?: string;
+  archivedBy?: string;
+  fixPrompt?: FixPrompt;
+  fixAttempts: FixAttempt[];
+  issueKey: string; // Unique identifier for tracking across scans
+}
+
+export interface FixPrompt {
+  analysis: string;
+  steps: string[];
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  estimatedTime: string;
+  prerequisites: string[];
+  testingApproach: string;
+  generatedAt: string;
+  generatedBy: string;
+}
+
+export interface FixAttempt {
+  id: string;
+  timestamp: string;
+  appliedBy: string;
+  success: boolean;
+  notes?: string;
+  scanResultBefore: number; // Total issues before fix
+  scanResultAfter: number;  // Total issues after fix
+  newIssuesIntroduced: number;
 }
 
 export interface ScanResult {
@@ -19,6 +47,15 @@ export interface ScanResult {
   scanTimestamp: string;
   totalFiles: number;
   totalRoutes: number;
+  comparisonResult?: FixEffectivenessAnalysis;
+}
+
+export interface FixEffectivenessAnalysis {
+  fixed: SecurityIssue[];
+  persistent: SecurityIssue[];
+  newIssues: SecurityIssue[];
+  analysis: string;
+  successRate: number;
 }
 
 export interface SecurityFinding {
