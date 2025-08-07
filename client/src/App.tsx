@@ -49,6 +49,7 @@ import { Affiliate } from "@/pages/affiliate";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import Alfr3dDashboard from "@/pages/alfr3d";
 
 function Router() {
   // Automatically scroll to top on page navigation
@@ -80,6 +81,7 @@ function Router() {
       <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><AdminBundles /></ProtectedRoute>} />
       <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminProducts /></ProtectedRoute>} />
       <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminProductEdit /></ProtectedRoute>} />
+      <Route path="/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><Alfr3dDashboard /></ProtectedRoute>} />
       <Route path="/portal" component={() => <ProtectedRoute requiredRole="customer"><CustomerPortal /></ProtectedRoute>} />
       <Route path="/portal/subscriptions" component={() => <ProtectedRoute requiredRole="customer"><PortalSubscriptions /></ProtectedRoute>} />
       

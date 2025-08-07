@@ -90,6 +90,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register admin image upload routes - PROTECTED
   const adminImagesRoutes = await import('./routes/adminImages');
   app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
+  
+  // Register ALFR3D security dashboard routes - ADMIN ONLY (development)
+  if (process.env.NODE_ENV === 'development') {
+    const alfr3dRoutes = await import('./routes/alfr3d');
+    app.use('/api/alfr3d', alfr3dRoutes.default);
+  }
 
   // Get all products - FROM DATABASE
   app.get("/api/products", async (req, res) => {

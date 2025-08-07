@@ -3,6 +3,9 @@ import { pgTable, text, varchar, decimal, integer, boolean } from "drizzle-orm/p
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Import ALFR3D security issues schema
+export * from './alfr3d-schema';
+
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),

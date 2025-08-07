@@ -1,4 +1,5 @@
 import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
+import { type SecurityIssue, type InsertSecurityIssue } from "@shared/alfr3d-schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -137,6 +138,14 @@ export interface IStorage {
   updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined>;
   getAllSubscriptions(): Promise<Subscription[]>;
   
+  // ALFR3D Security Dashboard
+  getSecurityIssues(): Promise<SecurityIssue[]>;
+  createSecurityIssue(issue: InsertSecurityIssue): Promise<SecurityIssue>;
+  updateSecurityIssueReviewStatus(id: string, reviewed: boolean, reviewedBy?: string): Promise<SecurityIssue | undefined>;
+  clearSecurityIssues(): Promise<void>;
+  getLastScanTimestamp(): Promise<string | null>;
+  updateLastScanTimestamp(): Promise<void>;
+  
   // Phase 19: Email Events Tracking (Abandoned Cart + Reorder Reminders)
   createEmailEvent(event: { userId?: string; emailType: string; relatedId: string; emailAddress: string; }): Promise<void>;
   getEmailEventsByType(emailType: string): Promise<any[]>;
@@ -192,6 +201,8 @@ export class MemStorage implements IStorage {
   private referralClaims: Map<string, any>; // Phase 20
   private supportTickets: Map<string, any>; // Phase 21
   private chatSessions: Map<string, any>; // Phase 21
+  private securityIssues: Map<string, SecurityIssue>; // ALFR3D
+  private lastScanTimestamp: string | null = null; // ALFR3D
 
   constructor() {
     this.products = new Map();
@@ -219,6 +230,7 @@ export class MemStorage implements IStorage {
     this.referralClaims = new Map(); // Phase 20
     this.supportTickets = new Map(); // Phase 21
     this.chatSessions = new Map(); // Phase 21
+    this.securityIssues = new Map(); // ALFR3D
     this.seedData();
     this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
@@ -2672,6 +2684,52 @@ export class MemStorage implements IStorage {
     };
     this.chatSessions.set(id, updated);
     return updated;
+  }
+  
+  // ALFR3D Security Dashboard Methods
+  async getSecurityIssues(): Promise<SecurityIssue[]> {
+    return Array.from(this.securityIssues.values())
+      .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+  }
+  
+  async createSecurityIssue(issue: InsertSecurityIssue): Promise<SecurityIssue> {
+    const id = randomUUID();
+    const timestamp = new Date().toISOString();
+    const securityIssue: SecurityIssue = {
+      id,
+      ...issue,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+    this.securityIssues.set(id, securityIssue);
+    return securityIssue;
+  }
+  
+  async updateSecurityIssueReviewStatus(id: string, reviewed: boolean, reviewedBy?: string): Promise<SecurityIssue | undefined> {
+    const issue = this.securityIssues.get(id);
+    if (!issue) return undefined;
+    
+    const updated: SecurityIssue = {
+      ...issue,
+      reviewed,
+      reviewedAt: reviewed ? new Date().toISOString() : null,
+      reviewedBy: reviewed ? reviewedBy : null,
+      updatedAt: new Date().toISOString(),
+    };
+    this.securityIssues.set(id, updated);
+    return updated;
+  }
+  
+  async clearSecurityIssues(): Promise<void> {
+    this.securityIssues.clear();
+  }
+  
+  async getLastScanTimestamp(): Promise<string | null> {
+    return this.lastScanTimestamp;
+  }
+  
+  async updateLastScanTimestamp(): Promise<void> {
+    this.lastScanTimestamp = new Date().toISOString();
   }
 }
 
