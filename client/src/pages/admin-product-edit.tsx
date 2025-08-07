@@ -172,7 +172,7 @@ export default function AdminProductEdit() {
 
   const generateSEOFromProduct = () => {
     if (formData.name && formData.description) {
-      const title = formData.name + " | Wild Nutrition";
+      const title = formData.name;
       const description = formData.description.slice(0, 150) + (formData.description.length > 150 ? "..." : "");
       const keywords = [
         ...formData.categories.map(c => c.toLowerCase()),
@@ -476,7 +476,7 @@ export default function AdminProductEdit() {
                         id="seoTitle"
                         value={formData.seoTitle}
                         onChange={(e) => setFormData(prev => ({ ...prev, seoTitle: e.target.value }))}
-                        placeholder="Product Name | Wild Nutrition"
+                        placeholder="Product Name"
                         className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
                       />
                       <p className="text-xs text-gray-500">Recommended length: 50-60 characters</p>

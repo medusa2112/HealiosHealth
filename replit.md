@@ -1,7 +1,7 @@
-# Wild Nutrition E-commerce Application
+# E-commerce Application
 
 ## Overview
-This project is a full-stack e-commerce application for Wild Nutrition, a premium supplement company. It aims to provide a modern, accessible, and high-performance online shopping experience. Key capabilities include product browsing, shopping cart functionality, secure checkout, and comprehensive product information. The business vision is to establish a robust digital storefront that effectively showcases Wild Nutrition's product range, emphasizing their "nutrition without the nonsense" philosophy and Food-Grown® difference, while expanding market reach in regions like South Africa. The project also focuses on environmental responsibility through initiatives like The Ocean Cleanup partnership.
+This project is a full-stack e-commerce application for a premium supplement company. It aims to provide a modern, accessible, and high-performance online shopping experience. Key capabilities include product browsing, shopping cart functionality, secure checkout, and comprehensive product information. The business vision is to establish a robust digital storefront that effectively showcases the product range, emphasizing quality nutrition products, while expanding market reach in regions like South Africa. The project also focuses on environmental responsibility through sustainability initiatives.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.

@@ -363,7 +363,7 @@ export default function HomePage() {
         keywords="wellness supplements, natural vitamins, daily wellness, premium supplements, Healios, quality ingredients, third-party tested"
         image="/assets/healios-health27.png"
       />
-      {/* Wild Nutrition Hero Section */}
+      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Video Background */}
         <video
@@ -540,7 +540,7 @@ export default function HomePage() {
           </div>
         </section>
       )}
-      {/* Wild Nutrition Bestsellers Section */}
+      {/* Bestsellers Section */}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="lg:grid lg:grid-cols-4 lg:gap-12">
@@ -715,7 +715,7 @@ export default function HomePage() {
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
                       <div className={`group cursor-pointer ${!(product.inStock && product.stockQuantity > 0) ? 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100' : ''} transition-all duration-300`} itemScope itemType="https://schema.org/Product">
-                        {/* Clean White Background for Products - Wild Nutrition Style */}
+                        {/* Clean White Background for Products */}
                         <div className="relative bg-gray-50 dark:bg-gray-800 mb-6 aspect-square overflow-hidden group-hover:shadow-lg transition-all duration-300">
                           {/* Supply Badge - Top Left - Only for supplements */}
                           {product.type === 'supplement' && product.supplyDays && (
@@ -763,7 +763,7 @@ export default function HomePage() {
                           )}
                         </div>
                         
-                        {/* Product Info - Wild Nutrition Clean Style */}
+                        {/* Product Info - Clean Style */}
                         <div className="space-y-2">
                           {/* Product Badge */}
                           <div className="inline-block bg-black text-white px-2 py-1 text-xs font-medium">
