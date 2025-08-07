@@ -19,6 +19,7 @@ export default function Alfr3dDashboard() {
   const [search, setSearch] = useState("");
   const [selectedIssue, setSelectedIssue] = useState<SecurityIssue | null>(null);
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
 
   // Only show in development
@@ -70,21 +71,21 @@ export default function Alfr3dDashboard() {
 
   // Generate AI fix prompt
   const generateFixMutation = useMutation({
-    mutationFn: (issueId: string) => 
-      apiRequest("POST", `/api/alfr3d/issues/${issueId}/fix-prompt`),
-    onSuccess: (data, issueId) => {
-      const issue = issues?.find(i => i.id === issueId);
-      if (issue && data.fixPrompt) {
-        setSelectedIssue(issue);
+    mutationFn: ({ issueId, issue }: { issueId: string; issue: SecurityIssue }) => {
+      setSelectedIssue(issue);
+      return apiRequest("POST", `/api/alfr3d/issues/${issueId}/fix-prompt`);
+    },
+    onSuccess: (data) => {
+      if (selectedIssue && data.fixPrompt) {
         const prompt = `🔒 SECURITY FIX REQUEST
 
-ISSUE: ${issue.title}
-FILE: ${issue.file}
-LINE: ${issue.line || 'N/A'}
-SEVERITY: ${issue.severity.toUpperCase()}
+ISSUE: ${selectedIssue.title}
+FILE: ${selectedIssue.file}
+LINE: ${selectedIssue.line || 'N/A'}
+SEVERITY: ${selectedIssue.severity.toUpperCase()}
 
 DESCRIPTION:
-${issue.description}
+${selectedIssue.description}
 
 AI EXPERT ANALYSIS:
 ${data.fixPrompt.analysis}
@@ -104,10 +105,11 @@ ${data.fixPrompt.testingApproach}
 ---
 Please implement this security fix following the expert recommendations above.`;
         setGeneratedPrompt(prompt);
+        setDialogOpen(true);
       }
       toast({
         title: "AI Fix Prompt Generated",
-        description: "Expert analysis completed. Click to view and copy the prompt.",
+        description: "Expert analysis completed. View and copy the prompt.",
       });
     },
     onError: () => {
@@ -126,6 +128,7 @@ Please implement this security fix following the expert recommendations above.`;
         title: "Copied to Clipboard",
         description: "AI fix prompt copied! You can now paste it in chat with me.",
       });
+      setDialogOpen(false);
     } catch (err) {
       toast({
         title: "Copy Failed",
@@ -174,90 +177,37 @@ Please implement this security fix following the expert recommendations above.`;
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-black dark:text-white mb-2">
-                ALFR3D Security Dashboard
+              <h1 className="text-2xl font-bold text-black dark:text-white">
+                🛡️ ALFR3D Security
               </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Development-only security scanning and analysis
-              </p>
             </div>
-            <div className="flex items-center gap-3">
-              {scanStatus?.isScanning && (
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <RefreshCw className="w-3 h-3 animate-spin" />
-                  Scanning...
-                </Badge>
-              )}
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {stats.total} issues • {stats.critical} critical • {stats.high} high
+              </div>
               <Button 
                 onClick={() => scanMutation.mutate()}
                 disabled={scanMutation.isPending || scanStatus?.isScanning}
-                variant="outline"
                 size="sm"
+                className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Manual Scan
+                {scanMutation.isPending || scanStatus?.isScanning ? (
+                  <>
+                    <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
+                    Scanning...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="w-3 h-3 mr-1" />
+                    Scan
+                  </>
+                )}
               </Button>
             </div>
           </div>
-          {scanStatus?.lastScan && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Last scan: {new Date(scanStatus.lastScan).toLocaleString()}
-            </p>
-          )}
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold text-black dark:text-white">{stats.total}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Total Issues</p>
-                </div>
-                <AlertTriangle className="h-8 w-8 text-orange-500" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold text-red-600">{stats.critical}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Critical</p>
-                </div>
-                <Shield className="h-8 w-8 text-red-500" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold text-orange-600">{stats.high}</p>
-                  <p className="text-gray-600 dark:text-gray-400">High Priority</p>
-                </div>
-                <AlertTriangle className="h-8 w-8 text-orange-500" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold text-green-600">{stats.reviewed}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Reviewed</p>
-                </div>
-                <Check className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Filters */}
@@ -400,7 +350,7 @@ Please implement this security fix following the expert recommendations above.`;
                                 size="sm"
                                 variant="outline"
                                 className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
-                                onClick={() => generateFixMutation.mutate(issue.id)}
+                                onClick={() => generateFixMutation.mutate({ issueId: issue.id, issue })}
                                 disabled={generateFixMutation.isPending}
                               >
                                 {generateFixMutation.isPending ? (
@@ -467,6 +417,50 @@ Please implement this security fix following the expert recommendations above.`;
             )}
           </CardContent>
         </Card>
+        
+        {/* AI Fix Prompt Dialog */}
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5" />
+                AI Expert Fix Prompt - {selectedIssue?.title}
+              </DialogTitle>
+              <DialogDescription>
+                Generated security fix instructions ready to use with AI assistant
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Textarea
+                value={generatedPrompt}
+                readOnly
+                className="min-h-96 font-mono text-sm"
+              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={copyPromptToClipboard}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copy & Use with AI Assistant
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setDialogOpen(false);
+                    setSelectedIssue(null);
+                    setGeneratedPrompt("");
+                  }}
+                >
+                  Close
+                </Button>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
+                💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
