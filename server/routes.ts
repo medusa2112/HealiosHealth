@@ -89,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Register admin image upload routes
   const adminImagesRoutes = await import('./routes/adminImages');
-  app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
+  app.use('/api/admin/images', adminImagesRoutes.default);
 
   // Get all products - FROM DATABASE
   app.get("/api/products", async (req, res) => {
