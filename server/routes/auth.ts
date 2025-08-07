@@ -2,6 +2,7 @@ import express from 'express';
 import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole } from '../lib/auth';
+import { auditLogin, auditLogout } from '../lib/auditMiddleware';
 
 const router = express.Router();
 
@@ -83,7 +84,15 @@ router.get('/login', (req, res) => {
 
 
 // Logout endpoint
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+  const user = req.user as any;
+  const userId = user?.id || user?.userId || (req.session as any)?.userId;
+  
+  if (userId) {
+    // Log logout
+    await auditLogout(userId);
+  }
+  
   if (req.session) {
     req.session.destroy((err: any) => {
       if (err) console.error('Session destroy error:', err);
@@ -118,6 +127,14 @@ router.post('/mock-login', async (req, res) => {
     // Set session
     req.session = req.session || {};
     req.session.userId = user.id;
+    
+    // Log successful login
+    await auditLogin(user.id, true, {
+      email: user.email,
+      role: user.role,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent')
+    });
 
     // Redirect based on role
     const redirectUrl = user.role === 'admin' ? '/admin' : 
@@ -130,6 +147,14 @@ router.post('/mock-login', async (req, res) => {
     });
   } catch (error) {
     console.error('Auth error:', error);
+    // Log failed login attempt
+    if (req.body.email) {
+      await auditLogin(req.body.email, false, {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+    }
     res.status(500).json({ message: 'Authentication failed' });
   }
 });
@@ -166,11 +191,25 @@ if (process.env.NODE_ENV === 'development') {
       }
       
       // Set up the session manually for demo purposes
-      req.login(adminUser, (err) => {
+      req.login(adminUser, async (err) => {
         if (err) {
           console.error('[DEMO_LOGIN] Login error:', err);
+          await auditLogin(adminUser.id, false, {
+            type: 'demo_login',
+            error: err.message,
+            ip: req.ip || req.connection.remoteAddress
+          });
           return res.status(500).json({ message: 'Demo login failed' });
         }
+        
+        // Log successful demo login
+        await auditLogin(adminUser.id, true, {
+          type: 'demo_login',
+          email: adminUser.email,
+          role: adminUser.role,
+          ip: req.ip || req.connection.remoteAddress,
+          userAgent: req.get('User-Agent')
+        });
         
         console.log(`[DEMO_LOGIN] Successfully logged in as admin: ${adminUser.email}`);
         res.json({ 

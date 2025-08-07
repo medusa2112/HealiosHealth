@@ -5,6 +5,7 @@ import { products } from '@shared/schema';
 import { db } from '../db';
 import { eq, sql } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
+import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
 import discountCodesRouter from './adminDiscounts';
@@ -21,6 +22,18 @@ router.use('/abandoned-carts', abandonedCartsRouter);
 
 // Mount discount codes subrouter
 router.use('/discount-codes', discountCodesRouter);
+
+// Admin Logs API - Get audit logs
+router.get('/logs', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit as string) || 100;
+    const logs = await storage.getAdminLogs(limit);
+    res.json(logs);
+  } catch (error) {
+    console.error('Error fetching admin logs:', error);
+    res.status(500).json({ error: 'Failed to fetch admin logs' });
+  }
+});
 
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {
@@ -110,7 +123,7 @@ router.get('/products/:id', async (req, res) => {
   }
 });
 
-router.post('/products', async (req, res) => {
+router.post('/products', auditAction('create_product', 'product'), async (req, res) => {
   try {
     const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, type, bottleCount, dailyDosage, supplyDays } = req.body;
     
@@ -154,7 +167,7 @@ router.post('/products', async (req, res) => {
   }
 });
 
-router.put('/products/:id', async (req, res) => {
+router.put('/products/:id', auditAction('update_product', 'product'), async (req, res) => {
   try {
     const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = req.body;
     
@@ -193,7 +206,7 @@ router.put('/products/:id', async (req, res) => {
   }
 });
 
-router.delete('/products/:id', async (req, res) => {
+router.delete('/products/:id', auditAction('delete_product', 'product'), async (req, res) => {
   try {
     const [deletedProduct] = await db.delete(products).where(eq(products.id, req.params.id)).returning();
     if (!deletedProduct) {
@@ -214,7 +227,7 @@ router.delete('/products/:id', async (req, res) => {
   }
 });
 
-router.put('/products/:id/stock', async (req, res) => {
+router.put('/products/:id/stock', auditAction('update_stock', 'product'), async (req, res) => {
   try {
     const { quantity } = req.body;
     if (typeof quantity !== 'number' || quantity < 0) {
