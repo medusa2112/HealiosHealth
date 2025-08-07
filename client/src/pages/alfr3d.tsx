@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, AlertTriangle, Bug, Database, Zap, RefreshCw, Eye, Check, Clock, Brain, Archive, ArchiveRestore, TrendingUp, FileText } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Shield, AlertTriangle, Bug, Database, Zap, RefreshCw, Eye, Check, Clock, Brain, Archive, ArchiveRestore, TrendingUp, FileText, Copy, Bot } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { SecurityIssue } from "../../../types/alfr3d";
@@ -15,6 +17,8 @@ import type { SecurityIssue } from "../../../types/alfr3d";
 export default function Alfr3dDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
+  const [selectedIssue, setSelectedIssue] = useState<SecurityIssue | null>(null);
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
   const { toast } = useToast();
 
   // Only show in development
@@ -63,6 +67,73 @@ export default function Alfr3dDashboard() {
       queryClient.invalidateQueries({ queryKey: ['/api/alfr3d/issues'] });
     },
   });
+
+  // Generate AI fix prompt
+  const generateFixMutation = useMutation({
+    mutationFn: (issueId: string) => 
+      apiRequest("POST", `/api/alfr3d/issues/${issueId}/fix-prompt`),
+    onSuccess: (data, issueId) => {
+      const issue = issues?.find(i => i.id === issueId);
+      if (issue && data.fixPrompt) {
+        setSelectedIssue(issue);
+        const prompt = `🔒 SECURITY FIX REQUEST
+
+ISSUE: ${issue.title}
+FILE: ${issue.file}
+LINE: ${issue.line || 'N/A'}
+SEVERITY: ${issue.severity.toUpperCase()}
+
+DESCRIPTION:
+${issue.description}
+
+AI EXPERT ANALYSIS:
+${data.fixPrompt.analysis}
+
+RECOMMENDED STEPS:
+${data.fixPrompt.steps.map((step: string, i: number) => `${i + 1}. ${step}`).join('\n')}
+
+RISK LEVEL: ${data.fixPrompt.riskLevel.toUpperCase()}
+ESTIMATED TIME: ${data.fixPrompt.estimatedTime}
+
+PREREQUISITES:
+${data.fixPrompt.prerequisites.map((req: string) => `• ${req}`).join('\n')}
+
+TESTING APPROACH:
+${data.fixPrompt.testingApproach}
+
+---
+Please implement this security fix following the expert recommendations above.`;
+        setGeneratedPrompt(prompt);
+      }
+      toast({
+        title: "AI Fix Prompt Generated",
+        description: "Expert analysis completed. Click to view and copy the prompt.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to generate AI fix prompt. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const copyPromptToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedPrompt);
+      toast({
+        title: "Copied to Clipboard",
+        description: "AI fix prompt copied! You can now paste it in chat with me.",
+      });
+    } catch (err) {
+      toast({
+        title: "Copy Failed",
+        description: "Please manually copy the text from the dialog.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const filteredIssues = (issues || []).filter(issue => {
     const matchesFilter = filter === "all" || issue.type === filter;
@@ -300,27 +371,94 @@ export default function Alfr3dDashboard() {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => reviewMutation.mutate({ 
-                            id: issue.id, 
-                            reviewed: !issue.reviewed 
-                          })}
-                          disabled={reviewMutation.isPending}
-                        >
-                          {issue.reviewed ? (
-                            <>
-                              <Eye className="w-3 h-3 mr-1" />
-                              Unmark
-                            </>
-                          ) : (
-                            <>
-                              <Check className="w-3 h-3 mr-1" />
-                              Mark Reviewed
-                            </>
-                          )}
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => reviewMutation.mutate({ 
+                              id: issue.id, 
+                              reviewed: !issue.reviewed 
+                            })}
+                            disabled={reviewMutation.isPending}
+                          >
+                            {issue.reviewed ? (
+                              <>
+                                <Eye className="w-3 h-3 mr-1" />
+                                Unmark
+                              </>
+                            ) : (
+                              <>
+                                <Check className="w-3 h-3 mr-1" />
+                                Mark Reviewed
+                              </>
+                            )}
+                          </Button>
+                          
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+                                onClick={() => generateFixMutation.mutate(issue.id)}
+                                disabled={generateFixMutation.isPending}
+                              >
+                                {generateFixMutation.isPending ? (
+                                  <>
+                                    <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
+                                    Generating...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Bot className="w-3 h-3 mr-1" />
+                                    AI Fix
+                                  </>
+                                )}
+                              </Button>
+                            </DialogTrigger>
+                            {selectedIssue && generatedPrompt && (
+                              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                <DialogHeader>
+                                  <DialogTitle className="flex items-center gap-2">
+                                    <Brain className="w-5 h-5" />
+                                    AI Expert Fix Prompt - {selectedIssue.title}
+                                  </DialogTitle>
+                                  <DialogDescription>
+                                    Generated security fix instructions ready to use with AI assistant
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <Textarea
+                                    value={generatedPrompt}
+                                    readOnly
+                                    className="min-h-96 font-mono text-sm"
+                                  />
+                                  <div className="flex gap-2">
+                                    <Button
+                                      onClick={copyPromptToClipboard}
+                                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                                    >
+                                      <Copy className="w-4 h-4 mr-2" />
+                                      Copy & Use with AI Assistant
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        setSelectedIssue(null);
+                                        setGeneratedPrompt("");
+                                      }}
+                                    >
+                                      Close
+                                    </Button>
+                                  </div>
+                                  <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
+                                    💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            )}
+                          </Dialog>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
