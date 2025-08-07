@@ -43,7 +43,7 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Get user from session or passport user (OAuth)
-      const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+      const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId || (req.user as any)?.id;
       
       console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
       console.log(`[PROTECT_ROUTE] Session userId: ${(req.session as any)?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
@@ -81,7 +81,7 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
 // Simple auth check - just verifies user exists
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId || (req.user as any)?.id;
     
     console.log(`[REQUIRE_AUTH] Checking auth for userId: ${userId}`);
     console.log(`[REQUIRE_AUTH] Session:`, (req.session as any)?.userId ? 'present' : 'missing');
@@ -112,7 +112,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 export const requireSessionOrAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Check for authenticated user first
-    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId || (req.user as any)?.id;
     if (userId) {
       const user = await storage.getUserById(userId);
       if (user) {
