@@ -1648,34 +1648,39 @@ export class MemStorage implements IStorage {
   }
 
   private seedUsers() {
-    const testUsers: User[] = [
-      {
-        id: "admin-user-id",
-        email: "admin@healios.com",
-        password: "admin123",
-        firstName: "Admin",
-        lastName: "User",
-        role: "admin",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: "customer-user-id", 
-        email: "customer@healios.com",
-        password: "password123",
-        firstName: "Customer",
-        lastName: "User",
-        role: "customer",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-    ];
+    // Only seed if users don't already exist (prevent reset on reload)
+    if (this.users.size === 0) {
+      const testUsers: User[] = [
+        {
+          id: "admin-user-id",
+          email: "dn@thefourths.com",
+          password: "SecureAdmin2025!",
+          firstName: "DN",
+          lastName: "Admin",
+          role: "admin",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: "customer-user-id", 
+          email: "customer@healios.com",
+          password: "password123",
+          firstName: "Customer",
+          lastName: "User",
+          role: "customer",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }
+      ];
 
-    testUsers.forEach(user => {
-      this.users.set(user.id, user);
-    });
+      testUsers.forEach(user => {
+        this.users.set(user.id, user);
+      });
 
-    console.log("✅ Seeded", testUsers.length, "test users for authentication testing");
+      console.log("✅ Seeded", testUsers.length, "users in database");
+    } else {
+      console.log("✅ Users already exist in database, skipping seed");
+    }
   }
 
   // Seed abandoned carts for Phase 11 testing

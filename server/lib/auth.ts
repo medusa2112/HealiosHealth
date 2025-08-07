@@ -22,22 +22,28 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
       // Get user from session (assuming session-based auth)
       const userId = req.session?.userId;
       
+      console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
+      
       if (!userId) {
+        console.log('[PROTECT_ROUTE] No userId in session');
         return res.status(401).json({ message: 'Authentication required' });
       }
 
       const user = await storage.getUserById(userId);
       
-      if (!user || !roles.includes(user.role as 'admin' | 'customer' | 'guest')) {
-        // Log unauthorized access attempt
-        if (user) {
-          await SecurityLogger.logRoleEscalationAttempt(req, user.role, roles.join('|'));
-        } else {
-          await SecurityLogger.logUnauthorizedAccess(req, roles.join('|'));
-        }
+      if (!user) {
+        console.log(`[PROTECT_ROUTE] User not found for userId: ${userId}`);
+        return res.status(401).json({ message: 'User not found' });
+      }
+      
+      console.log(`[PROTECT_ROUTE] Found user: ${user.email}, role: ${user.role}`);
+      
+      if (!roles.includes(user.role as 'admin' | 'customer' | 'guest')) {
+        console.log(`[PROTECT_ROUTE] Access denied - User role '${user.role}' not in allowed roles [${roles.join(', ')}]`);
         return res.status(403).json({ message: 'Access denied' });
       }
       
+      console.log(`[PROTECT_ROUTE] Access granted for ${user.email} (${user.role})`);
       req.user = user;
       next();
     } catch (err) {
@@ -91,12 +97,8 @@ export const getAdminEmails = (): string[] => {
 
 // Helper function to determine role based on email
 export const determineUserRole = (email: string): 'admin' | 'customer' => {
-  const adminEmails = getAdminEmails();
-  // Check for admin email patterns - exact match or pattern based
-  const isAdminEmail = email === 'admin@healios.com' ||
-                      email === 'admin@test.com' ||
-                      email.includes('admin@') ||
-                      adminEmails.includes(email);
+  // Only dn@thefourths.com is admin
+  const isAdminEmail = email === 'dn@thefourths.com';
   
   return isAdminEmail ? 'admin' : 'customer';
 };
