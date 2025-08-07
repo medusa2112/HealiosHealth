@@ -123,7 +123,7 @@ export default function AdminProductEdit() {
         return apiRequest("POST", "/api/admin/products", payload);
       }
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin"] });
       queryClient.invalidateQueries({ queryKey: [`/api/admin/products/${id}`] });
