@@ -13,6 +13,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 import { ShoppingCart, Package, MapPin, Plus, Edit, Trash2, User, Clock, CreditCard } from "lucide-react";
 import ReferralsPage from "./portal/Referrals";
+import { SEOHead } from '@/components/seo-head';
 
 interface CustomerPortalData {
   user: {
@@ -269,6 +270,11 @@ export default function CustomerPortal() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
+      <SEOHead 
+        title="Customer Portal | Healios"
+        description="Manage your orders, subscriptions, addresses, and account settings in your Healios customer portal."
+        keywords="customer portal, my account, order history, subscriptions, addresses, healios"
+      />
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

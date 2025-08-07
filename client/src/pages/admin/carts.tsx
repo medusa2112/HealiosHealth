@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Download, ShoppingCart, Users, DollarSign, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 interface CartItem {
   productId: string;
@@ -130,7 +132,16 @@ export default function AdminCarts() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEOHead 
+        title="Abandoned Cart Analytics - Admin | Healios"
+        description="Track and analyze abandoned shopping carts to identify recovery opportunities in the Healios admin panel."
+      />
+      <AdminHeader 
+        title="Abandoned Cart Analytics" 
+        subtitle="Track and analyze abandoned shopping carts to identify recovery opportunities"
+      />
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -329,6 +340,7 @@ export default function AdminCarts() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

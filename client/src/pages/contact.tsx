@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from '@/components/seo-head';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -46,6 +47,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead 
+        title="Contact Us | Healios"
+        description="Get in touch with our wellness experts. Contact Healios for product questions, support, or general inquiries about our premium supplements."
+        keywords="contact healios, customer support, supplement questions, wellness support, health inquiries"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-16">

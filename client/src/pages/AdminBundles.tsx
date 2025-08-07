@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiRequest } from '@/lib/queryClient';
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 interface Bundle {
   id: string;
@@ -399,7 +401,16 @@ export default function AdminBundles() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEOHead 
+        title="Product Bundles - Admin | Healios"
+        description="Manage product bundles and promotional offers in the Healios admin panel."
+      />
+      <AdminHeader 
+        title="Product Bundles" 
+        subtitle="Manage product bundles with smart pricing and exclusion rules"
+      />
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-black">Product Bundles</h1>
@@ -538,6 +549,7 @@ export default function AdminBundles() {
           />
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

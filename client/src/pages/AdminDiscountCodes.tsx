@@ -14,6 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, TrendingUp, Users, Percent } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import type { DiscountCode, InsertDiscountCode } from '@shared/schema';
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 interface CreateDiscountForm {
   code: string;
@@ -177,7 +179,16 @@ function AdminDiscountCodes() {
   const totalUsage = discountCodes.reduce((sum: number, c: DiscountCode) => sum + ((c.usageCount ?? 0)), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEOHead 
+        title="Discount Codes - Admin | Healios"
+        description="Manage promotional codes and discounts in the Healios admin panel."
+      />
+      <AdminHeader 
+        title="Discount Codes" 
+        subtitle="Manage promotional codes and discounts for your store"
+      />
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Discount Codes</h1>
         <p className="text-gray-600 dark:text-gray-400">
@@ -422,6 +433,7 @@ function AdminDiscountCodes() {
           </Table>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

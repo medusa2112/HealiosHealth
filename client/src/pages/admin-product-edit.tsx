@@ -15,6 +15,8 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import AdminImageUpload from "@/components/AdminImageUpload";
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 interface ProductFormData {
   name: string;
@@ -200,9 +202,17 @@ export default function AdminProductEdit() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-white dark:bg-black">
+      <SEOHead 
+        title={`${isEditing ? 'Edit' : 'Create'} Product - Admin | Healios`}
+        description="Create and edit product details, pricing, inventory, and SEO settings in the Healios admin panel."
+      />
+      <AdminHeader 
+        title={isEditing ? 'Edit Product' : 'Create Product'} 
+        subtitle={isEditing ? `Editing: ${product?.name || formData.name}` : 'Add a new product to your catalog'}
+      />
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Header Actions */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button 

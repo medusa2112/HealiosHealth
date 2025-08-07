@@ -9,6 +9,8 @@ import { apiRequest } from "@/lib/queryClient";
 import { ArrowLeft, RefreshCw, DollarSign, Package, AlertTriangle, CheckCircle, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 interface Order {
   id: string;
@@ -166,7 +168,16 @@ export default function AdminOrders() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEOHead 
+        title="Order Management - Admin | Healios"
+        description="View and manage all customer orders, refunds, and payment status in the Healios admin panel."
+      />
+      <AdminHeader 
+        title="Order Management" 
+        subtitle="View and manage all customer orders, refunds, and payment status"
+      />
+      <div className="max-w-7xl mx-auto px-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
@@ -389,6 +400,7 @@ export default function AdminOrders() {
             );
           })
         )}
+      </div>
       </div>
     </div>
   );

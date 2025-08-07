@@ -11,6 +11,8 @@ import { Plus, Edit, Trash2, Package, DollarSign, Eye, Search } from "lucide-rea
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from '@/components/seo-head';
+import { AdminHeader } from '@/components/admin-header';
 
 const availableCategories = [
   "Vitamins", "Minerals", "Gummies", "Probiotics", "Adaptogens", 
@@ -80,16 +82,18 @@ export default function AdminProducts() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-black dark:text-white">Product Management</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Manage your product catalog - {filteredProducts.length} of {products?.length || 0} products
-            </p>
-          </div>
+    <div className="min-h-screen bg-white dark:bg-black">
+      <SEOHead 
+        title="Product Management - Admin | Healios"
+        description="Manage products, inventory, and product details in the Healios admin panel."
+      />
+      <AdminHeader 
+        title="Product Management" 
+        subtitle={`Manage your product catalog - ${filteredProducts.length} of ${products?.length || 0} products`}
+      />
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header Actions */}
+        <div className="mb-8 flex justify-end">
           <Button 
             onClick={handleCreateNew}
             className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"

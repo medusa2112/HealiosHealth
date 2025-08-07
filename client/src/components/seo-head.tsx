@@ -9,11 +9,11 @@ interface SEOHeadProps {
 }
 
 export function SEOHead({
-  title = "Food-Grown® Supplements | Premium Natural Vitamins | WildClone",
-  description = "Shop Food-Grown® supplements with 113% better absorption. Premium natural vitamins, fertility support, magnesium & more. Trusted by thousands of customers.",
-  keywords = "food grown supplements, natural vitamins, magnesium supplement, fertility support, vitamin D, collagen, organic supplements",
-  image = "https://wildclone.com/images/og-image.jpg",
-  url = "https://wildclone.com",
+  title = "Premium Wellness Supplements | Natural Health Products | Healios",
+  description = "Shop premium wellness supplements with quality ingredients. Natural vitamins, minerals, probiotics & more. Third-party tested for purity and potency.",
+  keywords = "wellness supplements, natural vitamins, health supplements, probiotics, minerals, vitamin D, magnesium, premium supplements",
+  image = "/assets/healios-health27.png",
+  url = typeof window !== 'undefined' ? window.location.origin : 'https://healios.com',
   type = "website",
   structuredData
 }: SEOHeadProps) {
