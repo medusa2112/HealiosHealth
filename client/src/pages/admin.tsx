@@ -148,6 +148,47 @@ export default function AdminDashboard() {
               </div>
             )}
 
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-black dark:text-white flex items-center gap-2">
+                  <Package className="w-5 h-5" />
+                  Quick Actions
+                </CardTitle>
+                <CardDescription>
+                  Access key management features
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <Link href="/admin/products">
+                    <Button className="w-full h-16 flex flex-col items-center justify-center gap-2 bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
+                      <Package className="w-5 h-5" />
+                      <span className="text-sm">Manage Products</span>
+                    </Button>
+                  </Link>
+                  <Link href="/admin/orders">
+                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span className="text-sm">View Orders</span>
+                    </Button>
+                  </Link>
+                  <Link href="/admin/discount-codes">
+                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                      <Percent className="w-5 h-5" />
+                      <span className="text-sm">Discount Codes</span>
+                    </Button>
+                  </Link>
+                  <Link href="/admin/bundles">
+                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
+                      <Package className="w-5 h-5" />
+                      <span className="text-sm">Product Bundles</span>
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
             {stats?.lowStockProducts && stats.lowStockProducts.length > 0 && (
               <Card>
                 <CardHeader>

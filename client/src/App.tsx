@@ -36,6 +36,8 @@ import AdminLogs from "@/pages/admin/logs";
 import AdminBundles from "@/pages/AdminBundles";
 import ReorderAnalytics from "@/pages/admin/reorder-analytics";
 import AdminDiscountCodes from "@/pages/AdminDiscountCodes";
+import AdminProducts from "@/pages/admin-products";
+import AdminProductEdit from "@/pages/admin-product-edit";
 import CustomerPortal from "@/pages/customer-portal";
 import PortalSubscriptions from "@/pages/PortalSubscriptions";
 import { FAQ } from "@/pages/faq";
@@ -75,6 +77,8 @@ function Router() {
       <Route path="/admin/reorder-analytics" component={ReorderAnalytics} />
       <Route path="/admin/discount-codes" component={AdminDiscountCodes} />
       <Route path="/admin/bundles" component={AdminBundles} />
+      <Route path="/admin/products" component={AdminProducts} />
+      <Route path="/admin/products/:id" component={AdminProductEdit} />
       <Route path="/portal" component={CustomerPortal} />
       <Route path="/portal/subscriptions" component={PortalSubscriptions} />
       

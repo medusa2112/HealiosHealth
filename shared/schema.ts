@@ -36,6 +36,10 @@ export const products = pgTable("products", {
   dailyDosage: integer("daily_dosage"),
   supplyDays: integer("supply_days"),
   tags: text("tags").array().default([]), // For children's exclusion and other categorization
+  // SEO and AEO fields
+  seoTitle: text("seo_title"),
+  seoDescription: text("seo_description"),
+  seoKeywords: text("seo_keywords").array(),
 });
 
 // Phase 14: Product variants table for SKUs, sizes, flavours, bundles
