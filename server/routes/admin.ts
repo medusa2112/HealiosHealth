@@ -1,6 +1,8 @@
 import express from 'express';
 // Authentication removed - admin routes now publicly accessible
 import { storage } from '../storage';
+import { products } from '@shared/schema';
+import { db } from '../db';
 import { AdminLogger } from '../lib/admin-logger';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
@@ -22,20 +24,18 @@ router.use('/discount-codes', discountCodesRouter);
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {
   try {
-    const [products, orders, quizResults, newsletters] = await Promise.all([
-      storage.getProducts(),
-      storage.getOrdersByEmail(''), // Get all orders - we'll need to modify this
-      storage.getQuizResults(),
-      // We'll need a method to get all newsletters
-    ]);
+    // Query database directly instead of in-memory storage
+    const dbProducts = await db.select().from(products);
+    const orders = await storage.getOrdersByEmail(''); // Keep this for now
+    const quizResults = await storage.getQuizResults();
 
     res.json({
       stats: {
-        totalProducts: products.length,
+        totalProducts: dbProducts.length,
         totalOrders: orders.length,
         totalQuizCompletions: quizResults.length,
         recentOrders: orders.slice(-5),
-        lowStockProducts: products.filter(p => (p.stockQuantity || 0) < 5)
+        lowStockProducts: dbProducts.filter(p => (p.stockQuantity || 0) < 5)
       }
     });
   } catch (error) {
@@ -47,8 +47,9 @@ router.get('/', async (req, res) => {
 // Product Management - Full CRUD
 router.get('/products', async (req, res) => {
   try {
-    const products = await storage.getProducts();
-    res.json(products);
+    // Query database directly instead of in-memory storage
+    const dbProducts = await db.select().from(products);
+    res.json(dbProducts);
   } catch (error) {
     console.error('Failed to fetch products:', error);
     res.status(500).json({ message: 'Failed to fetch products' });
