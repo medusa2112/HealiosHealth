@@ -262,158 +262,150 @@ Please implement this security fix following the expert recommendations above.`;
                 </p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Severity</TableHead>
-                    <TableHead>Issue</TableHead>
-                    <TableHead>File</TableHead>
-                    <TableHead>Line</TableHead>
-                    <TableHead>Timestamp</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredIssues.map((issue) => (
-                    <TableRow key={issue.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {getTypeIcon(issue.type)}
-                          <span className="capitalize">{issue.type}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getSeverityColor(issue.severity)}>
-                          {issue.severity.toUpperCase()}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium text-black dark:text-white">{issue.title}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                            {issue.description}
-                          </p>
-                          <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                            💡 {issue.recommendation}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {issue.file.replace(/^.*\/workspace\//, '')}
-                      </TableCell>
-                      <TableCell>{issue.line || '-'}</TableCell>
-                      <TableCell className="text-sm">
-                        {new Date(issue.timestamp).toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        {issue.reviewed ? (
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                            <Check className="w-3 h-3 mr-1" />
-                            Reviewed
-                          </Badge>
-                        ) : (
-                          <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-                            <Clock className="w-3 h-3 mr-1" />
-                            Pending
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => reviewMutation.mutate({ 
-                              id: issue.id, 
-                              reviewed: !issue.reviewed 
-                            })}
-                            disabled={reviewMutation.isPending}
-                          >
-                            {issue.reviewed ? (
-                              <>
-                                <Eye className="w-3 h-3 mr-1" />
-                                Unmark
-                              </>
-                            ) : (
-                              <>
-                                <Check className="w-3 h-3 mr-1" />
-                                Mark Reviewed
-                              </>
-                            )}
-                          </Button>
-                          
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
-                                onClick={() => generateFixMutation.mutate({ issueId: issue.id, issue })}
-                                disabled={generateFixMutation.isPending}
-                              >
-                                {generateFixMutation.isPending ? (
-                                  <>
-                                    <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
-                                    Generating...
-                                  </>
-                                ) : (
-                                  <>
-                                    <Bot className="w-3 h-3 mr-1" />
-                                    AI Fix
-                                  </>
-                                )}
-                              </Button>
-                            </DialogTrigger>
-                            {selectedIssue && generatedPrompt && (
-                              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                                <DialogHeader>
-                                  <DialogTitle className="flex items-center gap-2">
-                                    <Brain className="w-5 h-5" />
-                                    AI Expert Fix Prompt - {selectedIssue.title}
-                                  </DialogTitle>
-                                  <DialogDescription>
-                                    Generated security fix instructions ready to use with AI assistant
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                  <Textarea
-                                    value={generatedPrompt}
-                                    readOnly
-                                    className="min-h-96 font-mono text-sm"
-                                  />
-                                  <div className="flex gap-2">
-                                    <Button
-                                      onClick={copyPromptToClipboard}
-                                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                                    >
-                                      <Copy className="w-4 h-4 mr-2" />
-                                      Copy & Use with AI Assistant
-                                    </Button>
-                                    <Button
-                                      variant="outline"
-                                      onClick={() => {
-                                        setSelectedIssue(null);
-                                        setGeneratedPrompt("");
-                                      }}
-                                    >
-                                      Close
-                                    </Button>
-                                  </div>
-                                  <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
-                                    💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
-                                  </div>
-                                </div>
-                              </DialogContent>
-                            )}
-                          </Dialog>
-                        </div>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="text-xs">
+                      <TableHead className="w-20">Type</TableHead>
+                      <TableHead className="w-20">Severity</TableHead>
+                      <TableHead className="min-w-0 flex-1">Issue</TableHead>
+                      <TableHead className="w-32">File</TableHead>
+                      <TableHead className="w-16">Line</TableHead>
+                      <TableHead className="w-24">Time</TableHead>
+                      <TableHead className="w-20">Status</TableHead>
+                      <TableHead className="w-32">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredIssues.map((issue) => (
+                      <TableRow key={issue.id} className="text-xs">
+                        <TableCell className="py-2">
+                          <div className="flex items-center gap-1">
+                            {getTypeIcon(issue.type)}
+                            <span className="capitalize text-xs">{issue.type}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <Badge className={`${getSeverityColor(issue.severity)} text-xs px-1 py-0`}>
+                            {issue.severity.toUpperCase()}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <div className="min-w-0">
+                            <p className="font-medium text-black dark:text-white text-xs truncate" title={issue.title}>
+                              {issue.title}
+                            </p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 truncate" title={issue.description}>
+                              {issue.description}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-mono text-xs py-2">
+                          <span className="truncate block" title={issue.file.replace(/^.*\/workspace\//, '')}>
+                            {issue.file.replace(/^.*\/workspace\//, '').replace(/^.*\//, '')}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-xs py-2">{issue.line || '-'}</TableCell>
+                        <TableCell className="text-xs py-2">
+                          {new Date(issue.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </TableCell>
+                        <TableCell className="py-2">
+                          {issue.reviewed ? (
+                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs px-1 py-0">
+                              <Check className="w-2 h-2 mr-1" />
+                              ✓
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-xs px-1 py-0">
+                              <Clock className="w-2 h-2 mr-1" />
+                              ⧖
+                            </Badge>
+                          )}
+                        </TableCell>
+                        <TableCell className="py-2">
+                          <div className="flex gap-1">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => reviewMutation.mutate({ 
+                                id: issue.id, 
+                                reviewed: !issue.reviewed 
+                              })}
+                              disabled={reviewMutation.isPending}
+                              className="h-6 px-2 text-xs"
+                            >
+                              {issue.reviewed ? (
+                                <Eye className="w-3 h-3" />
+                              ) : (
+                                <Check className="w-3 h-3" />
+                              )}
+                            </Button>
+                            
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-6 px-2 text-xs"
+                                  onClick={() => generateFixMutation.mutate({ issueId: issue.id, issue })}
+                                  disabled={generateFixMutation.isPending}
+                                >
+                                  {generateFixMutation.isPending ? (
+                                    <RefreshCw className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <Bot className="w-3 h-3" />
+                                  )}
+                                </Button>
+                              </DialogTrigger>
+                              {selectedIssue && generatedPrompt && (
+                                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                  <DialogHeader>
+                                    <DialogTitle className="flex items-center gap-2">
+                                      <Brain className="w-5 h-5" />
+                                      AI Expert Fix Prompt - {selectedIssue.title}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                      Generated security fix instructions ready to use with AI assistant
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <Textarea
+                                      value={generatedPrompt}
+                                      readOnly
+                                      className="min-h-96 font-mono text-sm"
+                                    />
+                                    <div className="flex gap-2">
+                                      <Button
+                                        onClick={copyPromptToClipboard}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                                      >
+                                        <Copy className="w-4 h-4 mr-2" />
+                                        Copy & Use with AI Assistant
+                                      </Button>
+                                      <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                          setSelectedIssue(null);
+                                          setGeneratedPrompt("");
+                                        }}
+                                      >
+                                        Close
+                                      </Button>
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
+                                      💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              )}
+                            </Dialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>
