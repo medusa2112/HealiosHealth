@@ -10,8 +10,9 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import AdminProducts from "./admin-products";
 import AdminEmailJobs from "./admin/EmailJobs";
+import Alfr3dDashboard from "./alfr3d";
 import { Link } from "wouter";
-import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp, Mail } from "lucide-react";
+import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp, Mail, Shield } from "lucide-react";
 
 interface AdminStats {
   totalProducts: number;
@@ -74,7 +75,7 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto">
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
@@ -83,6 +84,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="admin-logs">Activity Logs</TabsTrigger>
             <TabsTrigger value="email-jobs">Email Jobs</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -351,6 +353,12 @@ export default function AdminDashboard() {
                   )}
                 </CardContent>
               </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="security">
+            <div className="space-y-6">
+              <Alfr3dDashboard />
             </div>
           </TabsContent>
         </Tabs>
