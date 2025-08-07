@@ -98,8 +98,15 @@ export async function setupAuth(app: Express) {
     passport.use(strategy);
   }
 
-  passport.serializeUser((user: Express.User, cb) => cb(null, user));
-  passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+  passport.serializeUser((user: Express.User, cb) => {
+    // Store the user ID in the session for protectRoute middleware
+    const userId = (user as any).claims?.sub;
+    cb(null, { ...user, userId });
+  });
+  
+  passport.deserializeUser((user: Express.User, cb) => {
+    cb(null, user);
+  });
 
   app.get("/api/login", (req, res, next) => {
     passport.authenticate(`replitauth:${req.hostname}`, {

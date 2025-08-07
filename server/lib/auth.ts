@@ -19,13 +19,14 @@ declare global {
 export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Get user from session (assuming session-based auth)
-      const userId = req.session?.userId;
+      // Get user from session or passport user (OAuth)
+      const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
       
       console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
+      console.log(`[PROTECT_ROUTE] Session userId: ${req.session?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
       
       if (!userId) {
-        console.log('[PROTECT_ROUTE] No userId in session');
+        console.log('[PROTECT_ROUTE] No userId in session or passport user');
         return res.status(401).json({ message: 'Authentication required' });
       }
 
