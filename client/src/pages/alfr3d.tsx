@@ -18,8 +18,8 @@ export default function Alfr3dDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [selectedIssue, setSelectedIssue] = useState<SecurityIssue | null>(null);
-  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [generatedPrompts, setGeneratedPrompts] = useState<Record<string, string>>({});
+  const [dialogOpen, setDialogOpen] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Only show in development
@@ -75,7 +75,7 @@ export default function Alfr3dDashboard() {
       setSelectedIssue(issue);
       return apiRequest("POST", `/api/alfr3d/issues/${issueId}/fix-prompt`);
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (selectedIssue && data.fixPrompt) {
         const prompt = `🔒 SECURITY FIX REQUEST
 
@@ -104,8 +104,12 @@ ${data.fixPrompt.testingApproach}
 
 ---
 Please implement this security fix following the expert recommendations above.`;
-        setGeneratedPrompt(prompt);
-        setDialogOpen(true);
+        
+        setGeneratedPrompts(prev => ({
+          ...prev,
+          [variables.issueId]: prompt
+        }));
+        setDialogOpen(variables.issueId);
       }
       toast({
         title: "AI Fix Prompt Generated",
@@ -121,14 +125,17 @@ Please implement this security fix following the expert recommendations above.`;
     },
   });
 
-  const copyPromptToClipboard = async () => {
+  const copyPromptToClipboard = async (issueId: string) => {
+    const prompt = generatedPrompts[issueId];
+    if (!prompt) return;
+    
     try {
-      await navigator.clipboard.writeText(generatedPrompt);
+      await navigator.clipboard.writeText(prompt);
       toast({
         title: "Copied to Clipboard",
         description: "AI fix prompt copied! You can now paste it in chat with me.",
       });
-      setDialogOpen(false);
+      setDialogOpen(null);
     } catch (err) {
       toast({
         title: "Copy Failed",
@@ -266,14 +273,14 @@ Please implement this security fix following the expert recommendations above.`;
                 <Table>
                   <TableHeader>
                     <TableRow className="text-xs">
-                      <TableHead className="w-20">Type</TableHead>
-                      <TableHead className="w-20">Severity</TableHead>
+                      <TableHead className="w-16">Type</TableHead>
+                      <TableHead className="w-16">Sev</TableHead>
                       <TableHead className="min-w-0 flex-1">Issue</TableHead>
-                      <TableHead className="w-32">File</TableHead>
-                      <TableHead className="w-16">Line</TableHead>
-                      <TableHead className="w-24">Time</TableHead>
-                      <TableHead className="w-20">Status</TableHead>
-                      <TableHead className="w-32">Actions</TableHead>
+                      <TableHead className="w-24">File</TableHead>
+                      <TableHead className="w-12">Line</TableHead>
+                      <TableHead className="w-16">Time</TableHead>
+                      <TableHead className="w-16">Status</TableHead>
+                      <TableHead className="w-20">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -341,7 +348,7 @@ Please implement this security fix following the expert recommendations above.`;
                               )}
                             </Button>
                             
-                            <Dialog>
+                            <Dialog open={dialogOpen === issue.id} onOpenChange={(open) => setDialogOpen(open ? issue.id : null)}>
                               <DialogTrigger asChild>
                                 <Button
                                   size="sm"
@@ -357,12 +364,12 @@ Please implement this security fix following the expert recommendations above.`;
                                   )}
                                 </Button>
                               </DialogTrigger>
-                              {selectedIssue && generatedPrompt && (
+                              {generatedPrompts[issue.id] && (
                                 <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                                   <DialogHeader>
                                     <DialogTitle className="flex items-center gap-2">
                                       <Brain className="w-5 h-5" />
-                                      AI Expert Fix Prompt - {selectedIssue.title}
+                                      AI Expert Fix Prompt - {issue.title}
                                     </DialogTitle>
                                     <DialogDescription>
                                       Generated security fix instructions ready to use with AI assistant
@@ -370,13 +377,13 @@ Please implement this security fix following the expert recommendations above.`;
                                   </DialogHeader>
                                   <div className="space-y-4">
                                     <Textarea
-                                      value={generatedPrompt}
+                                      value={generatedPrompts[issue.id]}
                                       readOnly
                                       className="min-h-96 font-mono text-sm"
                                     />
                                     <div className="flex gap-2">
                                       <Button
-                                        onClick={copyPromptToClipboard}
+                                        onClick={() => copyPromptToClipboard(issue.id)}
                                         className="bg-blue-600 hover:bg-blue-700 text-white"
                                       >
                                         <Copy className="w-4 h-4 mr-2" />
@@ -384,10 +391,7 @@ Please implement this security fix following the expert recommendations above.`;
                                       </Button>
                                       <Button
                                         variant="outline"
-                                        onClick={() => {
-                                          setSelectedIssue(null);
-                                          setGeneratedPrompt("");
-                                        }}
+                                        onClick={() => setDialogOpen(null)}
                                       >
                                         Close
                                       </Button>
@@ -410,49 +414,6 @@ Please implement this security fix following the expert recommendations above.`;
           </CardContent>
         </Card>
         
-        {/* AI Fix Prompt Dialog */}
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5" />
-                AI Expert Fix Prompt - {selectedIssue?.title}
-              </DialogTitle>
-              <DialogDescription>
-                Generated security fix instructions ready to use with AI assistant
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Textarea
-                value={generatedPrompt}
-                readOnly
-                className="min-h-96 font-mono text-sm"
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={copyPromptToClipboard}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy & Use with AI Assistant
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setDialogOpen(false);
-                    setSelectedIssue(null);
-                    setGeneratedPrompt("");
-                  }}
-                >
-                  Close
-                </Button>
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 p-3 bg-blue-50 dark:bg-blue-950 rounded">
-                💡 <strong>How to use:</strong> Click "Copy & Use with AI Assistant" to copy this prompt, then paste it in a new chat with me (the AI assistant) to get specific implementation help.
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );
