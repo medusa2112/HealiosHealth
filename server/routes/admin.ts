@@ -30,13 +30,11 @@ router.get('/', async (req, res) => {
     const quizResults = await storage.getQuizResults();
 
     res.json({
-      stats: {
-        totalProducts: dbProducts.length,
-        totalOrders: orders.length,
-        totalQuizCompletions: quizResults.length,
-        recentOrders: orders.slice(-5),
-        lowStockProducts: dbProducts.filter(p => (p.stockQuantity || 0) < 5)
-      }
+      totalProducts: dbProducts.length,
+      totalOrders: orders.length,
+      totalQuizCompletions: quizResults.length,
+      recentOrders: orders.slice(-5),
+      lowStockProducts: dbProducts.filter(p => (p.stockQuantity || 0) < 5)
     });
   } catch (error) {
     console.error('Admin dashboard error:', error);
