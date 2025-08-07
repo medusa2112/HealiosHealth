@@ -98,9 +98,9 @@ router.post('/products', async (req, res) => {
 
     const product = await storage.createProduct(productData);
     
-    // Log admin action
+    // Log admin action (no auth required)
     await AdminLogger.logProductAction(
-      (req as any).user.id,
+      'system-admin',
       'create',
       product.id,
       { name: product.name, price: product.price, categories: product.categories }
@@ -137,9 +137,9 @@ router.put('/products/:id', async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     
-    // Log admin action
+    // Log admin action (no auth required)
     await AdminLogger.logProductAction(
-      (req as any).user.id,
+      'system-admin',
       'update',
       req.params.id,
       updates
@@ -159,9 +159,9 @@ router.delete('/products/:id', async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     
-    // Log admin action
+    // Log admin action (no auth required)
     await AdminLogger.logProductAction(
-      (req as any).user.id,
+      'system-admin',
       'delete',
       req.params.id
     );
@@ -185,9 +185,9 @@ router.put('/products/:id/stock', async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     
-    // Log admin action
+    // Log admin action (no auth required)
     await AdminLogger.logProductAction(
-      (req as any).user.id,
+      'system-admin',
       'update',
       req.params.id,
       { stockUpdate: quantity }
