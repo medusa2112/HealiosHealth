@@ -37,34 +37,21 @@ export default function AdminDashboard() {
   const [newStock, setNewStock] = useState<number>(0);
   const queryClient = useQueryClient();
 
-  // Check auth status
-  const { data: user, isLoading: authLoading } = useQuery({
-    queryKey: ["/auth/me"],
-    retry: false,
-  });
-
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
     queryKey: ["/admin"],
-    enabled: !!user && user.role === 'admin',
   });
 
   const { data: products, isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/admin/products"],
-    enabled: !!user && user.role === 'admin',
   });
 
   const { data: quizAnalytics, isLoading: quizLoading } = useQuery<QuizAnalytics>({
     queryKey: ["/admin/quiz/analytics"],
-    enabled: !!user && user.role === 'admin',
   });
 
   const updateStockMutation = useMutation({
     mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
-      return apiRequest(`/admin/products/${productId}/stock`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity }),
-      });
+      return apiRequest("PUT", `/admin/products/${productId}/stock`, { quantity });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/admin/products"] });
@@ -81,28 +68,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Redirect if not authenticated or not admin
-  useEffect(() => {
-    if (!authLoading && (!user || user.role !== 'admin')) {
-      window.location.href = '/login';
-    }
-  }, [user, authLoading]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-black dark:text-white">Loading...</div>
-      </div>
-    );
-  }
-
-  if (!user || user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-red-600">Access denied</div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-black p-6">
@@ -110,7 +75,7 @@ export default function AdminDashboard() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black dark:text-white">Admin Dashboard</h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Welcome back, {user.firstName} {user.lastName}
+            Website Management & Analytics
           </p>
         </div>
 

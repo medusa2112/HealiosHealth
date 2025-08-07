@@ -80,11 +80,7 @@ export default function AdminProducts() {
         supplyDays: data.supplyDays ? parseInt(data.supplyDays) : null,
       };
 
-      return apiRequest("/admin/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      return apiRequest("POST", "/admin/products", payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/admin/products"] });
@@ -119,11 +115,7 @@ export default function AdminProducts() {
         supplyDays: data.supplyDays ? parseInt(data.supplyDays) : null,
       };
 
-      return apiRequest(`/admin/products/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      return apiRequest("PUT", `/admin/products/${id}`, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/admin/products"] });
@@ -144,7 +136,7 @@ export default function AdminProducts() {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: string) => {
-      return apiRequest(`/admin/products/${id}`, { method: "DELETE" });
+      return apiRequest("DELETE", `/admin/products/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/admin/products"] });
@@ -179,7 +171,7 @@ export default function AdminProducts() {
       imageUrl: product.imageUrl,
       categories: product.categories,
       stockQuantity: product.stockQuantity?.toString() || "0",
-      featured: product.featured,
+      featured: product.featured || false,
       type: product.type || "supplement",
       bottleCount: product.bottleCount?.toString() || "",
       dailyDosage: product.dailyDosage?.toString() || "",

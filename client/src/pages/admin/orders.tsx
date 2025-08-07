@@ -44,19 +44,19 @@ export default function AdminOrders() {
   const queryClient = useQueryClient();
 
   // Fetch orders
-  const { data: orders = [], isLoading: ordersLoading, error: ordersError } = useQuery({
+  const { data: orders = [], isLoading: ordersLoading, error: ordersError } = useQuery<Order[]>({
     queryKey: ['/admin/orders'],
   });
 
   // Fetch order statistics  
-  const { data: stats, isLoading: statsLoading } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery<OrderStats>({
     queryKey: ['/admin/orders', 'stats'],
   });
 
   // Refund mutation
   const refundMutation = useMutation({
     mutationFn: async ({ orderId, amount, reason }: { orderId: string; amount?: number; reason?: string }) => {
-      return apiRequest(`/admin/orders/${orderId}/refund`, 'POST', { amount, reason });
+      return apiRequest('POST', `/admin/orders/${orderId}/refund`, { amount, reason });
     },
     onSuccess: (data, variables) => {
       toast({
@@ -79,7 +79,7 @@ export default function AdminOrders() {
   // Update status mutation
   const updateStatusMutation = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string; status: string }) => {
-      return apiRequest(`/admin/orders/${orderId}/status`, 'PUT', { status });
+      return apiRequest('PUT', `/admin/orders/${orderId}/status`, { status });
     },
     onSuccess: (data, variables) => {
       toast({
