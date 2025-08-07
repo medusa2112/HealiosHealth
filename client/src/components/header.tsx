@@ -198,12 +198,14 @@ export function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-black border-gray-700">
-                  <DropdownMenuItem className="text-white hover:bg-gray-800 hover:text-white">
-                    <Link href="/portal" className="flex items-center gap-2 w-full">
-                      <User className="h-4 w-4" />
-                      My Account
-                    </Link>
-                  </DropdownMenuItem>
+                  {user.role === 'customer' && (
+                    <DropdownMenuItem className="text-white hover:bg-gray-800 hover:text-white">
+                      <Link href="/portal" className="flex items-center gap-2 w-full">
+                        <User className="h-4 w-4" />
+                        My Account
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   {user.role === 'admin' && (
                     <DropdownMenuItem className="text-white hover:bg-gray-800 hover:text-white">
                       <Link href="/admin" className="flex items-center gap-2 w-full">
@@ -355,12 +357,14 @@ export function Header() {
                         <div className="px-3 py-2 text-sm text-gray-400">
                           Welcome, {user.firstName || 'User'}
                         </div>
-                        <Link href="/portal">
-                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2">
-                            <User className="h-4 w-4" />
-                            My Account
-                          </span>
-                        </Link>
+                        {user.role === 'customer' && (
+                          <Link href="/portal">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2">
+                              <User className="h-4 w-4" />
+                              My Account
+                            </span>
+                          </Link>
+                        )}
                         {user.role === 'admin' && (
                           <Link href="/admin">
                             <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300 flex items-center gap-2">
