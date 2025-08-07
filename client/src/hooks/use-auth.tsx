@@ -27,15 +27,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    console.log('[AUTH] userData changed:', userData, 'isLoading:', isLoading);
     if (userData && typeof userData === 'object' && 'id' in userData) {
-      console.log('[AUTH] Setting user:', userData);
       setUser(userData as User);
     } else {
-      console.log('[AUTH] Clearing user');
       setUser(null);
     }
-  }, [userData, isLoading]);
+  }, [userData]);
 
   const login = async (credentials: { username: string; password: string }): Promise<boolean> => {
     try {

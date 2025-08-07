@@ -27,12 +27,10 @@ export function RequireRole({
   useEffect(() => {
     // Add a small delay to allow auth context to stabilize
     const timer = setTimeout(() => {
-      console.log(`[REQUIRE_ROLE] Checking role '${role}' - user:`, user, 'isLoading:', isLoading, 'hasRedirected:', hasRedirected);
-      
       if (!isLoading && !hasRedirected) {
         // If user is not logged in, redirect to login
         if (!user) {
-          console.warn(`🔒 [REQUIRE_ROLE] Access denied: Authentication required for role '${role}'`);
+          console.warn(`🔒 Access denied: Authentication required for role '${role}'`);
           setLocation(fallbackPath);
           setHasRedirected(true);
           return;
@@ -40,7 +38,7 @@ export function RequireRole({
 
         // If user doesn't have any of the allowed roles
         if (!allowedRoles.includes(user.role as any)) {
-          console.warn(`🔒 [REQUIRE_ROLE] Access denied: User role '${user.role}' not in allowed roles [${allowedRoles.join(', ')}]`);
+          console.warn(`🔒 Access denied: User role '${user.role}' not in allowed roles [${allowedRoles.join(', ')}]`);
           
           // Smart redirect based on user's actual role
           if (user.role === "admin" && !allowedRoles.includes("admin")) {
@@ -51,8 +49,6 @@ export function RequireRole({
             setLocation(fallbackPath);
           }
           setHasRedirected(true);
-        } else {
-          console.log(`✅ [REQUIRE_ROLE] Access granted for role '${user.role}' in allowed roles [${allowedRoles.join(', ')}]`);
         }
       }
     }, 50); // Small delay to prevent race conditions
