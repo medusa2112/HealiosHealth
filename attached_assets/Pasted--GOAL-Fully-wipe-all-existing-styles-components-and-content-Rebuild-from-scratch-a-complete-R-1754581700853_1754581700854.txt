@@ -1,0 +1,83 @@
+## GOAL
+Fully wipe all existing styles, components, and content. Rebuild from scratch a **complete Replit-based concept site** that replicates the exact layout, style, typography, spacing, responsiveness, and interactivity shown in the attached style reference (eco-kitchenware eCommerce theme). This site is a **visual and UX pitch prototype** for Andertons.co.uk to modernise their customer experience.
+
+## OBJECTIVE
+Use the reference image to drive **UI structure and aesthetic**, but preserve Andertons’ **functional scope and content types**:
+- Navigation categories
+- Product listing structure
+- Product pages
+- Filters, search, sort
+- Cart, account
+- Admin for product management
+
+## VISUAL/UX REQUIREMENTS
+- Match **font** exactly (both headings and body)
+- Use the same **color palette**, button styles, iconography, and spacing
+- Match **layout grid**, product card styling, hover states, carousel behaviour, and responsive breakpoints
+- Hero section must match image ratio, CTA placement, and copy alignment from the reference
+- Product cards: use mock eco-kitchenware content, but structure as per Andertons (stock, badges, add-to-cart, reviews, price)
+
+## PAGES TO BUILD
+Replicate all major pages from Andertons with the **new style reference UI**:
+1. **Home** (hero, featured carousels, categories, promos)
+2. **Category grid pages** (filters, tags, product grid, pagination)
+3. **Product Detail page** (gallery, price, options, description, reviews, CTA)
+4. **Search Results**
+5. **Cart**
+6. **Checkout (stubbed, non-functional)**
+7. **Account Section**: login/register, orders, wishlist, loyalty
+8. **Content pages**: About, Delivery Info, Store Locator, Blog stub
+9. **Admin Interface** (see below)
+
+## ADMIN INTERFACE
+Include a separate `/admin` route for managing:
+- Products (CRUD: title, images, price, stock, description, variants)
+- Categories
+- Orders (view only)
+- Users (view only)
+
+Use the same style rules as the frontend for admin styling. Use mock data stored in JSON or a basic backend.
+
+## TECHNICAL STRUCTURE
+- Stack: Node.js + React or Vite + Tailwind (or equivalent) on Replit
+- Use folder structure:
+  - `/pages` → Home, Category, Product, Cart, Checkout, Admin
+  - `/components` → Header, Footer, ProductCard, FilterPanel, Carousel, AdminForms
+  - `/data` → Mock product data
+  - `/styles` → Tailwind config or global CSS
+- Admin routes under `/admin`
+- Mock authentication only
+- Responsive layout using reference image breakpoints
+
+## STYLING CONSTRAINT
+- **Do not reuse any previous styles**
+- All styles must be rebuilt to match the reference: black text, clean white backgrounds, rounded containers, soft shadows, vertical layout rhythm
+- No inline CSS allowed
+
+## NEXT STEPS
+Once build is complete, export:
+- Full responsive walkthrough with screenshots
+- Editable product schema for JSON-based updates
+- Optional deployable ZIP or GitHub link
+
+👇 What You Must Prepare Before Executing This Prompt
+To avoid false starts or missed expectations:
+
+1. Confirm Audit of Andertons Site
+List all:
+
+Page types
+
+Navigation menus
+
+Product categories
+
+Filter types
+
+Product card layout conventions
+
+Messaging blocks (e.g. loyalty points, store offers, etc.)
+
+Unique sections (like Guitar Gallery or Finance options)
+
+Once you paste that audit in here, I’ll refactor the prompt to hardcode those features in the UI rebuild.
