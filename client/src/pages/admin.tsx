@@ -202,86 +202,8 @@ export default function AdminDashboard() {
             )}
           </TabsContent>
 
-          <TabsContent value="products" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-black dark:text-white">Update Stock</CardTitle>
-                  <CardDescription>Manage product inventory</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleUpdateStock} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="product-select" className="text-black dark:text-white">
-                        Select Product
-                      </Label>
-                      <select
-                        id="product-select"
-                        value={selectedProductId}
-                        onChange={(e) => setSelectedProductId(e.target.value)}
-                        className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-black dark:text-white"
-                        required
-                      >
-                        <option value="">Choose a product...</option>
-                        {products?.map((product) => (
-                          <option key={product.id} value={product.id}>
-                            {product.name} (Current: {product.stockQuantity})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="new-stock" className="text-black dark:text-white">
-                        New Stock Quantity
-                      </Label>
-                      <Input
-                        id="new-stock"
-                        type="number"
-                        min="0"
-                        value={newStock}
-                        onChange={(e) => setNewStock(parseInt(e.target.value) || 0)}
-                        className="bg-white dark:bg-gray-900 text-black dark:text-white"
-                        required
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      disabled={updateStockMutation.isPending || !selectedProductId}
-                      className="w-full bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
-                    >
-                      {updateStockMutation.isPending ? "Updating..." : "Update Stock"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-black dark:text-white">Product List</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {productsLoading ? (
-                    <div className="text-black dark:text-white">Loading products...</div>
-                  ) : (
-                    <div className="space-y-2 max-h-96 overflow-y-auto">
-                      {products?.map((product) => (
-                        <div key={product.id} className="flex justify-between items-center p-2 border border-gray-200 dark:border-gray-700 rounded">
-                          <div className="text-black dark:text-white">
-                            <div className="font-medium">{product.name}</div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              R{product.price}
-                            </div>
-                          </div>
-                          <Badge variant={product.inStock ? "default" : "destructive"}>
-                            {product.stockQuantity} in stock
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="products">
+            <AdminProducts />
           </TabsContent>
 
           <TabsContent value="orders">
@@ -314,9 +236,6 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="product-crud">
-            <AdminProducts />
-          </TabsContent>
 
           <TabsContent value="abandoned-carts">
             <Card>
