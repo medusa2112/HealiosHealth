@@ -45,16 +45,16 @@ export function AdminNavbar({ activeTab, onTabChange }: AdminNavbarProps) {
   return (
     <div className="bg-black text-white border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo/Brand */}
-          <div className="flex items-center space-x-4">
-            <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600">
-              Development
+          <div className="flex items-center">
+            <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-600 text-xs px-2 py-1">
+              Dev
             </Badge>
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex space-x-1">
+          <nav className="flex space-x-0.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -65,38 +65,38 @@ export function AdminNavbar({ activeTab, onTabChange }: AdminNavbarProps) {
                   variant={isActive ? "secondary" : "ghost"}
                   size="sm"
                   onClick={() => onTabChange(item.id)}
-                  className={`flex items-center space-x-2 ${
+                  className={`flex items-center space-x-1 px-2 py-1 h-8 text-xs ${
                     isActive 
                       ? "bg-white text-black hover:bg-gray-100" 
                       : "text-gray-300 hover:text-white hover:bg-gray-800"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden lg:inline">{item.label}</span>
+                  <Icon className="w-3 h-3" />
+                  <span className="hidden xl:inline">{item.label}</span>
                 </Button>
               );
             })}
           </nav>
 
           {/* Admin Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="sm"
-              className="text-gray-300 hover:text-white hover:bg-gray-800"
+              className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
             >
-              <Settings className="w-4 h-4" />
-              <span className="hidden md:inline ml-2">Settings</span>
+              <Settings className="w-3 h-3" />
+              <span className="hidden xl:inline ml-1 text-xs">Settings</span>
             </Button>
             
             <Button
               variant="ghost"
               size="sm"
               onClick={handleLogout}
-              className="text-gray-300 hover:text-white hover:bg-gray-800"
+              className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
             >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden md:inline ml-2">Logout</span>
+              <LogOut className="w-3 h-3" />
+              <span className="hidden xl:inline ml-1 text-xs">Logout</span>
             </Button>
           </div>
         </div>
