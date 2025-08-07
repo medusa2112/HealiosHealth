@@ -160,6 +160,7 @@ export const orders = pgTable("orders", {
   stripePaymentIntentId: text("stripe_payment_intent_id"),
   stripeSessionId: text("stripe_session_id"), // For webhook correlation
   trackingNumber: text("tracking_number"),
+  discountCode: text("discount_code"), // Phase 15: Discount code tracking
   notes: text("notes"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),

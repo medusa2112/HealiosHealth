@@ -10,6 +10,7 @@ import express from "express";
 import path from "path";
 import { protectRoute, requireAuth } from "./lib/auth";
 import { rateLimit, secureHeaders, validateOrderAccess } from "./lib/session-auth";
+import { setupAuth } from "./replitAuth";
 import authRoutes from "./routes/auth";
 import adminRoutes from "./routes/admin";
 import portalRoutes from "./routes/portal";
@@ -26,6 +27,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
+  
+  // Setup Replit Auth BEFORE other routes
+  await setupAuth(app);
   
   // Register Stripe webhook routes BEFORE body parsing middleware
   // This is critical for webhook signature verification
