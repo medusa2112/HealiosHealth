@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getQueryFn } from '@/lib/queryClient';
 import type { User } from '@shared/schema';
 
 interface AuthContextType {
@@ -15,21 +16,26 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
-  // Query to get current user
+  // Query to get current user with proper 401 handling
   const { data: userData, isLoading, refetch } = useQuery({
     queryKey: ['/api/auth/user'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: true,
     retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 1 * 60 * 1000, // 1 minute for auth queries
+    gcTime: 5 * 60 * 1000, // 5 minutes cache time
   });
 
   useEffect(() => {
+    console.log('[AUTH] userData changed:', userData, 'isLoading:', isLoading);
     if (userData && typeof userData === 'object' && 'id' in userData) {
+      console.log('[AUTH] Setting user:', userData);
       setUser(userData as User);
     } else {
+      console.log('[AUTH] Clearing user');
       setUser(null);
     }
-  }, [userData]);
+  }, [userData, isLoading]);
 
   const login = async (credentials: { username: string; password: string }): Promise<boolean> => {
     try {
@@ -43,7 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        refetch(); // Refresh user data
+        // Force immediate refetch to ensure auth state is current
+        setTimeout(() => refetch(), 100);
         return true;
       }
       return false;
@@ -85,7 +92,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Logout error:', error);
     } finally {
       setUser(null);
-      refetch(); // Clear user data
+      // Force immediate refetch to clear auth state
+      setTimeout(() => refetch(), 100);
     }
   };
 

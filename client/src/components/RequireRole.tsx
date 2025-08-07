@@ -25,30 +25,39 @@ export function RequireRole({
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !hasRedirected) {
-      // If user is not logged in, redirect to login
-      if (!user) {
-        console.warn(`🔒 Access denied: Authentication required for role '${role}'`);
-        setLocation(fallbackPath);
-        setHasRedirected(true);
-        return;
-      }
-
-      // If user doesn't have any of the allowed roles
-      if (!allowedRoles.includes(user.role as any)) {
-        console.warn(`🔒 Access denied: User role '${user.role}' not in allowed roles [${allowedRoles.join(', ')}]`);
-        
-        // Smart redirect based on user's actual role
-        if (user.role === "admin" && !allowedRoles.includes("admin")) {
-          setLocation("/admin");
-        } else if (user.role === "customer" && !allowedRoles.includes("customer")) {
-          setLocation("/portal");
-        } else {
+    // Add a small delay to allow auth context to stabilize
+    const timer = setTimeout(() => {
+      console.log(`[REQUIRE_ROLE] Checking role '${role}' - user:`, user, 'isLoading:', isLoading, 'hasRedirected:', hasRedirected);
+      
+      if (!isLoading && !hasRedirected) {
+        // If user is not logged in, redirect to login
+        if (!user) {
+          console.warn(`🔒 [REQUIRE_ROLE] Access denied: Authentication required for role '${role}'`);
           setLocation(fallbackPath);
+          setHasRedirected(true);
+          return;
         }
-        setHasRedirected(true);
+
+        // If user doesn't have any of the allowed roles
+        if (!allowedRoles.includes(user.role as any)) {
+          console.warn(`🔒 [REQUIRE_ROLE] Access denied: User role '${user.role}' not in allowed roles [${allowedRoles.join(', ')}]`);
+          
+          // Smart redirect based on user's actual role
+          if (user.role === "admin" && !allowedRoles.includes("admin")) {
+            setLocation("/admin");
+          } else if (user.role === "customer" && !allowedRoles.includes("customer")) {
+            setLocation("/portal");
+          } else {
+            setLocation(fallbackPath);
+          }
+          setHasRedirected(true);
+        } else {
+          console.log(`✅ [REQUIRE_ROLE] Access granted for role '${user.role}' in allowed roles [${allowedRoles.join(', ')}]`);
+        }
       }
-    }
+    }, 50); // Small delay to prevent race conditions
+
+    return () => clearTimeout(timer);
   }, [user, isLoading, role, allowedRoles, setLocation, hasRedirected, fallbackPath]);
 
   // Show enhanced loading state
