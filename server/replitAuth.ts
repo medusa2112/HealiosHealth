@@ -84,25 +84,39 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
-    const user = {};
-    updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
-    
-    // Get the full user record from database to include role
-    const claims = tokens.claims();
-    const dbUser = await storage.getUserById(claims["sub"]);
-    
-    if (dbUser) {
+    try {
+      const claims = tokens.claims();
+      console.log(`[OAUTH_VERIFY] Processing user: ${claims["email"]} with ID: ${claims["sub"]}`);
+      
+      // First ensure user is properly stored
+      await upsertUser(claims);
+      
+      // Small delay to ensure storage completes
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Verify the user was stored
+      const dbUser = await storage.getUserById(claims["sub"]);
+      
+      if (!dbUser) {
+        console.error(`[OAUTH_VERIFY] Failed to store/retrieve user with ID: ${claims["sub"]}`);
+        return verified(new Error('Failed to store user'));
+      }
+      
+      console.log(`[OAUTH_VERIFY] User successfully stored/retrieved: ${dbUser.email} with role: ${dbUser.role}`);
+      
+      const user = {};
+      updateUserSession(user, tokens);
+      
       const enrichedUser = {
         ...user,
         ...dbUser,
         claims: claims,
         userId: dbUser.id
       };
-      console.log(`[REPLIT_AUTH] User authenticated: ${dbUser.email} (${dbUser.role})`);
       verified(null, enrichedUser);
-    } else {
-      verified(new Error('Failed to retrieve user after creation'), false);
+    } catch (error) {
+      console.error(`[OAUTH_VERIFY] Error during verification:`, error);
+      verified(error as Error);
     }
   };
 

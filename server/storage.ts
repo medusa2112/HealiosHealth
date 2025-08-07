@@ -1433,7 +1433,11 @@ export class MemStorage implements IStorage {
 
   // Users (Auth) Implementation
   async getUserById(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    console.log(`[STORAGE] Looking up user by ID: ${id}`);
+    const user = this.users.get(id);
+    console.log(`[STORAGE] User lookup result: ${user ? `Found ${user.email}` : 'Not found'}`);
+    console.log(`[STORAGE] Current user IDs in storage: ${Array.from(this.users.keys()).join(', ')}`);
+    return user;
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
@@ -1469,10 +1473,13 @@ export class MemStorage implements IStorage {
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
+    console.log(`[STORAGE] Upserting user with ID: ${userData.id}, email: ${userData.email}`);
+    
     // Check if user exists
     const existingUser = this.users.get(userData.id);
     
     if (existingUser) {
+      console.log(`[STORAGE] Updating existing user: ${existingUser.email}`);
       // Update existing user
       const updatedUser: User = {
         ...existingUser,
@@ -1483,8 +1490,10 @@ export class MemStorage implements IStorage {
         updatedAt: new Date().toISOString(),
       };
       this.users.set(userData.id, updatedUser);
+      console.log(`[STORAGE] User updated successfully: ${updatedUser.email} with role: ${updatedUser.role}`);
       return updatedUser;
     } else {
+      console.log(`[STORAGE] Creating new user: ${userData.email}`);
       // Create new user with provided role or determine from email
       const role = userData.role ?? (userData.email === 'dn@thefourths.com' ? 'admin' : 'customer');
       const newUser: User = {
@@ -1499,6 +1508,8 @@ export class MemStorage implements IStorage {
         updatedAt: new Date().toISOString(),
       };
       this.users.set(userData.id, newUser);
+      console.log(`[STORAGE] New user created successfully: ${newUser.email} with role: ${newUser.role}`);
+      console.log(`[STORAGE] Total users in storage: ${this.users.size}`);
       return newUser;
     }
   }
