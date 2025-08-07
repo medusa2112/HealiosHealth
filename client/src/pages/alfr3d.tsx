@@ -357,27 +357,35 @@ Please implement this security fix following the expert recommendations above.`;
                               )}
                             </Button>
                             
-                            <Dialog open={dialogOpen === issue.id} onOpenChange={(open) => setDialogOpen(open ? issue.id : null)}>
-                              <DialogTrigger asChild>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-6 px-2 text-xs"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    generateFixMutation.mutate({ issueId: issue.id, issue });
-                                  }}
-                                  disabled={generateFixMutation.isPending}
-                                >
-                                  {generateFixMutation.isPending ? (
-                                    <RefreshCw className="w-3 h-3 animate-spin" />
-                                  ) : (
-                                    <Bot className="w-3 h-3" />
-                                  )}
-                                </Button>
-                              </DialogTrigger>
-                              {generatedPrompts[issue.id] && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-6 px-2 text-xs"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                generateFixMutation.mutate({ issueId: issue.id, issue });
+                              }}
+                              disabled={generateFixMutation.isPending}
+                            >
+                              {generateFixMutation.isPending ? (
+                                <RefreshCw className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Bot className="w-3 h-3" />
+                              )}
+                            </Button>
+
+                            {generatedPrompts[issue.id] && (
+                              <Dialog open={dialogOpen === issue.id} onOpenChange={(open) => setDialogOpen(open ? issue.id : null)}>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200 h-6 px-2 text-xs"
+                                  >
+                                    <FileText className="w-3 h-3" />
+                                  </Button>
+                                </DialogTrigger>
                                 <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                                   <DialogHeader>
                                     <DialogTitle className="flex items-center gap-2">
@@ -414,8 +422,8 @@ Please implement this security fix following the expert recommendations above.`;
                                     </div>
                                   </div>
                                 </DialogContent>
-                              )}
-                            </Dialog>
+                              </Dialog>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
