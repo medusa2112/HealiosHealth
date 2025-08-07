@@ -1,11 +1,10 @@
 import express from "express";
 import { storage } from "../../storage";
-import { protectRoute } from "../../lib/auth";
+// Authentication removed - admin routes now publicly accessible
 
 const router = express.Router();
 
-// Protect all admin log routes - admin only
-router.use(protectRoute(["admin"]));
+// Admin log routes accessible without authentication
 
 // Get admin activity logs with optional filters
 router.get("/", async (req, res) => {

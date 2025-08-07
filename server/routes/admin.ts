@@ -1,5 +1,5 @@
 import express from 'express';
-import { protectRoute } from '../lib/auth';
+// Authentication removed - admin routes now publicly accessible
 import { storage } from '../storage';
 import { AdminLogger } from '../lib/admin-logger';
 import ordersRouter from './admin/orders';
@@ -8,8 +8,7 @@ import discountCodesRouter from './adminDiscounts';
 
 const router = express.Router();
 
-// Protect all admin routes - only admin role allowed
-router.use(protectRoute(['admin']));
+// Admin routes accessible without authentication for development
 
 // Mount orders subrouter
 router.use('/orders', ordersRouter);

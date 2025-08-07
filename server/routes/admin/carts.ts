@@ -1,11 +1,10 @@
 import express from "express";
 import { storage } from "../../storage";
-import { protectRoute } from "../../lib/auth";
+// Authentication removed - admin routes now publicly accessible
 
 const router = express.Router();
 
-// Protect all cart admin routes - admin only
-router.use(protectRoute(["admin"]));
+// Admin cart routes accessible without authentication
 
 // Get abandoned carts (not converted after specified time)
 router.get("/", async (req, res) => {

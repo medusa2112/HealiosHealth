@@ -4,8 +4,7 @@ import { protectRoute } from "../lib/auth";
 
 const router = express.Router();
 
-// Protect all image upload routes - admin only
-router.use(protectRoute(['admin']));
+// Admin routes accessible without authentication
 
 // Get upload URL for product images
 router.post("/upload-url", async (req, res) => {
