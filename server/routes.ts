@@ -2,7 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification } from "@shared/schema";
+import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
+import { db } from "./db";
+import { eq, sql } from "drizzle-orm";
 import { EmailService } from "./email";
 import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
@@ -89,30 +91,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const adminImagesRoutes = await import('./routes/adminImages');
   app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
 
-  // Get all products
+  // Get all products - FROM DATABASE
   app.get("/api/products", async (req, res) => {
     try {
-      const products = await storage.getProducts();
-      res.json(products);
+      const dbProducts = await db.select().from(products);
+      res.json(dbProducts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });
 
-  // Get featured products
+  // Get featured products - FROM DATABASE
   app.get("/api/products/featured", async (req, res) => {
     try {
-      const products = await storage.getFeaturedProducts();
-      res.json(products);
+      const dbProducts = await db.select().from(products).where(eq(products.featured, true));
+      res.json(dbProducts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch featured products" });
     }
   });
 
-  // Get product by ID
+  // Get product by ID - FROM DATABASE
   app.get("/api/products/:id", async (req, res) => {
     try {
-      const product = await storage.getProductById(req.params.id);
+      const [product] = await db.select().from(products).where(eq(products.id, req.params.id));
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
@@ -122,11 +124,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get products by category
+  // Get products by category - FROM DATABASE
   app.get("/api/products/category/:category", async (req, res) => {
     try {
-      const products = await storage.getProductsByCategory(req.params.category);
-      res.json(products);
+      // Use SQL array contains operator to check if category exists in categories array
+      const dbProducts = await db.select().from(products).where(sql`${products.categories} @> ARRAY[${req.params.category}]`);
+      res.json(dbProducts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products by category" });
     }
