@@ -9,8 +9,10 @@ const router = express.Router();
 // Get upload URL for product images
 router.post("/upload-url", async (req, res) => {
   try {
+    console.log("Admin image upload URL requested");
     const objectStorageService = new ObjectStorageService();
     const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+    console.log("Upload URL generated successfully");
     res.json({ uploadURL });
   } catch (error) {
     console.error("Error generating upload URL:", error);
