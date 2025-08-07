@@ -47,7 +47,7 @@ function AdminDiscountCodes() {
 
   const createMutation = useMutation({
     mutationFn: (data: InsertDiscountCode) => 
-      apiRequest('/api/admin/discount-codes', 'POST', data),
+      apiRequest('POST', '/api/admin/discount-codes', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/discount-codes'] });
       setIsCreateDialogOpen(false);
@@ -64,7 +64,7 @@ function AdminDiscountCodes() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<DiscountCode> }) =>
-      apiRequest(`/api/admin/discount-codes/${id}`, 'PUT', data),
+      apiRequest('PUT', `/api/admin/discount-codes/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/discount-codes'] });
       setEditingCode(null);
@@ -81,7 +81,7 @@ function AdminDiscountCodes() {
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => 
-      apiRequest(`/api/admin/discount-codes/${id}`, 'DELETE'),
+      apiRequest('DELETE', `/api/admin/discount-codes/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/discount-codes'] });
       toast({ description: "Discount code deleted successfully" });
@@ -152,7 +152,7 @@ function AdminDiscountCodes() {
       return <Badge variant="destructive">Expired</Badge>;
     }
     
-    if (code.usageLimit && code.usageCount >= code.usageLimit) {
+    if (code.usageLimit && (code.usageCount ?? 0) >= code.usageLimit) {
       return <Badge variant="destructive">Limit Reached</Badge>;
     }
     

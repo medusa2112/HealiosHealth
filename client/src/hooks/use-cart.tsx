@@ -49,7 +49,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return sum + (parseFloat(item.product.price) * item.quantity);
       }, 0);
 
-      await apiRequest('/api/cart/sync', 'POST', {
+      await apiRequest('POST', '/api/cart/sync', {
         session_token: sessionToken,
         items: cartItems,
         totalAmount,

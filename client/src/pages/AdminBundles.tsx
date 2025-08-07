@@ -87,7 +87,7 @@ export default function AdminBundles() {
   // Create bundle mutation
   const createBundleMutation = useMutation({
     mutationFn: (data: BundleFormData) => 
-      apiRequest('/api/admin/bundles', 'POST', data),
+      apiRequest('POST', '/api/admin/bundles', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bundles'] });
       setIsCreateDialogOpen(false);
@@ -105,7 +105,7 @@ export default function AdminBundles() {
   // Update bundle mutation
   const updateBundleMutation = useMutation({
     mutationFn: ({ id, ...data }: BundleFormData) => 
-      apiRequest(`/api/admin/bundles/${id}`, 'PUT', data),
+      apiRequest('PUT', `/api/admin/bundles/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bundles'] });
       setIsEditDialogOpen(false);
@@ -124,7 +124,7 @@ export default function AdminBundles() {
   // Delete bundle mutation
   const deleteBundleMutation = useMutation({
     mutationFn: (id: string) => 
-      apiRequest(`/api/admin/bundles/${id}`, 'DELETE'),
+      apiRequest('DELETE', `/api/admin/bundles/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/bundles'] });
       toast({ description: 'Bundle deleted successfully!' });
