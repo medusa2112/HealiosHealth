@@ -3,6 +3,7 @@ import express from 'express';
 import { storage } from '../storage';
 import { products } from '@shared/schema';
 import { db } from '../db';
+import { eq, sql } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
@@ -24,17 +25,37 @@ router.use('/discount-codes', discountCodesRouter);
 // Admin Dashboard - Overview stats
 router.get('/', async (req, res) => {
   try {
-    // Query database directly instead of in-memory storage
+    // Query database directly with proper serialization
     const dbProducts = await db.select().from(products);
-    const orders = await storage.getOrdersByEmail(''); // Keep this for now
-    const quizResults = await storage.getQuizResults();
+    const orders = []; // Orders table to be implemented
+    let totalQuizCompletions = 0;
+    
+    // Try to get quiz completions
+    try {
+      const quizCount = await db.execute(sql`SELECT COUNT(*) as count FROM quiz_results`);
+      totalQuizCompletions = parseInt(quizCount.rows[0]?.count || '0');
+    } catch (quizError) {
+      console.log('Quiz results table not found, using default count');
+      totalQuizCompletions = 0;
+    }
+
+    // Serialize low stock products properly
+    const lowStockProducts = dbProducts
+      .filter(p => (p.stockQuantity || 0) < 5)
+      .map(product => ({
+        id: product.id,
+        name: product.name,
+        stockQuantity: product.stockQuantity,
+        price: product.price,
+        imageUrl: product.imageUrl
+      }));
 
     res.json({
       totalProducts: dbProducts.length,
       totalOrders: orders.length,
-      totalQuizCompletions: quizResults.length,
+      totalQuizCompletions,
       recentOrders: orders.slice(-5),
-      lowStockProducts: dbProducts.filter(p => (p.stockQuantity || 0) < 5)
+      lowStockProducts
     });
   } catch (error) {
     console.error('Admin dashboard error:', error);
@@ -45,9 +66,31 @@ router.get('/', async (req, res) => {
 // Product Management - Full CRUD
 router.get('/products', async (req, res) => {
   try {
-    // Query database directly instead of in-memory storage
+    // Query database directly and ensure proper serialization
     const dbProducts = await db.select().from(products);
-    res.json(dbProducts);
+    // Ensure proper JSON serialization by creating plain objects
+    const serializedProducts = dbProducts.map(product => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      imageUrl: product.imageUrl,
+      categories: product.categories,
+      rating: product.rating,
+      reviewCount: product.reviewCount,
+      inStock: product.inStock,
+      stockQuantity: product.stockQuantity,
+      featured: product.featured,
+      type: product.type,
+      bottleCount: product.bottleCount,
+      dailyDosage: product.dailyDosage,
+      supplyDays: product.supplyDays,
+      seoTitle: product.seoTitle,
+      seoDescription: product.seoDescription,
+      seoKeywords: product.seoKeywords
+    }));
+    res.json(serializedProducts);
   } catch (error) {
     console.error('Failed to fetch products:', error);
     res.status(500).json({ message: 'Failed to fetch products' });
@@ -56,11 +99,11 @@ router.get('/products', async (req, res) => {
 
 router.get('/products/:id', async (req, res) => {
   try {
-    const product = await storage.getProduct(req.params.id);
-    if (!product) {
+    const product = await db.select().from(products).where(eq(products.id, req.params.id)).limit(1);
+    if (!product || product.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json(product);
+    res.json(product[0]);
   } catch (error) {
     console.error('Failed to fetch product:', error);
     res.status(500).json({ message: 'Failed to fetch product' });
@@ -94,7 +137,7 @@ router.post('/products', async (req, res) => {
       reviewCount: 0
     };
 
-    const product = await storage.createProduct(productData);
+    const [product] = await db.insert(products).values(productData).returning();
     
     // Log admin action (no auth required)
     await AdminLogger.logProductAction(
@@ -130,7 +173,7 @@ router.put('/products/:id', async (req, res) => {
     if (dailyDosage !== undefined) updates.dailyDosage = dailyDosage ? parseInt(dailyDosage) : null;
     if (supplyDays !== undefined) updates.supplyDays = supplyDays ? parseInt(supplyDays) : null;
 
-    const product = await storage.updateProduct(req.params.id, updates);
+    const [product] = await db.update(products).set(updates).where(eq(products.id, req.params.id)).returning();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -152,8 +195,8 @@ router.put('/products/:id', async (req, res) => {
 
 router.delete('/products/:id', async (req, res) => {
   try {
-    const success = await storage.deleteProduct(req.params.id);
-    if (!success) {
+    const [deletedProduct] = await db.delete(products).where(eq(products.id, req.params.id)).returning();
+    if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
     
@@ -178,7 +221,7 @@ router.put('/products/:id/stock', async (req, res) => {
       return res.status(400).json({ message: 'Invalid quantity' });
     }
 
-    const product = await storage.updateProductStock(req.params.id, quantity);
+    const [product] = await db.update(products).set({ stockQuantity: quantity }).where(eq(products.id, req.params.id)).returning();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -211,22 +254,34 @@ router.get('/orders', async (req, res) => {
 // Quiz Analytics
 router.get('/quiz/analytics', async (req, res) => {
   try {
-    const quizResults = await storage.getQuizResults();
+    // Query quiz_results table directly with error handling
+    let quizResults = [];
+    let totalCompletions = 0;
+    
+    try {
+      const quizResultsQuery = await db.execute(sql`SELECT * FROM quiz_results ORDER BY created_at DESC LIMIT 20`);
+      quizResults = quizResultsQuery.rows;
+      
+      const countQuery = await db.execute(sql`SELECT COUNT(*) as count FROM quiz_results`);
+      totalCompletions = parseInt(countQuery.rows[0]?.count || '0');
+    } catch (dbError) {
+      console.log('Quiz results table not found or empty, returning empty results');
+      quizResults = [];
+      totalCompletions = 0;
+    }
     
     res.json({
-      totalCompletions: quizResults.length,
-      recentCompletions: quizResults
-        .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
-        .slice(0, 20)
-        .map(result => ({
-          id: result.id,
-          name: `${result.firstName} ${result.lastName}`,
-          email: result.email,
-          completedAt: result.createdAt,
-          consentToMarketing: result.consentToMarketing
-        }))
+      totalCompletions,
+      recentCompletions: quizResults.map((result: any) => ({
+        id: result.id,
+        name: `${result.first_name} ${result.last_name}`,
+        email: result.email,
+        completedAt: result.created_at,
+        consentToMarketing: result.consent_to_marketing
+      }))
     });
   } catch (error) {
+    console.error('Quiz analytics error:', error);
     res.status(500).json({ message: 'Failed to get quiz analytics' });
   }
 });

@@ -51,7 +51,7 @@ export default function AdminDashboard() {
 
   const updateStockMutation = useMutation({
     mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
-      return apiRequest("PUT", `/admin/products/${productId}/stock`, { quantity });
+      return apiRequest("PUT", `/api/admin/products/${productId}/stock`, { quantity });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
