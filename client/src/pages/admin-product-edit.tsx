@@ -123,14 +123,19 @@ export default function AdminProductEdit() {
         return apiRequest("POST", "/api/admin/products", payload);
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/products/${id}`] });
       toast({ 
         title: "Success", 
         description: isEditing ? "Product updated successfully" : "Product created successfully" 
       });
-      setLocation("/admin");
+      
+      // Only redirect for new products, stay on edit page for updates
+      if (!isEditing && data?.id) {
+        setLocation(`/admin/products/${data.id}`);
+      }
     },
     onError: (error: any) => {
       toast({ 
