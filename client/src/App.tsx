@@ -15,7 +15,6 @@ import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
 // Chat functionality removed as requested
-import { AdminTestButton } from "@/components/AdminTestButton";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductComprehensive from "@/pages/product-comprehensive";
@@ -170,7 +169,6 @@ function App() {
               <Footer />
               <CartSidebar />
               <StockNotification />
-              <AdminTestButton />
               
               {/* AI Assistant */}
               {!isAIAssistantOpen && (
