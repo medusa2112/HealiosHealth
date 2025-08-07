@@ -8,7 +8,6 @@ import { CartProvider } from "@/hooks/use-cart";
 import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/hooks/use-auth";
-import { RequireRole } from "@/components/RequireRole";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
@@ -30,8 +29,6 @@ import Article from "@/pages/article";
 
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
-import Login from "@/pages/login";
-import Register from "@/pages/register";
 import AdminDashboard from "@/pages/admin";
 import AdminOrders from "@/pages/admin/orders";
 import AdminCarts from "@/pages/admin/carts";
@@ -71,71 +68,15 @@ function Router() {
 
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/admin" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminDashboard />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/orders" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminOrders />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/carts" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminCarts />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/logs" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminLogs />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/reorder-analytics" 
-        component={() => (
-          <RequireRole role="admin">
-            <ReorderAnalytics />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/discount-codes" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminDiscountCodes />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/admin/bundles" 
-        component={() => (
-          <RequireRole role="admin">
-            <AdminBundles />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/portal" 
-        component={() => (
-          <RequireRole role="customer">
-            <CustomerPortal />
-          </RequireRole>
-        )} 
-      />
-      <Route path="/portal/subscriptions" 
-        component={() => (
-          <RequireRole role="customer">
-            <PortalSubscriptions />
-          </RequireRole>
-        )} 
-      />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/orders" component={AdminOrders} />
+      <Route path="/admin/carts" component={AdminCarts} />
+      <Route path="/admin/logs" component={AdminLogs} />
+      <Route path="/admin/reorder-analytics" component={ReorderAnalytics} />
+      <Route path="/admin/discount-codes" component={AdminDiscountCodes} />
+      <Route path="/admin/bundles" component={AdminBundles} />
+      <Route path="/portal" component={CustomerPortal} />
+      <Route path="/portal/subscriptions" component={PortalSubscriptions} />
       
       {/* Legal and Informational Pages */}
       <Route path="/faq" component={FAQ} />
