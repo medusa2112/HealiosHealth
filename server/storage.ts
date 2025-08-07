@@ -219,6 +219,7 @@ export class MemStorage implements IStorage {
     this.supportTickets = new Map(); // Phase 21
     this.chatSessions = new Map(); // Phase 21
     this.seedData();
+    this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
     this.seedAdminLogs();
@@ -1644,6 +1645,37 @@ export class MemStorage implements IStorage {
       };
       this.orders.set(order.id, updatedOrder);
     }
+  }
+
+  private seedUsers() {
+    const testUsers: User[] = [
+      {
+        id: "admin-user-id",
+        email: "admin@healios.com",
+        password: "admin123",
+        firstName: "Admin",
+        lastName: "User",
+        role: "admin",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        id: "customer-user-id", 
+        email: "customer@healios.com",
+        password: "password123",
+        firstName: "Customer",
+        lastName: "User",
+        role: "customer",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+    ];
+
+    testUsers.forEach(user => {
+      this.users.set(user.id, user);
+    });
+
+    console.log("✅ Seeded", testUsers.length, "test users for authentication testing");
   }
 
   // Seed abandoned carts for Phase 11 testing
