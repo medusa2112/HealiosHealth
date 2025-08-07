@@ -87,9 +87,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const objectStorageRoutes = await import('./routes/objectStorage');
   await objectStorageRoutes.registerRoutes(app);
 
-  // Register admin image upload routes
+  // Register admin image upload routes - PROTECTED
   const adminImagesRoutes = await import('./routes/adminImages');
-  app.use('/api/admin/images', adminImagesRoutes.default);
+  app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
 
   // Get all products - FROM DATABASE
   app.get("/api/products", async (req, res) => {

@@ -7,11 +7,29 @@ import type { User } from '@shared/schema';
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user?: User & {
+        claims?: any;
+        userId?: string;
+        access_token?: string;
+        refresh_token?: string;
+        expires_at?: number;
+      };
       session?: {
         userId?: string;
         [key: string]: any;
       };
+    }
+    interface User {
+      id: string;
+      email: string;
+      role: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      claims?: any;
+      userId?: string;
+      access_token?: string;
+      refresh_token?: string;
+      expires_at?: number;
     }
   }
 }
@@ -29,6 +47,7 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
       
       console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
       console.log(`[PROTECT_ROUTE] Session userId: ${req.session?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
+      console.log(`[PROTECT_ROUTE] Request user object:`, req.user ? { id: (req.user as any).id, email: req.user.email, role: req.user.role } : 'null');
       
       if (!userId) {
         console.log('[PROTECT_ROUTE] No userId in session or passport user');
@@ -50,7 +69,7 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
       }
       
       console.log(`[PROTECT_ROUTE] Access granted for ${user.email} (${user.role})`);
-      req.user = user;
+      req.user = { ...user, claims: (req.user as any)?.claims };
       next();
     } catch (err) {
       console.error('Auth error:', err);
@@ -64,17 +83,24 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   try {
     const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
     
+    console.log(`[REQUIRE_AUTH] Checking auth for userId: ${userId}`);
+    console.log(`[REQUIRE_AUTH] Session:`, req.session?.userId ? 'present' : 'missing');
+    console.log(`[REQUIRE_AUTH] Passport user:`, req.user ? 'present' : 'missing');
+    
     if (!userId) {
+      console.log('[REQUIRE_AUTH] No userId found');
       return res.status(401).json({ message: 'Authentication required' });
     }
 
     const user = await storage.getUserById(userId);
     
     if (!user) {
+      console.log(`[REQUIRE_AUTH] User not found for userId: ${userId}`);
       return res.status(401).json({ message: 'Invalid session' });
     }
     
-    req.user = user;
+    console.log(`[REQUIRE_AUTH] Auth successful for ${user.email}`);
+    req.user = { ...user, claims: (req.user as any)?.claims };
     next();
   } catch (err) {
     console.error('Auth error:', err);

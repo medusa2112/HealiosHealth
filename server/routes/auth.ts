@@ -1,18 +1,54 @@
 import express from 'express';
 import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
+import { determineUserRole } from '../lib/auth';
 
 const router = express.Router();
 
-// Get current user info via Replit Auth
+// Get current user info - this is what the frontend /auth/me expects
+router.get('/me', async (req, res) => {
+  try {
+    // Check if user is authenticated through Replit Auth or session
+    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    
+    console.log(`[AUTH_ME] Checking auth status for userId: ${userId}`);
+    console.log(`[AUTH_ME] Session:`, req.session?.userId ? 'present' : 'missing');
+    console.log(`[AUTH_ME] Passport user:`, req.user ? 'present' : 'missing');
+    
+    if (!userId) {
+      console.log('[AUTH_ME] No authentication found');
+      return res.json(null);
+    }
+
+    const user = await storage.getUserById(userId);
+    if (!user) {
+      console.log(`[AUTH_ME] User not found for userId: ${userId}`);
+      return res.json(null);
+    }
+
+    console.log(`[AUTH_ME] User found: ${user.email} (${user.role})`);
+    res.json({ 
+      id: user.id, 
+      email: user.email, 
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName
+    });
+  } catch (error) {
+    console.error('Auth me error:', error);
+    res.json(null);
+  }
+});
+
+// Legacy /user endpoint for backwards compatibility
 router.get('/user', isAuthenticated, async (req, res) => {
   try {
-    const userId = req.user?.claims?.sub;
+    const userId = (req.user as any)?.claims?.sub;
     if (!userId) {
       return res.json(null);
     }
 
-    const user = await storage.getUser(userId);
+    const user = await storage.getUserById(userId);
     if (!user) {
       return res.json(null);
     }
@@ -25,7 +61,7 @@ router.get('/user', isAuthenticated, async (req, res) => {
       lastName: user.lastName
     });
   } catch (error) {
-    console.error('Auth me error:', error);
+    console.error('Auth user error:', error);
     res.json(null);
   }
 });
@@ -45,10 +81,6 @@ router.get('/login', (req, res) => {
   });
 });
 
-// Redirect to Replit Auth for login
-router.get('/login', (req, res) => {
-  res.redirect('/api/login');
-});
 
 // Logout endpoint
 router.post('/logout', (req, res) => {
@@ -119,19 +151,6 @@ router.get('/callback', async (req, res) => {
   }
 });
 
-router.post('/logout', (req, res) => {
-  if (req.session) {
-    req.session.destroy((err: any) => {
-      if (err) {
-        return res.status(500).json({ message: 'Logout failed' });
-      }
-      res.clearCookie('connect.sid'); // Default session cookie name
-      res.json({ success: true, message: 'Logged out successfully' });
-    });
-  } else {
-    res.json({ success: true, message: 'No active session' });
-  }
-});
 
 
 export default router;

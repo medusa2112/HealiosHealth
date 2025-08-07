@@ -412,6 +412,7 @@ export type UpsertUser = {
   firstName?: string | null;
   lastName?: string | null;
   profileImageUrl?: string | null;
+  role?: string; // Allow role to be provided during upsert
 };
 export type User = typeof users.$inferSelect;
 export type Product = typeof products.$inferSelect;

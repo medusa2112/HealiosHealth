@@ -57,13 +57,19 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
+  const { determineUserRole } = await import('./lib/auth');
+  const role = determineUserRole(claims["email"]);
+  
   await storage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
     firstName: claims["first_name"],
     lastName: claims["last_name"],
     profileImageUrl: claims["profile_image_url"],
+    role, // Assign role during user creation
   });
+  
+  console.log(`[REPLIT_AUTH] User upserted: ${claims["email"]} with role: ${role}`);
 }
 
 export async function setupAuth(app: Express) {
@@ -81,7 +87,23 @@ export async function setupAuth(app: Express) {
     const user = {};
     updateUserSession(user, tokens);
     await upsertUser(tokens.claims());
-    verified(null, user);
+    
+    // Get the full user record from database to include role
+    const claims = tokens.claims();
+    const dbUser = await storage.getUserById(claims["sub"]);
+    
+    if (dbUser) {
+      const enrichedUser = {
+        ...user,
+        ...dbUser,
+        claims: claims,
+        userId: dbUser.id
+      };
+      console.log(`[REPLIT_AUTH] User authenticated: ${dbUser.email} (${dbUser.role})`);
+      verified(null, enrichedUser);
+    } else {
+      verified(new Error('Failed to retrieve user after creation'), false);
+    }
   };
 
   for (const domain of process.env
@@ -99,13 +121,46 @@ export async function setupAuth(app: Express) {
   }
 
   passport.serializeUser((user: Express.User, cb) => {
-    // Store the user ID in the session for protectRoute middleware
-    const userId = (user as any).claims?.sub;
-    cb(null, { ...user, userId });
+    // Store the user data including database fields
+    const serializedUser = {
+      id: (user as any).id,
+      email: (user as any).email,
+      role: (user as any).role,
+      firstName: (user as any).firstName,
+      lastName: (user as any).lastName,
+      claims: (user as any).claims,
+      userId: (user as any).id,
+      access_token: (user as any).access_token,
+      refresh_token: (user as any).refresh_token,
+      expires_at: (user as any).expires_at
+    };
+    console.log(`[REPLIT_AUTH] Serializing user: ${serializedUser.email} (${serializedUser.role})`);
+    cb(null, serializedUser);
   });
   
-  passport.deserializeUser((user: Express.User, cb) => {
-    cb(null, user);
+  passport.deserializeUser(async (serializedUser: any, cb) => {
+    try {
+      // Refresh user data from database to ensure current role/info
+      if (serializedUser.id) {
+        const currentUser = await storage.getUserById(serializedUser.id);
+        if (currentUser) {
+          const user = {
+            ...currentUser,
+            claims: serializedUser.claims,
+            userId: currentUser.id,
+            access_token: serializedUser.access_token,
+            refresh_token: serializedUser.refresh_token,
+            expires_at: serializedUser.expires_at
+          };
+          console.log(`[REPLIT_AUTH] Deserialized user: ${user.email} (${user.role})`);
+          return cb(null, user);
+        }
+      }
+      cb(null, serializedUser);
+    } catch (error) {
+      console.error('[REPLIT_AUTH] Deserialization error:', error);
+      cb(null, serializedUser);
+    }
   });
 
   app.get("/api/login", (req, res, next) => {

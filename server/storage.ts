@@ -1479,16 +1479,18 @@ export class MemStorage implements IStorage {
         email: userData.email,
         firstName: userData.firstName ?? existingUser.firstName,
         lastName: userData.lastName ?? existingUser.lastName,
+        role: userData.role ?? existingUser.role, // Keep existing role unless explicitly changed
         updatedAt: new Date().toISOString(),
       };
       this.users.set(userData.id, updatedUser);
       return updatedUser;
     } else {
-      // Create new user
+      // Create new user with provided role or determine from email
+      const role = userData.role ?? (userData.email === 'dn@thefourths.com' ? 'admin' : 'customer');
       const newUser: User = {
         id: userData.id,
         email: userData.email,
-        role: "customer", // Default role for OAuth users
+        role: role,
         firstName: userData.firstName ?? null,
         lastName: userData.lastName ?? null,
         password: null, // OAuth users don't have passwords
