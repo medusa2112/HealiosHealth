@@ -23,8 +23,18 @@ export default function Login() {
       const success = await login({ username: email, password });
       
       if (success) {
-        // Redirect based on role will be handled by RequireRole components
-        setLocation('/');
+        // Redirect directly to admin for admin users, customer portal for customers
+        const userRole = await fetch('/api/auth/user', { credentials: 'include' })
+          .then(res => res.json())
+          .then(data => data?.role);
+          
+        if (userRole === 'admin') {
+          setLocation('/admin');
+        } else if (userRole === 'customer') {
+          setLocation('/portal');
+        } else {
+          setLocation('/');
+        }
       } else {
         setError('Invalid credentials. Please try again.');
       }

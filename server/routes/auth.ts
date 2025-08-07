@@ -103,25 +103,37 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     
+    console.log(`[DEBUG LOGIN] Attempt - Email: "${username}", Password: "${password}"`);
+    
     if (!username || !password) {
+      console.log(`[DEBUG LOGIN] Missing credentials`);
       return res.status(400).json({ message: "Username and password are required" });
     }
 
     // Find user by email (username field)
     const user = await storage.getUserByEmail(username);
     
+    console.log(`[DEBUG LOGIN] User lookup result:`, user ? `Found user: ${user.email}, password: "${user.password}", role: ${user.role}` : 'User not found');
+    
     if (!user) {
+      console.log(`[DEBUG LOGIN] User not found for email: "${username}"`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
     
     // In production, verify hashed password here
+    console.log(`[DEBUG LOGIN] Password comparison - Stored: "${user.password}", Provided: "${password}", Match: ${user.password === password}`);
     if (user.password !== password) {
+      console.log(`[DEBUG LOGIN] Password mismatch`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
+    
+    console.log(`[DEBUG LOGIN] Login successful for ${user.email}`);
 
     // Set session
     req.session = req.session || {};
     req.session.userId = user.id;
+    
+    console.log(`[DEBUG LOGIN] Session set - userId: ${req.session.userId}`);
 
     res.json({ 
       message: "Login successful",
