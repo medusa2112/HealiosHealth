@@ -33,6 +33,7 @@ import AdminDashboard from "@/pages/admin";
 import AdminOrders from "@/pages/admin/orders";
 import AdminCarts from "@/pages/admin/carts";
 import AdminLogs from "@/pages/admin/logs";
+import AbandonedCarts from "@/pages/admin/abandoned-carts";
 import AdminBundles from "@/pages/AdminBundles";
 import ReorderAnalytics from "@/pages/admin/reorder-analytics";
 import AdminDiscountCodes from "@/pages/AdminDiscountCodes";
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><AdminOrders /></ProtectedRoute>} />
       <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><AdminCarts /></ProtectedRoute>} />
+      <Route path="/admin/abandoned-carts" component={() => <ProtectedRoute requiredRole="admin"><AbandonedCarts /></ProtectedRoute>} />
       <Route path="/admin/logs" component={() => <ProtectedRoute requiredRole="admin"><AdminLogs /></ProtectedRoute>} />
       <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><ReorderAnalytics /></ProtectedRoute>} />
       <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><AdminDiscountCodes /></ProtectedRoute>} />

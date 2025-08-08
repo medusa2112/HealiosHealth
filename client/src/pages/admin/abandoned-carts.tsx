@@ -20,6 +20,8 @@ export default function AbandonedCartsPage() {
   const [timeFilter, setTimeFilter] = useState<string>('24');
   const [loading, setLoading] = useState(true);
   const [sendingEmails, setSendingEmails] = useState<Set<string>>(new Set());
+  const [emailPreview, setEmailPreview] = useState<any>(null);
+  const [showPreview, setShowPreview] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function AbandonedCartsPage() {
     try {
       setLoading(true);
       
-      const response = await fetch(`/admin/api/abandoned-carts?hours=${timeFilter}`);
+      const response = await fetch(`/api/admin/abandoned-carts?hours=${timeFilter}`);
       if (!response.ok) throw new Error('Failed to fetch abandoned carts');
       
       const data = await response.json();
@@ -52,7 +54,7 @@ export default function AbandonedCartsPage() {
     try {
       setSendingEmails(prev => new Set(prev).add(cartId));
       
-      const response = await fetch('/admin/api/send-recovery-email', {
+      const response = await fetch('/api/admin/send-recovery-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -84,6 +86,56 @@ export default function AbandonedCartsPage() {
         const newSet = new Set(prev);
         newSet.delete(cartId);
         return newSet;
+      });
+    }
+  };
+  
+  const previewEmail = async (cartId: string, emailType: 'abandoned_cart_1h' | 'abandoned_cart_24h' = 'abandoned_cart_1h') => {
+    try {
+      const response = await fetch('/api/admin/preview-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartId, emailType })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate email preview');
+
+      const data = await response.json();
+      setEmailPreview(data.preview);
+      setShowPreview(true);
+    } catch (error) {
+      console.error('Error previewing email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate email preview",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const cleanupExpiredCarts = async () => {
+    try {
+      const response = await fetch('/api/admin/cleanup-expired', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('Failed to cleanup expired carts');
+
+      const data = await response.json();
+      toast({
+        title: "Cleanup Complete",
+        description: `Cleaned up ${data.expiredCount} expired carts`,
+      });
+      
+      // Refresh data
+      await fetchAbandonedCarts();
+    } catch (error) {
+      console.error('Error cleaning up carts:', error);
+      toast({
+        title: "Error",
+        description: "Failed to cleanup expired carts",
+        variant: "destructive",
       });
     }
   };
