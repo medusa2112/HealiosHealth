@@ -15,7 +15,6 @@ import { SubscriptionSection } from "@/components/SubscriptionSection";
 // Import images
 import healiosLogoImg from '@assets/healios-health26.png';
 import supplementLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png';
-import haloGlowImage from '@assets/healios-health20.png';
 import wellnessLifestyleImg from '@assets/healios-health121.jpg';
 import immuneHealthImg from '@assets/healios-health122.png';
 import stressReliefImg from '@assets/healios-health123.png';
@@ -609,11 +608,9 @@ export default function ProductComprehensive() {
     );
   }
 
-  // Product images - use correct image for each product
+  // Product images - always use the admin-controlled image URL
   const productImages = [
-    product.id === 'collagen-complex' || product.name.toLowerCase().includes('halo glow') || product.name.toLowerCase().includes('collagen')
-      ? haloGlowImage
-      : product.imageUrl
+    product.imageUrl
   ];
 
   const nextImage = () => {
