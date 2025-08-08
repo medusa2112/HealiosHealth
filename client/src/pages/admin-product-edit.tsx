@@ -291,15 +291,7 @@ export default function AdminProductEdit() {
       />
       <div className="max-w-6xl mx-auto px-6">
         {/* Header Actions */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-black dark:text-white">
-              {isEditing ? "Edit Product" : "Create New Product"}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              {isEditing ? `Editing: ${product?.name}` : "Create a new product with full SEO optimization"}
-            </p>
-          </div>
+        <div className="mb-8 flex justify-end">
           <Button 
             form="product-form"
             type="submit"
