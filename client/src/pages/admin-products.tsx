@@ -199,29 +199,29 @@ export default function AdminProducts() {
                 </div>
               </div>
             ) : (
-              <div className="w-full overflow-hidden">
-                <Table className="w-full table-fixed">
+              <div className="w-full overflow-x-auto">
+                <Table className="w-full min-w-[1200px]">
                   <TableHeader>
                     <TableRow className="border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                      <TableHead className="text-black dark:text-white font-semibold py-4">Product</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] py-4">Type</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[120px] py-4">Categories</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[80px] py-4">Price</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] text-center py-4">Stock</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] py-4">Status</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] text-center py-4">Actions</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-6 w-[35%]">Product</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 w-[8%]">Type</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 w-[18%]">Categories</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 w-[10%]">Price</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 text-center w-[8%]">Stock</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 w-[11%]">Status</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-6 px-4 text-center w-[10%]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredProducts.map((product) => (
                       <TableRow 
                         key={product.id} 
-                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 cursor-pointer transition-colors border-b"
+                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 cursor-pointer transition-all duration-200 border-b-2"
                         onClick={() => handleEdit(product.id)}
                       >
-                        <TableCell className="py-5">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
+                        <TableCell className="py-6 px-6">
+                          <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700">
                               <img
                                 src={product.imageUrl}
                                 alt={product.name}
@@ -231,41 +231,41 @@ export default function AdminProducts() {
                                 }}
                               />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="font-medium text-black dark:text-white truncate text-sm">
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="font-semibold text-black dark:text-white text-sm leading-tight">
                                 {product.name}
                               </div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                {product.description.length > 50 
-                                  ? product.description.substring(0, 50) + "..."
+                              <div className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                                {product.description.length > 80 
+                                  ? product.description.substring(0, 80) + "..."
                                   : product.description
                                 }
                               </div>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="py-5">
-                          <Badge variant="outline" className="capitalize text-xs">
+                        <TableCell className="py-6 px-4">
+                          <Badge variant="outline" className="capitalize text-xs px-2 py-1">
                             {product.type === 'supplement' ? 'Supp' : product.type || 'Supp'}
                           </Badge>
                         </TableCell>
-                        <TableCell className="py-5">
-                          <div className="flex flex-wrap gap-1">
+                        <TableCell className="py-6 px-4">
+                          <div className="flex flex-wrap gap-1.5">
                             {product.categories?.slice(0, 2).map((category) => (
-                              <Badge key={category} variant="secondary" className="text-xs px-1.5 py-0.5">
-                                {category.length > 8 ? category.substring(0, 8) + '...' : category}
+                              <Badge key={category} variant="secondary" className="text-xs px-2 py-1">
+                                {category.length > 10 ? category.substring(0, 10) + '...' : category}
                               </Badge>
                             ))}
                             {(product.categories?.length || 0) > 2 && (
-                              <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                              <Badge variant="secondary" className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700">
                                 +{(product.categories?.length || 0) - 2}
                               </Badge>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="py-5">
-                          <div className="text-black dark:text-white">
-                            <div className="font-medium text-sm">R{product.price}</div>
+                        <TableCell className="py-6 px-4">
+                          <div className="text-black dark:text-white space-y-1">
+                            <div className="font-semibold text-sm">R{product.price}</div>
                             {product.originalPrice && (
                               <div className="text-xs text-gray-500 line-through">
                                 R{product.originalPrice}
@@ -273,8 +273,8 @@ export default function AdminProducts() {
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="text-center py-5">
-                          <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
+                        <TableCell className="text-center py-6 px-4">
+                          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold ${
                             (product.stockQuantity || 0) > 10 
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
                               : (product.stockQuantity || 0) > 0 
@@ -285,25 +285,23 @@ export default function AdminProducts() {
                             {product.stockQuantity || 0}
                           </div>
                         </TableCell>
-                        <TableCell className="py-5">
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-1">
-                              {product.featured && (
-                                <Badge className="text-xs px-1.5 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">
-                                  Featured
-                                </Badge>
-                              )}
-                            </div>
+                        <TableCell className="py-6 px-4">
+                          <div className="flex flex-col gap-2">
+                            {product.featured && (
+                              <Badge className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200 w-fit">
+                                Featured
+                              </Badge>
+                            )}
                             <Badge 
                               variant={product.inStock ? "default" : "destructive"} 
-                              className="text-xs px-1.5 py-0.5 w-fit"
+                              className="text-xs px-2 py-1 w-fit"
                             >
                               {product.inStock ? "In Stock" : "Out"}
                             </Badge>
                           </div>
                         </TableCell>
-                        <TableCell className="py-5">
-                          <div className="flex items-center justify-center gap-1">
+                        <TableCell className="py-6 px-4">
+                          <div className="flex items-center justify-center gap-2">
                             <Button
                               size="sm"
                               variant="ghost"
@@ -311,7 +309,7 @@ export default function AdminProducts() {
                                 e.stopPropagation();
                                 handleEdit(product.id);
                               }}
-                              className="h-8 w-8 p-0 hover:bg-gray-100 dark:hover:bg-gray-800"
+                              className="h-9 w-9 p-0 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
                               title="Edit product"
                             >
                               <Edit className="w-4 h-4" />
@@ -323,7 +321,7 @@ export default function AdminProducts() {
                                 e.stopPropagation();
                                 handleDelete(product);
                               }}
-                              className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400"
+                              className="h-9 w-9 p-0 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-lg"
                               disabled={deleteProductMutation.isPending}
                               title="Delete product"
                             >
