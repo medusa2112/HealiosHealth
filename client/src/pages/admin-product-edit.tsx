@@ -345,7 +345,14 @@ export default function AdminProductEdit() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                      <AdminImageUpload
+                        label="Product Image *"
+                        currentImageUrl={formData.imageUrl}
+                        onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, imageUrl }))}
+                      />
+                    </div>
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="name" className="text-black dark:text-white">Product Name *</Label>
@@ -369,26 +376,18 @@ export default function AdminProductEdit() {
                           </SelectContent>
                         </Select>
                       </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="description" className="text-black dark:text-white">Product Description *</Label>
+                        <Textarea
+                          id="description"
+                          value={formData.description}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                          required
+                          rows={6}
+                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
+                        />
+                      </div>
                     </div>
-                    <div className="space-y-4">
-                      <AdminImageUpload
-                        label="Product Image *"
-                        currentImageUrl={formData.imageUrl}
-                        onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, imageUrl }))}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="description" className="text-black dark:text-white">Product Description *</Label>
-                    <Textarea
-                      id="description"
-                      value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                      required
-                      rows={6}
-                      className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
-                    />
                   </div>
 
                   <div className="space-y-4">

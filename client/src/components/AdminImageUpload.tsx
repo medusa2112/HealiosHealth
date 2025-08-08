@@ -124,23 +124,12 @@ export default function AdminImageUpload({
       <Label>{label}</Label>
       
       {currentImageUrl && (
-        <div className="space-y-3 p-4 border rounded">
+        <div className="w-full h-[500px] border rounded overflow-hidden">
           <img 
             src={currentImageUrl} 
             alt="Current image" 
-            className="w-24 h-24 object-cover rounded mx-auto"
+            className="w-full h-full object-cover"
           />
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-2">Current image</p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.open(currentImageUrl, '_blank')}
-            >
-              <ExternalLink className="w-4 h-4 mr-1" />
-              View Full Size
-            </Button>
-          </div>
         </div>
       )}
 
