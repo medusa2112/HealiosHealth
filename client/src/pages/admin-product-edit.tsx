@@ -297,7 +297,7 @@ export default function AdminProductEdit() {
           <div className="flex items-center gap-4">
             <Button 
               variant="outline" 
-              onClick={() => setLocation("/admin")}
+              onClick={() => setLocation("/admin/products")}
               className="border-gray-300 dark:border-gray-700 text-black dark:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
