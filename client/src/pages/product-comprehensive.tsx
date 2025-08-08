@@ -2189,6 +2189,10 @@ export default function ProductComprehensive() {
               src={createProductSVG(params?.id || '')}
               alt={`${product?.name} wellness lifestyle imagery`}
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover object-top-left"
+              style={{
+                objectPosition: 'left top',
+                transform: 'scale(1.33) translateY(-12.5%)'
+              }}
             />
           </div>
         </div>
