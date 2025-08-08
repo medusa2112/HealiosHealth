@@ -135,7 +135,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/products/category/:category", async (req, res) => {
     try {
       // Use SQL array contains operator to check if category exists in categories array
-      const dbProducts = await db.select().from(products).where(sql`${products.categories} @> ARRAY[${req.params.category}]`);
+      // Safe parameterized query to prevent SQL injection
+      const category = req.params.category;
+      const dbProducts = await db.select().from(products).where(sql`${products.categories} @> ${[category]}`);
       res.json(dbProducts);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch products by category" });
