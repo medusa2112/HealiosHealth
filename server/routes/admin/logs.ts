@@ -82,7 +82,8 @@ router.get("/admin/:adminId", [
       });
     }
     
-    const { adminId } = req.params;
+    // Use validated data directly instead of destructuring
+    const adminId = req.params.adminId;
     const logs = await storage.getAdminLogsByAdmin(adminId);
     res.json(logs);
   } catch (error) {
@@ -107,7 +108,9 @@ router.get("/target/:targetType/:targetId", [
       });
     }
     
-    const { targetType, targetId } = req.params;
+    // Use validated data directly instead of destructuring
+    const targetType = req.params.targetType;
+    const targetId = req.params.targetId;
     const logs = await storage.getAdminLogsByTarget(targetType, targetId);
     res.json(logs);
   } catch (error) {
