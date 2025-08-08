@@ -125,7 +125,7 @@ export default function AdminProducts() {
         {/* Compact Header with Filters and Actions */}
         <div className="mb-6">
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="pt-11">
               <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
                 {/* Search and Filters */}
                 <div className="flex flex-col sm:flex-row gap-3 flex-1 min-w-0">
