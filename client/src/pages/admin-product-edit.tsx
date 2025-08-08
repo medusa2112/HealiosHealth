@@ -98,22 +98,26 @@ export default function AdminProductEdit() {
 
   const updateProductMutation = useMutation({
     mutationFn: async (data: ProductFormData) => {
+      // IMPORTANT: price and originalPrice must be STRINGS for decimal columns
       const payload = {
         name: data.name,
         description: data.description,
-        price: parseFloat(data.price),
-        originalPrice: data.originalPrice ? parseFloat(data.originalPrice) : null,
+        price: data.price.toString(),  // Decimal fields must be strings
+        originalPrice: data.originalPrice ? data.originalPrice.toString() : null,
         imageUrl: data.imageUrl,
         categories: data.categories,
         stockQuantity: parseInt(data.stockQuantity) || 0,
         featured: data.featured,
-        type: data.type,
+        inStock: true,  // Add missing field
+        type: data.type || 'supplement',
         bottleCount: data.bottleCount ? parseInt(data.bottleCount) : null,
         dailyDosage: data.dailyDosage ? parseInt(data.dailyDosage) : null,
         supplyDays: data.supplyDays ? parseInt(data.supplyDays) : null,
-        seoTitle: data.seoTitle,
-        seoDescription: data.seoDescription,
-        seoKeywords: data.seoKeywords,
+        seoTitle: data.seoTitle || null,
+        seoDescription: data.seoDescription || null,
+        seoKeywords: data.seoKeywords || [],
+        rating: "5.0",  // Default rating
+        reviewCount: 0   // Default review count
       };
 
       if (isEditing) {

@@ -120,11 +120,11 @@ router.get('/', requireAuth, async (req, res) => {
           COUNT(CASE WHEN converted_to_order = false THEN 1 END) as abandoned,
           COUNT(*) as total 
           FROM carts 
-          WHERE created_at >= NOW() - INTERVAL '30 days'`
+          WHERE created_at::timestamp >= NOW() - INTERVAL '30 days'`
       );
       const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
       abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
-    } catch (cartError) {
+    } catch (cartError: any) {
       console.log('Cart abandonment calculation failed:', cartError.message);
     }
 
@@ -146,9 +146,9 @@ router.get('/', requireAuth, async (req, res) => {
       const activeUsersResult = await db
         .select({ count: countDistinct(orders.customerEmail) })
         .from(orders)
-        .where(sql`created_at >= NOW() - INTERVAL '30 days'`);
+        .where(sql`created_at::timestamp >= NOW() - INTERVAL '30 days'`);
       activeUsers = activeUsersResult[0]?.count || 0;
-    } catch (activeUsersError) {
+    } catch (activeUsersError: any) {
       console.log('Active users calculation failed:', activeUsersError.message);
     }
 
@@ -676,7 +676,7 @@ router.get('/metrics', requireAuth, async (req, res) => {
           COUNT(CASE WHEN converted_to_order = false THEN 1 END) as abandoned,
           COUNT(*) as total 
           FROM carts 
-          WHERE created_at >= NOW() - INTERVAL '30 days'`
+          WHERE created_at::timestamp >= NOW() - INTERVAL '30 days'`
       );
       const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
       abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
@@ -748,7 +748,7 @@ router.get('/orders/summary', requireAuth, async (req, res) => {
         COUNT(*) as orders_count,
         SUM(CAST(total_amount AS DECIMAL)) as daily_revenue
       FROM orders 
-      WHERE created_at >= NOW() - INTERVAL '30 days'
+      WHERE created_at::timestamp >= NOW() - INTERVAL '30 days'
       GROUP BY DATE(created_at)
       ORDER BY order_date DESC
     `);
