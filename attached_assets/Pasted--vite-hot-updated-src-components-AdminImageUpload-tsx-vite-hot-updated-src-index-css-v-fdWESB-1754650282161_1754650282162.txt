@@ -1,0 +1,58 @@
+[vite] hot updated: /src/components/AdminImageUpload.tsx
+[vite] hot updated: /src/index.css?v=fdWESBORCAxirmxvaqw88
+[PRODUCT_EDIT] Form submission started 
+Object {formData: {…}, isEditing: true, productId: "collagen-complex"}
+[PRODUCT_EDIT] Validation passed, starting mutation
+[PRODUCT_EDIT] Starting product mutation 
+Object {isEditing: true, productId: "collagen-complex", formData: {…}}
+[PRODUCT_EDIT] Prepared payload 
+Object {endpoint: "/api/admin/products/collagen-complex", method: "PUT", payload: {…}}
+[API_REQUEST] Starting request 
+Object {method: "PUT", url: "/api/admin/products/collagen-complex", hasData: true, dataType: "object", data: {…}}
+[API_REQUEST] Starting request 
+Object {method: "POST", url: "/api/admin/images/upload-url", hasData: false, dataType: "none", data: undefined}
+[API_REQUEST] Response received 
+Object {url: "/api/admin/images/upload-url", status: 200, statusText: "OK", ok: true, duration: "451ms", …}
+Failed to get upload URL: 
+Error {}
+
+[Uppy] [12:51:16] No upload URL received
+Upload completion failed: 
+Error {}
+
+[API_REQUEST] Response received 
+Object {url: "/api/admin/products/collagen-complex", status: 200, statusText: "OK", ok: true, duration: "2990ms", …}
+[PRODUCT_EDIT] Mutation success 
+Object {response: Response, productId: undefined, isEditing: true}
+[QUERY] Fetching 
+Object {url: "/api/admin/products/collagen-complex", queryKey: Array(1)}
+[API_REQUEST] Starting request 
+Object {method: "POST", url: "/api/admin/images/upload-url", hasData: false, dataType: "none", data: undefined}
+[QUERY] Response 
+Object {url: "/api/admin/products/collagen-complex", status: 200, duration: "308ms"}
+[QUERY] Data received 
+Object {url: "/api/admin/products/collagen-complex", dataSize: 672}
+[API_REQUEST] Response received 
+Object {url: "/api/admin/images/upload-url", status: 200, statusText: "OK", ok: true, duration: "351ms", …}
+Failed to get upload URL: 
+Error {}
+
+[Uppy] [12:51:17] No upload URL received
+Upload completion failed: 
+Error {}
+
+[API_REQUEST] Starting request 
+Object {method: "POST", url: "/api/admin/images/upload-url", hasData: false, dataType: "none", data: undefined}
+[API_REQUEST] Response received 
+Object {url: "/api/admin/images/upload-url", status: 200, statusText: "OK", ok: true, duration: "371ms", …}
+Failed to get upload URL: 
+Error {}
+
+[Uppy] [12:51:18] No upload URL received
+Upload completion failed: 
+Error {}
+message: "Upload failed"
+stack: "Error: Upload failed↵ at handleUploadComplete (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/AdminImageUpload.tsx:57:15)↵ at Function.<anonymous> (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/src/components/ObjectUploader.tsx:47:19)↵ at emitAll (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RTIOR232.js?v=064dd176:385:19)↵ at Object.emit (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RTIOR232.js?v=064dd176:330:11)↵ at _Uppy.emit (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RTIOR232.js?v=064dd176:2075:34)↵ at _Uppy.retryAll (https://ecb0186e-5c41-485f-8aa5-ec408ab0eb01-00-2yr5qtdrdniax.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RTIOR232.js?v=064dd176:2515:10)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object

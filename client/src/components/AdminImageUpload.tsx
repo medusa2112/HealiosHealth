@@ -24,16 +24,32 @@ export default function AdminImageUpload({
 
   const handleGetUploadParameters = async () => {
     try {
+      console.log('[ADMIN_IMAGE_UPLOAD] Requesting upload URL...');
       const response = await apiRequest("POST", "/api/admin/images/upload-url");
-      const data = await response.json();
       
-      console.log('[ADMIN_IMAGE_UPLOAD] Upload URL response:', data);
+      console.log('[ADMIN_IMAGE_UPLOAD] Response object:', response);
+      console.log('[ADMIN_IMAGE_UPLOAD] Response type:', typeof response);
+      console.log('[ADMIN_IMAGE_UPLOAD] Response status:', response.status);
+      console.log('[ADMIN_IMAGE_UPLOAD] Response ok:', response.ok);
+      
+      let data;
+      try {
+        const responseText = await response.text();
+        console.log('[ADMIN_IMAGE_UPLOAD] Response text:', responseText);
+        data = JSON.parse(responseText);
+        console.log('[ADMIN_IMAGE_UPLOAD] Parsed data:', data);
+      } catch (parseError) {
+        console.error('[ADMIN_IMAGE_UPLOAD] Failed to parse response:', parseError);
+        console.error('[ADMIN_IMAGE_UPLOAD] Response was:', response);
+        throw new Error(`Failed to parse upload URL response: ${parseError}`);
+      }
       
       if (!data.uploadURL) {
         console.error('[ADMIN_IMAGE_UPLOAD] No uploadURL in response:', data);
         throw new Error("No upload URL received");
       }
 
+      console.log('[ADMIN_IMAGE_UPLOAD] Returning upload parameters with URL:', data.uploadURL);
       return {
         method: "PUT" as const,
         url: data.uploadURL,
@@ -42,7 +58,7 @@ export default function AdminImageUpload({
       console.error("[ADMIN_IMAGE_UPLOAD] Failed to get upload URL:", error);
       toast({
         title: "Upload Error",
-        description: "Failed to prepare image upload. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to prepare image upload. Please try again.",
         variant: "destructive",
       });
       throw error;
@@ -65,16 +81,26 @@ export default function AdminImageUpload({
       }
 
       // Confirm the upload with our backend
+      console.log('[ADMIN_IMAGE_UPLOAD] Confirming upload with URL:', uploadURL);
       const confirmResponse = await apiRequest("POST", "/api/admin/images/confirm", { uploadURL });
-      const confirmData = await confirmResponse.json();
       
-      console.log('[ADMIN_IMAGE_UPLOAD] Confirm response:', confirmData);
+      let confirmData;
+      try {
+        const confirmText = await confirmResponse.text();
+        console.log('[ADMIN_IMAGE_UPLOAD] Confirm response text:', confirmText);
+        confirmData = JSON.parse(confirmText);
+        console.log('[ADMIN_IMAGE_UPLOAD] Confirm parsed data:', confirmData);
+      } catch (parseError) {
+        console.error('[ADMIN_IMAGE_UPLOAD] Failed to parse confirm response:', parseError);
+        throw new Error(`Failed to parse confirm response: ${parseError}`);
+      }
 
       if (!confirmData.imageUrl) {
         console.error('[ADMIN_IMAGE_UPLOAD] No imageUrl in confirmation response:', confirmData);
         throw new Error("No image URL returned from confirmation");
       }
 
+      console.log('[ADMIN_IMAGE_UPLOAD] Image uploaded successfully:', confirmData.imageUrl);
       onImageUploaded(confirmData.imageUrl);
       
       toast({
