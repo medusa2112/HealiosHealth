@@ -1,77 +1,71 @@
 ID,Type,Description,Severity,File,Line,Snippet,Fixed
-o0tglrsWnKAR3Q,unvalidatedInput,Request data destructured without validation,critical,server/lib/auth.ts,223,"const { customerEmail } = req.body;",false
-Nx9WqNlossCxkg,unauthRoute,Route missing authentication middleware,high,server/routes/admin/carts.ts,79,"router.post(""/:cartId/recover"", [",false
-YJou6nk9yDHviw,unvalidatedInput,Request data destructured without validation,critical,server/routes/admin/carts.ts,94,"const { cartId } = req.params;",false
-i74e-uTm5ncsBQ,unauthRoute,Route missing authentication middleware,high,server/routes/admin/logs.ts,71,"router.get(""/admin/:adminId"", [",false
-ES0gYAwelOUeEQ,unauthRoute,Route missing authentication middleware,high,server/routes/admin/logs.ts,96,"router.get(""/target/:targetType/:targetId"", [",false
-o1hS0pAH_p_GZA,unauthRoute,Route missing authentication middleware,high,server/routes/admin.ts,592,"router.get(""/reorder-logs"", [",false
-4maoIwMrXILKWQ,unauthRoute,Route missing authentication middleware,high,server/routes/admin.ts,847,"router.post('/products/:id/variants', [",false
-_c4pbC6e6m_O0w,unvalidatedInput,Request data destructured without validation,critical,server/routes/admin.ts,608,"const { status, channel, limit = 100 } = req.query;",false
-QqATlmbPRjSC6g,unvalidatedInput,Request data destructured without validation,critical,server/routes/admin.ts,870,"const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;",false
-vIH2Knpa-4C08Q,unvalidatedInput,Request data destructured without validation,critical,server/routes/admin.ts,917,"const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;",false
-6tfqdX1Qlsu4FA,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,261,"router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {",false
-Fbw7RqHpJ_hl6Q,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,325,"router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {",false
-lLQ6qk6RJkGIKA,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,403,"router.delete('/products/:id', requireAuth, auditAction('delete_product', 'product'), async (req, res) => {",false
-sQwVwU7Wk2zkgw,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,847,"router.post('/products/:id/variants', [",false
-PQu0czH3BbWNjQ,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,959,"router.delete('/product-variants/:id', requireAuth, async (req, res) => {",false
-RzqhndUIz_g_EA,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,142,"const { id: bundleId } = req.params;",false
-WuHYiL89IMDsuw,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,143,"const { items } = req.body; // Array of { variantId, quantity }",false
--L3ODNdk5cXPgg,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,233,"const { id } = req.params;",false
-NTPLHpgcocegjA,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,273,"const { bundleId, itemId } = req.params;",false
-9ABAvnmLnfNRNw,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,302,"const { id } = req.params;",false
-kA2Vc4JzNdQNoQ,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,96,"router.post(""/"", requireAuth, async (req, res) => {",false
-ceIhfwxYKCRXBw,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,231,"router.put(""/:id"", requireAuth, async (req, res) => {",false
-DFRSKrMF_Hrj0w,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,300,"router.delete(""/:id"", requireAuth, async (req, res) => {",false
-8pxJRiBogCBBGQ,duplicateRoute,Duplicate route definition,medium,server/routes/adminDiscounts.ts,21,"router.post(""/"", requireAuth, async (req, res) => {",false
-QmVV9yrdgL_kxQ,duplicateRoute,Duplicate route definition,medium,server/routes/adminDiscounts.ts,169,"router.delete(""/:id"", requireAuth, async (req, res) => {",false
-pIVUnB4CN04rLQ,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminImages.ts,27,"const { uploadURL } = req.body;",false
-WI3XtOjUu4pV6A,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,35,"router.post(""/chat"", async (req, res) => {",false
-ldj8Ip8KFLleWA,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,89,"router.post(""/escalate"", async (req, res) => {",false
-0Ux_DSIpopkA0Q,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,179,"router.post(""/feedback"", async (req, res) => {",false
-t2IkmXdJdEkNaA,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,19,"router.get(""/issues"", async (req, res) => {",false
-_t6-1VUlnT1xKQ,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,32,"router.get(""/status"", async (req, res) => {",false
-APdv-3qUG4Eg3Q,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,51,"router.post(""/issues/:id/fix-prompt"", async (req, res) => {",false
-AuV4wZtvnq1fbw,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,91,"router.post(""/scan"", async (req, res) => {",false
-V3uZpRVQ0Z4tBA,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,53,"const { id } = req.params;",false
-w3PtAVsPlCjQxg,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,184,"const { id } = req.params;",false
-QoM5wY-fH5ix8A,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,185,"const { status } = req.body;",false
--Tc6BqDNESRn-g,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,25,"router.get('/me', async (req, res) => {",false
-ppij-8TVzBxbTA,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,74,"router.post(""/register"", (req, res) => {",false
-SbX7SqXQLXDuig,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,79,"router.get('/login', (req, res) => {",false
-fgmdseZySuNOiw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,90,"router.post('/logout', async (req, res) => {",false
-3L-F9vRZUOyusg,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,108,"router.post('/mock-login', loginLimiter, async (req, res) => {",false
-7GFG63q5ByJIxg,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,181,"router.get('/callback', async (req, res) => {",false
-UFYlSy0844WZDw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,201,"router.post('/demo-admin-login', loginLimiter, async (req, res) => {",false
-JeZ0I_APa6qaqw,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,8,"router.get(""/"", async (req, res) => {",false
-GToWkcl1Z3pExw,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,19,"router.get(""/:id"", async (req, res) => {",false
-wUwhIPuP-QaH2A,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,82,"router.post(""/validate"", async (req, res) => {",false
-QyBXlv5ZAZYajQ,unauthRoute,Route missing authentication middleware,high,server/routes/cart.ts,9,"router.post(""/sync"", requireSessionOrAuth, rateLimit(20, 60000), async (req, res) => {",false
-gXlz0t9bc-k72A,unvalidatedInput,Request data destructured without validation,critical,server/routes/email-test.ts,10,"const { type, email, testData } = req.body;",false
-tdYw8L14PH98Ww,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,14,"router.get(""/orders"", async (req, res) => {",false
-cvyizoXxyGs2rA,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,38,"router.get(""/orders/:id"", async (req, res) => {",false
-u_YZZqSe4Dr3VQ,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,73,"router.post(""/orders/:id/reorder"", async (req, res) => {",false
-I_OXhV4GPwCh1Q,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,262,"router.get(""/addresses"", async (req, res) => {",false
-jQXwIlw72MEMVg,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,274,"router.post(""/addresses"", async (req, res) => {",false
-dilteNZC0zzZow,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,300,"router.put(""/addresses/:id"", async (req, res) => {",false
-4EDcX2mxWoeopg,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,348,"router.delete(""/addresses/:id"", async (req, res) => {",false
-Q6fDKPkK4eXZHg,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,382,"router.get(""/"", async (req, res) => {",false
-iGWj2ECzH-usFQ,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,274,"router.post(""/addresses"", async (req, res) => {",false
-UkKok4fx1KjOMA,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,348,"router.delete(""/addresses/:id"", async (req, res) => {",false
-WHXp4DD9zGH7mA,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,8,"router.get(""/my-referral"", async (req, res) => {",false
-EK9VBEFNqmVnpA,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,26,"router.get(""/stats"", async (req, res) => {",false
-XCHx7HXHWf5VVA,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,41,"router.post(""/validate"", async (req, res) => {",false
-KHULDt8fltDAVA,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,70,"router.post(""/claim"", async (req, res) => {",false
-wxyv-iLxt5txTg,unauthRoute,Route missing authentication middleware,high,server/routes/stripe.ts,9,"router.post(""/webhook"", express.raw({ type: ""application/json"" }), async (req, res) => {",false
-WveoUx3qZLPL0A,unvalidatedInput,Request data destructured without validation,critical,server/routes/subscriptions.ts,108,"const { id } = req.params;",false
-mV8neDokvdoHsg,unvalidatedInput,Request data destructured without validation,critical,server/routes/subscriptions.ts,146,"const { id } = req.params;",false
-24kwtZZkxGAacQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,220,"const { id } = req.params;",false
-ZPsw7Zn4rpyJKQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,231,"const { id } = req.params;",false
-u5VrINYucMCNgg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,245,"const { id } = req.params;",false
-EQaRtjqMsgkkVw,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,311,"const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = req.body;",false
-GOBEzBPArvMnaQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,446,"const { orderData, returnUrl } = req.body;",false
-UpjeI-DFLAqV4Q,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,485,"const { code, subtotal, cartTotal } = req.body;",false
-eGEH-saXUdSfhg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,619,"const { items } = req.query;",false
-HRYLHZBPOcU-6A,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,699,"const { status } = req.body;",false
-iPzfAfItaLnJhA,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,713,"const { quantity } = req.body;",false
-uuAx99zMTPN5dg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,742,"const { productId, productName, currentStock } = req.body;",false
-fq1J3IdC46HOOg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,789,"const { firstName, email, product, restockDate } = req.body;",false
+_EdtTpxABb4hCQ,unauthRoute,Route missing authentication middleware,high,server/routes/admin/carts.ts,79,"router.post(""/:cartId/recover"", [",false
+NxEGI0OWIFDNmQ,unauthRoute,Route missing authentication middleware,high,server/routes/admin/logs.ts,71,"router.get(""/admin/:adminId"", [",false
+MVrMne_Gkx5b6w,unauthRoute,Route missing authentication middleware,high,server/routes/admin/logs.ts,96,"router.get(""/target/:targetType/:targetId"", [",false
+04Ipy0lji01ZYA,unauthRoute,Route missing authentication middleware,high,server/routes/admin.ts,592,"router.get(""/reorder-logs"", [",false
+wwy-eU-S_D6_jg,unauthRoute,Route missing authentication middleware,high,server/routes/admin.ts,850,"router.post('/products/:id/variants', [",false
+dxffBVDbsHo5ng,unvalidatedInput,Request data destructured without validation,critical,server/routes/admin.ts,929,"const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;",false
+_rZ9YlF6-dg96w,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,261,"router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {",false
+o5G71kpW84MmSw,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,325,"router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {",false
+uF8S72iD7isinQ,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,403,"router.delete('/products/:id', requireAuth, auditAction('delete_product', 'product'), async (req, res) => {",false
+cIKiutcacSXFGQ,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,850,"router.post('/products/:id/variants', [",false
+wvZVkjtQTm08YA,duplicateRoute,Duplicate route definition,medium,server/routes/admin.ts,971,"router.delete('/product-variants/:id', requireAuth, async (req, res) => {",false
+-ObLCxCFaneYiA,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,235,"const { id } = req.params;",false
+tp9O_9vP39oHEw,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,275,"const { bundleId, itemId } = req.params;",false
+PhWKrf__f_r9eg,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminBundles.ts,304,"const { id } = req.params;",false
+3QHMdMMFYqJsGA,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,97,"router.post(""/"", requireAuth, async (req, res) => {",false
+9uew1oTGhWbRng,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,233,"router.put(""/:id"", requireAuth, async (req, res) => {",false
+koaVHd835ODIUw,duplicateRoute,Duplicate route definition,medium,server/routes/adminBundles.ts,302,"router.delete(""/:id"", requireAuth, async (req, res) => {",false
+QIgBPLq_K20kGQ,duplicateRoute,Duplicate route definition,medium,server/routes/adminDiscounts.ts,21,"router.post(""/"", requireAuth, async (req, res) => {",false
+S9B3sISQYVjI2Q,duplicateRoute,Duplicate route definition,medium,server/routes/adminDiscounts.ts,169,"router.delete(""/:id"", requireAuth, async (req, res) => {",false
+rUkSKtbNwTjbEQ,unvalidatedInput,Request data destructured without validation,critical,server/routes/adminImages.ts,27,"const { uploadURL } = req.body;",false
+f-0U3dFPuUjRFQ,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,35,"router.post(""/chat"", async (req, res) => {",false
+NANSJXQj3qVWzQ,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,89,"router.post(""/escalate"", async (req, res) => {",false
+rfQfV4a8hkQAcw,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,179,"router.post(""/feedback"", async (req, res) => {",false
+4PVTBx3LiyNxsw,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,19,"router.get(""/issues"", async (req, res) => {",false
+WSJnpmw17C4u3Q,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,32,"router.get(""/status"", async (req, res) => {",false
+mihHGHJxTfdquQ,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,51,"router.post(""/issues/:id/fix-prompt"", async (req, res) => {",false
+OXXxbWjvV6e0Gg,unauthRoute,Route missing authentication middleware,high,server/routes/alfr3d.ts,91,"router.post(""/scan"", async (req, res) => {",false
+yH-bKm-d5QLlFQ,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,53,"const { id } = req.params;",false
+IOU-aADERgJqOA,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,184,"const { id } = req.params;",false
+w8fHaq1ncNBA7Q,unvalidatedInput,Request data destructured without validation,critical,server/routes/alfr3d.ts,185,"const { status } = req.body;",false
+3VgQ3mzGepE_vQ,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,25,"router.get('/me', async (req, res) => {",false
+5o8Gb9aOJltD3Q,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,74,"router.post(""/register"", (req, res) => {",false
+hQjR31lR0AvULw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,79,"router.get('/login', (req, res) => {",false
+9TWK7CVXIEW7kA,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,90,"router.post('/logout', async (req, res) => {",false
+4OtFXK3-YT3qRA,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,108,"router.post('/mock-login', loginLimiter, async (req, res) => {",false
+TrAg-YDJ2lj9qQ,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,181,"router.get('/callback', async (req, res) => {",false
+-KZs7h9TvPNikg,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,201,"router.post('/demo-admin-login', loginLimiter, async (req, res) => {",false
+wYAZ12pxiT5U3w,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,8,"router.get(""/"", async (req, res) => {",false
+13o2h4vV153rzw,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,19,"router.get(""/:id"", async (req, res) => {",false
+uhjco3SVT4nIWg,unauthRoute,Route missing authentication middleware,high,server/routes/bundles.ts,82,"router.post(""/validate"", async (req, res) => {",false
+JEGsUanzPUGc7w,unauthRoute,Route missing authentication middleware,high,server/routes/cart.ts,9,"router.post(""/sync"", requireSessionOrAuth, rateLimit(20, 60000), async (req, res) => {",false
+sdc9iealnDZDIg,unvalidatedInput,Request data destructured without validation,critical,server/routes/email-test.ts,10,"const { type, email, testData } = req.body;",false
+dBt4n0pbqEP57w,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,14,"router.get(""/orders"", async (req, res) => {",false
+xDZmBto4w5bL2A,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,38,"router.get(""/orders/:id"", async (req, res) => {",false
+JSLQYh9SzYbRbw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,73,"router.post(""/orders/:id/reorder"", async (req, res) => {",false
+XFbQnYeuMXXEiw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,262,"router.get(""/addresses"", async (req, res) => {",false
+qgYDuY-z-7OVYg,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,274,"router.post(""/addresses"", async (req, res) => {",false
+hlk4xjkFsoAoyw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,300,"router.put(""/addresses/:id"", async (req, res) => {",false
+GV_vCbUj0EkLRg,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,348,"router.delete(""/addresses/:id"", async (req, res) => {",false
+lR2jZpUPGBQYIA,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,382,"router.get(""/"", async (req, res) => {",false
+feG5z4OnhpeVyw,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,274,"router.post(""/addresses"", async (req, res) => {",false
+AGf10vDG2efkXw,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,348,"router.delete(""/addresses/:id"", async (req, res) => {",false
+m3VvQLchHCZsgQ,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,8,"router.get(""/my-referral"", async (req, res) => {",false
+hWFvn4Eb0qxaEw,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,26,"router.get(""/stats"", async (req, res) => {",false
+Mn_Gruf4WChKSg,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,41,"router.post(""/validate"", async (req, res) => {",false
+VpSvEQw-p1rftg,unauthRoute,Route missing authentication middleware,high,server/routes/referrals.ts,70,"router.post(""/claim"", async (req, res) => {",false
+8ApkskVOFrktWg,unauthRoute,Route missing authentication middleware,high,server/routes/stripe.ts,9,"router.post(""/webhook"", express.raw({ type: ""application/json"" }), async (req, res) => {",false
+z_JckJyX2Imkfg,unvalidatedInput,Request data destructured without validation,critical,server/routes/subscriptions.ts,108,"const { id } = req.params;",false
+5bcqaJgFc5Ekkg,unvalidatedInput,Request data destructured without validation,critical,server/routes/subscriptions.ts,146,"const { id } = req.params;",false
+SCV4LRS7VHHp4w,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,220,"const { id } = req.params;",false
+b-I0KLE_jOrzww,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,231,"const { id } = req.params;",false
+aUv5MDTuTVMNBw,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,245,"const { id } = req.params;",false
+HOfX68DkfuFMrA,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,311,"const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = req.body;",false
+aJNSKvZoHXRYlQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,446,"const { orderData, returnUrl } = req.body;",false
+A94kdiwL9kojYA,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,485,"const { code, subtotal, cartTotal } = req.body;",false
+_wFVz2AI6n_QVA,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,619,"const { items } = req.query;",false
+ptfEKlGE5rkRfQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,699,"const { status } = req.body;",false
+RFx53-yRqV14OA,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,713,"const { quantity } = req.body;",false
+PSFOKef1Vya3CQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,742,"const { productId, productName, currentStock } = req.body;",false
+QEY3Ji_kBK_GBg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,789,"const { firstName, email, product, restockDate } = req.body;",false

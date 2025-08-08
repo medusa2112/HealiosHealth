@@ -90,8 +90,8 @@ router.post("/:cartId/recover", [
       });
     }
     
-    // Now safely destructure the validated data
-    const { cartId } = req.params;
+    // Use validated data directly instead of destructuring
+    const cartId = req.params.cartId;
     const cart = await storage.getCartById(cartId);
     
     if (!cart) {

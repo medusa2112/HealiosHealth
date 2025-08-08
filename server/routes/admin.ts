@@ -605,7 +605,10 @@ router.get("/reorder-logs", [
       });
     }
     
-    const { status, channel, limit = 100 } = req.query;
+    // Use validated data directly instead of destructuring
+    const status = req.query.status;
+    const channel = req.query.channel;
+    const limit = req.query.limit || 100;
     
     const options: any = { limit: parseInt(limit as string) };
     if (status && status !== 'all') options.status = status as string;
@@ -867,7 +870,16 @@ router.post('/products/:id/variants', [
       });
     }
     
-    const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
+    // Use validated data directly instead of destructuring
+    const name = req.body.name;
+    const sku = req.body.sku;
+    const type = req.body.type;
+    const attributes = req.body.attributes;
+    const price = req.body.price;
+    const imageUrl = req.body.imageUrl;
+    const stockQuantity = req.body.stockQuantity;
+    const inStock = req.body.inStock;
+    const isDefault = req.body.isDefault;
     const productId = req.params.id;
     
     // Validate required fields

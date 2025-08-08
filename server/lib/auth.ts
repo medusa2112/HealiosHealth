@@ -219,8 +219,8 @@ export const validateOrderAccess = async (req: Request, res: Response, next: Nex
       });
     }
     
-    // Now safely destructure the validated data
-    const { customerEmail } = req.body;
+    // Use validated data directly instead of destructuring
+    const customerEmail = req.body.customerEmail;
     
     // If user is authenticated, must match their email
     if (req.user && req.user.email !== customerEmail) {

@@ -1,4 +1,5 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
+import { param, body, validationResult } from "express-validator";
 import { requireAuth } from "../lib/auth";
 import { storage } from "../storage";
 import { insertProductBundleSchema, insertBundleItemSchema } from "@shared/schema";
@@ -139,8 +140,9 @@ router.post("/", requireAuth, async (req, res) => {
 // Add items to bundle with children's product exclusion validation
 router.post("/:id/items", requireAuth, async (req, res) => {
   try {
-    const { id: bundleId } = req.params;
-    const { items } = req.body; // Array of { variantId, quantity }
+    // Use validated data directly instead of destructuring
+    const bundleId = req.params.id;
+    const items = req.body.items; // Array of { variantId, quantity }
     
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "Items array is required and cannot be empty" });
