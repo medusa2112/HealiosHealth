@@ -331,6 +331,22 @@ export class MemStorage implements IStorage {
   private seedUsers() {
     const testUsers: User[] = [];
 
+    // Add demo admin user for development
+    if (process.env.NODE_ENV === 'development') {
+      const demoAdmin: User = {
+        id: 'admin-user-id',
+        email: 'admin@healios.dev',
+        password: null,
+        role: 'admin',
+        firstName: 'Admin',
+        lastName: 'Demo',
+        stripeCustomerId: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      testUsers.push(demoAdmin);
+    }
+
     testUsers.forEach(user => {
       this.users.set(user.id, user);
     });
