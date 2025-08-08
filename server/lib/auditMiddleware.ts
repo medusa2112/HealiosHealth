@@ -5,8 +5,11 @@ import type { InsertAdminLog } from '@shared/schema';
 // Audit middleware to log admin actions
 export function auditAction(actionType: string, targetType: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const originalSend = res.send;
+    // Track if we've already logged this action
+    let hasLogged = false;
     const originalJson = res.json;
+    const originalSend = res.send;
+    const originalEnd = res.end;
     
     // Get user info
     const user = req.user as any;
@@ -19,11 +22,11 @@ export function auditAction(actionType: string, targetType: string) {
     // Extract target ID from request
     const targetId = req.params.id || req.params.orderId || req.params.productId || req.body.id || 'unknown';
     
-    // Override response methods to capture response data
-    res.send = function(this: Response, body: any) {
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        // Log successful admin action
-        logAdminAction({
+    // Helper function to log once
+    const logOnce = async () => {
+      if (!hasLogged && res.statusCode >= 200 && res.statusCode < 300) {
+        hasLogged = true;
+        await logAdminAction({
           adminId,
           actionType,
           targetType,
@@ -38,28 +41,22 @@ export function auditAction(actionType: string, targetType: string) {
           })
         }).catch(console.error);
       }
+    };
+    
+    // Override response methods to capture response data
+    res.json = function(this: Response, body: any) {
+      logOnce();
+      return originalJson.call(this, body);
+    };
+    
+    res.send = function(this: Response, body: any) {
+      logOnce();
       return originalSend.call(this, body);
     };
     
-    res.json = function(this: Response, body: any) {
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        // Log successful admin action
-        logAdminAction({
-          adminId,
-          actionType,
-          targetType, 
-          targetId,
-          ipAddress: req.ip || req.connection.remoteAddress,
-          details: JSON.stringify({
-            method: req.method,
-            path: req.path,
-            query: req.query,
-            body: sanitizeBody(req.body),
-            userAgent: req.get('User-Agent')
-          })
-        }).catch(console.error);
-      }
-      return originalJson.call(this, body);
+    res.end = function(this: Response, chunk?: any, encoding?: any) {
+      logOnce();
+      return originalEnd.call(this, chunk, encoding);
     };
     
     next();

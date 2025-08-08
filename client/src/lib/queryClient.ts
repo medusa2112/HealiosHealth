@@ -99,11 +99,20 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
+      // Cache admin queries for 5 minutes to prevent excessive re-fetching
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime in v5)
       retry: false,
     },
     mutations: {
       retry: false,
+      // Add optimistic updates for admin operations
+      onSuccess: () => {
+        // Invalidate only specific queries after mutation success
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ['/api/admin'], refetchType: 'none' });
+        }, 100);
+      },
     },
   },
 });

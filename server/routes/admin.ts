@@ -274,12 +274,23 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
       categories: req.body.categories
     });
     
+    // Preprocess data before validation
+    const preprocessedData = {
+      ...req.body,
+      // Fix stock validation: inStock should be false when stockQuantity is 0
+      inStock: (req.body.stockQuantity || 0) > 0,
+      // Auto-generate SEO fields if not provided
+      seoTitle: req.body.seoTitle || `${req.body.name} | Premium Supplements | Healios`,
+      seoDescription: req.body.seoDescription || req.body.description?.substring(0, 160) || `Buy ${req.body.name} from Healios. Premium quality supplements with science-backed ingredients. Free shipping on orders over R500.`,
+      seoKeywords: req.body.seoKeywords?.length > 0 ? req.body.seoKeywords : [req.body.name, ...(req.body.categories || []), 'supplements', 'health', 'wellness'].filter(Boolean),
+    };
+
     // Use SINGLE SOURCE OF TRUTH - shared schema
-    const result = insertProductSchema.safeParse(req.body);
+    const result = insertProductSchema.safeParse(preprocessedData);
     if (!result.success) {
       console.error('[ADMIN_PRODUCT] Validation failed', {
         errors: result.error.errors,
-        receivedData: req.body,
+        receivedData: preprocessedData,
         issues: result.error.issues
       });
       return res.status(400).json({ 
@@ -354,13 +365,26 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
       priceType: typeof req.body.price
     });
     
+    // Preprocess data before validation
+    const preprocessedData = {
+      ...req.body,
+      // Fix stock validation: inStock should be false when stockQuantity is 0
+      ...(req.body.stockQuantity !== undefined && { inStock: req.body.stockQuantity > 0 }),
+      // Auto-generate SEO fields if not provided and name/description are being updated
+      ...(req.body.name && !req.body.seoTitle && { seoTitle: `${req.body.name} | Premium Supplements | Healios` }),
+      ...(req.body.description && !req.body.seoDescription && { seoDescription: req.body.description.substring(0, 160) }),
+      ...(req.body.categories && (!req.body.seoKeywords || req.body.seoKeywords.length === 0) && { 
+        seoKeywords: [req.body.name || '', ...(req.body.categories || []), 'supplements', 'health', 'wellness'].filter(Boolean)
+      }),
+    };
+
     // Use SINGLE SOURCE OF TRUTH - shared schema made partial for updates  
     const updateSchema = insertProductSchema.partial();
-    const bodyResult = updateSchema.safeParse(req.body);
+    const bodyResult = updateSchema.safeParse(preprocessedData);
     if (!bodyResult.success) {
       console.error('[ADMIN_PRODUCT] Update validation failed', {
         errors: bodyResult.error.errors,
-        receivedData: req.body,
+        receivedData: preprocessedData,
         issues: bodyResult.error.issues
       });
       return res.status(400).json({ 
@@ -477,7 +501,11 @@ router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'prod
     const { id } = paramsResult.data;
     const { quantity } = bodyResult.data;
 
-    const [product] = await db.update(products).set({ stockQuantity: quantity }).where(eq(products.id, id)).returning();
+    // Update both stockQuantity and inStock status
+    const [product] = await db.update(products).set({ 
+      stockQuantity: quantity,
+      inStock: quantity > 0 
+    }).where(eq(products.id, id)).returning();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
