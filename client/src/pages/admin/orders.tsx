@@ -24,15 +24,43 @@ interface OrderStats {
   shippedOrders: number;
 }
 
+interface OrdersResponse {
+  orders: Order[];
+  total: number;
+  filtered: number;
+  filters: any;
+}
+
 export default function AdminOrders() {
   const [filter, setFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState({ from: "", to: "" });
+  const [customerEmailFilter, setCustomerEmailFilter] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch orders
-  const { data: orders = [], isLoading: ordersLoading, error: ordersError } = useQuery<Order[]>({
-    queryKey: ['/admin/orders'],
+  // Fetch orders with filtering
+  const { data: ordersResponse, isLoading: ordersLoading, error: ordersError } = useQuery<OrdersResponse>({
+    queryKey: ['/admin/orders', filter, dateFilter, customerEmailFilter],
+    queryFn: () => {
+      const params = new URLSearchParams();
+      if (filter !== "all") {
+        if (['processing', 'shipped', 'delivered', 'cancelled'].includes(filter)) {
+          params.append('status', filter);
+        } else if (['pending', 'completed', 'failed'].includes(filter)) {
+          params.append('paymentStatus', filter);
+        }
+      }
+      if (dateFilter.from) params.append('dateFrom', dateFilter.from);
+      if (dateFilter.to) params.append('dateTo', dateFilter.to);
+      if (customerEmailFilter.trim()) params.append('customerEmail', customerEmailFilter.trim());
+      
+      const queryString = params.toString();
+      return fetch(`/admin/orders${queryString ? `?${queryString}` : ''}`)
+        .then(res => res.json());
+    }
   });
+  
+  const orders = ordersResponse?.orders || [];
 
   // Fetch order statistics  
   const { data: stats, isLoading: statsLoading } = useQuery<OrderStats>({
@@ -51,7 +79,7 @@ export default function AdminOrders() {
       });
       // Refetch orders to get updated data
       queryClient.invalidateQueries({ queryKey: ['/admin/orders'] });
-      queryClient.invalidateQueries({ queryKey: ['/admin/orders/stats/summary'] });
+      queryClient.invalidateQueries({ queryKey: ['/admin/orders', 'stats'] });
     },
     onError: (error: any) => {
       toast({
@@ -83,14 +111,7 @@ export default function AdminOrders() {
     },
   });
 
-  // Filter orders
-  const filteredOrders = orders.filter((order: Order) => {
-    if (filter === "all") return true;
-    return order.paymentStatus === filter || 
-           order.refundStatus === filter || 
-           order.disputeStatus === filter ||
-           order.orderStatus === filter;
-  });
+  // Orders are now filtered server-side, so we use them directly
 
   const handleRefund = async (orderId: string, totalAmount: string) => {
     const confirmed = window.confirm(
@@ -229,26 +250,84 @@ export default function AdminOrders() {
         </div>
       )}
 
-      {/* Filters */}
-      <div className="flex items-center gap-4">
-        <label className="text-sm font-medium">Filter by status:</label>
-        <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select filter" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Orders</SelectItem>
-            <SelectItem value="pending">Pending Payment</SelectItem>
-            <SelectItem value="completed">Paid Orders</SelectItem>
-            <SelectItem value="processing">Processing</SelectItem>
-            <SelectItem value="shipped">Shipped</SelectItem>
-            <SelectItem value="delivered">Delivered</SelectItem>
-            <SelectItem value="refunded">Refunded</SelectItem>
-            <SelectItem value="disputed">Disputed</SelectItem>
-          </SelectContent>
-        </Select>
+      {/* Enhanced Filters */}
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Status:</label>
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Orders</SelectItem>
+                <SelectItem value="pending">Pending Payment</SelectItem>
+                <SelectItem value="completed">Paid Orders</SelectItem>
+                <SelectItem value="processing">Processing</SelectItem>
+                <SelectItem value="shipped">Shipped</SelectItem>
+                <SelectItem value="delivered">Delivered</SelectItem>
+                <SelectItem value="refunded">Refunded</SelectItem>
+                <SelectItem value="disputed">Disputed</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Customer:</label>
+            <input
+              type="text"
+              placeholder="Search by email..."
+              value={customerEmailFilter}
+              onChange={(e) => setCustomerEmailFilter(e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm w-[200px] bg-white dark:bg-gray-800"
+            />
+          </div>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Date Range:</label>
+            <input
+              type="date"
+              value={dateFilter.from}
+              onChange={(e) => setDateFilter(prev => ({ ...prev, from: e.target.value }))}
+              className="px-3 py-2 border rounded-md text-sm bg-white dark:bg-gray-800"
+            />
+            <span className="text-sm text-muted-foreground">to</span>
+            <input
+              type="date"
+              value={dateFilter.to}
+              onChange={(e) => setDateFilter(prev => ({ ...prev, to: e.target.value }))}
+              className="px-3 py-2 border rounded-md text-sm bg-white dark:bg-gray-800"
+            />
+            {(dateFilter.from || dateFilter.to || customerEmailFilter || filter !== "all") && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setFilter("all");
+                  setDateFilter({ from: "", to: "" });
+                  setCustomerEmailFilter("");
+                }}
+              >
+                Clear Filters
+              </Button>
+            )}
+          </div>
+        </div>
+        
         <div className="text-sm text-muted-foreground">
-          Showing {filteredOrders.length} of {orders.length} orders
+          Showing {ordersResponse?.filtered || 0} of {ordersResponse?.total || 0} orders
+          {ordersResponse?.total !== ordersResponse?.filtered && (
+            <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs">
+              Filtered
+            </span>
+          )}
+          {ordersLoading && (
+            <span className="ml-2 px-2 py-1 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 rounded text-xs">
+              Loading...
+            </span>
+          )}
         </div>
       </div>
 
@@ -259,12 +338,29 @@ export default function AdminOrders() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
             <p className="mt-2 text-muted-foreground">Loading orders...</p>
           </div>
-        ) : filteredOrders.length === 0 ? (
+        ) : orders.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground">No orders found matching the current filter.</p>
+            <p className="text-muted-foreground">
+              {ordersResponse?.total === 0 
+                ? "No orders found in the system." 
+                : "No orders found matching the current filters."}
+            </p>
+            {ordersResponse?.total !== ordersResponse?.filtered && (
+              <Button 
+                variant="outline" 
+                className="mt-2"
+                onClick={() => {
+                  setFilter("all");
+                  setDateFilter({ from: "", to: "" });
+                  setCustomerEmailFilter("");
+                }}
+              >
+                Clear All Filters
+              </Button>
+            )}
           </div>
         ) : (
-          filteredOrders.map((order: Order) => {
+          orders.map((order: Order) => {
             const orderItems = parseOrderItems(typeof order.orderItems === 'string' ? order.orderItems : JSON.stringify(order.orderItems || []));
             return (
               <Card key={order.id} className="p-6">

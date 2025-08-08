@@ -4,20 +4,70 @@ import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
 import { stripe } from "../../lib/stripe";
 import { sendEmail } from "../../lib/email";
+import { auditAction } from "../../lib/auditMiddleware";
 
 const router = express.Router();
 
-// Get all orders for admin dashboard
+// Get all orders for admin dashboard with filtering support
 router.get("/", requireAuth, async (req, res) => {
   try {
-    const orders = await storage.getAllOrders();
+    const querySchema = z.object({
+      status: z.string().optional(),
+      paymentStatus: z.string().optional(), 
+      userId: z.string().optional(),
+      customerEmail: z.string().optional(),
+      dateFrom: z.string().optional(),
+      dateTo: z.string().optional(),
+      limit: z.string().transform(val => parseInt(val) || 100).optional()
+    });
     
-    // Sort by most recent first
+    const queryResult = querySchema.safeParse(req.query);
+    if (!queryResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: queryResult.error.errors
+      });
+    }
+    
+    const filters = queryResult.data;
+    let orders = await storage.getAllOrders();
+    
+    // Apply filters
+    if (filters.status) {
+      orders = orders.filter(o => o.orderStatus === filters.status);
+    }
+    if (filters.paymentStatus) {
+      orders = orders.filter(o => o.paymentStatus === filters.paymentStatus);
+    }
+    if (filters.userId) {
+      orders = orders.filter(o => o.userId === filters.userId);
+    }
+    if (filters.customerEmail) {
+      orders = orders.filter(o => o.customerEmail.toLowerCase().includes(filters.customerEmail!.toLowerCase()));
+    }
+    if (filters.dateFrom) {
+      const fromDate = new Date(filters.dateFrom);
+      orders = orders.filter(o => new Date(o.createdAt) >= fromDate);
+    }
+    if (filters.dateTo) {
+      const toDate = new Date(filters.dateTo);
+      orders = orders.filter(o => new Date(o.createdAt) <= toDate);
+    }
+    
+    // Sort by most recent first (descending date order)
     const sortedOrders = orders.sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     
-    res.json(sortedOrders);
+    // Apply limit
+    const limitedOrders = sortedOrders.slice(0, filters.limit || 100);
+    
+    res.json({
+      orders: limitedOrders,
+      total: orders.length,
+      filtered: limitedOrders.length,
+      filters: filters
+    });
   } catch (error) {
     console.error("Error fetching orders:", error);
     res.status(500).json({ message: "Failed to fetch orders" });
@@ -59,8 +109,8 @@ router.get("/:id", requireAuth, async (req, res) => {
   }
 });
 
-// Process refund for an order
-router.post("/:id/refund", requireAuth, async (req, res) => {
+// Process refund for an order with audit logging
+router.post("/:id/refund", requireAuth, auditAction('process_refund', 'order'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -168,8 +218,8 @@ router.post("/:id/refund", requireAuth, async (req, res) => {
   }
 });
 
-// Update order status
-router.put("/:id/status", requireAuth, async (req, res) => {
+// Update order status with audit logging and validation
+router.put("/:id/status", requireAuth, auditAction('update_order_status', 'order'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -184,7 +234,8 @@ router.put("/:id/status", requireAuth, async (req, res) => {
     }
     
     const bodySchema = z.object({
-      status: z.enum(["processing", "shipped", "delivered", "cancelled"])
+      status: z.enum(["processing", "shipped", "delivered", "cancelled"]),
+      reason: z.string().optional()
     });
     
     const bodyResult = bodySchema.safeParse(req.body);
@@ -196,18 +247,47 @@ router.put("/:id/status", requireAuth, async (req, res) => {
     }
     
     const orderId = paramsResult.data.id;
-    const { status } = bodyResult.data;
+    const { status, reason } = bodyResult.data;
 
     const order = await storage.getOrderById(orderId);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    await storage.updateOrderStatus(orderId, status);
+    // Validate status transitions (prevent invalid status changes)
+    const currentStatus = order.orderStatus;
+    const validTransitions: Record<string, string[]> = {
+      'processing': ['shipped', 'cancelled'],
+      'shipped': ['delivered', 'cancelled'], 
+      'delivered': [], // No transitions from delivered
+      'cancelled': [] // No transitions from cancelled
+    };
+    
+    if (currentStatus && !validTransitions[currentStatus]?.includes(status)) {
+      return res.status(400).json({ 
+        error: 'Invalid status transition',
+        message: `Cannot change status from '${currentStatus}' to '${status}'`,
+        validTransitions: validTransitions[currentStatus] || []
+      });
+    }
+
+    const updatedOrder = await storage.updateOrderStatus(orderId, status);
+    
+    if (!updatedOrder) {
+      return res.status(500).json({ message: "Failed to update order status" });
+    }
+
+    // Log the status change (audit logging handled by middleware)
+    console.log(`[ORDER_STATUS] Order ${orderId} status changed from '${currentStatus}' to '${status}' by admin`);
 
     res.json({ 
       success: true, 
-      message: `Order status updated to ${status}` 
+      message: `Order status updated to ${status}`,
+      order: {
+        id: updatedOrder.id,
+        orderStatus: updatedOrder.orderStatus,
+        previousStatus: currentStatus
+      }
     });
 
   } catch (error) {
