@@ -148,6 +148,10 @@ export default function AdminProductEdit() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin"] });
       queryClient.invalidateQueries({ queryKey: [`/api/admin/products/${id}`] });
+      // Invalidate frontend queries so product images update immediately
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/products/featured"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${id}`] });
       toast({ 
         title: "Success", 
         description: isEditing ? "Product updated successfully" : "Product created successfully" 
