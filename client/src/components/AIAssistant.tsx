@@ -19,14 +19,7 @@ import {
   Bot
 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
-  metadata?: any;
-}
+import type { Message } from '@shared/types';
 
 interface AIAssistantProps {
   isOpen: boolean;

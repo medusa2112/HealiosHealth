@@ -14,59 +14,8 @@ import { useState } from "react";
 import { ShoppingCart, Package, MapPin, Plus, Edit, Trash2, User, Clock, CreditCard } from "lucide-react";
 import ReferralsPage from "./portal/Referrals";
 import { SEOHead } from '@/components/seo-head';
+import type { User as UserType, Order, Address, CustomerPortalData } from "@shared/types";
 
-interface CustomerPortalData {
-  user: {
-    id: string;
-    email: string;
-    firstName: string | null;
-    lastName: string | null;
-  };
-  orders: Array<{
-    id: string;
-    totalAmount: string;
-    currency: string;
-    orderStatus: string;
-    paymentStatus: string;
-    createdAt: string;
-    trackingNumber: string | null;
-    items: any[];
-  }>;
-  addresses: Array<{
-    id: string;
-    type: string;
-    line1: string;
-    line2: string | null;
-    city: string | null;
-    zip: string | null;
-    country: string | null;
-  }>;
-  stats: {
-    totalOrders: number;
-    totalSpent: string;
-  };
-}
-
-interface Order {
-  id: string;
-  totalAmount: string;
-  currency: string;
-  orderStatus: string;
-  paymentStatus: string;
-  createdAt: string;
-  trackingNumber: string | null;
-  items: any[];
-}
-
-interface Address {
-  id: string;
-  type: string;
-  line1: string;
-  line2: string | null;
-  city: string | null;
-  zip: string | null;
-  country: string | null;
-}
 
 export default function CustomerPortal() {
   const [, setLocation] = useLocation();
@@ -75,26 +24,26 @@ export default function CustomerPortal() {
   const [addressDialogOpen, setAddressDialogOpen] = useState(false);
 
   // Check auth status
-  const { data: user, isLoading: authLoading } = useQuery<any>({
+  const { data: user, isLoading: authLoading } = useQuery<UserType | null>({
     queryKey: ["/auth/me"],
     retry: false,
   });
 
   // Fetch portal data
   const { data: portalData, isLoading: portalLoading } = useQuery<CustomerPortalData>({
-    queryKey: ["/portal"],
+    queryKey: ["/portal", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
   // Fetch full order list
   const { data: orders, isLoading: ordersLoading } = useQuery<Order[]>({
-    queryKey: ["/portal/orders"],
+    queryKey: ["/portal/orders", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery<Address[]>({
-    queryKey: ["/portal/addresses"],
+    queryKey: ["/portal/addresses", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 

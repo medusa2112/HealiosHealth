@@ -5,27 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2, Send, ShoppingCart, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-interface CartItem {
-  id: string;
-  productId: string;
-  productName: string;
-  quantity: number;
-  price: number;
-}
-
-interface AbandonedCart {
-  id: string;
-  userId: string | null;
-  sessionToken: string;
-  items: CartItem[];
-  totalAmount: number;
-  currency: string;
-  createdAt: string;
-  lastUpdated: string;
-  convertedToOrder: boolean | null;
-  stripeSessionId: string | null;
-}
+import type { CartItem, AbandonedCart } from '@shared/types';
 
 interface CartStats {
   totalAbandoned: number;
@@ -282,7 +262,7 @@ export default function AbandonedCartsPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold">
-                          R{cart.totalAmount.toFixed(2)}
+                          R{typeof cart.totalAmount === 'number' ? cart.totalAmount.toFixed(2) : (cart.totalAmount || '0.00')}
                         </p>
                         <p className="text-sm text-gray-600">
                           {items.length} item{items.length !== 1 ? 's' : ''}

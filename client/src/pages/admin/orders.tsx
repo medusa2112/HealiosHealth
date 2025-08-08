@@ -11,23 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
 import { SEOHead } from '@/components/seo-head';
 import { AdminHeader } from '@/components/admin-header';
-
-interface Order {
-  id: string;
-  customerEmail: string;
-  customerName?: string;
-  totalAmount: string;
-  currency: string;
-  paymentStatus: string;
-  orderStatus: string;
-  refundStatus: string;
-  disputeStatus: string;
-  stripePaymentIntentId?: string;
-  stripeSessionId?: string;
-  createdAt: string;
-  updatedAt?: string;
-  orderItems: string;
-}
+import type { Order } from '@shared/types';
 
 interface OrderStats {
   totalOrders: number;
@@ -281,7 +265,7 @@ export default function AdminOrders() {
           </div>
         ) : (
           filteredOrders.map((order: Order) => {
-            const orderItems = parseOrderItems(order.orderItems);
+            const orderItems = parseOrderItems(typeof order.orderItems === 'string' ? order.orderItems : JSON.stringify(order.orderItems || []));
             return (
               <Card key={order.id} className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -299,7 +283,7 @@ export default function AdminOrders() {
                       Customer: {order.customerName || order.customerEmail}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Created: {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString()}
+                      Created: {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'} at {order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : 'N/A'}
                     </div>
                   </div>
                   

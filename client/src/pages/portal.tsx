@@ -5,77 +5,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "date-fns";
-
-interface CustomerPortalData {
-  user: {
-    id: string;
-    email: string;
-    firstName: string | null;
-    lastName: string | null;
-  };
-  orders: Array<{
-    id: string;
-    totalAmount: string;
-    currency: string;
-    orderStatus: string;
-    paymentStatus: string;
-    createdAt: string;
-    trackingNumber: string | null;
-    items: any[];
-  }>;
-  quizResults: Array<{
-    id: string;
-    completedAt: string;
-    recommendationsCount: number;
-  }>;
-  stats: {
-    totalOrders: number;
-    totalSpent: number;
-  };
-}
-
-interface Order {
-  id: string;
-  totalAmount: string;
-  currency: string;
-  orderStatus: string;
-  paymentStatus: string;
-  createdAt: string;
-  trackingNumber: string | null;
-  items: Array<{
-    id: string;
-    name: string;
-    price: string;
-    quantity: number;
-  }>;
-}
-
-interface QuizResult {
-  id: string;
-  completedAt: string;
-  answers: any;
-  recommendations: any;
-}
+import type { User, Order, QuizResult, CustomerPortalData } from "@shared/types";
 
 export default function CustomerPortal() {
   // Check auth status
-  const { data: user, isLoading: authLoading } = useQuery({
+  const { data: user, isLoading: authLoading } = useQuery<User | null>({
     queryKey: ["/auth/me"],
     retry: false,
   });
 
   const { data: portalData, isLoading: portalLoading } = useQuery<CustomerPortalData>({
-    queryKey: ["/portal"],
+    queryKey: ["/portal", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
   const { data: orders, isLoading: ordersLoading } = useQuery<Order[]>({
-    queryKey: ["/portal/orders"],
+    queryKey: ["/portal/orders", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
   const { data: quizResults, isLoading: quizLoading } = useQuery<QuizResult[]>({
-    queryKey: ["/portal/quiz-results"],
+    queryKey: ["/portal/quiz-results", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
@@ -162,7 +112,9 @@ export default function CustomerPortal() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-black dark:text-white">
-                      R{portalData?.stats.totalSpent.toFixed(2) || '0.00'}
+                      R{typeof portalData?.stats.totalSpent === 'number' 
+                        ? portalData.stats.totalSpent.toFixed(2) 
+                        : portalData?.stats.totalSpent || '0.00'}
                     </div>
                   </CardContent>
                 </Card>
@@ -271,7 +223,7 @@ export default function CustomerPortal() {
                           </p>
                         )}
                         <div className="space-y-2">
-                          {order.items.map((item, index) => (
+                          {(order.items || []).map((item, index) => (
                             <div key={index} className="flex justify-between items-center text-sm">
                               <span className="text-black dark:text-white">
                                 {item.name} x {item.quantity}

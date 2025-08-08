@@ -3,17 +3,7 @@ import { Link } from 'wouter';
 import { ArrowRight, Clock, User } from 'lucide-react';
 import { SEOHead } from '@/components/seo-head';
 import { useQuery } from '@tanstack/react-query';
-
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  metaDescription: string;
-  content: string;
-  research: string;
-  sources: string[];
-  createdAt: string;
-}
+import type { Article } from '@shared/types';
 
 export default function JournalAll() {
   const [activeCategory, setActiveCategory] = useState('All');

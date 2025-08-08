@@ -3,17 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Clock, User, ExternalLink, Calendar } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
-
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  metaDescription: string;
-  content: string;
-  research: string;
-  sources: string[];
-  createdAt: string;
-}
+import type { Article } from '@shared/types';
 
 export default function Article() {
   const [match, params] = useRoute('/journal/:slug');
@@ -21,7 +11,7 @@ export default function Article() {
 
   // Fetch specific article by slug
   const { data: article, isLoading, error } = useQuery<Article>({
-    queryKey: [`/api/articles/${slug}`],
+    queryKey: ['/api/articles', slug],
     enabled: !!slug,
     staleTime: 10 * 60 * 1000, // 10 minutes
   });

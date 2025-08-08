@@ -8,25 +8,7 @@ import { Download, ShoppingCart, Users, DollarSign, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SEOHead } from '@/components/seo-head';
 import { AdminHeader } from '@/components/admin-header';
-
-interface CartItem {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface AbandonedCart {
-  id: string;
-  userId: string | null;
-  sessionToken: string;
-  items: string | CartItem[];
-  totalAmount: string | null;
-  currency: string | null;
-  createdAt: string;
-  lastUpdated: string;
-  convertedToOrder: boolean;
-}
+import type { CartItem, AbandonedCart } from '@shared/types';
 
 interface CartAnalytics {
   totalAbandoned: number;
@@ -39,14 +21,14 @@ interface CartAnalytics {
 export default function AdminCarts() {
   const [timeRange, setTimeRange] = useState<string>("1");
   
-  const { data: cartsData, isLoading } = useQuery({
-    queryKey: ['/api/admin/carts', timeRange],
+  const { data: cartsData, isLoading: cartsLoading } = useQuery({
+    queryKey: ['/api/admin/carts', 'abandoned', timeRange],
     queryFn: () => 
       fetch(`/api/admin/carts?hours=${timeRange}`, { credentials: 'include' })
         .then(res => res.json())
   });
 
-  const { data: analyticsData } = useQuery({
+  const { data: analyticsData, isLoading: analyticsLoading } = useQuery({
     queryKey: ['/api/admin/carts/analytics'],
     queryFn: () =>
       fetch('/api/admin/carts/analytics', { credentials: 'include' })
@@ -118,7 +100,7 @@ export default function AdminCarts() {
     URL.revokeObjectURL(url);
   };
 
-  if (isLoading) {
+  if (cartsLoading) {
     return (
       <div className="space-y-6 animate-pulse">
         <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
