@@ -121,7 +121,7 @@ export default function AdminProducts() {
         title="Product Management - Admin | Healios"
         description="Manage products, inventory, and product details in the Healios admin panel."
       />
-      <div className="w-full px-[5%]">
+      <div className="w-screen" style={{ paddingLeft: '5vw', paddingRight: '5vw', marginLeft: 'calc(-50vw + 50%)', width: '100vw' }}>
         {/* Compact Header with Filters and Actions */}
         <div className="mb-6">
           <Card>
@@ -199,8 +199,8 @@ export default function AdminProducts() {
                 </div>
               </div>
             ) : (
-              <div className="w-full">
-                <Table className="w-full">
+              <div className="w-full overflow-hidden">
+                <Table className="w-full table-fixed">
                   <TableHeader>
                     <TableRow className="border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
                       <TableHead className="text-black dark:text-white font-semibold">Product</TableHead>
