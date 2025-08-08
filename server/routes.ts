@@ -308,7 +308,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create Stripe Checkout Session for external payment processing
   app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
     try {
-      const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = req.body;
+      const bodySchema = z.object({
+        orderData: z.object({}).passthrough(),
+        lineItems: z.array(z.object({}).passthrough()).min(1),
+        successUrl: z.string().url(),
+        cancelUrl: z.string().url(),
+        sessionToken: z.string().optional(),
+        discountCode: z.string().optional()
+      });
+      
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+      }
+      
+      const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = parsed.data;
       
       if (!lineItems || !lineItems.length) {
         return res.status(400).json({ message: "Line items are required" });
@@ -482,7 +496,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Consolidated discount code validation endpoint (Phase 15)
   app.post("/api/validate-discount", rateLimit(30, 60000), async (req, res) => {
     try {
-      const { code, subtotal, cartTotal } = req.body;
+      const bodySchema = z.object({
+        code: z.string().min(1),
+        subtotal: z.number().optional(),
+        cartTotal: z.number().optional()
+      });
+      
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+      }
+      
+      const { code, subtotal, cartTotal } = parsed.data;
       // Support both parameter names for backward compatibility
       const total = subtotal || cartTotal;
       
@@ -696,7 +721,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Update order status (admin endpoint)
   app.patch("/api/orders/:id/status", protectRoute(['admin']), async (req, res) => {
     try {
-      const { status } = req.body;
+      const bodySchema = z.object({
+        status: z.string().min(1)
+      });
+      
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+      }
+      
+      const { status } = parsed.data;
       const order = await storage.updateOrderStatus(req.params.id, status);
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
@@ -710,10 +744,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stock management endpoints
   app.patch("/api/products/:id/stock", protectRoute(['admin']), async (req, res) => {
     try {
-      const { quantity } = req.body;
-      if (typeof quantity !== 'number' || quantity < 0) {
-        return res.status(400).json({ message: "Invalid quantity" });
+      const bodySchema = z.object({
+        quantity: z.number().int().nonnegative()
+      });
+      
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
       }
+      
+      const { quantity } = parsed.data;
       
       const product = await storage.updateProductStock(req.params.id, quantity);
       if (!product) {
@@ -739,7 +779,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Send low stock alert manually
   app.post("/api/stock-alerts/send", protectRoute(['admin']), async (req, res) => {
     try {
-      const { productId, productName, currentStock } = req.body;
+      const bodySchema = z.object({
+        productId: z.string().min(1),
+        productName: z.string().min(1),
+        currentStock: z.number().int().nonnegative()
+      });
+      
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+      }
+      
+      const { productId, productName, currentStock } = parsed.data;
       
       const success = await EmailService.sendLowStockAlert({ productName, currentStock, threshold: 5 });
       
@@ -786,11 +837,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Restock notification submission
   app.post("/api/notify-restock", async (req, res) => {
     try {
-      const { firstName, email, product, restockDate } = req.body;
+      const bodySchema = z.object({
+        firstName: z.string().min(1),
+        email: z.string().email(),
+        product: z.string().min(1),
+        restockDate: z.string().min(1)
+      });
       
-      if (!firstName || !email || !product || !restockDate) {
-        return res.status(400).json({ message: "Missing required fields" });
+      const parsed = bodySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
       }
+      
+      const { firstName, email, product, restockDate } = parsed.data;
 
       console.log('🚀 Sending restock notification emails...');
       const success = await EmailService.sendRestockNotification({

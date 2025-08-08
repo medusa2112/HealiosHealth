@@ -1,4 +1,5 @@
 import express from "express";
+import { z } from "zod";
 import { requireAuth, protectRoute } from "../lib/auth";
 import { storage } from "../storage";
 import { alfr3dExpert } from "../../lib/alfr3d/expert";
@@ -50,7 +51,16 @@ router.get("/status", async (req, res) => {
  */
 router.post("/issues/:id/fix-prompt", async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const parsed = paramsSchema.safeParse(req.params);
+    if (!parsed.success) {
+      return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+    }
+    
+    const { id } = parsed.data;
     
     console.log(`[ALFR3D] Generating fix prompt for issue: ${id}`);
     
@@ -181,12 +191,26 @@ router.post("/scan", async (req, res) => {
  */
 router.patch("/issues/:id/status", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { status } = req.body;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
     
-    if (!status || !['open', 'in_progress', 'resolved'].includes(status)) {
-      return res.status(400).json({ error: "Invalid status" });
+    const bodySchema = z.object({
+      status: z.enum(['open', 'in_progress', 'resolved'])
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ error: 'Invalid params', details: paramsResult.error.issues });
     }
+    
+    const bodyResult = bodySchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ error: 'Invalid input', details: bodyResult.error.issues });
+    }
+    
+    const { id } = paramsResult.data;
+    const { status } = bodyResult.data;
 
     // Update issue status
     const updated = await storage.updateSecurityIssueReviewStatus(id, status === 'resolved', req.user?.email);

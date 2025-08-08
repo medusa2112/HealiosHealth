@@ -143,7 +143,16 @@ router.post("/:id/cancel", protectRoute(["customer", "admin"]), async (req, res)
 // Reactivate subscription (if canceled but not yet expired)
 router.post("/:id/reactivate", protectRoute(["customer", "admin"]), async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const parsed = paramsSchema.safeParse(req.params);
+    if (!parsed.success) {
+      return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+    }
+    
+    const { id } = parsed.data;
     const userId = req.user?.id;
 
     if (!userId) {
