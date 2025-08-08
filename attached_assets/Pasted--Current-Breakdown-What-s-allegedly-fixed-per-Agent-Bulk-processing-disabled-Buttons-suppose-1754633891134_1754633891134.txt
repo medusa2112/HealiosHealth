@@ -1,0 +1,104 @@
+🧨 Current Breakdown
+✅ What’s (allegedly) fixed per Agent:
+Bulk processing disabled
+
+Buttons supposed to render per issue
+
+Copy/View UI re-enabled
+
+TypeScript backend errors fixed
+
+❌ What’s Still Broken
+🔴 "Failed to generate AI fix prompt. Please try again."
+
+This confirms the backend failed at the prompt generation layer, not just UI rendering.
+
+🔎 Root Cause Likely Candidates
+1. Backend Prompt Generation Crash
+The generatePrompt(issue) call is now firing per issue — but is returning an unhandled error.
+
+Possibilities:
+
+Agent still dependent on deprecated bulk format
+
+Prompt template renderer failing (e.g., missing field, undefined value)
+
+AI API request fails silently or has been rate-limited
+
+2. Prompt Field is Not Set
+In the issue object:
+
+ts
+Copy
+Edit
+issue.prompt === undefined
+→ So the copy/view buttons do not show, and it triggers the fallback error banner instead.
+
+3. Frontend Didn't Await Prompt Completion
+If the system tries to render buttons before the issue.prompt is returned:
+
+ts
+Copy
+Edit
+await generatePrompt(issue); // NOT properly awaited?
+The buttons will never render, and your error shows.
+
+✅ Replit Patch Checklist
+Here's the actual logic Replit needs to fix (or you can apply if you have access):
+
+🧱 1. Backend Function: generatePrompt(issue)
+Patch:
+
+ts
+Copy
+Edit
+try {
+  const prompt = await generatePromptForIssue(issue);
+  return res.json({ prompt }); // ensure prompt is returned
+} catch (err) {
+  console.error("Prompt generation failed:", err);
+  return res.status(500).json({ error: "Failed to generate AI fix prompt." });
+}
+Also check:
+
+Is the issue object missing a required field?
+
+Is generatePromptForIssue(issue) trying to access issue.line, issue.code, or issue.title and receiving undefined?
+
+🧱 2. Frontend Trigger and Display
+Ensure:
+
+ts
+Copy
+Edit
+const onFixClick = async (issue) => {
+  setLoading(true);
+  const res = await fetch(`/api/generate-prompt?issueId=${issue.id}`);
+  const data = await res.json();
+  if (res.ok && data.prompt) {
+    updateIssuePrompt(issue.id, data.prompt); // set to state
+    setShowCopyButtons(true); // ensure button UI appears
+  } else {
+    showToast("Failed to generate AI fix prompt. Please try again.");
+  }
+  setLoading(false);
+};
+📣 Critical Note to Replit (Send This Verbatim)
+🔥 AI Fix Button Still Broken
+
+I tested as requested. The AI fix prompt fails to generate entirely. It throws:
+"Error: Failed to generate AI fix prompt. Please try again."
+
+✅ UI appears functional.
+❌ Prompt generation call fails backend-side.
+
+Please:
+
+Log the backend error — likely inside generatePromptForIssue(issue)
+
+Confirm that issue.prompt is correctly set in the returned object
+
+Ensure that frontend onClickFix() correctly awaits and sets prompt, triggering the button render
+
+This is currently a full production blocker.
+

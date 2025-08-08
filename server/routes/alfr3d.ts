@@ -132,7 +132,13 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
       severity: issue.severity as 'low' | 'medium' | 'high' | 'critical',
       timestamp: issue.createdAt?.toISOString() || new Date().toISOString(),
       line: issue.line ? parseInt(issue.line) : undefined,
-      route: issue.route || undefined
+      route: issue.route || undefined,
+      reviewedAt: issue.reviewedAt?.toISOString() || undefined,
+      archivedAt: issue.archivedAt?.toISOString() || undefined,
+      reviewedBy: issue.reviewedBy || undefined,
+      archivedBy: issue.archivedBy || undefined,
+      fixPrompt: issue.fixPrompt as any,
+      fixAttempts: (issue.fixAttempts as any) || []
     };
     const fixPrompt = await alfr3dExpert.generateFixPrompt(issueForExpert);
     
