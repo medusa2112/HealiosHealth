@@ -12,18 +12,18 @@ function generateId(): string {
 // 🔒 Security issue patterns
 const securityPatterns = {
   unauthRoute: {
-    pattern: /router\.(get|post|put|delete)\(['"`][^'"`]+['"`],\s*(?!requireAuth)/,
-    description: 'Route missing requireAuth middleware',
+    pattern: /router\.(get|post|put|delete)\s*\(\s*['"`][^'"`]+['"`]\s*,\s*(?!requireAuth|isAuthenticated|protectRoute)/,
+    description: 'Route missing authentication middleware',
     severity: 'high'
   },
   unvalidatedInput: {
-    pattern: /req\.(body|query|params)(?!.*safeParse|.*validate)/,
-    description: 'Request data used without validation',
+    pattern: /const\s+\{[^}]*\}\s*=\s*req\.(body|query|params)(?!.*after.*safeParse)/,
+    description: 'Request data destructured without validation',
     severity: 'critical'
   },
   rawSQL: {
-    pattern: /[`'"]\s*SELECT.*FROM.*\s*['"`]/i,
-    description: 'Raw SQL query detected (injection risk)',
+    pattern: /sql\s*`\s*SELECT.*FROM(?!.*\$\{|\$[0-9])/i,
+    description: 'Raw SQL query without parameterization',
     severity: 'critical'
   },
   sensitiveResp: {
@@ -65,6 +65,30 @@ function findAllFiles(dir: string): string[] {
   }
 }
 
+// Smart context checking functions
+function hasValidationInContext(lines: string[], lineIndex: number, lookBack: number = 10): boolean {
+  const startIndex = Math.max(0, lineIndex - lookBack);
+  const contextLines = lines.slice(startIndex, lineIndex + 1);
+  const contextText = contextLines.join('\n');
+  
+  return /\.safeParse\s*\(/.test(contextText) || 
+         /\.parse\s*\(/.test(contextText) ||
+         /validate\w*\s*\(/.test(contextText);
+}
+
+function hasAuthInRoute(line: string): boolean {
+  return /requireAuth|isAuthenticated|protectRoute/.test(line);
+}
+
+function isInCommentOrString(line: string, position: number): boolean {
+  const beforeMatch = line.substring(0, position);
+  const inString = (beforeMatch.match(/'/g) || []).length % 2 !== 0 ||
+                  (beforeMatch.match(/"/g) || []).length % 2 !== 0 ||
+                  (beforeMatch.match(/`/g) || []).length % 2 !== 0;
+  const inComment = /\/\//.test(beforeMatch) || /\/\*/.test(beforeMatch);
+  return inString || inComment;
+}
+
 async function scanFile(path: string): Promise<SecurityIssue[]> {
   try {
     const content = readFileSync(path, 'utf8');
@@ -98,17 +122,31 @@ async function scanFile(path: string): Promise<SecurityIssue[]> {
         }
       } else {
         lines.forEach((line, i) => {
-          if (config.pattern.test(line)) {
-            results.push({
-              id: generateId(),
-              type: key,
-              description: config.description,
-              severity: config.severity,
-              filePath: path,
-              line: i + 1,
-              snippet: line.trim().slice(0, 200),
-              fixed: false,
-            });
+          const match = config.pattern.exec(line);
+          if (match && !isInCommentOrString(line, match.index || 0)) {
+            // Apply smart context checking
+            let shouldReport = true;
+            
+            if (key === 'unauthRoute') {
+              // Check if this route actually has auth middleware
+              shouldReport = !hasAuthInRoute(line);
+            } else if (key === 'unvalidatedInput') {
+              // Check if there's validation in context
+              shouldReport = !hasValidationInContext(lines, i);
+            }
+            
+            if (shouldReport) {
+              results.push({
+                id: generateId(),
+                type: key,
+                description: config.description,
+                severity: config.severity,
+                filePath: path,
+                line: i + 1,
+                snippet: line.trim().slice(0, 200),
+                fixed: false,
+              });
+            }
           }
         });
       }

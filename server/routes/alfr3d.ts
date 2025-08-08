@@ -3,6 +3,9 @@ import { requireAuth, protectRoute } from "../lib/auth";
 import { storage } from "../storage";
 import { alfr3dExpert } from "../../lib/alfr3d/expert";
 import type { SecurityIssue } from "@shared/schema";
+import { spawn } from "child_process";
+import { readFileSync } from "fs";
+import path from "path";
 
 const router = express.Router();
 
@@ -87,13 +90,86 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
  */
 router.post("/scan", async (req, res) => {
   try {
-    // For now, return mock data
-    // In a real implementation, this would trigger the actual security scanner
+    console.log('[ALFR3D] Starting actual security scan...');
+    
+    // Run the security scanner
+    const scannerPath = path.join(process.cwd(), 'server', 'security-scanner.ts');
+    const scanProcess = spawn('tsx', [scannerPath], {
+      cwd: process.cwd(),
+      stdio: 'pipe'
+    });
+    
+    let scanOutput = '';
+    let scanError = '';
+    
+    scanProcess.stdout.on('data', (data) => {
+      scanOutput += data.toString();
+    });
+    
+    scanProcess.stderr.on('data', (data) => {
+      scanError += data.toString();
+    });
+    
+    scanProcess.on('close', async (code) => {
+      try {
+        if (code === 0) {
+          console.log('[ALFR3D] Security scan completed successfully');
+          console.log('[ALFR3D] Scan output:', scanOutput);
+          
+          // Read the updated CSV file with scan results
+          try {
+            const csvPath = path.join(process.cwd(), 'security-issues.csv');
+            const csvContent = readFileSync(csvPath, 'utf-8');
+            
+            // Parse CSV and update stored issues
+            const lines = csvContent.split('\n').slice(1); // Skip header
+            const updatedIssues: SecurityIssue[] = [];
+            
+            for (const line of lines) {
+              if (line.trim()) {
+                const [id, type, description, severity, file, lineNumber, snippet, fixed] = line.split(',');
+                
+                updatedIssues.push({
+                  id: id.trim(),
+                  type: type.trim(),
+                  title: description.replace(/"/g, '').trim(),
+                  description: description.replace(/"/g, '').trim(),
+                  severity: severity.trim() as 'low' | 'medium' | 'high' | 'critical',
+                  file: file.trim(),
+                  line: parseInt(lineNumber) || null,
+                  snippet: snippet.replace(/^"|"$/g, '').trim(),
+                  status: fixed.trim() === 'true' ? 'resolved' : 'open',
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString(),
+                  fixPrompt: null
+                });
+              }
+            }
+            
+            // Update storage with fresh scan results
+            await storage.updateAllSecurityIssues(updatedIssues);
+            console.log(`[ALFR3D] Updated ${updatedIssues.length} security issues in storage`);
+            
+          } catch (csvError) {
+            console.warn('[ALFR3D] Could not read/parse CSV file:', csvError.message);
+            // Continue anyway - the scan might not have found issues
+          }
+        } else {
+          console.error('[ALFR3D] Security scan failed with code:', code);
+          console.error('[ALFR3D] Scan error:', scanError);
+        }
+      } catch (updateError) {
+        console.error('[ALFR3D] Error updating scan results:', updateError);
+      }
+    });
+    
+    // Don't wait for the scan to complete - return immediately
     res.json({
       success: true,
       message: "Security scan started",
-      scanId: "mock-scan-id"
+      scanId: `scan-${Date.now()}`
     });
+    
   } catch (error) {
     console.error('[ALFR3D] Error starting security scan:', error);
     res.status(500).json({ error: "Failed to start security scan" });

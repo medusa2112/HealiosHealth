@@ -155,6 +155,7 @@ export interface IStorage {
   createSecurityIssue(issue: InsertSecurityIssue): Promise<SecurityIssue>;
   updateSecurityIssueReviewStatus(id: string, reviewed: boolean, reviewedBy?: string): Promise<SecurityIssue | undefined>;
   clearSecurityIssues(): Promise<void>;
+  updateAllSecurityIssues(issues: SecurityIssue[]): Promise<void>;
   getLastScanTimestamp(): Promise<string | null>;
   updateLastScanTimestamp(): Promise<void>;
   
@@ -2910,6 +2911,15 @@ export class MemStorage implements IStorage {
   
   async getSecurityIssueById(id: string): Promise<SecurityIssue | undefined> {
     return this.securityIssues.get(id);
+  }
+
+  async updateAllSecurityIssues(issues: SecurityIssue[]): Promise<void> {
+    // Clear existing issues and replace with new scan results
+    this.securityIssues.clear();
+    issues.forEach(issue => {
+      this.securityIssues.set(issue.id, issue);
+    });
+    console.log(`✅ Updated storage with ${issues.length} security issues from scan`);
   }
   
   // Seed mock security issues for ALFR3D testing
