@@ -156,9 +156,15 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     }
     
     res.json({ fixPrompt: promptWithMetadata, message: "Fix prompt generated successfully" });
-  } catch (error) {
-    console.error("Error generating fix prompt:", error);
-    res.status(500).json({ error: "Failed to generate fix prompt" });
+  } catch (error: any) {
+    console.error("[ALFR3D Expert] Error generating fix prompt:", error);
+    console.error("[ALFR3D Expert] Error details:", {
+      message: error?.message,
+      stack: error?.stack,
+      issueId: req.params.id,
+      issueTitle: issue?.title
+    });
+    res.status(500).json({ error: "Failed to generate fix prompt", details: error?.message });
   }
 });
 
