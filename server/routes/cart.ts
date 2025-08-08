@@ -1,4 +1,5 @@
 import express from "express";
+import { z } from "zod";
 import { storage } from "../storage";
 import { requireSessionOrAuth, requireAuth, rateLimit } from "../lib/auth";
 
@@ -7,14 +8,23 @@ const router = express.Router();
 // Sync cart data to database (for both guest and logged-in users)
 router.post("/sync", requireSessionOrAuth, rateLimit(20, 60000), async (req, res) => {
   try {
-    const { session_token, items, totalAmount, currency = "ZAR" } = req.body;
-    const userId = req.user?.id || null;
-
-    if (!session_token || !items) {
+    const syncSchema = z.object({
+      session_token: z.string().min(1),
+      items: z.array(z.any()),
+      totalAmount: z.number().optional(),
+      currency: z.string().default("ZAR")
+    });
+    
+    const result = syncSchema.safeParse(req.body);
+    if (!result.success) {
       return res.status(400).json({ 
-        message: "Missing required fields: session_token, items" 
+        error: 'Invalid input',
+        details: result.error.errors
       });
     }
+    
+    const { session_token, items, totalAmount, currency } = result.data;
+    const userId = req.user?.id || null;
 
     // Upsert cart (update if exists, create if not)
     const cart = await storage.upsertCart({
@@ -40,7 +50,19 @@ router.post("/sync", requireSessionOrAuth, rateLimit(20, 60000), async (req, res
 // Get cart by session token
 router.get("/:sessionToken", requireAuth, async (req, res) => {
   try {
-    const { sessionToken } = req.params;
+    const paramsSchema = z.object({
+      sessionToken: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid session token',
+        details: result.error.errors
+      });
+    }
+    
+    const { sessionToken } = result.data;
     
     const cart = await storage.getCartBySessionToken(sessionToken);
     
@@ -66,7 +88,19 @@ router.get("/:sessionToken", requireAuth, async (req, res) => {
 // Mark cart as abandoned (optional endpoint for analytics)
 router.put("/:cartId/abandon", requireAuth, async (req, res) => {
   try {
-    const { cartId } = req.params;
+    const paramsSchema = z.object({
+      cartId: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid cart ID',
+        details: result.error.errors
+      });
+    }
+    
+    const { cartId } = result.data;
     
     const cart = await storage.getCartById(cartId);
     if (!cart) {

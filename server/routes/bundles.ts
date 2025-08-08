@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { z } from "zod";
 import { storage } from "../storage";
 
 const router = Router();
@@ -17,7 +18,19 @@ router.get("/", async (req, res) => {
 // Get a specific bundle with items and product details (public endpoint)
 router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid bundle ID',
+        details: result.error.errors
+      });
+    }
+    
+    const { id } = result.data;
     const bundleWithItems = await storage.getBundleWithItems(id);
     
     if (!bundleWithItems || !bundleWithItems.isActive) {
@@ -68,11 +81,23 @@ router.get("/:id", async (req, res) => {
 // Validate bundle cart items (used during checkout)
 router.post("/validate", async (req, res) => {
   try {
-    const { bundleId, items } = req.body;
+    const validateSchema = z.object({
+      bundleId: z.string().min(1),
+      items: z.array(z.object({
+        variantId: z.string().min(1),
+        quantity: z.number().int().positive()
+      })).min(1)
+    });
     
-    if (!bundleId || !Array.isArray(items)) {
-      return res.status(400).json({ error: "Bundle ID and items array required" });
+    const result = validateSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { bundleId, items } = result.data;
     
     const bundle = await storage.getProductBundleById(bundleId);
     if (!bundle || !bundle.isActive) {

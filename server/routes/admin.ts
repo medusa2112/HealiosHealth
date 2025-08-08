@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
 import { products } from '@shared/schema';
@@ -26,7 +27,19 @@ router.use('/discount-codes', discountCodesRouter);
 // Admin Logs API - Get audit logs
 router.get('/logs', requireAuth, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit as string) || 100;
+    const querySchema = z.object({
+      limit: z.string().optional().transform(val => val ? parseInt(val, 10) : 100)
+    });
+    
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
+    }
+    
+    const { limit } = result.data;
     const logs = await storage.getAdminLogs(limit);
     res.json(logs);
   } catch (error) {
@@ -112,7 +125,19 @@ router.get('/products', requireAuth, async (req, res) => {
 
 router.get('/products/:id', requireAuth, async (req, res) => {
   try {
-    const product = await db.select().from(products).where(eq(products.id, req.params.id)).limit(1);
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product ID',
+        details: result.error.errors
+      });
+    }
+    
+    const product = await db.select().from(products).where(eq(products.id, result.data.id)).limit(1);
     if (!product || product.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -125,12 +150,30 @@ router.get('/products/:id', requireAuth, async (req, res) => {
 
 router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {
   try {
-    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, type, bottleCount, dailyDosage, supplyDays } = req.body;
+    const productSchema = z.object({
+      name: z.string().min(1),
+      description: z.string().min(1),
+      price: z.number().positive(),
+      originalPrice: z.number().positive().optional(),
+      imageUrl: z.string().url(),
+      categories: z.array(z.string()).min(1),
+      stockQuantity: z.number().int().nonnegative().optional().default(0),
+      featured: z.boolean().optional().default(false),
+      type: z.string().optional().default('supplement'),
+      bottleCount: z.number().int().positive().optional(),
+      dailyDosage: z.number().int().positive().optional(),
+      supplyDays: z.number().int().positive().optional()
+    });
     
-    // Basic validation
-    if (!name || !description || !price || !imageUrl || !categories) {
-      return res.status(400).json({ message: 'Missing required fields: name, description, price, imageUrl, categories' });
+    const result = productSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product data',
+        details: result.error.errors
+      });
     }
+    
+    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, type, bottleCount, dailyDosage, supplyDays } = result.data;
 
     const productData = {
       name: name.trim(),
@@ -169,7 +212,44 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
 
 router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {
   try {
-    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = req.body;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
+    const updateSchema = z.object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      price: z.number().positive().optional(),
+      originalPrice: z.number().positive().optional(),
+      imageUrl: z.string().url().optional(),
+      categories: z.array(z.string()).optional(),
+      stockQuantity: z.number().int().nonnegative().optional(),
+      featured: z.boolean().optional(),
+      inStock: z.boolean().optional(),
+      type: z.string().optional(),
+      bottleCount: z.number().int().positive().optional(),
+      dailyDosage: z.number().int().positive().optional(),
+      supplyDays: z.number().int().positive().optional()
+    });
+    
+    const bodyResult = updateSchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product data',
+        details: bodyResult.error.errors
+      });
+    }
+    
+    const { id } = paramsResult.data;
+    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = bodyResult.data;
     
     const updates: any = {};
     if (name !== undefined) updates.name = name.trim();
@@ -186,7 +266,7 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     if (dailyDosage !== undefined) updates.dailyDosage = dailyDosage ? parseInt(dailyDosage) : null;
     if (supplyDays !== undefined) updates.supplyDays = supplyDays ? parseInt(supplyDays) : null;
 
-    const [product] = await db.update(products).set(updates).where(eq(products.id, req.params.id)).returning();
+    const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -195,7 +275,7 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     await AdminLogger.logProductAction(
       'system-admin',
       'update',
-      req.params.id,
+      id,
       updates
     );
 
@@ -208,7 +288,20 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
 
 router.delete('/products/:id', requireAuth, auditAction('delete_product', 'product'), async (req, res) => {
   try {
-    const [deletedProduct] = await db.delete(products).where(eq(products.id, req.params.id)).returning();
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product ID',
+        details: result.error.errors
+      });
+    }
+    
+    const { id } = result.data;
+    const [deletedProduct] = await db.delete(products).where(eq(products.id, id)).returning();
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -217,7 +310,7 @@ router.delete('/products/:id', requireAuth, auditAction('delete_product', 'produ
     await AdminLogger.logProductAction(
       'system-admin',
       'delete',
-      req.params.id
+      id
     );
     
     res.status(204).end();
@@ -229,12 +322,34 @@ router.delete('/products/:id', requireAuth, auditAction('delete_product', 'produ
 
 router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'product'), async (req, res) => {
   try {
-    const { quantity } = req.body;
-    if (typeof quantity !== 'number' || quantity < 0) {
-      return res.status(400).json({ message: 'Invalid quantity' });
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid product ID',
+        details: paramsResult.error.errors
+      });
     }
+    
+    const bodySchema = z.object({
+      quantity: z.number().int().nonnegative()
+    });
+    
+    const bodyResult = bodySchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid quantity',
+        details: bodyResult.error.errors
+      });
+    }
+    
+    const { id } = paramsResult.data;
+    const { quantity } = bodyResult.data;
 
-    const [product] = await db.update(products).set({ stockQuantity: quantity }).where(eq(products.id, req.params.id)).returning();
+    const [product] = await db.update(products).set({ stockQuantity: quantity }).where(eq(products.id, id)).returning();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }

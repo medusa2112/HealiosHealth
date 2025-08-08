@@ -20,7 +20,19 @@ router.get("/", requireAuth, async (req, res) => {
 // Get a specific bundle with items (admin only)
 router.get("/:id", requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid bundle ID',
+        details: result.error.errors
+      });
+    }
+    
+    const { id } = result.data;
     const bundleWithItems = await storage.getBundleWithItems(id);
     
     if (!bundleWithItems) {
@@ -37,8 +49,20 @@ router.get("/:id", requireAuth, async (req, res) => {
 // Get variants excluding children's products (admin only - for bundle creation UI)
 router.get("/variants/eligible", requireAuth, async (req, res) => {
   try {
-    const excludeTags = req.query.excludeTags ? 
-      (req.query.excludeTags as string).split(",").map(tag => tag.trim()) : 
+    const querySchema = z.object({
+      excludeTags: z.string().optional()
+    });
+    
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
+    }
+    
+    const excludeTags = result.data.excludeTags ? 
+      result.data.excludeTags.split(",").map(tag => tag.trim()) : 
       ["children"];
     
     const eligibleVariants = await storage.getVariantsExcludingTags(excludeTags);

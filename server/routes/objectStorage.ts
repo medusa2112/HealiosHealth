@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { z } from "zod";
 import { requireAuth } from "../lib/auth";
 import {
   ObjectStorageService,
@@ -11,7 +12,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // This endpoint is used to serve public assets.
   // IMPORTANT: always provide this endpoint.
   app.get("/public-objects/:filePath(*)", async (req, res) => {
-    const filePath = req.params.filePath;
+    const paramsSchema = z.object({
+      filePath: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid file path',
+        details: result.error.errors
+      });
+    }
+    
+    const filePath = result.data.filePath;
     const objectStorageService = new ObjectStorageService();
     try {
       const file = await objectStorageService.searchPublicObject(filePath);
@@ -52,8 +65,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // An example endpoint for updating the model state after an object entity is uploaded (product image in this case).
   app.put("/api/product-images", requireAuth, async (req, res) => {
-    if (!req.body.imageURL) {
-      return res.status(400).json({ error: "imageURL is required" });
+    const bodySchema = z.object({
+      imageURL: z.string().url()
+    });
+    
+    const result = bodySchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
 
     try {

@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import { requireAuth } from '../../lib/auth';
 import { storage } from '../../storage';
 
@@ -7,7 +8,19 @@ const router = express.Router();
 // Get abandoned carts with analytics
 router.get('/abandoned-carts', requireAuth, async (req, res) => {
   try {
-    const hoursThreshold = parseInt(req.query.hours as string) || 24;
+    const querySchema = z.object({
+      hours: z.string().optional().transform(val => val ? parseInt(val, 10) : 24)
+    });
+    
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
+    }
+    
+    const hoursThreshold = result.data.hours;
     const abandonedCarts = await storage.getAbandonedCarts(hoursThreshold);
     
     // Parse cart items for better frontend handling
@@ -55,11 +68,22 @@ router.get('/abandoned-carts', requireAuth, async (req, res) => {
 // Send cart recovery email
 router.post('/send-recovery-email', requireAuth, async (req, res) => {
   try {
-    const { cartId, sessionToken, items, totalAmount } = req.body;
+    const bodySchema = z.object({
+      cartId: z.string().min(1),
+      sessionToken: z.string().min(1),
+      items: z.array(z.any()).optional(),
+      totalAmount: z.number().nonnegative().optional()
+    });
     
-    if (!cartId || !sessionToken) {
-      return res.status(400).json({ message: 'Cart ID and session token required' });
+    const result = bodySchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { cartId, sessionToken, items, totalAmount } = result.data;
     
     // Get cart details
     const cart = await storage.getCartById(cartId);
@@ -103,7 +127,19 @@ router.post('/send-recovery-email', requireAuth, async (req, res) => {
 // Get cart analytics for dashboard
 router.get('/cart-analytics', requireAuth, async (req, res) => {
   try {
-    const days = parseInt(req.query.days as string) || 30;
+    const querySchema = z.object({
+      days: z.string().optional().transform(val => val ? parseInt(val, 10) : 30)
+    });
+    
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
+    }
+    
+    const days = result.data.days;
     
     // Get abandoned carts for different time periods
     const periods = [1, 24, 72, 168]; // 1 hour, 24 hours, 3 days, 1 week

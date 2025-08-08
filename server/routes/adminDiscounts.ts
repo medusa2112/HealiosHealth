@@ -86,7 +86,19 @@ router.post("/", requireAuth, async (req, res) => {
 // Update a discount code (admin only)
 router.put("/:id", requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid discount code ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
+    const { id } = paramsResult.data;
     
     const updateSchema = insertDiscountCodeSchema.partial();
     const validationResult = updateSchema.safeParse(req.body);
@@ -156,7 +168,19 @@ router.put("/:id", requireAuth, async (req, res) => {
 // Delete a discount code (admin only)
 router.delete("/:id", requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid discount code ID',
+        details: result.error.errors
+      });
+    }
+    
+    const { id } = result.data;
     
     // Get the discount code before deletion for logging
     const discountCodes = await storage.getDiscountCodes();
@@ -196,11 +220,19 @@ router.delete("/:id", requireAuth, async (req, res) => {
 // Validate a discount code (for frontend preview)
 router.post("/validate", requireAuth, async (req, res) => {
   try {
-    const { code } = req.body;
+    const validateSchema = z.object({
+      code: z.string().min(1)
+    });
     
-    if (!code || typeof code !== "string") {
-      return res.status(400).json({ error: "Code is required" });
+    const result = validateSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { code } = result.data;
 
     const validation = await storage.validateDiscountCode(code);
     res.json(validation);

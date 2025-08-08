@@ -1,4 +1,5 @@
 import express from "express";
+import { z } from "zod";
 import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
 import { stripe } from "../../lib/stripe";
@@ -26,7 +27,19 @@ router.get("/", requireAuth, async (req, res) => {
 // Get specific order details
 router.get("/:id", requireAuth, async (req, res) => {
   try {
-    const orderId = req.params.id;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid order ID',
+        details: result.error.errors
+      });
+    }
+    
+    const orderId = result.data.id;
     const order = await storage.getOrderById(orderId);
     
     if (!order) {
@@ -49,8 +62,33 @@ router.get("/:id", requireAuth, async (req, res) => {
 // Process refund for an order
 router.post("/:id/refund", requireAuth, async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const { amount, reason } = req.body;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid order ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
+    const bodySchema = z.object({
+      amount: z.number().positive().optional(),
+      reason: z.string().optional()
+    });
+    
+    const bodyResult = bodySchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid refund data',
+        details: bodyResult.error.errors
+      });
+    }
+    
+    const orderId = paramsResult.data.id;
+    const { amount, reason } = bodyResult.data;
 
     const order = await storage.getOrderById(orderId);
     if (!order) {
@@ -133,12 +171,32 @@ router.post("/:id/refund", requireAuth, async (req, res) => {
 // Update order status
 router.put("/:id/status", requireAuth, async (req, res) => {
   try {
-    const orderId = req.params.id;
-    const { status } = req.body;
-
-    if (!status || !["processing", "shipped", "delivered", "cancelled"].includes(status)) {
-      return res.status(400).json({ message: "Invalid status" });
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid order ID',
+        details: paramsResult.error.errors
+      });
     }
+    
+    const bodySchema = z.object({
+      status: z.enum(["processing", "shipped", "delivered", "cancelled"])
+    });
+    
+    const bodyResult = bodySchema.safeParse(req.body);
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid status',
+        details: bodyResult.error.errors
+      });
+    }
+    
+    const orderId = paramsResult.data.id;
+    const { status } = bodyResult.data;
 
     const order = await storage.getOrderById(orderId);
     if (!order) {

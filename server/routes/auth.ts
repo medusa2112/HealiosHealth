@@ -1,4 +1,5 @@
 import express from 'express';
+import { z } from 'zod';
 import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole } from '../lib/auth';
@@ -104,11 +105,21 @@ router.post('/logout', async (req, res) => {
 // Mock login endpoint for development/testing
 router.post('/mock-login', async (req, res) => {
   try {
-    const { email, firstName, lastName } = req.body;
+    const mockLoginSchema = z.object({
+      email: z.string().email(),
+      firstName: z.string().optional(),
+      lastName: z.string().optional()
+    });
     
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required' });
+    const result = mockLoginSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { email, firstName, lastName } = result.data;
 
     // Check if user exists
     let user = await storage.getUserByEmail(email);
@@ -148,8 +159,9 @@ router.post('/mock-login', async (req, res) => {
   } catch (error) {
     console.error('Auth error:', error);
     // Log failed login attempt
-    if (req.body.email) {
-      await auditLogin(req.body.email, false, {
+    const emailResult = z.object({ email: z.string().optional() }).safeParse(req.body);
+    if (emailResult.success && emailResult.data.email) {
+      await auditLogin(emailResult.data.email, false, {
         error: error instanceof Error ? error.message : 'Unknown error',
         ip: req.ip || req.connection.remoteAddress,
         userAgent: req.get('User-Agent')

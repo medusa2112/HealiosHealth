@@ -1,4 +1,5 @@
 import express from "express";
+import { z } from "zod";
 import { protectRoute } from "../lib/auth";
 import { storage } from "../storage";
 import { insertAddressSchema } from "@shared/schema";
@@ -36,8 +37,20 @@ router.get("/orders", async (req, res) => {
 // Get specific order by ID (user-scoped)
 router.get("/orders/:id", async (req, res) => {
   try {
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid order ID',
+        details: result.error.errors
+      });
+    }
+    
     const userId = req.user!.id;
-    const orderId = req.params.id;
+    const orderId = result.data.id;
     
     const order = await storage.getOrderByIdAndUserId(orderId, userId);
     if (!order) {
@@ -59,8 +72,33 @@ router.get("/orders/:id", async (req, res) => {
 // Reorder functionality - create new checkout session from existing order
 router.post("/orders/:id/reorder", async (req, res) => {
   try {
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    const bodySchema = z.object({
+      sessionToken: z.string().optional()
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    const bodyResult = bodySchema.safeParse(req.body);
+    
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid order ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid request body',
+        details: bodyResult.error.errors
+      });
+    }
+    
     const userId = req.user!.id;
-    const orderId = req.params.id;
+    const orderId = paramsResult.data.id;
+    const { sessionToken } = bodyResult.data;
     
     // Verify order belongs to user
     const order = await storage.getOrderByIdAndUserId(orderId, userId);
@@ -176,7 +214,7 @@ router.post("/orders/:id/reorder", async (req, res) => {
         channel: 'authenticated_portal',
         orderId: newOrder.id,
         userId: userId,
-        sessionToken: req.body.sessionToken || undefined,
+        sessionToken: sessionToken || undefined,
         reorderId: orderId, // Track that this is a reorder
       },
       billing_address_collection: 'required',
@@ -234,10 +272,19 @@ router.get("/addresses", async (req, res) => {
 router.post("/addresses", async (req, res) => {
   try {
     const userId = req.user!.id;
-    const validatedData = insertAddressSchema.parse({
+    const result = insertAddressSchema.safeParse({
       ...req.body,
       userId
     });
+    
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid address data',
+        details: result.error.errors
+      });
+    }
+    
+    const validatedData = result.data;
     
     const address = await storage.createAddress(validatedData);
     res.status(201).json(address);
@@ -250,8 +297,20 @@ router.post("/addresses", async (req, res) => {
 // Update existing address
 router.put("/addresses/:id", async (req, res) => {
   try {
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid address ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
     const userId = req.user!.id;
-    const addressId = req.params.id;
+    const addressId = paramsResult.data.id;
     
     // Verify address belongs to user
     const existingAddresses = await storage.getAddressesByUserId(userId);
@@ -261,7 +320,17 @@ router.put("/addresses/:id", async (req, res) => {
       return res.status(404).json({ message: 'Address not found' });
     }
     
-    const updatedAddress = await storage.updateAddress(addressId, req.body);
+    const updateSchema = insertAddressSchema.partial().omit({ userId: true });
+    const bodyResult = updateSchema.safeParse(req.body);
+    
+    if (!bodyResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid address update data',
+        details: bodyResult.error.errors
+      });
+    }
+    
+    const updatedAddress = await storage.updateAddress(addressId, bodyResult.data);
     if (!updatedAddress) {
       return res.status(404).json({ message: 'Address not found' });
     }
@@ -276,8 +345,20 @@ router.put("/addresses/:id", async (req, res) => {
 // Delete saved address
 router.delete("/addresses/:id", async (req, res) => {
   try {
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const result = paramsSchema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid address ID',
+        details: result.error.errors
+      });
+    }
+    
     const userId = req.user!.id;
-    const addressId = req.params.id;
+    const addressId = result.data.id;
     
     // Verify address belongs to user
     const existingAddresses = await storage.getAddressesByUserId(userId);

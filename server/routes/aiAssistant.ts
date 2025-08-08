@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { z } from "zod";
 import { requireAuth } from "../lib/auth";
 import { processAIAssistantRequest, escalateToSupport } from "../lib/aiAssistantService";
 import { storage } from "../storage";
@@ -33,11 +34,20 @@ function checkAnonymousRateLimit(sessionToken: string): boolean {
 // POST /api/ai-assistant/chat - Main chat endpoint
 router.post("/chat", async (req, res) => {
   try {
-    const { message, sessionToken } = req.body;
+    const chatSchema = z.object({
+      message: z.string().min(1),
+      sessionToken: z.string().optional()
+    });
     
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({ error: "Message is required" });
+    const result = chatSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { message, sessionToken } = result.data;
     
     // Get user ID if authenticated
     const userId = req.user?.claims?.sub;
@@ -56,14 +66,14 @@ router.post("/chat", async (req, res) => {
     const finalSessionToken = sessionToken || (!userId ? randomUUID() : undefined);
     
     // Process the request
-    const result = await processAIAssistantRequest(message, userId, finalSessionToken);
+    const aiResult = await processAIAssistantRequest(message, userId, finalSessionToken);
     
     res.json({
-      response: result.response,
-      requiresEscalation: result.requiresEscalation,
-      sessionId: result.sessionId,
+      response: aiResult.response,
+      requiresEscalation: aiResult.requiresEscalation,
+      sessionId: aiResult.sessionId,
       sessionToken: finalSessionToken,
-      metadata: result.metadata
+      metadata: aiResult.metadata
     });
     
   } catch (error) {
@@ -78,11 +88,20 @@ router.post("/chat", async (req, res) => {
 // POST /api/ai-assistant/escalate - Escalate to human support
 router.post("/escalate", async (req, res) => {
   try {
-    const { sessionId, reason } = req.body;
+    const escalateSchema = z.object({
+      sessionId: z.string().min(1),
+      reason: z.string().min(1)
+    });
     
-    if (!sessionId || !reason) {
-      return res.status(400).json({ error: "Session ID and reason are required" });
+    const result = escalateSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { sessionId, reason } = result.data;
     
     const userId = req.user?.claims?.sub;
     
@@ -102,7 +121,19 @@ router.post("/escalate", async (req, res) => {
 // GET /api/ai-assistant/session/:id - Get chat session (authenticated users only)
 router.get("/session/:id", requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const paramsSchema = z.object({
+      id: z.string().min(1)
+    });
+    
+    const paramsResult = paramsSchema.safeParse(req.params);
+    if (!paramsResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid session ID',
+        details: paramsResult.error.errors
+      });
+    }
+    
+    const { id } = paramsResult.data;
     const userId = req.user?.id;
     
     const session = await storage.getChatSession(id);
@@ -147,11 +178,21 @@ router.get("/sessions", requireAuth, async (req, res) => {
 // POST /api/ai-assistant/feedback - Submit feedback on AI response
 router.post("/feedback", async (req, res) => {
   try {
-    const { sessionId, rating, feedback } = req.body;
+    const feedbackSchema = z.object({
+      sessionId: z.string().min(1),
+      rating: z.number().int().min(1).max(5),
+      feedback: z.string().optional()
+    });
     
-    if (!sessionId || !rating) {
-      return res.status(400).json({ error: "Session ID and rating are required" });
+    const result = feedbackSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid input',
+        details: result.error.errors
+      });
     }
+    
+    const { sessionId, rating, feedback } = result.data;
     
     // Update session with feedback
     const session = await storage.getChatSession(sessionId);
