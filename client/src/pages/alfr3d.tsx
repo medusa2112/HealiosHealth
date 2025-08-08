@@ -111,11 +111,11 @@ Please implement this security fix following the expert recommendations above.`;
           ...prev,
           [variables.issueId]: prompt
         }));
-        setDialogOpen(variables.issueId);
         
+        // Don't auto-open dialog, let user choose to view or copy
         toast({
-          title: "AI Fix Prompt Generated",
-          description: "Expert analysis completed. View and copy the prompt.",
+          title: "✅ AI Fix Prompt Generated",
+          description: "Copy and view buttons are now available. Click the green copy button to copy the prompt.",
         });
       } else {
         toast({
