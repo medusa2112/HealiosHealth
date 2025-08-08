@@ -203,23 +203,23 @@ export default function AdminProducts() {
                 <Table className="w-full table-fixed">
                   <TableHeader>
                     <TableRow className="border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                      <TableHead className="text-black dark:text-white font-semibold">Product</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px]">Type</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[120px]">Categories</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[80px]">Price</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] text-center">Stock</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px]">Status</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] text-center">Actions</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold py-4">Product</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] py-4">Type</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[120px] py-4">Categories</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[80px] py-4">Price</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] text-center py-4">Stock</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] py-4">Status</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] text-center py-4">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredProducts.map((product) => (
                       <TableRow 
                         key={product.id} 
-                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 cursor-pointer transition-colors"
+                        className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/50 cursor-pointer transition-colors border-b"
                         onClick={() => handleEdit(product.id)}
                       >
-                        <TableCell className="py-3">
+                        <TableCell className="py-5">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
                               <img
@@ -244,12 +244,12 @@ export default function AdminProducts() {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-5">
                           <Badge variant="outline" className="capitalize text-xs">
                             {product.type === 'supplement' ? 'Supp' : product.type || 'Supp'}
                           </Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-5">
                           <div className="flex flex-wrap gap-1">
                             {product.categories?.slice(0, 2).map((category) => (
                               <Badge key={category} variant="secondary" className="text-xs px-1.5 py-0.5">
@@ -263,7 +263,7 @@ export default function AdminProducts() {
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-5">
                           <div className="text-black dark:text-white">
                             <div className="font-medium text-sm">R{product.price}</div>
                             {product.originalPrice && (
@@ -273,7 +273,7 @@ export default function AdminProducts() {
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center py-5">
                           <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
                             (product.stockQuantity || 0) > 10 
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
@@ -285,7 +285,7 @@ export default function AdminProducts() {
                             {product.stockQuantity || 0}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-5">
                           <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-1">
                               {product.featured && (
@@ -302,7 +302,7 @@ export default function AdminProducts() {
                             </Badge>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-5">
                           <div className="flex items-center justify-center gap-1">
                             <Button
                               size="sm"
