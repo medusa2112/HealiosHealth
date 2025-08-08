@@ -25,7 +25,7 @@ import energyVitalityImg from '@assets/healios-health127.png';
 import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
-import marineCollagenImg from '@assets/Collagen Complex__1754395222287.png';
+import marineCollagenImg from '@assets/generated_images/Collagen_beauty_face_editorial_1988ae102d1.png';
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 import biotinHairImg from '@assets/woman-hair-and-beauty-cosmetics-for-healthy-salon-2025-04-06-07-33-29-utc (1) (1)_1754676479670.jpg';
 
