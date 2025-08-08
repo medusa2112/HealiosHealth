@@ -68,6 +68,9 @@ router.post("/scan", async (req, res) => {
         recommendation: getRecommendation(finding),
         reviewed: false,
         timestamp: new Date().toISOString(),
+        issueKey: `${finding.type}-${finding.file}-${finding.line || 'noLine'}-${finding.message.replace(/\s+/g, '')}`,
+        archived: false,
+        fixAttempts: []
       }));
       
       // Clear old issues and insert new ones
@@ -123,7 +126,15 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     }
     
     console.log(`[ALFR3D Expert] Generating fix prompt for issue: ${issue.title}`);
-    const fixPrompt = await alfr3dExpert.generateFixPrompt(issue);
+    const issueForExpert = {
+      ...issue,
+      type: issue.type as 'security' | 'routing' | 'schema' | 'sync',
+      severity: issue.severity as 'low' | 'medium' | 'high' | 'critical',
+      timestamp: issue.createdAt?.toISOString() || new Date().toISOString(),
+      line: issue.line ? parseInt(issue.line) : undefined,
+      route: issue.route || undefined
+    };
+    const fixPrompt = await alfr3dExpert.generateFixPrompt(issueForExpert);
     
     // Add metadata to fix prompt
     const promptWithMetadata = {
@@ -270,10 +281,13 @@ function getRecommendation(finding: SecurityFinding): string {
   }
 }
 
-// Start background scanning when module loads (development only)
-if (process.env.NODE_ENV === 'development') {
-  scanner.startBackgroundScanning(30000); // Every 30 seconds
-  console.log("[ALFR3D] Background security scanning started");
+// Start background scanning when module loads (development only) - DISABLED FOR TESTING
+// Background scanning disabled to prevent interference with manual fix prompts
+if (process.env.NODE_ENV === 'development' && process.env.ALFR3D_BACKGROUND_SCAN === 'true') {
+  scanner.startBackgroundScanning(300000); // Every 5 minutes instead of 30 seconds
+  console.log("[ALFR3D] Background security scanning started (5min intervals)");
+} else {
+  console.log("[ALFR3D] Background scanning disabled - use manual scan button");
 }
 
 export default router;
