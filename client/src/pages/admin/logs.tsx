@@ -6,31 +6,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Shield, User, Database, Settings, ShoppingCart, FileText, LogIn, LogOut, Search, Filter } from "lucide-react";
-import type { AdminLog } from "../../../shared/schema";
+import type { AdminLog } from "@shared/schema";
 
 export default function AdminLogsPage() {
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("all");
   const [targetFilter, setTargetFilter] = useState("all");
+  const [timeFilter, setTimeFilter] = useState("24"); // hours
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 50;
 
-  // Fetch admin logs
-  const { data: logs, isLoading } = useQuery<AdminLog[]>({
-    queryKey: ['/api/admin/logs'],
+  // Fetch admin logs with pagination and time filtering
+  const { data: logsResponse, isLoading } = useQuery<{ logs: AdminLog[], total: number, totalPages: number }>({
+    queryKey: ['/api/admin/logs', { page, limit: PAGE_SIZE, hours: timeFilter, search, actionFilter, targetFilter }],
     refetchInterval: 30000, // Auto-refresh every 30 seconds
   });
 
-  const filteredLogs = (logs || []).filter(log => {
-    const matchesSearch = search === "" || 
-      log.actionType.toLowerCase().includes(search.toLowerCase()) ||
-      log.targetType.toLowerCase().includes(search.toLowerCase()) ||
-      log.targetId.toLowerCase().includes(search.toLowerCase()) ||
-      log.adminId.toLowerCase().includes(search.toLowerCase());
-    
-    const matchesActionFilter = actionFilter === "all" || log.actionType === actionFilter;
-    const matchesTargetFilter = targetFilter === "all" || log.targetType === targetFilter;
-    
-    return matchesSearch && matchesActionFilter && matchesTargetFilter;
-  });
+  const logs = logsResponse?.logs || [];
+  const totalLogs = logsResponse?.total || 0;
+  const totalPages = logsResponse?.totalPages || 1;
+
+  // Logs are now filtered server-side, no need for client-side filtering
+  const filteredLogs = logs;
 
   const getActionIcon = (actionType: string) => {
     if (actionType.includes('login')) return <LogIn className="w-4 h-4" />;
@@ -179,6 +176,19 @@ export default function AdminLogsPage() {
                   ))}
                 </SelectContent>
               </Select>
+              <Select value={timeFilter} onValueChange={setTimeFilter}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Time window" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">Last Hour</SelectItem>
+                  <SelectItem value="24">Last 24 Hours</SelectItem>
+                  <SelectItem value="72">Last 3 Days</SelectItem>
+                  <SelectItem value="168">Last Week</SelectItem>
+                  <SelectItem value="720">Last Month</SelectItem>
+                  <SelectItem value="all">All Time</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>
@@ -188,9 +198,9 @@ export default function AdminLogsPage() {
           <CardHeader>
             <CardTitle className="text-black dark:text-white">Security Audit Logs</CardTitle>
             <CardDescription>
-              {filteredLogs.length} log{filteredLogs.length !== 1 ? 's' : ''} found
-              {(search || actionFilter !== "all" || targetFilter !== "all") && 
-                ` (filtered from ${logs?.length || 0} total)`
+              Showing {filteredLogs.length} of {totalLogs} logs (Page {page} of {totalPages})
+              {(search || actionFilter !== "all" || targetFilter !== "all" || timeFilter !== "all") && 
+                ` - Filters active`
               }
             </CardDescription>
           </CardHeader>
@@ -266,6 +276,11 @@ export default function AdminLogsPage() {
                                 IP: {details.ip}
                               </div>
                             )}
+                            {log.ipAddress && (
+                              <div className="text-xs text-gray-500">
+                                IP: {log.ipAddress}
+                              </div>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -273,6 +288,29 @@ export default function AdminLogsPage() {
                   })}
                 </TableBody>
               </Table>
+            )}
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <button
+                  onClick={() => setPage(Math.max(1, page - 1))}
+                  disabled={page <= 1}
+                  className="px-4 py-2 bg-black text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span className="px-4 py-2 text-sm">
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setPage(Math.min(totalPages, page + 1))}
+                  disabled={page >= totalPages}
+                  className="px-4 py-2 bg-black text-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
             )}
           </CardContent>
         </Card>

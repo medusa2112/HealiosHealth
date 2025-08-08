@@ -105,6 +105,17 @@ export interface IStorage {
   getAdminLogs(limit?: number): Promise<AdminLog[]>;
   getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]>;
   getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]>;
+  getAdminLogsWithPagination(filters: {
+    limit: number;
+    offset: number;
+    search?: string | null;
+    actionFilter?: string | null;
+    targetFilter?: string | null;
+    hours?: number | null;
+    adminId?: string | null;
+    targetType?: string | null;
+    targetId?: string | null;
+  }): Promise<{ logs: AdminLog[], total: number }>;
   
   // Reorder logs (Phase 13)
   createReorderLog(log: InsertReorderLog): Promise<ReorderLog>;
@@ -2154,6 +2165,7 @@ export class MemStorage implements IStorage {
       targetType: logData.targetType,
       targetId: logData.targetId,
       details: logData.details,
+      ipAddress: logData.ipAddress || null,
       timestamp: new Date().toISOString(),
     };
     this.adminLogs.set(id, log);
@@ -2176,6 +2188,72 @@ export class MemStorage implements IStorage {
     return Array.from(this.adminLogs.values())
       .filter(log => log.targetType === targetType && log.targetId === targetId)
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  // Enhanced pagination method for admin logs
+  async getAdminLogsWithPagination(filters: {
+    limit: number;
+    offset: number;
+    search?: string | null;
+    actionFilter?: string | null;
+    targetFilter?: string | null;
+    hours?: number | null;
+    adminId?: string | null;
+    targetType?: string | null;
+    targetId?: string | null;
+  }): Promise<{ logs: AdminLog[], total: number }> {
+    let filteredLogs = Array.from(this.adminLogs.values());
+    
+    // Apply time filter
+    if (filters.hours && filters.hours > 0) {
+      const cutoffTime = new Date();
+      cutoffTime.setHours(cutoffTime.getHours() - filters.hours);
+      filteredLogs = filteredLogs.filter(log => 
+        new Date(log.timestamp).getTime() >= cutoffTime.getTime()
+      );
+    }
+    
+    // Apply admin ID filter
+    if (filters.adminId) {
+      filteredLogs = filteredLogs.filter(log => log.adminId === filters.adminId);
+    }
+    
+    // Apply action type filter
+    if (filters.actionFilter) {
+      filteredLogs = filteredLogs.filter(log => log.actionType === filters.actionFilter);
+    }
+    
+    // Apply target type filter
+    if (filters.targetFilter) {
+      filteredLogs = filteredLogs.filter(log => log.targetType === filters.targetFilter);
+    }
+    
+    // Apply target ID filter
+    if (filters.targetId) {
+      filteredLogs = filteredLogs.filter(log => log.targetId === filters.targetId);
+    }
+    
+    // Apply search filter
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      filteredLogs = filteredLogs.filter(log =>
+        log.actionType.toLowerCase().includes(searchLower) ||
+        log.targetType.toLowerCase().includes(searchLower) ||
+        log.targetId.toLowerCase().includes(searchLower) ||
+        log.adminId.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    // Sort chronologically (newest first)
+    filteredLogs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    
+    const total = filteredLogs.length;
+    const paginatedLogs = filteredLogs.slice(filters.offset, filters.offset + filters.limit);
+    
+    return {
+      logs: paginatedLogs,
+      total
+    };
   }
 
   // Phase 13: Reorder logging implementation

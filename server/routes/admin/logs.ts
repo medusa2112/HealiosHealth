@@ -1,30 +1,65 @@
 import express from "express";
 import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
+import { z } from "zod";
 
 const router = express.Router();
 
 // Admin log routes - authentication required
 
-// Get admin activity logs with optional filters
+// Get admin activity logs with pagination and filtering
 router.get("/", requireAuth, async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit as string) || 100;
-    const adminId = req.query.adminId as string;
-    const targetType = req.query.targetType as string;
-    const targetId = req.query.targetId as string;
+    // Parse and validate query parameters
+    const querySchema = z.object({
+      page: z.string().optional().transform(val => Math.max(1, parseInt(val || '1', 10))),
+      limit: z.string().optional().transform(val => Math.min(100, Math.max(10, parseInt(val || '50', 10)))),
+      hours: z.string().optional(),
+      search: z.string().optional(),
+      actionFilter: z.string().optional(),
+      targetFilter: z.string().optional(),
+      adminId: z.string().optional(),
+      targetType: z.string().optional(),
+      targetId: z.string().optional()
+    });
     
-    let logs;
-    
-    if (adminId) {
-      logs = await storage.getAdminLogsByAdmin(adminId);
-    } else if (targetType && targetId) {
-      logs = await storage.getAdminLogsByTarget(targetType, targetId);
-    } else {
-      logs = await storage.getAdminLogs(limit);
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
     }
     
-    res.json(logs);
+    const { page, limit, hours, search, actionFilter, targetFilter, adminId, targetType, targetId } = result.data;
+    
+    // Calculate offset for pagination
+    const offset = (page - 1) * limit;
+    
+    // Build filters object
+    const filters: any = {
+      limit,
+      offset,
+      search: search || null,
+      actionFilter: actionFilter === 'all' ? null : actionFilter,
+      targetFilter: targetFilter === 'all' ? null : targetFilter,
+      hours: hours === 'all' ? null : (hours ? parseInt(hours, 10) : null),
+      adminId: adminId || null,
+      targetType: targetType || null,
+      targetId: targetId || null
+    };
+    
+    // Get logs with filtering and pagination
+    const { logs, total } = await storage.getAdminLogsWithPagination(filters);
+    const totalPages = Math.ceil(total / limit);
+    
+    res.json({
+      logs,
+      total,
+      page,
+      totalPages,
+      hasMore: page < totalPages
+    });
   } catch (error) {
     console.error("Failed to fetch admin logs:", error);
     res.status(500).json({ message: "Failed to fetch admin logs" });

@@ -273,6 +273,7 @@ export const adminLogs = pgTable("admin_logs", {
   targetType: varchar("target_type", { length: 64 }).notNull(), // e.g. "order", "product"
   targetId: varchar("target_id").notNull(),
   details: text("details"), // JSON string of metadata
+  ipAddress: varchar("ip_address", { length: 45 }), // Support both IPv4 and IPv6
   timestamp: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
 });
 

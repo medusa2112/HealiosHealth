@@ -28,13 +28,13 @@ export function auditAction(actionType: string, targetType: string) {
           actionType,
           targetType,
           targetId,
+          ipAddress: req.ip || req.connection.remoteAddress,
           details: JSON.stringify({
             method: req.method,
             path: req.path,
             query: req.query,
             body: sanitizeBody(req.body),
-            userAgent: req.get('User-Agent'),
-            ip: req.ip || req.connection.remoteAddress
+            userAgent: req.get('User-Agent')
           })
         }).catch(console.error);
       }
@@ -49,13 +49,13 @@ export function auditAction(actionType: string, targetType: string) {
           actionType,
           targetType, 
           targetId,
+          ipAddress: req.ip || req.connection.remoteAddress,
           details: JSON.stringify({
             method: req.method,
             path: req.path,
             query: req.query,
             body: sanitizeBody(req.body),
-            userAgent: req.get('User-Agent'),
-            ip: req.ip || req.connection.remoteAddress
+            userAgent: req.get('User-Agent')
           })
         }).catch(console.error);
       }
@@ -102,6 +102,7 @@ export async function auditLogin(adminId: string, success: boolean, details?: an
       actionType: success ? 'login_success' : 'login_failed',
       targetType: 'auth',
       targetId: adminId,
+      ipAddress: details?.ip || null,
       details: JSON.stringify({
         timestamp: new Date().toISOString(),
         success,
@@ -121,6 +122,7 @@ export async function auditLogout(adminId: string) {
       actionType: 'logout',
       targetType: 'auth', 
       targetId: adminId,
+      ipAddress: null, // IP not available during logout
       details: JSON.stringify({
         timestamp: new Date().toISOString()
       })
