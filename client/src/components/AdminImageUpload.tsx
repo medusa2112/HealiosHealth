@@ -24,18 +24,22 @@ export default function AdminImageUpload({
 
   const handleGetUploadParameters = async () => {
     try {
-      const response = await apiRequest("POST", "/api/admin/images/upload-url") as any;
+      const response = await apiRequest("POST", "/api/admin/images/upload-url");
+      const data = await response.json();
       
-      if (!response.uploadURL) {
+      console.log('[ADMIN_IMAGE_UPLOAD] Upload URL response:', data);
+      
+      if (!data.uploadURL) {
+        console.error('[ADMIN_IMAGE_UPLOAD] No uploadURL in response:', data);
         throw new Error("No upload URL received");
       }
 
       return {
         method: "PUT" as const,
-        url: response.uploadURL,
+        url: data.uploadURL,
       };
     } catch (error) {
-      console.error("Failed to get upload URL:", error);
+      console.error("[ADMIN_IMAGE_UPLOAD] Failed to get upload URL:", error);
       toast({
         title: "Upload Error",
         description: "Failed to prepare image upload. Please try again.",
@@ -61,13 +65,17 @@ export default function AdminImageUpload({
       }
 
       // Confirm the upload with our backend
-      const confirmResponse = await apiRequest("POST", "/api/admin/images/confirm", { uploadURL }) as any;
+      const confirmResponse = await apiRequest("POST", "/api/admin/images/confirm", { uploadURL });
+      const confirmData = await confirmResponse.json();
+      
+      console.log('[ADMIN_IMAGE_UPLOAD] Confirm response:', confirmData);
 
-      if (!confirmResponse.imageUrl) {
+      if (!confirmData.imageUrl) {
+        console.error('[ADMIN_IMAGE_UPLOAD] No imageUrl in confirmation response:', confirmData);
         throw new Error("No image URL returned from confirmation");
       }
 
-      onImageUploaded(confirmResponse.imageUrl);
+      onImageUploaded(confirmData.imageUrl);
       
       toast({
         title: "Upload Successful",
