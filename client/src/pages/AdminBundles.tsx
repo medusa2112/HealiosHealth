@@ -17,7 +17,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiRequest } from '@/lib/queryClient';
 import { SEOHead } from '@/components/seo-head';
-import { AdminHeader } from '@/components/admin-header';
 
 interface Bundle {
   id: string;
@@ -405,10 +404,6 @@ export default function AdminBundles() {
       <SEOHead 
         title="Product Bundles - Admin | Healios"
         description="Manage product bundles and promotional offers in the Healios admin panel."
-      />
-      <AdminHeader 
-        title="Product Bundles" 
-        subtitle="Manage product bundles with smart pricing and exclusion rules"
       />
       <div className="max-w-7xl mx-auto px-6 space-y-6">
       <div className="flex justify-between items-center">

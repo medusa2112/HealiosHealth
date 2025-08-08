@@ -10,7 +10,6 @@ import { ArrowLeft, RefreshCw, DollarSign, Package, AlertTriangle, CheckCircle, 
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
 import { SEOHead } from '@/components/seo-head';
-import { AdminHeader } from '@/components/admin-header';
 import type { Order } from '@shared/types';
 
 interface OrderStats {
@@ -177,10 +176,6 @@ export default function AdminOrders() {
       <SEOHead 
         title="Order Management - Admin | Healios"
         description="View and manage all customer orders, refunds, and payment status in the Healios admin panel."
-      />
-      <AdminHeader 
-        title="Order Management" 
-        subtitle="View and manage all customer orders, refunds, and payment status"
       />
       <div className="max-w-7xl mx-auto px-6 space-y-6">
       {/* Header */}

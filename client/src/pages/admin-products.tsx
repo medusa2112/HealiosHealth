@@ -12,7 +12,6 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from '@/components/seo-head';
-import { AdminHeader } from '@/components/admin-header';
 
 const availableCategories = [
   "Vitamins", "Minerals", "Gummies", "Probiotics", "Adaptogens", 
@@ -121,10 +120,6 @@ export default function AdminProducts() {
       <SEOHead 
         title="Product Management - Admin | Healios"
         description="Manage products, inventory, and product details in the Healios admin panel."
-      />
-      <AdminHeader 
-        title="Product Management" 
-        subtitle={`Manage your product catalog - ${filteredProducts.length} of ${products?.length || 0} products${performanceWarning ? ' ⚠️ Large dataset' : ''}`}
       />
       <div className="w-full px-4">
         {/* Compact Header with Filters and Actions */}

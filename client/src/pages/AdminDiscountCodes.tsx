@@ -15,7 +15,6 @@ import { Plus, Edit, Trash2, TrendingUp, Users, Percent } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import type { DiscountCode, InsertDiscountCode } from '@shared/schema';
 import { SEOHead } from '@/components/seo-head';
-import { AdminHeader } from '@/components/admin-header';
 
 interface CreateDiscountForm {
   code: string;
@@ -183,10 +182,6 @@ function AdminDiscountCodes() {
       <SEOHead 
         title="Discount Codes - Admin | Healios"
         description="Manage promotional codes and discounts in the Healios admin panel."
-      />
-      <AdminHeader 
-        title="Discount Codes" 
-        subtitle="Manage promotional codes and discounts for your store"
       />
       <div className="max-w-7xl mx-auto px-6 space-y-6">
       <div>
