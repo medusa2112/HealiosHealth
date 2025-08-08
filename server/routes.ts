@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
 import { db } from "./db";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, arrayContains } from "drizzle-orm";
 import { EmailService } from "./email";
 import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
@@ -134,12 +134,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get products by category - FROM DATABASE
   app.get("/api/products/category/:category", async (req, res) => {
     try {
-      // Use SQL array contains operator to check if category exists in categories array
-      // Safe parameterized query to prevent SQL injection
-      const category = req.params.category;
-      const dbProducts = await db.select().from(products).where(sql`${products.categories} @> ${[category]}`);
+      // Input validation to prevent SQL injection
+      const categorySchema = z.object({
+        category: z.string()
+          .min(1, "Category cannot be empty")
+          .max(50, "Category name too long")
+          .regex(/^[a-zA-Z0-9\s\-_]+$/, "Invalid category format")
+          .trim()
+      });
+      
+      const validationResult = categorySchema.safeParse({ category: req.params.category });
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid category parameter",
+          errors: validationResult.error.errors 
+        });
+      }
+      
+      const { category } = validationResult.data;
+      
+      // Use safe Drizzle array contains query instead of raw SQL
+      const dbProducts = await db
+        .select()
+        .from(products)
+        .where(arrayContains(products.categories, [category]));
+        
       res.json(dbProducts);
     } catch (error) {
+      console.error('Product category search error:', error);
       res.status(500).json({ message: "Failed to fetch products by category" });
     }
   });

@@ -2,9 +2,9 @@ import express from 'express';
 import { z } from 'zod';
 import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
-import { products, orders, insertProductSchema } from '@shared/schema';
+import { products, orders, insertProductSchema, quizResults } from '@shared/schema';
 import { db } from '../db';
-import { eq, sql, desc, sum } from 'drizzle-orm';
+import { eq, sql, desc, sum, count, countDistinct } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
 import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
@@ -64,8 +64,9 @@ router.get('/', requireAuth, async (req, res) => {
     
     try {
       // Get order count first for performance
-      const orderCountResult = await db.execute(sql`SELECT COUNT(*) as count FROM orders`);
-      totalOrdersCount = parseInt(orderCountResult.rows[0]?.count || '0');
+      // Use safe Drizzle count query instead of raw SQL
+      const orderCountResult = await db.select({ count: count() }).from(orders);
+      totalOrdersCount = orderCountResult[0]?.count || 0;
       
       // Get recent orders with limit
       dbOrders = await db
@@ -84,10 +85,12 @@ router.get('/', requireAuth, async (req, res) => {
         .limit(Math.min(queryLimit, 100)); // Cap at 100 for dashboard performance
         
       // Calculate total revenue from completed orders only
-      const revenueResult = await db.execute(
-        sql`SELECT SUM(CAST(total_amount AS DECIMAL)) as total FROM orders WHERE payment_status = 'completed'`
-      );
-      totalRevenue = parseFloat(revenueResult.rows[0]?.total || '0');
+      // Use safe Drizzle aggregation instead of raw SQL
+      const revenueResult = await db
+        .select({ total: sum(orders.totalAmount) })
+        .from(orders)
+        .where(eq(orders.paymentStatus, 'completed'));
+      totalRevenue = parseFloat(revenueResult[0]?.total || '0');
       
     } catch (ordersError) {
       console.log('Orders table query failed, using default values:', ordersError.message);
@@ -100,8 +103,9 @@ router.get('/', requireAuth, async (req, res) => {
     
     // Try to get quiz completions
     try {
-      const quizCount = await db.execute(sql`SELECT COUNT(*) as count FROM quiz_results`);
-      totalQuizCompletions = parseInt(quizCount.rows[0]?.count || '0');
+      // Use safe Drizzle count query instead of raw SQL
+      const quizCount = await db.select({ count: count() }).from(quizResults);
+      totalQuizCompletions = quizCount[0]?.count || 0;
     } catch (quizError) {
       console.log('Quiz results table not found, using default count');
       totalQuizCompletions = 0;
@@ -137,10 +141,12 @@ router.get('/', requireAuth, async (req, res) => {
     // Calculate active users (customers who placed orders in last 30 days)
     let activeUsers = 0;
     try {
-      const activeUsersResult = await db.execute(
-        sql`SELECT COUNT(DISTINCT customer_email) as count FROM orders WHERE created_at >= NOW() - INTERVAL '30 days'`
-      );
-      activeUsers = parseInt(activeUsersResult.rows[0]?.count || '0');
+      // Use safe Drizzle query with countDistinct instead of raw SQL
+      const activeUsersResult = await db
+        .select({ count: countDistinct(orders.customerEmail) })
+        .from(orders)
+        .where(sql`created_at >= NOW() - INTERVAL '30 days'`);
+      activeUsers = activeUsersResult[0]?.count || 0;
     } catch (activeUsersError) {
       console.log('Active users calculation failed:', activeUsersError.message);
     }
@@ -549,11 +555,16 @@ router.get('/quiz/analytics', requireAuth, async (req, res) => {
     let totalCompletions = 0;
     
     try {
-      const quizResultsQuery = await db.execute(sql`SELECT * FROM quiz_results ORDER BY created_at DESC LIMIT 20`);
-      quizResults = quizResultsQuery.rows;
+      // Use safe Drizzle query methods instead of raw SQL
+      const quizResultsQuery = await db
+        .select()
+        .from(quizResults)
+        .orderBy(desc(quizResults.createdAt))
+        .limit(20);
+      quizResults = quizResultsQuery;
       
-      const countQuery = await db.execute(sql`SELECT COUNT(*) as count FROM quiz_results`);
-      totalCompletions = parseInt(countQuery.rows[0]?.count || '0');
+      const countQuery = await db.select({ count: count() }).from(quizResults);
+      totalCompletions = countQuery[0]?.count || 0;
     } catch (dbError) {
       console.log('Quiz results table not found or empty, returning empty results');
       quizResults = [];
