@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Save, Eye, Package, DollarSign, Search, BarChart3 } from "lucide-react";
+import { Save, Eye, Package, DollarSign, Search, BarChart3 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -157,11 +157,9 @@ export default function AdminProductEdit() {
         description: isEditing ? "Product updated successfully" : "Product created successfully" 
       });
       
-      // Only redirect for new products, stay on edit page for updates
-      if (!isEditing && data?.id) {
-        console.log('[PRODUCT_EDIT] Redirecting to', `/admin/products/${data.id}`);
-        setLocation(`/admin/products/${data.id}`);
-      }
+      // Always redirect to products list after saving
+      console.log('[PRODUCT_EDIT] Redirecting to products list');
+      setLocation("/admin/products");
     },
     onError: (error: any) => {
       console.error('[PRODUCT_EDIT] Mutation error', {
@@ -294,23 +292,13 @@ export default function AdminProductEdit() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Header Actions */}
         <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setLocation("/admin/products")}
-              className="border-gray-300 dark:border-gray-700 text-black dark:text-white"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Products
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold text-black dark:text-white">
-                {isEditing ? "Edit Product" : "Create New Product"}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                {isEditing ? `Editing: ${product?.name}` : "Create a new product with full SEO optimization"}
-              </p>
-            </div>
+          <div>
+            <h1 className="text-3xl font-bold text-black dark:text-white">
+              {isEditing ? "Edit Product" : "Create New Product"}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              {isEditing ? `Editing: ${product?.name}` : "Create a new product with full SEO optimization"}
+            </p>
           </div>
           <Button 
             form="product-form"
