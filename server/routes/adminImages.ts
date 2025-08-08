@@ -1,4 +1,5 @@
 import express from "express";
+import { body, validationResult } from "express-validator";
 import { requireAuth } from "../lib/auth";
 import { ObjectStorageService } from "../objectStorage";
 import { protectRoute } from "../lib/auth";
@@ -22,13 +23,21 @@ router.post("/upload-url", requireAuth, async (req, res) => {
 });
 
 // Confirm image upload and get public URL
-router.post("/confirm", requireAuth, async (req, res) => {
+router.post("/confirm", [
+  body('uploadURL').isURL().withMessage('uploadURL must be a valid URL'),
+  requireAuth
+], async (req, res) => {
   try {
-    const { uploadURL } = req.body;
-    
-    if (!uploadURL) {
-      return res.status(400).json({ error: "uploadURL is required" });
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        error: 'Validation failed',
+        details: errors.array() 
+      });
     }
+    
+    const uploadURL = req.body.uploadURL;
 
     const objectStorageService = new ObjectStorageService();
     const objectPath = objectStorageService.normalizeObjectEntityPath(uploadURL);

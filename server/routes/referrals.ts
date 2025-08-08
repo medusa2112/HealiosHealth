@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { createReferral, validateReferralCode, getReferralStats, processReferralClaim } from "../lib/referralService";
+import { requireAuth } from "../lib/auth";
 import { z } from "zod";
 
 const router = Router();
 
 // Create/Get referral code for authenticated user
-router.get("/my-referral", async (req, res) => {
+router.get("/my-referral", requireAuth, async (req, res) => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({ error: "Authentication required" });
@@ -23,7 +24,7 @@ router.get("/my-referral", async (req, res) => {
 });
 
 // Get referral statistics for authenticated user
-router.get("/stats", async (req, res) => {
+router.get("/stats", requireAuth, async (req, res) => {
   try {
     if (!req.user?.id) {
       return res.status(401).json({ error: "Authentication required" });
@@ -37,8 +38,8 @@ router.get("/stats", async (req, res) => {
   }
 });
 
-// Validate referral code (public endpoint for checkout)
-router.post("/validate", async (req, res) => {
+// Validate referral code (secured endpoint)
+router.post("/validate", requireAuth, async (req, res) => {
   try {
     const schema = z.object({
       code: z.string().min(1),
@@ -66,8 +67,8 @@ router.post("/validate", async (req, res) => {
   }
 });
 
-// Process referral claim (called by webhook)
-router.post("/claim", async (req, res) => {
+// Process referral claim (secured endpoint)
+router.post("/claim", requireAuth, async (req, res) => {
   try {
     const schema = z.object({
       referralId: z.string(),

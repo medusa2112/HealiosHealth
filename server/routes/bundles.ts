@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { z } from "zod";
+import { requireAuth } from "../lib/auth";
 import { storage } from "../storage";
 
 const router = Router();
 
-// Get all active bundles (public endpoint)
-router.get("/", async (req, res) => {
+// Get all active bundles (secured endpoint)
+router.get("/", requireAuth, async (req, res) => {
   try {
     const bundles = await storage.getProductBundles();
     res.json(bundles);
@@ -15,8 +16,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a specific bundle with items and product details (public endpoint)
-router.get("/:id", async (req, res) => {
+// Get a specific bundle with items and product details (secured endpoint)
+router.get("/:id", requireAuth, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -78,8 +79,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Validate bundle cart items (used during checkout)
-router.post("/validate", async (req, res) => {
+// Validate bundle cart items (secured endpoint)
+router.post("/validate", requireAuth, async (req, res) => {
   try {
     const validateSchema = z.object({
       bundleId: z.string().min(1),

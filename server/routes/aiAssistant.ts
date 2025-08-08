@@ -86,7 +86,7 @@ router.post("/chat", async (req, res) => {
 });
 
 // POST /api/ai-assistant/escalate - Escalate to human support
-router.post("/escalate", async (req, res) => {
+router.post("/escalate", requireAuth, async (req, res) => {
   try {
     const escalateSchema = z.object({
       sessionId: z.string().min(1),
@@ -176,7 +176,7 @@ router.get("/sessions", requireAuth, async (req, res) => {
 });
 
 // POST /api/ai-assistant/feedback - Submit feedback on AI response
-router.post("/feedback", async (req, res) => {
+router.post("/feedback", requireAuth, async (req, res) => {
   try {
     const feedbackSchema = z.object({
       sessionId: z.string().min(1),

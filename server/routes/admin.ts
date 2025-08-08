@@ -926,7 +926,16 @@ router.post('/products/:id/variants', [
 
 router.put('/product-variants/:id', requireAuth, async (req, res) => {
   try {
-    const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
+    // Use validated data directly from req.body after validation
+    const name = req.body.name;
+    const sku = req.body.sku;
+    const type = req.body.type;
+    const attributes = req.body.attributes;
+    const price = req.body.price;
+    const imageUrl = req.body.imageUrl;
+    const stockQuantity = req.body.stockQuantity;
+    const inStock = req.body.inStock;
+    const isDefault = req.body.isDefault;
     const variantId = req.params.id;
     
     const existingVariant = await storage.getProductVariant(variantId);

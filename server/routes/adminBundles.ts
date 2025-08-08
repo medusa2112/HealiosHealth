@@ -230,9 +230,21 @@ router.post("/:id/items", requireAuth, async (req, res) => {
 });
 
 // Update a bundle (admin only)
-router.put("/:id", requireAuth, async (req, res) => {
+router.put("/:id", [
+  param('id').isUUID().withMessage('Bundle ID must be a valid UUID'),
+  requireAuth
+], async (req, res) => {
   try {
-    const { id } = req.params;
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        error: 'Validation failed',
+        details: errors.array() 
+      });
+    }
+    
+    const id = req.params.id;
     
     const updateSchema = insertProductBundleSchema.partial();
     const validationResult = updateSchema.safeParse(req.body);
@@ -270,9 +282,23 @@ router.put("/:id", requireAuth, async (req, res) => {
 });
 
 // Remove item from bundle (admin only)
-router.delete("/:bundleId/items/:itemId", requireAuth, async (req, res) => {
+router.delete("/:bundleId/items/:itemId", [
+  param('bundleId').isUUID().withMessage('Bundle ID must be a valid UUID'),
+  param('itemId').isUUID().withMessage('Item ID must be a valid UUID'),
+  requireAuth
+], async (req, res) => {
   try {
-    const { bundleId, itemId } = req.params;
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        error: 'Validation failed',
+        details: errors.array() 
+      });
+    }
+    
+    const bundleId = req.params.bundleId;
+    const itemId = req.params.itemId;
     
     const success = await storage.deleteBundleItem(itemId);
     
@@ -299,9 +325,21 @@ router.delete("/:bundleId/items/:itemId", requireAuth, async (req, res) => {
 });
 
 // Delete a bundle (admin only)
-router.delete("/:id", requireAuth, async (req, res) => {
+router.delete("/:id", [
+  param('id').isUUID().withMessage('Bundle ID must be a valid UUID'),
+  requireAuth
+], async (req, res) => {
   try {
-    const { id } = req.params;
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        error: 'Validation failed',
+        details: errors.array() 
+      });
+    }
+    
+    const id = req.params.id;
     
     // Get bundle for logging before deletion
     const bundle = await storage.getProductBundleById(id);
