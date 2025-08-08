@@ -221,7 +221,7 @@ export default function AdminProducts() {
                       >
                         <TableCell className="py-6 px-6">
                           <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700">
+                            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-700">
                               <img
                                 src={product.imageUrl}
                                 alt={product.name}
