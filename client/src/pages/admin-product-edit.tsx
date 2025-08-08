@@ -372,16 +372,6 @@ export default function AdminProductEdit() {
                         currentImageUrl={formData.imageUrl}
                         onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, imageUrl }))}
                       />
-                      <div className="space-y-2">
-                        <Label htmlFor="imageUrl" className="text-black dark:text-white text-xs">Or paste image URL</Label>
-                        <Input
-                          id="imageUrl"
-                          value={formData.imageUrl}
-                          onChange={(e) => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))}
-                          placeholder="https://example.com/image.jpg"
-                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white text-sm"
-                        />
-                      </div>
                     </div>
                   </div>
 
