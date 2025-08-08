@@ -260,51 +260,18 @@ router.get('/products/:id', requireAuth, async (req, res) => {
 
 router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {
   try {
-    const productSchema = z.object({
-      name: z.string().min(1),
-      description: z.string().min(1),
-      price: z.number().positive(),
-      originalPrice: z.number().positive().optional(),
-      imageUrl: z.string().url(),
-      categories: z.array(z.string()).min(1),
-      stockQuantity: z.number().int().nonnegative().optional().default(0),
-      featured: z.boolean().optional().default(false),
-      type: z.string().optional().default('supplement'),
-      bottleCount: z.number().int().positive().optional(),
-      dailyDosage: z.number().int().positive().optional(),
-      supplyDays: z.number().int().positive().optional()
-    });
-    
-    const result = productSchema.safeParse(req.body);
+    // Use SINGLE SOURCE OF TRUTH - shared schema
+    const result = insertProductSchema.safeParse(req.body);
     if (!result.success) {
+      console.error('Product validation failed:', result.error.errors);
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: result.error.errors
       });
     }
     
-    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, type, bottleCount, dailyDosage, supplyDays } = result.data;
-
-    const productData = {
-      name: name.trim(),
-      description: description.trim(),
-      price: parseFloat(price.toString()).toString(),
-      originalPrice: originalPrice ? parseFloat(originalPrice.toString()).toString() : null,
-      imageUrl: imageUrl.trim(),
-      categories: Array.isArray(categories) ? categories : [categories],
-      stockQuantity: parseInt(stockQuantity.toString()) || 0,
-      featured: Boolean(featured),
-      type: type || 'supplement',
-      bottleCount: bottleCount ? parseInt(bottleCount.toString()) : null,
-      dailyDosage: dailyDosage ? parseInt(dailyDosage.toString()) : null,
-      supplyDays: supplyDays ? parseInt(supplyDays.toString()) : null,
-      inStock: true,
-      rating: "5.0",
-      reviewCount: 0
-    };
-
-    // SECURITY: Validate product data before database insertion
-    const validatedProductData = insertProductSchema.parse(productData);
+    // Use validated data DIRECTLY - no double conversion needed
+    const validatedProductData = result.data;
     const [product] = await db.insert(products).values(validatedProductData).returning();
     
     // Log admin action (no auth required)
@@ -336,24 +303,11 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
       });
     }
     
-    const updateSchema = z.object({
-      name: z.string().optional(),
-      description: z.string().optional(),
-      price: z.number().positive().optional(),
-      originalPrice: z.number().positive().optional(),
-      imageUrl: z.string().url().optional(),
-      categories: z.array(z.string()).optional(),
-      stockQuantity: z.number().int().nonnegative().optional(),
-      featured: z.boolean().optional(),
-      inStock: z.boolean().optional(),
-      type: z.string().optional(),
-      bottleCount: z.number().int().positive().optional(),
-      dailyDosage: z.number().int().positive().optional(),
-      supplyDays: z.number().int().positive().optional()
-    });
-    
+    // Use SINGLE SOURCE OF TRUTH - shared schema made partial for updates  
+    const updateSchema = insertProductSchema.partial();
     const bodyResult = updateSchema.safeParse(req.body);
     if (!bodyResult.success) {
+      console.error('Product update validation failed:', bodyResult.error.errors);
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: bodyResult.error.errors
@@ -361,24 +315,12 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     }
     
     const { id } = paramsResult.data;
-    const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = bodyResult.data;
     
-    const updates: any = {
-      updatedAt: sql`CURRENT_TIMESTAMP` // Always update timestamp on edits
+    // Use validated data DIRECTLY - add timestamp for updates
+    const updates = {
+      ...bodyResult.data,
+      updatedAt: sql`CURRENT_TIMESTAMP`
     };
-    if (name !== undefined) updates.name = name.trim();
-    if (description !== undefined) updates.description = description.trim();
-    if (price !== undefined) updates.price = parseFloat(price.toString()).toString();
-    if (originalPrice !== undefined) updates.originalPrice = originalPrice ? parseFloat(originalPrice.toString()).toString() : null;
-    if (imageUrl !== undefined) updates.imageUrl = imageUrl.trim();
-    if (categories !== undefined) updates.categories = Array.isArray(categories) ? categories : [categories];
-    if (stockQuantity !== undefined) updates.stockQuantity = parseInt(stockQuantity.toString()) || 0;
-    if (featured !== undefined) updates.featured = Boolean(featured);
-    if (inStock !== undefined) updates.inStock = Boolean(inStock);
-    if (type !== undefined) updates.type = type;
-    if (bottleCount !== undefined) updates.bottleCount = bottleCount ? parseInt(bottleCount.toString()) : null;
-    if (dailyDosage !== undefined) updates.dailyDosage = dailyDosage ? parseInt(dailyDosage.toString()) : null;
-    if (supplyDays !== undefined) updates.supplyDays = supplyDays ? parseInt(supplyDays.toString()) : null;
 
     const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
     if (!product) {
