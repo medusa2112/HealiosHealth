@@ -199,17 +199,17 @@ export default function AdminProducts() {
                 </div>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
+              <div className="w-full">
+                <Table className="w-full">
                   <TableHeader>
                     <TableRow className="border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                      <TableHead className="text-black dark:text-white font-semibold w-[300px]">Product</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[80px]">Type</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[180px]">Categories</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[100px]">Price</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[80px] text-center">Stock</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[140px]">Status</TableHead>
-                      <TableHead className="text-black dark:text-white font-semibold w-[120px] text-center">Actions</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold">Product</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px]">Type</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[120px]">Categories</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[80px]">Price</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[60px] text-center">Stock</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px]">Status</TableHead>
+                      <TableHead className="text-black dark:text-white font-semibold min-w-[100px] text-center">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -274,13 +274,13 @@ export default function AdminProducts() {
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
-                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
+                          <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${
                             (product.stockQuantity || 0) > 10 
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
                               : (product.stockQuantity || 0) > 0 
                               ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                               : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                          }">
+                          }`}>
                             <Package className="w-3 h-3" />
                             {product.stockQuantity || 0}
                           </div>
