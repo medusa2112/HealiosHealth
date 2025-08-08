@@ -41,6 +41,7 @@ import AdminProducts from "@/pages/admin-products";
 import AdminProductEdit from "@/pages/admin-product-edit";
 import CustomerPortal from "@/pages/customer-portal";
 import PortalSubscriptions from "@/pages/PortalSubscriptions";
+import ALFR3D from "@/pages/alfr3d";
 import { FAQ } from "@/pages/faq";
 import { ShippingReturns } from "@/pages/shipping-returns";
 import { Terms } from "@/pages/terms";
@@ -82,6 +83,7 @@ function Router() {
       <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><AdminBundles /></ProtectedRoute>} />
       <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminProducts /></ProtectedRoute>} />
       <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminProductEdit /></ProtectedRoute>} />
+      <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><ALFR3D /></ProtectedRoute>} />
       <Route path="/portal" component={() => <ProtectedRoute requiredRole="customer"><CustomerPortal /></ProtectedRoute>} />
       <Route path="/portal/subscriptions" component={() => <ProtectedRoute requiredRole="customer"><PortalSubscriptions /></ProtectedRoute>} />
       

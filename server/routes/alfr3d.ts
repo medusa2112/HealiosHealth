@@ -142,16 +142,11 @@ router.post("/scan", async (req, res) => {
                 updatedIssues.push({
                   id: id.trim(),
                   type: type.trim(),
-                  title: description.replace(/"/g, '').trim(),
-                  description: description.replace(/"/g, '').trim(),
-                  severity: severity.trim() as 'low' | 'medium' | 'high' | 'critical',
-                  file: file.trim(),
+                  filePath: file.trim(),
                   line: parseInt(lineNumber) || 0,
                   snippet: snippet.replace(/^"|"$/g, '').trim(),
-                  status: fixed.trim() === 'true' ? 'resolved' : 'open',
-                  createdAt: new Date().toISOString(),
-                  updatedAt: new Date().toISOString(),
-                  fixPrompt: null
+                  fixed: fixed.trim() === 'true',
+                  createdAt: new Date().toISOString()
                 });
               }
             }
