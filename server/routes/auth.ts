@@ -2,7 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
-import { determineUserRole } from '../lib/auth';
+import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
 
 const router = express.Router();
@@ -29,13 +29,7 @@ router.get('/me', async (req, res) => {
     }
 
     console.log(`[AUTH_ME] User found: ${user.email} (${user.role})`);
-    res.json({ 
-      id: user.id, 
-      email: user.email, 
-      role: user.role,
-      firstName: user.firstName,
-      lastName: user.lastName
-    });
+    res.json(sanitizeUser(user));
   } catch (error) {
     console.error('Auth me error:', error);
     res.json(null);
@@ -55,13 +49,7 @@ router.get('/user', isAuthenticated, async (req, res) => {
       return res.json(null);
     }
 
-    res.json({ 
-      id: user.id, 
-      email: user.email, 
-      role: user.role,
-      firstName: user.firstName,
-      lastName: user.lastName
-    });
+    res.json(sanitizeUser(user));
   } catch (error) {
     console.error('Auth user error:', error);
     res.json(null);
@@ -153,7 +141,7 @@ router.post('/mock-login', async (req, res) => {
     
     res.json({ 
       success: true, 
-      user: { id: user.id, email: user.email, role: user.role },
+      user: sanitizeUser(user),
       redirectUrl 
     });
   } catch (error) {
@@ -226,13 +214,7 @@ if (process.env.NODE_ENV === 'development') {
         console.log(`[DEMO_LOGIN] Successfully logged in as admin: ${adminUser.email}`);
         res.json({ 
           message: 'Demo login successful', 
-          user: {
-            id: adminUser.id,
-            email: adminUser.email,
-            role: adminUser.role,
-            firstName: adminUser.firstName,
-            lastName: adminUser.lastName
-          }
+          user: sanitizeUser(adminUser)
         });
       });
       

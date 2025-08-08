@@ -1726,7 +1726,7 @@ export class MemStorage implements IStorage {
         {
           id: "admin-user-id",
           email: "dn@thefourths.com",
-          password: "SecureAdmin2025!",
+          password: null, // OAuth users don't have passwords
           firstName: "DN",
           lastName: "Admin",
           role: "admin",
@@ -1736,7 +1736,7 @@ export class MemStorage implements IStorage {
         {
           id: "customer-user-id", 
           email: "customer@healios.com",
-          password: "password123",
+          password: null, // OAuth users don't have passwords
           firstName: "Customer",
           lastName: "User",
           role: "customer",

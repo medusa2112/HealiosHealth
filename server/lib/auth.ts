@@ -39,6 +39,67 @@ declare global {
  * Consolidates all auth functionality into one clean file
  */
 
+/**
+ * Sanitize user object by removing sensitive fields before sending to client
+ * @param user User object that may contain sensitive data
+ * @returns Safe user object without sensitive fields
+ */
+export function sanitizeUser(user: any): any {
+  if (!user) return null;
+  
+  // Create clean user object with only safe fields
+  const safeUser: any = {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    firstName: user.firstName,
+    lastName: user.lastName
+  };
+  
+  // Remove sensitive fields if they exist
+  const sensitiveFields = [
+    'password', 'passwordHash', 'hash',
+    'access_token', 'refresh_token', 'token',
+    'secret', 'key', 'privateKey',
+    'claims', 'expires_at', 'sessionId',
+    'internalId', 'stripeCustomerId'
+  ];
+  
+  // Explicitly exclude sensitive fields
+  sensitiveFields.forEach(field => {
+    delete safeUser[field];
+  });
+  
+  return safeUser;
+}
+
+/**
+ * Sanitize any object by removing sensitive fields
+ * @param obj Object that may contain sensitive data
+ * @returns Safe object without sensitive fields
+ */
+export function sanitizeObject(obj: any): any {
+  if (!obj || typeof obj !== 'object') return obj;
+  
+  const sensitiveFields = [
+    'password', 'passwordHash', 'hash',
+    'access_token', 'refresh_token', 'token',
+    'secret', 'key', 'privateKey',
+    'sessionSecret', 'apiKey',
+    'stripeSecretKey', 'webhookSecret'
+  ];
+  
+  const sanitized = { ...obj };
+  
+  sensitiveFields.forEach(field => {
+    if (sanitized.hasOwnProperty(field)) {
+      delete sanitized[field];
+    }
+  });
+  
+  return sanitized;
+}
+
 export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {

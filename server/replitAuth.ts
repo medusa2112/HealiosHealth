@@ -44,14 +44,20 @@ export function getSession() {
   });
 }
 
+// SECURITY: Store tokens in session, not on user object to prevent exposure
 function updateUserSession(
   user: any,
   tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers
 ) {
   user.claims = tokens.claims();
-  user.access_token = tokens.access_token;
-  user.refresh_token = tokens.refresh_token;
+  // SECURITY FIX: Store tokens in internal properties to prevent JSON serialization exposure
+  user._internal_access_token = tokens.access_token;
+  user._internal_refresh_token = tokens.refresh_token;
   user.expires_at = user.claims?.exp;
+  
+  // DO NOT expose tokens as public properties:
+  // user.access_token = tokens.access_token; // REMOVED for security
+  // user.refresh_token = tokens.refresh_token; // REMOVED for security
 }
 
 async function upsertUser(
@@ -144,8 +150,9 @@ export async function setupAuth(app: Express) {
       lastName: (user as any).lastName,
       claims: (user as any).claims,
       userId: (user as any).id,
-      access_token: (user as any).access_token,
-      refresh_token: (user as any).refresh_token,
+      // SECURITY: Use internal token storage
+      _internal_access_token: (user as any)._internal_access_token,
+      _internal_refresh_token: (user as any)._internal_refresh_token,
       expires_at: (user as any).expires_at
     };
     console.log(`[REPLIT_AUTH] Serializing user: ${serializedUser.email} (${serializedUser.role})`);
@@ -162,8 +169,9 @@ export async function setupAuth(app: Express) {
             ...currentUser,
             claims: serializedUser.claims,
             userId: currentUser.id,
-            access_token: serializedUser.access_token,
-            refresh_token: serializedUser.refresh_token,
+            // SECURITY: Use internal token storage
+            _internal_access_token: serializedUser._internal_access_token,
+            _internal_refresh_token: serializedUser._internal_refresh_token,
             expires_at: serializedUser.expires_at
           };
           console.log(`[REPLIT_AUTH] Deserialized user: ${user.email} (${user.role})`);
@@ -215,7 +223,8 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     return next();
   }
 
-  const refreshToken = user.refresh_token;
+  // SECURITY: Get refresh token from internal storage
+  const refreshToken = (user as any)._internal_refresh_token;
   if (!refreshToken) {
     res.status(401).json({ message: "Unauthorized" });
     return;

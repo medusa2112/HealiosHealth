@@ -2,12 +2,15 @@
 import { storage } from './storage';
 import { determineUserRole } from './lib/auth';
 
+// SECURITY NOTE: These are development test users only!
+// In production, passwords should be properly hashed and never logged.
+
 export async function createTestUsers() {
   try {
     // Create admin user
     const adminUser = await storage.createUser({
       email: 'admin@healios.com',
-      password: 'admin123', // In production, this would be hashed
+      password: null, // OAuth-based auth - no password needed
       firstName: 'Admin',
       lastName: 'User',
       role: 'admin'
@@ -17,16 +20,16 @@ export async function createTestUsers() {
     // Create customer user
     const customerUser = await storage.createUser({
       email: 'customer@healios.com', 
-      password: 'customer123',
+      password: null, // OAuth-based auth - no password needed
       firstName: 'Customer',
       lastName: 'User',
       role: 'customer'
     });
     console.log('✅ Created customer user:', customerUser.email);
     
-    console.log('\n🔐 Phase 10 Test Users Ready:');
-    console.log('Admin: admin@healios.com / admin123');
-    console.log('Customer: customer@healios.com / customer123');
+    console.log('\n🔐 Phase 10 Test Users Ready (OAuth-based):');
+    console.log('Admin: admin@healios.com (use Replit OAuth)');
+    console.log('Customer: customer@healios.com (use Replit OAuth)');
     
   } catch (error) {
     console.error('❌ Error creating test users:', error);
