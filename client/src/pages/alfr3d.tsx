@@ -91,9 +91,7 @@ export default function Alfr3dDashboard() {
   // Start security scan mutation
   const scanMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest('/api/alfr3d/scan', {
-        method: 'POST',
-      });
+      const response = await apiRequest('POST', '/api/alfr3d/scan');
       return response.json();
     },
     onSuccess: () => {
