@@ -1,5 +1,5 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue, type SecurityScan, type InsertSecurityScan } from "@shared/schema";
-import { type FixPrompt, type FixEffectivenessAnalysis, type FixAttempt, type InsertFixAttempt } from "../../types/alfr3d";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue } from "@shared/schema";
+// Remove import of non-existent types/alfr3d module
 import { randomUUID } from "crypto";
 import { mockSecurityIssues } from "./security-seed";
 
@@ -118,7 +118,7 @@ export interface IStorage {
   }): Promise<{ logs: AdminLog[], total: number }>;
   
   // Reorder logs (Phase 13)
-  createReorderLog(log: InsertReorderLog): Promise<ReorderLog>;
+  createReorderLog(log: any): Promise<ReorderLog>;
   getReorderLogs(options?: { limit?: number; userId?: string; status?: string }): Promise<ReorderLog[]>;
   getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]>;
   
@@ -160,12 +160,12 @@ export interface IStorage {
   updateLastScanTimestamp(): Promise<void>;
   
   // ALFR3D Expert Features
-  updateSecurityIssueWithFixPrompt(id: string, fixPrompt: FixPrompt): Promise<SecurityIssue | undefined>;
+  updateSecurityIssueWithFixPrompt(id: string, fixPrompt: any): Promise<SecurityIssue | undefined>;
   archiveSecurityIssue(id: string, archivedBy: string): Promise<SecurityIssue | undefined>;
   unarchiveSecurityIssue(id: string): Promise<SecurityIssue | undefined>;
   getArchivedSecurityIssues(): Promise<SecurityIssue[]>;
-  recordFixAttempt(issueId: string, attempt: Omit<InsertFixAttempt, 'issueId'>): Promise<FixAttempt>;
-  getFixAttempts(issueId: string): Promise<FixAttempt[]>;
+  recordFixAttempt(issueId: string, attempt: any): Promise<any>;
+  getFixAttempts(issueId: string): Promise<any[]>;
   getSecurityIssueById(id: string): Promise<SecurityIssue | undefined>;
   
   // Phase 19: Email Events Tracking (Abandoned Cart + Reorder Reminders)

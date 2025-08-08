@@ -232,7 +232,7 @@ ${prompt.testingApproach}
                 </thead>
                 <tbody>
                   {issues.map((issue) => {
-                    const hasGeneratedPrompt = generatedPrompts[issue.id] || issue.fixPrompt;
+                    const hasGeneratedPrompt = generatedPrompts[issue.id];
                     
                     return (
                       <tr key={issue.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -242,21 +242,21 @@ ${prompt.testingApproach}
                           </Badge>
                         </td>
                         <td className="p-2">
-                          <Badge className={`text-xs px-1 py-0 ${getSeverityColor(issue.severity)}`}>
+                          <Badge className={`text-xs px-1 py-0 ${getSeverityColor('medium')}`}>
                             <span className="flex items-center gap-1">
-                              {getSeverityIcon(issue.severity)}
-                              {issue.severity}
+                              {getSeverityIcon('medium')}
+                              medium
                             </span>
                           </Badge>
                         </td>
                         <td className="p-2 max-w-40">
-                          <div className="truncate" title={issue.title}>
-                            {issue.title}
+                          <div className="truncate" title={issue.type}>
+                            {issue.type} - Line {issue.line}
                           </div>
                         </td>
                         <td className="p-2 max-w-32">
-                          <div className="truncate text-gray-600 dark:text-gray-400" title={issue.file}>
-                            {issue.file}
+                          <div className="truncate text-gray-600 dark:text-gray-400" title={issue.filePath}>
+                            {issue.filePath}
                           </div>
                         </td>
                         <td className="p-2">
@@ -266,10 +266,10 @@ ${prompt.testingApproach}
                         </td>
                         <td className="p-2">
                           <Badge 
-                            variant={issue.status === 'resolved' ? 'default' : 'secondary'} 
+                            variant={issue.fixed ? 'default' : 'secondary'} 
                             className="text-xs px-1 py-0"
                           >
-                            {issue.status}
+                            {issue.fixed ? 'fixed' : 'open'}
                           </Badge>
                         </td>
                         <td className="p-2">
@@ -296,8 +296,8 @@ ${prompt.testingApproach}
                             {hasGeneratedPrompt && (
                               <Button
                                 onClick={() => copyPromptToClipboard(
-                                  generatedPrompts[issue.id] || issue.fixPrompt, 
-                                  issue.title
+                                  generatedPrompts[issue.id], 
+                                  issue.type
                                 )}
                                 size="sm"
                                 variant="ghost"
@@ -325,7 +325,7 @@ ${prompt.testingApproach}
                                   <DialogHeader>
                                     <DialogTitle className="flex items-center gap-2">
                                       <Sparkles className="w-4 h-4" />
-                                      AI Fix Prompt: {issue.title}
+                                      AI Fix Prompt: {issue.type}
                                     </DialogTitle>
                                     <DialogDescription>
                                       Generated fix instructions for this security issue
@@ -336,7 +336,7 @@ ${prompt.testingApproach}
                                       <div>
                                         <h4 className="font-medium text-sm mb-2">Analysis</h4>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                                          {(generatedPrompts[issue.id] || issue.fixPrompt)?.analysis}
+                                          {generatedPrompts[issue.id]?.analysis || 'No analysis available'}
                                         </p>
                                       </div>
                                       
@@ -345,7 +345,7 @@ ${prompt.testingApproach}
                                       <div>
                                         <h4 className="font-medium text-sm mb-2">Fix Steps</h4>
                                         <ol className="list-decimal list-inside space-y-1 text-sm">
-                                          {((generatedPrompts[issue.id] || issue.fixPrompt)?.steps || []).map((step, index) => (
+                                          {(generatedPrompts[issue.id]?.steps || []).map((step, index) => (
                                             <li key={index} className="text-gray-600 dark:text-gray-400">
                                               {step}
                                             </li>
@@ -358,14 +358,14 @@ ${prompt.testingApproach}
                                       <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
                                           <h4 className="font-medium mb-1">Risk Level</h4>
-                                          <Badge className={getSeverityColor((generatedPrompts[issue.id] || issue.fixPrompt)?.riskLevel || 'medium')}>
-                                            {((generatedPrompts[issue.id] || issue.fixPrompt)?.riskLevel || 'unknown').toUpperCase()}
+                                          <Badge className={getSeverityColor(generatedPrompts[issue.id]?.riskLevel || 'medium')}>
+                                            {(generatedPrompts[issue.id]?.riskLevel || 'unknown').toUpperCase()}
                                           </Badge>
                                         </div>
                                         <div>
                                           <h4 className="font-medium mb-1">Estimated Time</h4>
                                           <p className="text-gray-600 dark:text-gray-400">
-                                            {(generatedPrompts[issue.id] || issue.fixPrompt)?.estimatedTime}
+                                            {generatedPrompts[issue.id]?.estimatedTime || 'Unknown'}
                                           </p>
                                         </div>
                                       </div>
@@ -375,7 +375,7 @@ ${prompt.testingApproach}
                                       <div>
                                         <h4 className="font-medium text-sm mb-2">Prerequisites</h4>
                                         <ul className="list-disc list-inside space-y-1 text-sm">
-                                          {((generatedPrompts[issue.id] || issue.fixPrompt)?.prerequisites || []).map((prereq, index) => (
+                                          {(generatedPrompts[issue.id]?.prerequisites || []).map((prereq, index) => (
                                             <li key={index} className="text-gray-600 dark:text-gray-400">
                                               {prereq}
                                             </li>
@@ -388,7 +388,7 @@ ${prompt.testingApproach}
                                       <div>
                                         <h4 className="font-medium text-sm mb-2">Testing Approach</h4>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                                          {(generatedPrompts[issue.id] || issue.fixPrompt)?.testingApproach}
+                                          {generatedPrompts[issue.id]?.testingApproach || 'No testing approach available'}
                                         </p>
                                       </div>
                                     </div>
@@ -396,8 +396,8 @@ ${prompt.testingApproach}
                                   <div className="flex justify-end gap-2 pt-4 border-t">
                                     <Button
                                       onClick={() => copyPromptToClipboard(
-                                        generatedPrompts[issue.id] || issue.fixPrompt,
-                                        issue.title
+                                        generatedPrompts[issue.id],
+                                        issue.type
                                       )}
                                       variant="outline"
                                     >
