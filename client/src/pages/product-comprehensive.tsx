@@ -27,7 +27,7 @@ import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
 import marineCollagenImg from '@assets/Collagen Complex__1754395222287.png';
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
-import biotinHairImg from '@assets/generated_images/Editorial_flowing_hair_beauty_c3473199.png';
+import biotinHairImg from '@assets/generated_images/Luxury_blonde_hair_editorial_1988adaba84.png';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
