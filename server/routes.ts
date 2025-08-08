@@ -10,7 +10,7 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
-import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess } from "./lib/auth";
+import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess, validateCustomerEmail } from "./lib/auth";
 import { setupAuth } from "./replitAuth";
 import authRoutes from "./routes/auth";
 // All auth middleware now consolidated in ./lib/auth
@@ -306,7 +306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
   // Create Stripe Checkout Session for external payment processing
-  app.post("/api/create-checkout-session", validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
+  app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
     try {
       const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = req.body;
       
@@ -533,7 +533,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/orders", validateOrderAccess, rateLimit(10, 300000), async (req, res) => {
+  app.post("/api/orders", validateCustomerEmail, validateOrderAccess, rateLimit(10, 300000), async (req, res) => {
     try {
       const validatedData = insertOrderSchema.parse(req.body);
       

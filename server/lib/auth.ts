@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { body, validationResult } from 'express-validator';
 import { storage } from '../storage';
 import { SecurityLogger } from './security-logger';
 import type { User } from '@shared/schema';
@@ -196,9 +197,29 @@ export const requireSessionOrAuth = async (req: Request, res: Response, next: Ne
   }
 };
 
+// Validation middleware for customer email
+export const validateCustomerEmail = [
+  body('customerEmail')
+    .isEmail()
+    .withMessage('Must be a valid email address')
+    .normalizeEmail()
+    .trim()
+    .escape(),
+];
+
 // Order access validation
 export const validateOrderAccess = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
+    // Now safely destructure the validated data
     const { customerEmail } = req.body;
     
     // If user is authenticated, must match their email
