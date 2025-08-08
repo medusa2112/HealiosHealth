@@ -28,6 +28,7 @@ import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vineg
 import marineCollagenImg from '@assets/studio-shot-of-a-beautiful-young-woman-posing-agai-2025-04-05-20-57-59-utc_1754676717677.jpg';
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 import biotinHairImg from '@assets/woman-hair-and-beauty-cosmetics-for-healthy-salon-2025-04-06-07-33-29-utc (1) (1)_1754676479670.jpg';
+import prenatalWellnessPortraitImg from '@assets/portrait-hug-or-sitting-pregnancy-friends-in-unde-2025-04-06-07-18-00-utc (1) (1)_1754677156689.jpg';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
@@ -216,6 +217,9 @@ const createProductSVG = (productId: string): string => {
   }
   if (productId === 'collagen-complex') {
     return marineCollagenImg;
+  }
+  if (productId === 'folic-acid-400' || productId === 'folic-acid') {
+    return prenatalWellnessPortraitImg;
   }
   
   const svgs = {
