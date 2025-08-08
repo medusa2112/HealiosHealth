@@ -11,7 +11,8 @@ export enum SecurityEventType {
   ADMIN_ACTION = 'admin_action',
   FAILED_AUTH_ATTEMPT = 'failed_auth_attempt',
   PASSWORD_CHANGE = 'password_change',
-  ACCOUNT_LOCKOUT = 'account_lockout'
+  ACCOUNT_LOCKOUT = 'account_lockout',
+  SECURITY_FIX_APPLIED = 'security_fix_applied'
 }
 
 export interface SecurityEvent {
@@ -24,6 +25,16 @@ export interface SecurityEvent {
   requestMethod?: string;
   details?: Record<string, any>;
   severity: 'low' | 'medium' | 'high' | 'critical';
+}
+
+export interface SecurityFixLog {
+  route: string;
+  file: string;
+  type: 'unauthRoute' | 'unvalidatedInput' | 'duplicateRoute' | 'rateLimitBypass' | 'authBypass' | 'other';
+  fixedBy: string;
+  timestamp: string;
+  severity?: 'low' | 'medium' | 'high' | 'critical';
+  details?: Record<string, any>;
 }
 
 export class SecurityLogger {
@@ -166,5 +177,59 @@ export class SecurityLogger {
         timestamp: new Date().toISOString()
       }
     });
+  }
+
+  static async logSecurityFix(fixLog: SecurityFixLog): Promise<void> {
+    try {
+      // Format for admin log system
+      const logEntry = {
+        adminId: fixLog.fixedBy,
+        actionType: 'security_fix_applied',
+        targetType: 'security_vulnerability',
+        targetId: `${fixLog.type}_${fixLog.route.replace(/[^a-zA-Z0-9]/g, '_')}`,
+        details: JSON.stringify({
+          route: fixLog.route,
+          file: fixLog.file,
+          fixType: fixLog.type,
+          fixedBy: fixLog.fixedBy,
+          timestamp: fixLog.timestamp,
+          severity: fixLog.severity || 'medium',
+          ...fixLog.details
+        })
+      };
+
+      await storage.createAdminLog(logEntry);
+
+      // Also log as security event
+      await this.logSecurityEvent({
+        type: SecurityEventType.SECURITY_FIX_APPLIED,
+        severity: fixLog.severity || 'medium',
+        details: {
+          route: fixLog.route,
+          file: fixLog.file,
+          fixType: fixLog.type,
+          fixedBy: fixLog.fixedBy,
+          timestamp: fixLog.timestamp,
+          ...fixLog.details
+        }
+      });
+
+      // Console log with appropriate formatting
+      const fixTypeEmoji = {
+        unauthRoute: '🔒',
+        unvalidatedInput: '🛡️',
+        duplicateRoute: '🔄',
+        rateLimitBypass: '⏱️',
+        authBypass: '🚫',
+        other: '🔧'
+      };
+
+      const emoji = fixTypeEmoji[fixLog.type] || '🔧';
+      const severity = (fixLog.severity || 'medium').toUpperCase();
+      console.log(`${emoji} SECURITY FIX [${severity}]: ${fixLog.type} fixed in ${fixLog.route} by ${fixLog.fixedBy}`);
+      
+    } catch (error) {
+      console.error('Failed to log security fix:', error);
+    }
   }
 }
