@@ -268,29 +268,6 @@ export class MemStorage implements IStorage {
 
   private seedData() {
     const sampleProducts: Product[] = [
-      // Healios Products matching frontend
-      {
-        id: "apple-cider-vinegar",
-        name: "Apple Cider Vinegar + Ginger Gummies (Natural Apple Flavour) — 500mg ACV with the Mother",
-        description: "Support your gut daily with these delicious apple-flavoured gummies. Each serving delivers 500mg of raw Apple Cider Vinegar with the Mother plus 10mg of soothing ginger extract to support digestion, metabolism, and natural detox — without the harsh vinegar taste.\n\nMade for daily balance, these vegan-friendly gummies offer a gentler, more convenient way to experience the benefits of ACV — no enamel damage, no burning aftertaste.\n\nWhy it works:\n• ACV with the Mother — promotes healthy gut flora & digestion\n• Ginger extract — traditionally used to ease bloating and support motility\n• Natural flavour — crisp apple taste with no artificial nasties\n\n✓ Vegan ✓ Gluten-Free ✓ Gelatin-Free ✓ No Artificial Colours or Preservatives\n\nNutritional Information (Per 2 Gummies / Daily Serving):\n• Apple Cider Vinegar (with the Mother): 500mg\n• Ginger Extract: 10mg\n\nIngredients: Glucose Syrup, Sugar, Water, Pre-mix (Ginger Extract, Mother Apple Cider Vinegar), Pectin, Citric Acid, Sodium Citrate, Anthocyanadins, Sodium Copper Chlorophyll, Coconut Oil, Carnauba Wax, Natural Apple Flavour.\n\nHow to Take: Take two (2) gummies daily. Can be taken with or without food.",
-        price: "299.00",
-        originalPrice: null,
-        imageUrl: "/assets/healios-health124.png",
-        categories: ["Gummies", "Digestive"],
-        rating: "4.8",
-        reviewCount: 23,
-        inStock: true,
-        stockQuantity: 15,
-        featured: true,
-        sizes: null,
-        colors: null,
-        gender: null,
-        type: 'supplement',
-        bottleCount: 60,
-        dailyDosage: 2,
-        supplyDays: 30,
-        tags: ["digestive", "gut-health", "adult"],
-      },
       {
         id: "vitamin-d3",
         name: "Vitamin D3 4000 IU Gummies (Orange Flavour)",
@@ -630,13 +607,6 @@ export class MemStorage implements IStorage {
         sizes: null,
         colors: null,
         gender: null,
-        type: 'supplement',
-        bottleCount: 60,
-        dailyDosage: 2,
-        supplyDays: 30,
-        tags: ["children", "multivitamin", "kids-safe", "under-16"],
-      },
-
     ];
 
     sampleProducts.forEach(product => {
@@ -647,19 +617,6 @@ export class MemStorage implements IStorage {
   // Phase 14: Seed product variants data
   private seedProductVariants() {
     const variants: ProductVariant[] = [
-      // Magnesium variants (60 caps vs 90 caps)
-      {
-        id: "magnesium-60-caps",
-        productId: "magnesium-gummies",
-        name: "60 Caps",
-        price: "349.00",
-        sku: "MAG-60-CAPS",
-        imageUrl: null,
-        stockQuantity: 25,
-        inStock: true,
-        isDefault: true,
-        createdAt: new Date().toISOString(),
-      },
       {
         id: "magnesium-90-caps",
         productId: "magnesium-gummies",
@@ -716,12 +673,6 @@ export class MemStorage implements IStorage {
         name: "1000mg ACV",
         price: "399.00",
         sku: "ACV-1000-60",
-        imageUrl: null,
-        stockQuantity: 8,
-        inStock: true,
-        isDefault: false,
-        createdAt: new Date().toISOString(),
-      },
     ];
 
     for (const variant of variants) {
@@ -730,22 +681,6 @@ export class MemStorage implements IStorage {
 
     // Seed sample articles
     const sampleArticles: Article[] = [
-      {
-        id: "understanding-magnesium-benefits",
-        title: "Understanding Magnesium: The Essential Mineral for Sleep and Muscle Function",
-        slug: "understanding-magnesium-benefits",
-        metaDescription: "Discover how magnesium supports better sleep, muscle function, and overall wellness. Learn about the different forms and optimal dosing strategies.",
-        content: "<p>Magnesium is one of the most important minerals for human health, yet deficiency is surprisingly common. This essential nutrient plays a role in over 300 enzymatic reactions in the body, making it crucial for energy production, muscle function, and nervous system health.</p><h2>Why Magnesium Matters for Sleep</h2><p>Research consistently shows that magnesium plays a crucial role in sleep regulation. It activates the parasympathetic nervous system, which is responsible for helping you feel calm and relaxed. Magnesium also regulates melatonin production and maintains healthy levels of GABA, a neurotransmitter that promotes sleep.</p><p>Clinical studies have demonstrated that magnesium supplementation can significantly improve sleep quality, reduce sleep onset time, and increase sleep efficiency - particularly beneficial for older adults who often experience age-related sleep disturbances.</p><h2>Muscle Function and Recovery</h2><p>For athletes and active individuals, magnesium is essential for proper muscle contraction and relaxation. It helps prevent muscle cramps and supports post-exercise recovery by reducing inflammation and oxidative stress.</p><h2>Choosing the Right Form</h2><p>Not all magnesium supplements are created equal. The form of magnesium affects absorption and bioavailability:</p><ul><li><strong>Magnesium Glycinate:</strong> Highly bioavailable and gentle on the stomach, ideal for sleep support</li><li><strong>Magnesium Citrate:</strong> Good absorption, may have mild laxative effects</li><li><strong>Magnesium Oxide:</strong> Lower bioavailability, primarily used for constipation relief</li></ul><p>Our magnesium gummies combine both citrate and glycinate forms to optimize absorption while maintaining digestive comfort.</p>",
-        research: "Multiple clinical trials have shown magnesium supplementation improves sleep quality scores by 15-25% and reduces sleep onset time by an average of 17 minutes. A 2012 study in the Journal of Research in Medical Sciences found that magnesium supplementation significantly improved insomnia severity, sleep time, and early morning awakening.",
-        sources: [
-          "https://pubmed.ncbi.nlm.nih.gov/23853635/",
-          "https://pubmed.ncbi.nlm.nih.gov/32162142/",
-          "https://pubmed.ncbi.nlm.nih.gov/24264568/"
-        ],
-        category: "Minerals",
-        author: "Healios Research Team",
-        readTime: "5",
-        published: true,
         createdAt: "2024-01-15T10:00:00Z"
       },
       {
@@ -872,8 +807,6 @@ export class MemStorage implements IStorage {
         author: "Healios Research Team",
         readTime: "7",
         published: true,
-        createdAt: "2025-08-03T14:00:00Z"
-      }
     ];
 
     sampleArticles.forEach(article => {
@@ -886,21 +819,6 @@ export class MemStorage implements IStorage {
 
   private seedProductVariants() {
     const sampleVariants: ProductVariant[] = [
-      // Vitamin D3 variants (different strengths)
-      {
-        id: "vitamin-d3-1000iu-variant",
-        productId: "vitamin-d3",
-        name: "1000 IU",
-        sku: "VD3-1000",
-        type: "strength",
-        attributes: { strength: "1000 IU", quantity: 60 },
-        price: 14.99,
-        stockQuantity: 100,
-        inStock: true,
-        isDefault: true,
-        imageUrl: null,
-        createdAt: "2025-08-06T00:00:00Z"
-      },
       {
         id: "vitamin-d3-2000iu-variant",
         productId: "vitamin-d3",
@@ -1003,9 +921,6 @@ export class MemStorage implements IStorage {
         stockQuantity: 25,
         inStock: true,
         isDefault: true,
-        imageUrl: null,
-        createdAt: "2025-08-06T00:00:00Z"
-      }
     ];
 
     sampleVariants.forEach(variant => {
@@ -1735,14 +1650,6 @@ export class MemStorage implements IStorage {
     // Only seed if users don't already exist (prevent reset on reload)
     if (this.users.size === 0) {
       const testUsers: User[] = [
-        {
-          id: "admin-user-id",
-          email: "dn@thefourths.com",
-          password: null, // OAuth users don't have passwords
-          firstName: "DN",
-          lastName: "Admin",
-          role: "admin",
-          createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
         {
@@ -1753,8 +1660,6 @@ export class MemStorage implements IStorage {
           lastName: "User",
           role: "customer",
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        }
       ];
 
       testUsers.forEach(user => {
@@ -1771,15 +1676,6 @@ export class MemStorage implements IStorage {
   private seedAbandonedCarts() {
     const now = new Date();
     const sampleCarts = [
-      {
-        id: "cart_abandoned_1h",
-        userId: null,
-        sessionToken: "sess_guest_1h_ago",
-        items: JSON.stringify([
-          { productId: "vitamin-d3", name: "Vitamin D3 4000 IU Gummies", price: 379, quantity: 2 },
-          { productId: "magnesium", name: "Magnesium Complex", price: 329, quantity: 1 }
-        ]),
-        totalAmount: "1087.00",
         currency: "ZAR",
         createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
         lastUpdated: new Date(now.getTime() - 1 * 60 * 60 * 1000).toISOString(),
@@ -1828,8 +1724,6 @@ export class MemStorage implements IStorage {
         createdAt: new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString(),
         lastUpdated: new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString(),
         convertedToOrder: false,
-        stripeSessionId: null,
-      }
     ];
 
     sampleCarts.forEach(cart => {
@@ -1915,8 +1809,6 @@ export class MemStorage implements IStorage {
           action: "Database cleanup",
           recordsProcessed: 1250
         }),
-        timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(),
-      }
     ];
 
     sampleLogs.forEach(log => {
@@ -2017,8 +1909,6 @@ export class MemStorage implements IStorage {
           completedAt: new Date(now.getTime() - 8 * 60 * 60 * 1000).toISOString(),
           automatedTrigger: 'subscription_renewal',
           customerEmail: 'customer@healios.com'
-        }
-      }
     ];
 
     sampleReorders.forEach(reorder => {
@@ -2030,7 +1920,7 @@ export class MemStorage implements IStorage {
 
   // Phase 16: Seed bundles for testing
   private seedBundles() {
-    const sampleBundles: InsertBundle[] = [
+    const sampleBundles: any[] = [
       {
         id: "wellness-starter-pack",
         name: "Wellness Starter Pack",
@@ -2055,8 +1945,6 @@ export class MemStorage implements IStorage {
         isActive: true,
         maxQuantity: 30,
         expiresAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-        imageUrl: "/assets/healios-health39.png"
-      }
     ];
 
     const bundleProducts = [
