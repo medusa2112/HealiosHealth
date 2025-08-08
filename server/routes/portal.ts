@@ -197,7 +197,9 @@ router.post("/orders/:id/reorder", async (req, res) => {
       orderStatus: "processing"
     };
     
-    const newOrder = await storage.createOrder(newOrderData);
+    // SECURITY: Validate order data before database insertion
+    const validatedOrderData = insertOrderSchema.parse(newOrderData);
+    const newOrder = await storage.createOrder(validatedOrderData);
     
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({

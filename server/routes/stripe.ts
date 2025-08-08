@@ -1,6 +1,7 @@
 import express from "express";
 import { stripe } from "../lib/stripe";
 import { storage } from "../storage";
+import { insertOrderSchema } from "@shared/schema";
 
 const router = express.Router();
 
@@ -296,7 +297,9 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
                   notes: `Subscription renewal - ${dbSubscription.id}`,
                 };
 
-                await storage.createOrder(orderData);
+                // SECURITY: Validate order data before database insertion
+                const validatedOrderData = insertOrderSchema.parse(orderData);
+                await storage.createOrder(validatedOrderData);
                 console.log("Created order for subscription renewal:", dbSubscription.id);
               } catch (orderError) {
                 console.error("Failed to create order for subscription renewal:", orderError);

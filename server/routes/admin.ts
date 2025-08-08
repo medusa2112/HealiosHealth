@@ -2,7 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
-import { products } from '@shared/schema';
+import { products, insertProductSchema } from '@shared/schema';
 import { db } from '../db';
 import { eq, sql } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
@@ -193,7 +193,9 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
       reviewCount: 0
     };
 
-    const [product] = await db.insert(products).values(productData).returning();
+    // SECURITY: Validate product data before database insertion
+    const validatedProductData = insertProductSchema.parse(productData);
+    const [product] = await db.insert(products).values(validatedProductData).returning();
     
     // Log admin action (no auth required)
     await AdminLogger.logProductAction(

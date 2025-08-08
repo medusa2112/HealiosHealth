@@ -4,6 +4,7 @@ import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
+import { insertUserSchema } from '@shared/schema';
 
 const router = express.Router();
 
@@ -115,12 +116,16 @@ router.post('/mock-login', async (req, res) => {
     if (!user) {
       // Create new user
       const role = determineUserRole(email);
-      user = await storage.createUser({
+      
+      // SECURITY: Validate user data before database insertion
+      const userData = {
         email,
         firstName: firstName || '',
         lastName: lastName || '',
         role
-      });
+      };
+      const validatedUserData = insertUserSchema.parse(userData);
+      user = await storage.createUser(validatedUserData);
     }
 
     // Set session

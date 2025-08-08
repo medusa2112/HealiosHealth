@@ -395,7 +395,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           : orderData.totalAmount
       };
 
-      const order = await storage.createOrder(finalOrderData);
+      // SECURITY: Validate order data before database insertion
+      const validatedOrderData = insertOrderSchema.parse(finalOrderData);
+      const order = await storage.createOrder(validatedOrderData);
       
       // Update stock for each item
       const orderItems = JSON.parse(orderData.orderItems);
@@ -469,8 +471,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { orderData, returnUrl } = req.body;
       
+      // SECURITY: Validate order data before database insertion
+      const validatedOrderData = insertOrderSchema.parse(orderData);
+      
       // Create order first
-      const order = await storage.createOrder(orderData);
+      const order = await storage.createOrder(validatedOrderData);
       
       // Update stock
       const orderItems = JSON.parse(orderData.orderItems);
