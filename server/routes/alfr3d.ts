@@ -78,7 +78,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     // Update the issue with the generated prompt
     await storage.updateSecurityIssueWithFixPrompt(id, fixPrompt);
     
-    console.log(`[ALFR3D] ✓ Generated fix prompt for issue: ${issue.title}`);
+    console.log(`[ALFR3D] ✓ Generated fix prompt for issue: ${issue.id}`);
     
     res.json({
       success: true,
@@ -90,7 +90,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     console.error('[ALFR3D] Error generating fix prompt:', error);
     res.status(500).json({ 
       error: "Failed to generate AI fix prompt. Please try again.",
-      details: error.message 
+      details: error instanceof Error ? error.message : 'Unknown error' 
     });
   }
 });
@@ -146,7 +146,7 @@ router.post("/scan", async (req, res) => {
                   description: description.replace(/"/g, '').trim(),
                   severity: severity.trim() as 'low' | 'medium' | 'high' | 'critical',
                   file: file.trim(),
-                  line: parseInt(lineNumber) || null,
+                  line: parseInt(lineNumber) || 0,
                   snippet: snippet.replace(/^"|"$/g, '').trim(),
                   status: fixed.trim() === 'true' ? 'resolved' : 'open',
                   createdAt: new Date().toISOString(),
@@ -161,7 +161,7 @@ router.post("/scan", async (req, res) => {
             console.log(`[ALFR3D] Updated ${updatedIssues.length} security issues in storage`);
             
           } catch (csvError) {
-            console.warn('[ALFR3D] Could not read/parse CSV file:', csvError.message);
+            console.warn('[ALFR3D] Could not read/parse CSV file:', csvError instanceof Error ? csvError.message : csvError);
             // Continue anyway - the scan might not have found issues
           }
         } else {

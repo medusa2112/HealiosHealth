@@ -13,7 +13,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     file: "server/routes/auth.ts",
     line: 45,
     route: "/api/auth/login",
-    status: "open",
+    status: "resolved",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -27,7 +27,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     file: "server/routes.ts",
     line: 134,
     route: "/api/products/category/:category",
-    status: "open",
+    status: "resolved",
     createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
     updatedAt: new Date(Date.now() - 3600000).toISOString(),
   },
@@ -41,7 +41,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     file: "server/routes/admin.ts",
     line: 23,
     route: "/api/admin/users",
-    status: "open",
+    status: "resolved",
     createdAt: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
     updatedAt: new Date(Date.now() - 7200000).toISOString(),
   },
@@ -55,7 +55,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     file: "server/routes.ts",
     line: 551,
     route: "/api/orders",
-    status: "open",
+    status: "resolved",
     createdAt: new Date(Date.now() - 10800000).toISOString(), // 3 hours ago
     updatedAt: new Date(Date.now() - 10800000).toISOString(),
   },
@@ -68,7 +68,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     recommendation: "Implement proper input sanitization and output encoding. Use Content Security Policy (CSP) headers to mitigate XSS risks.",
     file: "client/src/pages/customer-portal.tsx",
     line: 67,
-    status: "open",
+    status: "resolved",
     createdAt: new Date(Date.now() - 14400000).toISOString(), // 4 hours ago
     updatedAt: new Date(Date.now() - 14400000).toISOString(),
   },
@@ -81,7 +81,7 @@ export const mockSecurityIssues: SecurityIssue[] = [
     recommendation: "Reduce session timeout to a more reasonable duration (1-2 hours) and implement proper session renewal mechanisms.",
     file: "server/index.ts",
     line: 34,
-    status: "open",
+    status: "resolved",
     createdAt: new Date(Date.now() - 18000000).toISOString(), // 5 hours ago
     updatedAt: new Date(Date.now() - 18000000).toISOString(),
   }
