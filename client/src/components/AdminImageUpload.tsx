@@ -27,22 +27,11 @@ export default function AdminImageUpload({
       console.log('[ADMIN_IMAGE_UPLOAD] Requesting upload URL...');
       const response = await apiRequest("POST", "/api/admin/images/upload-url");
       
-      console.log('[ADMIN_IMAGE_UPLOAD] Response object:', response);
-      console.log('[ADMIN_IMAGE_UPLOAD] Response type:', typeof response);
-      console.log('[ADMIN_IMAGE_UPLOAD] Response status:', response.status);
-      console.log('[ADMIN_IMAGE_UPLOAD] Response ok:', response.ok);
+      console.log('[ADMIN_IMAGE_UPLOAD] Response received:', response);
       
-      let data;
-      try {
-        const responseText = await response.text();
-        console.log('[ADMIN_IMAGE_UPLOAD] Response text:', responseText);
-        data = JSON.parse(responseText);
-        console.log('[ADMIN_IMAGE_UPLOAD] Parsed data:', data);
-      } catch (parseError) {
-        console.error('[ADMIN_IMAGE_UPLOAD] Failed to parse response:', parseError);
-        console.error('[ADMIN_IMAGE_UPLOAD] Response was:', response);
-        throw new Error(`Failed to parse upload URL response: ${parseError}`);
-      }
+      // Parse the JSON response
+      const data = await response.json();
+      console.log('[ADMIN_IMAGE_UPLOAD] Parsed data:', data);
       
       if (!data.uploadURL) {
         console.error('[ADMIN_IMAGE_UPLOAD] No uploadURL in response:', data);
@@ -84,16 +73,9 @@ export default function AdminImageUpload({
       console.log('[ADMIN_IMAGE_UPLOAD] Confirming upload with URL:', uploadURL);
       const confirmResponse = await apiRequest("POST", "/api/admin/images/confirm", { uploadURL });
       
-      let confirmData;
-      try {
-        const confirmText = await confirmResponse.text();
-        console.log('[ADMIN_IMAGE_UPLOAD] Confirm response text:', confirmText);
-        confirmData = JSON.parse(confirmText);
-        console.log('[ADMIN_IMAGE_UPLOAD] Confirm parsed data:', confirmData);
-      } catch (parseError) {
-        console.error('[ADMIN_IMAGE_UPLOAD] Failed to parse confirm response:', parseError);
-        throw new Error(`Failed to parse confirm response: ${parseError}`);
-      }
+      // Parse the JSON response
+      const confirmData = await confirmResponse.json();
+      console.log('[ADMIN_IMAGE_UPLOAD] Confirm parsed data:', confirmData);
 
       if (!confirmData.imageUrl) {
         console.error('[ADMIN_IMAGE_UPLOAD] No imageUrl in confirmation response:', confirmData);
