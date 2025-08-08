@@ -288,16 +288,16 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
     const productData = {
       name: name.trim(),
       description: description.trim(),
-      price: parseFloat(price).toString(),
-      originalPrice: originalPrice ? parseFloat(originalPrice).toString() : null,
+      price: parseFloat(price.toString()).toString(),
+      originalPrice: originalPrice ? parseFloat(originalPrice.toString()).toString() : null,
       imageUrl: imageUrl.trim(),
       categories: Array.isArray(categories) ? categories : [categories],
-      stockQuantity: parseInt(stockQuantity) || 0,
+      stockQuantity: parseInt(stockQuantity.toString()) || 0,
       featured: Boolean(featured),
       type: type || 'supplement',
-      bottleCount: bottleCount ? parseInt(bottleCount) : null,
-      dailyDosage: dailyDosage ? parseInt(dailyDosage) : null,
-      supplyDays: supplyDays ? parseInt(supplyDays) : null,
+      bottleCount: bottleCount ? parseInt(bottleCount.toString()) : null,
+      dailyDosage: dailyDosage ? parseInt(dailyDosage.toString()) : null,
+      supplyDays: supplyDays ? parseInt(supplyDays.toString()) : null,
       inStock: true,
       rating: "5.0",
       reviewCount: 0
@@ -368,17 +368,17 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     };
     if (name !== undefined) updates.name = name.trim();
     if (description !== undefined) updates.description = description.trim();
-    if (price !== undefined) updates.price = parseFloat(price).toString();
-    if (originalPrice !== undefined) updates.originalPrice = originalPrice ? parseFloat(originalPrice).toString() : null;
+    if (price !== undefined) updates.price = parseFloat(price.toString()).toString();
+    if (originalPrice !== undefined) updates.originalPrice = originalPrice ? parseFloat(originalPrice.toString()).toString() : null;
     if (imageUrl !== undefined) updates.imageUrl = imageUrl.trim();
     if (categories !== undefined) updates.categories = Array.isArray(categories) ? categories : [categories];
-    if (stockQuantity !== undefined) updates.stockQuantity = parseInt(stockQuantity) || 0;
+    if (stockQuantity !== undefined) updates.stockQuantity = parseInt(stockQuantity.toString()) || 0;
     if (featured !== undefined) updates.featured = Boolean(featured);
     if (inStock !== undefined) updates.inStock = Boolean(inStock);
     if (type !== undefined) updates.type = type;
-    if (bottleCount !== undefined) updates.bottleCount = bottleCount ? parseInt(bottleCount) : null;
-    if (dailyDosage !== undefined) updates.dailyDosage = dailyDosage ? parseInt(dailyDosage) : null;
-    if (supplyDays !== undefined) updates.supplyDays = supplyDays ? parseInt(supplyDays) : null;
+    if (bottleCount !== undefined) updates.bottleCount = bottleCount ? parseInt(bottleCount.toString()) : null;
+    if (dailyDosage !== undefined) updates.dailyDosage = dailyDosage ? parseInt(dailyDosage.toString()) : null;
+    if (supplyDays !== undefined) updates.supplyDays = supplyDays ? parseInt(supplyDays.toString()) : null;
 
     const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
     if (!product) {
