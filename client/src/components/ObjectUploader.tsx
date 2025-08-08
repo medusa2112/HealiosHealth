@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Uppy from "@uppy/core";
 import { DashboardModal } from "@uppy/react";
@@ -59,33 +59,87 @@ export function ObjectUploader({
   children,
 }: ObjectUploaderProps) {
   const [showModal, setShowModal] = useState(false);
-  const [uppy] = useState(() =>
-    new Uppy({
+  const modalRef = useRef({ setShowModal });
+  const callbacksRef = useRef({ onGetUploadParameters, onComplete });
+  
+  // Update refs when props change
+  useEffect(() => {
+    modalRef.current.setShowModal = setShowModal;
+    callbacksRef.current.onGetUploadParameters = onGetUploadParameters;
+    callbacksRef.current.onComplete = onComplete;
+  }, [onGetUploadParameters, onComplete]);
+  
+  const [uppy] = useState(() => {
+    const uppyInstance = new Uppy({
       restrictions: {
         maxNumberOfFiles,
         maxFileSize,
       },
       autoProceed: false,
-    })
-      .use(AwsS3, {
-        shouldUseMultipart: false,
-        getUploadParameters: onGetUploadParameters,
-      })
-      .on("complete", (result) => {
-        onComplete?.(result);
-      })
-  );
+    });
+    
+    uppyInstance.use(AwsS3, {
+      shouldUseMultipart: false,
+      getUploadParameters: async (file) => {
+        console.log('[OBJECT_UPLOADER] Getting upload parameters for file:', file.name);
+        try {
+          const params = await callbacksRef.current.onGetUploadParameters();
+          console.log('[OBJECT_UPLOADER] Got upload parameters:', params);
+          return params;
+        } catch (error) {
+          console.error('[OBJECT_UPLOADER] Failed to get upload parameters:', error);
+          throw error;
+        }
+      },
+    });
+    
+    uppyInstance.on("complete", (result) => {
+      console.log('[OBJECT_UPLOADER] Upload complete:', result);
+      if (callbacksRef.current.onComplete) {
+        callbacksRef.current.onComplete(result);
+      }
+      // Close modal after successful upload
+      modalRef.current.setShowModal(false);
+    });
+    
+    uppyInstance.on("error", (error) => {
+      console.error('[OBJECT_UPLOADER] Upload error:', error);
+    });
+    
+    return uppyInstance;
+  });
+  
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      uppy.cancelAll();
+    };
+  }, [uppy]);
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('[OBJECT_UPLOADER] Button clicked, opening modal');
+    setShowModal(true);
+  };
 
   return (
     <div>
-      <Button onClick={() => setShowModal(true)} className={buttonClassName}>
+      <Button 
+        type="button"
+        onClick={handleButtonClick} 
+        className={buttonClassName}
+      >
         {children}
       </Button>
 
       <DashboardModal
         uppy={uppy}
         open={showModal}
-        onRequestClose={() => setShowModal(false)}
+        onRequestClose={() => {
+          console.log('[OBJECT_UPLOADER] Modal close requested');
+          setShowModal(false);
+        }}
         proudlyDisplayPoweredByUppy={false}
       />
     </div>

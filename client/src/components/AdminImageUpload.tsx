@@ -63,7 +63,8 @@ export default function AdminImageUpload({
       }
 
       const uploadedFile = result.successful[0];
-      const uploadURL = uploadedFile.uploadURL;
+      console.log('[ADMIN_IMAGE_UPLOAD] Uploaded file data:', uploadedFile);
+      const uploadURL = uploadedFile.uploadURL || (uploadedFile as any).url;
 
       if (!uploadURL) {
         throw new Error("No upload URL in result");
