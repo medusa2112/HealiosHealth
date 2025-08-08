@@ -17,9 +17,18 @@ import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp
 interface AdminStats {
   totalProducts: number;
   totalOrders: number;
+  totalRevenue: number;
   totalQuizCompletions: number;
+  cartAbandonmentRate: number;
+  activeUsers: number;
   recentOrders: any[];
   lowStockProducts: Product[];
+  _metadata?: {
+    queryLimit: number;
+    ordersCount: number;
+    productsCount: number;
+    performanceWarning: string | null;
+  };
 }
 
 interface QuizAnalytics {
@@ -79,54 +88,116 @@ export default function AdminDashboard() {
         {activeTab === "overview" && (
           <div className="space-y-6">
             {statsLoading ? (
-              <div className="text-black dark:text-white">Loading stats...</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                {[...Array(6)].map((_, i) => (
+                  <Card key={i} className="animate-pulse">
+                    <CardHeader className="pb-2">
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mt-2"></div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Total Products
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-black dark:text-white">
-                      {stats?.totalProducts || 0}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
                       Total Orders
                     </CardTitle>
+                    <ShoppingCart className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-black dark:text-white">
-                      {stats?.totalOrders || 0}
+                      {stats?.totalOrders?.toLocaleString() || 0}
+                    </div>
+                    {stats?._metadata?.performanceWarning && (
+                      <div className="text-xs text-amber-600 mt-1">⚠️ Large dataset</div>
+                    )}
+                  </CardContent>
+                </Card>
+                
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Total Revenue
+                    </CardTitle>
+                    <DollarSign className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      R{stats?.totalRevenue?.toLocaleString() || '0.00'}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Completed orders only
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
-                  <CardHeader className="pb-2">
+                
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Quiz Completions
+                      Active Users
                     </CardTitle>
+                    <Users className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                      {stats?.activeUsers?.toLocaleString() || 0}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Last 30 days
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Cart Abandonment
+                    </CardTitle>
+                    <TrendingUp className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                      {stats?.cartAbandonmentRate?.toFixed(1) || '0.0'}%
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Last 30 days
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Total Products
+                    </CardTitle>
+                    <Package className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-black dark:text-white">
-                      {stats?.totalQuizCompletions || 0}
+                      {stats?.totalProducts?.toLocaleString() || 0}
                     </div>
                   </CardContent>
                 </Card>
-                <Card>
-                  <CardHeader className="pb-2">
+                
+                <Card className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Low Stock Items
+                      Low Stock Alert
                     </CardTitle>
+                    <Package className="w-4 h-4 text-red-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-red-600">
                       {stats?.lowStockProducts?.length || 0}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Under 5 items left
                     </div>
                   </CardContent>
                 </Card>

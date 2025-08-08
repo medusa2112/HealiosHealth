@@ -2,9 +2,9 @@ import express from 'express';
 import { z } from 'zod';
 import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
-import { products, insertProductSchema } from '@shared/schema';
+import { products, orders, insertProductSchema } from '@shared/schema';
 import { db } from '../db';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, desc, sum } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
 import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
@@ -48,12 +48,54 @@ router.get('/logs', requireAuth, async (req, res) => {
   }
 });
 
-// Admin Dashboard - Overview stats
+// Admin Dashboard - Overview stats with real-time data
 router.get('/', requireAuth, async (req, res) => {
   try {
+    // Query limit for performance with large datasets
+    const queryLimit = parseInt(req.query.limit as string) || 1000;
+    
     // Query database directly with proper serialization
     const dbProducts = await db.select().from(products);
-    const orders = []; // Orders table to be implemented
+    
+    // Query actual orders from database with pagination support
+    let dbOrders = [];
+    let totalRevenue = 0;
+    let totalOrdersCount = 0;
+    
+    try {
+      // Get order count first for performance
+      const orderCountResult = await db.execute(sql`SELECT COUNT(*) as count FROM orders`);
+      totalOrdersCount = parseInt(orderCountResult.rows[0]?.count || '0');
+      
+      // Get recent orders with limit
+      dbOrders = await db
+        .select({
+          id: orders.id,
+          customerEmail: orders.customerEmail,
+          customerName: orders.customerName,
+          totalAmount: orders.totalAmount,
+          currency: orders.currency,
+          paymentStatus: orders.paymentStatus,
+          orderStatus: orders.orderStatus,
+          createdAt: orders.createdAt
+        })
+        .from(orders)
+        .orderBy(desc(orders.createdAt))
+        .limit(Math.min(queryLimit, 100)); // Cap at 100 for dashboard performance
+        
+      // Calculate total revenue from completed orders only
+      const revenueResult = await db.execute(
+        sql`SELECT SUM(CAST(total_amount AS DECIMAL)) as total FROM orders WHERE payment_status = 'completed'`
+      );
+      totalRevenue = parseFloat(revenueResult.rows[0]?.total || '0');
+      
+    } catch (ordersError) {
+      console.log('Orders table query failed, using default values:', ordersError.message);
+      dbOrders = [];
+      totalRevenue = 0;
+      totalOrdersCount = 0;
+    }
+    
     let totalQuizCompletions = 0;
     
     // Try to get quiz completions
@@ -63,6 +105,22 @@ router.get('/', requireAuth, async (req, res) => {
     } catch (quizError) {
       console.log('Quiz results table not found, using default count');
       totalQuizCompletions = 0;
+    }
+
+    // Calculate cart abandonment rate
+    let abandonmentRate = 0;
+    try {
+      const cartResults = await db.execute(
+        sql`SELECT 
+          COUNT(CASE WHEN converted_to_order = false THEN 1 END) as abandoned,
+          COUNT(*) as total 
+          FROM carts 
+          WHERE created_at >= NOW() - INTERVAL '30 days'`
+      );
+      const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
+      abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
+    } catch (cartError) {
+      console.log('Cart abandonment calculation failed:', cartError.message);
     }
 
     // Serialize low stock products properly
@@ -76,16 +134,46 @@ router.get('/', requireAuth, async (req, res) => {
         imageUrl: product.imageUrl
       }));
 
+    // Calculate active users (customers who placed orders in last 30 days)
+    let activeUsers = 0;
+    try {
+      const activeUsersResult = await db.execute(
+        sql`SELECT COUNT(DISTINCT customer_email) as count FROM orders WHERE created_at >= NOW() - INTERVAL '30 days'`
+      );
+      activeUsers = parseInt(activeUsersResult.rows[0]?.count || '0');
+    } catch (activeUsersError) {
+      console.log('Active users calculation failed:', activeUsersError.message);
+    }
+
     res.json({
       totalProducts: dbProducts.length,
-      totalOrders: orders.length,
+      totalOrders: totalOrdersCount,
+      totalRevenue: Math.round(totalRevenue * 100) / 100, // Round to 2 decimal places
       totalQuizCompletions,
-      recentOrders: orders.slice(-5),
-      lowStockProducts
+      cartAbandonmentRate: Math.round(abandonmentRate * 10) / 10, // Round to 1 decimal place
+      activeUsers,
+      recentOrders: dbOrders.slice(0, 5).map(order => ({
+        id: order.id,
+        customerEmail: order.customerEmail,
+        customerName: order.customerName,
+        totalAmount: order.totalAmount,
+        currency: order.currency,
+        paymentStatus: order.paymentStatus,
+        orderStatus: order.orderStatus,
+        createdAt: order.createdAt
+      })),
+      lowStockProducts,
+      // Metadata for frontend performance handling
+      _metadata: {
+        queryLimit,
+        ordersCount: totalOrdersCount,
+        productsCount: dbProducts.length,
+        performanceWarning: totalOrdersCount > 500 ? 'Large dataset detected - consider pagination' : null
+      }
     });
   } catch (error) {
     console.error('Admin dashboard error:', error);
-    res.status(500).json({ message: 'Failed to load dashboard data' });
+    res.status(500).json({ message: 'Failed to load dashboard data', error: error.message });
   }
 });
 
@@ -371,13 +459,68 @@ router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'prod
   }
 });
 
-// Order Management
+// Order Management with pagination for large datasets
 router.get('/orders', requireAuth, async (req, res) => {
   try {
-    // We'll need to implement a method to get all orders
-    res.json({ message: 'Order management coming soon' });
+    const querySchema = z.object({
+      page: z.string().optional().transform(val => val ? parseInt(val, 10) : 1),
+      limit: z.string().optional().transform(val => val ? Math.min(parseInt(val, 10), 500) : 50), // Cap at 500 for performance
+      status: z.string().optional(),
+      paymentStatus: z.string().optional()
+    });
+    
+    const result = querySchema.safeParse(req.query);
+    if (!result.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: result.error.errors
+      });
+    }
+    
+    const { page, limit, status, paymentStatus } = result.data;
+    const offset = (page - 1) * limit;
+    
+    // Build where conditions
+    let whereConditions = [];
+    if (status) whereConditions.push(sql`order_status = ${status}`);
+    if (paymentStatus) whereConditions.push(sql`payment_status = ${paymentStatus}`);
+    
+    const whereClause = whereConditions.length > 0 
+      ? sql`WHERE ${sql.join(whereConditions, sql` AND `)}`
+      : sql``;
+    
+    // Get total count for pagination
+    const countQuery = sql`SELECT COUNT(*) as count FROM orders ${whereClause}`;
+    const countResult = await db.execute(countQuery);
+    const totalCount = parseInt(countResult.rows[0]?.count || '0');
+    
+    // Get paginated orders
+    const ordersQuery = sql`
+      SELECT * FROM orders 
+      ${whereClause}
+      ORDER BY created_at DESC 
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    
+    const ordersResult = await db.execute(ordersQuery);
+    const dbOrders = ordersResult.rows;
+    
+    res.json({
+      orders: dbOrders,
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        pages: Math.ceil(totalCount / limit),
+        hasNext: offset + limit < totalCount,
+        hasPrev: page > 1
+      },
+      filters: { status, paymentStatus },
+      performanceWarning: totalCount > 1000 ? 'Large dataset - consider using filters' : null
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch orders' });
+    console.error('Failed to fetch orders:', error);
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
   }
 });
 
@@ -508,6 +651,134 @@ router.get("/reorder-analytics", requireAuth, async (req, res) => {
   } catch (error) {
     console.error("Error calculating reorder analytics:", error);
     res.status(500).json({ error: "Failed to calculate reorder analytics" });
+  }
+});
+
+// Metrics API endpoint for dashboard (as requested in QA prompt)
+router.get('/metrics', requireAuth, async (req, res) => {
+  try {
+    // Use the same logic as main dashboard but with lighter response
+    const dbProducts = await db.select({ 
+      id: products.id, 
+      stockQuantity: products.stockQuantity 
+    }).from(products);
+    
+    let totalOrdersCount = 0;
+    let totalRevenue = 0;
+    
+    try {
+      const orderCountResult = await db.execute(sql`SELECT COUNT(*) as count FROM orders`);
+      totalOrdersCount = parseInt(orderCountResult.rows[0]?.count || '0');
+      
+      const revenueResult = await db.execute(
+        sql`SELECT SUM(CAST(total_amount AS DECIMAL)) as total FROM orders WHERE payment_status = 'completed'`
+      );
+      totalRevenue = parseFloat(revenueResult.rows[0]?.total || '0');
+    } catch (error) {
+      console.log('Orders metrics query failed:', error.message);
+    }
+    
+    let abandonmentRate = 0;
+    try {
+      const cartResults = await db.execute(
+        sql`SELECT 
+          COUNT(CASE WHEN converted_to_order = false THEN 1 END) as abandoned,
+          COUNT(*) as total 
+          FROM carts 
+          WHERE created_at >= NOW() - INTERVAL '30 days'`
+      );
+      const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
+      abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
+    } catch (error) {
+      console.log('Cart abandonment metrics failed:', error.message);
+    }
+    
+    let activeUsers = 0;
+    try {
+      const activeUsersResult = await db.execute(
+        sql`SELECT COUNT(DISTINCT customer_email) as count FROM orders WHERE created_at >= NOW() - INTERVAL '30 days'`
+      );
+      activeUsers = parseInt(activeUsersResult.rows[0]?.count || '0');
+    } catch (error) {
+      console.log('Active users metrics failed:', error.message);
+    }
+    
+    const lowStockCount = dbProducts.filter(p => (p.stockQuantity || 0) < 5).length;
+    
+    res.json({
+      totalProducts: dbProducts.length,
+      totalOrders: totalOrdersCount,
+      totalRevenue: Math.round(totalRevenue * 100) / 100,
+      cartAbandonmentRate: Math.round(abandonmentRate * 10) / 10,
+      activeUsers,
+      lowStockAlerts: lowStockCount,
+      lastUpdated: new Date().toISOString(),
+      // Performance metadata
+      performanceInfo: {
+        hasLargeDataset: totalOrdersCount > 500,
+        recommendsPagination: totalOrdersCount > 1000,
+        cacheRecommended: totalOrdersCount > 2000
+      }
+    });
+  } catch (error) {
+    console.error('Metrics API error:', error);
+    res.status(500).json({ message: 'Failed to fetch metrics', error: error.message });
+  }
+});
+
+// Orders summary endpoint for performance testing
+router.get('/orders/summary', requireAuth, async (req, res) => {
+  try {
+    const summaryResult = await db.execute(sql`
+      SELECT 
+        COUNT(*) as total_orders,
+        COUNT(CASE WHEN payment_status = 'completed' THEN 1 END) as completed_orders,
+        COUNT(CASE WHEN payment_status = 'pending' THEN 1 END) as pending_orders,
+        COUNT(CASE WHEN payment_status = 'failed' THEN 1 END) as failed_orders,
+        COUNT(CASE WHEN order_status = 'processing' THEN 1 END) as processing_orders,
+        COUNT(CASE WHEN order_status = 'shipped' THEN 1 END) as shipped_orders,
+        COUNT(CASE WHEN order_status = 'delivered' THEN 1 END) as delivered_orders,
+        SUM(CASE WHEN payment_status = 'completed' THEN CAST(total_amount AS DECIMAL) ELSE 0 END) as total_revenue,
+        AVG(CASE WHEN payment_status = 'completed' THEN CAST(total_amount AS DECIMAL) END) as avg_order_value
+      FROM orders
+    `);
+    
+    const summary = summaryResult.rows[0] || {};
+    
+    // Recent orders for trend analysis
+    const recentOrdersResult = await db.execute(sql`
+      SELECT 
+        DATE(created_at) as order_date,
+        COUNT(*) as orders_count,
+        SUM(CAST(total_amount AS DECIMAL)) as daily_revenue
+      FROM orders 
+      WHERE created_at >= NOW() - INTERVAL '30 days'
+      GROUP BY DATE(created_at)
+      ORDER BY order_date DESC
+    `);
+    
+    res.json({
+      summary: {
+        totalOrders: parseInt(summary.total_orders || '0'),
+        completedOrders: parseInt(summary.completed_orders || '0'),
+        pendingOrders: parseInt(summary.pending_orders || '0'),
+        failedOrders: parseInt(summary.failed_orders || '0'),
+        processingOrders: parseInt(summary.processing_orders || '0'),
+        shippedOrders: parseInt(summary.shipped_orders || '0'),
+        deliveredOrders: parseInt(summary.delivered_orders || '0'),
+        totalRevenue: Math.round((parseFloat(summary.total_revenue || '0')) * 100) / 100,
+        averageOrderValue: Math.round((parseFloat(summary.avg_order_value || '0')) * 100) / 100
+      },
+      trends: recentOrdersResult.rows.map(row => ({
+        date: row.order_date,
+        ordersCount: parseInt(row.orders_count || '0'),
+        dailyRevenue: Math.round((parseFloat(row.daily_revenue || '0')) * 100) / 100
+      })),
+      lastUpdated: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Orders summary API error:', error);
+    res.status(500).json({ message: 'Failed to fetch orders summary', error: error.message });
   }
 });
 
