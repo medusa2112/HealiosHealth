@@ -121,11 +121,11 @@ export default function AdminProducts() {
         title="Product Management - Admin | Healios"
         description="Manage products, inventory, and product details in the Healios admin panel."
       />
-      <div className="w-screen" style={{ paddingLeft: '5vw', paddingRight: '5vw', marginLeft: 'calc(-50vw + 50%)', width: '100vw' }}>
+      <div className="w-screen pt-5" style={{ paddingLeft: '5vw', paddingRight: '5vw', marginLeft: 'calc(-50vw + 50%)', width: '100vw' }}>
         {/* Compact Header with Filters and Actions */}
         <div className="mb-6">
           <Card>
-            <CardContent className="pt-11">
+            <CardContent className="pt-6">
               <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
                 {/* Search and Filters */}
                 <div className="flex flex-col sm:flex-row gap-3 flex-1 min-w-0">
