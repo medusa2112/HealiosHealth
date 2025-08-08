@@ -26,7 +26,7 @@ router.post("/upload-url", requireAuth, async (req, res) => {
 router.post("/confirm", [
   body('uploadURL').isURL().withMessage('uploadURL must be a valid URL'),
   requireAuth
-], async (req, res) => {
+], async (req: express.Request, res: express.Response) => {
   try {
     // Check for validation errors first
     const errors = validationResult(req);

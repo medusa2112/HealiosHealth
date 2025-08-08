@@ -903,19 +903,18 @@ router.post('/products/:id/variants', [
     const variant = await storage.createProductVariant(variantData);
     
     // Log the action
-    await AdminLogger.logAction({
-      adminId: req.user?.id || 'system',
-      adminEmail: req.user?.email || 'system@healios.com',
-      action: 'CREATE_PRODUCT_VARIANT',
-      resourceType: 'PRODUCT_VARIANT',
-      resourceId: variant.id,
-      details: {
+    await AdminLogger.log(
+      req.user?.id || 'system',
+      'CREATE_PRODUCT_VARIANT',
+      'PRODUCT_VARIANT',
+      variant.id,
+      {
         productId,
         variantName: name,
         variantType: type,
         sku: variant.sku
       }
-    });
+    );
     
     res.status(201).json(variant);
   } catch (error) {
@@ -958,17 +957,16 @@ router.put('/product-variants/:id', requireAuth, async (req, res) => {
     const variant = await storage.updateProductVariant(variantId, updateData);
     
     // Log the action
-    await AdminLogger.logAction({
-      adminId: req.user?.id || 'system',
-      adminEmail: req.user?.email || 'system@healios.com',
-      action: 'UPDATE_PRODUCT_VARIANT',
-      resourceType: 'PRODUCT_VARIANT',
-      resourceId: variantId,
-      details: {
+    await AdminLogger.log(
+      req.user?.id || 'system',
+      'UPDATE_PRODUCT_VARIANT',
+      'PRODUCT_VARIANT',
+      variantId,
+      {
         productId: existingVariant.productId,
         changes: updateData
       }
-    });
+    );
     
     res.json(variant);
   } catch (error) {
@@ -992,18 +990,17 @@ router.delete('/product-variants/:id', requireAuth, async (req, res) => {
     }
     
     // Log the action
-    await AdminLogger.logAction({
-      adminId: req.user?.id || 'system',
-      adminEmail: req.user?.email || 'system@healios.com',
-      action: 'DELETE_PRODUCT_VARIANT',
-      resourceType: 'PRODUCT_VARIANT',
-      resourceId: variantId,
-      details: {
+    await AdminLogger.log(
+      req.user?.id || 'system',
+      'DELETE_PRODUCT_VARIANT',
+      'PRODUCT_VARIANT',
+      variantId,
+      {
         productId: existingVariant.productId,
         variantName: existingVariant.name,
         variantSku: existingVariant.sku
       }
-    });
+    );
     
     res.json({ message: 'Product variant deleted successfully' });
   } catch (error) {
