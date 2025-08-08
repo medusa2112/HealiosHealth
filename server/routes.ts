@@ -282,54 +282,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Phase 15: Validate discount code endpoint (public access for checkout)
-  app.post("/api/validate-discount", async (req, res) => {
-    try {
-      const { code, cartTotal } = req.body;
-      
-      if (!code || typeof code !== "string") {
-        return res.status(400).json({ error: "Code is required" });
-      }
-
-      const validation = await storage.validateDiscountCode(code.trim());
-      
-      if (!validation.valid) {
-        return res.json({
-          valid: false,
-          error: validation.error
-        });
-      }
-
-      const discount = validation.discount!;
-      let discountAmount = 0;
-
-      // Calculate discount amount for preview
-      if (cartTotal && cartTotal > 0) {
-        if (discount.type === "percent") {
-          discountAmount = (cartTotal * parseFloat(discount.value)) / 100;
-        } else if (discount.type === "fixed") {
-          discountAmount = parseFloat(discount.value);
-        }
-        
-        // Ensure discount doesn't exceed total
-        discountAmount = Math.min(discountAmount, cartTotal);
-      }
-
-      res.json({
-        valid: true,
-        discount: {
-          code: discount.code,
-          type: discount.type,
-          value: discount.value,
-          discountAmount,
-          finalTotal: cartTotal ? Math.max(0, cartTotal - discountAmount) : 0
-        }
-      });
-    } catch (error) {
-      console.error("Error validating discount code:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
 
   // Create Stripe Checkout Session for external payment processing
   app.post("/api/create-checkout-session", validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
@@ -505,54 +457,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create order endpoint
-  // Validate discount code endpoint
+  // Consolidated discount code validation endpoint (Phase 15)
   app.post("/api/validate-discount", rateLimit(30, 60000), async (req, res) => {
     try {
-      const { code, subtotal } = req.body;
+      const { code, subtotal, cartTotal } = req.body;
+      // Support both parameter names for backward compatibility
+      const total = subtotal || cartTotal;
       
-      if (!code || typeof subtotal !== 'number') {
-        return res.status(400).json({ message: "Code and subtotal are required" });
+      if (!code || typeof code !== "string") {
+        return res.status(400).json({ error: "Code is required" });
       }
-
-      const discountCode = await storage.getDiscountCodeByCode(code);
       
-      if (!discountCode) {
-        return res.status(400).json({ message: "Invalid discount code" });
+      if (total !== undefined && typeof total !== 'number') {
+        return res.status(400).json({ error: "Total must be a number" });
       }
 
-      if (!discountCode.isActive) {
-        return res.status(400).json({ message: "Discount code is inactive" });
+      // Use the comprehensive validation method
+      const validation = await storage.validateDiscountCode(code.trim());
+      
+      if (!validation.valid) {
+        return res.json({
+          valid: false,
+          error: validation.error
+        });
       }
 
-      if (discountCode.expiresAt && new Date(discountCode.expiresAt) < new Date()) {
-        return res.status(400).json({ message: "Discount code has expired" });
-      }
-
-      if (discountCode.usageLimit && (discountCode.usageCount || 0) >= discountCode.usageLimit) {
-        return res.status(400).json({ message: "Discount code usage limit reached" });
-      }
-
-      // Calculate discount amount
+      const discount = validation.discount!;
       let discountAmount = 0;
-      if (discountCode.type === 'percent') {
-        const percentage = parseFloat(discountCode.value);
-        discountAmount = (subtotal * percentage) / 100;
-      } else {
-        discountAmount = parseFloat(discountCode.value);
-      }
 
-      // Ensure discount doesn't exceed subtotal
-      discountAmount = Math.min(discountAmount, subtotal);
+      // Calculate discount amount if total provided
+      if (total && total > 0) {
+        if (discount.type === "percent") {
+          discountAmount = (total * parseFloat(discount.value)) / 100;
+        } else if (discount.type === "fixed") {
+          discountAmount = parseFloat(discount.value);
+        }
+        
+        // Ensure discount doesn't exceed total
+        discountAmount = Math.min(discountAmount, total);
+      }
 
       res.json({
-        code: discountCode.code,
-        type: discountCode.type,
-        value: discountCode.value,
-        discountAmount
+        valid: true,
+        code: discount.code,
+        type: discount.type,
+        value: discount.value,
+        discountAmount,
+        finalTotal: total ? Math.max(0, total - discountAmount) : undefined
       });
     } catch (error) {
-      console.error('Discount validation error:', error);
-      res.status(500).json({ message: "Internal server error" });
+      console.error("Error validating discount code:", error);
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 
