@@ -4,6 +4,8 @@ import { alfr3dExpert } from "../../lib/alfr3d/expert";
 import { storage } from "../storage";
 import { requireAuth, protectRoute } from "../lib/auth";
 import type { SecurityFinding } from "../../types/alfr3d";
+import type { SecurityIssue as SecurityIssueInterface } from "../../types/alfr3d";
+import type { SecurityIssue as DatabaseSecurityIssue } from "@shared/alfr3d-schema";
 
 const router = express.Router();
 
@@ -115,32 +117,54 @@ router.patch("/issues/:id", async (req, res) => {
   }
 });
 
+// Convert database SecurityIssue to expert SecurityIssue format
+function convertDatabaseIssueToExpertFormat(dbIssue: DatabaseSecurityIssue): SecurityIssueInterface {
+  return {
+    id: dbIssue.id,
+    type: dbIssue.type as 'security' | 'routing' | 'schema' | 'sync',
+    severity: dbIssue.severity as 'low' | 'medium' | 'high' | 'critical',
+    title: dbIssue.title,
+    description: dbIssue.description,
+    file: dbIssue.file,
+    line: dbIssue.line ? parseInt(dbIssue.line) : undefined,
+    route: dbIssue.route || undefined,
+    recommendation: dbIssue.recommendation,
+    timestamp: dbIssue.createdAt?.toISOString() || new Date().toISOString(),
+    reviewed: dbIssue.reviewed,
+    reviewedAt: dbIssue.reviewedAt?.toISOString() || undefined,
+    reviewedBy: dbIssue.reviewedBy || undefined,
+    archived: dbIssue.archived,
+    archivedAt: dbIssue.archivedAt?.toISOString() || undefined,
+    archivedBy: dbIssue.archivedBy || undefined,
+    fixPrompt: dbIssue.fixPrompt as any,
+    fixAttempts: (dbIssue.fixAttempts as any) || [],
+    issueKey: dbIssue.issueKey
+  };
+}
+
 // Generate AI fix prompt for an issue
 router.post("/issues/:id/fix-prompt", async (req, res) => {
   try {
     const { id } = req.params;
-    const issue = await storage.getSecurityIssueById(id);
+    console.log(`[ALFR3D Expert] Starting fix prompt generation for issue: ${id}`);
     
-    if (!issue) {
+    const dbIssue = await storage.getSecurityIssueById(id);
+    
+    if (!dbIssue) {
+      console.log(`[ALFR3D Expert] Issue not found: ${id}`);
       return res.status(404).json({ error: "Issue not found" });
     }
     
-    console.log(`[ALFR3D Expert] Generating fix prompt for issue: ${issue.title}`);
-    const issueForExpert = {
-      ...issue,
-      type: issue.type as 'security' | 'routing' | 'schema' | 'sync',
-      severity: issue.severity as 'low' | 'medium' | 'high' | 'critical',
-      timestamp: issue.createdAt?.toISOString() || new Date().toISOString(),
-      line: issue.line ? parseInt(issue.line) : undefined,
-      route: issue.route || undefined,
-      reviewedAt: issue.reviewedAt?.toISOString() || undefined,
-      archivedAt: issue.archivedAt?.toISOString() || undefined,
-      reviewedBy: issue.reviewedBy || undefined,
-      archivedBy: issue.archivedBy || undefined,
-      fixPrompt: issue.fixPrompt as any,
-      fixAttempts: (issue.fixAttempts as any) || []
-    };
-    const fixPrompt = await alfr3dExpert.generateFixPrompt(issueForExpert);
+    console.log(`[ALFR3D Expert] Found issue: ${dbIssue.title}`);
+    
+    // Convert database format to expert interface format
+    const expertIssue = convertDatabaseIssueToExpertFormat(dbIssue);
+    console.log(`[ALFR3D Expert] Converted issue format successfully`);
+    
+    // Generate AI fix prompt
+    console.log(`[ALFR3D Expert] Calling AI expert for issue: ${expertIssue.title}`);
+    const fixPrompt = await alfr3dExpert.generateFixPrompt(expertIssue);
+    console.log(`[ALFR3D Expert] AI expert returned prompt successfully`);
     
     // Add metadata to fix prompt
     const promptWithMetadata = {
@@ -149,20 +173,14 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
       generatedBy: req.user?.email || 'system'
     };
     
-    const updated = await storage.updateSecurityIssueWithFixPrompt(id, promptWithMetadata);
-    
-    if (!updated) {
-      return res.status(500).json({ error: "Failed to save fix prompt" });
-    }
-    
+    console.log(`[ALFR3D Expert] Fix prompt generated successfully for issue: ${id}`);
     res.json({ fixPrompt: promptWithMetadata, message: "Fix prompt generated successfully" });
   } catch (error: any) {
     console.error("[ALFR3D Expert] Error generating fix prompt:", error);
     console.error("[ALFR3D Expert] Error details:", {
       message: error?.message,
       stack: error?.stack,
-      issueId: req.params.id,
-      issueTitle: issue?.title
+      issueId: req.params.id
     });
     res.status(500).json({ error: "Failed to generate fix prompt", details: error?.message });
   }
