@@ -121,7 +121,7 @@ export default function AdminProducts() {
         title="Product Management - Admin | Healios"
         description="Manage products, inventory, and product details in the Healios admin panel."
       />
-      <div className="w-full px-4">
+      <div className="w-full px-2 max-w-none">
         {/* Compact Header with Filters and Actions */}
         <div className="mb-6">
           <Card>
