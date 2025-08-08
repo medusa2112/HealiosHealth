@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { requireAuth } from "../lib/auth";
 import {
   ObjectStorageService,
   ObjectNotFoundError,
@@ -43,14 +44,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // This endpoint is used to get the upload URL for an object entity.
-  app.post("/api/objects/upload", async (req, res) => {
+  app.post("/api/objects/upload", requireAuth, async (req, res) => {
     const objectStorageService = new ObjectStorageService();
     const uploadURL = await objectStorageService.getObjectEntityUploadURL();
     res.json({ uploadURL });
   });
 
   // An example endpoint for updating the model state after an object entity is uploaded (product image in this case).
-  app.put("/api/product-images", async (req, res) => {
+  app.put("/api/product-images", requireAuth, async (req, res) => {
     if (!req.body.imageURL) {
       return res.status(400).json({ error: "imageURL is required" });
     }

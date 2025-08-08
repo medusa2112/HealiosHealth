@@ -865,7 +865,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Article generation endpoints have been removed for security purposes
 
   // Quiz completion endpoint
-  app.post("/api/quiz/complete", async (req, res) => {
+  app.post("/api/quiz/complete", requireAuth, async (req, res) => {
     try {
       const {
         email,
@@ -945,7 +945,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Chat functionality removed as requested
 
   // Test email endpoint - sends samples of all email templates
-  app.post("/api/test-emails", async (req, res) => {
+  app.post("/api/test-emails", requireAuth, async (req, res) => {
     try {
       console.log('🧪 Testing all email templates...');
       const results: string[] = [];

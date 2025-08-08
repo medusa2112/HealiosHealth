@@ -1,5 +1,5 @@
 import express from 'express';
-// Authentication removed - admin routes now publicly accessible
+import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
 import { products } from '@shared/schema';
 import { db } from '../db';
@@ -12,7 +12,7 @@ import discountCodesRouter from './adminDiscounts';
 
 const router = express.Router();
 
-// Admin routes accessible without authentication for development
+// Admin routes protected with authentication
 
 // Mount orders subrouter
 router.use('/orders', ordersRouter);
@@ -24,7 +24,7 @@ router.use('/abandoned-carts', abandonedCartsRouter);
 router.use('/discount-codes', discountCodesRouter);
 
 // Admin Logs API - Get audit logs
-router.get('/logs', async (req, res) => {
+router.get('/logs', requireAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit as string) || 100;
     const logs = await storage.getAdminLogs(limit);
@@ -36,7 +36,7 @@ router.get('/logs', async (req, res) => {
 });
 
 // Admin Dashboard - Overview stats
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
     // Query database directly with proper serialization
     const dbProducts = await db.select().from(products);
@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
 });
 
 // Product Management - Full CRUD
-router.get('/products', async (req, res) => {
+router.get('/products', requireAuth, async (req, res) => {
   try {
     // Query database directly and ensure proper serialization
     const dbProducts = await db.select().from(products);
@@ -110,7 +110,7 @@ router.get('/products', async (req, res) => {
   }
 });
 
-router.get('/products/:id', async (req, res) => {
+router.get('/products/:id', requireAuth, async (req, res) => {
   try {
     const product = await db.select().from(products).where(eq(products.id, req.params.id)).limit(1);
     if (!product || product.length === 0) {
@@ -123,7 +123,7 @@ router.get('/products/:id', async (req, res) => {
   }
 });
 
-router.post('/products', auditAction('create_product', 'product'), async (req, res) => {
+router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {
   try {
     const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, type, bottleCount, dailyDosage, supplyDays } = req.body;
     
@@ -167,7 +167,7 @@ router.post('/products', auditAction('create_product', 'product'), async (req, r
   }
 });
 
-router.put('/products/:id', auditAction('update_product', 'product'), async (req, res) => {
+router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {
   try {
     const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = req.body;
     
@@ -206,7 +206,7 @@ router.put('/products/:id', auditAction('update_product', 'product'), async (req
   }
 });
 
-router.delete('/products/:id', auditAction('delete_product', 'product'), async (req, res) => {
+router.delete('/products/:id', requireAuth, auditAction('delete_product', 'product'), async (req, res) => {
   try {
     const [deletedProduct] = await db.delete(products).where(eq(products.id, req.params.id)).returning();
     if (!deletedProduct) {
@@ -227,7 +227,7 @@ router.delete('/products/:id', auditAction('delete_product', 'product'), async (
   }
 });
 
-router.put('/products/:id/stock', auditAction('update_stock', 'product'), async (req, res) => {
+router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'product'), async (req, res) => {
   try {
     const { quantity } = req.body;
     if (typeof quantity !== 'number' || quantity < 0) {
@@ -255,7 +255,7 @@ router.put('/products/:id/stock', auditAction('update_stock', 'product'), async 
 });
 
 // Order Management
-router.get('/orders', async (req, res) => {
+router.get('/orders', requireAuth, async (req, res) => {
   try {
     // We'll need to implement a method to get all orders
     res.json({ message: 'Order management coming soon' });
@@ -265,7 +265,7 @@ router.get('/orders', async (req, res) => {
 });
 
 // Quiz Analytics
-router.get('/quiz/analytics', async (req, res) => {
+router.get('/quiz/analytics', requireAuth, async (req, res) => {
   try {
     // Query quiz_results table directly with error handling
     let quizResults = [];
@@ -300,7 +300,7 @@ router.get('/quiz/analytics', async (req, res) => {
 });
 
 // Phase 13: Reorder Analytics API Routes
-router.get("/reorder-logs", async (req, res) => {
+router.get("/reorder-logs", requireAuth, async (req, res) => {
   try {
     const { status, channel, limit = 100 } = req.query;
     
@@ -316,7 +316,7 @@ router.get("/reorder-logs", async (req, res) => {
   }
 });
 
-router.get("/reorder-analytics", async (req, res) => {
+router.get("/reorder-analytics", requireAuth, async (req, res) => {
   try {
     const logs = await storage.getReorderLogs({ limit: 1000 }); // Get more data for analytics
     
@@ -395,7 +395,7 @@ router.get("/reorder-analytics", async (req, res) => {
 });
 
 // Phase 14: Product Variant Management
-router.get('/products/:id/variants', async (req, res) => {
+router.get('/products/:id/variants', requireAuth, async (req, res) => {
   try {
     const variants = await storage.getProductVariants(req.params.id);
     res.json(variants);
@@ -405,7 +405,7 @@ router.get('/products/:id/variants', async (req, res) => {
   }
 });
 
-router.post('/products/:id/variants', async (req, res) => {
+router.post('/products/:id/variants', requireAuth, async (req, res) => {
   try {
     const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
     const productId = req.params.id;
@@ -452,7 +452,7 @@ router.post('/products/:id/variants', async (req, res) => {
   }
 });
 
-router.put('/product-variants/:id', async (req, res) => {
+router.put('/product-variants/:id', requireAuth, async (req, res) => {
   try {
     const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
     const variantId = req.params.id;
@@ -496,7 +496,7 @@ router.put('/product-variants/:id', async (req, res) => {
   }
 });
 
-router.delete('/product-variants/:id', async (req, res) => {
+router.delete('/product-variants/:id', requireAuth, async (req, res) => {
   try {
     const variantId = req.params.id;
     

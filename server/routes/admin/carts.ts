@@ -1,13 +1,13 @@
 import express from "express";
+import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
-// Authentication removed - admin routes now publicly accessible
 
 const router = express.Router();
 
-// Admin cart routes accessible without authentication
+// Admin cart routes - authentication required
 
 // Get abandoned carts (not converted after specified time)
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const hoursAgo = parseInt(req.query.hours as string) || 1;
     const thresholdTime = new Date(Date.now() - 1000 * 60 * 60 * hoursAgo);
@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get abandoned cart analytics summary
-router.get("/analytics", async (req, res) => {
+router.get("/analytics", requireAuth, async (req, res) => {
   try {
     const timeRanges = [1, 6, 24, 72]; // 1h, 6h, 24h, 72h
     const analytics: Record<string, {count: number, value: number, avgValue: number}> = {};
@@ -75,7 +75,7 @@ router.get("/analytics", async (req, res) => {
 });
 
 // Convert abandoned cart to order (recovery action)
-router.post("/:cartId/recover", async (req, res) => {
+router.post("/:cartId/recover", requireAuth, async (req, res) => {
   try {
     const { cartId } = req.params;
     const cart = await storage.getCartById(cartId);

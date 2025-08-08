@@ -1,10 +1,11 @@
 import express from "express";
+import { requireAuth } from "../lib/auth";
 import { sendEmail, sendAdminAlert } from "../lib/email";
 
 const router = express.Router();
 
 // Email test endpoint for development
-router.post("/test", async (req, res) => {
+router.post("/test", requireAuth, async (req, res) => {
   try {
     const { type, email, testData } = req.body;
 
@@ -76,7 +77,7 @@ router.post("/test", async (req, res) => {
 });
 
 // Get email system status
-router.get("/status", (req, res) => {
+router.get("/status", requireAuth, (req, res) => {
   res.json({
     status: "operational",
     configured: !!process.env.RESEND_API_KEY,

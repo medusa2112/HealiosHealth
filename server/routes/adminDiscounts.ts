@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { requireAuth } from "../lib/auth";
 import { storage } from "../storage";
 import { insertDiscountCodeSchema } from "@shared/schema";
 import { z } from "zod";
@@ -6,7 +7,7 @@ import { z } from "zod";
 const router = Router();
 
 // Get all discount codes (admin only)
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const discountCodes = await storage.getDiscountCodes();
     res.json(discountCodes);
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new discount code (admin only)
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   try {
     const validationResult = insertDiscountCodeSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -83,7 +84,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a discount code (admin only)
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -153,7 +154,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a discount code (admin only)
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -193,7 +194,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Validate a discount code (for frontend preview)
-router.post("/validate", async (req, res) => {
+router.post("/validate", requireAuth, async (req, res) => {
   try {
     const { code } = req.body;
     

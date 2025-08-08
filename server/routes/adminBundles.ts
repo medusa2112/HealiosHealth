@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { requireAuth } from "../lib/auth";
 import { storage } from "../storage";
 import { insertProductBundleSchema, insertBundleItemSchema } from "@shared/schema";
 import { z } from "zod";
@@ -6,7 +7,7 @@ import { z } from "zod";
 const router = Router();
 
 // Get all bundles (admin only)
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const bundles = await storage.getProductBundles();
     res.json(bundles);
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get a specific bundle with items (admin only)
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const bundleWithItems = await storage.getBundleWithItems(id);
@@ -34,7 +35,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Get variants excluding children's products (admin only - for bundle creation UI)
-router.get("/variants/eligible", async (req, res) => {
+router.get("/variants/eligible", requireAuth, async (req, res) => {
   try {
     const excludeTags = req.query.excludeTags ? 
       (req.query.excludeTags as string).split(",").map(tag => tag.trim()) : 
@@ -68,7 +69,7 @@ router.get("/variants/eligible", async (req, res) => {
 });
 
 // Create a new bundle (admin only)
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   try {
     const validationResult = insertProductBundleSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -112,7 +113,7 @@ router.post("/", async (req, res) => {
 });
 
 // Add items to bundle with children's product exclusion validation
-router.post("/:id/items", async (req, res) => {
+router.post("/:id/items", requireAuth, async (req, res) => {
   try {
     const { id: bundleId } = req.params;
     const { items } = req.body; // Array of { variantId, quantity }
@@ -203,7 +204,7 @@ router.post("/:id/items", async (req, res) => {
 });
 
 // Update a bundle (admin only)
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -243,7 +244,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Remove item from bundle (admin only)
-router.delete("/:bundleId/items/:itemId", async (req, res) => {
+router.delete("/:bundleId/items/:itemId", requireAuth, async (req, res) => {
   try {
     const { bundleId, itemId } = req.params;
     
@@ -272,7 +273,7 @@ router.delete("/:bundleId/items/:itemId", async (req, res) => {
 });
 
 // Delete a bundle (admin only)
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     

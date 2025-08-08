@@ -1,13 +1,14 @@
 import express from "express";
+import { requireAuth } from "../lib/auth";
 import { ObjectStorageService } from "../objectStorage";
 import { protectRoute } from "../lib/auth";
 
 const router = express.Router();
 
-// Admin routes accessible without authentication
+// Admin image upload routes - protected with authentication
 
 // Get upload URL for product images
-router.post("/upload-url", async (req, res) => {
+router.post("/upload-url", requireAuth, async (req, res) => {
   try {
     console.log("Admin image upload URL requested");
     const objectStorageService = new ObjectStorageService();
@@ -21,7 +22,7 @@ router.post("/upload-url", async (req, res) => {
 });
 
 // Confirm image upload and get public URL
-router.post("/confirm", async (req, res) => {
+router.post("/confirm", requireAuth, async (req, res) => {
   try {
     const { uploadURL } = req.body;
     

@@ -1,6 +1,6 @@
 import express from "express";
 import { storage } from "../storage";
-import { requireSessionOrAuth, rateLimit } from "../lib/auth";
+import { requireSessionOrAuth, requireAuth, rateLimit } from "../lib/auth";
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.post("/sync", requireSessionOrAuth, rateLimit(20, 60000), async (req, res
 });
 
 // Get cart by session token
-router.get("/:sessionToken", async (req, res) => {
+router.get("/:sessionToken", requireAuth, async (req, res) => {
   try {
     const { sessionToken } = req.params;
     
@@ -64,7 +64,7 @@ router.get("/:sessionToken", async (req, res) => {
 });
 
 // Mark cart as abandoned (optional endpoint for analytics)
-router.put("/:cartId/abandon", async (req, res) => {
+router.put("/:cartId/abandon", requireAuth, async (req, res) => {
   try {
     const { cartId } = req.params;
     

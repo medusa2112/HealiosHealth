@@ -1,10 +1,11 @@
 import express from 'express';
+import { requireAuth } from '../../lib/auth';
 import { storage } from '../../storage';
 
 const router = express.Router();
 
 // Get abandoned carts with analytics
-router.get('/abandoned-carts', async (req, res) => {
+router.get('/abandoned-carts', requireAuth, async (req, res) => {
   try {
     const hoursThreshold = parseInt(req.query.hours as string) || 24;
     const abandonedCarts = await storage.getAbandonedCarts(hoursThreshold);
@@ -52,7 +53,7 @@ router.get('/abandoned-carts', async (req, res) => {
 });
 
 // Send cart recovery email
-router.post('/send-recovery-email', async (req, res) => {
+router.post('/send-recovery-email', requireAuth, async (req, res) => {
   try {
     const { cartId, sessionToken, items, totalAmount } = req.body;
     
@@ -100,7 +101,7 @@ router.post('/send-recovery-email', async (req, res) => {
 });
 
 // Get cart analytics for dashboard
-router.get('/cart-analytics', async (req, res) => {
+router.get('/cart-analytics', requireAuth, async (req, res) => {
   try {
     const days = parseInt(req.query.days as string) || 30;
     

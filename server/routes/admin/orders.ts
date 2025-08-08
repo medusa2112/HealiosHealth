@@ -1,4 +1,5 @@
 import express from "express";
+import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
 import { stripe } from "../../lib/stripe";
 import { sendEmail } from "../../lib/email";
@@ -6,7 +7,7 @@ import { sendEmail } from "../../lib/email";
 const router = express.Router();
 
 // Get all orders for admin dashboard
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const orders = await storage.getAllOrders();
     
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get specific order details
-router.get("/:id", async (req, res) => {
+router.get("/:id", requireAuth, async (req, res) => {
   try {
     const orderId = req.params.id;
     const order = await storage.getOrderById(orderId);
@@ -46,7 +47,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Process refund for an order
-router.post("/:id/refund", async (req, res) => {
+router.post("/:id/refund", requireAuth, async (req, res) => {
   try {
     const orderId = req.params.id;
     const { amount, reason } = req.body;
@@ -130,7 +131,7 @@ router.post("/:id/refund", async (req, res) => {
 });
 
 // Update order status
-router.put("/:id/status", async (req, res) => {
+router.put("/:id/status", requireAuth, async (req, res) => {
   try {
     const orderId = req.params.id;
     const { status } = req.body;
@@ -158,7 +159,7 @@ router.put("/:id/status", async (req, res) => {
 });
 
 // Get order statistics for dashboard
-router.get("/stats/summary", async (req, res) => {
+router.get("/stats/summary", requireAuth, async (req, res) => {
   try {
     const orders = await storage.getAllOrders();
     

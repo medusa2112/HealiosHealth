@@ -1,13 +1,13 @@
 import express from "express";
+import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
-// Authentication removed - admin routes now publicly accessible
 
 const router = express.Router();
 
-// Admin log routes accessible without authentication
+// Admin log routes - authentication required
 
 // Get admin activity logs with optional filters
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit as string) || 100;
     const adminId = req.query.adminId as string;
@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get logs for a specific admin user
-router.get("/admin/:adminId", async (req, res) => {
+router.get("/admin/:adminId", requireAuth, async (req, res) => {
   try {
     const { adminId } = req.params;
     const logs = await storage.getAdminLogsByAdmin(adminId);
@@ -44,7 +44,7 @@ router.get("/admin/:adminId", async (req, res) => {
 });
 
 // Get logs for a specific target
-router.get("/target/:targetType/:targetId", async (req, res) => {
+router.get("/target/:targetType/:targetId", requireAuth, async (req, res) => {
   try {
     const { targetType, targetId } = req.params;
     const logs = await storage.getAdminLogsByTarget(targetType, targetId);

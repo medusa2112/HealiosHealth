@@ -1,13 +1,13 @@
 import express from 'express';
-import { protectRoute } from '../lib/auth';
+import { requireAuth, protectRoute } from '../lib/auth';
 import { SecurityValidator } from '../lib/security-validator';
 
 const router = express.Router();
 
-// Admin routes accessible without authentication
+// Security audit routes - admin access required
 
 // Run comprehensive security audit
-router.get('/audit', async (req, res) => {
+router.get('/audit', requireAuth, async (req, res) => {
   try {
     const results = await SecurityValidator.runSecurityAudit();
     const report = SecurityValidator.generateSecurityReport(results);

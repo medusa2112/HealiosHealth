@@ -1,5 +1,6 @@
 // Phase 19: Email Jobs API Routes for Manual Testing and Admin Control
 import { Router } from "express";
+import { requireAuth } from "../lib/auth";
 import { processAbandonedCartEmails } from "../jobs/emailAbandonedCarts";
 import { processReorderReminders } from "../jobs/emailReorderReminders";
 import { emailScheduler } from "../jobs/scheduler";
@@ -8,7 +9,7 @@ import { storage } from "../storage";
 const router = Router();
 
 // Manual trigger for abandoned cart emails (Admin only)
-router.post("/abandoned-carts", async (req, res) => {
+router.post("/abandoned-carts", requireAuth, async (req, res) => {
   try {
     console.log("[EMAIL-JOBS API] Manually triggering abandoned cart emails...");
     await processAbandonedCartEmails();
@@ -26,7 +27,7 @@ router.post("/abandoned-carts", async (req, res) => {
 });
 
 // Manual trigger for reorder reminder emails (Admin only)
-router.post("/reorder-reminders", async (req, res) => {
+router.post("/reorder-reminders", requireAuth, async (req, res) => {
   try {
     console.log("[EMAIL-JOBS API] Manually triggering reorder reminder emails...");
     await processReorderReminders();
@@ -44,7 +45,7 @@ router.post("/reorder-reminders", async (req, res) => {
 });
 
 // Trigger both email jobs at once
-router.post("/all", async (req, res) => {
+router.post("/all", requireAuth, async (req, res) => {
   try {
     console.log("[EMAIL-JOBS API] Manually triggering all email jobs...");
     await emailScheduler.runNow();
@@ -62,7 +63,7 @@ router.post("/all", async (req, res) => {
 });
 
 // Get email job statistics
-router.get("/stats", async (req, res) => {
+router.get("/stats", requireAuth, async (req, res) => {
   try {
     const abandonedCarts1h = await storage.getAbandonedCarts(1);
     const abandonedCarts24h = await storage.getAbandonedCarts(24);
@@ -100,7 +101,7 @@ router.get("/stats", async (req, res) => {
 });
 
 // Start/stop the email scheduler
-router.post("/scheduler/start", async (req, res) => {
+router.post("/scheduler/start", requireAuth, async (req, res) => {
   try {
     emailScheduler.start();
     res.json({ 
@@ -116,7 +117,7 @@ router.post("/scheduler/start", async (req, res) => {
   }
 });
 
-router.post("/scheduler/stop", async (req, res) => {
+router.post("/scheduler/stop", requireAuth, async (req, res) => {
   try {
     emailScheduler.stop();
     res.json({ 
