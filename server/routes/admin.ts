@@ -180,8 +180,14 @@ router.get('/', requireAuth, async (req, res) => {
 // Product Management - Full CRUD
 router.get('/products', requireAuth, async (req, res) => {
   try {
-    // Query database directly and ensure proper serialization
-    const dbProducts = await db.select().from(products);
+    // Add pagination support for large datasets (>1000 products)
+    const limit = parseInt(req.query.limit as string) || 1000;
+    const offset = parseInt(req.query.offset as string) || 0;
+    
+    // Query database directly and ensure proper serialization with performance limits
+    const dbProducts = await db.select().from(products).limit(limit).offset(offset);
+    const totalCount = await db.select({ count: sql`count(*)` }).from(products);
+    
     // Ensure proper JSON serialization by creating plain objects
     const serializedProducts = dbProducts.map(product => ({
       id: product.id,
@@ -204,7 +210,16 @@ router.get('/products', requireAuth, async (req, res) => {
       seoDescription: product.seoDescription,
       seoKeywords: product.seoKeywords
     }));
-    res.json(serializedProducts);
+    res.json({
+      products: serializedProducts,
+      pagination: {
+        total: parseInt(totalCount[0]?.count?.toString() || '0'),
+        limit,
+        offset,
+        hasMore: serializedProducts.length === limit
+      },
+      performanceWarning: serializedProducts.length > 500 ? 'Large dataset detected - consider using filters' : null
+    });
   } catch (error) {
     console.error('Failed to fetch products:', error);
     res.status(500).json({ message: 'Failed to fetch products' });
@@ -341,7 +356,9 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     const { id } = paramsResult.data;
     const { name, description, price, originalPrice, imageUrl, categories, stockQuantity, featured, inStock, type, bottleCount, dailyDosage, supplyDays } = bodyResult.data;
     
-    const updates: any = {};
+    const updates: any = {
+      updatedAt: sql`CURRENT_TIMESTAMP` // Always update timestamp on edits
+    };
     if (name !== undefined) updates.name = name.trim();
     if (description !== undefined) updates.description = description.trim();
     if (price !== undefined) updates.price = parseFloat(price).toString();

@@ -146,8 +146,42 @@ export default function AdminProductEdit() {
     },
   });
 
+  const validateForm = (): string[] => {
+    const errors: string[] = [];
+    
+    // Validate required fields
+    if (!formData.name.trim()) errors.push('Product name is required');
+    if (!formData.description.trim()) errors.push('Product description is required');
+    if (!formData.imageUrl.trim()) errors.push('Product image is required');
+    if (formData.categories.length === 0) errors.push('At least one category must be selected');
+    
+    // Validate price - must be positive
+    const price = parseFloat(formData.price);
+    if (isNaN(price) || price <= 0) errors.push('Price must be a positive number');
+    
+    // Validate stock quantity - must be non-negative
+    const stockQuantity = parseInt(formData.stockQuantity);
+    if (isNaN(stockQuantity) || stockQuantity < 0) {
+      errors.push('Stock quantity must be a non-negative number');
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      toast({
+        title: 'Validation Error',
+        description: validationErrors[0], // Show first error
+        variant: 'destructive'
+      });
+      return;
+    }
+    
     updateProductMutation.mutate(formData);
   };
 

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,15 +22,50 @@ const availableCategories = [
 
 export default function AdminProducts() {
   const [, setLocation] = useLocation();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("all");
-  const [filterType, setFilterType] = useState("all");
+  // Persistent filters using localStorage
+  const [searchTerm, setSearchTerm] = useState(() => {
+    return localStorage.getItem('admin-products-search') || "";
+  });
+  const [filterCategory, setFilterCategory] = useState(() => {
+    return localStorage.getItem('admin-products-category') || "all";
+  });
+  const [filterType, setFilterType] = useState(() => {
+    return localStorage.getItem('admin-products-type') || "all";
+  });
+  
+  // Save filter state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('admin-products-search', searchTerm);
+  }, [searchTerm]);
+  
+  useEffect(() => {
+    localStorage.setItem('admin-products-category', filterCategory);
+  }, [filterCategory]);
+  
+  useEffect(() => {
+    localStorage.setItem('admin-products-type', filterType);
+  }, [filterType]);
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { data: products, isLoading } = useQuery<Product[]>({
+  // Support for paginated product loading with performance handling
+  const { data: productData, isLoading } = useQuery({
     queryKey: ["/api/admin/products"],
+    select: (data: any) => {
+      // Handle both old format (array) and new format (object with pagination)
+      if (Array.isArray(data)) {
+        return {
+          products: data,
+          pagination: { total: data.length, limit: 1000, offset: 0, hasMore: false },
+          performanceWarning: data.length > 500 ? 'Large dataset detected' : null
+        };
+      }
+      return data;
+    }
   });
+  
+  const products = (productData?.products || []) as Product[];
+  const performanceWarning = productData?.performanceWarning;
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -89,7 +124,7 @@ export default function AdminProducts() {
       />
       <AdminHeader 
         title="Product Management" 
-        subtitle={`Manage your product catalog - ${filteredProducts.length} of ${products?.length || 0} products`}
+        subtitle={`Manage your product catalog - ${filteredProducts.length} of ${products?.length || 0} products${performanceWarning ? ' ⚠️ Large dataset' : ''}`}
       />
       <div className="w-full px-4">
         {/* Compact Header with Filters and Actions */}
@@ -137,6 +172,9 @@ export default function AdminProducts() {
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <div className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
                     {filteredProducts.length} products
+                    {performanceWarning && (
+                      <div className="text-xs text-amber-600 dark:text-amber-400 mt-1">⚠️ {performanceWarning}</div>
+                    )}
                   </div>
                   <Button 
                     onClick={handleCreateNew}

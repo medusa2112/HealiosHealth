@@ -43,6 +43,9 @@ export const products = pgTable("products", {
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),
   seoKeywords: text("seo_keywords").array(),
+  // Timestamps for tracking changes
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Phase 14: Product variants table for SKUs, sizes, flavours, bundles
