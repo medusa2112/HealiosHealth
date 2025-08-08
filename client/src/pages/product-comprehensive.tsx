@@ -214,6 +214,9 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'biotin-5000' || productId === 'biotin') {
     return biotinHairImg;
   }
+  if (productId === 'collagen-complex') {
+    return marineCollagenImg;
+  }
   
   const svgs = {
     'halo-glow': `data:image/svg+xml;base64,${btoa(`
