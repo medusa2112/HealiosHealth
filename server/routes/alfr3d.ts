@@ -126,7 +126,7 @@ function convertDatabaseIssueToExpertFormat(dbIssue: DatabaseSecurityIssue): Sec
     title: dbIssue.title,
     description: dbIssue.description,
     file: dbIssue.file,
-    line: dbIssue.line ? parseInt(dbIssue.line) : undefined,
+    line: (dbIssue.line && dbIssue.line !== null) ? parseInt(dbIssue.line) : undefined,
     route: dbIssue.route || undefined,
     recommendation: dbIssue.recommendation,
     timestamp: dbIssue.createdAt?.toISOString() || new Date().toISOString(),
