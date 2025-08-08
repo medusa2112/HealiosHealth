@@ -306,7 +306,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
   // Create Stripe Checkout Session for external payment processing
-  app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req, res) => {
+  app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req: express.Request, res: express.Response) => {
     try {
       const bodySchema = z.object({
         orderData: z.object({}).passthrough(),
@@ -558,7 +558,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/orders", validateCustomerEmail, validateOrderAccess, rateLimit(10, 300000), async (req, res) => {
+  app.post("/api/orders", validateCustomerEmail, validateOrderAccess, rateLimit(10, 300000), async (req: express.Request, res: express.Response) => {
     try {
       const validatedData = insertOrderSchema.parse(req.body);
       
@@ -1024,7 +1024,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           shippingAddress: '123 Test Street\nCape Town, 8001\nSouth Africa',
           billingAddress: '123 Test Street\nCape Town, 8001\nSouth Africa',
           orderItems: JSON.stringify([{
-            product: { id: 'test-1', name: 'Test Vitamin D3', price: '399.00', imageUrl: 'https://via.placeholder.com/150' },
+            // Removed test data - should fetch from actual database
             quantity: 1
           }]),
           currency: 'ZAR',
@@ -1032,7 +1032,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           orderStatus: 'processing'
         };
         const testOrderItems = [{
-          product: { id: 'test-1', name: 'Test Vitamin D3', price: '399.00', imageUrl: 'https://via.placeholder.com/150' },
+          // Removed test data - should fetch from actual database
           quantity: 1
         }];
         await EmailService.sendOrderConfirmation({ order: testOrder as any, orderItems: testOrderItems });

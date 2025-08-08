@@ -494,7 +494,7 @@ router.get('/orders', requireAuth, async (req, res) => {
 router.get('/quiz/analytics', requireAuth, async (req, res) => {
   try {
     // Query quiz_results table directly with error handling
-    let quizResults = [];
+    let quizResultsList = [];
     let totalCompletions = 0;
     
     try {
@@ -504,19 +504,19 @@ router.get('/quiz/analytics', requireAuth, async (req, res) => {
         .from(quizResults)
         .orderBy(desc(quizResults.createdAt))
         .limit(20);
-      quizResults = quizResultsQuery;
+      quizResultsList = quizResultsQuery;
       
       const countQuery = await db.select({ count: count() }).from(quizResults);
       totalCompletions = countQuery[0]?.count || 0;
     } catch (dbError) {
       console.log('Quiz results table not found or empty, returning empty results');
-      quizResults = [];
+      quizResultsList = [];
       totalCompletions = 0;
     }
     
     res.json({
       totalCompletions,
-      recentCompletions: quizResults.map((result: any) => ({
+      recentCompletions: quizResultsList.map((result: any) => ({
         id: result.id,
         name: `${result.first_name} ${result.last_name}`,
         email: result.email,
@@ -573,17 +573,24 @@ router.get("/reorder-analytics", requireAuth, async (req, res) => {
     const completedReorders = logs.filter(log => log.status === 'completed').length;
     const conversionRate = totalReorders > 0 ? completedReorders / totalReorders : 0;
     
-    const completedLogs = logs.filter(log => log.status === 'completed' && log.newAmount);
-    const totalReorderValue = completedLogs.reduce((sum, log) => sum + (log.newAmount || 0), 0);
+    const completedLogs = logs.filter(log => log.status === 'completed' && log.metadata);
+    const totalReorderValue = completedLogs.reduce((sum, log) => {
+      try {
+        const meta = typeof log.metadata === 'string' ? JSON.parse(log.metadata) : log.metadata;
+        return sum + (meta?.newAmount || 0);
+      } catch { return sum; }
+    }, 0);
     const avgReorderValue = completedReorders > 0 ? totalReorderValue / completedReorders : 0;
     
     // Channel analytics
     const channelMap = new Map<string, { count: number; value: number }>();
     logs.forEach(log => {
-      const existing = channelMap.get(log.channel) || { count: 0, value: 0 };
-      channelMap.set(log.channel, {
+      const meta = typeof log.metadata === 'string' ? JSON.parse(log.metadata) : log.metadata;
+      const channel = meta?.channel || 'unknown';
+      const existing = channelMap.get(channel) || { count: 0, value: 0 };
+      channelMap.set(channel, {
         count: existing.count + 1,
-        value: existing.value + (log.newAmount || 0)
+        value: existing.value + (meta?.newAmount || 0)
       });
     });
     
@@ -607,11 +614,11 @@ router.get("/reorder-analytics", requireAuth, async (req, res) => {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     
-    const recentLogs = logs.filter(log => new Date(log.timestamp) >= sevenDaysAgo);
+    const recentLogs = logs.filter(log => log.timestamp && new Date(log.timestamp) >= sevenDaysAgo);
     const dailyMap = new Map<string, { count: number; value: number }>();
     
     recentLogs.forEach(log => {
-      const date = new Date(log.timestamp).toISOString().split('T')[0];
+      const date = log.timestamp ? new Date(log.timestamp).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
       const existing = dailyMap.get(date) || { count: 0, value: 0 };
       dailyMap.set(date, {
         count: existing.count + 1,
