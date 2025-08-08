@@ -50,9 +50,7 @@ export default function Alfr3dDashboard() {
     mutationFn: async (issueId: string) => {
       console.log(`[ALFR3D Frontend] Generating fix prompt for issue: ${issueId}`);
       
-      const response = await apiRequest(`/api/alfr3d/issues/${issueId}/fix-prompt`, {
-        method: 'POST',
-      });
+      const response = await apiRequest('POST', `/api/alfr3d/issues/${issueId}/fix-prompt`);
       
       if (!response.ok) {
         const error = await response.json();
