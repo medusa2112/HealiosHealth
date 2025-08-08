@@ -96,6 +96,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const alfr3dRoutes = await import('./routes/alfr3d');
     app.use('/api/alfr3d', alfr3dRoutes.default);
   }
+  
 
   // Get all products - FROM DATABASE
   app.get("/api/products", async (req, res) => {

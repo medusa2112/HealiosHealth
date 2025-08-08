@@ -1,7 +1,7 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription } from "@shared/schema";
-import { type SecurityIssue, type InsertSecurityIssue, type FixAttempt, type InsertFixAttempt } from "@shared/alfr3d-schema";
-import { type FixPrompt, type FixEffectivenessAnalysis } from "../types/alfr3d";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type InsertReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue, type SecurityScan, type InsertSecurityScan } from "@shared/schema";
+import { type FixPrompt, type FixEffectivenessAnalysis, type FixAttempt, type InsertFixAttempt } from "../../types/alfr3d";
 import { randomUUID } from "crypto";
+import { mockSecurityIssues } from "./security-seed";
 
 export interface IStorage {
   // Products
@@ -251,6 +251,7 @@ export class MemStorage implements IStorage {
     this.seedReorderLogs();
     this.seedDiscountCodes(); // Phase 15
     this.seedBundles(); // Phase 16
+    this.seedSecurityIssues(); // ALFR3D mock data
   }
 
   private seedData() {
@@ -2831,6 +2832,15 @@ export class MemStorage implements IStorage {
   
   async getSecurityIssueById(id: string): Promise<SecurityIssue | undefined> {
     return this.securityIssues.get(id);
+  }
+  
+  // Seed mock security issues for ALFR3D testing
+  private seedSecurityIssues(): void {
+    console.log('✅ Seeding ALFR3D security issues for testing');
+    mockSecurityIssues.forEach(issue => {
+      this.securityIssues.set(issue.id, issue);
+    });
+    console.log(`✅ Seeded ${mockSecurityIssues.length} security issues`);
   }
 }
 

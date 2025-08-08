@@ -1,16 +1,8 @@
 import OpenAI from "openai";
-import type { SecurityIssue } from "../../types/alfr3d";
+import type { SecurityIssue } from "@shared/schema";
+import type { FixPrompt } from "../../types/alfr3d";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-interface FixPrompt {
-  analysis: string;
-  steps: string[];
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
-  estimatedTime: string;
-  prerequisites: string[];
-  testingApproach: string;
-}
 
 export class Alfr3dExpert {
   /**
@@ -54,14 +46,6 @@ export class Alfr3dExpert {
 
     } catch (error) {
       console.error('[ALFR3D Expert] Failed to generate fix prompt:', error);
-      console.error('[ALFR3D Expert] Error details:', {
-        message: error.message,
-        status: error.status,
-        code: error.code,
-        issueTitle: issue.title,
-        issueType: issue.type,
-        expertPromptLength: expertPrompt.length
-      });
       throw new Error(`Failed to generate AI fix prompt: ${error.message}`);
     }
   }
@@ -143,42 +127,6 @@ This is a ${issue.type} issue in a TypeScript/Node.js e-commerce application usi
 6. Define comprehensive testing approach
 
 The fix should be production-ready and follow security best practices for enterprise applications.`;
-  }
-
-  /**
-   * Compare fix attempts to track success/failure patterns
-   */
-  async analyzeFixEffectiveness(
-    originalIssues: SecurityIssue[], 
-    postFixIssues: SecurityIssue[]
-  ): Promise<{
-    fixed: SecurityIssue[];
-    persistent: SecurityIssue[];
-    newIssues: SecurityIssue[];
-    analysis: string;
-  }> {
-    const originalIssueMap = new Map(originalIssues.map(issue => [this.getIssueKey(issue), issue]));
-    const postFixIssueMap = new Map(postFixIssues.map(issue => [this.getIssueKey(issue), issue]));
-
-    const fixed = originalIssues.filter(issue => !postFixIssueMap.has(this.getIssueKey(issue)));
-    const persistent = originalIssues.filter(issue => postFixIssueMap.has(this.getIssueKey(issue)));
-    const newIssues = postFixIssues.filter(issue => !originalIssueMap.has(this.getIssueKey(issue)));
-
-    const analysis = `Fix Analysis:
-✅ Fixed: ${fixed.length} issues resolved
-⚠️  Persistent: ${persistent.length} issues remain
-🆕 New Issues: ${newIssues.length} new issues introduced
-
-Success Rate: ${Math.round((fixed.length / originalIssues.length) * 100)}%`;
-
-    return { fixed, persistent, newIssues, analysis };
-  }
-
-  /**
-   * Generate a unique key for an issue to track it across scans
-   */
-  private getIssueKey(issue: SecurityIssue): string {
-    return `${issue.type}-${issue.file}-${issue.line || 'noLine'}-${issue.title.replace(/\s+/g, '')}`;
   }
 }
 
