@@ -1,5 +1,6 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { z } from 'zod';
+import { query, body, param, validationResult } from 'express-validator';
 import { requireAuth } from '../lib/auth';
 import { storage } from '../storage';
 import { products, orders, insertProductSchema, quizResults } from '@shared/schema';
@@ -588,8 +589,22 @@ router.get('/quiz/analytics', requireAuth, async (req, res) => {
 });
 
 // Phase 13: Reorder Analytics API Routes
-router.get("/reorder-logs", requireAuth, async (req, res) => {
+router.get("/reorder-logs", [
+  query('status').optional().isString().withMessage('Status must be a string'),
+  query('channel').optional().isString().withMessage('Channel must be a string'), 
+  query('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),
+  requireAuth
+], async (req: Request, res: Response) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
     const { status, channel, limit = 100 } = req.query;
     
     const options: any = { limit: parseInt(limit as string) };
@@ -695,13 +710,16 @@ router.get('/metrics', requireAuth, async (req, res) => {
     let totalRevenue = 0;
     
     try {
-      const orderCountResult = await db.execute(sql`SELECT COUNT(*) as count FROM orders`);
-      totalOrdersCount = parseInt(orderCountResult.rows[0]?.count || '0');
+      // Get total orders count using Drizzle ORM
+      const orderCountResult = await db.select({ count: count() }).from(orders);
+      totalOrdersCount = orderCountResult[0]?.count || 0;
       
-      const revenueResult = await db.execute(
-        sql`SELECT SUM(CAST(total_amount AS DECIMAL)) as total FROM orders WHERE payment_status = 'completed'`
-      );
-      totalRevenue = parseFloat(revenueResult.rows[0]?.total || '0');
+      // Get total revenue using Drizzle ORM
+      const revenueResult = await db
+        .select({ total: sum(orders.totalAmount) })
+        .from(orders)
+        .where(eq(orders.paymentStatus, 'completed'));
+      totalRevenue = parseFloat(revenueResult[0]?.total || '0');
     } catch (error) {
       console.log('Orders metrics query failed:', error.message);
     }
@@ -723,10 +741,15 @@ router.get('/metrics', requireAuth, async (req, res) => {
     
     let activeUsers = 0;
     try {
-      const activeUsersResult = await db.execute(
-        sql`SELECT COUNT(DISTINCT customer_email) as count FROM orders WHERE created_at >= NOW() - INTERVAL '30 days'`
-      );
-      activeUsers = parseInt(activeUsersResult.rows[0]?.count || '0');
+      // Get active users count using Drizzle ORM
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      const activeUsersResult = await db
+        .select({ count: countDistinct(orders.customerEmail) })
+        .from(orders)
+        .where(sql`${orders.createdAt} >= ${thirtyDaysAgo}`);
+      activeUsers = activeUsersResult[0]?.count || 0;
     } catch (error) {
       console.log('Active users metrics failed:', error.message);
     }
@@ -821,8 +844,29 @@ router.get('/products/:id/variants', requireAuth, async (req, res) => {
   }
 });
 
-router.post('/products/:id/variants', requireAuth, async (req, res) => {
+router.post('/products/:id/variants', [
+  param('id').isUUID().withMessage('Product ID must be a valid UUID'),
+  body('name').isString().notEmpty().withMessage('Name is required and must be a string'),
+  body('sku').optional().isString().withMessage('SKU must be a string'),
+  body('type').isString().notEmpty().withMessage('Type is required and must be a string'),
+  body('attributes').optional().isObject().withMessage('Attributes must be an object'),
+  body('price').optional().isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+  body('imageUrl').optional().isURL().withMessage('Image URL must be valid'),
+  body('stockQuantity').optional().isInt({ min: 0 }).withMessage('Stock quantity must be a non-negative integer'),
+  body('inStock').optional().isBoolean().withMessage('inStock must be a boolean'),
+  body('isDefault').optional().isBoolean().withMessage('isDefault must be a boolean'),
+  requireAuth
+], async (req: Request, res: Response) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
     const { name, sku, type, attributes, price, imageUrl, stockQuantity, inStock, isDefault } = req.body;
     const productId = req.params.id;
     

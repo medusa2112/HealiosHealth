@@ -1,4 +1,5 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import { param, validationResult } from "express-validator";
 import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
 import { z } from "zod";
@@ -67,8 +68,20 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // Get logs for a specific admin user
-router.get("/admin/:adminId", requireAuth, async (req, res) => {
+router.get("/admin/:adminId", [
+  param('adminId').isUUID().withMessage('Admin ID must be a valid UUID'),
+  requireAuth
+], async (req: Request, res: Response) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
     const { adminId } = req.params;
     const logs = await storage.getAdminLogsByAdmin(adminId);
     res.json(logs);
@@ -79,8 +92,21 @@ router.get("/admin/:adminId", requireAuth, async (req, res) => {
 });
 
 // Get logs for a specific target
-router.get("/target/:targetType/:targetId", requireAuth, async (req, res) => {
+router.get("/target/:targetType/:targetId", [
+  param('targetType').isAlpha().withMessage('Target type must contain only letters'),
+  param('targetId').isLength({ min: 1, max: 50 }).withMessage('Target ID must be 1-50 characters'),
+  requireAuth
+], async (req: Request, res: Response) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
     const { targetType, targetId } = req.params;
     const logs = await storage.getAdminLogsByTarget(targetType, targetId);
     res.json(logs);

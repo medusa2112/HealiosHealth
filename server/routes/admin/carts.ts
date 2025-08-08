@@ -1,4 +1,5 @@
 import express from "express";
+import { param, validationResult } from "express-validator";
 import { requireAuth } from "../../lib/auth";
 import { storage } from "../../storage";
 
@@ -75,8 +76,21 @@ router.get("/analytics", requireAuth, async (req, res) => {
 });
 
 // Convert abandoned cart to order (recovery action)
-router.post("/:cartId/recover", requireAuth, async (req, res) => {
+router.post("/:cartId/recover", [
+  param('cartId').isUUID().withMessage('Cart ID must be a valid UUID'),
+  requireAuth
+], async (req, res) => {
   try {
+    // Check for validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed',
+        errors: errors.array() 
+      });
+    }
+    
+    // Now safely destructure the validated data
     const { cartId } = req.params;
     const cart = await storage.getCartById(cartId);
     
