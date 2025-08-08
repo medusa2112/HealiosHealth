@@ -291,7 +291,7 @@ export default function AdminProductEdit() {
       />
       <div className="max-w-6xl mx-auto px-6">
         {/* Header Actions */}
-        <div className="mb-8 flex justify-end">
+        <div className="pt-5 mb-8 flex justify-end">
           <Button 
             form="product-form"
             type="submit"
