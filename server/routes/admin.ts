@@ -59,7 +59,7 @@ router.get('/', requireAuth, async (req, res) => {
     const dbProducts = await db.select().from(products);
     
     // Query actual orders from database with pagination support
-    let dbOrders = [];
+    let dbOrders: any[] = [];
     let totalRevenue = 0;
     let totalOrdersCount = 0;
     
@@ -259,20 +259,47 @@ router.get('/products/:id', requireAuth, async (req, res) => {
 });
 
 router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {
+  console.log('[ADMIN_PRODUCT] POST /products - Request received', {
+    userId: (req as any).session?.userId,
+    userEmail: (req as any).user?.email,
+    bodyKeys: Object.keys(req.body),
+    bodySize: JSON.stringify(req.body).length
+  });
+  
   try {
+    console.log('[ADMIN_PRODUCT] Validating product data', {
+      name: req.body.name,
+      price: req.body.price,
+      priceType: typeof req.body.price,
+      categories: req.body.categories
+    });
+    
     // Use SINGLE SOURCE OF TRUTH - shared schema
     const result = insertProductSchema.safeParse(req.body);
     if (!result.success) {
-      console.error('Product validation failed:', result.error.errors);
+      console.error('[ADMIN_PRODUCT] Validation failed', {
+        errors: result.error.errors,
+        receivedData: req.body,
+        issues: result.error.issues
+      });
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: result.error.errors
       });
     }
     
+    console.log('[ADMIN_PRODUCT] Validation successful, inserting to database', {
+      validatedData: result.data
+    });
+    
     // Use validated data DIRECTLY - no double conversion needed
     const validatedProductData = result.data;
     const [product] = await db.insert(products).values(validatedProductData).returning();
+    
+    console.log('[ADMIN_PRODUCT] Product created successfully', {
+      productId: product.id,
+      productName: product.name
+    });
     
     // Log admin action (no auth required)
     await AdminLogger.logProductAction(
@@ -283,13 +310,26 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
     );
     
     res.status(201).json(product);
-  } catch (error) {
-    console.error('Failed to create product:', error);
-    res.status(500).json({ message: 'Failed to create product' });
+  } catch (error: any) {
+    console.error('[ADMIN_PRODUCT] Failed to create product', {
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code
+    });
+    res.status(500).json({ message: 'Failed to create product', error: error.message });
   }
 });
 
 router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {
+  console.log('[ADMIN_PRODUCT] PUT /products/:id - Request received', {
+    productId: req.params.id,
+    userId: (req as any).session?.userId,
+    userEmail: (req as any).user?.email,
+    bodyKeys: Object.keys(req.body),
+    bodySize: JSON.stringify(req.body).length
+  });
+  
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -297,17 +337,32 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     
     const paramsResult = paramsSchema.safeParse(req.params);
     if (!paramsResult.success) {
+      console.error('[ADMIN_PRODUCT] Invalid product ID', {
+        params: req.params,
+        errors: paramsResult.error.errors
+      });
       return res.status(400).json({ 
         error: 'Invalid product ID',
         details: paramsResult.error.errors
       });
     }
     
+    console.log('[ADMIN_PRODUCT] Validating update data', {
+      productId: req.params.id,
+      updateFields: Object.keys(req.body),
+      price: req.body.price,
+      priceType: typeof req.body.price
+    });
+    
     // Use SINGLE SOURCE OF TRUTH - shared schema made partial for updates  
     const updateSchema = insertProductSchema.partial();
     const bodyResult = updateSchema.safeParse(req.body);
     if (!bodyResult.success) {
-      console.error('Product update validation failed:', bodyResult.error.errors);
+      console.error('[ADMIN_PRODUCT] Update validation failed', {
+        errors: bodyResult.error.errors,
+        receivedData: req.body,
+        issues: bodyResult.error.issues
+      });
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: bodyResult.error.errors
@@ -315,6 +370,11 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     }
     
     const { id } = paramsResult.data;
+    
+    console.log('[ADMIN_PRODUCT] Validation successful, updating database', {
+      productId: id,
+      updates: bodyResult.data
+    });
     
     // Use validated data DIRECTLY - add timestamp for updates
     const updates = {
@@ -324,8 +384,14 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
 
     const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
     if (!product) {
+      console.warn('[ADMIN_PRODUCT] Product not found', { productId: id });
       return res.status(404).json({ message: 'Product not found' });
     }
+    
+    console.log('[ADMIN_PRODUCT] Product updated successfully', {
+      productId: product.id,
+      productName: product.name
+    });
     
     // Log admin action (no auth required)
     await AdminLogger.logProductAction(
@@ -336,9 +402,15 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
     );
 
     res.json(product);
-  } catch (error) {
-    console.error('Failed to update product:', error);
-    res.status(500).json({ message: 'Failed to update product' });
+  } catch (error: any) {
+    console.error('[ADMIN_PRODUCT] Failed to update product', {
+      productId: req.params.id,
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code
+    });
+    res.status(500).json({ message: 'Failed to update product', error: error.message });
   }
 });
 

@@ -3,6 +3,12 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
+    console.error('[API_ERROR] Response not OK', {
+      status: res.status,
+      statusText: res.statusText,
+      url: res.url,
+      responseText: text
+    });
     throw new Error(`${res.status}: ${text}`);
   }
 }
@@ -12,15 +18,47 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  console.log('[API_REQUEST] Starting request', {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
+    url,
+    hasData: !!data,
+    dataType: data ? typeof data : 'none',
+    data
   });
+  
+  const startTime = Date.now();
+  
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: data ? { "Content-Type": "application/json" } : {},
+      body: data ? JSON.stringify(data) : undefined,
+      credentials: "include",
+    });
 
-  await throwIfResNotOk(res);
-  return res;
+    const duration = Date.now() - startTime;
+    console.log('[API_REQUEST] Response received', {
+      url,
+      status: res.status,
+      statusText: res.statusText,
+      ok: res.ok,
+      duration: `${duration}ms`,
+      headers: Object.fromEntries(res.headers.entries())
+    });
+
+    await throwIfResNotOk(res);
+    return res;
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    console.error('[API_REQUEST] Request failed', {
+      url,
+      method,
+      error,
+      duration: `${duration}ms`,
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+    throw error;
+  }
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
@@ -29,16 +67,30 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    const url = queryKey.join("/") as string;
+    console.log('[QUERY] Fetching', { url, queryKey });
+    
+    const startTime = Date.now();
+    const res = await fetch(url, {
       credentials: "include",
     });
 
+    const duration = Date.now() - startTime;
+    console.log('[QUERY] Response', {
+      url,
+      status: res.status,
+      duration: `${duration}ms`
+    });
+
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
+      console.log('[QUERY] 401 - Returning null as configured');
       return null;
     }
 
     await throwIfResNotOk(res);
-    return await res.json();
+    const data = await res.json();
+    console.log('[QUERY] Data received', { url, dataSize: JSON.stringify(data).length });
+    return data;
   };
 
 export const queryClient = new QueryClient({

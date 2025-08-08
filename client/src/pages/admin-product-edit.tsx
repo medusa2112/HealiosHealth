@@ -98,6 +98,12 @@ export default function AdminProductEdit() {
 
   const updateProductMutation = useMutation({
     mutationFn: async (data: ProductFormData) => {
+      console.log('[PRODUCT_EDIT] Starting product mutation', {
+        isEditing,
+        productId: id,
+        formData: data
+      });
+      
       // IMPORTANT: price and originalPrice must be STRINGS for decimal columns
       const payload = {
         name: data.name,
@@ -119,6 +125,12 @@ export default function AdminProductEdit() {
         rating: "5.0",  // Default rating
         reviewCount: 0   // Default review count
       };
+      
+      console.log('[PRODUCT_EDIT] Prepared payload', {
+        endpoint: isEditing ? `/api/admin/products/${id}` : '/api/admin/products',
+        method: isEditing ? 'PUT' : 'POST',
+        payload
+      });
 
       if (isEditing) {
         return apiRequest("PUT", `/api/admin/products/${id}`, payload);
@@ -127,6 +139,12 @@ export default function AdminProductEdit() {
       }
     },
     onSuccess: (data: any) => {
+      console.log('[PRODUCT_EDIT] Mutation success', {
+        response: data,
+        productId: data?.id,
+        isEditing
+      });
+      
       queryClient.invalidateQueries({ queryKey: ["/api/admin/products"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin"] });
       queryClient.invalidateQueries({ queryKey: [`/api/admin/products/${id}`] });
@@ -137,10 +155,18 @@ export default function AdminProductEdit() {
       
       // Only redirect for new products, stay on edit page for updates
       if (!isEditing && data?.id) {
+        console.log('[PRODUCT_EDIT] Redirecting to', `/admin/products/${data.id}`);
         setLocation(`/admin/products/${data.id}`);
       }
     },
     onError: (error: any) => {
+      console.error('[PRODUCT_EDIT] Mutation error', {
+        error,
+        message: error.message,
+        response: error.response,
+        status: error.status
+      });
+      
       toast({ 
         title: "Error", 
         description: error.message || "Failed to save product",
@@ -174,9 +200,20 @@ export default function AdminProductEdit() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('[PRODUCT_EDIT] Form submission started', {
+      formData,
+      isEditing,
+      productId: id
+    });
+    
     // Validate form before submission
     const validationErrors = validateForm();
     if (validationErrors.length > 0) {
+      console.error('[PRODUCT_EDIT] Validation failed', {
+        errors: validationErrors,
+        formData
+      });
+      
       toast({
         title: 'Validation Error',
         description: validationErrors[0], // Show first error
@@ -185,6 +222,7 @@ export default function AdminProductEdit() {
       return;
     }
     
+    console.log('[PRODUCT_EDIT] Validation passed, starting mutation');
     updateProductMutation.mutate(formData);
   };
 
