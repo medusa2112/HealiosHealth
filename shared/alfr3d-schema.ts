@@ -3,47 +3,37 @@ import { pgTable, text, varchar, integer, boolean, decimal } from "drizzle-orm/p
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// ALFR3D Security Issues table
+// ALFR3D Security Issues table for Fix Tracking CLI
 export const securityIssues = pgTable("security_issues", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  type: varchar("type", { length: 64 }).notNull(), // e.g. "authentication", "input_validation"
-  severity: varchar("severity", { length: 16 }).notNull(), // "low", "medium", "high", "critical"
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  recommendation: text("recommendation").notNull(),
-  file: text("file").notNull(), // file path where issue was found
-  line: integer("line"), // line number (nullable)
-  route: text("route"), // API route if applicable
-  status: varchar("status", { length: 16 }).default("open"), // "open", "in_progress", "resolved"
-  fixPrompt: text("fix_prompt"), // AI generated fix prompt
+  id: text("id").primaryKey(),
+  type: text("type").notNull(), // e.g. unauthRoute, unvalidatedInput, rawSQL, sensitiveResp
+  filePath: text("filePath").notNull(),
+  line: integer("line").notNull(),
+  snippet: text("snippet").notNull(),
+  fixed: boolean("fixed").default(false),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
-// ALFR3D Security Scan Status table
-export const securityScans = pgTable("security_scans", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  status: varchar("status", { length: 16 }).notNull(), // "running", "completed", "failed"
-  issuesFound: integer("issues_found").default(0),
-  startedAt: text("started_at").default(sql`CURRENT_TIMESTAMP`),
-  completedAt: text("completed_at"),
-  errorMessage: text("error_message"),
+// Fix Attempts table for CLI tracking
+export const fixAttempts = pgTable("fix_attempts", {
+  id: text("id").primaryKey(),
+  summary: text("summary").notNull(),
+  fileCount: integer("fileCount").notNull(),
+  issueCount: integer("issueCount").notNull(),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Insert schemas for validation
 export const insertSecurityIssueSchema = createInsertSchema(securityIssues).omit({
-  id: true,
   createdAt: true,
-  updatedAt: true,
 });
 
-export const insertSecurityScanSchema = createInsertSchema(securityScans).omit({
-  id: true,
-  startedAt: true,
+export const insertFixAttemptSchema = createInsertSchema(fixAttempts).omit({
+  createdAt: true,
 });
 
 // Type exports
 export type SecurityIssue = typeof securityIssues.$inferSelect;
 export type InsertSecurityIssue = z.infer<typeof insertSecurityIssueSchema>;
-export type SecurityScan = typeof securityScans.$inferSelect;
-export type InsertSecurityScan = z.infer<typeof insertSecurityScanSchema>;
+export type FixAttempt = typeof fixAttempts.$inferSelect;
+export type InsertFixAttempt = z.infer<typeof insertFixAttemptSchema>;
