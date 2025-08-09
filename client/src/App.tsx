@@ -48,6 +48,7 @@ import { Terms } from "@/pages/terms";
 import { Careers } from "@/pages/careers";
 import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
+import Login from "@/pages/login";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -95,6 +96,9 @@ function Router() {
       <Route path="/careers" component={Careers} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/affiliate" component={Affiliate} />
+      
+      {/* Authentication Pages */}
+      <Route path="/login" component={Login} />
       
       <Route component={NotFound} />
     </Switch>
