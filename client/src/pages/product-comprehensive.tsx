@@ -2248,41 +2248,7 @@ export default function ProductComprehensive() {
           </div>
         </section>
       )}
-      {/* Sleep Benefits Section - Only show for products with sleep benefits */}
-      {productContent.sleepBenefit && (
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-              HONESTY OVER HYPE
-            </p>
-            <h2 className="text-2xl lg:text-3xl font-light text-gray-900 mb-8">
-              Scientifically supported sleep
-            </h2>
-            <p className="text-gray-600 mb-12">
-              Clinical studies show that Magnesium supplementation can improve sleep quality and duration when taken consistently as part of a healthy routine.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-12 mb-8">
-              <div>
-                <div className="text-4xl font-light text-gray-900 mb-2">42</div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  MINUTES EXTRA SLEEP
-                </p>
-              </div>
-              <div>
-                <div className="text-4xl font-light text-gray-900 mb-2">32%</div>
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  INCREASE IN SLEEP QUALITY
-                </p>
-              </div>
-            </div>
-            
-            <p className="text-xs text-gray-500">
-              *Results based on clinical research with magnesium supplementation. Individual results may vary.
-            </p>
-          </div>
-        </section>
-      )}
+
       {/* Fixed Bottom Purchase Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-50 lg:hidden">
         <div className="space-y-3">
