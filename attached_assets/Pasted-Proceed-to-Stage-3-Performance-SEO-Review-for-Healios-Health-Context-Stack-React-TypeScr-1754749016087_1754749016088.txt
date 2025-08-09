@@ -1,0 +1,54 @@
+Proceed to Stage 3 – Performance & SEO Review for Healios Health.
+
+Context:
+- Stack: React + TypeScript frontend, Express backend, PostgreSQL with Drizzle ORM
+- Features: Supplements e-commerce, subscriptions, blog (“Journal”), AI assistant
+- Prior findings: Domain mismatch (wildclone.com), missing cookie consent, password hashing gap, missing CORS, no CSP
+
+Performance & SEO Review Tasks:
+
+1) Core Web Vitals
+   - Measure LCP, CLS, INP/FID for desktop and mobile (Google Lighthouse).
+   - Identify slowest templates/components.
+   - Flag render-blocking JS/CSS.
+
+2) Page Weight & Asset Optimisation
+   - Audit bundle sizes and unused JS/CSS.
+   - Identify large assets (>200 KB) and unoptimised images/video (lazy-loading, next/image).
+   - Check caching headers for static assets.
+
+3) Server-Side Rendering & Indexing
+   - Verify SSR/SSG use on key landing pages (products, blog posts).
+   - Check for hydration issues and “flash of unstyled content”.
+   - Ensure robots.txt and sitemap.xml reflect thehealios.com only.
+
+4) Metadata & Structured Data
+   - Confirm meta titles/descriptions per page (no duplicates).
+   - Check Open Graph/Twitter card tags.
+   - Validate JSON-LD schema.org for:
+     • Product (name, image, price, availability, SKU, brand)
+     • BlogPosting (headline, author, datePublished)
+   - Ensure prices are in GBP and reflect VAT inclusion where required.
+
+5) Internal Linking & Navigation
+   - Audit nav menus, breadcrumb trails (fix any “wildclone.com” refs).
+   - Confirm internal linking supports crawl depth ≤3.
+   - Identify orphan pages.
+
+6) Mobile Usability
+   - Test responsive behaviour on multiple breakpoints.
+   - Check tap targets, font sizes, viewport meta tags.
+
+7) Accessibility SEO Cross-check
+   - Ensure all images have alt attributes.
+   - Use semantic HTML headings (<h1>-<h3>) per page.
+   - Flag non-descriptive link text (“click here”).
+
+Deliverables:
+- Summary [≤6 bullets]
+- Findings Table: [ID | Severity | Area | Evidence (URL or file:line) | Impact | Confidence%]
+- Minimal Plan (smallest fixes with biggest SEO/perf gains first)
+- Risks & Rollback
+- Open Questions
+
+Only output the Stage 3 report in the specified format.
