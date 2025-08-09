@@ -983,6 +983,32 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports skin elasticity, hair strength, nail vitality and joint health'
         };
+      case 'bio-cultures-vitamin-plus':
+        return {
+          bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
+          bundlePrice: 'R1552.85',
+          bundleOriginalPrice: 'R1743.97',
+          sectionTitle: 'THE GUT-HEALTH ADVANTAGE',
+          sectionHeading: 'Advanced probiotic + vitamin\ncomplex for digestive wellness\nand immune system support.',
+          stat1Number: '5 Billion',
+          stat1Text: 'Live Probiotic\nCultures CFU',
+          stat2Number: '4 Strains',
+          stat2Text: 'Clinically Studied\nProbiotics',
+          stat3Number: '6 Vitamins',
+          stat3Text: 'Essential B-Complex\n& Vitamin C',
+          stat4Number: '100%',
+          stat4Text: 'Shelf-Stable\nFormulation',
+          testimonial: '"Bio Cultures + Vitamins combines the gut health benefits of probiotics with essential vitamins in one convenient daily supplement. The shelf-stable formulation ensures potency without refrigeration."',
+          testimonialAuthor: 'DR. MARIA GONZALEZ',
+          testimonialTitle: 'Gastroenterologist & Gut Health Specialist',
+          benefitTitle: 'Complete digestive and immune support',
+          benefitDescription: '5 billion CFU of 4 clinically studied probiotic strains combined with essential B-complex vitamins and vitamin C support digestive health, immune function, and energy metabolism.',
+          ingredientSource: 'Bifidobacterium, Lactobacillus strains + B-complex vitamins',
+          ingredientForm: 'Pineapple-flavored chewable gummies',
+          ingredientOrigin: 'Shelf-stable probiotic cultures with essential vitamin complex',
+          sleepBenefit: false,
+          primaryBenefit: 'Supports digestive health, immune function, and vitamin B complex needs'
+        };
       default:
         return {
           bundleWith: 'Premium Wellness Bundle',
