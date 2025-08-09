@@ -276,18 +276,18 @@ export default function HomePage() {
     return () => observer.disconnect();
   }, [rightHasReachedCenter]);
 
-  const { data: featuredProducts, isLoading } = useQuery({
-    queryKey: ['/api/products/featured'],
+  const { data: allProducts, isLoading } = useQuery({
+    queryKey: ['/api/products'],
   });
 
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'childrens-multivitamin', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom', 'bio-cultures-vitamin-plus'],
-    VITAMINS: ['vitamin-d3', 'childrens-multivitamin', 'folic-acid-400', 'bio-cultures-vitamin-plus'],
+    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom', 'bio-cultures-vitamin-plus'],
+    VITAMINS: ['vitamin-d3', 'folic-acid-400', 'bio-cultures-vitamin-plus', 'iron-vitamin-c'],
     ADAPTOGENS: ['ashwagandha', 'mind-memory-mushroom'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins', 'bio-cultures-vitamin-plus'],
-    MINERALS: ['magnesium', 'iron-vitamin-c'],
+    MINERALS: ['magnesium', 'magnesium-bisglycinate-b6', 'iron-vitamin-c'],
     BEAUTY: ['collagen-complex', 'biotin-5000', 'collagen-powder'],
     PRENATAL: ['folic-acid-400'],
     APPAREL: ['healios-oversized-tee'],
@@ -305,12 +305,12 @@ export default function HomePage() {
   };
 
   const getFilteredProducts = () => {
-    if (!featuredProducts || !Array.isArray(featuredProducts)) return [];
+    if (!allProducts || !Array.isArray(allProducts)) return [];
     
     const categoryFilter = categories[selectedCategory as keyof typeof categories];
     let filteredProducts = categoryFilter === 'all' 
-      ? featuredProducts 
-      : featuredProducts.filter((product: any) => 
+      ? allProducts 
+      : allProducts.filter((product: any) => 
           Array.isArray(categoryFilter) && categoryFilter.includes(product.id)
         );
     
