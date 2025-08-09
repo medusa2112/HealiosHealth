@@ -697,6 +697,7 @@ export default function HomePage() {
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
                     'magnesium': 'Sleep',
+                    'magnesium-bisglycinate-b6': 'Sleep',
                     'children-multivitamin': 'Kids',
                     'childrens-multivitamin': 'Kids',
                     'probiotic-vitamins': 'Immunity',
