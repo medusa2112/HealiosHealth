@@ -2269,15 +2269,9 @@ export default function ProductComprehensive() {
               </div>
             </div>
             
-            <p className="text-xs text-gray-500 mb-8">
+            <p className="text-xs text-gray-500">
               *Results based on clinical research with magnesium supplementation. Individual results may vary.
             </p>
-            
-            <img
-              src={createProductSVG('magnesium')}
-              alt="Sleep and wellness lifestyle"
-              className="w-full h-64 object-cover"
-            />
           </div>
         </section>
       )}
