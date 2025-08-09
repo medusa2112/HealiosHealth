@@ -2165,83 +2165,85 @@ export default function ProductComprehensive() {
           </Button>
         </div>
       </section>
-      {/* Product-Specific Facts Section - Like Home Page */}
-      <section className="bg-white">
-        <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
-          {/* Content */}
-          <div className="py-24 px-6 lg:px-16 flex items-center">
-            <div>
-              <div className="mb-8">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
-                  {productContent.sectionTitle}
-                </p>
-                <h2 className="text-2xl lg:text-3xl font-light text-gray-900 leading-tight mb-6">
-                  {productContent.sectionHeading}
-                </h2>
+      {/* Product-Specific Facts Section - Hide completely for healios-oversized-tee */}
+      {params?.id !== 'healios-oversized-tee' && (
+        <section className="bg-white">
+          <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
+            {/* Content */}
+            <div className="py-24 px-6 lg:px-16 flex items-center">
+              <div>
+                <div className="mb-8">
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">
+                    {productContent.sectionTitle}
+                  </p>
+                  <h2 className="text-2xl lg:text-3xl font-light text-gray-900 leading-tight mb-6">
+                    {productContent.sectionHeading}
+                  </h2>
+                </div>
+
+                {/* Statistics Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat1Number}</div>
+                    <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                      {productContent.stat1Text}
+                    </p>
+                  </div>
+
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat2Number}</div>
+                    <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                      {productContent.stat2Text}
+                    </p>
+                  </div>
+
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat3Number}</div>
+                    <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                      {productContent.stat3Text}
+                    </p>
+                  </div>
+
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat4Number}</div>
+                    <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
+                      {productContent.stat4Text}
+                    </p>
+                  </div>
+                </div>
+
+                {/* CTA Buttons - Hide for collagen-complex */}
+                {params?.id !== 'collagen-complex' && (
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/products">
+                      <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                        Shop Healios supplements →
+                      </button>
+                    </Link>
+                    <Link href="/science">
+                      <button className="border border-black text-black px-6 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors w-full sm:w-auto">
+                        Learn about our science →
+                      </button>
+                    </Link>
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Statistics Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-12">
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat1Number}</div>
-                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                    {productContent.stat1Text}
-                  </p>
-                </div>
-
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat2Number}</div>
-                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                    {productContent.stat2Text}
-                  </p>
-                </div>
-
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat3Number}</div>
-                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                    {productContent.stat3Text}
-                  </p>
-                </div>
-
-                <div className="text-center lg:text-left">
-                  <div className="text-3xl lg:text-4xl font-light text-gray-900 mb-3">{productContent.stat4Number}</div>
-                  <p className="text-xs text-gray-600 uppercase tracking-wide leading-relaxed">
-                    {productContent.stat4Text}
-                  </p>
-                </div>
-              </div>
-
-              {/* CTA Buttons - Hide for collagen-complex */}
-              {params?.id !== 'collagen-complex' && (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/products">
-                    <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
-                      Shop Healios supplements →
-                    </button>
-                  </Link>
-                  <Link href="/science">
-                    <button className="border border-black text-black px-6 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors w-full sm:w-auto">
-                      Learn about our science →
-                    </button>
-                  </Link>
-                </div>
-              )}
+            {/* Image */}
+            <div className="relative overflow-hidden">
+              <img
+                src={createProductSVG(params?.id || '')}
+                alt={`${product?.name} wellness lifestyle imagery`}
+                className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
+                style={{
+                  objectPosition: params?.id === 'mind-memory-mushroom' ? 'center center' : 'center center'
+                }}
+              />
             </div>
           </div>
-
-          {/* Image */}
-          <div className="relative overflow-hidden">
-            <img
-              src={createProductSVG(params?.id || '')}
-              alt={`${product?.name} wellness lifestyle imagery`}
-              className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
-              style={{
-                objectPosition: params?.id === 'mind-memory-mushroom' ? 'center center' : 'center center'
-              }}
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
       {/* Sleep Benefits Section - Only show for products with sleep benefits */}
       {productContent.sleepBenefit && (
         <section className="py-16 bg-gray-50">
