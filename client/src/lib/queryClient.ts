@@ -29,9 +29,29 @@ export async function apiRequest(
   const startTime = Date.now();
   
   try {
+    // Get CSRF token for POST/PUT/DELETE requests
+    let headers: Record<string, string> = {};
+    if (data) {
+      headers["Content-Type"] = "application/json";
+    }
+    
+    if (method !== 'GET' && method !== 'HEAD') {
+      try {
+        const csrfResponse = await fetch('/api/csrf/token', {
+          credentials: 'include'
+        });
+        if (csrfResponse.ok) {
+          const csrfData = await csrfResponse.json();
+          headers[csrfData.header] = csrfData.csrfToken;
+        }
+      } catch (csrfError) {
+        console.warn('[API_REQUEST] Failed to get CSRF token', csrfError);
+      }
+    }
+    
     const res = await fetch(url, {
       method,
-      headers: data ? { "Content-Type": "application/json" } : {},
+      headers,
       body: data ? JSON.stringify(data) : undefined,
       credentials: "include",
     });
