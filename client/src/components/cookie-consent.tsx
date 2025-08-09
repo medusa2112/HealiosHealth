@@ -56,7 +56,7 @@ export function CookieConsent() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-black/80 backdrop-blur-sm">
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-4">
       <Card className="max-w-4xl mx-auto bg-white dark:bg-gray-900 border shadow-lg">
         <CardContent className="p-6">
           {!showDetails ? (
