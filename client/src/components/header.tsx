@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Menu, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, ChevronDown, User } from "lucide-react";
 import { FaInstagram, FaFacebook, FaTiktok, FaGoogle } from "react-icons/fa";
 import { SiTrustpilot } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import healiosLogo from "@assets/healios-health27.png";
 
 export function Header() {
   const [location, setLocation] = useLocation();
   const { toggleCart, getTotalItems } = useCart();
-  const user = null; // Auth removed
+  const { user, logout } = useAuth();
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
   const totalItems = getTotalItems();
 
-  // Auth removed - no logout handler needed
+  const handleLogout = async () => {
+    await logout();
+    setLocation('/');
+  };
 
   // Handle scroll to shrink header
   useEffect(() => {
@@ -244,6 +255,55 @@ export function Header() {
               </a>
             </div>
             
+            {/* Account Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white hover:bg-transparent hover:text-healios-cyan transition-colors duration-200"
+                >
+                  <User className={`transition-all duration-300 ${
+                    isScrolled ? 'h-4 w-4' : 'h-5 w-5'
+                  }`} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-800">
+                {user ? (
+                  <>
+                    <DropdownMenuItem className="text-sm font-medium">
+                      {user.email}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {user.role === 'admin' && (
+                      <DropdownMenuItem onClick={() => setLocation('/admin')}>
+                        Admin Dashboard
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onClick={() => setLocation('/portal')}>
+                      My Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setLocation('/orders')}>
+                      Order History
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem onClick={() => setLocation('/login')}>
+                      Sign In
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setLocation('/register')}>
+                      Create Account
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
             {/* Cart */}
             <Button
               variant="ghost"
@@ -295,7 +355,50 @@ export function Header() {
                     </span>
                   </Link>
                   
-                  {/* Auth removed - no mobile user menu */}
+                  {/* Mobile User Menu */}
+                  <div className="border-t border-gray-700 mt-4 pt-4">
+                    {user ? (
+                      <>
+                        <p className="px-3 py-2 text-sm text-gray-400">{user.email}</p>
+                        {user.role === 'admin' && (
+                          <Link href="/admin">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                              Admin Dashboard
+                            </span>
+                          </Link>
+                        )}
+                        <Link href="/portal">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            My Account
+                          </span>
+                        </Link>
+                        <Link href="/orders">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            Order History
+                          </span>
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gray-300"
+                        >
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/login">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            Sign In
+                          </span>
+                        </Link>
+                        <Link href="/register">
+                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                            Create Account
+                          </span>
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>
