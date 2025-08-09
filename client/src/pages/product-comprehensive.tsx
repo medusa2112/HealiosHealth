@@ -36,6 +36,7 @@ import ironVitaminCImg from '@assets/generated_images/Active_diverse_group_exerc
 import beautyPortraitImg from '@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png';
 import ashwagandhaLabImg from '@assets/male-biochemist-performing-lab-test-on-sample-of-p-2025-03-09-23-29-26-utc (1) (1)_1754745532835.jpg';
 import magnesiumSleepImg from '@assets/young-woman-sleeping-peacefully-in-bed-enjoying-a-2025-06-25-09-17-06-utc (2)_1754745777161.jpg';
+import probioticVitaminsImg from '@assets/happy-tailor-taking-measurements-2024-09-22-20-26-57-utc (1) (1)_1754746253546.jpg';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
@@ -236,6 +237,9 @@ const createProductSVG = (productId: string): string => {
   }
   if (productId === 'bio-cultures-vitamin-plus') {
     return probioticLabImg;
+  }
+  if (productId === 'probiotic-vitamins') {
+    return probioticVitaminsImg;
   }
   if (productId === 'iron-vitamin-c') {
     return ironVitaminCImg;
@@ -2271,7 +2275,8 @@ export default function ProductComprehensive() {
                 alt={`${product?.name} wellness lifestyle imagery`}
                 className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
                 style={{
-                  objectPosition: params?.id === 'mind-memory-mushroom' ? 'center center' : 'center center'
+                  objectPosition: params?.id === 'mind-memory-mushroom' ? 'center center' : 'center center',
+                  transform: params?.id === 'probiotic-vitamins' ? 'scaleX(-1)' : 'none'
                 }}
               />
             </div>
