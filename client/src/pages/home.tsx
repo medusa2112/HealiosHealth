@@ -692,7 +692,7 @@ export default function HomePage() {
                   };
 
                   const productBadges = {
-                    'apple-cider-vinegar': 'Bestseller',
+                    'apple-cider-vinegar': 'Best Seller',
                     'vitamin-d3': 'Popular',
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
@@ -706,7 +706,7 @@ export default function HomePage() {
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
                     'mind-memory-mushroom': 'Focus',
-                    'collagen-powder': 'Premium',
+                    'collagen-powder': 'Latest',
                     'bio-cultures-vitamin-plus': 'Multi-Benefit',
                     'healios-oversized-tee': 'Lifestyle',
                   };
