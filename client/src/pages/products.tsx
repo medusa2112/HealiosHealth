@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { type Product } from "@shared/schema";
 import { ProductCard } from "@/components/product-card";
@@ -7,8 +7,6 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-
-const categories = ["All", "Gummies", "Vitamins", "Adaptogens", "Probiotics", "Minerals", "Children", "Beauty", "Prenatal", "Mushrooms", "Apparel"];
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,12 +17,52 @@ export default function Products() {
     queryKey: ["/api/products"],
   });
 
+  // Dynamically generate categories from actual products in database
+  const categories = useMemo(() => {
+    if (!products) return ["All"];
+    
+    const categorySet = new Set<string>();
+    products.forEach(product => {
+      if (product.categories && Array.isArray(product.categories)) {
+        product.categories.forEach(cat => categorySet.add(cat));
+      }
+    });
+    
+    // Sort categories alphabetically but keep "All" first
+    const sortedCategories = Array.from(categorySet).sort();
+    return ["All", ...sortedCategories];
+  }, [products]);
+
+  // Get product count for each category
+  const getCategoryCount = (category: string) => {
+    if (!products) return 0;
+    if (category === "All") return products.length;
+    
+    return products.filter(product => 
+      product.categories && 
+      Array.isArray(product.categories) && 
+      product.categories.includes(category)
+    ).length;
+  };
+
+  // Format category name for display
+  const formatCategoryName = (category: string) => {
+    if (category === "All") return "All";
+    // Convert hyphenated names to proper case
+    return category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   const filteredProducts = products?.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
     
+    // Check if product matches selected category
     const matchesCategory = selectedCategory === "All" || 
-                           product.categories?.includes(selectedCategory);
+                           (product.categories && Array.isArray(product.categories) && 
+                            product.categories.includes(selectedCategory));
     
     return matchesSearch && matchesCategory;
   }) || [];
@@ -93,7 +131,7 @@ export default function Products() {
           </p>
         </div>
 
-        {/* Category Pills */}
+        {/* Category Pills - Dynamically Generated from Database */}
         <div className="mb-8 sm:mb-12 flex justify-center px-4">
           <div className="flex flex-wrap lg:flex-nowrap gap-2 justify-center max-w-6xl overflow-x-auto lg:overflow-x-visible">
             {categories.map((category) => (
@@ -106,7 +144,12 @@ export default function Products() {
                     : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                {category}
+                {formatCategoryName(category)}
+                {!isLoading && (
+                  <span className="ml-1 opacity-60">
+                    ({getCategoryCount(category)})
+                  </span>
+                )}
               </button>
             ))}
           </div>

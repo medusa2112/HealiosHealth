@@ -64,6 +64,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - **2025-08-09**: Updated product images with stunning editorial photography for biotin, collagen, and prenatal products using real uploaded images instead of SVG placeholders
 - **2025-08-09**: Applied proper image positioning and cropping techniques to showcase product imagery effectively
 - **2025-08-09**: Fixed missing badge for Magnesium Complex product by adding correct product ID mapping for `magnesium-bisglycinate-b6`
+- **2025-08-09**: Made products page category filters fully dynamic - pulls categories directly from database products instead of hardcoded list, displays product counts for each category
 
 ## External Dependencies
 
