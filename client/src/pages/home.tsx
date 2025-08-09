@@ -767,7 +767,13 @@ export default function HomePage() {
                         {/* Product Info - Clean Style */}
                         <div className="space-y-2">
                           {/* Product Badge */}
-                          <div className="inline-block bg-black text-white px-2 py-1 text-xs font-medium">
+                          <div className={`inline-block px-2 py-1 text-xs font-medium ${
+                            productBadges[product.id as keyof typeof productBadges] === 'Bestseller' 
+                              ? 'bg-green-600 text-white' 
+                              : productBadges[product.id as keyof typeof productBadges] === 'Premium'
+                              ? 'bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 text-white backdrop-blur-sm'
+                              : 'bg-black text-white'
+                          }`}>
                             {productBadges[product.id as keyof typeof productBadges]}
                           </div>
                           
