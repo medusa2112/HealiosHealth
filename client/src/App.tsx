@@ -51,6 +51,7 @@ import { Affiliate } from "@/pages/affiliate";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { CookieConsent } from "@/components/cookie-consent";
 
 function Router() {
   // Automatically scroll to top on page navigation
@@ -133,6 +134,7 @@ function App() {
               />
             </div>
             <Toaster />
+            <CookieConsent />
           </CartProvider>
         </AuthProvider>
         </TooltipProvider>

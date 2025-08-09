@@ -24,7 +24,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
               </span>
             </Link>
             <meta itemProp="position" content="1" />
-            <link itemProp="item" href="https://wildclone.com" />
+            <link itemProp="item" href="https://thehealios.com" />
           </li>
           
           {items.map((item, index) => (
@@ -49,7 +49,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                 </Link>
               )}
               <meta itemProp="position" content={String(index + 2)} />
-              {item.href && <link itemProp="item" href={`https://wildclone.com${item.href}`} />}
+              {item.href && <link itemProp="item" href={`https://thehealios.com${item.href}`} />}
             </li>
           ))}
         </ol>

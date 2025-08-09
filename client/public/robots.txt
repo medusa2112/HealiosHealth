@@ -14,7 +14,7 @@ Allow: /contact
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://wildclone.com/sitemap.xml
+Sitemap: https://thehealios.com/sitemap.xml
 
 # Block admin areas (if any)
 Disallow: /admin/

@@ -2,17 +2,52 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { requestLogger, errorLogger } from "./middleware/requestLogger";
+import { csrfProtection } from "./middleware/csrf";
+import { contentSecurityPolicy } from "./middleware/csp";
 import { logger } from "./lib/logger";
 
 const app = express();
 
+// Remove security-revealing headers
+app.disable('x-powered-by');
+
+// Apply Content Security Policy and security headers
+app.use(contentSecurityPolicy);
+
 // Add comprehensive request logging BEFORE body parsing
 app.use(requestLogger);
+
+// CORS configuration for production security
+app.use((req, res, next) => {
+  const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? ['https://thehealios.com', 'https://www.thehealios.com']
+    : ['http://localhost:5000', 'http://127.0.0.1:5000'];
+  
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
+  res.setHeader('Access-Control-Max-Age', '86400');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Session management is handled in replitAuth.ts
+
+// CSRF protection for state-changing operations
+app.use('/api', csrfProtection);
 
 // Log application startup
 logger.info('SERVER', 'Starting application', {

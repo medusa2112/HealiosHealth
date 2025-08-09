@@ -37,6 +37,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // This is critical for webhook signature verification
   app.use('/stripe', stripeRoutes);
 
+  // Register CSRF token endpoint
+  app.use('/api/csrf', (await import('./routes/csrf')).default);
+  
   // Register auth routes
   app.use('/api/auth', authRoutes);
   app.use('/api/admin', adminRoutes);

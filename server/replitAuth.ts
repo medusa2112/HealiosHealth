@@ -46,13 +46,16 @@ export function getSession() {
   
   return session({
     secret: process.env.SESSION_SECRET!,
+    name: 'healios.sid', // Custom session name to avoid default 'connect.sid'
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    rolling: true, // Reset expiration on activity
     cookie: {
-      httpOnly: true,
-      secure: false, // Allow over HTTP in development
-      maxAge: sessionTtl,
+      httpOnly: true, // Prevent XSS access to cookies
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+      sameSite: 'strict', // CSRF protection via SameSite
+      maxAge: process.env.NODE_ENV === 'production' ? sessionTtl : 2 * 60 * 60 * 1000, // 2 hours in dev, 1 week in prod
     },
   });
 }

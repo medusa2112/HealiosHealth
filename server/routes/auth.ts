@@ -5,6 +5,7 @@ import { storage } from '../storage';
 import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
+import { hashPassword, verifyPassword, validatePassword } from '../lib/password';
 import { insertUserSchema } from '@shared/schema';
 
 const router = express.Router();
@@ -70,21 +71,172 @@ router.get('/user', isAuthenticated, async (req, res) => {
   }
 });
 
-// Registration handled by Replit Auth
-router.post("/register", (req, res) => {
-  res.status(501).json({ message: "Registration handled by Replit Auth" });
+// Password-based registration for local development/testing
+router.post("/register", loginLimiter, async (req, res) => {
+  try {
+    const registerSchema = z.object({
+      email: z.string().email(),
+      password: z.string().min(8),
+      firstName: z.string().min(1).optional(),
+      lastName: z.string().min(1).optional()
+    });
+
+    const result = registerSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, password, firstName, lastName } = result.data;
+
+    // Validate password strength
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ message: passwordValidation.message });
+    }
+
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
+
+    // Hash password
+    const passwordHash = await hashPassword(password);
+
+    // Create user with hashed password
+    const userData = {
+      email,
+      passwordHash,
+      firstName: firstName || null,
+      lastName: lastName || null,
+      role: 'customer' as const,
+      isActive: true
+    };
+
+    const user = await storage.createUser(userData);
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = user.id;
+
+    res.status(201).json({
+      success: true,
+      user: sanitizeUser(user),
+      message: 'Registration successful'
+    });
+
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Registration failed' });
+  }
 });
 
-// Mock Replit Auth login - in production this would redirect to Replit OAuth
+// Password-based login
+router.post('/login', loginLimiter, async (req, res) => {
+  try {
+    const loginSchema = z.object({
+      email: z.string().email(),
+      password: z.string().min(1)
+    });
+
+    const result = loginSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, password } = result.data;
+
+    // Get user by email
+    const user = await storage.getUserByEmail(email);
+    if (!user) {
+      await auditLogin(email, false, {
+        error: 'User not found',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Verify password if hash exists
+    if (user.passwordHash) {
+      const isValidPassword = await verifyPassword(password, user.passwordHash);
+      if (!isValidPassword) {
+        await auditLogin(user.id, false, {
+          error: 'Invalid password',
+          ip: req.ip || req.connection.remoteAddress,
+          userAgent: req.get('User-Agent')
+        });
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+    } else {
+      // For users without password hash (legacy/OAuth), deny password login
+      await auditLogin(user.id, false, {
+        error: 'Password authentication not available for this account',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(401).json({ message: 'Please use OAuth login for this account' });
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      await auditLogin(user.id, false, {
+        error: 'Account inactive',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(403).json({ message: 'Account is inactive' });
+    }
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = user.id;
+    
+    // Log successful login
+    await auditLogin(user.id, true, {
+      email: user.email,
+      role: user.role,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent')
+    });
+
+    // Redirect based on role
+    const redirectUrl = user.role === 'admin' ? '/admin' : 
+                       user.role === 'customer' ? '/portal' : '/';
+    
+    res.json({ 
+      success: true, 
+      user: sanitizeUser(user),
+      redirectUrl 
+    });
+  } catch (error) {
+    console.error('Auth error:', error);
+    // Log failed login attempt
+    const emailResult = z.object({ email: z.string().optional() }).safeParse(req.body);
+    if (emailResult.success && emailResult.data.email) {
+      await auditLogin(emailResult.data.email, false, {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+    }
+    res.status(500).json({ message: 'Authentication failed' });
+  }
+});
+
+// Legacy OAuth GET login endpoint
 router.get('/login', (req, res) => {
-  // In a real implementation, this would redirect to Replit OAuth
-  // For now, we'll provide a simple form for testing
   res.json({ 
-    message: "In production, this would redirect to Replit OAuth",
+    message: "Use POST /api/auth/login for password authentication",
     loginUrl: "/auth/mock-login" 
   });
 });
-
 
 // Logout endpoint
 router.post('/logout', async (req, res) => {

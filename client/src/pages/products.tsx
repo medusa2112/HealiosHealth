@@ -91,7 +91,7 @@ export default function Products() {
     "@type": "CollectionPage",
     "name": "Food-Grown® Supplements & Natural Vitamins",
     "description": "Shop our complete range of quality wellness supplements. Premium natural vitamins and supplements for daily wellness support.",
-    "url": "https://wildclone.com/products",
+    "url": "https://thehealios.com/products",
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [
