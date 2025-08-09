@@ -1,0 +1,61 @@
+Proceed to Stage 1 – Content & Compliance Review for Healios Health.
+
+Operating context:
+- Framework: React + TypeScript frontend, Express.js backend, PostgreSQL with Drizzle ORM
+- Production domain: thehealios.com (all prior "wildclone.com" references are incorrect)
+- Core focus: Supplements, e-commerce, AI assistant, blog content
+
+Review tasks:
+1) Regulatory & Health Claim Compliance (UK/EU)
+   - For each supplement product page:
+     • Identify all health/nutrition claims.
+     • Cross-check against EU Register of Nutrition and Health Claims (EFSA) and UK ASA/CAP guidance.
+     • Flag any unsubstantiated or prohibited claims; suggest compliant wording.
+   - Check that required disclaimers (“This product is not intended to…” etc.) are present, clear, and appropriately placed.
+   - Confirm ingredient lists, dosage instructions, allergen warnings, and country of origin are visible and complete.
+
+2) GDPR & PECR Compliance
+   - Verify that privacy policy covers:
+     • Personal data categories collected
+     • Processing purposes & lawful basis
+     • Third-party processors (Stripe, Google Cloud, OpenAI, email services)
+     • Data retention periods
+     • Data subject rights (access, erasure, portability)
+   - Check consent mechanisms for:
+     • Cookies (prior, granular consent; opt-out mechanism)
+     • Email/SMS marketing (unbundled, explicit opt-in)
+   - Confirm all forms have an accessible link to privacy policy and consent checkboxes where required.
+
+3) Terms & Conditions
+   - Check coverage for:
+     • Sales contract formation
+     • Pricing & taxes
+     • Delivery & returns
+     • Warranty/disclaimer of liability
+     • Governing law and jurisdiction
+   - Verify URLs and company details match thehealios.com production info.
+
+4) Content Consistency
+   - Search all static content (privacy, terms, cookies, disclaimers) for “wildclone.com” or outdated brand references.
+   - Flag any mismatches or broken links in legal documents.
+
+5) Blog & Informational Pages
+   - Scan “science” and “journal” content for:
+     • Medical advice disclaimers
+     • Accurate referencing of studies (no broken links, proper citations)
+     • No implication of disease prevention/treatment unless authorised.
+
+6) Deliverables
+   - Summary [≤6 bullets]
+   - Findings Table: [ID | Severity | Area | Evidence (URL/selector or file:line) | Impact | Confidence%]
+   - Minimal Plan: smallest legal/compliance fixes first
+   - Risks & Rollback: note any SEO or marketing copy impacts
+   - Open Questions
+
+Important:
+- Evidence must be page-specific (URL + section or selector).
+- Use UK English for all copy recommendations.
+- Flag both missing elements and inconsistent/misaligned content.
+- Do not rewrite copy yet — just identify compliance gaps.
+
+Begin Stage 1 now. Output only the Stage 1 report in the specified format.
