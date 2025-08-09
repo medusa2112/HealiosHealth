@@ -132,13 +132,13 @@ export default function Products() {
         </div>
 
         {/* Category Pills - Dynamically Generated from Database */}
-        <div className="mb-8 sm:mb-12 flex justify-center px-4">
-          <div className="flex flex-wrap lg:flex-nowrap gap-2 justify-center max-w-6xl overflow-x-auto lg:overflow-x-visible">
+        <div className="mb-6 sm:mb-8 flex justify-center px-2">
+          <div className="flex flex-wrap gap-1 sm:gap-2 justify-center max-w-7xl">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+                className={`px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium transition-colors whitespace-nowrap ${
                   selectedCategory === category
                     ? 'bg-black text-white'
                     : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -146,7 +146,7 @@ export default function Products() {
               >
                 {formatCategoryName(category)}
                 {!isLoading && (
-                  <span className="ml-1 opacity-60">
+                  <span className="ml-0.5 sm:ml-1 opacity-60">
                     ({getCategoryCount(category)})
                   </span>
                 )}
