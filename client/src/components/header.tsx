@@ -409,20 +409,20 @@ export function Header() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/healios-health27.png" 
-                  alt="Take our wellness quiz" 
+                  src="/assets/healios-health53.png" 
+                  alt="Best Seller - Apple Cider Vinegar" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-sm font-medium text-white mb-2">
-                    Need supplement guidance?
+                    Best Seller
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Take our personalized wellness quiz
+                    Apple Cider Vinegar Gummies
                   </p>
-                  <Link href="/quiz">
+                  <Link href="/products/apple-cider-vinegar">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
-                      Start Quiz →
+                      Shop Now →
                     </button>
                   </Link>
                 </div>
@@ -430,18 +430,18 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/healios-health31.jpg" 
-                  alt="A new journey" 
+                  src="/assets/healios-health44.png" 
+                  alt="Latest Product - Marine Collagen" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-sm font-medium text-white mb-2">
-                    A new journey
+                    Just Added
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Visit our pregnancy hub
+                    Marine Collagen Powder
                   </p>
-                  <Link href="/pregnancy">
+                  <Link href="/products/collagen-powder">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Explore →
                     </button>
