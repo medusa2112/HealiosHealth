@@ -51,6 +51,8 @@ import { Affiliate } from "@/pages/affiliate";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
 import Verify from "@/pages/verify";
+import ForgotPassword from "@/pages/forgot-password";
+import ResetPassword from "@/pages/reset-password";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -103,6 +105,8 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/verify" component={Verify} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       
       <Route component={NotFound} />
     </Switch>

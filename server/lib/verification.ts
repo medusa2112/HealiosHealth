@@ -30,28 +30,34 @@ export function generateExpiryTime(): Date {
 }
 
 // Send verification email
-export async function sendVerificationEmail(email: string, code: string, firstName?: string | null): Promise<void> {
-  const subject = "Your Healios verification code";
+export async function sendVerificationEmail(email: string, code: string, firstName?: string | null, type: 'verification' | 'reset' = 'verification'): Promise<void> {
+  const isReset = type === 'reset';
+  const subject = isReset ? "Reset your Healios password" : "Your Healios verification code";
+  const actionText = isReset ? "PASSWORD RESET" : "EMAIL VERIFICATION";
+  const headerText = isReset ? "Reset your password" : "Verify your email address";
+  const instructionText = isReset 
+    ? "To reset your password, please use the following verification code:"
+    : "To complete your registration and access your Healios account, please enter the verification code below:";
   
   const html = `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="utf-8">
-      <title>Email Verification - Healios</title>
+      <title>${isReset ? 'Password Reset' : 'Email Verification'} - Healios</title>
     </head>
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
       <div style="max-width: 600px; margin: 0 auto;">
         <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
-          EMAIL VERIFICATION
+          ${actionText}
         </div>
         
         <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
-          ${firstName ? `Hi ${firstName}, ` : ''}Verify your email address
+          ${firstName ? `Hi ${firstName}, ` : ''}${headerText}
         </h1>
         
         <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
-          To complete your registration and access your Healios account, please enter the verification code below:
+          ${instructionText}
         </p>
         
         <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-left: 4px solid #000; margin: 0 0 40px 0;">
@@ -64,7 +70,7 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
         </div>
         
         <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
-          If you didn't request this verification code, please ignore this email. Your account security remains protected.
+          If you didn't request this ${isReset ? 'password reset' : 'verification code'}, please ignore this email. Your account security remains protected.
         </p>
         
         <div style="border-top: 1px solid #e0e0e0; padding-top: 30px; margin-top: 50px;">

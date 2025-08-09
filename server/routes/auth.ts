@@ -580,4 +580,153 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
+// Forgot password endpoint
+router.post('/forgot-password', loginLimiter, async (req, res) => {
+  try {
+    const forgotPasswordSchema = z.object({
+      email: z.string().email()
+    });
+
+    const result = forgotPasswordSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid email address',
+        errors: result.error.errors
+      });
+    }
+
+    const { email } = result.data;
+
+    // Check if user exists
+    const user = await storage.getUserByEmail(email);
+    
+    // Always return success to prevent email enumeration attacks
+    if (!user) {
+      console.log(`[FORGOT_PASSWORD] Password reset requested for non-existent email: ${email}`);
+      return res.json({ 
+        success: true,
+        message: 'If an account exists with this email, password reset instructions have been sent.'
+      });
+    }
+
+    // Generate password reset code (similar to verification code)
+    const resetCode = generateVerificationCode();
+    const resetCodeHash = await hashVerificationCode(resetCode);
+    const resetExpiresAt = generateExpiryTime(); // 1 hour expiry
+
+    // Update user with reset code
+    await storage.updateUser(user.id, {
+      verificationCodeHash: resetCodeHash,
+      verificationExpiresAt: resetExpiresAt.toISOString(),
+      verificationAttempts: 0
+    });
+
+    // Send password reset email
+    try {
+      await sendVerificationEmail(email, resetCode, user.firstName, 'reset');
+      console.log(`[FORGOT_PASSWORD] Password reset email sent to: ${email}`);
+    } catch (emailError) {
+      console.error('[FORGOT_PASSWORD] Failed to send reset email:', emailError);
+      // Still return success to prevent enumeration
+    }
+
+    res.json({ 
+      success: true,
+      message: 'If an account exists with this email, password reset instructions have been sent.'
+    });
+  } catch (error) {
+    console.error('[FORGOT_PASSWORD] Error:', error);
+    res.status(500).json({ 
+      message: 'Failed to process password reset request. Please try again.' 
+    });
+  }
+});
+
+// Reset password endpoint
+router.post('/reset-password', loginLimiter, async (req, res) => {
+  try {
+    const resetPasswordSchema = z.object({
+      email: z.string().email(),
+      code: z.string().length(6),
+      newPassword: z.string().min(8)
+    });
+
+    const result = resetPasswordSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, code, newPassword } = result.data;
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.valid) {
+      return res.status(400).json({ message: passwordValidation.message });
+    }
+
+    // Get user
+    const user = await storage.getUserByEmail(email);
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or code' });
+    }
+
+    // Check if user can attempt verification
+    if (!canAttemptVerification(user.verificationAttempts || 0)) {
+      return res.status(429).json({ 
+        message: 'Too many failed attempts. Please request a new code.',
+        attemptsLeft: 0
+      });
+    }
+
+    // Check if code is expired
+    if (isCodeExpired(user.verificationExpiresAt)) {
+      return res.status(400).json({ 
+        message: 'Reset code has expired. Please request a new one.' 
+      });
+    }
+
+    // Verify the code
+    const isValid = await verifyCode(code, user.verificationCodeHash || '');
+    
+    if (!isValid) {
+      // Increment attempts
+      await storage.updateUser(user.id, {
+        verificationAttempts: (user.verificationAttempts || 0) + 1
+      });
+      
+      const attemptsLeft = 5 - ((user.verificationAttempts || 0) + 1);
+      return res.status(400).json({ 
+        message: 'Invalid reset code',
+        attemptsLeft
+      });
+    }
+
+    // Hash new password
+    const passwordHash = await hashPassword(newPassword);
+
+    // Update user password and clear reset code
+    await storage.updateUser(user.id, {
+      passwordHash,
+      verificationCodeHash: null,
+      verificationExpiresAt: null,
+      verificationAttempts: 0
+    });
+
+    console.log(`[RESET_PASSWORD] Password successfully reset for: ${email}`);
+
+    res.json({ 
+      success: true,
+      message: 'Password has been successfully reset. You can now login with your new password.'
+    });
+  } catch (error) {
+    console.error('[RESET_PASSWORD] Error:', error);
+    res.status(500).json({ 
+      message: 'Failed to reset password. Please try again.' 
+    });
+  }
+});
+
 export default router;
