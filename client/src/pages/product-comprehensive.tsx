@@ -30,6 +30,7 @@ import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premi
 import biotinHairImg from '@assets/woman-hair-and-beauty-cosmetics-for-healthy-salon-2025-04-06-07-33-29-utc (1) (1)_1754676479670.jpg';
 import prenatalWellnessPortraitImg from '@assets/portrait-hug-or-sitting-pregnancy-friends-in-unde-2025-04-06-07-18-00-utc (1) (1)_1754677156689.jpg';
 import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_1754742645233.webp';
+import lionsManeMushroomImg from '@assets/lion-s-mane-mushroom-growing-on-a-tree-trunk-2025-01-10-03-08-35-utc (2)_1754742941586.jpg';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
@@ -223,7 +224,7 @@ const createProductSVG = (productId: string): string => {
     return prenatalWellnessPortraitImg;
   }
   if (productId === 'mind-memory-mushroom') {
-    return collagenTextureImg;
+    return lionsManeMushroomImg;
   }
   if (productId === 'marine-collagen' || productId === 'collagen-peptides') {
     return collagenTextureImg;
@@ -2201,7 +2202,7 @@ export default function ProductComprehensive() {
               alt={`${product?.name} wellness lifestyle imagery`}
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
               style={{
-                objectPosition: 'center center'
+                objectPosition: params?.id === 'mind-memory-mushroom' ? 'center center' : 'center center'
               }}
             />
           </div>
