@@ -2211,19 +2211,21 @@ export default function ProductComprehensive() {
                 </div>
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/products">
-                  <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
-                    Shop Healios supplements →
-                  </button>
-                </Link>
-                <Link href="/science">
-                  <button className="border border-black text-black px-6 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors w-full sm:w-auto">
-                    Learn about our science →
-                  </button>
-                </Link>
-              </div>
+              {/* CTA Buttons - Hide for collagen-complex */}
+              {params?.id !== 'collagen-complex' && (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/products">
+                    <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto">
+                      Shop Healios supplements →
+                    </button>
+                  </Link>
+                  <Link href="/science">
+                    <button className="border border-black text-black px-6 py-3 text-sm font-medium hover:bg-black hover:text-white transition-colors w-full sm:w-auto">
+                      Learn about our science →
+                    </button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
