@@ -50,7 +50,7 @@ export default function CustomerPortal() {
   // Reorder mutation
   const reorderMutation = useMutation({
     mutationFn: async (orderId: string) => {
-      return apiRequest(`/portal/orders/${orderId}/reorder`, "POST");
+      return apiRequest("POST", `/portal/orders/${orderId}/reorder`);
     },
     onSuccess: (data: any) => {
       if (data.url) {
@@ -74,7 +74,7 @@ export default function CustomerPortal() {
   // Address mutations
   const createAddressMutation = useMutation({
     mutationFn: async (addressData: any) => {
-      return apiRequest("/portal/addresses", "POST", addressData);
+      return apiRequest("POST", "/portal/addresses", addressData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });
@@ -90,7 +90,7 @@ export default function CustomerPortal() {
 
   const updateAddressMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      return apiRequest(`/portal/addresses/${id}`, "PUT", data);
+      return apiRequest("PUT", `/portal/addresses/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });
@@ -106,7 +106,7 @@ export default function CustomerPortal() {
 
   const deleteAddressMutation = useMutation({
     mutationFn: async (id: string) => {
-      return apiRequest(`/portal/addresses/${id}`, "DELETE");
+      return apiRequest("DELETE", `/portal/addresses/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });

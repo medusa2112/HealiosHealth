@@ -31,7 +31,7 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
     setIsSubmitting(true);
 
     try {
-      await apiRequest('/api/pre-orders', 'POST', {
+      await apiRequest('POST', '/api/pre-orders', {
         productId: product.id,
         productName: product.name,
         customerName: formData.firstName,

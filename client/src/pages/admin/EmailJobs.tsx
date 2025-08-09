@@ -35,7 +35,7 @@ export default function AdminEmailJobs() {
 
   // Mutation to trigger abandoned cart emails
   const triggerAbandonedCarts = useMutation({
-    mutationFn: () => apiRequest("/api/admin/email-jobs/abandoned-carts", "POST"),
+    mutationFn: () => apiRequest("POST", "/api/admin/email-jobs/abandoned-carts"),
     onSuccess: () => {
       toast({
         title: "Abandoned Cart Emails",
@@ -54,7 +54,7 @@ export default function AdminEmailJobs() {
 
   // Mutation to trigger reorder reminders
   const triggerReorderReminders = useMutation({
-    mutationFn: () => apiRequest("/api/admin/email-jobs/reorder-reminders", "POST"),
+    mutationFn: () => apiRequest("POST", "/api/admin/email-jobs/reorder-reminders"),
     onSuccess: () => {
       toast({
         title: "Reorder Reminders",
@@ -73,7 +73,7 @@ export default function AdminEmailJobs() {
 
   // Mutation to trigger all email jobs
   const triggerAllJobs = useMutation({
-    mutationFn: () => apiRequest("/api/admin/email-jobs/all", "POST"),
+    mutationFn: () => apiRequest("POST", "/api/admin/email-jobs/all"),
     onSuccess: () => {
       toast({
         title: "All Email Jobs",
@@ -92,7 +92,7 @@ export default function AdminEmailJobs() {
 
   // Mutation to start scheduler
   const startScheduler = useMutation({
-    mutationFn: () => apiRequest("/api/admin/email-jobs/scheduler/start", "POST"),
+    mutationFn: () => apiRequest("POST", "/api/admin/email-jobs/scheduler/start"),
     onSuccess: () => {
       toast({
         title: "Email Scheduler",
@@ -110,7 +110,7 @@ export default function AdminEmailJobs() {
 
   // Mutation to stop scheduler
   const stopScheduler = useMutation({
-    mutationFn: () => apiRequest("/api/admin/email-jobs/scheduler/stop", "POST"),
+    mutationFn: () => apiRequest("POST", "/api/admin/email-jobs/scheduler/stop"),
     onSuccess: () => {
       toast({
         title: "Email Scheduler",

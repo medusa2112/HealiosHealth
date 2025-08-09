@@ -1,0 +1,40 @@
+You are a senior front-end engineer. Issue: Browser error “Failed to execute 'fetch' on 'Window': '[object Object]' is not a valid HTTP method.” Also saw url: undefined in request logs.
+
+PHASE A — CHECK FIRST (read-only)
+A1. Open client API helper (likely client/src/lib/api.ts or utils/request.ts):
+- Print the function signature. Confirm it accepts (url: string, init?: RequestInit).
+- Show how it constructs the final URL. If it accepts a single object param, note it.
+
+A2. Search for call sites that pass an object as the first arg:
+- Find usages like apiFetch({ method: ..., url: ... }).
+- List files + lines for each offender.
+
+A3. Inspect any Methods/HTTP enum:
+- Show the export and the exact value passed into fetch. If an object is passed instead of a string (e.g., { POST:'POST' }), flag it.
+
+A4. SPA catch-all order:
+- Show server/index.ts lines where /api is mounted and where the SPA catch-all is defined to ensure /api is not swallowed.
+
+Output Phase A report with:
+- Summary
+- Findings table [ID | Area | Evidence (file:line) | Impact]
+- Minimal diffs to apply
+
+PHASE B — APPLY MINIMAL PATCHES
+B1. Normalize apiFetch signature to apiFetch(url: string, init?: RequestInit & { method?: 'GET'|'POST'|'PUT'|'DELETE'|'PATCH' }).
+B2. Ensure method is a string. Replace any enum/object passing at call sites with string literals or Methods.POST (value = 'POST').
+B3. Guarantee URL is never undefined: build full URL with new URL(path, BASE_URL or window.location.origin).
+B4. Keep credentials: 'include' and JSON headers. Do not touch CSRF/header logic besides forwarding x-csrf-token.
+
+PHASE C — VERIFICATION
+C1. Console tests:
+  - GET /api/auth/me returns 200 and JSON content-type.
+  - POST /api/auth/login with bad creds returns 401/403 JSON (not HTML).
+C2. Register + verify (if enabled): /register → /verify → /account.
+C3. Ensure no request logs display method: {…} or url: undefined.
+
+Return:
+1) Summary
+2) Findings Table with file:line diffs
+3) Console/curl outputs proving success
+4) Go/No-Go
