@@ -46,48 +46,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // Session management is handled in replitAuth.ts
 
-// Demo login endpoint before CSRF protection for easy testing
-app.post('/api/auth/demo-admin-login', async (req, res) => {
-  try {
-    const { storage } = await import('./storage');
-    const { sanitizeUser } = await import('./lib/auth');
-    
-    console.log('[DEMO_LOGIN] Attempting demo admin login');
-    
-    // Find the demo admin user by email, create if doesn't exist
-    let demoAdmin = await storage.getUserByEmail('admin@healios.com');
-    
-    if (!demoAdmin) {
-      console.log('[DEMO_LOGIN] Demo admin user not found, creating...');
-      demoAdmin = await storage.createUser({
-        email: 'admin@healios.com',
-        firstName: 'Demo',
-        lastName: 'Admin',
-        role: 'admin',
-        isActive: true
-      });
-      console.log('[DEMO_LOGIN] Created demo admin user:', demoAdmin.id);
-    }
-    
-    console.log('[DEMO_LOGIN] Found demo admin:', demoAdmin.email, demoAdmin.role);
-    
-    // Set session
-    req.session = req.session || {};
-    req.session.userId = demoAdmin.id;
-    
-    console.log('[DEMO_LOGIN] Session set for user:', demoAdmin.id);
-    
-    res.json({ 
-      success: true, 
-      user: sanitizeUser(demoAdmin),
-      redirectUrl: '/admin'
-    });
-  } catch (error) {
-    console.error('Demo login error:', error);
-    res.status(500).json({ message: 'Demo login failed' });
-  }
-});
-
 // CSRF protection for state-changing operations (applied after demo login)
 app.use('/api', csrfProtection);
 
