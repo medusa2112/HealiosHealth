@@ -77,9 +77,14 @@ export function RegisterForm() {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // Redirect to customer portal after successful registration
-        const redirectUrl = result.redirectUrl || '/portal';
-        setLocation(redirectUrl);
+        // Redirect to verification page if email verification required
+        if (result.requiresVerification) {
+          setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
+        } else {
+          // Direct redirect if no verification needed (shouldn't happen with new flow)
+          const redirectUrl = result.redirectUrl || '/portal';
+          setLocation(redirectUrl);
+        }
       } else {
         setError(result.message || 'Registration failed. Please try again.');
         

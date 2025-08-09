@@ -83,7 +83,16 @@ export function LoginForm() {
         const redirectUrl = result.redirectUrl || '/portal';
         setLocation(redirectUrl);
       } else {
-        setError(result.message || 'We couldn\'t sign you in with those details.');
+        // Check if email verification is required
+        if (response.status === 403 && result.error === 'email_unverified') {
+          setError('Please verify your email to continue. Check your inbox for the verification code.');
+          // Optionally redirect to verify page
+          setTimeout(() => {
+            setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
+          }, 2000);
+        } else {
+          setError(result.message || 'We couldn\'t sign you in with those details.');
+        }
         
         // Focus first invalid input
         const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;

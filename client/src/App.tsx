@@ -50,6 +50,7 @@ import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
+import Verify from "@/pages/verify";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -101,6 +102,7 @@ function Router() {
       {/* Authentication Pages */}
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/verify" component={Verify} />
       
       <Route component={NotFound} />
     </Switch>

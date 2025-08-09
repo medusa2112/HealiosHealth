@@ -7,6 +7,15 @@ import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
 import { hashPassword, verifyPassword, validatePassword } from '../lib/password';
 import { insertUserSchema } from '@shared/schema';
+import { 
+  generateVerificationCode, 
+  hashVerificationCode, 
+  verifyCode, 
+  isCodeExpired, 
+  generateExpiryTime,
+  sendVerificationEmail,
+  canAttemptVerification 
+} from '../lib/verification';
 
 const router = express.Router();
 
@@ -106,26 +115,41 @@ router.post("/register", loginLimiter, async (req, res) => {
     // Hash password
     const passwordHash = await hashPassword(password);
 
-    // Create user with hashed password
+    // Generate verification code
+    const verificationCode = generateVerificationCode();
+    const verificationCodeHash = await hashVerificationCode(verificationCode);
+    const verificationExpiresAt = generateExpiryTime();
+
+    // Create user with hashed password and verification data
     const userData = {
       email,
       passwordHash,
       firstName: firstName || null,
       lastName: lastName || null,
       role: 'customer' as const,
-      isActive: true
+      isActive: true,
+      emailVerified: null, // Not verified yet
+      verificationCodeHash,
+      verificationExpiresAt: verificationExpiresAt.toISOString(),
+      verificationAttempts: 0
     };
 
     const user = await storage.createUser(userData);
 
-    // Set session
-    req.session = req.session || {};
-    req.session.userId = user.id;
+    // Send verification email
+    try {
+      await sendVerificationEmail(email, verificationCode, firstName);
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError);
+      // Continue registration even if email fails
+    }
 
+    // Don't set session yet - user needs to verify email first
     res.status(201).json({
       success: true,
-      user: sanitizeUser(user),
-      message: 'Registration successful'
+      message: 'Registration successful. Please check your email for a verification code.',
+      requiresVerification: true,
+      email
     });
 
   } catch (error) {
@@ -194,6 +218,20 @@ router.post('/login', loginLimiter, async (req, res) => {
       return res.status(403).json({ message: 'Account is inactive' });
     }
 
+    // Check if email is verified (only for password-based auth)
+    if (user.passwordHash && !user.emailVerified) {
+      await auditLogin(user.id, false, {
+        error: 'Email not verified',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(403).json({ 
+        message: 'Please verify your email to continue',
+        error: 'email_unverified',
+        email: user.email
+      });
+    }
+
     // Set session
     req.session = req.session || {};
     req.session.userId = user.id;
@@ -236,6 +274,153 @@ router.get('/login', (req, res) => {
     message: "Use POST /api/auth/login for password authentication",
     loginUrl: "/auth/mock-login" 
   });
+});
+
+// Email verification endpoint
+router.post('/verify', loginLimiter, async (req, res) => {
+  try {
+    const verifySchema = z.object({
+      email: z.string().email(),
+      code: z.string().length(6)
+    });
+
+    const result = verifySchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, code } = result.data;
+
+    // Get user by email
+    const user = await storage.getUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if already verified
+    if (user.emailVerified) {
+      return res.status(400).json({ message: 'Email already verified' });
+    }
+
+    // Check rate limiting
+    if (!canAttemptVerification(user.verificationAttempts || 0)) {
+      return res.status(429).json({ 
+        message: 'Too many verification attempts. Please try again in 1 hour.' 
+      });
+    }
+
+    // Update attempt count
+    await storage.updateUser(user.id, {
+      verificationAttempts: (user.verificationAttempts || 0) + 1
+    });
+
+    // Check if code expired
+    if (!user.verificationExpiresAt || isCodeExpired(user.verificationExpiresAt)) {
+      return res.status(400).json({ 
+        message: 'Verification code has expired. Please request a new one.' 
+      });
+    }
+
+    // Verify the code
+    if (!user.verificationCodeHash || !(await verifyCode(code, user.verificationCodeHash))) {
+      return res.status(400).json({ message: 'Invalid verification code' });
+    }
+
+    // Mark email as verified
+    await storage.updateUser(user.id, {
+      emailVerified: new Date().toISOString(),
+      verificationCodeHash: null,
+      verificationExpiresAt: null,
+      verificationAttempts: 0
+    });
+
+    // Set session
+    req.session = req.session || {};
+    req.session.userId = user.id;
+
+    // Log successful verification
+    await auditLogin(user.id, true, {
+      email: user.email,
+      role: user.role,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent'),
+      verified: true
+    });
+
+    // Redirect based on role
+    const redirectUrl = user.role === 'admin' ? '/admin' : '/portal';
+
+    res.json({ 
+      success: true,
+      message: 'Email verified successfully',
+      user: sanitizeUser(user),
+      redirectUrl
+    });
+  } catch (error) {
+    console.error('Verification error:', error);
+    res.status(500).json({ message: 'Verification failed' });
+  }
+});
+
+// Resend verification code endpoint
+router.post('/resend-code', loginLimiter, async (req, res) => {
+  try {
+    const resendSchema = z.object({
+      email: z.string().email()
+    });
+
+    const result = resendSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email } = result.data;
+
+    // Get user by email
+    const user = await storage.getUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if already verified
+    if (user.emailVerified) {
+      return res.status(400).json({ message: 'Email already verified' });
+    }
+
+    // Generate new verification code
+    const verificationCode = generateVerificationCode();
+    const verificationCodeHash = await hashVerificationCode(verificationCode);
+    const verificationExpiresAt = generateExpiryTime();
+
+    // Update user with new verification data
+    await storage.updateUser(user.id, {
+      verificationCodeHash,
+      verificationExpiresAt: verificationExpiresAt.toISOString(),
+      verificationAttempts: 0 // Reset attempts for new code
+    });
+
+    // Send new verification email
+    try {
+      await sendVerificationEmail(email, verificationCode, user.firstName);
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError);
+      return res.status(500).json({ message: 'Failed to send verification email' });
+    }
+
+    res.json({ 
+      success: true,
+      message: 'New verification code sent to your email'
+    });
+  } catch (error) {
+    console.error('Resend code error:', error);
+    res.status(500).json({ message: 'Failed to resend verification code' });
+  }
 });
 
 // Logout endpoint

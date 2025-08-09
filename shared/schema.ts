@@ -14,6 +14,11 @@ export const users = pgTable("users", {
   firstName: text("first_name"),
   lastName: text("last_name"),
   stripeCustomerId: text("stripe_customer_id"), // Phase 18: Stripe customer tracking
+  emailVerified: text("email_verified"), // Timestamp when email was verified
+  verificationCodeHash: text("verification_code_hash"), // Hashed verification code
+  verificationExpiresAt: text("verification_expires_at"), // When code expires
+  verificationAttempts: integer("verification_attempts").default(0), // Rate limiting
+  isActive: boolean("is_active").default(true), // Account active status
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
