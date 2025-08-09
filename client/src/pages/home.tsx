@@ -692,7 +692,7 @@ export default function HomePage() {
                   };
 
                   const productBadges = {
-                    'apple-cider-vinegar': 'Best Seller',
+                    'apple-cider-vinegar': 'Bestseller',
                     'vitamin-d3': 'Popular',
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
@@ -706,7 +706,7 @@ export default function HomePage() {
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
                     'mind-memory-mushroom': 'Focus',
-                    'collagen-powder': 'Latest',
+                    'collagen-powder': 'Premium',
                     'bio-cultures-vitamin-plus': 'Multi-Benefit',
                     'healios-oversized-tee': 'Lifestyle',
                   };
@@ -767,13 +767,7 @@ export default function HomePage() {
                         {/* Product Info - Clean Style */}
                         <div className="space-y-2">
                           {/* Product Badge */}
-                          <div className={`inline-block px-2 py-1 text-xs font-medium ${
-                            productBadges[product.id as keyof typeof productBadges] === 'Bestseller' 
-                              ? 'bg-green-600 text-white' 
-                              : productBadges[product.id as keyof typeof productBadges] === 'Premium'
-                              ? 'bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 text-white backdrop-blur-sm'
-                              : 'bg-black text-white'
-                          }`}>
+                          <div className="inline-block bg-black text-white px-2 py-1 text-xs font-medium">
                             {productBadges[product.id as keyof typeof productBadges]}
                           </div>
                           
