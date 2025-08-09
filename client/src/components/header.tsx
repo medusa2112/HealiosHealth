@@ -409,8 +409,8 @@ export function Header() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/healios-health75.png" 
-                  alt="Best Seller - Magnesium Complex" 
+                  src="/@assets/young-woman-sleeping-peacefully-in-bed-enjoying-a-2025-06-25-09-17-06-utc (2)_1754745777161.jpg" 
+                  alt="Best Seller - Magnesium" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
@@ -418,9 +418,9 @@ export function Header() {
                     Best Seller
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Magnesium Complex Capsules
+                    Magnesium
                   </p>
-                  <Link href="/products/magnesium-bisglycinate-b6">
+                  <Link href="/products/magnesium">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Shop Now →
                     </button>
@@ -430,18 +430,18 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/HaloGlow_1754394641788.png" 
-                  alt="New Product - Halo Glow" 
+                  src="/@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png" 
+                  alt="New Product Alert - Collagen Powder" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-sm font-medium text-white mb-2">
-                    Just Added
+                    New Product Alert
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Halo Glow
+                    Marine Collagen Powder
                   </p>
-                  <Link href="/products/halo-glow">
+                  <Link href="/products/collagen-powder">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Explore →
                     </button>
