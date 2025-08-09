@@ -33,7 +33,7 @@ import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_17547
 import lionsManeMushroomImg from '@assets/lion-s-mane-mushroom-growing-on-a-tree-trunk-2025-01-10-03-08-35-utc (2)_1754742941586.jpg';
 import probioticLabImg from '@assets/interracial-pharmacists-are-working-on-a-cure-disc-2025-04-01-13-21-45-utc (1) (1)_1754743224564.jpg';
 import beautyPortraitImg from '@assets/Screenshot 2025-08-09 at 14.43.41_1754743434009.png';
-import ashwagandhaLabImg from '@assets/generated_images/Chemistry_lab_ashwagandha_research_6d76ba27.png';
+import ashwagandhaLabImg from '@assets/generated_images/realistic_ashwagandha_lab.svg';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
