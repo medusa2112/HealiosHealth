@@ -240,7 +240,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'iron-vitamin-c') {
     return ironVitaminCImg;
   }
-  if (productId === 'magnesium') {
+  if (productId === 'magnesium' || productId === 'magnesium-bisglycinate-b6') {
     return magnesiumSleepImg;
   }
   
@@ -788,6 +788,32 @@ export default function ProductComprehensive() {
           ingredientOrigin: 'Organic citrate form for superior absorption',
           sleepBenefit: true,
           primaryBenefit: 'Reduces tiredness, supports muscle function and electrolyte balance'
+        };
+      case 'magnesium-bisglycinate-b6':
+        return {
+          bundleWith: 'Ashwagandha KSM-66 500mg Vegetarian Capsules',
+          bundlePrice: 'R1147.05',
+          bundleOriginalPrice: 'R1576.74',
+          sectionTitle: 'THE SLEEP & RECOVERY COMPLEX',
+          sectionHeading: 'Advanced magnesium bisglycinate\nwith vitamin B6 for enhanced\nsleep quality and muscle recovery.',
+          stat1Number: '375mg',
+          stat1Text: 'Premium\nMagnesium',
+          stat2Number: '18%',
+          stat2Text: 'Better\nAbsorption',
+          stat3Number: '120',
+          stat3Text: 'Vegan\nCapsules',
+          stat4Number: 'B6',
+          stat4Text: 'Sleep\nEnhancer',
+          testimonial: '"Magnesium bisglycinate with B6 is my preferred combination for patients with sleep disturbances. The chelated form is gentler on the stomach and more bioavailable."',
+          testimonialAuthor: 'DR. ALEXANDRA WINTERS',
+          testimonialTitle: 'Sleep Medicine Specialist',
+          benefitTitle: 'Superior sleep & muscle support',
+          benefitDescription: '375mg chelated magnesium bisglycinate with vitamin B6 supports deeper sleep, muscle relaxation, and nervous system function in gentle capsule form.',
+          ingredientSource: 'Magnesium bisglycinate (375mg) + Vitamin B6',
+          ingredientForm: '120 vegan capsules',
+          ingredientOrigin: 'Chelated magnesium for superior bioavailability',
+          sleepBenefit: true,
+          primaryBenefit: 'Supports quality sleep, muscle function, and nervous system health'
         };
       case 'childrens-multivitamin':
         return {

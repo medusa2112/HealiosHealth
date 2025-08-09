@@ -75,6 +75,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - **2025-08-09**: Updated KSM-66 Ashwagandha product with authentic laboratory photography showing professional biochemist performing quality testing - reinforces the scientific credibility and research-backed nature of the premium ingredient
 - **2025-08-09**: Completely removed Sleep Benefits section from all product pages to maintain clean design
 - **2025-08-09**: Updated Magnesium product with peaceful sleep photography showing woman resting naturally - authentic lifestyle image that perfectly represents the restful sleep benefits of magnesium supplementation
+- **2025-08-09**: Added comprehensive content and peaceful sleep imagery for Magnesium Complex Capsules (magnesium-bisglycinate-b6) product - includes statistics, testimonials, and product-specific information about chelated magnesium with vitamin B6
 
 ## External Dependencies
 
