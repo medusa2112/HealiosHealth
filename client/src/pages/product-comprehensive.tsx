@@ -38,6 +38,7 @@ import ashwagandhaLabImg from '@assets/male-biochemist-performing-lab-test-on-sa
 import magnesiumSleepImg from '@assets/young-woman-sleeping-peacefully-in-bed-enjoying-a-2025-06-25-09-17-06-utc (2)_1754745777161.jpg';
 import probioticVitaminsImg from '@assets/happy-tailor-taking-measurements-2024-09-22-20-26-57-utc (1) (1)_1754746253546.jpg';
 import probioticsImg from '@assets/these-abs-were-made-with-love-2025-04-06-08-16-40-utc_1754746612142.jpg';
+import vitaminD3Img from '@assets/nominated-already-2025-02-25-00-27-06-utc_1754746917299.jpg';
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
@@ -244,6 +245,9 @@ const createProductSVG = (productId: string): string => {
   }
   if (productId === 'probiotics') {
     return probioticsImg;
+  }
+  if (productId === 'vitamin-d3') {
+    return vitaminD3Img;
   }
   if (productId === 'iron-vitamin-c') {
     return ironVitaminCImg;
