@@ -42,7 +42,8 @@ export async function apiRequest(
         });
         if (csrfResponse.ok) {
           const csrfData = await csrfResponse.json();
-          headers[csrfData.header] = csrfData.csrfToken;
+          // Use X-CSRF-Token header
+          headers['X-CSRF-Token'] = csrfData.csrfToken;
         }
       } catch (csrfError) {
         console.warn('[API_REQUEST] Failed to get CSRF token', csrfError);

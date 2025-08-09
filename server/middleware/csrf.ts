@@ -54,11 +54,13 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  // Skip CSRF for auth endpoints during initial login/register/password reset
+  // Skip CSRF for auth endpoints during initial login/register/password reset/verification
   if (req.path.includes('/auth/login') || 
       req.path.includes('/auth/register') ||
       req.path.includes('/auth/forgot-password') ||
       req.path.includes('/auth/reset-password') ||
+      req.path.includes('/auth/verify') ||
+      req.path.includes('/auth/resend-code') ||
       req.path === '/auth/demo-admin-login') {
     return next();
   }
