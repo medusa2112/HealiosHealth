@@ -32,6 +32,7 @@ import prenatalWellnessPortraitImg from '@assets/portrait-hug-or-sitting-pregnan
 import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_1754744751477.webp';
 import lionsManeMushroomImg from '@assets/lion-s-mane-mushroom-growing-on-a-tree-trunk-2025-01-10-03-08-35-utc (2)_1754742941586.jpg';
 import probioticLabImg from '@assets/interracial-pharmacists-are-working-on-a-cure-disc-2025-04-01-13-21-45-utc (1) (1)_1754743224564.jpg';
+import ironVitaminCImg from '@assets/generated_images/Active_diverse_group_exercising_2ea18caa.png';
 import beautyPortraitImg from '@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png';
 import ashwagandhaLabImg from '@assets/generated_images/realistic_ashwagandha_lab.svg';
 
@@ -234,6 +235,9 @@ const createProductSVG = (productId: string): string => {
   }
   if (productId === 'bio-cultures-vitamin-plus') {
     return probioticLabImg;
+  }
+  if (productId === 'iron-vitamin-c') {
+    return ironVitaminCImg;
   }
   
   const svgs = {
