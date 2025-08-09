@@ -78,15 +78,24 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
   `;
 
   try {
-    await resend.emails.send({
-      from: "Healios <onboarding@resend.dev>",
+    const result = await resend.emails.send({
+      from: "Healios <no-reply@thehealios.com>",
       to: email,
       subject,
       html,
     });
-    console.log(`Verification email sent to ${email} with code: ${code.substring(0, 2)}****`);
+    console.log(`Verification email sent to ${email} with code: ${code.substring(0, 2)}****`, result);
+    return result;
   } catch (error) {
-    console.error('Failed to send verification email:', error);
+    console.error('Failed to send verification email to', email, ':', error);
+    // Log the full error details for debugging
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+    }
     throw new Error('Failed to send verification email');
   }
 }

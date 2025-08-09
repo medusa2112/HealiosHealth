@@ -233,7 +233,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
   try {
     const result = await resend.emails.send({
-      from: "Healios <onboarding@resend.dev>", // Using verified Resend domain for testing
+      from: "Healios <no-reply@thehealios.com>",
       to,
       subject: subjectMap[type],
       html: bodyMap[type](data),
@@ -243,6 +243,14 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     return result;
   } catch (error) {
     console.error(`Failed to send email: ${type} to ${to}`, error);
+    // Log the full error details
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+    }
     throw error;
   }
 }
