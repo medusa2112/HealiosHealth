@@ -29,7 +29,7 @@ import marineCollagenImg from '@assets/studio-shot-of-a-beautiful-young-woman-po
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 import biotinHairImg from '@assets/woman-hair-and-beauty-cosmetics-for-healthy-salon-2025-04-06-07-33-29-utc (1) (1)_1754676479670.jpg';
 import prenatalWellnessPortraitImg from '@assets/portrait-hug-or-sitting-pregnancy-friends-in-unde-2025-04-06-07-18-00-utc (1) (1)_1754677156689.jpg';
-import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_1754744322817.webp';
+import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_1754744751477.webp';
 import lionsManeMushroomImg from '@assets/lion-s-mane-mushroom-growing-on-a-tree-trunk-2025-01-10-03-08-35-utc (2)_1754742941586.jpg';
 import probioticLabImg from '@assets/interracial-pharmacists-are-working-on-a-cure-disc-2025-04-01-13-21-45-utc (1) (1)_1754743224564.jpg';
 import beautyPortraitImg from '@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png';
@@ -221,7 +221,7 @@ const createProductSVG = (productId: string): string => {
     return biotinHairImg;
   }
   if (productId === 'collagen-complex') {
-    return marineCollagenImg;
+    return collagenTextureImg;
   }
   if (productId === 'folic-acid-400' || productId === 'folic-acid') {
     return prenatalWellnessPortraitImg;
