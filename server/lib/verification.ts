@@ -36,7 +36,7 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
   const actionText = isReset ? "PASSWORD RESET" : "EMAIL VERIFICATION";
   const headerText = isReset ? "Reset your password" : "Verify your email address";
   const instructionText = isReset 
-    ? "To reset your password, please use the following verification code:"
+    ? "To reset your password, please enter the following 6-digit verification code on our website:"
     : "To complete your registration and access your Healios account, please enter the verification code below:";
   
   const html = `

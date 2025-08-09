@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
             <Alert className="bg-blue-50 border-blue-200">
               <Mail className="h-4 w-4 text-blue-600" />
               <AlertDescription className="text-sm text-gray-700">
-                If you don't see the email, check your spam folder. The link in the email will expire in 1 hour.
+                If you don't see the email, check your spam folder. The verification code will expire in 15 minutes.
               </AlertDescription>
             </Alert>
             

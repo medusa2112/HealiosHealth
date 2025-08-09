@@ -106,7 +106,11 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/verify" component={Verify} />
       <Route path="/forgot-password" component={ForgotPassword} />
-      <Route path="/reset-password" component={ResetPassword} />
+      {/* Legacy redirect - reset-password now handled by /verify?type=reset */}
+      <Route path="/reset-password" component={() => {
+        window.location.href = '/verify?type=reset';
+        return null;
+      }} />
       
       <Route component={NotFound} />
     </Switch>
