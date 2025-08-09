@@ -79,13 +79,12 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
 
   try {
     const result = await resend.emails.send({
-      from: "Healios <no-reply@thehealios.com>",
+      from: "Healios <dn@thefourths.com>",
       to: email,
       subject,
       html,
     });
     console.log(`Verification email sent to ${email} with code: ${code.substring(0, 2)}****`, result);
-    return result;
   } catch (error) {
     console.error('Failed to send verification email to', email, ':', error);
     // Log the full error details for debugging

@@ -233,7 +233,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
   try {
     const result = await resend.emails.send({
-      from: "Healios <no-reply@thehealios.com>",
+      from: "Healios <dn@thefourths.com>",
       to,
       subject: subjectMap[type],
       html: bodyMap[type](data),
