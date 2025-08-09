@@ -409,8 +409,8 @@ export function Header() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/healios-health53.png" 
-                  alt="Best Seller - Apple Cider Vinegar" 
+                  src="/assets/healios-health75.png" 
+                  alt="Best Seller - Magnesium Complex" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
@@ -418,9 +418,9 @@ export function Header() {
                     Best Seller
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Apple Cider Vinegar Gummies
+                    Magnesium Complex Capsules
                   </p>
-                  <Link href="/products/apple-cider-vinegar">
+                  <Link href="/products/magnesium-bisglycinate-b6">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Shop Now →
                     </button>
@@ -430,8 +430,8 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/assets/healios-health44.png" 
-                  alt="Latest Product - Marine Collagen" 
+                  src="/assets/HaloGlow_1754394641788.png" 
+                  alt="New Product - Halo Glow" 
                   className="w-full h-24 object-cover"
                 />
                 <div className="p-4">
@@ -439,9 +439,9 @@ export function Header() {
                     Just Added
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Marine Collagen Powder
+                    Halo Glow
                   </p>
-                  <Link href="/products/collagen-powder">
+                  <Link href="/products/halo-glow">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Explore →
                     </button>
