@@ -1,0 +1,132 @@
+You are a senior QA lead. Run a full end‑to‑end audit of AUTH for Healios:
+
+Scope
+- Public flows: Register → Email Verification (OTP) → Login
+- Forgot Password: Request → Email receipt → Code entry → Password update → Login
+- Sessions/cookies, CSRF, CORS, redirects, accessibility, consent gating
+- Emails: content, links/codes, expiry, deliverability (simulate in dev if needed)
+
+Rules
+- No code edits. You may create/dispose test users and trigger emails.
+- Evidence over opinion. For every check, provide concrete artifacts:
+  • CLI outputs (curl), response codes/headers
+  • Screenshots or copied email bodies (redact addresses)
+  • Exact file:line only if relevant to config
+- Output format:
+  1) Summary [≤6 bullets]
+  2) Findings Table [ID | Severity | Area | Evidence | Impact | Confidence%]
+  3) Repro Steps for each failure
+  4) Minimal Fix Plan (smallest safe diffs)
+  5) Go/No‑Go (one line)
+
+Pre‑Checks (read‑only)
+- Confirm base URLs (SITE_URL, API base), CORS allowlist, CSRF header name, session cookie name and flags (Secure/HttpOnly/SameSite).
+- Confirm endpoints exist: 
+  POST /api/auth/register, POST /api/auth/verify, POST /api/auth/login,
+  POST /api/auth/forgot, POST /api/auth/verify-reset, POST /api/auth/logout,
+  GET /api/auth/me
+- Confirm routes exist and render: /register, /verify, /login, /forgot, /reset, /account
+
+Test Data
+- Use disposable emails: qa+auth1@healios.test, qa+auth2@healios.test
+- Strong password: S7ecure!234
+- OTP: 6‑digit numeric (from email)
+
+Test Matrix (happy paths)
+1) Register → Verify → Login
+   a. Visit /register; submit email+password
+   b. Assert 200 JSON and no redirect to external domains
+   c. Capture verification email; extract 6‑digit code or verification link
+   d. Visit /verify; enter code → expect 200 JSON, Set‑Cookie with Secure, HttpOnly, SameSite=Lax/Strict
+   e. GET /api/auth/me → 200 with user object
+   Evidence: curl responses, Set‑Cookie headers, email copy (redacted), UI screenshot
+
+2) Login (verified user)
+   a. POST /api/auth/login (JSON, x‑csrf-token)
+   b. Assert 200 JSON, session cookie set
+   c. Navigate to /account → page renders user data
+   Evidence: headers + network log
+
+3) Forgot Password → Verify Reset → Login
+   a. Visit /forgot; submit email
+   b. Capture reset email; extract code/link, assert expiry text present
+   c. Visit /reset or /verify-reset; submit email + code + new password
+   d. Assert 200 JSON; login succeeds with new password and fails with old
+   Evidence: email content, responses, Set‑Cookie
+
+Negative & Security Cases
+4) Unverified user login
+   a. Register new user; do NOT verify
+   b. POST /api/auth/login → expect 403/401 with { error:"email_unverified" }
+   Evidence: status/body
+
+5) Bad/expired codes
+   a. Submit wrong OTP → 400 with clear error message (no leakage)
+   b. Submit expired OTP → 400 with “expired” guidance; “Resend code” throttled
+   Evidence: responses and rate‑limit headers/logs
+
+6) CSRF enforcement (mutations)
+   a. Omit x‑csrf-token on POST /api/auth/login and /api/auth/verify → 401/403
+   Evidence: status codes
+
+7) CORS
+   a. OPTIONS/GET from allowed origin → Access‑Control‑Allow‑Origin present
+   b. Request from disallowed origin → header absent (blocked)
+   Evidence: headers
+
+8) Cookies & Redirects
+   a. Ensure Set‑Cookie uses Secure; HttpOnly; SameSite=Lax/Strict; Path=/; no Domain mismatch
+   b. No redirects to Replit preview URLs; all links/redirects use SITE_URL
+   Evidence: headers and Location values
+
+Accessibility & Consent
+9) A11y quick checks on /login, /register, /verify, /forgot, /reset
+   - Labels associated, keyboard flow, error text announced, focus visible
+   Evidence: axe/console summary, screenshots
+
+10) Consent gating on auth pages
+   - Ensure analytics do not fire before consent; network shows 0 GA/Ads hits pre‑consent
+   Evidence: network logs before/after consent
+
+Email Specific Checks
+11) Registration email
+   - Subject, sender, branding correct
+   - Contains 6‑digit code or one‑time link; includes expiry and support line
+   - No secrets or internal URLs; links are HTTPS and on SITE_URL
+   Evidence: redacted email
+
+12) Reset email
+   - Same criteria as above; warns if you didn’t request it
+   - Link/code expires and is single‑use
+   Evidence: redacted email
+
+CLI Snippets (use and include outputs)
+- Register:
+  curl -s -X POST "$BASE/api/auth/register" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test","password":"S7ecure!234"}' -i | head -20
+- Login (bad → good):
+  curl -s -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test","password":"Wrong!234"}' -i | head -20
+  curl -s -X POST "$BASE/api/auth/login" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test","password":"S7ecure!234"}' -i | grep -i set-cookie
+- Verify email:
+  curl -s -X POST "$BASE/api/auth/verify" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test","code":"123456"}' -i | head -20
+- Forgot/reset:
+  curl -s -X POST "$BASE/api/auth/forgot" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test"}' -i | head -20
+  curl -s -X POST "$BASE/api/auth/verify-reset" -H "Content-Type: application/json" \
+    -H "x-csrf-token: $CSRF" -d '{"email":"qa+auth1@healios.test","code":"123456","newPassword":"S7ecure!567"}' -i | head -20
+- CORS:
+  curl -s -H "Origin: https://thehealios.com" -H "Access-Control-Request-Method: POST" \
+    -H "Access-Control-Request-Headers: Content-Type" -X OPTIONS "$BASE/api/auth/login" -i | head -20
+  curl -s -H "Origin: https://evil.test" "$BASE/api/auth/login" -I | grep -i access-control-allow-origin || echo "blocked"
+
+Pass Criteria (all must be true)
+- Verified user can login and access /account; unverified user is blocked with clear error
+- Emails are received with correct content, HTTPS links on SITE_URL, and working codes
+- CSRF and CORS enforce correctly; cookies have Secure/HttpOnly/SameSite
+- No redirects to non‑production domains
+- Accessibility and consent checks pass on auth pages
+
+Return the final report in the required format with concrete evidence and a clear Go/No‑Go.
