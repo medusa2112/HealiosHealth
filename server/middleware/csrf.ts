@@ -55,7 +55,9 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
   }
 
   // Skip CSRF for auth endpoints during initial login/register
-  if (req.path.includes('/auth/login') || req.path.includes('/auth/register')) {
+  if (req.path.includes('/auth/login') || 
+      req.path.includes('/auth/register') ||
+      req.path === '/auth/demo-admin-login') {
     return next();
   }
 
