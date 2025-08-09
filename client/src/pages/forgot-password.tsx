@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +20,7 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordPage() {
+  const [, setLocation] = useLocation();
   const [submitted, setSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
 
@@ -71,6 +72,16 @@ export default function ForgotPasswordPage() {
             
             <div className="space-y-3">
               <Button
+                variant="default"
+                className="w-full bg-black hover:bg-gray-800"
+                onClick={() => {
+                  setLocation(`/verify?type=reset&email=${encodeURIComponent(submittedEmail)}`);
+                }}
+              >
+                Enter Reset Code
+              </Button>
+              
+              <Button
                 variant="outline"
                 className="w-full"
                 onClick={() => {
@@ -82,7 +93,7 @@ export default function ForgotPasswordPage() {
               </Button>
               
               <Link href="/login">
-                <Button variant="default" className="w-full bg-black hover:bg-gray-800">
+                <Button variant="ghost" className="w-full">
                   Back to Sign In
                 </Button>
               </Link>
