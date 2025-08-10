@@ -13,6 +13,37 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// Cache the CSRF token for the session
+let cachedCsrfToken: string | null = null;
+
+async function getCsrfToken(): Promise<string | null> {
+  // Return cached token if available
+  if (cachedCsrfToken) {
+    return cachedCsrfToken;
+  }
+  
+  try {
+    const csrfResponse = await fetch('/api/csrf/token', {
+      credentials: 'include'
+    });
+    if (csrfResponse.ok) {
+      const csrfData = await csrfResponse.json();
+      cachedCsrfToken = csrfData.csrfToken;
+      console.log('[CSRF] Token fetched and cached:', cachedCsrfToken.substring(0, 10) + '...');
+      return cachedCsrfToken;
+    }
+  } catch (csrfError) {
+    console.warn('[CSRF] Failed to get token', csrfError);
+  }
+  return null;
+}
+
+// Clear cached token on auth changes
+export function clearCsrfToken() {
+  cachedCsrfToken = null;
+  console.log('[CSRF] Token cache cleared');
+}
+
 export async function apiRequest(
   method: string,
   url: string,
@@ -36,17 +67,10 @@ export async function apiRequest(
     }
     
     if (method !== 'GET' && method !== 'HEAD') {
-      try {
-        const csrfResponse = await fetch('/api/csrf/token', {
-          credentials: 'include'
-        });
-        if (csrfResponse.ok) {
-          const csrfData = await csrfResponse.json();
-          // Use X-CSRF-Token header
-          headers['X-CSRF-Token'] = csrfData.csrfToken;
-        }
-      } catch (csrfError) {
-        console.warn('[API_REQUEST] Failed to get CSRF token', csrfError);
+      const csrfToken = await getCsrfToken();
+      if (csrfToken) {
+        headers['X-CSRF-Token'] = csrfToken;
+        console.log('[CSRF] Token added to request:', csrfToken.substring(0, 10) + '...');
       }
     }
     

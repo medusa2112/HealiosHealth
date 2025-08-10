@@ -1,0 +1,159 @@
+Got it. If it’s breaking in DEV too, you almost certainly have one or more of these in play:
+
+cookie flags not compatible with localhost or the Replit dev domain, 2) no CSRF token being fetched before a PUT, 3) cross-origin between your UI and API during dev, 4) an over-strict CSRF middleware expecting headers you never send.
+
+Here’s a focused, drop-in fix. It makes DEV work reliably without weakening PROD.
+
+1) Make cookie flags environment-aware
+Use strict cookies in PROD, relaxed where required in DEV. For double-submit CSRF the token cookie must not be httpOnly.
+
+ts
+Copy
+Edit
+// lib/cookies.ts
+export const isProd = process.env.NODE_ENV === 'production';
+
+export const sessionCookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax' as const,
+  secure: isProd,                          // false in dev if using http://localhost
+  path: '/',
+  domain: isProd ? '.thehealios.com' : undefined, // never set domain on localhost or replit preview if it breaks
+};
+
+export const csrfCookieOptions = {
+  ...sessionCookieOptions,
+  httpOnly: false, // double-submit token must be readable by JS
+};
+2) Provide a CSRF token endpoint and always attach it on mutations
+ts
+Copy
+Edit
+// app/api/csrf/route.ts or pages/api/csrf.ts
+import { NextResponse } from 'next/server';
+import { randomBytes } from 'crypto';
+import { cookies } from 'next/headers';
+import { csrfCookieOptions } from '@/lib/cookies';
+
+export async function GET() {
+  const token = randomBytes(24).toString('hex');
+  // store in cookie for double-submit
+  cookies().set('csrf_token', token, csrfCookieOptions);
+  return NextResponse.json({ token });
+}
+Client utility:
+
+ts
+Copy
+Edit
+// lib/api.ts
+let CSRF_TOKEN: string | null = null;
+
+async function ensureCsrf() {
+  if (!CSRF_TOKEN) {
+    const r = await fetch('/api/csrf', { credentials: 'include' });
+    const j = await r.json();
+    CSRF_TOKEN = j.token;
+  }
+  return CSRF_TOKEN!;
+}
+
+export async function api<T>(method: string, url: string, body?: unknown): Promise<T> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (['POST','PUT','PATCH','DELETE'].includes(method)) {
+    headers['x-csrf-token'] = await ensureCsrf();
+  }
+  const res = await fetch(url, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: 'include', // critical in dev and prod
+  });
+  if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+  return res.headers.get('content-type')?.includes('application/json') ? res.json() : (await res.text() as any);
+}
+Use it in your edit mutation:
+
+ts
+Copy
+Edit
+await api('PUT', `/api/admin/products/${slug}`, payload);
+3) Ensure same-origin in DEV wherever possible
+In your frontend config, remove any full API base like https://<something>.replit.dev.
+
+Use relative URLs only: /api/....
+
+If you absolutely must call a different origin in dev, you need:
+
+credentials: 'include' on fetch,
+
+cookies with sameSite: 'none' and secure: true, and
+
+a CORS config that allows your dev UI origin. Same-origin is simpler and less fragile.
+
+4) Patch the CSRF verifier to play well in DEV
+Where you validate CSRF on the server, fail closed in PROD, but add a safe DEV path that only triggers when you are truly in dev and same-origin:
+
+ts
+Copy
+Edit
+// lib/verifyCsrf.ts
+export function verifyCsrf(req: Request) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const header = req.headers.get('x-csrf-token') || '';
+  const cookie = req.headers.get('cookie') || '';
+  const cookieToken = cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/)?.[1] || '';
+
+  const ok = header && cookieToken && header === cookieToken;
+  if (ok) return true;
+
+  if (!isProd) {
+    // DEV fallback: allow same-origin no-token edits to unblock you
+    const origin = req.headers.get('origin') || '';
+    const host = new URL(req.url).origin;
+    if (origin === host) return true; // same origin in dev
+  }
+
+  return false;
+}
+Use it in your route:
+
+ts
+Copy
+Edit
+// app/api/admin/products/[slug]/route.ts
+import { NextResponse } from 'next/server';
+import { verifyCsrf } from '@/lib/verifyCsrf';
+
+export async function PUT(req: Request, { params }: { params: { slug: string } }) {
+  if (!verifyCsrf(req)) {
+    return NextResponse.json({ error: 'Invalid CSRF token', code: 'CSRF_TOKEN_MISMATCH' }, { status: 403 });
+  }
+  // ... update logic
+  return NextResponse.json({ ok: true });
+}
+5) Fix cookie Secure on localhost
+If you run next dev at http://localhost:3000, a cookie with secure: true will not set. The sessionCookieOptions above handles that automatically. If you develop only on Replit’s HTTPS dev domain, secure: true is fine, but keep domain unset so the cookie attaches to that subdomain.
+
+6) Quick smoke checks
+Open DevTools → Application → Cookies while on the admin page. You should see both your session cookie and csrf_token.
+
+Before a PUT, your network tab should show a GET to /api/csrf at least once in the session.
+
+The PUT should include x-csrf-token and credentials: include.
+
+If it still 403s, log these on the server for one test request: req.headers.origin, req.headers.referer, whether the cookie exists, and the first 4 chars of both tokens to confirm mismatch.
+
+Assumptions
+Next.js with cookie-based admin auth. CSRF is implemented as double-submit or similar. Frontend fetches were not consistently sending credentials or x-csrf-token in DEV.
+
+Risk zones
+Setting domain on cookies in DEV will silently prevent the cookie being set.
+
+Leaving secure: true on localhost will also prevent cookies from being set.
+
+If you keep cross-origin in DEV, you must switch to sameSite: 'none' and secure: true for the cookies and configure CORS. Easy to misconfigure.
+
+Never ship the DEV fallback path to PROD.
+
+If you paste this in and wire the three pieces (env-aware cookies, /api/csrf, client api helper), your PUT in DEV and PROD should stop throwing the CSRF mismatch. If you want, paste your current cookies.set(...), the CSRF check, and your fetch helper, and I will mark the exact lines to change.

@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, LogIn } from 'lucide-react';
 import { LoginSchema, type LoginFormData } from '@/lib/validators/login';
-import { queryClient } from '@/lib/queryClient';
+import { queryClient, clearCsrfToken } from '@/lib/queryClient';
 
 export function LoginForm() {
   const [, setLocation] = useLocation();
@@ -80,6 +80,9 @@ export function LoginForm() {
       const result = await response.json();
 
       if (response.ok && result.success) {
+        // Clear CSRF cache to get a fresh token after login
+        clearCsrfToken();
+        
         // Invalidate the auth query to force a refresh
         await queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
         
