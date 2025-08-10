@@ -1,0 +1,174 @@
+Here’s a tight, copy-paste **QA EXPERT Prompt** for Replit AI to run a **full Abandoned Carts QA** across DB, APIs, jobs, and UI in your existing Healios repo. Minimal changes, UK English, no rewrites.
+
+---
+
+# QA EXPERT Prompt — Abandoned Carts (DB + API + Jobs + UI)
+
+**You are Replit AI working inside the current Healios repository. Perform a comprehensive QA of the Abandoned Carts system end-to-end using the existing stack. Make minimal, non-breaking changes. Use UK English. Output a final Markdown report.**
+
+## 0) Pre-flight
+
+1. Scan the repo and detect:
+
+   * Framework (Next.js pages/app), test runner (Vitest/Jest/Playwright), ORM (Drizzle/Prisma/raw), DB (Postgres).
+   * Cart data model and where session vs user carts are stored.
+   * Cart lifecycle code: creation, update, merge on login, conversion to order, and any scheduled jobs.
+   * Email/SMS provider and mailer transport.
+2. Create a **separate test DB** and use it for all writes. Run migrations.
+3. If no tests exist, add **Vitest** for unit/integration, **supertest** for API, and **Playwright** for UI. Keep tooling minimal.
+
+## 1) Assumptions and Config (do not hardcode)
+
+* Introduce envs if missing (read once, do not force values):
+
+  * `ABANDONED_STALE_MINUTES` default 15
+  * `ABANDONED_MARK_MINUTES` default 60
+  * `ABANDONED_REMINDER_SCHEDULE` default `60,1440` (minutes after abandonment, e.g. 1 hour and 24 hours)
+  * `ABANDONED_MAX_REMINDERS` default 2
+* Respect POPIA/GDPR: send reminders only if user has contact permission; for guests, require a captured email.
+
+## 2) Instrumentation contract
+
+If not present, add lightweight event hooks (no rewrites):
+
+* `CART_CREATED`, `CART_UPDATED`, `CART_STALE`, `CART_ABANDONED`, `CART_REMINDER_SENT`, `CART_RECOVERED`, `CART_CONVERTED`, `CART_MERGED`.
+* Log to console in tests; keep existing telemetry untouched.
+
+## 3) Seed data (idempotent)
+
+Create `scripts/seed.abandoned.test.ts` inserting:
+
+* Users: one guest email, one registered user with marketing consent true, one with consent false.
+* Products: mix of in-stock and out-of-stock to ensure add-to-cart works and edge cases exist.
+* Carts:
+
+  * Guest cart with items and email captured.
+  * Logged-in user cart with items.
+  * Cart already abandoned with `abandoned_at` in the past to exercise reminder logic.
+
+## 4) Test Matrix
+
+### A. Lifecycle and timing
+
+* **Stale**: simulate inactivity beyond `ABANDONED_STALE_MINUTES`; mark `status=stale`, set `stale_at`. No message sent.
+* **Abandoned**: after `ABANDONED_MARK_MINUTES`, mark `status=abandoned`, set `abandoned_at`. Do not mark if already converted or empty.
+* **Converted**: when order is created and paid, ensure any abandoned flags clear and reminders stop.
+
+### B. Session vs user carts and merge
+
+* Guest adds items, then logs in:
+
+  * Carts merge correctly; no duplicate lines; totals recomputed once.
+  * If guest cart was abandoned, merged cart status should reset to active with new activity timestamp.
+* Multiple devices: ensure only one active cart per user or clearly defined behaviour. Older carts should be closed or superseded.
+
+### C. Reminder scheduling
+
+* For abandoned carts with consent:
+
+  * Send reminder 1 at the first scheduled minute. Record `reminder_count=1`, `last_reminder_at`.
+  * Do not send again within the same window. Respect `ABANDONED_MAX_REMINDERS`.
+  * If user returns via recovery link, mark `CART_RECOVERED` and stop future reminders.
+* For users without consent or missing email, **no reminders** are sent; assert audit trail notes the reason.
+
+### D. Recovery link security
+
+* Recovery link must be a single-use or time-boxed token (JWT/HMAC). Tests:
+
+  * Works once to restore the exact cart content.
+  * Expired or reused token returns 4xx and does not expose PII.
+  * Link includes UTM params for analytics; no secrets in query string.
+
+### E. Totals integrity
+
+* After recovery, totals and prices match current pricing rules:
+
+  * If prices changed, ensure documented behaviour (reprice or honour old price). Test both paths if supported.
+  * Coupons auto-apply only if still valid; otherwise show a clear message.
+
+### F. Inventory reservations (if implemented)
+
+* If soft reservations exist, verify:
+
+  * Reservation created on add-to-cart; released on abandonment or after expiry.
+  * No negative stock due to lingering reservations.
+* If not implemented, assert that no reservation records remain after conversion or abandonment.
+
+### G. API contract tests (supertest)
+
+Hit existing endpoints. Do not add new public routes unless needed for testing.
+
+* `POST /api/cart` add/update/remove lines; verify last activity timestamp updates.
+* `GET /api/cart` returns cart with `status`, `stale_at`, `abandoned_at`, `reminder_count`.
+* `POST /api/cart/recover` with token restores cart; invalid token → 400/401.
+* Scheduler endpoint or job runner (if any) invoked to process stale → abandoned and reminders.
+* Ensure 401/403 for unauthorised cart access; CSRF holds on state-changing endpoints when using cookies.
+
+### H. Job runner and idempotency
+
+* If a scheduler exists, run it repeatedly:
+
+  * Marking stale/abandoned is idempotent.
+  * Reminders do not double-send within a window.
+* If no scheduler exists, add a minimal **dev-only** runner in tests that calls the existing service function. Do not ship new cron to production code.
+
+### I. Email/SMS transport
+
+* Switch to an in-memory or file transport for tests. Assert:
+
+  * Subject, preview text, personalisation (first name if known), correct recovery link, and unsubscribe/consent copy present.
+  * No sends for non-consented users or empty carts.
+  * Rate limiting respected: no more than 1 send per cart per window.
+
+### J. Analytics
+
+* Fire `CART_REMINDER_SENT` with cart id and reminder index, `CART_RECOVERED` when link clicked, `CART_CONVERTED` after checkout.
+* Ensure no PII in event payloads beyond allowed identifiers.
+
+### K. Edge cases
+
+* Empty cart becomes abandoned → should be auto-deleted or ignored for reminders.
+* Multi-currency or VAT changes mid-flow → behaviour documented and tested.
+* Hard refresh or cookie clear → guest cart lost; ensure no orphan reminders go out.
+
+## 5) Concurrency tests
+
+Create `tests/helpers/concurrency.ts` to run N parallel requests:
+
+* 50 concurrent recoveries for the same token → only first succeeds; others cleanly fail.
+* 50 concurrent reminder jobs → at most one send per cart per window; use DB locks or unique keys if implemented.
+
+## 6) Direct DB assertions
+
+After each scenario, query Postgres directly to assert:
+
+* `carts.status` transitions: `active → stale → abandoned → recovered/converted`.
+* Timestamps: `last_activity_at`, `stale_at`, `abandoned_at`, `last_reminder_at`.
+* Counters: `reminder_count` never exceeds `ABANDONED_MAX_REMINDERS`.
+* No orphaned `cart_items`; all FKs intact.
+
+## 7) Reporting
+
+Generate `QA_ABANDONED_CARTS_REPORT.md` at the repo root including:
+
+* Environment summary (commit hash, masked DB).
+* Test matrix with pass/fail and short rationale.
+* Email transport transcript (redacted) for each reminder.
+* Concurrency outcomes and any race conditions.
+* Defects with reproduction steps, suspected root cause, and proposed fix.
+  Print a concise summary to console.
+
+## 8) Safety rails
+
+* Never touch production DB or keys.
+* Do not change customer-visible copy beyond tests.
+* Keep any helper jobs behind test flags and devDependencies.
+
+## Acceptance criteria
+
+* Abandonment flow transitions and timestamps correct under repeated scheduler runs.
+* Reminders respect consent and caps; single send per window; recovery link secured and single use.
+* Conversion clears abandonment and stops future sends.
+* Report generated with actionable findings and no regressions to orders or auth.
+
+**Run now. If required tooling is missing, add the smallest possible harness and proceed.**
