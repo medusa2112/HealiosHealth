@@ -166,8 +166,8 @@ if (process.env.NODE_ENV !== 'production') {
   // Password-based login
   router.post('/login', loginLimiter, async (req, res) => {
     try {
-    console.log('[LOGIN] Request body:', req.body);
-    console.log('[LOGIN] Headers:', req.headers);
+    // Avoid logging sensitive information such as passwords or headers
+    console.log('[LOGIN] Attempt for email:', req.body?.email);
     
     const loginSchema = z.object({
       email: z.string().email(),
