@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, LogIn } from 'lucide-react';
 import { LoginSchema, type LoginFormData } from '@/lib/validators/login';
+import { queryClient } from '@/lib/queryClient';
 
 export function LoginForm() {
   const [, setLocation] = useLocation();
@@ -79,6 +80,12 @@ export function LoginForm() {
       const result = await response.json();
 
       if (response.ok && result.success) {
+        // Invalidate the auth query to force a refresh
+        await queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
+        
+        // Small delay to ensure the query is refreshed
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         // Redirect based on user role or to account portal
         const redirectUrl = result.redirectUrl || '/portal';
         setLocation(redirectUrl);
