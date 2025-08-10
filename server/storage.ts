@@ -341,6 +341,11 @@ export class MemStorage implements IStorage {
         firstName: 'Admin',
         lastName: 'Demo',
         stripeCustomerId: null,
+        emailVerified: null,
+        verificationCodeHash: null,
+        verificationExpiresAt: null,
+        verificationAttempts: 0,
+        isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -388,8 +393,32 @@ export class MemStorage implements IStorage {
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = randomUUID();
     const product: Product = { 
-      ...insertProduct, 
       id,
+      name: insertProduct.name,
+      description: insertProduct.description,
+      price: insertProduct.price,
+      originalPrice: insertProduct.originalPrice ?? null,
+      imageUrl: insertProduct.imageUrl,
+      categories: insertProduct.categories,
+      rating: insertProduct.rating ?? null,
+      reviewCount: insertProduct.reviewCount ?? null,
+      inStock: insertProduct.inStock ?? null,
+      stockQuantity: insertProduct.stockQuantity ?? null,
+      featured: insertProduct.featured ?? null,
+      sizes: insertProduct.sizes ?? null,
+      colors: insertProduct.colors ?? null,
+      gender: insertProduct.gender ?? null,
+      type: insertProduct.type ?? null,
+      bottleCount: insertProduct.bottleCount ?? null,
+      dailyDosage: insertProduct.dailyDosage ?? null,
+      supplyDays: insertProduct.supplyDays ?? null,
+      tags: insertProduct.tags ?? null,
+      allowPreorder: insertProduct.allowPreorder ?? null,
+      preorderCap: insertProduct.preorderCap ?? null,
+      preorderCount: insertProduct.preorderCount ?? null,
+      seoTitle: insertProduct.seoTitle ?? null,
+      seoDescription: insertProduct.seoDescription ?? null,
+      seoKeywords: insertProduct.seoKeywords ?? null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -416,7 +445,8 @@ export class MemStorage implements IStorage {
     const product = this.products.get(productId);
     if (!product) return undefined;
 
-    const newQuantity = Math.max(0, product.stockQuantity - quantity);
+    const currentStock = product.stockQuantity ?? 0;
+    const newQuantity = Math.max(0, currentStock - quantity);
     return this.updateProductStock(productId, newQuantity);
   }
 
