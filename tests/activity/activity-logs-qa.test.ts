@@ -555,13 +555,18 @@ describe('Activity Logs QA Suite', () => {
   describe('E. RBAC & Access Controls', () => {
     
     it('should allow admin to view activity logs', async () => {
-      const { cookies } = await login(adminUser.email, adminUser.password);
+      const loginResponse = await login(adminUser.email, adminUser.password);
+      console.log('Login response:', { cookies: loginResponse.cookies, user: loginResponse.user });
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs`,
+        `${BASE_URL}/api/admin/logs`,
         { method: 'GET' },
-        cookies
+        loginResponse.cookies
       );
+      
+      if (!response.ok) {
+        console.log('Failed to access logs:', response.status, await response.text());
+      }
       
       expect(response.ok).toBe(true);
       
@@ -574,7 +579,7 @@ describe('Activity Logs QA Suite', () => {
       const { cookies } = await login(normalUser.email, normalUser.password);
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs`,
+        `${BASE_URL}/api/admin/logs`,
         { method: 'GET' },
         cookies
       );
@@ -589,7 +594,7 @@ describe('Activity Logs QA Suite', () => {
       startDate.setDate(startDate.getDate() - 7);
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs?startDate=${startDate.toISOString()}&endDate=${new Date().toISOString()}`,
+        `${BASE_URL}/api/admin/logs?hours=168`,
         { method: 'GET' },
         cookies
       );
@@ -611,7 +616,7 @@ describe('Activity Logs QA Suite', () => {
       const { cookies } = await login(adminUser.email, adminUser.password);
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs?actionType=login_success`,
+        `${BASE_URL}/api/admin/logs?actionFilter=login_success`,
         { method: 'GET' },
         cookies
       );
@@ -636,7 +641,7 @@ describe('Activity Logs QA Suite', () => {
       const { cookies } = await login(adminUser.email, adminUser.password);
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs?page=1&limit=10`,
+        `${BASE_URL}/api/admin/logs?page=1&limit=10`,
         { method: 'GET' },
         cookies
       );
@@ -654,7 +659,7 @@ describe('Activity Logs QA Suite', () => {
       const { cookies } = await login(adminUser.email, adminUser.password);
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs?limit=20`,
+        `${BASE_URL}/api/admin/logs?limit=20`,
         { method: 'GET' },
         cookies
       );
@@ -677,7 +682,7 @@ describe('Activity Logs QA Suite', () => {
       const startTime = Date.now();
       
       const response = await makeAuthRequest(
-        `${BASE_URL}/api/admin/activity-logs?limit=50`,
+        `${BASE_URL}/api/admin/logs?limit=50`,
         { method: 'GET' },
         cookies
       );

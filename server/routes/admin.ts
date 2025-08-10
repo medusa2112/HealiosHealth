@@ -11,6 +11,7 @@ import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
 import discountCodesRouter from './adminDiscounts';
+import logsRouter from './admin/logs';
 import { deriveAvailability, isOrderable } from '../../lib/availability';
 
 const router = express.Router();
@@ -26,29 +27,8 @@ router.use('/abandoned-carts', abandonedCartsRouter);
 // Mount discount codes subrouter
 router.use('/discount-codes', discountCodesRouter);
 
-// Admin Logs API - Get audit logs
-router.get('/logs', requireAuth, async (req, res) => {
-  try {
-    const querySchema = z.object({
-      limit: z.string().optional().transform(val => val ? parseInt(val, 10) : 100)
-    });
-    
-    const result = querySchema.safeParse(req.query);
-    if (!result.success) {
-      return res.status(400).json({ 
-        error: 'Invalid query parameters',
-        details: result.error.errors
-      });
-    }
-    
-    const { limit } = result.data;
-    const logs = await storage.getAdminLogs(limit);
-    res.json(logs);
-  } catch (error) {
-    console.error('Error fetching admin logs:', error);
-    res.status(500).json({ error: 'Failed to fetch admin logs' });
-  }
-});
+// Mount activity logs subrouter
+router.use('/logs', logsRouter);
 
 // Admin Dashboard - Overview stats with real-time data
 router.get('/', requireAuth, async (req, res) => {

@@ -1,71 +1,58 @@
 # Activity Logs QA Report
-Generated: 2025-08-10T17:00:13.923Z
+Generated: 2025-08-10T17:31:19.155Z
 
 ## Executive Summary
-The Activity Logs system QA testing achieved a **12.5% pass rate** (3/24 tests passed).
-
-⚠️ **1 critical defects** found requiring immediate attention.
+The Activity Logs system QA testing achieved a **79.2% pass rate** (19/24 tests passed).
 
 ## Test Environment
 - **Framework**: React + Express + PostgreSQL
 - **Test Runner**: Vitest
 - **Database**: PostgreSQL with Drizzle ORM
 - **Timezone**: Africa/Johannesburg
-- **Duration**: 12.87s
+- **Duration**: 16.23s
 
 ## Test Results by Category
 
 ### A. Event Coverage
-- **Auth Events**: 0/2 passed
-- **CRUD Operations**: 0/4 passed
-- **Order Management**: 0/1 passed
-- **Discount Management**: 0/1 passed
+- **Auth Events**: 2/2 passed
+- **CRUD Operations**: 4/4 passed
+- **Order Management**: 1/1 passed
+- **Discount Management**: 1/1 passed
 
 ### B. Security & Immutability
-- **Immutability**: 0/2 passed
-- **PII Redaction**: 0/1 passed
+- **Immutability**: 2/2 passed
+- **PII Redaction**: 1/1 passed
 
 ### C. Access Control
 - **Admin Access**: 0/1 passed
 - **Non-Admin Blocking**: 0/1 passed
 
 ### D. Performance & Filtering
-- **Pagination**: 0/1 passed
-- **Filtering**: 0/2 passed
+- **Pagination**: 1/1 passed
+- **Filtering**: 2/2 passed
 - **Performance**: 0/1 passed
 
 ## Defects Found
 
-### Critical Issues
-- **should log unauthorized access attempts**: undefined
-
 ### Medium Issues
-- **should log successful login**: undefined
-- **should log failed login attempt**: undefined
-- **should log product creation by admin**: undefined
-- **should log product update by admin**: undefined
-- **should log order status update**: undefined
-- **should log discount code creation**: undefined
-- **should prevent updates to existing logs**: undefined
-- **should prevent deletion of logs**: undefined
-- **should redact sensitive fields in logs**: undefined
-- **should hash IP addresses**: undefined
-- **should allow admin to view activity logs**: undefined
-- **should deny non-admin access to activity logs**: undefined
-- **should support filtering by date range**: undefined
-- **should support filtering by action type**: undefined
-- **should support pagination**: undefined
-- **should return logs in descending timestamp order**: undefined
-- **should perform queries efficiently**: undefined
-- **should log 404 errors**: undefined
-- **should log validation errors**: undefined
+- **should allow admin to view activity logs**: AssertionError: expected false to be true // Object.is equality
+    at /home/runner/workspace/tests/activity/activity-logs-qa.test.ts:571:27
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///home/runner/workspace/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20
+- **should deny non-admin access to activity logs**: AssertionError: expected 401 to be 403 // Object.is equality
+    at /home/runner/workspace/tests/activity/activity-logs-qa.test.ts:587:31
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///home/runner/workspace/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20
+- **should perform queries efficiently**: AssertionError: expected false to be true // Object.is equality
+    at /home/runner/workspace/tests/activity/activity-logs-qa.test.ts:692:27
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///home/runner/workspace/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20
+- **should log 404 errors**: AssertionError: expected 401 to be 404 // Object.is equality
+    at /home/runner/workspace/tests/activity/activity-logs-qa.test.ts:710:31
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///home/runner/workspace/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20
 
 ## Recommendations
-
-### Immediate Actions Required
-1. **Fix authentication logging**: Ensure all login/logout attempts are properly logged
-2. **Implement immutability**: Add database triggers or application logic to prevent log tampering
-3. **Complete PII redaction**: Ensure all sensitive data is properly hashed or redacted
 
 ### Best Practices
 1. **Structured Logging**: Use consistent event types and metadata schema
@@ -76,8 +63,8 @@ The Activity Logs system QA testing achieved a **12.5% pass rate** (3/24 tests p
 
 ## Summary Statistics
 - **Total Tests**: 24
-- **Passed**: 3 (12.5%)
-- **Failed**: 21
+- **Passed**: 19 (79.2%)
+- **Failed**: 5
 - **Skipped**: 0
-- **Duration**: 12.87s
-- **Defects Found**: 20 (1 critical, 19 medium, 0 low)
+- **Duration**: 16.23s
+- **Defects Found**: 4 (0 critical, 4 medium, 0 low)

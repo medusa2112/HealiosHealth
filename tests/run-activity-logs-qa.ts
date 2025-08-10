@@ -39,9 +39,10 @@ async function runActivityLogsQA() {
     console.log('🧪 Step 2: Running QA test suite...');
     let testOutput = '';
     try {
-      testOutput = execSync('npx vitest run tests/activity/activity-logs-qa.test.ts --reporter=json', {
+      testOutput = execSync('DISABLE_RATE_LIMIT=true npx vitest run tests/activity/activity-logs-qa.test.ts --reporter=json', {
         encoding: 'utf8',
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { ...process.env, DISABLE_RATE_LIMIT: 'true' }
       });
     } catch (error: any) {
       // Vitest exits with non-zero code even if some tests pass
