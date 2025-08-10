@@ -35,10 +35,10 @@ const loginLimiter = rateLimit({
 router.get('/me', async (req, res) => {
   try {
     // Check if user is authenticated through Replit Auth or session
-    const userId = req.session?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
+    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
     
     console.log(`[AUTH_ME] Checking auth status for userId: ${userId}`);
-    console.log(`[AUTH_ME] Session:`, req.session?.userId ? 'present' : 'missing');
+    console.log(`[AUTH_ME] Session:`, (req.session as any)?.userId ? 'present' : 'missing');
     console.log(`[AUTH_ME] Passport user:`, req.user ? 'present' : 'missing');
     
     if (!userId) {
@@ -188,8 +188,8 @@ router.post('/login', loginLimiter, async (req, res) => {
     }
 
     // Verify password if hash exists
-    if (user.passwordHash) {
-      const isValidPassword = await verifyPassword(password, user.passwordHash);
+    if (user.password) {
+      const isValidPassword = await verifyPassword(password, user.password);
       if (!isValidPassword) {
         await auditLogin(user.id, false, {
           error: 'Invalid password',
@@ -219,7 +219,7 @@ router.post('/login', loginLimiter, async (req, res) => {
     }
 
     // Check if email is verified (only for password-based auth)
-    if (user.passwordHash && !user.emailVerified) {
+    if (user.password && !user.emailVerified) {
       await auditLogin(user.id, false, {
         error: 'Email not verified',
         ip: req.ip || req.connection.remoteAddress,
@@ -234,7 +234,7 @@ router.post('/login', loginLimiter, async (req, res) => {
 
     // Set session
     req.session = req.session || {};
-    req.session.userId = user.id;
+    (req.session as any).userId = user.id;
     
     // Log successful login
     await auditLogin(user.id, true, {
@@ -266,14 +266,6 @@ router.post('/login', loginLimiter, async (req, res) => {
     }
     res.status(500).json({ message: 'Authentication failed' });
   }
-});
-
-// Legacy OAuth GET login endpoint
-router.get('/login', (req, res) => {
-  res.json({ 
-    message: "Use POST /api/auth/login for password authentication",
-    loginUrl: "/auth/mock-login" 
-  });
 });
 
 // Email verification endpoint
@@ -339,7 +331,7 @@ router.post('/verify', loginLimiter, async (req, res) => {
 
     // Set session
     req.session = req.session || {};
-    req.session.userId = user.id;
+    (req.session as any).userId = user.id;
 
     // Log successful verification
     await auditLogin(user.id, true, {
@@ -480,7 +472,7 @@ router.post('/mock-login', loginLimiter, async (req, res) => {
 
     // Set session
     req.session = req.session || {};
-    req.session.userId = user.id;
+    (req.session as any).userId = user.id;
     
     // Log successful login
     await auditLogin(user.id, true, {
@@ -682,7 +674,7 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
     }
 
     // Check if code is expired
-    if (isCodeExpired(user.verificationExpiresAt)) {
+    if (!user.verificationExpiresAt || isCodeExpired(user.verificationExpiresAt)) {
       return res.status(400).json({ 
         message: 'Reset code has expired. Please request a new one.' 
       });
@@ -705,11 +697,11 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
     }
 
     // Hash new password
-    const passwordHash = await hashPassword(newPassword);
+    const hashedPassword = await hashPassword(newPassword);
 
     // Update user password and clear reset code
     await storage.updateUser(user.id, {
-      passwordHash,
+      password: hashedPassword,
       verificationCodeHash: null,
       verificationExpiresAt: null,
       verificationAttempts: 0
