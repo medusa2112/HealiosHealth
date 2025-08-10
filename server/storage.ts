@@ -542,5 +542,8 @@ export class MemStorage implements IStorage {
   async updateChatSession(id: string, updates: any): Promise<any | undefined> { const session = this.chatSessions.get(id); if (!session) return undefined; const updated = { ...session, ...updates, updatedAt: new Date().toISOString() }; this.chatSessions.set(id, updated); return updated; }
 }
 
-// Create and export storage instance
-export const storage = new MemStorage();
+// Import DrizzleStorage for database persistence
+import { storage as drizzleStorage } from "./drizzleStorage";
+
+// Export the storage instance - using DrizzleStorage for database persistence
+export const storage = drizzleStorage;

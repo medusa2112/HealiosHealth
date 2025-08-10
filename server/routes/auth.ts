@@ -161,6 +161,9 @@ router.post("/register", loginLimiter, async (req, res) => {
 // Password-based login
 router.post('/login', loginLimiter, async (req, res) => {
   try {
+    console.log('[LOGIN] Request body:', req.body);
+    console.log('[LOGIN] Headers:', req.headers);
+    
     const loginSchema = z.object({
       email: z.string().email(),
       password: z.string().min(1)
@@ -177,7 +180,9 @@ router.post('/login', loginLimiter, async (req, res) => {
     const { email, password } = result.data;
 
     // Get user by email
+    console.log('[LOGIN] Looking up user:', email);
     const user = await storage.getUserByEmail(email);
+    console.log('[LOGIN] User found:', user ? 'yes' : 'no', user?.id);
     if (!user) {
       await auditLogin(email, false, {
         error: 'User not found',

@@ -61,6 +61,8 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Deployment**: Configured for deployment with Vite building frontend and ESBuild bundling server.
 
 ## Recent Updates
+- **2025-08-10**: Fixed critical authentication system - replaced in-memory storage (MemStorage) with database storage (DrizzleStorage) to enable persistent user authentication and proper admin login functionality
+- **2025-08-10**: Successfully tested admin login system - admin@healios.com can now authenticate and access protected admin routes with proper session management
 - **2025-08-10**: Fixed critical bug where hero video files weren't being served - added static file serving for client/public directory to properly serve hero-video.webm and hero-video.mp4 files
 - **2025-08-10**: Fixed console stringification errors by removing complex object logging that was causing circular reference issues in API request logging
 - **2025-08-10**: Fixed TypeScript type errors in server routes - properly typed CartItem imports and fixed orderItems parsing with explicit type casting
