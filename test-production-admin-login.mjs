@@ -2,9 +2,11 @@ import fetch from 'node-fetch';
 
 async function testAdminLogin() {
   const baseUrl = 'http://localhost:5000';
-  
+
   console.log('🔐 Testing production admin login...');
-  console.log('📧 Email: dn@thefourths.com');
+  const allowedAdminEmails = (process.env.ALLOWED_ADMIN_EMAILS || '').split(',').map(e => e.trim()).filter(Boolean);
+  const adminEmail = allowedAdminEmails[0] || 'dn@thefourths.com';
+  console.log('📧 Email:', adminEmail);
   console.log('🔑 Password: [Using ADM_PW secret]\n');
   
   try {
@@ -15,7 +17,7 @@ async function testAdminLogin() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: 'dn@thefourths.com',
+        email: adminEmail,
         password: process.env.ADM_PW
       })
     });

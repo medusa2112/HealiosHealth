@@ -49,7 +49,7 @@ Sometimes old session data can interfere:
 Make sure you're using the correct login endpoint:
 
 - **Login page**: `https://your-domain.replit.app/login`
-- **Admin email**: `dn@thefourths.com` or `admin@healios.com`
+- **Admin email**: use an address from `ALLOWED_ADMIN_EMAILS` (e.g., `dn@thefourths.com` or `admin@healios.com`)
 - **Password**: The value you set in `ADM_PW` secret
 
 ### Step 5: Check Database Connection
@@ -69,8 +69,8 @@ If the admin setup was done after deployment:
 
 ## 🔐 Security Notes
 
-- The admin emails are hardcoded in `server/lib/auth.ts`
-- Both `dn@thefourths.com` and `admin@healios.com` are configured as admin accounts
+- Admin emails are configured via the `ALLOWED_ADMIN_EMAILS` environment variable (comma-separated)
+- Ensure `dn@thefourths.com` and `admin@healios.com` are included if they should have admin access
 - The system uses bcrypt for password hashing
 - Sessions are stored in PostgreSQL in production
 
@@ -80,7 +80,7 @@ To verify your credentials are correct locally:
 
 1. Make sure `ADM_PW` secret is set in Replit
 2. The password you're entering should match exactly what's in `ADM_PW`
-3. Use either `dn@thefourths.com` or `admin@healios.com` as the email
+3. Use an email listed in `ALLOWED_ADMIN_EMAILS` (e.g., `dn@thefourths.com` or `admin@healios.com`)
 
 ## 📝 What to Check in Production Logs
 
