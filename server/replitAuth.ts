@@ -177,27 +177,38 @@ export async function setupAuth(app: Express) {
   
   passport.deserializeUser(async (serializedUser: any, cb) => {
     try {
+      // Handle case where no user data exists (public endpoints)
+      if (!serializedUser) {
+        return cb(null, false);
+      }
+      
       // Refresh user data from database to ensure current role/info
-      if (serializedUser.id) {
-        const currentUser = await storage.getUserById(serializedUser.id);
-        if (currentUser) {
-          const user = {
-            ...currentUser,
-            claims: serializedUser.claims,
-            userId: currentUser.id,
-            // SECURITY: Use internal token storage
-            _internal_access_token: serializedUser._internal_access_token,
-            _internal_refresh_token: serializedUser._internal_refresh_token,
-            expires_at: serializedUser.expires_at
-          };
-          console.log(`[REPLIT_AUTH] Deserialized user: ${user.email} (${user.role})`);
-          return cb(null, user);
+      if (serializedUser.id && storage.getUserById) {
+        try {
+          const currentUser = await storage.getUserById(serializedUser.id);
+          if (currentUser) {
+            const user = {
+              ...currentUser,
+              claims: serializedUser.claims,
+              userId: currentUser.id,
+              // SECURITY: Use internal token storage
+              _internal_access_token: serializedUser._internal_access_token,
+              _internal_refresh_token: serializedUser._internal_refresh_token,
+              expires_at: serializedUser.expires_at
+            };
+            console.log(`[REPLIT_AUTH] Deserialized user: ${user.email} (${user.role})`);
+            return cb(null, user);
+          }
+        } catch (storageError) {
+          console.error('[REPLIT_AUTH] Storage error during deserialization:', storageError);
+          // Continue with serialized user if storage fails
         }
       }
       cb(null, serializedUser);
     } catch (error) {
       console.error('[REPLIT_AUTH] Deserialization error:', error);
-      cb(null, serializedUser);
+      // Return false instead of failing to prevent 500 errors on public endpoints
+      cb(null, false);
     }
   });
 

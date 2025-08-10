@@ -561,10 +561,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use the comprehensive validation method
       const validation = await storage.validateDiscountCode(code.trim());
       
-      if (!validation.valid) {
+      if (!validation || !validation.valid) {
         return res.json({
           valid: false,
-          error: validation.error
+          error: validation?.error || 'Invalid discount code'
         });
       }
 

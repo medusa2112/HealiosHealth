@@ -63,13 +63,15 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
   }
 
   // Skip CSRF for auth endpoints during initial login/register/password reset/verification
-  if (req.path.includes('/auth/login') || 
-      req.path.includes('/auth/register') ||
-      req.path.includes('/auth/forgot-password') ||
-      req.path.includes('/auth/reset-password') ||
-      req.path.includes('/auth/verify') ||
-      req.path.includes('/auth/resend-code') ||
-      req.path === '/auth/demo-admin-login') {
+  const fullPath = req.originalUrl || req.url || req.path;
+  if (fullPath.includes('/auth/login') || 
+      fullPath.includes('/auth/register') ||
+      fullPath.includes('/auth/forgot-password') ||
+      fullPath.includes('/auth/reset-password') ||
+      fullPath.includes('/auth/verify') ||
+      fullPath.includes('/auth/resend-code') ||
+      fullPath === '/auth/demo-admin-login' ||
+      fullPath.includes('/validate-discount')) {  // Public discount validation endpoint
     return next();
   }
 

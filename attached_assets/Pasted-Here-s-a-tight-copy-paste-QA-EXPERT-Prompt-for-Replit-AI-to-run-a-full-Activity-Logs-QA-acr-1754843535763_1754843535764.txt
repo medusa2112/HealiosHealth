@@ -1,0 +1,171 @@
+Here’s a tight, copy-paste **QA EXPERT Prompt** for Replit AI to run a **full Activity Logs QA** across DB, APIs, jobs, security, and UI in your existing Healios repo. Minimal changes, UK English, no rewrites.
+
+---
+
+# QA EXPERT Prompt — Activity Logs / Audit Trails (DB + API + Jobs + UI)
+
+**You are Replit AI working inside the current Healios repository. Perform a comprehensive QA of the Activity Logs/Audit Trail system end-to-end using the existing stack. Make minimal, non-breaking changes. Use UK English. Output a final Markdown report.**
+
+## 0) Pre-flight
+
+1. Scan the repo and detect:
+
+   * Framework (Next.js app/pages), ORM (Drizzle/Prisma/raw), DB (Postgres), test runner (Vitest/Jest/Playwright).
+   * Existing audit table(s) and schema (e.g. `activity_logs`, `audit_events`), logging utilities, and admin viewer pages/routes.
+   * Where logs are written (middleware, services, API handlers, webhooks, background jobs).
+2. Set up a **separate test database**; run migrations against it only.
+3. If no tests exist, add the smallest harness: Vitest for unit/integration, supertest for API, Playwright for UI.
+
+## 1) Logging Contract (assumptions; do not rewrite)
+
+Verify or minimally introduce a **structured log schema** (reuse existing names if present):
+
+* `id` (uuid), `ts` (timestamptz), `severity` (`INFO|WARN|ERROR|SECURITY`), `event_type` (string enum),
+  `actor_type` (`user|system|admin|webhook`), `actor_id` (nullable),
+  `resource_type` (e.g. `order|product|cart|discount|user|config`), `resource_id` (nullable),
+  `verb` (`CREATE|READ|UPDATE|DELETE|LOGIN|LOGOUT|STATUS_CHANGE|JOB_RUN|WEBHOOK`),
+  `request_id`/`correlation_id`, `ip_hash`, `user_agent_hash`,
+  `metadata` (jsonb; **no secrets**), `diff` (jsonb of changed fields),
+  `immutable` boolean default true.
+  Add indices on `(ts)`, `(event_type)`, `(actor_id)`, `(resource_type, resource_id)`, `(request_id)`.
+
+**Secrets redaction**: confirm a central redactor that strips tokens, passwords, keys, card data from any `metadata` before insert.
+
+## 2) Seed Data (idempotent)
+
+Create `scripts/seed.activity.test.ts`:
+
+* Users: admin, normal user, guest session.
+* Entities: a few products, carts, orders, discounts.
+* Pre-insert some representative logs if none exist (login success/failure, product update, order paid, webhook received).
+
+## 3) Test Matrix (automate under `tests/activity/`)
+
+### A. Coverage of Critical Events
+
+Assert a log entry is written with correct shape for each scenario:
+
+* **Auth**: login success, login failure (wrong password), logout, password reset request, password change.
+* **RBAC changes**: role upgrade/downgrade for a user.
+* **Product**: create/update/delete, stock change, price change.
+* **Orders**: create, status transitions (`pending→paid→fulfilled→refunded→canceled`), refund issued.
+* **Payments**: webhook received (idempotent double-delivery), signature valid/invalid.
+* **Carts**: add/update/remove lines, cart merged on login, abandoned marked, recovery link used.
+* **Discounts**: create/update/disable, apply/remove at cart, usage cap reached.
+* **Admin config**: feature toggle on/off, environment change attempted (should be blocked in prod; still log).
+* **Security**: CSRF mismatch 403, rate-limit trigger, unauthorised admin access attempt.
+
+For each, assert:
+
+* `event_type`, `verb`, `actor_*`, `resource_*`, `ts` present.
+* `request_id`/`correlation_id` present and consistent across related events.
+* `diff` contains only changed fields (no full object dumps).
+
+### B. Immutability & Tamper-evidence
+
+* Attempt `UPDATE` on an existing log row via code path → must be blocked (Raise error/trigger).
+* Attempt `DELETE` → blocked except by retention job; ensure soft-delete or restricted role only.
+* If a hash chain exists (optional), verify `prev_hash/hash` integrity; else skip.
+
+### C. Transactional Integrity
+
+* For a **successful** product update: log is written **in the same transaction** as DB change; if the update rolls back, **no log remains**.
+* For webhook **idempotency**: second identical webhook → zero new logs; existing log has an idempotency note (or no change).
+
+### D. PII & Secrets Redaction
+
+* Inject metadata with tokens/headers/passwords on a test endpoint; ensure saved `metadata` has them **redacted** or omitted.
+* Ensure `ip_hash` and `user_agent_hash` are hashed (salted) rather than raw values.
+* No email addresses or card PANs in plaintext anywhere in logs.
+
+### E. RBAC & Access Controls
+
+* Admin can view `GET /api/admin/activity-logs` with filters (date range, event\_type, actor, resource).
+* Non-admin is **forbidden** to list logs.
+* A normal user can view **only their own** activity (if such endpoint exists), never others’.
+* Export endpoint (CSV/JSON) restricted to admin and logged with an event.
+
+### F. Filtering, Pagination, Performance
+
+* API returns logs with server-side pagination and stable ordering by `ts DESC, id`.
+* Filter by `event_type`, `actor_id`, `resource_type`, `date range` works and uses indices (confirm via `EXPLAIN` or timing threshold).
+* Return time for a 50k-row dataset stays under an acceptable limit (e.g. < 300 ms in dev).
+
+### G. Retention & Archival
+
+* If retention exists, e.g. **debug logs 30 days**, **audit logs 365 days**:
+
+  * Run the retention job: only eligible rows are removed/archived.
+  * Job is idempotent; a second run changes nothing.
+  * A **summary log** of the retention job is written.
+* If no retention, document recommended envs (see Config).
+
+### H. UI Admin Viewer (Playwright)
+
+* Filtering and pagination UI works; query state appears in URL (if designed that way).
+* Row shows: timestamp (localised), event badge, actor, resource, short metadata preview, with a detail drawer/modal for full JSON (redacted).
+* Export button disabled for non-admin; enabled for admin and logs an export event.
+
+### I. Clock, Timezone, Ordering
+
+* All times stored as `timestamptz` UTC; displayed in **Africa/Johannesburg** by default.
+* Verify **monotonic** display ordering when multiple events share near-identical timestamps.
+
+### J. Error Path Logging
+
+* When API returns 4xx/5xx for key domains (orders, payments, admin writes), an ERROR/SECURITY log exists with `request_id` and a short code (no stack traces or secrets in metadata).
+
+## 4) Concurrency Tests
+
+* Fire 100 parallel order status updates (where only one should win) → exactly one `STATUS_CHANGE` to the target state; others log conflicts with stable codes.
+* Fire 50 parallel discount apply calls on a capped code → success count matches cap; logs reflect failures cleanly.
+* Fire 50 parallel admin list queries → rate limiter works if configured; no performance collapse.
+
+## 5) Direct DB Assertions
+
+* Count of logs per scenario matches expectations (no duplicates).
+* Verify constraint/trigger prevents `UPDATE` to `activity_logs`.
+* `metadata` keys limited (size cap), and JSON is valid.
+* Indices exist and are used; add missing indices only if necessary (non-breaking).
+
+## 6) Config (read, don’t hardcode)
+
+Introduce or confirm envs (read once; defaults used only in tests):
+
+* `ACTIVITY_TIMEZONE` default `Africa/Johannesburg`
+* `ACTIVITY_REDACTION_ENABLED=true`
+* `ACTIVITY_RETENTION_DAYS_AUDIT=365`
+* `ACTIVITY_RETENTION_DAYS_DEBUG=30`
+* `ACTIVITY_MAX_METADATA_BYTES=8192`
+
+## 7) Reporting
+
+Generate `QA_ACTIVITY_LOGS_REPORT.md` at the repo root including:
+
+* Environment summary (commit hash, masked DB).
+* Schema overview and index status.
+* Complete test matrix with pass/fail per case.
+* Concurrency outcomes and performance timings.
+* Retention run results (rows affected).
+* Redaction findings with examples (safely redacted).
+* Defects with reproduction steps, suspected root cause, and proposed fix.
+  Print a concise summary to console.
+
+## 8) Safety Rails
+
+* Never use production DB or keys.
+* Do not weaken access controls; tests must authenticate as appropriate roles.
+* Keep any helper endpoints behind test flags and devDependencies.
+* Do not log secrets during tests; use the redactor when generating synthetic events.
+
+## Acceptance Criteria
+
+* Logs exist for all critical actions with correct shape and redaction.
+* Append-only behaviour enforced (no updates/deletes outside retention).
+* Events are **transactionally aligned** with business changes; idempotency respected.
+* Admin-only access to global logs; user-scoped views restricted.
+* Filters, pagination, and indices verified; performance within thresholds.
+* Retention job behaves correctly and is idempotent.
+* `QA_ACTIVITY_LOGS_REPORT.md` produced with actionable findings, no regressions to orders, carts, discounts, or auth.
+
+**Run now. If minimal tooling is missing, add it and proceed without altering production behaviour.**

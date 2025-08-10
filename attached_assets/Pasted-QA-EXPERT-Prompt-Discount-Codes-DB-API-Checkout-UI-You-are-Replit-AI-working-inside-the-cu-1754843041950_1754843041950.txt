@@ -1,0 +1,212 @@
+QA EXPERT Prompt — Discount Codes (DB + API + Checkout + UI)
+You are Replit AI working inside the current Healios repository. Perform a comprehensive QA of the Discount/Coupon system end-to-end using the existing stack. Make minimal, non-breaking changes. Use UK English. Output a final Markdown report.
+
+0) Pre-flight
+Scan the repo and detect:
+
+Framework (Next.js pages/app), test runner (Vitest/Jest/Playwright), ORM (Drizzle/Prisma/raw), DB (Postgres).
+
+Discount model: tables, fields, and relationships (codes, promotions, usage logs).
+
+Where discounts are applied: cart service, checkout, order creation, payment webhook.
+
+Admin endpoints and UI for creating and managing codes.
+
+Create a separate test DB. Run migrations against it only.
+
+If no tests: add the smallest harness required:
+
+Vitest for unit/integration, supertest for API, Playwright for UI. Keep tooling minimal.
+
+1) Assumptions and config (do not hardcode)
+Read env if present, otherwise use safe defaults for tests only:
+
+DISCOUNT_TIMEZONE default Africa/Johannesburg
+
+DISCOUNT_CASE_INSENSITIVE default true
+
+DISCOUNT_MAX_STACK default 1
+
+DISCOUNT_MIN_SPEND_DEFAULT default 0
+
+FREE_SHIPPING_CODE optional
+Respect consent and legal copy in emails if any discount emails exist.
+
+2) Seed data (idempotent)
+Create scripts/seed.discounts.test.ts with:
+
+Users: guest with captured email, registered user, admin.
+
+Products: 3 taxable in-stock, 1 out-of-stock, 1 non-taxable if supported, 1 excluded from discounts via category rule.
+
+Discounts:
+
+PERCENT10: 10% off, site-wide.
+
+FIXED50: R50 off, site-wide, min spend R200.
+
+FREESHIP: free shipping.
+
+ONEPERUSER20: 20% off, one use per user.
+
+GLOBAL100USES: 15% off, max 100 total redemptions.
+
+CAT10: 10% off specific category only.
+
+EXCLUDECAT20: 20% off but excludes one category.
+
+UNIQUE_PREFIX_XXXXX: generate 5 unique one-time codes.
+
+BOGO_TEST: buy 1 get 1 free on a specific SKU if BOGO supported.
+
+AUTO_APPLY_5: auto-applied 5% when basket meets rule.
+Ensure a usage log table exists or create a minimal one if missing for tests.
+
+3) Test matrix
+A. Code validation basics
+Trim spaces, case insensitivity if enabled.
+
+Invalid, expired, or not-yet-active codes return clear 4xx error code and message.
+
+Time windows respect DISCOUNT_TIMEZONE.
+
+B. Eligibility rules
+Min spend, allowed categories, excluded categories, product-specific codes.
+
+One-per-user and global redemption caps enforced.
+
+Unique one-time codes redeemable once only.
+
+Guest vs logged-in: guests with email captured may redeem unless business rules forbid.
+
+C. Stacking rules
+Default: only one code if DISCOUNT_MAX_STACK=1.
+
+When stack allowed: test percent+fixed ordering, reject conflicting free-shipping combos if business rules forbid.
+
+Ensure deterministic application order and audit in response: applied_codes array with order.
+
+D. Price maths and rounding
+Percent discounts round to 2 decimals at line level using standard rounding.
+
+Fixed discounts prorata across eligible lines to maintain totals.
+
+Discounts never reduce a line below 0.
+
+VAT or tax base correctly reduced if your jurisdiction requires it. Assert totals: subtotal, discount, shipping, tax, grand total.
+
+Multi-currency if present: do not cross currency.
+
+E. Free shipping
+Apply only to shipping component.
+
+If shipping is already zero, code should be accepted but have zero effect and log that outcome.
+
+F. Exclusions and BOGO
+Excluded items pay full price while others discount.
+
+BOGO: add 2 units of target SKU, ensure one line is zeroed or an adjustment line is created. Add 3 units and verify correct application (one free only, unless rule says otherwise).
+
+G. Lifecycle through checkout
+Apply code at cart, proceed to checkout, create order with snapshot of discount breakdown.
+
+Payment success webhook: order totals remain identical to pre-authorised totals.
+
+Payment failure: no usage recorded.
+
+Payment retry: no double discounting.
+
+H. Usage limits and concurrency
+For GLOBAL100USES: fire 200 parallel redemption attempts. Exactly 100 succeed, others fail gracefully with a stable error code. No overshoot.
+
+For ONEPERUSER20: same user attempts multiple times concurrently. Exactly one succeeds.
+
+I. Abuse and security
+Rate limit code validation endpoint to resist brute force.
+
+CSRF enforced on apply/remove endpoints if cookie-based sessions are used.
+
+Admin coupon CRUD endpoints require admin and audit log entries.
+
+Do not leak whether a code exists via timing or distinct messages beyond what UI needs.
+
+J. Cart merge and persistence
+Guest applies code, then logs in and carts merge: code persists if still eligible; if not eligible under user account rules, remove with clear reason.
+
+Recovery from abandoned cart with code: code re-applies only if still valid and eligible.
+
+K. Remove and replace
+Removing a code restores prices exactly.
+
+Replacing Code A with Code B recalculates totals cleanly with no residue.
+
+L. Refunds and returns
+Partial return prorates discount back to returned items correctly.
+
+Ensure refund amounts incorporate the discount allocation from the original order.
+
+M. API contract
+Write API tests for:
+
+POST /api/cart/discounts/apply
+
+POST /api/cart/discounts/remove
+
+GET /api/cart reflects applied_discounts with amounts, eligibility notes, and per-line allocations.
+
+POST /api/orders carries discount snapshot.
+
+POST /api/webhooks/payment checks idempotency and total integrity.
+
+4) Concurrency harness
+Add tests/helpers/runConcurrency.ts to launch N parallel requests with per-result metrics. Fail tests if redemptions exceed caps or if totals diverge across concurrent runs.
+
+5) Direct DB assertions
+After each scenario, query Postgres to assert:
+
+discount_usages insert exactly once per successful redemption with code, user id or guest token, order id.
+
+Global and per-user counters match expectations.
+
+Order and order_items store discount amounts and allocations immutably.
+
+6) UI checks (Playwright)
+Apply, remove, replace code flows.
+
+Error messaging, accessibility of inputs, disabled Apply while processing.
+
+Badge and line-level display match server amounts.
+
+Prices update without flicker or stale totals.
+
+Code persists across refresh and page navigation until removed or invalid.
+
+7) Reporting
+Generate QA_DISCOUNTS_REPORT.md at repo root with:
+
+Environment summary (commit hash, masked DB).
+
+Complete test matrix with pass or fail.
+
+Concurrency outcomes and usage cap graphs.
+
+Any defects with steps to reproduce, suspected root cause, and proposed fix.
+Print a concise summary to console.
+
+8) Safety rails
+Never touch production DB or keys.
+
+Do not loosen auth or CSRF except inside isolated tests.
+
+Keep all helpers behind tests/ and devDependencies.
+
+Acceptance criteria
+All discount rules pass, including maths, stacking, eligibility, limits, and time windows.
+
+Concurrency does not overshoot usage caps or produce inconsistent totals.
+
+Webhook idempotency proven. Order totals match pre-payment totals exactly.
+
+Report generated with actionable findings and no regressions to orders or carts.
+
+Run now. If required tooling is missing, add the smallest possible harness and proceed.
