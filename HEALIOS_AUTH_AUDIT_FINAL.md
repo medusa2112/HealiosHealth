@@ -7,6 +7,7 @@
 - ✅ Rate limiting active (5 requests per 15 minutes per IP)
 - ✅ CORS headers configured for localhost:5000
 - ✅ Frontend routes accessible (/register, /verify, /login, /forgot-password)
+- 🔒 Password-based auth routes (/register, /login, /mock-login, verification, password reset) are disabled in production
 
 ## 2. Findings Table
 

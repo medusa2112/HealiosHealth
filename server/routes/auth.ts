@@ -83,9 +83,10 @@ router.get('/user', isAuthenticated, async (req, res) => {
   }
 });
 
-// Password-based registration for local development/testing
-router.post("/register", loginLimiter, async (req, res) => {
-  try {
+if (process.env.NODE_ENV !== 'production') {
+  // Password-based registration for local development/testing
+  router.post("/register", loginLimiter, async (req, res) => {
+    try {
     const registerSchema = z.object({
       email: z.string().email(),
       password: z.string().min(8),
@@ -155,15 +156,15 @@ router.post("/register", loginLimiter, async (req, res) => {
       email
     });
 
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Registration failed' });
-  }
-});
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(500).json({ message: 'Registration failed' });
+    }
+  });
 
-// Password-based login
-router.post('/login', loginLimiter, async (req, res) => {
-  try {
+  // Password-based login
+  router.post('/login', loginLimiter, async (req, res) => {
+    try {
     console.log('[LOGIN] Request body:', req.body);
     console.log('[LOGIN] Headers:', req.headers);
     
@@ -272,13 +273,13 @@ router.post('/login', loginLimiter, async (req, res) => {
         userAgent: req.get('User-Agent')
       });
     }
-    res.status(500).json({ message: 'Authentication failed' });
-  }
-});
+      res.status(500).json({ message: 'Authentication failed' });
+    }
+  });
 
-// Email verification endpoint
-router.post('/verify', loginLimiter, async (req, res) => {
-  try {
+  // Email verification endpoint
+  router.post('/verify', loginLimiter, async (req, res) => {
+    try {
     const verifySchema = z.object({
       email: z.string().email(),
       code: z.string().length(6)
@@ -359,15 +360,15 @@ router.post('/verify', loginLimiter, async (req, res) => {
       user: sanitizeUser(user),
       redirectUrl
     });
-  } catch (error) {
-    console.error('Verification error:', error);
-    res.status(500).json({ message: 'Verification failed' });
-  }
-});
+    } catch (error) {
+      console.error('Verification error:', error);
+      res.status(500).json({ message: 'Verification failed' });
+    }
+  });
 
-// Resend verification code endpoint
-router.post('/resend-code', loginLimiter, async (req, res) => {
-  try {
+  // Resend verification code endpoint
+  router.post('/resend-code', loginLimiter, async (req, res) => {
+    try {
     const resendSchema = z.object({
       email: z.string().email()
     });
@@ -417,11 +418,12 @@ router.post('/resend-code', loginLimiter, async (req, res) => {
       success: true,
       message: 'New verification code sent to your email'
     });
-  } catch (error) {
-    console.error('Resend code error:', error);
-    res.status(500).json({ message: 'Failed to resend verification code' });
-  }
-});
+    } catch (error) {
+      console.error('Resend code error:', error);
+      res.status(500).json({ message: 'Failed to resend verification code' });
+    }
+  });
+}
 
 // Logout endpoint
 router.post('/logout', async (req, res) => {
@@ -441,6 +443,7 @@ router.post('/logout', async (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
+if (process.env.NODE_ENV !== 'production') {
 // Mock login endpoint for development/testing
 router.post('/mock-login', loginLimiter, async (req, res) => {
   try {
@@ -513,6 +516,7 @@ router.post('/mock-login', loginLimiter, async (req, res) => {
     res.status(500).json({ message: 'Authentication failed' });
   }
 });
+}
 
 // Real callback endpoint (would handle Replit OAuth callback in production)
 router.get('/callback', async (req, res) => {
@@ -533,6 +537,7 @@ router.get('/callback', async (req, res) => {
 
 
 
+if (process.env.NODE_ENV !== 'production') {
 // Development-only demo login (admin access)
 if (process.env.NODE_ENV === 'development') {
   router.post('/demo-admin-login', loginLimiter, async (req, res) => {
@@ -728,5 +733,6 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
     });
   }
 });
+}
 
 export default router;
