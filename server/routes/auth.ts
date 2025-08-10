@@ -126,7 +126,7 @@ router.post("/register", loginLimiter, async (req, res) => {
     // Create user with hashed password and verification data
     const userData = {
       email,
-      passwordHash,
+      password: passwordHash,
       firstName: firstName || null,
       lastName: lastName || null,
       role: 'customer' as const,
@@ -137,7 +137,8 @@ router.post("/register", loginLimiter, async (req, res) => {
       verificationAttempts: 0
     };
 
-    const user = await storage.createUser(userData);
+    const validatedUserData = insertUserSchema.parse(userData);
+    const user = await storage.createUser(validatedUserData);
 
     // Send verification email
     try {
