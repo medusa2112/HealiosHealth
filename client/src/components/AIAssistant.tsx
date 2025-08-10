@@ -363,15 +363,7 @@ export function AIAssistant({ isOpen, onToggle, isMinimized, onMinimize }: AIAss
   );
 }
 
-// Chat bubble component for triggering the assistant
+// Chat bubble component for triggering the assistant (temporarily disabled)
 export function ChatBubble({ onClick }: { onClick: () => void }) {
-  return (
-    <Button
-      onClick={onClick}
-      className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-black hover:bg-gray-800 shadow-2xl z-40"
-      size="lg"
-    >
-      <MessageSquare className="h-6 w-6 text-white" />
-    </Button>
-  );
+  return null;
 }

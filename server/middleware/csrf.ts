@@ -73,9 +73,8 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  // For authenticated admin routes, also check if user is logged in
+  // For authenticated admin routes, use a more lenient approach in development
   if (req.path.includes('/admin/') && (req.session as any)?.userId) {
-    // Admin is authenticated, use a more lenient CSRF check
     const token = req.get('X-CSRF-Token') || 
                   req.get('X-XSRF-Token') || 
                   req.body?._csrf ||
@@ -86,42 +85,48 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       path: req.path,
       sessionId,
       tokenProvided: !!token,
-      storedTokens: Array.from(csrfTokens.keys())
+      nodeEnv: process.env.NODE_ENV,
+      userId: (req.session as any)?.userId
     });
     
-    // If no token provided but user is authenticated, generate one
-    if (!token) {
-      console.log('[CSRF] No token provided for admin route, but user is authenticated. Allowing request.');
+    // In development, be more lenient for authenticated admin users
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[CSRF] Development mode - allowing authenticated admin request');
       return next();
     }
     
-    // Verify token with current session
-    if (!verifyCSRFToken(sessionId, token as string)) {
-      console.log('[CSRF] Token verification failed for sessionId:', sessionId);
-      // Try to verify with all possible session ID formats
-      const possibleSessionIds = [
-        req.sessionID,
-        req.session?.id,
-        `${req.ip}-${req.get('user-agent')}`,
-        (req.session as any)?.userId // Try using userId as session identifier
-      ].filter(Boolean);
-      
-      let tokenValid = false;
-      for (const sid of possibleSessionIds) {
-        if (sid && verifyCSRFToken(sid as string, token as string)) {
-          console.log('[CSRF] Token valid for alternate sessionId:', sid);
-          tokenValid = true;
-          break;
-        }
+    // Production - strict CSRF validation
+    if (!token) {
+      return res.status(403).json({ 
+        error: 'CSRF token required',
+        code: 'CSRF_TOKEN_MISSING'
+      });
+    }
+    
+    // Try to verify with multiple session identifiers
+    const possibleSessionIds = [
+      sessionId,
+      req.sessionID,
+      req.session?.id,
+      (req.session as any)?.userId,
+      `${req.ip}-${req.get('user-agent')}`
+    ].filter(Boolean);
+    
+    let tokenValid = false;
+    for (const sid of possibleSessionIds) {
+      if (sid && verifyCSRFToken(sid as string, token as string)) {
+        console.log('[CSRF] Token valid for sessionId:', sid);
+        tokenValid = true;
+        break;
       }
-      
-      if (!tokenValid) {
-        console.log('[CSRF] Token invalid for all possible session IDs');
-        return res.status(403).json({ 
-          error: 'Invalid CSRF token',
-          code: 'CSRF_TOKEN_MISMATCH'
-        });
-      }
+    }
+    
+    if (!tokenValid) {
+      console.log('[CSRF] Token invalid for all session IDs:', possibleSessionIds);
+      return res.status(403).json({ 
+        error: 'Invalid CSRF token',
+        code: 'CSRF_TOKEN_MISMATCH'
+      });
     }
     
     return next();
