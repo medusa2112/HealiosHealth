@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
+import type { CartItem } from "./email";
 import { db } from "./db";
 import { eq, sql, arrayContains } from "drizzle-orm";
 import { EmailService } from "./email";
@@ -29,6 +30,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
+  
+  // Serve static files from client/public directory (including hero videos)
+  app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
   // Setup Replit Auth BEFORE other routes
   await setupAuth(app);
@@ -393,7 +397,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const order = await storage.createOrder(validatedOrderData);
       
       // Update stock for each item
-      const orderItems = JSON.parse(orderData.orderItems);
+      const orderItems = JSON.parse(orderData.orderItems as string);
       for (const item of orderItems) {
         await storage.decreaseProductStock(item.product.id, item.quantity);
       }
@@ -1036,8 +1040,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           paymentStatus: 'completed',
           orderStatus: 'processing'
         };
-        const testOrderItems = [{
-          // Removed test data - should fetch from actual database
+        const testOrderItems: CartItem[] = [{
+          product: {
+            id: 'test-product-1',
+            name: 'Test Product',
+            price: '299.00',
+            imageUrl: '/assets/placeholder-product.png'
+          },
           quantity: 1
         }];
         await EmailService.sendOrderConfirmation({ order: testOrder as any, orderItems: testOrderItems });

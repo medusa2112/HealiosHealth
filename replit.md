@@ -61,6 +61,10 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Deployment**: Configured for deployment with Vite building frontend and ESBuild bundling server.
 
 ## Recent Updates
+- **2025-08-10**: Fixed critical bug where hero video files weren't being served - added static file serving for client/public directory to properly serve hero-video.webm and hero-video.mp4 files
+- **2025-08-10**: Fixed console stringification errors by removing complex object logging that was causing circular reference issues in API request logging
+- **2025-08-10**: Fixed TypeScript type errors in server routes - properly typed CartItem imports and fixed orderItems parsing with explicit type casting
+- **2025-08-10**: Identified and fixed video loading issues - hero videos now properly served from public directory instead of returning 404 errors
 - **2025-08-09**: Enhanced unified verification system (/verify) to handle both email verification and password reset flows with single secure interface
 - **2025-08-09**: Added comprehensive password reset functionality with 6-digit verification codes, secure password inputs with validation, and auto-focus for optimal UX
 - **2025-08-09**: Implemented enterprise-grade security features: CSRF protection, auto-complete prevention, memory-only credential storage, and WCAG 2.1 AA compliant design

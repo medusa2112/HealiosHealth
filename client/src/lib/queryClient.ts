@@ -22,8 +22,8 @@ export async function apiRequest(
     method,
     url,
     hasData: !!data,
-    dataType: data ? typeof data : 'none',
-    data
+    dataType: data ? typeof data : 'none'
+    // Removed 'data' to prevent circular reference errors
   });
   
   const startTime = Date.now();
@@ -63,8 +63,8 @@ export async function apiRequest(
       status: res.status,
       statusText: res.statusText,
       ok: res.ok,
-      duration: `${duration}ms`,
-      headers: Object.fromEntries(res.headers.entries())
+      duration: `${duration}ms`
+      // Removed headers to prevent circular reference errors
     });
 
     await throwIfResNotOk(res);
