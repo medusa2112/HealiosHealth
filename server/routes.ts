@@ -23,6 +23,8 @@ import emailTestRoutes from "./routes/email-test";
 
 // Stripe imports moved to dedicated service
 import { stripe } from "./lib/stripe";
+// Availability imports
+import { deriveAvailability, isOrderable, availabilityRank } from "../lib/availability";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Apply secure headers to all routes
@@ -107,12 +109,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
   
 
-  // Get all products - FROM DATABASE
+  // Get all products - FROM DATABASE with availability sorting
   app.get("/api/products", async (req, res) => {
     try {
       const dbProducts = await db.select().from(products);
-      res.json(dbProducts);
+      
+      // Add availability and sort by availability rank
+      const productsWithAvailability = dbProducts.map(product => {
+        const availability = deriveAvailability({
+          stockQuantity: product.stockQuantity || 0,
+          allowPreorder: product.allowPreorder || false,
+          preorderCap: product.preorderCap,
+          preorderCount: product.preorderCount || 0
+        });
+        
+        return {
+          ...product,
+          availability,
+          isOrderable: isOrderable(availability)
+        };
+      });
+      
+      // Sort by availability rank (in stock first, then preorder open, then out of stock/closed)
+      productsWithAvailability.sort((a, b) => {
+        const rankA = availabilityRank(a.availability);
+        const rankB = availabilityRank(b.availability);
+        if (rankA !== rankB) return rankA - rankB;
+        // Secondary sort by featured status and name
+        if (a.featured !== b.featured) return b.featured ? 1 : -1;
+        return a.name.localeCompare(b.name);
+      });
+      
+      res.json(productsWithAvailability);
     } catch (error) {
+      console.error("Failed to fetch products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });

@@ -11,6 +11,7 @@ import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
 import abandonedCartsRouter from './admin/abandoned-carts';
 import discountCodesRouter from './adminDiscounts';
+import { deriveAvailability, isOrderable } from '../../lib/availability';
 
 const router = express.Router();
 
@@ -251,7 +252,21 @@ router.get('/products/:id', requireAuth, async (req, res) => {
     if (!product || product.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json(product[0]);
+    
+    // Add availability to the product
+    const productData = product[0];
+    const availability = deriveAvailability({
+      stockQuantity: productData.stockQuantity || 0,
+      allowPreorder: productData.allowPreorder || false,
+      preorderCap: productData.preorderCap,
+      preorderCount: productData.preorderCount || 0
+    });
+    
+    res.json({
+      ...productData,
+      availability,
+      isOrderable: isOrderable(availability)
+    });
   } catch (error) {
     console.error('Failed to fetch product:', error);
     res.status(500).json({ message: 'Failed to fetch product' });
@@ -370,6 +385,8 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
       ...req.body,
       // Fix stock validation: inStock should be false when stockQuantity is 0
       ...(req.body.stockQuantity !== undefined && { inStock: req.body.stockQuantity > 0 }),
+      // Validate pre-order fields
+      ...(req.body.allowPreorder === true && !req.body.preorderCap && { preorderCap: null }),
       // Auto-generate SEO fields if not provided and name/description are being updated
       ...(req.body.name && !req.body.seoTitle && { seoTitle: `${req.body.name} | Premium Supplements | Healios` }),
       ...(req.body.description && !req.body.seoDescription && { seoDescription: req.body.description.substring(0, 160) }),
@@ -377,6 +394,13 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
         seoKeywords: [req.body.name || '', ...(req.body.categories || []), 'supplements', 'health', 'wellness'].filter(Boolean)
       }),
     };
+    
+    // Validate pre-order logic
+    if (preprocessedData.allowPreorder === true && !preprocessedData.preorderCap) {
+      return res.status(400).json({ 
+        error: 'Pre-order cap is required when pre-order is enabled'
+      });
+    }
 
     // Use SINGLE SOURCE OF TRUTH - shared schema made partial for updates  
     const updateSchema = insertProductSchema.partial();

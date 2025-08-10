@@ -16,6 +16,7 @@ import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import AdminImageUpload from "@/components/AdminImageUpload";
 import { SEOHead } from '@/components/seo-head';
+import { Separator } from "@/components/ui/separator";
 
 interface ProductFormData {
   name: string;
@@ -30,6 +31,11 @@ interface ProductFormData {
   bottleCount: string;
   dailyDosage: string;
   supplyDays: string;
+  // Pre-order fields
+  allowPreorder: boolean;
+  preorderCap: number | null;
+  preorderCount: number;
+  availability?: string;
   // SEO fields
   seoTitle: string;
   seoDescription: string;
@@ -49,6 +55,9 @@ const defaultFormData: ProductFormData = {
   bottleCount: "",
   dailyDosage: "",
   supplyDays: "",
+  allowPreorder: false,
+  preorderCap: null,
+  preorderCount: 0,
   seoTitle: "",
   seoDescription: "",
   seoKeywords: [],
@@ -89,6 +98,10 @@ export default function AdminProductEdit() {
         bottleCount: product.bottleCount?.toString() || "",
         dailyDosage: product.dailyDosage?.toString() || "",
         supplyDays: product.supplyDays?.toString() || "",
+        allowPreorder: (product as any).allowPreorder || false,
+        preorderCap: (product as any).preorderCap || null,
+        preorderCount: (product as any).preorderCount || 0,
+        availability: (product as any).availability,
         seoTitle: (product as any).seoTitle || "",
         seoDescription: (product as any).seoDescription || "",
         seoKeywords: (product as any).seoKeywords || [],
@@ -119,6 +132,8 @@ export default function AdminProductEdit() {
         bottleCount: data.bottleCount ? parseInt(data.bottleCount) : null,
         dailyDosage: data.dailyDosage ? parseInt(data.dailyDosage) : null,
         supplyDays: data.supplyDays ? parseInt(data.supplyDays) : null,
+        allowPreorder: data.allowPreorder || false,
+        preorderCap: data.preorderCap,
         seoTitle: data.seoTitle || null,
         seoDescription: data.seoDescription || null,
         seoKeywords: data.seoKeywords || [],
@@ -444,12 +459,71 @@ export default function AdminProductEdit() {
                       <Input
                         id="stockQuantity"
                         type="number"
+                        min="0"
                         value={formData.stockQuantity}
                         onChange={(e) => setFormData(prev => ({ ...prev, stockQuantity: e.target.value }))}
                         className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
                       />
                     </div>
                   </div>
+                  
+                  <Separator />
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-black dark:text-white">Pre-order Settings</h3>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="allowPreorder"
+                        checked={formData.allowPreorder || false}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, allowPreorder: Boolean(checked) }))}
+                      />
+                      <Label htmlFor="allowPreorder" className="text-black dark:text-white">
+                        Allow pre-order when out of stock
+                      </Label>
+                    </div>
+                    {formData.allowPreorder && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="preorderCap" className="text-black dark:text-white">Pre-order cap *</Label>
+                          <Input
+                            id="preorderCap"
+                            type="number"
+                            min="1"
+                            value={formData.preorderCap || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, preorderCap: e.target.value ? parseInt(e.target.value) : null }))}
+                            required={formData.allowPreorder}
+                            className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-black dark:text-white"
+                          />
+                          <p className="text-sm text-gray-500">Maximum number of pre-orders allowed</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-black dark:text-white">Pre-orders taken</Label>
+                          <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-md">
+                            <span className="text-black dark:text-white font-medium">{formData.preorderCount || 0}</span>
+                          </div>
+                          <p className="text-sm text-gray-500">Current number of pre-orders</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {formData.availability && (
+                    <div className="mt-4">
+                      <Label className="text-black dark:text-white">Current Status</Label>
+                      <div className="mt-2">
+                        <Badge variant={
+                          formData.availability === 'IN_STOCK' ? 'success' :
+                          formData.availability === 'PREORDER_OPEN' ? 'secondary' :
+                          'destructive'
+                        }>
+                          {formData.availability === 'IN_STOCK' && 'In stock'}
+                          {formData.availability === 'PREORDER_OPEN' && 'Pre-order open'}
+                          {formData.availability === 'PREORDER_CLOSED_MAX_REACHED' && 'Pre-order closed (max reached)'}
+                          {formData.availability === 'OUT_OF_STOCK' && 'Out of stock'}
+                        </Badge>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
