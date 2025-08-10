@@ -430,18 +430,25 @@ if (process.env.NODE_ENV !== 'production') {
 router.post('/logout', async (req, res) => {
   const user = req.user as any;
   const userId = user?.id || user?.userId || (req.session as any)?.userId;
-  
+
   if (userId) {
     // Log logout
     await auditLogout(userId);
   }
-  
-  if (req.session) {
-    req.session.destroy((err: any) => {
-      if (err) console.error('Session destroy error:', err);
+
+  req.logout(() => {
+    if (req.session) {
+      req.session.destroy((err: any) => {
+        if (err) console.error('Session destroy error:', err);
+      });
+    }
+    res.clearCookie('healios.sid', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
     });
-  }
-  res.json({ message: "Logged out successfully" });
+    res.json({ message: "Logged out successfully" });
+  });
 });
 
 if (process.env.NODE_ENV !== 'production') {

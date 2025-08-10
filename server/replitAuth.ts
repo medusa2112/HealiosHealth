@@ -226,8 +226,32 @@ export async function setupAuth(app: Express) {
     })(req, res, next);
   });
 
-  app.get("/api/logout", (req, res) => {
-    req.logout(() => {
+  app.get("/api/logout", async (req, res) => {
+    const user = req.user as any;
+    const userId = user?.id || user?.userId || (req.session as any)?.userId;
+
+    req.logout(async () => {
+      if (userId) {
+        try {
+          const { auditLogout } = await import("./lib/auditMiddleware");
+          await auditLogout(userId);
+        } catch (error) {
+          console.error("[REPLIT_AUTH] Logout audit failed:", error);
+        }
+      }
+
+      if (req.session) {
+        req.session.destroy(err => {
+          if (err) console.error("[REPLIT_AUTH] Session destroy error:", err);
+        });
+      }
+
+      res.clearCookie('healios.sid', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+      });
+
       res.redirect(
         client.buildEndSessionUrl(config, {
           client_id: process.env.REPL_ID!,
