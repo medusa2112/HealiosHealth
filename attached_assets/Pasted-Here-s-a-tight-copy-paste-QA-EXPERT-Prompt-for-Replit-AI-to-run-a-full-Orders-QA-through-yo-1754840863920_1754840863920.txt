@@ -1,0 +1,155 @@
+Here’s a tight, copy-paste **QA EXPERT Prompt** for Replit AI to run a **full Orders QA** through your existing Healios codebase — database + APIs + flows — without rewrites.
+
+---
+
+# QA EXPERT Prompt — Full Orders QA (DB + API + Flows)
+
+**You are Replit AI working inside the current Healios repo. Perform a comprehensive QA of the Orders system end-to-end using the existing stack. Make minimal, non-breaking changes. Use UK English. Output a final Markdown report.**
+
+## 0) Pre-flight (do first)
+
+1. Scan the repo to detect:
+
+   * Framework (Next.js pages/app), test runner (Vitest/Jest/Playwright), ORM (Drizzle/Prisma/raw), DB (Postgres), payment/webhook provider(s), auth (NextAuth/custom).
+   * Order tables and fields (orders, order\_items, payments, stock/preorder fields).
+   * API routes for cart/checkout, order create, payment webhook, admin orders.
+2. Create a **throwaway test DB** (don’t touch prod data):
+
+   * Duplicate env vars, override `DATABASE_URL` to a new test database.
+   * Run migrations against the test DB.
+3. Ensure we can run tests headless:
+
+   * If no test harness exists, set up **Vitest** for unit/integration and **supertest** for API routes. Only add what’s necessary.
+
+## 1) Seed Data (idempotent)
+
+Create a script `scripts/seed.test.ts` (or similar) to insert:
+
+* 3 in-stock products with varied prices and tax.
+* 1 product with `stock=0, allowPreorder=false`.
+* 1 product with `stock=0, allowPreorder=true, preorderCap=3, preorderCount=0`.
+* 1 product with `stock=0, allowPreorder=true, preorderCap=2, preorderCount=2` (closed).
+* A test user and an admin user.
+  Re-run seeds safely (UPSERT).
+
+## 2) Test Matrix (implement as automated tests)
+
+Create tests in `tests/orders/` and name clearly. Cover:
+
+### A. Cart & Order Creation
+
+* Add to cart: in-stock product, qty 1 and >1; verify price calc, tax, shipping, discounts (if any).
+* Create order (unpaid): record snapshot of prices and product name/sku.
+
+### B. Payment Lifecycle & Idempotency
+
+* Simulate **payment\_succeeded** webhook/callback:
+
+  * Order status transitions: `pending → paid`.
+  * `paid_at` set; payment record stored; idempotency on duplicate webhook (second call is no-op).
+* Simulate **payment\_failed** and **payment\_canceled**:
+
+  * Status moves to `failed`/`canceled`; ensure no stock decrement; cart not mutated.
+
+### C. Stock & Pre-order Rules
+
+* In-stock order (paid): decrements `stock_quantity` atomically by line qty; cannot go negative.
+* Out-of-stock item: order creation or payment must be blocked with clear 4xx response.
+* Pre-order OPEN (stock=0, allowPreorder=true, cap=3):
+
+  * Paid orders increment `preorder_count` only **after** payment success.
+  * When `preorder_count == cap`, derived status becomes **PREORDER\_CLOSED\_MAX\_REACHED**.
+  * Further payments fail with 409 + clear message; GET endpoints reflect closed status.
+* Pre-order CLOSED (seeded at cap): cannot order; CTA disabled in storefront response.
+
+### D. Concurrency (race conditions)
+
+* Fire **20 parallel paid order attempts** for the pre-order-open product with cap=3:
+
+  * Exactly 3 succeed, the rest fail gracefully (409).
+  * Validate DB invariants after: `preorder_count == cap`, no overshoot.
+* Fire **20 parallel in-stock orders** where stock=5:
+
+  * Max 5 succeed; no negatives.
+
+### E. Totals & Taxes
+
+* Verify order totals = sum(line totals) + shipping − discounts + tax.
+* Currency/precision rounding correct to 2 decimals.
+* Line items store unit price and tax snapshot (immutable after payment).
+
+### F. Security & RBAC
+
+* Unauthenticated user cannot access admin order APIs.
+* Non-admin cannot update order status.
+* CSRF enforced on state-changing admin endpoints (create/update/refund) when using cookie auth.
+* Webhook endpoints require correct secret; reject missing/invalid signature.
+
+### G. Refunds/Voids (if supported)
+
+* Refund a paid order:
+
+  * Status becomes `refunded` (or add a refund record linked to payment).
+  * **If your business rules require it**, restore stock or decrement preorder\_count accordingly; otherwise assert no stock mutation and document reasoning.
+  * Idempotent: duplicate refund requests do not double-refund.
+
+### H. Observability
+
+* Server logs contain order id, payment id, user id for each state change.
+* Return errors with machine-readable codes (e.g. `PREORDER_CAP_REACHED`, `OUT_OF_STOCK`).
+
+## 3) API Contract Tests (supertest or fetch against dev server)
+
+Write tests that hit:
+
+* `POST /api/cart` (add/update/remove)
+* `POST /api/orders` (create)
+* `POST /api/payments/intent` or equivalent
+* `POST /api/webhooks/payment` (provider-specific; simulate signed events)
+* `GET /api/orders/:id` (user-scoped)
+* `GET /api/admin/orders` + `PUT /api/admin/orders/:id` (admin only)
+  Assert status codes, response shapes, and side effects in DB.
+
+## 4) DB Assertions (direct queries)
+
+After each scenario, query Postgres directly to assert:
+
+* `orders.status`, `paid_at`, `total`, `currency`.
+* `order_items` correct quantities and unit prices.
+* `products.stock_quantity`, `products.preorder_count` values match expected.
+* No orphaned records; all FK relations intact.
+
+## 5) Concurrency Harness
+
+Add a small Node helper `tests/helpers/runConcurrency.ts` to issue N parallel requests with per-result metrics and a histogram of latencies. Fail the test if successes > allowed cap or DB invariants break.
+
+## 6) Non-Functional Checks
+
+* **Idempotency keys** used on client checkout (if implemented) → verify server respects them.
+* **Retry-safe webhooks**: multiple sends won’t duplicate payments or double-decrement stock.
+* **Performance**: median API latency for order create < 300 ms on dev hardware; log 95th percentile.
+
+## 7) Reporting
+
+1. On completion, generate `QA_ORDERS_REPORT.md` at repo root including:
+
+   * Environment summary (commit hash, test DB DSN masked).
+   * Test matrix with pass/fail per case.
+   * Concurrency outcomes (counts, latency percentiles).
+   * Any defects with reproduction steps, suspected root cause, and suggested fix.
+2. Print a concise summary to console.
+
+## 8) Safety Rails
+
+* Never run against prod DB. All writes must target the test DB set in Pre-flight.
+* Do not loosen auth/CSRF except in isolated tests; restore originals.
+* Keep changes behind `devDependencies` and `tests/` unless adding minimal hooks.
+
+## Acceptance Criteria
+
+* All tests green except explicitly documented defects.
+* DB invariants hold under concurrency (no negative stock, no preorder overshoot).
+* Webhook idempotency proven.
+* `QA_ORDERS_REPORT.md` produced with actionable findings.
+
+**Run now. If anything is missing (e.g. no test runner), add the smallest required tooling and proceed.**

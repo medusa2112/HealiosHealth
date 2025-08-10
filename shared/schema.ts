@@ -45,9 +45,9 @@ export const products = pgTable("products", {
   supplyDays: integer("supply_days"),
   tags: text("tags").array().default([]), // For children's exclusion and other categorization
   // Pre-order fields
-  allowPreorder: boolean("allow_preorder").default(false),
-  preorderCap: integer("preorder_cap"),
-  preorderCount: integer("preorder_count").default(0),
+  allowPreorder: boolean("allowPreorder").default(false),
+  preorderCap: integer("preorderCap"),
+  preorderCount: integer("preorderCount").default(0),
   // SEO and AEO fields
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),

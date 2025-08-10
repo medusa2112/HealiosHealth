@@ -214,6 +214,9 @@ router.get('/products', requireAuth, async (req, res) => {
       bottleCount: product.bottleCount,
       dailyDosage: product.dailyDosage,
       supplyDays: product.supplyDays,
+      allowPreorder: product.allowPreorder,
+      preorderCap: product.preorderCap,
+      preorderCount: product.preorderCount,
       seoTitle: product.seoTitle,
       seoDescription: product.seoDescription,
       seoKeywords: product.seoKeywords
