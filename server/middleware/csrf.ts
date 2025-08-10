@@ -19,9 +19,16 @@ setInterval(() => {
 }, 5 * 60 * 1000); // Clean every 5 minutes
 
 /**
- * Generate a CSRF token for a session
+ * Generate or retrieve a CSRF token for a session
  */
 function generateCSRFToken(sessionId: string): string {
+  // Check if a valid token already exists
+  const existing = csrfTokens.get(sessionId);
+  if (existing && existing.expires > Date.now()) {
+    return existing.token;
+  }
+  
+  // Generate new token
   const token = crypto.randomBytes(32).toString('hex');
   const expires = Date.now() + (24 * 60 * 60 * 1000); // 24 hours
   
@@ -74,6 +81,14 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
                   req.body?._csrf ||
                   req.query?._csrf;
     
+    // Log for debugging
+    console.log('[CSRF] Admin route check:', {
+      path: req.path,
+      sessionId,
+      tokenProvided: !!token,
+      storedTokens: Array.from(csrfTokens.keys())
+    });
+    
     // If no token provided but user is authenticated, generate one
     if (!token) {
       console.log('[CSRF] No token provided for admin route, but user is authenticated. Allowing request.');
@@ -82,9 +97,26 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     
     // Verify token with current session
     if (!verifyCSRFToken(sessionId, token as string)) {
-      // Try to verify with IP-based session ID as fallback
-      const fallbackSessionId = `${req.ip}-${req.get('user-agent')}`;
-      if (!verifyCSRFToken(fallbackSessionId, token as string)) {
+      console.log('[CSRF] Token verification failed for sessionId:', sessionId);
+      // Try to verify with all possible session ID formats
+      const possibleSessionIds = [
+        req.sessionID,
+        req.session?.id,
+        `${req.ip}-${req.get('user-agent')}`,
+        (req.session as any)?.userId // Try using userId as session identifier
+      ].filter(Boolean);
+      
+      let tokenValid = false;
+      for (const sid of possibleSessionIds) {
+        if (sid && verifyCSRFToken(sid as string, token as string)) {
+          console.log('[CSRF] Token valid for alternate sessionId:', sid);
+          tokenValid = true;
+          break;
+        }
+      }
+      
+      if (!tokenValid) {
+        console.log('[CSRF] Token invalid for all possible session IDs');
         return res.status(403).json({ 
           error: 'Invalid CSRF token',
           code: 'CSRF_TOKEN_MISMATCH'
@@ -118,6 +150,12 @@ export function csrfTokenEndpoint(req: CSRFRequest, res: Response) {
   // Use the same session ID logic as the middleware
   const sessionId = req.sessionID || req.session?.id || `${req.ip}-${req.get('user-agent')}`;
   const token = generateCSRFToken(sessionId);
+  
+  console.log('[CSRF] Token endpoint called:', {
+    sessionId,
+    tokenGenerated: token.substring(0, 10) + '...',
+    userId: (req.session as any)?.userId
+  });
   
   res.json({ 
     csrfToken: token,
