@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = () => {
-    window.location.href = '/api/auth/login';
+    window.location.href = '/login';
   };
 
   return (
