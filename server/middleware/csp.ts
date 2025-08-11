@@ -20,15 +20,15 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
       "form-action 'self'"
     ].join('; '));
   } else {
-    // Production CSP - strict security policy
+    // Production CSP - balanced security policy
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
-      "script-src 'self' https://js.stripe.com https://cdn.jsdelivr.net https://replit.com",
+      "script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.jsdelivr.net https://replit.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: https://healios-health-dominic96.replit.app https://cdn.stripe.com",
-      "media-src 'self' https://healios-health-dominic96.replit.app",
-      "connect-src 'self' https://api.stripe.com https://healios-health-dominic96.replit.app",
+      "img-src 'self' data: https: blob:",
+      "media-src 'self' data: https: blob:",
+      "connect-src 'self' https://api.stripe.com https://healios-health-dominic96.replit.app https://ipapi.co",
       "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
       "object-src 'none'",
       "base-uri 'self'",
