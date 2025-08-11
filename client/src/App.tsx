@@ -59,7 +59,7 @@ const AdminAuthProvider = isAdminEnabled()
   : ({ children }: any) => <>{children}</>;
 
 const AdminLogin = isAdminEnabled() 
-  ? lazy(() => import("@/pages/admin-login"))
+  ? lazy(() => import("@/pages/admin/login"))
   : () => <NotFound />;
 
 const AdminDashboard = isAdminEnabled() 

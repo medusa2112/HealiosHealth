@@ -2,12 +2,18 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Shield } from 'lucide-react';
+import { useEffect } from 'react';
 
-export function AdminLogin() {
+function AdminLogin() {
   const handleReplitLogin = () => {
     // Direct to Replit OAuth endpoint
     window.location.href = '/api/admin/oauth/login';
   };
+
+  useEffect(() => {
+    // Set page title
+    document.title = 'Admin Login | Healios';
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -49,3 +55,5 @@ export function AdminLogin() {
     </div>
   );
 }
+
+export default AdminLogin;
