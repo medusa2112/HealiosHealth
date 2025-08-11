@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { useState } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -65,6 +65,10 @@ function Router() {
   
   return (
     <Switch>
+      {/* Standalone Admin Login - No Layout */}
+      <Route path="/admin/login" component={AdminLogin} />
+      
+      {/* All other routes with full layout */}
       <Route path="/" component={Home} />
       <Route path="/products" component={Products} />
       <Route path="/products/:id" component={ProductComprehensive} />
@@ -105,7 +109,6 @@ function Router() {
       {/* Authentication Pages */}
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/verify" component={Verify} />
       <Route path="/forgot-password" component={ForgotPassword} />
       {/* Legacy redirect - reset-password now handled by /verify?type=reset */}
@@ -122,6 +125,10 @@ function Router() {
 function App() {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
+  const [location] = useLocation();
+  
+  // Check if current route should bypass layout
+  const isStandaloneRoute = location === '/admin/login';
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -129,32 +136,41 @@ function App() {
         <TooltipProvider>
           <AuthProvider>
             <CartProvider>
-            <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
-              <StockUpdateBanner />
-              <Header />
-              <main className="flex-1">
-                <Router />
-              </main>
-              <Footer />
-              <CartSidebar />
-              <StockNotification />
-              
-              {/* AI Assistant */}
-              {!isAIAssistantOpen && (
-                <ChatBubble onClick={() => setIsAIAssistantOpen(true)} />
+              {isStandaloneRoute ? (
+                // Standalone pages without layout
+                <div className="min-h-screen bg-white dark:bg-gray-900">
+                  <Router />
+                  <Toaster />
+                </div>
+              ) : (
+                // Full layout for all other pages
+                <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
+                  <StockUpdateBanner />
+                  <Header />
+                  <main className="flex-1">
+                    <Router />
+                  </main>
+                  <Footer />
+                  <CartSidebar />
+                  <StockNotification />
+                  
+                  {/* AI Assistant */}
+                  {!isAIAssistantOpen && (
+                    <ChatBubble onClick={() => setIsAIAssistantOpen(true)} />
+                  )}
+                  
+                  <AIAssistant 
+                    isOpen={isAIAssistantOpen}
+                    onToggle={() => setIsAIAssistantOpen(!isAIAssistantOpen)}
+                    isMinimized={isAIAssistantMinimized}
+                    onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
+                  />
+                  <Toaster />
+                  <CookieConsent />
+                </div>
               )}
-              
-              <AIAssistant 
-                isOpen={isAIAssistantOpen}
-                onToggle={() => setIsAIAssistantOpen(!isAIAssistantOpen)}
-                isMinimized={isAIAssistantMinimized}
-                onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
-              />
-            </div>
-            <Toaster />
-            <CookieConsent />
-          </CartProvider>
-        </AuthProvider>
+            </CartProvider>
+          </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
