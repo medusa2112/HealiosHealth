@@ -28,5 +28,5 @@ console.log('[ADMIN SESSION] Configured with:', {
   cookie: 'hh_admin_sess',
   store: ENV.isProd ? 'PostgreSQL (session_admins)' : 'Memory',
   ttl: '4 hours',
-  path: '/admin',
+  path: '/', // Fixed to reflect actual configuration
 });

@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Shield } from 'lucide-react';
 import { z } from 'zod';
 import { adminAuth, initializeAdminCsrf } from '@/lib/authClient';
+import { queryClient } from '@/lib/queryClient';
 
 const AdminLoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -76,8 +77,14 @@ export default function AdminLogin() {
       // Use the admin authentication endpoint
       const result = await adminAuth.login(data.email, data.password, data.totp);
       
+      // Invalidate the admin auth cache to force a refresh
+      await queryClient.invalidateQueries({ queryKey: ['/api/auth/admin/me'] });
+      
+      // Small delay to ensure the auth state is updated
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       // Redirect to admin dashboard
-      setLocation('/admin');
+      window.location.href = '/admin';
     } catch (err: any) {
       console.error('Admin login error:', err);
       

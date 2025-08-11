@@ -131,7 +131,7 @@ router.post('/logout', async (req, res) => {
     res.clearCookie('hh_admin_sess', {
       httpOnly: true,
       sameSite: 'strict',
-      path: '/admin',
+      path: '/', // Changed from '/admin' to '/' to match session config
     });
     
     res.json({ message: 'Admin logged out successfully' });
