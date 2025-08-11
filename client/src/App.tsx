@@ -8,6 +8,7 @@ import { CartProvider } from "@/hooks/use-cart";
 import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/hooks/use-auth";
+import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
@@ -175,9 +176,11 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <AuthProvider>
-            <CartProvider>
-              <AppContent />
-            </CartProvider>
+            <AdminAuthProvider>
+              <CartProvider>
+                <AppContent />
+              </CartProvider>
+            </AdminAuthProvider>
           </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>

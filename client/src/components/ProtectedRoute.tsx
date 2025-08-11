@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { useUser } from '@/hooks/use-auth';
+import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,11 +19,23 @@ export default function ProtectedRoute({
   requiredRole = 'customer',
   fallback 
 }: ProtectedRouteProps) {
-  const { user, isLoading, login } = useUser();
+  // Use different auth hooks based on required role
+  const customerAuth = useUser();
+  const adminAuthResult = useAdminAuth();
   const { toast } = useToast();
   
+  // Select the appropriate auth data based on required role
+  const authData = requiredRole === 'admin' ? {
+    user: adminAuthResult.admin,
+    isLoading: adminAuthResult.isLoading,
+    login: () => window.location.href = '/admin/login'
+  } : {
+    user: customerAuth.user,
+    isLoading: customerAuth.isLoading,
+    login: customerAuth.login
+  };
 
-
+  const { user, isLoading, login } = authData;
 
   if (isLoading) {
     return (
@@ -55,14 +68,14 @@ export default function ProtectedRoute({
               className="w-full bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
             >
               <LogIn className="w-4 h-4 mr-2" />
-              Log In with Replit
+              {requiredRole === 'admin' ? 'Admin Login' : 'Log In with Replit'}
             </Button>
             
 
             
             <div className="text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Secure authentication powered by Replit
+                {requiredRole === 'admin' ? 'Admin authentication required' : 'Secure authentication powered by Replit'}
               </p>
             </div>
           </CardContent>
@@ -71,31 +84,8 @@ export default function ProtectedRoute({
     );
   }
 
-  if (requiredRole === 'admin' && user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
-          <CardHeader className="text-center">
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center">
-              <Shield className="w-6 h-6 text-red-600 dark:text-red-400" />
-            </div>
-            <CardTitle className="text-black dark:text-white">Access Denied</CardTitle>
-            <CardDescription>
-              You don't have permission to access this admin area.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={() => window.location.href = '/'}
-              className="w-full bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100"
-            >
-              Return to Home
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
+  // For admin routes, user is already authenticated as admin if we reach this point
+  // For customer routes, check if admin is trying to access (no additional role check needed)
+  
   return <>{children}</>;
 }
