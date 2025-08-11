@@ -44,7 +44,7 @@ export const ENV = {
     parsed.data?.SESSION_SECRET_ADMIN || process.env.SESSION_SECRET_ADMIN,
     parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!
   ),
-  PROD_ORIGINS: (parsed.data?.PROD_ORIGINS ?? 'https://thehealios.com,https://www.thehealios.com').split(',').filter(Boolean),
+  PROD_ORIGINS: (parsed.data?.PROD_ORIGINS ?? 'https://healios-health-dominic96.replit.app').split(',').filter(Boolean),
   DEV_ORIGINS: [
     ...((parsed.data?.DEV_ORIGINS ?? 'http://localhost:5000,http://127.0.0.1:5000').split(',').filter(Boolean)),
     ...replitDomains // Include Replit domains in development

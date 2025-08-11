@@ -61,6 +61,11 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Deployment**: Configured for deployment with Vite building frontend and ESBuild bundling server.
 
 ## Recent Updates
+- **2025-08-11**: Production Domain Configuration Updated
+  - Updated Content Security Policy (CSP) from thehealios.com to healios-health-dominic96.replit.app
+  - Fixed PROD_ORIGINS configuration to use correct Replit app domain
+  - Updated environment configuration defaults to use Replit production domain
+  - Ensures proper CORS, CSP, and security configurations for production deployment
 - **2025-08-11**: Admin Removal from Production Implementation
   - Created build-time kill switch using ADMIN_ENABLED environment variable
   - Admin routes return 404 when ADMIN_ENABLED=false (production mode)
