@@ -7,6 +7,7 @@ import type { Express, RequestHandler } from "express";
 import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
+import { EmailService } from "./email";
 
 if (!process.env.REPLIT_DOMAINS) {
   throw new Error("Environment variable REPLIT_DOMAINS not provided");
@@ -262,6 +263,17 @@ export async function setupAuth(app: Express) {
         // Clear admin login flags
         delete (req.session as any).adminLoginAttempt;
         delete (req.session as any).adminLoginRedirect;
+        
+        // Send admin login notification email
+        EmailService.sendAdminLoginNotification({
+          email: userEmail,
+          ipAddress: req.ip,
+          timestamp: new Date(),
+          userAgent: req.headers['user-agent']
+        }).catch(error => {
+          console.error('[OAUTH_CALLBACK] Failed to send admin login notification:', error);
+        });
+        
         return res.redirect('/admin');
       } else if (isAdminLogin && !isAdmin) {
         console.log('[OAUTH_CALLBACK] Admin login failed - user is not an admin');
@@ -273,6 +285,17 @@ export async function setupAuth(app: Express) {
         });
       } else if (userRole === 'admin') {
         console.log('[OAUTH_CALLBACK] Admin user logged in - redirecting to admin dashboard');
+        
+        // Send admin login notification email
+        EmailService.sendAdminLoginNotification({
+          email: userEmail,
+          ipAddress: req.ip,
+          timestamp: new Date(),
+          userAgent: req.headers['user-agent']
+        }).catch(error => {
+          console.error('[OAUTH_CALLBACK] Failed to send admin login notification:', error);
+        });
+        
         return res.redirect('/admin');
       } else {
         console.log('[OAUTH_CALLBACK] Customer user logged in - redirecting to homepage');

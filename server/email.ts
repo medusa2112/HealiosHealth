@@ -672,6 +672,118 @@ export class EmailService {
     }
   }
 
+  static async sendAdminLoginNotification({ email, ipAddress, timestamp, userAgent }: {
+    email: string;
+    ipAddress?: string;
+    timestamp?: Date;
+    userAgent?: string;
+  }): Promise<boolean> {
+    if (!resend) {
+      console.error('❌ Resend API not configured - skipping admin login notification');
+      return false;
+    }
+
+    try {
+      const loginTime = timestamp || new Date();
+      const formattedTime = loginTime.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short'
+      });
+
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Admin Login Notification - Healios</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              SECURITY NOTIFICATION
+            </div>
+            
+            <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
+              Admin Account Sign-In Detected
+            </h1>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
+              Your admin account was successfully signed in to the Healios admin panel. If this was you, you can safely ignore this email.
+            </p>
+            
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              LOGIN DETAILS
+            </div>
+            
+            <div style="border-left: 2px solid #000; padding-left: 30px; margin-bottom: 40px;">
+              <div style="margin-bottom: 20px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #000;">Account</div>
+                <div style="color: #666; line-height: 1.5;">${email}</div>
+              </div>
+              
+              <div style="margin-bottom: 20px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #000;">Time</div>
+                <div style="color: #666; line-height: 1.5;">${formattedTime}</div>
+              </div>
+              
+              ${ipAddress ? `
+              <div style="margin-bottom: 20px;">
+                <div style="font-weight: 600; margin-bottom: 8px; color: #000;">IP Address</div>
+                <div style="color: #666; line-height: 1.5;">${ipAddress}</div>
+              </div>
+              ` : ''}
+              
+              ${userAgent ? `
+              <div>
+                <div style="font-weight: 600; margin-bottom: 8px; color: #000;">Device</div>
+                <div style="color: #666; line-height: 1.5; word-wrap: break-word;">${userAgent}</div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div style="background-color: #f3f4f6; padding: 20px; border-left: 3px solid #ef4444; margin-bottom: 40px;">
+              <p style="color: #000; font-size: 14px; line-height: 1.5; margin: 0; font-weight: 600;">
+                ⚠️ Security Notice
+              </p>
+              <p style="color: #666; font-size: 14px; line-height: 1.5; margin: 8px 0 0 0;">
+                If you did not sign in to your admin account, please immediately:
+              </p>
+              <ul style="color: #666; font-size: 14px; line-height: 1.5; margin: 10px 0 0 0; padding-left: 20px;">
+                <li>Change your password</li>
+                <li>Review your account activity</li>
+                <li>Contact support at support@healios.com</li>
+              </ul>
+            </div>
+            
+            <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
+              This is an automated security notification from Healios Admin System.
+            </p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const result = await resend.emails.send({
+        from: this.FROM_EMAIL,
+        to: email,
+        subject: '🔐 Admin Login Alert - Healios',
+        html,
+      });
+
+      console.log('📧 Admin login notification sent:', result);
+      return true;
+    } catch (error) {
+      console.error('❌ Failed to send admin login notification:', error);
+      return false;
+    }
+  }
+
   static async sendConsultationBookingConfirmation({ email, name, type, bookingId }: {
     email: string;
     name: string;
