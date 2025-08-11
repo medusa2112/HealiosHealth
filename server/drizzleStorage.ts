@@ -101,7 +101,7 @@ export class DrizzleStorage implements IStorage {
   }
 
   async getProductsByCategory(category: string): Promise<Product[]> {
-    return await db.select().from(products).where(eq(products.category, category));
+    return await db.select().from(products).where(sql`${category} = ANY(${products.categories})`);
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
@@ -111,7 +111,7 @@ export class DrizzleStorage implements IStorage {
 
   async updateProductStock(productId: string, quantity: number): Promise<Product | undefined> {
     const [updated] = await db.update(products)
-      .set({ stock: quantity })
+      .set({ stockQuantity: quantity })
       .where(eq(products.id, productId))
       .returning();
     return updated;
@@ -121,7 +121,7 @@ export class DrizzleStorage implements IStorage {
     const product = await this.getProductById(productId);
     if (!product) return undefined;
     
-    const newStock = Math.max(0, product.stock - quantity);
+    const newStock = Math.max(0, (product.stockQuantity || 0) - quantity);
     return this.updateProductStock(productId, newStock);
   }
 
@@ -198,7 +198,7 @@ export class DrizzleStorage implements IStorage {
   }
 
   async getOrdersByEmail(email: string): Promise<Order[]> {
-    return await db.select().from(orders).where(eq(orders.email, email));
+    return await db.select().from(orders).where(eq(orders.customerEmail, email));
   }
 
   async getOrdersByUserId(userId: string): Promise<Order[]> {
@@ -214,7 +214,7 @@ export class DrizzleStorage implements IStorage {
 
   async updateOrderStatus(orderId: string, status: string): Promise<Order | undefined> {
     const [updated] = await db.update(orders)
-      .set({ status })
+      .set({ orderStatus: status })
       .where(eq(orders.id, orderId))
       .returning();
     return updated;
@@ -259,13 +259,13 @@ export class DrizzleStorage implements IStorage {
 
   async markAlertSent(alertId: string): Promise<void> {
     await db.update(stockAlerts)
-      .set({ sentAt: new Date().toISOString() })
+      .set({ alertSent: true })
       .where(eq(stockAlerts.id, alertId));
   }
 
   // Articles
   async getArticles(): Promise<Article[]> {
-    return await db.select().from(articles).orderBy(desc(articles.publishedAt));
+    return await db.select().from(articles).orderBy(desc(articles.createdAt));
   }
 
   async getArticleBySlug(slug: string): Promise<Article | undefined> {
@@ -284,7 +284,7 @@ export class DrizzleStorage implements IStorage {
 
   async getLatestArticles(limit: number): Promise<Article[]> {
     return await db.select().from(articles)
-      .orderBy(desc(articles.publishedAt))
+      .orderBy(desc(articles.createdAt))
       .limit(limit);
   }
 
@@ -361,7 +361,7 @@ export class DrizzleStorage implements IStorage {
     
     if (existing) {
       const [updated] = await db.update(carts)
-        .set({ ...cart, updatedAt: new Date().toISOString() })
+        .set({ ...cart, lastUpdated: new Date().toISOString() })
         .where(eq(carts.id, existing.id))
         .returning();
       return updated;
@@ -369,9 +369,8 @@ export class DrizzleStorage implements IStorage {
     
     const [created] = await db.insert(carts).values({
       ...cart,
-      id: `cart-${randomUUID()}`,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      lastUpdated: new Date().toISOString()
     }).returning();
     
     return created;
@@ -392,9 +391,8 @@ export class DrizzleStorage implements IStorage {
   async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> {
     const [updated] = await db.update(carts)
       .set({ 
-        converted: true,
-        stripeSessionId,
-        convertedAt: new Date().toISOString()
+        convertedToOrder: true,
+        stripeSessionId
       })
       .where(eq(carts.id, cartId))
       .returning();
@@ -406,15 +404,15 @@ export class DrizzleStorage implements IStorage {
     
     return await db.select().from(carts)
       .where(and(
-        eq(carts.converted, false),
-        lte(carts.updatedAt, threshold)
+        eq(carts.convertedToOrder, false),
+        lte(carts.lastUpdated, threshold)
       ));
   }
 
   async linkGuestOrdersToUser(email: string, userId: string): Promise<void> {
     await db.update(orders)
       .set({ userId })
-      .where(and(eq(orders.email, email), eq(orders.userId, null)));
+      .where(and(eq(orders.customerEmail, email), isNull(orders.userId)));
   }
 
   // Admin Activity Logging
@@ -465,14 +463,14 @@ export class DrizzleStorage implements IStorage {
     
     if (filters.search) {
       conditions.push(or(
-        like(adminLogs.action, `%${filters.search}%`),
+        like(adminLogs.actionType, `%${filters.search}%`),
         like(adminLogs.targetId, `%${filters.search}%`),
         like(adminLogs.details, `%${filters.search}%`)
       ));
     }
     
     if (filters.actionFilter) {
-      conditions.push(eq(adminLogs.action, filters.actionFilter));
+      conditions.push(eq(adminLogs.actionType, filters.actionFilter));
     }
     
     if (filters.targetFilter) {
@@ -517,8 +515,7 @@ export class DrizzleStorage implements IStorage {
   async createReorderLog(log: any): Promise<ReorderLog> {
     const [created] = await db.insert(reorderLogs).values({
       ...log,
-      id: `reorder-${randomUUID()}`,
-      createdAt: new Date().toISOString()
+      timestamp: new Date().toISOString()
     }).returning();
     return created;
   }
@@ -539,7 +536,7 @@ export class DrizzleStorage implements IStorage {
       query = query.where(and(...conditions));
     }
     
-    query = query.orderBy(desc(reorderLogs.createdAt));
+    query = query.orderBy(desc(reorderLogs.timestamp));
     
     if (options?.limit) {
       query = query.limit(options.limit);
@@ -551,7 +548,7 @@ export class DrizzleStorage implements IStorage {
   async getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]> {
     return await db.select().from(reorderLogs)
       .where(eq(reorderLogs.originalOrderId, originalOrderId))
-      .orderBy(desc(reorderLogs.createdAt));
+      .orderBy(desc(reorderLogs.timestamp));
   }
 
   // Discount codes
@@ -606,7 +603,7 @@ export class DrizzleStorage implements IStorage {
       }
       
       // Check usage limit
-      if (discount.usageLimit && discount.usedCount >= discount.usageLimit) {
+      if (discount.usageLimit && (discount.usageCount || 0) >= discount.usageLimit) {
         return { valid: false, error: "Discount code usage limit reached" };
       }
       
@@ -621,7 +618,7 @@ export class DrizzleStorage implements IStorage {
     if (!code[0]) return;
     
     await db.update(discountCodes)
-      .set({ usedCount: code[0].usedCount + 1 })
+      .set({ usageCount: (code[0].usageCount || 0) + 1 })
       .where(eq(discountCodes.id, id));
   }
 
@@ -654,9 +651,10 @@ export class DrizzleStorage implements IStorage {
     return updated;
   }
 
-  async deleteProductBundle(id: string): Promise<void> {
+  async deleteProductBundle(id: string): Promise<boolean> {
     await db.delete(bundleItems).where(eq(bundleItems.bundleId, id));
-    await db.delete(productBundles).where(eq(productBundles.id, id));
+    const result = await db.delete(productBundles).where(eq(productBundles.id, id));
+    return true;
   }
 
   // Bundle items
@@ -680,13 +678,14 @@ export class DrizzleStorage implements IStorage {
     return updated;
   }
 
-  async deleteBundleItem(id: string): Promise<void> {
-    await db.delete(bundleItems).where(eq(bundleItems.id, id));
+  async deleteBundleItem(id: string): Promise<boolean> {
+    const result = await db.delete(bundleItems).where(eq(bundleItems.id, id));
+    return true;
   }
 
   // Subscriptions
   async getSubscriptions(): Promise<Subscription[]> {
-    return await db.select().from(subscriptions).orderBy(desc(subscriptions.createdAt));
+    return await db.select().from(subscriptions).orderBy(desc(subscriptions.startDate));
   }
 
   async getSubscriptionById(id: string): Promise<Subscription | undefined> {
@@ -699,7 +698,7 @@ export class DrizzleStorage implements IStorage {
   async getSubscriptionsByUserId(userId: string): Promise<Subscription[]> {
     return await db.select().from(subscriptions)
       .where(eq(subscriptions.userId, userId))
-      .orderBy(desc(subscriptions.createdAt));
+      .orderBy(desc(subscriptions.startDate));
   }
 
   async getSubscriptionByStripeId(stripeSubscriptionId: string): Promise<Subscription | undefined> {
@@ -712,16 +711,14 @@ export class DrizzleStorage implements IStorage {
   async createSubscription(subscription: InsertSubscription): Promise<Subscription> {
     const [created] = await db.insert(subscriptions).values({
       ...subscription,
-      id: subscription.id || `sub-${randomUUID()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      startDate: subscription.startDate || new Date().toISOString()
     }).returning();
     return created;
   }
 
   async updateSubscription(id: string, updates: Partial<InsertSubscription>): Promise<Subscription | undefined> {
     const [updated] = await db.update(subscriptions)
-      .set({ ...updates, updatedAt: new Date().toISOString() })
+      .set(updates)
       .where(eq(subscriptions.id, id))
       .returning();
     return updated;
@@ -729,7 +726,7 @@ export class DrizzleStorage implements IStorage {
 
   async updateSubscriptionByStripeId(stripeSubscriptionId: string, updates: Partial<InsertSubscription>): Promise<Subscription | undefined> {
     const [updated] = await db.update(subscriptions)
-      .set({ ...updates, updatedAt: new Date().toISOString() })
+      .set(updates)
       .where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId))
       .returning();
     return updated;

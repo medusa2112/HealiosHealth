@@ -422,6 +422,7 @@ export class MemStorage implements IStorage {
       seoTitle: insertProduct.seoTitle ?? null,
       seoDescription: insertProduct.seoDescription ?? null,
       seoKeywords: insertProduct.seoKeywords ?? null,
+      version: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -780,7 +781,7 @@ export class MemStorage implements IStorage {
   }
   async updateDiscountCode(id: string, updates: Partial<DiscountCode>): Promise<DiscountCode | undefined> { const code = this.discountCodes.get(id); if (!code) return undefined; const updated = { ...code, ...updates }; this.discountCodes.set(id, updated); return updated; }
   async deleteDiscountCode(id: string): Promise<boolean> { return this.discountCodes.delete(id); }
-  async validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }> { const discount = await this.getDiscountCodeByCode(code); if (!discount) return { valid: false, error: 'Code not found' }; if (!discount.isActive) return { valid: false, error: 'Code inactive' }; if (discount.usageLimit && discount.usageCount >= discount.usageLimit) return { valid: false, error: 'Usage limit exceeded' }; if (discount.expiresAt && new Date() > new Date(discount.expiresAt)) return { valid: false, error: 'Code expired' }; return { valid: true, discount }; }
+  async validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }> { const discount = await this.getDiscountCodeByCode(code); if (!discount) return { valid: false, error: 'Code not found' }; if (!discount.isActive) return { valid: false, error: 'Code inactive' }; if (discount.usageLimit && (discount.usageCount || 0) >= discount.usageLimit) return { valid: false, error: 'Usage limit exceeded' }; if (discount.expiresAt && new Date() > new Date(discount.expiresAt)) return { valid: false, error: 'Code expired' }; return { valid: true, discount }; }
   async incrementDiscountCodeUsage(id: string): Promise<void> { const code = this.discountCodes.get(id); if (code) { this.discountCodes.set(id, { ...code, usageCount: (code.usageCount ?? 0) + 1 }); } }
   async getProductBundles(): Promise<ProductBundle[]> { return Array.from(this.productBundles.values()); }
   async getProductBundleById(id: string): Promise<ProductBundle | undefined> { return this.productBundles.get(id); }
