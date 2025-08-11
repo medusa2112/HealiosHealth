@@ -88,8 +88,14 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
+  // Skip CSRF for admin routes in development environment
+  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/admin/')) {
+    console.log('[CSRF] Development mode - bypassing CSRF for admin route:', fullPath);
+    return next();
+  }
+
   // For authenticated admin routes, use a more lenient approach in development
-  if (req.path.includes('/admin/') && (req.session as any)?.userId) {
+  if (req.path.includes('/admin/') && (req.session as any)?.adminId) {
     const token = req.get('X-CSRF-Token') || 
                   req.get('X-XSRF-Token') || 
                   req.body?._csrf ||
@@ -101,7 +107,8 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       sessionId,
       tokenProvided: !!token,
       nodeEnv: process.env.NODE_ENV,
-      userId: (req.session as any)?.userId
+      adminId: (req.session as any)?.adminId,
+      providedToken: token ? token.substring(0, 10) + '...' : 'none'
     });
     
     // In development, be more lenient for authenticated admin users

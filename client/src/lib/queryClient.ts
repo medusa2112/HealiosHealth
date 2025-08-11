@@ -13,34 +13,49 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-// Cache the CSRF token for the session
-let cachedCsrfToken: string | null = null;
+// Cache CSRF tokens for both customer and admin
+let cachedCustomerCsrfToken: string | null = null;
+let cachedAdminCsrfToken: string | null = null;
 
-async function getCsrfToken(): Promise<string | null> {
+async function getCsrfToken(isAdminRoute = false): Promise<string | null> {
+  const cacheKey = isAdminRoute ? 'admin' : 'customer';
+  const cachedToken = isAdminRoute ? cachedAdminCsrfToken : cachedCustomerCsrfToken;
+  
   // Return cached token if available
-  if (cachedCsrfToken) {
-    return cachedCsrfToken;
+  if (cachedToken) {
+    return cachedToken;
   }
   
   try {
-    const csrfResponse = await fetch('/api/csrf/token', {
+    // Use admin CSRF endpoint for admin routes
+    const endpoint = isAdminRoute ? '/api/admin/csrf' : '/api/csrf/token';
+    const csrfResponse = await fetch(endpoint, {
       credentials: 'include'
     });
     if (csrfResponse.ok) {
       const csrfData = await csrfResponse.json();
-      cachedCsrfToken = csrfData.csrfToken;
-      console.log('[CSRF] Token fetched and cached:', cachedCsrfToken.substring(0, 10) + '...');
-      return cachedCsrfToken;
+      const token = csrfData.csrfToken || csrfData.token;
+      
+      // Cache the token
+      if (isAdminRoute) {
+        cachedAdminCsrfToken = token;
+      } else {
+        cachedCustomerCsrfToken = token;
+      }
+      
+      console.log(`[CSRF] ${cacheKey} token fetched and cached:`, token.substring(0, 10) + '...');
+      return token;
     }
   } catch (csrfError) {
-    console.warn('[CSRF] Failed to get token', csrfError);
+    console.warn(`[CSRF] Failed to get ${cacheKey} token`, csrfError);
   }
   return null;
 }
 
-// Clear cached token on auth changes
+// Clear cached tokens on auth changes
 export function clearCsrfToken() {
-  cachedCsrfToken = null;
+  cachedCustomerCsrfToken = null;
+  cachedAdminCsrfToken = null;
   console.log('[CSRF] Token cache cleared');
 }
 
@@ -67,10 +82,12 @@ export async function apiRequest(
     }
     
     if (method !== 'GET' && method !== 'HEAD') {
-      const csrfToken = await getCsrfToken();
+      // Check if this is an admin route
+      const isAdminRoute = url.includes('/api/admin/');
+      const csrfToken = await getCsrfToken(isAdminRoute);
       if (csrfToken) {
         headers['X-CSRF-Token'] = csrfToken;
-        console.log('[CSRF] Token added to request:', csrfToken.substring(0, 10) + '...');
+        console.log(`[CSRF] ${isAdminRoute ? 'Admin' : 'Customer'} token added to request:`, csrfToken.substring(0, 10) + '...');
       }
     }
     
