@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
 import { SEOHead } from '@/components/seo-head';
 import type { Order } from '@shared/types';
-import { AdminNavbar } from '@/components/admin-navbar';
 
 interface OrderStats {
   totalOrders: number;
@@ -172,13 +171,10 @@ export default function AdminOrders() {
     );
   }
 
-  const handleTabChange = (tab: string) => {
-    setLocation(`/admin`);
-  };
+
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <AdminNavbar activeTab="orders" onTabChange={handleTabChange} />
       <SEOHead 
         title="Order Management - Admin | Healios"
         description="View and manage all customer orders, refunds, and payment status in the Healios admin panel."
