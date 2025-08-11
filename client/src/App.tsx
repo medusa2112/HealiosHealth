@@ -184,7 +184,7 @@ function AppContent() {
   const [location] = useLocation();
   
   // Check if current route should bypass layout
-  const isStandaloneRoute = isAdminEnabled() && location === '/admin/login';
+  const isStandaloneRoute = isAdminEnabled() && location.startsWith('/admin');
 
   if (isStandaloneRoute) {
     // Standalone pages without layout
