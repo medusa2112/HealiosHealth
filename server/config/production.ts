@@ -77,7 +77,7 @@ export function getCookieConfig(type: 'customer' | 'admin') {
       httpOnly: true,
       secure: isProd, // Always secure in production
       sameSite: 'strict' as const,
-      path: '/admin',
+      path: '/', // Changed from '/admin' to '/' so cookie works for all admin routes including /api/auth/admin/*
       maxAge: 4 * 60 * 60 * 1000, // 4 hours
     };
   }

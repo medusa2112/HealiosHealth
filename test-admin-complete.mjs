@@ -1,133 +1,135 @@
 #!/usr/bin/env node
+
+/**
+ * Complete test of admin login and session persistence
+ */
+
 import fetch from 'node-fetch';
-import { writeFileSync } from 'fs';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
-const ADMIN_EMAIL = 'dn@thefourths.com';
-const ADMIN_PASSWORD = process.env.ADM_PW || 'admin123';
+const BASE_URL = 'http://localhost:5000';
 
-let cookies = {};
-
-function parseCookies(setCookieHeaders) {
-  if (!setCookieHeaders) return;
-  const headers = Array.isArray(setCookieHeaders) ? setCookieHeaders : [setCookieHeaders];
+async function testAdminSession() {
+  console.log('🔐 Testing Admin Session System\n');
   
-  headers.forEach(header => {
-    const [cookiePart] = header.split(';');
-    const [name, value] = cookiePart.split('=');
-    if (name && value) {
-      cookies[name.trim()] = value.trim();
-    }
-  });
-}
-
-function getCookieHeader() {
-  return Object.entries(cookies).map(([k, v]) => `${k}=${v}`).join('; ');
-}
-
-async function test() {
-  console.log('🔧 Testing Admin Login Flow...\n');
-  console.log(`Base URL: ${BASE_URL}`);
-  console.log(`Admin Email: ${ADMIN_EMAIL}\n`);
-
   try {
-    // Step 1: Get admin CSRF token
-    console.log('1️⃣ Getting admin CSRF token...');
-    const csrfRes = await fetch(`${BASE_URL}/api/admin/csrf`, {
+    // Step 1: Get CSRF token
+    console.log('1. Getting CSRF token...');
+    const csrfResponse = await fetch(`${BASE_URL}/api/admin/csrf`, {
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }
     });
     
-    if (!csrfRes.ok) {
-      throw new Error(`Failed to get CSRF token: ${csrfRes.status}`);
-    }
+    const csrfData = await csrfResponse.json();
+    const csrfToken = csrfData.token || csrfData.csrfToken;
+    console.log('   ✓ CSRF token obtained\n');
     
-    parseCookies(csrfRes.headers.raw()['set-cookie']);
-    const csrfData = await csrfRes.json();
-    const csrfToken = csrfData.csrfToken;
-    console.log(`✅ Got CSRF token: ${csrfToken.substring(0, 10)}...`);
-
-    // Step 2: Admin login
-    console.log('\n2️⃣ Attempting admin login...');
-    const loginRes = await fetch(`${BASE_URL}/api/auth/admin/login`, {
+    // Step 2: Login and capture cookies
+    console.log('2. Logging in as admin...');
+    const loginResponse = await fetch(`${BASE_URL}/api/auth/admin/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-Token': csrfToken,
-        'Cookie': getCookieHeader(),
-        'Accept': 'application/json',
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({
-        email: ADMIN_EMAIL,
-        password: ADMIN_PASSWORD
+        email: 'dn@thefourths.com',
+        password: process.env.ADM_PW || 'test-password'
       })
     });
-
-    parseCookies(loginRes.headers.raw()['set-cookie']);
     
-    if (!loginRes.ok) {
-      const error = await loginRes.text();
-      throw new Error(`Login failed: ${loginRes.status} - ${error}`);
+    const loginResult = await loginResponse.json();
+    
+    if (!loginResponse.ok) {
+      console.log('   ❌ Login failed:', loginResult);
+      return;
     }
-
-    const loginData = await loginRes.json();
-    console.log('✅ Admin login successful!');
-    console.log(`   Admin ID: ${loginData.admin?.id}`);
-    console.log(`   Email: ${loginData.admin?.email}`);
-    console.log(`   Session Cookie: ${cookies['hh_admin_sess'] ? 'Present' : 'Missing'}`);
-
-    // Step 3: Check admin session
-    console.log('\n3️⃣ Checking admin session...');
-    const meRes = await fetch(`${BASE_URL}/api/auth/admin/me`, {
+    
+    console.log('   ✓ Login successful\n');
+    
+    // Extract session cookie
+    const setCookieHeader = loginResponse.headers.raw()['set-cookie'];
+    if (!setCookieHeader) {
+      console.log('   ❌ No session cookie received');
+      return;
+    }
+    
+    const cookies = setCookieHeader.join('; ');
+    console.log('3. Session cookie received:');
+    const cookieType = cookies.includes('hh_admin_sess') ? 'hh_admin_sess (admin)' : 
+                       cookies.includes('hh_cust_sess') ? 'hh_cust_sess (customer)' : 'unknown';
+    console.log(`   Cookie type: ${cookieType}\n`);
+    
+    // Step 4: Test admin products endpoint
+    console.log('4. Testing /api/admin/products with session...');
+    const productsResponse = await fetch(`${BASE_URL}/api/admin/products`, {
+      method: 'GET',
       headers: {
-        'Cookie': getCookieHeader(),
-        'Accept': 'application/json',
+        'Cookie': cookies,
+        'X-CSRF-Token': csrfToken
       }
     });
-
-    if (!meRes.ok) {
-      const error = await meRes.text();
-      throw new Error(`Session check failed: ${meRes.status} - ${error}`);
-    }
-
-    const meData = await meRes.json();
-    console.log('✅ Admin session is valid!');
-    console.log(`   Admin: ${meData.admin?.email}`);
-    console.log(`   Role: ${meData.admin?.role}`);
-    console.log(`   Active: ${meData.admin?.active}`);
-
-    // Step 4: Test accessing admin endpoints
-    console.log('\n4️⃣ Testing admin-only endpoints...');
-    const productsRes = await fetch(`${BASE_URL}/api/admin/products`, {
-      headers: {
-        'Cookie': getCookieHeader(),
-        'Accept': 'application/json',
+    
+    if (productsResponse.ok) {
+      const products = await productsResponse.json();
+      console.log('   ✓ Admin products accessible');
+      console.log(`   Total products: ${products.length}`);
+      if (products.length > 0) {
+        console.log(`   First product: ${products[0].name} (ID: ${products[0].id})`);
       }
-    });
-
-    if (productsRes.ok) {
-      const products = await productsRes.json();
-      console.log(`✅ Can access admin endpoints! Found ${products.length || 0} products`);
     } else {
-      console.log(`⚠️ Admin products endpoint returned: ${productsRes.status}`);
+      const error = await productsResponse.json();
+      console.log('   ❌ Admin products not accessible');
+      console.log(`   Error: ${JSON.stringify(error)}`);
     }
-
-    // Save cookies for manual testing
-    writeFileSync('admin_cookies_test.txt', getCookieHeader());
-    console.log('\n✅ All tests passed! Admin cookies saved to admin_cookies_test.txt');
     
-    console.log('\n📝 Summary:');
-    console.log('- Admin login: ✅ Working');
-    console.log('- Session persistence: ✅ Working');
-    console.log('- Admin endpoints: ✅ Accessible');
-    console.log('\n🎉 Admin authentication system is fully functional!');
-
+    // Step 5: Test admin dashboard
+    console.log('\n5. Testing /api/admin dashboard...');
+    const dashboardResponse = await fetch(`${BASE_URL}/api/admin`, {
+      method: 'GET',
+      headers: {
+        'Cookie': cookies,
+        'X-CSRF-Token': csrfToken
+      }
+    });
+    
+    if (dashboardResponse.ok) {
+      const dashboard = await dashboardResponse.json();
+      console.log('   ✓ Admin dashboard accessible');
+      console.log(`   Total users: ${dashboard.totalUsers || 0}`);
+      console.log(`   Total orders: ${dashboard.totalOrders || 0}`);
+    } else {
+      const error = await dashboardResponse.json();
+      console.log('   ❌ Admin dashboard not accessible');
+      console.log(`   Error: ${JSON.stringify(error)}`);
+    }
+    
+    // Step 6: Test session status
+    console.log('\n6. Testing session status...');
+    const sessionResponse = await fetch(`${BASE_URL}/api/auth/admin/check-session`, {
+      method: 'GET',
+      headers: {
+        'Cookie': cookies,
+        'X-CSRF-Token': csrfToken
+      }
+    });
+    
+    if (sessionResponse.ok) {
+      const session = await sessionResponse.json();
+      console.log('   ✓ Session is valid');
+      console.log(`   Admin ID: ${session.adminId || 'unknown'}`);
+      console.log(`   Email: ${session.email || 'unknown'}`);
+    } else {
+      const error = await sessionResponse.json();
+      console.log('   ❌ Session check failed');
+      console.log(`   Error: ${JSON.stringify(error)}`);
+    }
+    
   } catch (error) {
-    console.error('\n❌ Test failed:', error.message);
-    console.error('\nCookies present:', Object.keys(cookies));
-    process.exit(1);
+    console.error('❌ Test failed with error:', error.message);
   }
 }
 
-test();
+// Run the test
+testAdminSession().catch(console.error);

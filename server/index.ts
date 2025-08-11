@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { requestLogger, errorLogger } from "./middleware/requestLogger";
@@ -67,12 +68,14 @@ app.use(healthRoutes); // Add the new health routes with auth status
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser()); // Parse cookies for session management
 
 // Phase 4: Dual Session Middlewares
 // Customer session for public routes (wider scope)
 app.use('/api', (req, res, next) => {
   // Skip customer session for admin-specific routes
-  if (req.path.startsWith('/api/admin')) {
+  // Note: req.path doesn't include the '/api' prefix since it's already stripped by Express
+  if (req.path.startsWith('/admin') || req.path.startsWith('/auth/admin')) {
     return next();
   }
   customerSession(req, res, next);
@@ -85,8 +88,14 @@ app.use('/api/auth/admin', protectAdmin);
 
 // Only add admin session if admin is enabled
 if (ADMIN_CONFIG.enabled) {
-  app.use('/api/admin', adminSession);
-  app.use('/api/auth/admin', adminSession);
+  app.use('/api/admin', (req, res, next) => {
+    console.log('[DEBUG] Applying admin session to:', req.path);
+    adminSession(req, res, next);
+  });
+  app.use('/api/auth/admin', (req, res, next) => {
+    console.log('[DEBUG] Applying admin session to auth:', req.path);
+    adminSession(req, res, next);
+  });
 }
 
 // CSRF protection for state-changing operations
