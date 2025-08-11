@@ -84,42 +84,43 @@ export function AdminNavbar({ activeTab, onTabChange }: AdminNavbarProps) {
                   </Tooltip>
                 );
               })}
-          </nav>
+            </nav>
 
-          {/* Admin Actions */}
-          <div className="flex items-center space-x-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
-                >
-                  <Settings className="w-3 h-3" />
-                  <span className="hidden xl:inline ml-1 text-xs">Settings</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Settings</p>
-              </TooltipContent>
-            </Tooltip>
-            
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
-                >
-                  <LogOut className="w-3 h-3" />
-                  <span className="hidden xl:inline ml-1 text-xs">Logout</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Logout</p>
-              </TooltipContent>
-            </Tooltip>
+            {/* Admin Actions */}
+            <div className="flex items-center space-x-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
+                  >
+                    <Settings className="w-3 h-3" />
+                    <span className="hidden xl:inline ml-1 text-xs">Settings</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Settings</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 px-2 py-1 h-8"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span className="hidden xl:inline ml-1 text-xs">Logout</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Logout</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
