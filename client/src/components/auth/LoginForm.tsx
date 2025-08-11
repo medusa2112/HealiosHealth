@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, LogIn } from 'lucide-react';
 import { LoginSchema, type LoginFormData } from '@/lib/validators/login';
 import { queryClient, clearCsrfToken } from '@/lib/queryClient';
+import { customerAuth, claimGuestOrders } from '@/lib/authClient';
 
 export function LoginForm() {
   const [, setLocation] = useLocation();
@@ -54,65 +55,57 @@ export function LoginForm() {
   }, []);
 
   const onSubmit = async (data: LoginFormData) => {
-    if (!csrfToken) {
-      setError('Security token not available. Please refresh the page.');
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          remember: data.remember
-        })
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        // Clear CSRF cache to get a fresh token after login
-        clearCsrfToken();
-        
-        // Invalidate the auth query to force a refresh
-        await queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
-        
-        // Small delay to ensure the query is refreshed
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Redirect based on user role or to account portal
-        const redirectUrl = result.redirectUrl || '/portal';
-        setLocation(redirectUrl);
-      } else {
-        // Check if email verification is required
-        if (response.status === 403 && result.error === 'email_unverified') {
-          setError('Please verify your email to continue. Check your inbox for the verification code.');
-          // Optionally redirect to verify page
-          setTimeout(() => {
-            setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
-          }, 2000);
-        } else {
-          setError(result.message || 'We couldn\'t sign you in with those details.');
-        }
-        
-        // Focus first invalid input
-        const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;
-        if (firstErrorField) {
-          firstErrorField.focus();
+      // Use the new customer authentication endpoint
+      const result = await customerAuth.login(data.email, data.password);
+      
+      // Check for guest orders to claim
+      const guestOrderIds = localStorage.getItem('guestOrderIds');
+      if (guestOrderIds) {
+        try {
+          const orderIds = JSON.parse(guestOrderIds);
+          await claimGuestOrders(orderIds);
+          localStorage.removeItem('guestOrderIds');
+        } catch (claimError) {
+          console.error('Failed to claim guest orders:', claimError);
         }
       }
-    } catch (err) {
+      
+      // Clear CSRF cache to get a fresh token after login
+      clearCsrfToken();
+      
+      // Invalidate the auth query to force a refresh
+      await queryClient.invalidateQueries({ queryKey: ['/api/auth/customer/me'] });
+      
+      // Small delay to ensure the query is refreshed
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Redirect to account portal
+      setLocation('/portal');
+    } catch (err: any) {
       console.error('Login error:', err);
-      setError('Unable to connect. Please check your connection and try again.');
+      
+      // Check if this is an admin trying to use customer login
+      if (err.message?.includes('admin')) {
+        setError('Please use the admin login page for administrator access.');
+      } else if (err.message?.includes('email_unverified')) {
+        setError('Please verify your email to continue. Check your inbox for the verification code.');
+        // Optionally redirect to verify page
+        setTimeout(() => {
+          setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
+        }, 2000);
+      } else {
+        setError(err.message || 'We couldn\'t sign you in with those details.');
+      }
+      
+      // Focus first invalid input
+      const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;
+      if (firstErrorField) {
+        firstErrorField.focus();
+      }
     } finally {
       setIsLoading(false);
     }

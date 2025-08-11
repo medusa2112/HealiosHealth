@@ -1,0 +1,222 @@
+Good progress. But “backend says it works” is meaningless until the **browser + proxy + prod** path is green. We still need to close the loop on the **frontend, cookies, CSRF, and deploy parity**. Below is the **Phase 8 cutover plan** plus a **gauntlet of kill-tests** to prove this is actually fixed end-to-end.
+
+# Answer
+
+## Phase 8 — Frontend cutover, parity, and proof
+
+### 1) Wire the frontend to the split stacks
+
+* Replace any calls to the old shared route with the new surfaces:
+
+  * Customer: `/api/auth/customer/login|register|logout`
+  * Admin: `/admin/auth/login|logout`
+* Ensure **credentials** are sent:
+
+  ```ts
+  // customer login
+  await fetch('/api/auth/customer/login', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCustCsrf() },
+    body: JSON.stringify({ email, password })
+  });
+
+  // admin login
+  await fetch('/admin/auth/login', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getAdminCsrf() },
+    body: JSON.stringify({ email, password })
+  });
+  ```
+* The **Admin footer button** must navigate to the page hosting the admin form (e.g. `/admin/login`) which posts to `/admin/auth/login`. Do not post to `/api/*`.
+
+### 2) CSRF token plumbing (separate per surface)
+
+* Expose two getters:
+
+  ```ts
+  export const getCustCsrf  = () => readCookie('csrf_cust');
+  export const getAdminCsrf = () => readCookie('csrf_admin');
+  ```
+* Load tokens by first hitting safe GETs that set cookies:
+
+  * Customer UI boot: `GET /api/csrf`
+  * Admin UI boot: `GET /admin/csrf`
+* All state-changing requests must include the matching token header. Never mix them.
+
+### 3) Cookie and path checks (browser + proxy reality)
+
+* Customer cookie must be:
+
+  * Name `hh_cust_sess`, `path=/`, `SameSite=Lax`, `Secure` on prod
+* Admin cookie must be:
+
+  * Name `hh_admin_sess`, `path=/admin`, `SameSite=Strict`, `Secure` on prod
+* With **Replit preview/Ortho** behind a proxy:
+
+  * `app.set('trust proxy', 1)` is already in. Confirm `x-forwarded-proto=https` is present in prod so cookies flip to Secure=true.
+
+### 4) Admin content updates must send **version**
+
+* Update admin UI to include and increment the optimistic lock:
+
+  ```ts
+  await fetch(`/admin/products/${id}`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getAdminCsrf() },
+    body: JSON.stringify({ payload: formData, version: product.version })
+  });
+  ```
+* On 409, show “Someone else edited this item. Refresh to merge.”
+
+### 5) Guest→account order linking
+
+* After successful customer login/registration, call a backend endpoint to **claim** any guest order IDs in localStorage/session and attach to `req.session.userId`. Provide a simple endpoint:
+
+  * `POST /api/orders/claim { orderIds: string[] }` (requires `requireCustomer`).
+
+### 6) Remove or fence legacy paths
+
+* Set `ENABLE_LEGACY_LOGIN=false` in all envs.
+* If `passport/openid-client` (Replit OAuth) is still registered, fence it so it cannot set `hh_cust_sess` or touch `/admin/*`.
+
+### 7) Deployment parity (fail fast)
+
+**Both** Replit and Ortho must set:
+
+```
+NODE_ENV=production
+SESSION_SECRET_CUSTOMER=...
+SESSION_SECRET_ADMIN=...
+PROD_ORIGINS=https://thehealios.com,https://www.thehealios.com
+DEV_ORIGINS=<your preview origins if you keep dev routes>
+ADMIN_2FA_ENABLED=false
+ADMIN_IP_ALLOWLIST=<optional, csv>
+```
+
+* Confirm `/health/auth` shows `nodeEnv: "production"` and that cookies are `Secure`.
+
+---
+
+## Copy-paste prompts for Replit AI (frontend + glue)
+
+**Prompt H — Frontend API client**
+
+```
+Refactor the frontend auth client to use split endpoints:
+- Customer: /api/auth/customer/login|register|logout with credentials:'include' and 'X-CSRF-Token' from cookie 'csrf_cust'.
+- Admin: /admin/auth/login|logout with credentials:'include' and 'X-CSRF-Token' from cookie 'csrf_admin'.
+Add two initializers that GET /api/csrf and /admin/csrf on app boot to set CSRF cookies. Export getCustCsrf/getAdminCsrf helpers. Do not modify business logic outside the API client.
+Commit as "FE: wire split auth endpoints + CSRF bootstrap".
+```
+
+**Prompt I — Admin footer route**
+
+```
+Ensure the footer 'Admin Login' button routes to /admin/login (React page). The page posts to /admin/auth/login and reads csrf_admin. Remove any reference to /api/auth/login from admin UI.
+Commit as "FE: admin login page + correct route".
+```
+
+**Prompt J — Admin content update**
+
+```
+Update admin product/content edit forms to include 'version' in the PUT body. On 409 from server, display an inline warning and fetch the latest record to resolve. Add a small hook/useMutation wrapper to handle version bump. 
+Commit as "FE: optimistic locking UI for admin writes".
+```
+
+**Prompt K — Guest→account order claim**
+
+```
+Add endpoint POST /api/orders/claim (requireCustomer) that accepts {orderIds:string[]} and attaches matching guest orders to req.session.userId in a transaction. On frontend, after login/register success, read pending guest orderIds from localStorage and call this endpoint, then clear localStorage.
+Commit as "Feature: guest order claim on login".
+```
+
+**Prompt L — Observability**
+
+```
+Add structured logs (request id, route, userId/adminId) for auth success/failure and admin writes. Attach 'x-request-id' if present or generate one per request. Include correlation id in 4xx/5xx JSON.
+Commit as "DX: structured logs + correlation ids".
+```
+
+---
+
+## Proof it works — ruthless test checklist
+
+Run these exactly. If any fail, auth is not fixed.
+
+1. **Cookies scope**
+
+   * Login as customer, open DevTools → Application → Cookies:
+
+     * `hh_cust_sess` exists, `Path=/`, `SameSite=Lax`, `Secure` when on HTTPS.
+     * No `hh_admin_sess`.
+   * Login as admin from `/admin/login`:
+
+     * `hh_admin_sess` exists, `Path=/admin`, `SameSite=Strict`, `Secure` when on HTTPS.
+     * Hitting `/api/me` returns 401 even with admin cookie (by design).
+
+2. **Cross-auth blockade**
+
+   * With only customer cookie, request `/admin/products` → **401**.
+   * With only admin cookie, request `/api/orders` → **401**.
+
+3. **CSRF correctness**
+
+   * POST to `/api/auth/customer/login` **without** `X-CSRF-Token` → **403**.
+   * With **wrong** (admin) token on `/api/*` → **403**.
+   * With correct token → **200**.
+
+4. **Origin parity**
+
+   * From `https://thehealios.com`, network panel shows `Set-Cookie` for both cookies with `Secure` and no CORS errors.
+   * From any unlisted origin → preflight fails with “CORS blocked”.
+
+5. **Admin writes**
+
+   * Two browser windows edit same product:
+
+     * Window A saves (200, version++). Window B then saves → **409** with `currentVersion`.
+     * UI shows merge prompt and re-save succeeds.
+
+6. **Guest→account claim**
+
+   * Guest places order → order visible by order ID only.
+   * User registers/logs in → `POST /api/orders/claim` runs → order now appears in **Order History**.
+
+7. **Legacy path fenced**
+
+   * `POST /api/auth/login` → 404 (or disabled unless feature flag explicitly enabled).
+
+8. **Prod flags**
+
+   * `/health/auth` responds `nodeEnv: "production"`, `adminCookie: present` only on admin surface; customer surface never shows admin cookie.
+
+---
+
+## Brutal Review (how this could still fail)
+
+* **Cookie domain mismatch** between apex and `www`. If you set a cookie for `thehealios.com` but browse `www.thehealios.com`, you’ll chase ghosts. Fix by serving from one canonical hostname and including both in `PROD_ORIGINS`.
+* **Proxy not setting `x-forwarded-proto`** on Ortho. Then `secure` never flips and cookies are downgraded or blocked. Verify headers at the edge; if missing, force `cookie.secure=true` when `NODE_ENV=production` and you know TLS is terminated upstream.
+* **Frontend forgetting `credentials:'include'`** on any call that needs the session. The request will “work” but you’ll be an anonymous user.
+* **CSRF tokens reused across surfaces.** Admin token on `/api/*` should fail. If it succeeds, CSRF isn’t actually split.
+* **Replit OAuth still mounted**. If passport/openid-client still sets sessions on `/api`, it can backdoor the customer cookie. Fence or remove it.
+* **Missing `version` in admin PUT**. You’ll re-introduce race bugs and think it’s “random”.
+
+---
+
+## Assumptions
+
+* You can ship minor frontend changes without breaking the store/catalogue pages.
+* Your Ortho deploy exposes correct forwarded headers and stable hostnames.
+
+## Risk Zones
+
+* Edge/CDN caching `Set-Cookie` headers (should be **no-store** on auth routes).
+* Mixed content (HTTP asset on HTTPS page) causing cookie policy warnings.
+* Third-party scripts performing cross-origin POSTs and tripping CSRF.
+
+**Give me the outcome of Prompt H and I** (commits made, app boots) and I’ll hand you the exact CSRF initialiser snippets for your current React structure and a Playwright file you can run to prove all eight kill-tests above.
+
+**Confidence:** 0.84 that the above, executed precisely, will close remaining login/admin content issues in both Replit and Ortho.

@@ -51,8 +51,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // This is critical for webhook signature verification
   app.use('/stripe', stripeRoutes);
 
-  // Register CSRF token endpoint
-  app.use('/api/csrf', (await import('./routes/csrf')).default);
+  // Register CSRF token endpoints
+  const csrfRoutes = await import('./routes/csrf');
+  app.use('/api/csrf', csrfRoutes.default);
+  app.use('/api/admin', csrfRoutes.adminCsrfRouter);
   
   // Register auth routes
   app.use('/api/auth', authRoutes);
@@ -65,6 +67,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/admin', adminRoutes);
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
+  
+  // Guest order claim route (Phase 8)
+  const orderClaimRoutes = await import('./routes/orderClaim');
+  app.use('/api/orders', orderClaimRoutes.default);
   
   // Register bundle routes (Phase 16)
   const bundleRoutes = await import('./routes/bundles');

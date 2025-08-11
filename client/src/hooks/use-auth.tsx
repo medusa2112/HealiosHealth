@@ -1,6 +1,7 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { User } from '@shared/schema';
+import { customerAuth, initializeCustomerCsrf } from '@/lib/authClient';
 
 interface AuthContextType {
   user: User | null;
@@ -12,18 +13,21 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Check authentication status
+  // Initialize CSRF token on mount
+  useEffect(() => {
+    initializeCustomerCsrf();
+  }, []);
+
+  // Check authentication status using new customer endpoint
   const { data: user, isLoading } = useQuery<User | null>({
-    queryKey: ['/api/auth/me'],
+    queryKey: ['/api/auth/customer/me'],
+    queryFn: () => customerAuth.checkSession(),
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   const logout = async (): Promise<void> => {
-    await fetch('/api/auth/logout', { 
-      method: 'POST', 
-      credentials: 'include' 
-    });
+    await customerAuth.logout();
     window.location.href = '/';
   };
 

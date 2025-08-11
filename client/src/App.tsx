@@ -50,6 +50,7 @@ import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
+import AdminLogin from "@/pages/admin-login";
 import Verify from "@/pages/verify";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
@@ -104,6 +105,7 @@ function Router() {
       {/* Authentication Pages */}
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/admin/login" component={AdminLogin} />
       <Route path="/verify" component={Verify} />
       <Route path="/forgot-password" component={ForgotPassword} />
       {/* Legacy redirect - reset-password now handled by /verify?type=reset */}

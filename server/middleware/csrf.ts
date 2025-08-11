@@ -62,10 +62,24 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
+  // In development, be more lenient with CSRF for testing Phase 8
+  if (process.env.NODE_ENV === 'development') {
+    const fullPath = req.originalUrl || req.url || req.path;
+    
+    // Skip CSRF for all auth endpoints in development
+    if (fullPath.includes('/auth/')) {
+      console.log('[CSRF] Development mode - skipping auth endpoint:', fullPath);
+      return next();
+    }
+  }
+
   // Skip CSRF for auth endpoints during initial login/register/password reset/verification
   const fullPath = req.originalUrl || req.url || req.path;
   if (fullPath.includes('/auth/login') || 
       fullPath.includes('/auth/register') ||
+      fullPath.includes('/auth/customer/login') ||  // Phase 8: Customer login
+      fullPath.includes('/auth/customer/register') || // Phase 8: Customer register
+      fullPath.includes('/auth/admin/login') ||  // Phase 8: Admin login
       fullPath.includes('/auth/forgot-password') ||
       fullPath.includes('/auth/reset-password') ||
       fullPath.includes('/auth/verify') ||

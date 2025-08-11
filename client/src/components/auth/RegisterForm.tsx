@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, UserPlus } from 'lucide-react';
 import { RegisterSchema, type RegisterFormData } from '@/lib/validators/register';
+import { customerAuth, claimGuestOrders } from '@/lib/authClient';
+import { queryClient } from '@/lib/queryClient';
 
 export function RegisterForm() {
   const [, setLocation] = useLocation();
@@ -50,53 +52,49 @@ export function RegisterForm() {
   }, []);
 
   const onSubmit = async (data: RegisterFormData) => {
-    if (!csrfToken) {
-      setError('Security token not available. Please refresh the page.');
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          firstName: data.firstName,
-          lastName: data.lastName
-        })
-      });
+      // Use the new customer authentication endpoint
+      const result = await customerAuth.register(
+        data.email, 
+        data.password, 
+        data.firstName, 
+        data.lastName
+      );
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        // Redirect to verification page if email verification required
-        if (result.requiresVerification) {
-          setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
-        } else {
-          // Direct redirect if no verification needed (shouldn't happen with new flow)
-          const redirectUrl = result.redirectUrl || '/portal';
-          setLocation(redirectUrl);
-        }
-      } else {
-        setError(result.message || 'Registration failed. Please try again.');
-        
-        // Focus first invalid input
-        const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;
-        if (firstErrorField) {
-          firstErrorField.focus();
+      // Check for guest orders to claim
+      const guestOrderIds = localStorage.getItem('guestOrderIds');
+      if (guestOrderIds) {
+        try {
+          const orderIds = JSON.parse(guestOrderIds);
+          await claimGuestOrders(orderIds);
+          localStorage.removeItem('guestOrderIds');
+        } catch (claimError) {
+          console.error('Failed to claim guest orders:', claimError);
         }
       }
-    } catch (err) {
+
+      // Invalidate the auth query to force a refresh
+      await queryClient.invalidateQueries({ queryKey: ['/api/auth/customer/me'] });
+
+      // Redirect to verification page if email verification required
+      if (result.requiresVerification) {
+        setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
+      } else {
+        // Direct redirect if no verification needed
+        setLocation('/portal');
+      }
+    } catch (err: any) {
       console.error('Registration error:', err);
-      setError('Unable to connect. Please check your connection and try again.');
+      setError(err.message || 'Registration failed. Please try again.');
+      
+      // Focus first invalid input
+      const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;
+      if (firstErrorField) {
+        firstErrorField.focus();
+      }
     } finally {
       setIsLoading(false);
     }

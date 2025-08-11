@@ -133,7 +133,7 @@ export function Footer() {
                 <Link href="#" className="hover:text-white transition-colors">Terms of Use</Link>
               </div>
               <div className="mt-2 flex justify-center md:justify-end">
-                <Link href="/admin" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-white transition-colors">
+                <Link href="/admin/login" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-white transition-colors">
                   <LogIn className="w-3 h-3" />
                   Admin Login
                 </Link>
