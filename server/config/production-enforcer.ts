@@ -22,15 +22,8 @@ export function enforceProductionConfig() {
       prodRequired: true
     },
     {
-      name: 'SESSION_SECRET_CUSTOMER',
-      value: process.env.SESSION_SECRET_CUSTOMER,
-      fallback: process.env.SESSION_SECRET,
-      prodRequired: true
-    },
-    {
-      name: 'SESSION_SECRET_ADMIN',
-      value: process.env.SESSION_SECRET_ADMIN,
-      fallback: process.env.SESSION_SECRET,
+      name: 'SESSION_SECRET',
+      value: process.env.SESSION_SECRET,
       prodRequired: true
     },
     {
