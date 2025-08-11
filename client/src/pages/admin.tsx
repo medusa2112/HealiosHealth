@@ -1,16 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AdminNavbar } from "@/components/admin-navbar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
-import AdminProducts from "./admin-products";
-import AdminEmailJobs from "./admin/EmailJobs";
-import Alfr3dDashboard from "./alfr3d";
 import { Link } from "wouter";
 import { ShoppingCart, Package, Users, DollarSign, FileText, Percent, TrendingUp, Mail, Shield } from "lucide-react";
 
@@ -45,7 +41,6 @@ interface QuizAnalytics {
 export default function AdminDashboard() {
   const [selectedProductId, setSelectedProductId] = useState<string>("");
   const [newStock, setNewStock] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<string>("overview");
   const queryClient = useQueryClient();
 
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
@@ -79,349 +74,232 @@ export default function AdminDashboard() {
     }
   };
 
-
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <AdminNavbar activeTab={activeTab} onTabChange={setActiveTab} />
-      <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
+      <div className="space-y-6">
+        {statsLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader className="pb-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mt-2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Total Orders
+                </CardTitle>
+                <ShoppingCart className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-black dark:text-white">
+                  {stats?.totalOrders?.toLocaleString() || 0}
+                </div>
+                {stats?._metadata?.performanceWarning && (
+                  <div className="text-xs text-amber-600 mt-1">⚠️ Large dataset</div>
+                )}
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Total Revenue
+                </CardTitle>
+                <DollarSign className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  R{stats?.totalRevenue?.toLocaleString() || '0.00'}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Completed orders only
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Active Users
+                </CardTitle>
+                <Users className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  {stats?.activeUsers?.toLocaleString() || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Last 30 days
+                </div>
+              </CardContent>
+            </Card>
 
-        {activeTab === "overview" && (
-          <div className="space-y-6">
-            {statsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                {[...Array(6)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <CardHeader className="pb-2">
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mt-2"></div>
-                    </CardContent>
-                  </Card>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Cart Abandonment
+                </CardTitle>
+                <TrendingUp className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                  {stats?.cartAbandonmentRate?.toFixed(1) || 0}%
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Last 30 days
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Quiz Completions
+                </CardTitle>
+                <FileText className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                  {quizAnalytics?.totalCompletions || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Total completions
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Total Products
+                </CardTitle>
+                <Package className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-black dark:text-white">
+                  {stats?.totalProducts?.toLocaleString() || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Active products
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-black dark:text-white">Quick Actions</CardTitle>
+            <CardDescription>Frequently used admin functions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link href="/admin/products">
+                <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 w-full">
+                  <Package className="w-5 h-5 mr-2" />
+                  <span className="text-sm">Manage Products</span>
+                </Button>
+              </Link>
+              <Link href="/admin/orders">
+                <Button variant="outline" className="w-full">
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  <span className="text-sm">View Orders</span>
+                </Button>
+              </Link>
+              <Link href="/admin/discount-codes">
+                <Button variant="outline" className="w-full">
+                  <Percent className="w-5 h-5 mr-2" />
+                  <span className="text-sm">Discount Codes</span>
+                </Button>
+              </Link>
+              <Link href="/admin/bundles">
+                <Button variant="outline" className="w-full">
+                  <Package className="w-5 h-5 mr-2" />
+                  <span className="text-sm">Product Bundles</span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {stats?.lowStockProducts && stats.lowStockProducts.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-black dark:text-white">Low Stock Alert</CardTitle>
+              <CardDescription>Products with less than 5 items in stock</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {stats.lowStockProducts.map((product) => (
+                  <div key={product.id} className="flex justify-between items-center p-3 border border-red-200 dark:border-red-800 rounded">
+                    <span className="text-black dark:text-white">{product.name}</span>
+                    <Badge variant="destructive">{product.stockQuantity} left</Badge>
+                  </div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Quiz Analytics */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-black dark:text-white flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Quiz Analytics
+            </CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">
+              Recent wellness quiz completions and engagement metrics
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {quizLoading ? (
+              <div className="text-black dark:text-white">Loading analytics...</div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Total Orders
-                    </CardTitle>
-                    <ShoppingCart className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-black dark:text-white">
-                      {stats?.totalOrders?.toLocaleString() || 0}
+              <div>
+                <div className="mb-4">
+                  <div className="text-2xl font-bold text-black dark:text-white">
+                    {quizAnalytics?.totalCompletions || 0}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Total quiz completions
+                  </div>
+                </div>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {quizAnalytics?.recentCompletions?.map((completion) => (
+                    <div key={completion.id} className="flex justify-between items-center p-3 border border-gray-200 dark:border-gray-700 rounded">
+                      <div className="text-black dark:text-white">
+                        <div className="font-medium">{completion.name}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {completion.email}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          {new Date(completion.completedAt).toLocaleDateString()}
+                        </div>
+                        {completion.consentToMarketing && (
+                          <Badge variant="secondary">Marketing OK</Badge>
+                        )}
+                      </div>
                     </div>
-                    {stats?._metadata?.performanceWarning && (
-                      <div className="text-xs text-amber-600 mt-1">⚠️ Large dataset</div>
-                    )}
-                  </CardContent>
-                </Card>
-                
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Total Revenue
-                    </CardTitle>
-                    <DollarSign className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      R{stats?.totalRevenue?.toLocaleString() || '0.00'}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Completed orders only
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Active Users
-                    </CardTitle>
-                    <Users className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                      {stats?.activeUsers?.toLocaleString() || 0}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Last 30 days
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Cart Abandonment
-                    </CardTitle>
-                    <TrendingUp className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                      {stats?.cartAbandonmentRate?.toFixed(1) || '0.0'}%
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Last 30 days
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Total Products
-                    </CardTitle>
-                    <Package className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-black dark:text-white">
-                      {stats?.totalProducts?.toLocaleString() || 0}
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Low Stock Alert
-                    </CardTitle>
-                    <Package className="w-4 h-4 text-red-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-red-600">
-                      {stats?.lowStockProducts?.length || 0}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Under 5 items left
-                    </div>
-                  </CardContent>
-                </Card>
+                  ))}
+                </div>
               </div>
             )}
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-black dark:text-white flex items-center gap-2">
-                  <Package className="w-5 h-5" />
-                  Quick Actions
-                </CardTitle>
-                <CardDescription>
-                  Access key management features
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Link href="/admin/products">
-                    <Button className="w-full h-16 flex flex-col items-center justify-center gap-2 bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
-                      <Package className="w-5 h-5" />
-                      <span className="text-sm">Manage Products</span>
-                    </Button>
-                  </Link>
-                  <Link href="/admin/orders">
-                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
-                      <ShoppingCart className="w-5 h-5" />
-                      <span className="text-sm">View Orders</span>
-                    </Button>
-                  </Link>
-                  <Link href="/admin/discount-codes">
-                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
-                      <Percent className="w-5 h-5" />
-                      <span className="text-sm">Discount Codes</span>
-                    </Button>
-                  </Link>
-                  <Link href="/admin/bundles">
-                    <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center gap-2 border-gray-300 dark:border-gray-700 text-black dark:text-white">
-                      <Package className="w-5 h-5" />
-                      <span className="text-sm">Product Bundles</span>
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {stats?.lowStockProducts && stats.lowStockProducts.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-black dark:text-white">Low Stock Alert</CardTitle>
-                  <CardDescription>Products with less than 5 items in stock</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {stats.lowStockProducts.map((product) => (
-                      <div key={product.id} className="flex justify-between items-center p-3 border border-red-200 dark:border-red-800 rounded">
-                        <span className="text-black dark:text-white">{product.name}</span>
-                        <Badge variant="destructive">{product.stockQuantity} left</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
-
-        {activeTab === "products" && (
-          <AdminProducts />
-        )}
-
-        {activeTab === "orders" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-black dark:text-white">Order Management</CardTitle>
-                <CardDescription>View and manage all customer orders</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Access the full order management system to view orders, process refunds, and track order status.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Link href="/admin/orders">
-                      <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 w-full">
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                        Order Management
-                      </Button>
-                    </Link>
-                    <Link href="/admin/reorder-analytics">
-                      <Button variant="outline" className="w-full">
-                        <TrendingUp className="mr-2 h-4 w-4" />
-                        Phase 13: Reorder Analytics
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-        )}
-
-        {activeTab === "abandoned-carts" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-black dark:text-white">Abandoned Cart Analytics</CardTitle>
-                <CardDescription>Track and analyze abandoned shopping carts</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Access detailed abandoned cart analytics to identify recovery opportunities and track conversion rates.
-                  </p>
-                  <Link href="/admin/carts">
-                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Open Cart Analytics
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-        )}
-
-        {activeTab === "discount-codes" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-black dark:text-white">Discount Code Management</CardTitle>
-                <CardDescription>Create and manage promotional discount codes</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Access the complete discount code management system to create, edit, and track promotional codes.
-                  </p>
-                  <Link href="/admin/discount-codes">
-                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
-                      <Percent className="mr-2 h-4 w-4" />
-                      Manage Discount Codes
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-        )}
-
-        {activeTab === "admin-logs" && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-black dark:text-white">Admin Activity Logs</CardTitle>
-                <CardDescription>Comprehensive audit trail of all admin actions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Access the complete admin activity logging system to track all critical admin actions with full attribution and audit trails.
-                  </p>
-                  <Link href="/admin/logs">
-                    <Button className="bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Open Activity Logs
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-        )}
-
-        {activeTab === "email-jobs" && (
-          <AdminEmailJobs />
-        )}
-
-        {activeTab === "analytics" && (
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-black dark:text-white">Quiz Analytics</CardTitle>
-                  <CardDescription>Wellness quiz completion statistics</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {quizLoading ? (
-                    <div className="text-black dark:text-white">Loading analytics...</div>
-                  ) : (
-                    <div>
-                      <div className="mb-4">
-                        <div className="text-2xl font-bold text-black dark:text-white">
-                          {quizAnalytics?.totalCompletions || 0}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          Total quiz completions
-                        </div>
-                      </div>
-                      <div className="space-y-2 max-h-64 overflow-y-auto">
-                        {quizAnalytics?.recentCompletions?.map((completion) => (
-                          <div key={completion.id} className="flex justify-between items-center p-3 border border-gray-200 dark:border-gray-700 rounded">
-                            <div className="text-black dark:text-white">
-                              <div className="font-medium">{completion.name}</div>
-                              <div className="text-sm text-gray-600 dark:text-gray-400">
-                                {completion.email}
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-sm text-gray-600 dark:text-gray-400">
-                                {new Date(completion.completedAt).toLocaleDateString()}
-                              </div>
-                              {completion.consentToMarketing && (
-                                <Badge variant="secondary">Marketing OK</Badge>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-        )}
-
-        {activeTab === "security" && (
-          <div className="space-y-6">
-            <Alfr3dDashboard />
-          </div>
-        )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
