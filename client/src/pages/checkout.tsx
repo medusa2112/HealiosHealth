@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowLeft, ShoppingBag, Tag, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
+import { apiRequest } from '@/lib/queryClient';
 
 // Extend Window interface for Google Analytics
 declare global {
@@ -140,24 +141,14 @@ const CheckoutForm = () => {
         quantity: item.quantity,
       }));
 
-      // Create Stripe checkout session
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          orderData,
-          lineItems,
-          successUrl: `${window.location.origin}/checkout-success`,
-          cancelUrl: `${window.location.origin}/checkout`,
-          sessionToken: localStorage.getItem('cart_session_token'),
-        }),
+      // Create Stripe checkout session using the centralized API request with CSRF handling
+      const response = await apiRequest('POST', '/api/create-checkout-session', {
+        orderData,
+        lineItems,
+        successUrl: `${window.location.origin}/checkout-success`,
+        cancelUrl: `${window.location.origin}/checkout`,
+        sessionToken: localStorage.getItem('cart_session_token'),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
-      }
 
       const { sessionUrl } = await response.json();
       

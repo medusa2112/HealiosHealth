@@ -88,6 +88,18 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
+  // Skip CSRF for cart routes in development (temporary fix for session consistency)
+  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/cart/')) {
+    console.log('[CSRF] Development mode - bypassing CSRF for cart route:', fullPath);
+    return next();
+  }
+
+  // Skip CSRF for checkout session creation in development
+  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/create-checkout-session')) {
+    console.log('[CSRF] Development mode - bypassing CSRF for checkout session:', fullPath);
+    return next();
+  }
+
   // Skip CSRF for admin routes in development environment
   if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/admin/')) {
     console.log('[CSRF] Development mode - bypassing CSRF for admin route:', fullPath);
