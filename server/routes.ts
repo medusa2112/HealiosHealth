@@ -36,6 +36,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Apply secure headers to all routes
   app.use(secureHeaders);
   
+  // Body parsing needs to come early for rate limiting to work
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  
   // Serve static assets from attached_assets directory
   app.use('/assets', express.static(path.resolve(process.cwd(), 'attached_assets')));
   

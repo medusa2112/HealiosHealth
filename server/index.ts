@@ -12,11 +12,21 @@ import { customerSession } from "./auth/sessionCustomer";
 import { adminSession } from "./auth/sessionAdmin";
 import { enforceProductionDefaults, logCookieAttributes } from "./config/production";
 import healthRoutes from "./routes/health";
+import { securityHeaders } from "./middleware/security-headers";
+import { enforceProductionConfig } from "./config/production-enforcer";
+import { auditAuthEvents } from "./middleware/audit-logger";
+import { 
+  authLimiter, 
+  adminAuthLimiter, 
+  passwordResetLimiter, 
+  registrationLimiter 
+} from "./middleware/rate-limiter";
 
 const app = express();
 
-// Enforce production defaults and log configuration
+// Enforce production configuration (fail-hard in production)
 try {
+  enforceProductionConfig(); // New comprehensive config enforcer
   enforceProductionDefaults();
   logCookieAttributes();
 } catch (error) {
@@ -34,11 +44,17 @@ if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
+// Apply comprehensive security headers (CSP, HSTS, X-Headers)
+app.use(securityHeaders);
+
 // Apply Content Security Policy and security headers
 app.use(contentSecurityPolicy);
 
 // Add comprehensive request logging BEFORE body parsing
 app.use(requestLogger);
+
+// Add audit logging for authentication events
+app.use(auditAuthEvents);
 
 // Use the new hardened CORS middleware
 app.use(corsMw);

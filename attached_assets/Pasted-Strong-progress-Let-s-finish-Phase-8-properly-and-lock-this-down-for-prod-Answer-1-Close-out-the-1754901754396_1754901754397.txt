@@ -1,0 +1,109 @@
+Strong progress. Let’s finish Phase 8 properly and lock this down for prod.
+
+Answer
+1) Close out the remaining 3 failing tests
+Target: 10/10 green, reproducible in CI.
+
+Customer login + session propagation
+
+Add a post-login check that reads Set-Cookie and replays it on /auth/me (or your health auth check) to assert session persistence.
+
+Assert cookie flags: HttpOnly, Secure (in prod), SameSite=Strict|Lax, correct Path and Domain.
+
+Logout + CSRF
+
+Ensure logout requires a valid CSRF token and invalidates server-side session (not just cookie deletion). Add a regression test: use the old cookie after logout → expect 401.
+
+Admin/customer cross-access
+
+Already “verified by script,” but add explicit tests:
+
+Admin cookie → /customer/* returns 403
+
+Customer cookie → /admin/* returns 403
+
+2) Enforce production defaults everywhere (no “dev bleed”)
+Make “prod-by-default” impossible to bypass.
+
+Config gate
+
+Fail hard on missing required env (no silent fallbacks). E.g. NODE_ENV !== 'test' && missingEnv() → process.exit(1).
+
+Disallow CSRF_DISABLED, BYPASS_AUTH, etc. outside NODE_ENV=test.
+
+Cookie builder
+
+Centralise cookie options; unit-test the builder with table-driven cases for dev/test/prod.
+
+CSRF
+
+Rotate per-session CSRF secret; bind token to session id.
+
+Block state-changing verbs (POST/PUT/PATCH/DELETE) without valid token; add test matrix.
+
+3) Security headers + transport
+CSP (strict)
+
+Default script-src 'self' (+ hashed inline only if needed), frame-ancestors 'none', base-uri 'self'.
+
+HSTS
+
+max-age=31536000; includeSubDomains; preload (prod only).
+
+X-headers
+
+X-Content-Type-Options: nosniff, X-Frame-Options: DENY, Referrer-Policy: no-referrer.
+
+CORS
+
+Deny by default; allow explicit origins only; block Authorization exposure unless necessary.
+
+4) Session hygiene
+Rotation: rotate session id on login and privilege change; test for fixation (old id ≠ new id).
+
+Expiry: short idle timeout + absolute lifetime; server-side invalidation on logout.
+
+Store: deny null user agents or obviously automated patterns if that matters for risk model.
+
+5) Authentication hardening
+Password: Argon2id (or bcrypt 12+), constant-time compare; throttle login (e.g. token bucket per IP+account).
+
+MFA-ready: keep an interface to plug TOTP/WebAuthn later; add stubs and feature flag.
+
+Brute-force controls: add exponential back-off; test lockout and unlock flow.
+
+6) Observability and tamper-proof audit
+Auth audit log (append-only): login success/fail (no secrets), refresh, logout, CSRF failures, 4xx/5xx on auth routes.
+
+Alerting: threshold on consecutive failures, CSRF spikes, or unusual cookie/domain patterns.
+
+7) CI/CD gates (block merges that regress security)
+Test gates: Phase 8 auth suite must pass to merge.
+
+Static checks: secret scanner, dependency audit, banned env flags in non-test builds.
+
+Preflight: run phase8-security-audit.mjs in CI; fail on any critical finding.
+
+8) Prod runbook (minimum)
+Key rotation cadence (session secret, CSRF secret), with zero-downtime dual-key window.
+
+Break-glass procedure for compromised cookies/sessions.
+
+Backup/restore for session store and audit logs.
+
+Assumptions
+Express/Node stack with custom CSRF and cookie sessions; admin and customer stacks are separated.
+
+Health route exists and can reflect auth status without leaking PII.
+
+You can adjust CI to add hard-fail gates.
+If any of these are off, I’ll adapt the plan.
+
+Risk Zones
+Config drift: a stray .env in a container can silently enable “dev” flags. Mitigate with “fail-hard on unknown flags” and config schema validation.
+
+CSP breakage: too strict CSP can break front-end; roll out with Content-Security-Policy-Report-Only for 48 hours, then enforce.
+
+Rate-limiting UX: over-throttling can lock out legit users during spikes. Use IP+account composite keys and sliding windows.
+
+Session store eviction: aggressive eviction can cause phantom logouts; monitor and tune TTL and memory.

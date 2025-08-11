@@ -87,34 +87,30 @@ class AuthTester {
   async testCustomerRegistration() {
     console.log(`\n${BLUE}Testing Customer Registration...${RESET}`);
     
-    // First, try to delete any existing customer account
-    try {
-      await this.cleanupCustomer();
-    } catch (e) {
-      // Ignore cleanup errors
-    }
-
     const response = await fetch(`${BASE_URL}/api/auth/customer/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-Token': this.customerCsrf  // Uppercase header
+        'X-CSRF-Token': this.customerCsrf
       },
       body: JSON.stringify({
         email: CUSTOMER_EMAIL,
         password: CUSTOMER_PASSWORD,
-        firstName: 'Test',  // Changed from 'name' to 'firstName'
+        firstName: 'Test',
         lastName: 'Customer'
       })
     });
 
     const data = await response.json();
     
-    if (response.ok || data.error?.includes('already exists')) {
-      console.log(`${GREEN}✓ Customer registration endpoint working${RESET}`);
-      if (data.error) {
-        console.log(`  Note: ${data.error}`);
-      }
+    // Accept both successful registration and "already registered" as valid outcomes
+    if (response.ok) {
+      console.log(`${GREEN}✓ Customer registered successfully${RESET}`);
+      console.log(`  User ID: ${data.user?.id}`);
+      return true;
+    } else if (data.error?.includes('already registered') || data.error?.includes('Email already registered')) {
+      console.log(`${GREEN}✓ Customer registration endpoint working (user exists)${RESET}`);
+      console.log(`  Note: ${data.error}`);
       return true;
     }
 
@@ -281,16 +277,28 @@ class AuthTester {
   async testCustomerLogout() {
     console.log(`\n${BLUE}Testing Customer Logout...${RESET}`);
     
+    // Get fresh CSRF token with the current session
+    const csrfRes = await fetch(`${BASE_URL}/api/csrf`, {
+      method: 'GET',
+      headers: {
+        'Cookie': this.customerCookies,
+        'Accept': 'application/json'
+      }
+    });
+    const csrfData = await csrfRes.json();
+    const freshCsrf = csrfData.csrfToken;
+    
     const response = await fetch(`${BASE_URL}/api/auth/customer/logout`, {
       method: 'POST',
       headers: {
         'Cookie': this.customerCookies,
-        'X-CSRF-Token': this.customerCsrf  // Uppercase header
+        'X-CSRF-Token': freshCsrf  // Use fresh CSRF token
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Customer logout failed: ${response.status}`);
+      const error = await response.text();
+      throw new Error(`Customer logout failed: ${response.status} - ${error}`);
     }
 
     console.log(`${GREEN}✓ Customer logged out successfully${RESET}`);
@@ -315,16 +323,28 @@ class AuthTester {
   async testAdminLogout() {
     console.log(`\n${BLUE}Testing Admin Logout...${RESET}`);
     
+    // Get fresh CSRF token with the current session
+    const csrfRes = await fetch(`${BASE_URL}/api/admin/csrf`, {
+      method: 'GET',
+      headers: {
+        'Cookie': this.adminCookies,
+        'Accept': 'application/json'
+      }
+    });
+    const csrfData = await csrfRes.json();
+    const freshCsrf = csrfData.csrfToken;
+    
     const response = await fetch(`${BASE_URL}/api/auth/admin/logout`, {
       method: 'POST',
       headers: {
         'Cookie': this.adminCookies,
-        'X-CSRF-Token': this.adminCsrf  // Uppercase header
+        'X-CSRF-Token': freshCsrf  // Use fresh CSRF token
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Admin logout failed: ${response.status}`);
+      const error = await response.text();
+      throw new Error(`Admin logout failed: ${response.status} - ${error}`);
     }
 
     console.log(`${GREEN}✓ Admin logged out successfully${RESET}`);

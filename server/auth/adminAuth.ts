@@ -6,6 +6,7 @@ import { admins } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
 import { logger } from '../lib/logger';
 import { ENV } from '../config/env';
+import { adminAuthLimiter } from '../middleware/rate-limiter';
 
 const router = Router();
 
@@ -16,8 +17,8 @@ const loginSchema = z.object({
   totp: z.string().optional(), // For 2FA if enabled
 });
 
-// Admin Login - POST /api/auth/admin/login
-router.post('/login', async (req, res) => {
+// Admin Login - POST /api/auth/admin/login (with stricter rate limiting)
+router.post('/login', adminAuthLimiter, async (req, res) => {
   try {
     const { email, password, totp } = loginSchema.parse(req.body);
     

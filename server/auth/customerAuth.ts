@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { storage } from '../storage';
 import { logger } from '../lib/logger';
 import { ENV } from '../config/env';
+import { authLimiter, registrationLimiter } from '../middleware/rate-limiter';
 
 const router = Router();
 
@@ -20,8 +21,8 @@ const registerSchema = z.object({
   lastName: z.string().min(1).max(50),
 });
 
-// Customer Login - POST /api/auth/customer/login
-router.post('/login', async (req, res) => {
+// Customer Login - POST /api/auth/customer/login (with rate limiting)
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = loginSchema.parse(req.body);
     
@@ -92,8 +93,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Customer Register - POST /api/auth/customer/register
-router.post('/register', async (req, res) => {
+// Customer Register - POST /api/auth/customer/register (with rate limiting)
+router.post('/register', registrationLimiter, async (req, res) => {
   try {
     const { email, password, firstName, lastName } = registerSchema.parse(req.body);
     
