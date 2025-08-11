@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import type { SecurityIssue } from "@shared/schema";
 import type { FixPrompt } from "../../types/alfr3d";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
 
 export class Alfr3dExpert {
   /**
@@ -12,11 +12,15 @@ export class Alfr3dExpert {
     if (process.env.NODE_ENV !== 'development') {
       throw new Error('ALFR3D Expert only available in development');
     }
+    
+    if (!openai) {
+      throw new Error('OpenAI API key not configured');
+    }
 
     const expertPrompt = this.buildExpertPrompt(issue);
     
     try {
-      const response = await openai.chat.completions.create({
+      const response = await openai!.chat.completions.create({
         model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
         messages: [
           {

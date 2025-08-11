@@ -1,10 +1,9 @@
 import { Resend } from "resend";
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY environment variable is required");
-}
+// Email service is optional - gracefully handle missing API key
+const isEmailEnabled = !!process.env.RESEND_API_KEY;
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = isEmailEnabled ? new Resend(process.env.RESEND_API_KEY!) : null;
 
 export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome";
 
@@ -17,6 +16,10 @@ interface EmailData {
 }
 
 export async function sendEmail(to: string, type: EmailType, data: EmailData) {
+  if (!isEmailEnabled || !resend) {
+    console.warn('Email service not configured - skipping email to:', to);
+    return { id: 'mock-' + Date.now(), success: false };
+  }
   const subjectMap: Record<EmailType, string> = {
     order_confirm: "Your Healios Order Confirmation",
     refund: "Your Healios Refund Has Been Processed",

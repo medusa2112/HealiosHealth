@@ -10,7 +10,7 @@ import { protectRoute } from "../lib/auth";
 import { storage } from "../storage";
 
 const router = Router();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-06-30.basil' });
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-06-30.basil' }) : null;
 
 // Create subscription checkout session
 router.post("/checkout", protectRoute(["customer", "admin"]), async (req, res) => {

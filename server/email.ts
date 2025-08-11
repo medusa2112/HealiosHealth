@@ -14,7 +14,7 @@ interface CartItem {
   quantity: number;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 interface OrderEmailData {
   order: Order;
@@ -102,6 +102,11 @@ export class EmailService {
   }
 
   static async sendNewsletterConfirmation(newsletter: Newsletter): Promise<boolean> {
+    if (!resend) {
+      console.warn('Resend API not configured - skipping email');
+      return false;
+    }
+    
     try {
       const html = `
         <!DOCTYPE html>
@@ -1145,7 +1150,8 @@ The Healios Team
     productName: string
   ): Promise<boolean> {
     try {
-      const { data, error } = await resend.emails.send({
+      if (!resend) return false;
+    const { data, error } = await resend.emails.send({
         from: 'Healios <notifications@thehealios.com>',
         to: [email],
         subject: `We'll notify you when ${productName} is back in stock`,
