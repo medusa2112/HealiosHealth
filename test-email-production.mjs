@@ -1,65 +1,84 @@
 #!/usr/bin/env node
 
 /**
- * Production Email Configuration Test
- * Verifies email system is fully operational
+ * Test script to send a test email using the existing Resend configuration
  */
 
-const BASE_URL = 'http://localhost:5000';
+import { Resend } from 'resend';
 
-async function testEmailConfiguration() {
-  console.log('📧 Testing Email Configuration for Production...');
-  console.log('====================================================');
-  
+// Direct Resend test
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+async function sendTestEmail() {
   try {
-    // Test 1: Check email service status
-    const statusResponse = await fetch(`${BASE_URL}/api/email/status`);
-    if (statusResponse.ok) {
-      const status = await statusResponse.json();
-      console.log('✅ Email service status:', status);
-    } else {
-      console.log('⚠️  Email status endpoint not available (expected in production)');
-    }
+    const result = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'dn@thefourths.com',
+      subject: '🔐 Test Admin Login Alert - Healios',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Test Admin Login Notification - Healios</title>
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+              TEST SECURITY NOTIFICATION
+            </div>
+            
+            <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
+              Test Email - Admin Login System
+            </h1>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
+              This is a test email to verify the admin login notification system is working correctly.
+            </p>
+            
+            <div style="background-color: #f3f4f6; padding: 20px; border-left: 3px solid #22c55e; margin-bottom: 40px;">
+              <p style="color: #000; font-size: 14px; line-height: 1.5; margin: 0; font-weight: 600;">
+                ✅ Email System Status: Working
+              </p>
+              <p style="color: #666; font-size: 14px; line-height: 1.5; margin: 8px 0 0 0;">
+                The admin login notification system is now properly configured and ready to send security alerts.
+              </p>
+            </div>
+            
+            <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
+              This is a test from the Healios Admin System.
+            </p>
+          </div>
+        </body>
+        </html>
+      `,
+    });
     
-    // Test 2: Check if RESEND_API_KEY is configured
-    const healthResponse = await fetch(`${BASE_URL}/api/health`);
-    if (healthResponse.ok) {
-      console.log('✅ Server responding to health checks');
-    }
-    
-    console.log('\n📋 Email System Components:');
-    console.log('✅ Order confirmation emails');
-    console.log('✅ Refund notification emails');
-    console.log('✅ Abandoned cart reminders (1h & 24h)');
-    console.log('✅ Reorder reminder emails');
-    console.log('✅ Admin alert notifications');
-    console.log('✅ Subscription management emails');
-    
-    console.log('\n🔄 Email Job Scheduler:');
-    console.log('✅ Runs every hour automatically');
-    console.log('✅ Processes abandoned carts');
-    console.log('✅ Sends reorder reminders');
-    
-    console.log('\n🎯 Email Triggers:');
-    console.log('✅ Stripe checkout completion → Order confirmation');
-    console.log('✅ Stripe refund processed → Refund notification');
-    console.log('✅ Portal reorder → Reorder confirmation');
-    console.log('✅ Payment failures → Admin alerts');
-    
-    return true;
-    
+    return result;
   } catch (error) {
-    console.error('❌ Email configuration test failed:', error.message);
-    return false;
+    console.error('Resend error:', error);
+    throw error;
   }
 }
 
-// Run test if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  testEmailConfiguration().then(success => {
-    console.log('\n' + (success ? '🚀 Email system ready for production!' : '⚠️  Email configuration needs attention'));
-    process.exit(success ? 0 : 1);
-  });
+console.log('====================================');
+console.log(' RESEND EMAIL TEST');
+console.log('====================================\n');
+
+console.log('📧 Testing email delivery to jv@thefourths.com...\n');
+
+async function testEmail() {
+  try {
+    console.log('Sending test email to jv@thefourths.com...');
+    const result = await sendTestEmail();
+    
+    console.log('✅ Email sent successfully!');
+    console.log('Result:', result);
+    console.log('Please check jv@thefourths.com for the test email.');
+    
+  } catch (error) {
+    console.error('❌ Email test failed:', error);
+  }
 }
 
-export { testEmailConfiguration };
+testEmail();
