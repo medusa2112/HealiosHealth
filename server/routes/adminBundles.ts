@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { param, body, validationResult } from "express-validator";
-import { requireAuth } from "../lib/auth";
+import { requireAdmin } from '../mw/requireAdmin';
 import { storage } from "../storage";
 import { insertProductBundleSchema, insertBundleItemSchema } from "@shared/schema";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { z } from "zod";
 const router = Router();
 
 // Get all bundles (admin only)
-router.get("/", requireAuth, async (req, res) => {
+router.get("/", requireAdmin, async (req, res) => {
   try {
     const bundles = await storage.getProductBundles();
     res.json(bundles);
@@ -19,7 +19,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // Get a specific bundle with items (admin only)
-router.get("/:id", requireAuth, async (req, res) => {
+router.get("/:id", requireAdmin, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -48,7 +48,7 @@ router.get("/:id", requireAuth, async (req, res) => {
 });
 
 // Get variants excluding children's products (admin only - for bundle creation UI)
-router.get("/variants/eligible", requireAuth, async (req, res) => {
+router.get("/variants/eligible", requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       excludeTags: z.string().optional()
@@ -94,7 +94,7 @@ router.get("/variants/eligible", requireAuth, async (req, res) => {
 });
 
 // Create a new bundle (admin only)
-router.post("/", requireAuth, async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     const validationResult = insertProductBundleSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -138,7 +138,7 @@ router.post("/", requireAuth, async (req, res) => {
 });
 
 // Add items to bundle with children's product exclusion validation
-router.post("/:id/items", requireAuth, async (req, res) => {
+router.post("/:id/items", requireAdmin, async (req, res) => {
   try {
     // Use validated data directly instead of destructuring
     const bundleId = req.params.id;
@@ -232,7 +232,7 @@ router.post("/:id/items", requireAuth, async (req, res) => {
 // Update a bundle (admin only)
 router.put("/:id", [
   param('id').isUUID().withMessage('Bundle ID must be a valid UUID'),
-  requireAuth
+  requireAdmin
 ], async (req, res) => {
   try {
     // Check for validation errors first
@@ -285,7 +285,7 @@ router.put("/:id", [
 router.delete("/:bundleId/items/:itemId", [
   param('bundleId').isUUID().withMessage('Bundle ID must be a valid UUID'),
   param('itemId').isUUID().withMessage('Item ID must be a valid UUID'),
-  requireAuth
+  requireAdmin
 ], async (req, res) => {
   try {
     // Check for validation errors first
@@ -327,7 +327,7 @@ router.delete("/:bundleId/items/:itemId", [
 // Delete a bundle (admin only)
 router.delete("/:id", [
   param('id').isUUID().withMessage('Bundle ID must be a valid UUID'),
-  requireAuth
+  requireAdmin
 ], async (req, res) => {
   try {
     // Check for validation errors first

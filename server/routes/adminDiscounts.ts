@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth } from "../lib/auth";
+import { requireAdmin } from '../mw/requireAdmin';
 import { storage } from "../storage";
 import { insertDiscountCodeSchema } from "@shared/schema";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import { z } from "zod";
 const router = Router();
 
 // Get all discount codes (admin only)
-router.get("/", requireAuth, async (req, res) => {
+router.get("/", requireAdmin, async (req, res) => {
   try {
     const discountCodes = await storage.getDiscountCodes();
     res.json(discountCodes);
@@ -18,7 +18,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // Create a new discount code (admin only)
-router.post("/", requireAuth, async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   try {
     const validationResult = insertDiscountCodeSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -84,7 +84,7 @@ router.post("/", requireAuth, async (req, res) => {
 });
 
 // Update a discount code (admin only)
-router.put("/:id", requireAuth, async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -166,7 +166,7 @@ router.put("/:id", requireAuth, async (req, res) => {
 });
 
 // Delete a discount code (admin only)
-router.delete("/:id", requireAuth, async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -218,7 +218,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
 });
 
 // Validate a discount code (for frontend preview)
-router.post("/validate", requireAuth, async (req, res) => {
+router.post("/validate", requireAdmin, async (req, res) => {
   try {
     const validateSchema = z.object({
       code: z.string().min(1)

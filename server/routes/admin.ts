@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { z } from 'zod';
 import { query, body, param, validationResult } from 'express-validator';
-import { requireAuth } from '../lib/auth';
+import { requireAdmin } from '../mw/requireAdmin';
 import { storage } from '../storage';
 import { products, orders, insertProductSchema, quizResults } from '@shared/schema';
 import { db } from '../db';
@@ -31,7 +31,7 @@ router.use('/discount-codes', discountCodesRouter);
 router.use('/logs', logsRouter);
 
 // Admin Dashboard - Overview stats with real-time data
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAdmin, async (req, res) => {
   try {
     // Query limit for performance with large datasets
     const queryLimit = parseInt(req.query.limit as string) || 1000;
@@ -166,7 +166,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 // Product Management - Full CRUD
-router.get('/products', requireAuth, async (req, res) => {
+router.get('/products', requireAdmin, async (req, res) => {
   try {
     // Add pagination support for large datasets (>1000 products)
     const limit = parseInt(req.query.limit as string) || 1000;
@@ -217,7 +217,7 @@ router.get('/products', requireAuth, async (req, res) => {
   }
 });
 
-router.get('/products/:id', requireAuth, async (req, res) => {
+router.get('/products/:id', requireAdmin, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -256,7 +256,7 @@ router.get('/products/:id', requireAuth, async (req, res) => {
   }
 });
 
-router.post('/products', requireAuth, auditAction('create_product', 'product'), async (req, res) => {
+router.post('/products', requireAdmin, auditAction('create_product', 'product'), async (req, res) => {
   console.log('[ADMIN_PRODUCT] POST /products - Request received', {
     userId: (req as any).session?.userId,
     userEmail: (req as any).user?.email,
@@ -330,7 +330,7 @@ router.post('/products', requireAuth, auditAction('create_product', 'product'), 
   }
 });
 
-router.put('/products/:id', requireAuth, auditAction('update_product', 'product'), async (req, res) => {
+router.put('/products/:id', requireAdmin, auditAction('update_product', 'product'), async (req, res) => {
   console.log('[ADMIN_PRODUCT] PUT /products/:id - Request received', {
     productId: req.params.id,
     userId: (req as any).session?.userId,
@@ -445,7 +445,7 @@ router.put('/products/:id', requireAuth, auditAction('update_product', 'product'
   }
 });
 
-router.delete('/products/:id', requireAuth, auditAction('delete_product', 'product'), async (req, res) => {
+router.delete('/products/:id', requireAdmin, auditAction('delete_product', 'product'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -479,7 +479,7 @@ router.delete('/products/:id', requireAuth, auditAction('delete_product', 'produ
   }
 });
 
-router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'product'), async (req, res) => {
+router.put('/products/:id/stock', requireAdmin, auditAction('update_stock', 'product'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -533,7 +533,7 @@ router.put('/products/:id/stock', requireAuth, auditAction('update_stock', 'prod
 });
 
 // Order Management with pagination for large datasets
-router.get('/orders', requireAuth, async (req, res) => {
+router.get('/orders', requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       page: z.string().optional().transform(val => val ? parseInt(val, 10) : 1),
@@ -598,7 +598,7 @@ router.get('/orders', requireAuth, async (req, res) => {
 });
 
 // Quiz Analytics
-router.get('/quiz/analytics', requireAuth, async (req, res) => {
+router.get('/quiz/analytics', requireAdmin, async (req, res) => {
   try {
     // Query quiz_results table directly with error handling
     let quizResultsList = [];
@@ -642,7 +642,7 @@ router.get("/reorder-logs", [
   query('status').optional().isString().withMessage('Status must be a string'),
   query('channel').optional().isString().withMessage('Channel must be a string'), 
   query('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),
-  requireAuth
+  requireAdmin
 ], async (req: Request, res: Response) => {
   try {
     // Check for validation errors first
@@ -671,7 +671,7 @@ router.get("/reorder-logs", [
   }
 });
 
-router.get("/reorder-analytics", requireAuth, async (req, res) => {
+router.get("/reorder-analytics", requireAdmin, async (req, res) => {
   try {
     const logs = await storage.getReorderLogs({ limit: 1000 }); // Get more data for analytics
     
@@ -757,7 +757,7 @@ router.get("/reorder-analytics", requireAuth, async (req, res) => {
 });
 
 // Metrics API endpoint for dashboard (as requested in QA prompt)
-router.get('/metrics', requireAuth, async (req, res) => {
+router.get('/metrics', requireAdmin, async (req, res) => {
   try {
     // Use the same logic as main dashboard but with lighter response
     const dbProducts = await db.select({ 
@@ -837,7 +837,7 @@ router.get('/metrics', requireAuth, async (req, res) => {
 });
 
 // Orders summary endpoint for performance testing
-router.get('/orders/summary', requireAuth, async (req, res) => {
+router.get('/orders/summary', requireAdmin, async (req, res) => {
   try {
     const summaryResult = await db.execute(sql`
       SELECT 
@@ -893,7 +893,7 @@ router.get('/orders/summary', requireAuth, async (req, res) => {
 });
 
 // Phase 14: Product Variant Management
-router.get('/products/:id/variants', requireAuth, async (req, res) => {
+router.get('/products/:id/variants', requireAdmin, async (req, res) => {
   try {
     const variants = await storage.getProductVariants(req.params.id);
     res.json(variants);
@@ -914,7 +914,7 @@ router.post('/products/:id/variants', [
   body('stockQuantity').optional().isInt({ min: 0 }).withMessage('Stock quantity must be a non-negative integer'),
   body('inStock').optional().isBoolean().withMessage('inStock must be a boolean'),
   body('isDefault').optional().isBoolean().withMessage('isDefault must be a boolean'),
-  requireAuth
+  requireAdmin
 ], async (req: Request, res: Response) => {
   try {
     // Check for validation errors first
@@ -979,7 +979,7 @@ router.post('/products/:id/variants', [
   }
 });
 
-router.put('/product-variants/:id', requireAuth, async (req, res) => {
+router.put('/product-variants/:id', requireAdmin, async (req, res) => {
   try {
     // Use validated data directly from req.body after validation
     const name = req.body.name;
@@ -1031,7 +1031,7 @@ router.put('/product-variants/:id', requireAuth, async (req, res) => {
   }
 });
 
-router.delete('/product-variants/:id', requireAuth, async (req, res) => {
+router.delete('/product-variants/:id', requireAdmin, async (req, res) => {
   try {
     const variantId = req.params.id;
     

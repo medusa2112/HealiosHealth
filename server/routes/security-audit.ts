@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
-import { requireAuth, protectRoute } from '../lib/auth';
+import { requireAdmin } from '../mw/requireAdmin';
+import { protectRoute } from '../lib/auth';
 import { SecurityValidator } from '../lib/security-validator';
 import { SecurityLogger } from '../lib/security-logger';
 
@@ -9,7 +10,7 @@ const router = express.Router();
 // Security audit routes - admin access required
 
 // Run comprehensive security audit
-router.get('/audit', requireAuth, async (req, res) => {
+router.get('/audit', requireAdmin, async (req, res) => {
   try {
     const results = await SecurityValidator.runSecurityAudit();
     const report = SecurityValidator.generateSecurityReport(results);
@@ -37,7 +38,7 @@ router.get('/audit', requireAuth, async (req, res) => {
 });
 
 // Log security fix applied
-router.post('/fix-log', requireAuth, async (req, res) => {
+router.post('/fix-log', requireAdmin, async (req, res) => {
   try {
     const securityFixSchema = z.object({
       route: z.string().min(1),

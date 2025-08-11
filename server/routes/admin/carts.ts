@@ -1,6 +1,6 @@
 import express from "express";
 import { param, validationResult } from "express-validator";
-import { requireAuth } from "../../lib/auth";
+import { requireAdmin } from '../../mw/requireAdmin';
 import { storage } from "../../storage";
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
 // Admin cart routes - authentication required
 
 // Get abandoned carts (not converted after specified time)
-router.get("/", requireAuth, async (req, res) => {
+router.get("/", requireAdmin, async (req, res) => {
   try {
     const hoursAgo = parseInt(req.query.hours as string) || 1;
     const thresholdTime = new Date(Date.now() - 1000 * 60 * 60 * hoursAgo);
@@ -47,7 +47,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // Get abandoned cart analytics summary
-router.get("/analytics", requireAuth, async (req, res) => {
+router.get("/analytics", requireAdmin, async (req, res) => {
   try {
     const timeRanges = [1, 6, 24, 72]; // 1h, 6h, 24h, 72h
     const analytics: Record<string, {count: number, value: number, avgValue: number}> = {};
@@ -78,7 +78,7 @@ router.get("/analytics", requireAuth, async (req, res) => {
 // Convert abandoned cart to order (recovery action)
 router.post("/:cartId/recover", [
   param('cartId').isUUID().withMessage('Cart ID must be a valid UUID'),
-  requireAuth
+  requireAdmin
 ], async (req, res) => {
   try {
     // Check for validation errors first

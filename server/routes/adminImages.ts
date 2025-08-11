@@ -1,6 +1,6 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
-import { requireAuth } from "../lib/auth";
+import { requireAdmin } from '../mw/requireAdmin';
 import { ObjectStorageService } from "../objectStorage";
 import { protectRoute } from "../lib/auth";
 
@@ -9,7 +9,7 @@ const router = express.Router();
 // Admin image upload routes - protected with authentication
 
 // Get upload URL for product images
-router.post("/upload-url", requireAuth, async (req, res) => {
+router.post("/upload-url", requireAdmin, async (req, res) => {
   try {
     console.log("Admin image upload URL requested");
     const objectStorageService = new ObjectStorageService();
@@ -25,7 +25,7 @@ router.post("/upload-url", requireAuth, async (req, res) => {
 // Confirm image upload and get public URL
 router.post("/confirm", [
   body('uploadURL').isURL().withMessage('uploadURL must be a valid URL'),
-  requireAuth
+  requireAdmin
 ], async (req: express.Request, res: express.Response) => {
   try {
     // Check for validation errors first

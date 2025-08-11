@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { param, validationResult } from "express-validator";
-import { requireAuth } from "../../lib/auth";
+import { requireAdmin } from '../../mw/requireAdmin';
 import { storage } from "../../storage";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ async function requireAdmin(req: Request, res: Response, next: Function) {
 // Admin log routes - authentication and admin role required
 
 // Get admin activity logs with pagination and filtering
-router.get("/", requireAuth, requireAdmin, async (req, res) => {
+router.get("/", requireAdmin, requireAdmin, async (req, res) => {
   try {
     // Parse and validate query parameters
     const querySchema = z.object({
@@ -79,7 +79,7 @@ router.get("/", requireAuth, requireAdmin, async (req, res) => {
 // Get logs for a specific admin user
 router.get("/admin/:adminId", [
   param('adminId').isUUID().withMessage('Admin ID must be a valid UUID'),
-  requireAuth,
+  requireAdmin,
   requireAdmin
 ], async (req: Request, res: Response) => {
   try {
@@ -106,7 +106,7 @@ router.get("/admin/:adminId", [
 router.get("/target/:targetType/:targetId", [
   param('targetType').isAlpha().withMessage('Target type must contain only letters'),
   param('targetId').isLength({ min: 1, max: 50 }).withMessage('Target ID must be 1-50 characters'),
-  requireAuth,
+  requireAdmin,
   requireAdmin
 ], async (req: Request, res: Response) => {
   try {

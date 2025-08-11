@@ -1,6 +1,6 @@
 import express from "express";
 import { z } from "zod";
-import { requireAuth } from "../../lib/auth";
+import { requireAdmin } from '../../mw/requireAdmin';
 import { storage } from "../../storage";
 import { stripe } from "../../lib/stripe";
 import { sendEmail } from "../../lib/email";
@@ -9,7 +9,7 @@ import { auditAction } from "../../lib/auditMiddleware";
 const router = express.Router();
 
 // Get all orders for admin dashboard with filtering support
-router.get("/", requireAuth, async (req, res) => {
+router.get("/", requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       status: z.string().optional(),
@@ -75,7 +75,7 @@ router.get("/", requireAuth, async (req, res) => {
 });
 
 // Get specific order details
-router.get("/:id", requireAuth, async (req, res) => {
+router.get("/:id", requireAdmin, async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -110,7 +110,7 @@ router.get("/:id", requireAuth, async (req, res) => {
 });
 
 // Process refund for an order with audit logging
-router.post("/:id/refund", requireAuth, auditAction('process_refund', 'order'), async (req, res) => {
+router.post("/:id/refund", requireAdmin, auditAction('process_refund', 'order'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -219,7 +219,7 @@ router.post("/:id/refund", requireAuth, auditAction('process_refund', 'order'), 
 });
 
 // Update order status with audit logging and validation
-router.put("/:id/status", requireAuth, auditAction('update_order_status', 'order'), async (req, res) => {
+router.put("/:id/status", requireAdmin, auditAction('update_order_status', 'order'), async (req, res) => {
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -297,7 +297,7 @@ router.put("/:id/status", requireAuth, auditAction('update_order_status', 'order
 });
 
 // Get order statistics for dashboard
-router.get("/stats/summary", requireAuth, async (req, res) => {
+router.get("/stats/summary", requireAdmin, async (req, res) => {
   try {
     const orders = await storage.getAllOrders();
     

@@ -1,6 +1,6 @@
 import express from 'express';
 import { z } from 'zod';
-import { requireAuth } from '../../lib/auth';
+import { requireAdmin } from '../../mw/requireAdmin';
 import { storage } from '../../storage';
 import { sendEmail } from '../../lib/email';
 import { auditAction } from '../../lib/auditMiddleware';
@@ -8,7 +8,7 @@ import { auditAction } from '../../lib/auditMiddleware';
 const router = express.Router();
 
 // Get abandoned carts with analytics
-router.get('/abandoned-carts', requireAuth, async (req, res) => {
+router.get('/abandoned-carts', requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       hours: z.string().optional().transform(val => val ? parseInt(val, 10) : 24)
@@ -68,7 +68,7 @@ router.get('/abandoned-carts', requireAuth, async (req, res) => {
 });
 
 // Send cart recovery email with proper logging
-router.post('/send-recovery-email', requireAuth, auditAction('send_recovery_email', 'cart'), async (req, res) => {
+router.post('/send-recovery-email', requireAdmin, auditAction('send_recovery_email', 'cart'), async (req, res) => {
   try {
     const bodySchema = z.object({
       cartId: z.string().min(1),
@@ -164,7 +164,7 @@ router.post('/send-recovery-email', requireAuth, auditAction('send_recovery_emai
 });
 
 // Get cart analytics for dashboard
-router.get('/cart-analytics', requireAuth, async (req, res) => {
+router.get('/cart-analytics', requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       days: z.string().optional().transform(val => val ? parseInt(val, 10) : 30)
@@ -210,7 +210,7 @@ router.get('/cart-analytics', requireAuth, async (req, res) => {
 });
 
 // Auto-expire old abandoned carts (called by cron job or admin action)
-router.post('/cleanup-expired', requireAuth, async (req, res) => {
+router.post('/cleanup-expired', requireAdmin, async (req, res) => {
   try {
     const daysToExpire = 30; // Expire carts after 30 days
     const expireDate = new Date();
@@ -248,7 +248,7 @@ router.post('/cleanup-expired', requireAuth, async (req, res) => {
 });
 
 // Email preview endpoint for testing
-router.post('/preview-email', requireAuth, async (req, res) => {
+router.post('/preview-email', requireAdmin, async (req, res) => {
   try {
     const bodySchema = z.object({
       cartId: z.string().min(1),

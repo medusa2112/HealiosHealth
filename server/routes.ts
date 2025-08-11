@@ -12,7 +12,7 @@ import { z } from "zod";
 import express from "express";
 import path from "path";
 import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess, validateCustomerEmail } from "./lib/auth";
-import { setupAuth } from "./replitAuth";
+// import { setupAuth } from "./replitAuth"; // Quarantined
 import authRoutes from "./routes/auth";
 // All auth middleware now consolidated in ./lib/auth
 import adminRoutes from "./routes/admin";
@@ -47,7 +47,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
   // Setup Replit Auth BEFORE other routes
-  await setupAuth(app);
+  // await setupAuth(app); // Quarantined - using dual auth instead
   
 
   
