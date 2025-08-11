@@ -233,9 +233,31 @@ export async function setupAuth(app: Express) {
 
   app.get("/api/callback", (req, res, next) => {
     passport.authenticate(`replitauth:${req.hostname}`, {
-      successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
-    })(req, res, next);
+    })(req, res, (err) => {
+      if (err) {
+        console.error('[OAUTH_CALLBACK] Authentication error:', err);
+        return res.redirect('/api/login');
+      }
+
+      // Check if user is authenticated
+      if (!req.user) {
+        console.log('[OAUTH_CALLBACK] No user in session after authentication');
+        return res.redirect('/api/login');
+      }
+
+      // Determine redirect based on user role
+      const userRole = (req.user as any).role;
+      console.log(`[OAUTH_CALLBACK] Authenticated user role: ${userRole}, email: ${(req.user as any).email}`);
+      
+      if (userRole === 'admin') {
+        console.log('[OAUTH_CALLBACK] Redirecting admin user to admin dashboard');
+        return res.redirect('/admin');
+      } else {
+        console.log('[OAUTH_CALLBACK] Redirecting customer user to homepage');
+        return res.redirect('/');
+      }
+    });
   });
 
   app.get("/api/logout", async (req, res) => {
