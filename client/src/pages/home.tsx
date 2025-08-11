@@ -820,7 +820,7 @@ export default function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-800">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Video Column */}
-          <div className="relative overflow-hidden min-h-[600px] lg:h-full bg-black">
+          <div className="relative overflow-hidden min-h-[600px] lg:h-full bg-gradient-to-br from-gray-900 to-gray-700">
             <video
               autoPlay
               muted
@@ -831,12 +831,29 @@ export default function HomePage() {
               onLoadStart={() => console.log('TheFourths video loading started')}
               onCanPlay={() => console.log('TheFourths video can play')}
               onLoadedData={() => console.log('TheFourths video loaded')}
-              onError={(e) => console.error('TheFourths video error:', e)}
+              onError={(e) => {
+                console.warn('TheFourths video could not load (QuickTime format may not be supported in this browser)');
+                // Hide the video element gracefully on error
+                if (e.currentTarget) {
+                  e.currentTarget.style.opacity = '0';
+                  e.currentTarget.style.pointerEvents = 'none';
+                }
+              }}
             >
-              <source src="/assets/TheFourths_1753620348483.mov" type="video/quicktime" />
               <source src="/assets/TheFourths_1753620348483.mov" type="video/mp4" />
+              <source src="/assets/TheFourths_1753620348483.mov" type="video/quicktime" />
               Your browser does not support the video tag.
             </video>
+            
+            {/* Fallback content when video fails */}
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
+              <div className="text-center text-white opacity-50">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center">
+                  <Leaf className="w-8 h-8" />
+                </div>
+                <p className="text-sm">Premium Wellness Experience</p>
+              </div>
+            </div>
           </div>
 
           {/* Content */}
