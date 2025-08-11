@@ -10,11 +10,29 @@ import { corsMw } from "./security/cors";
 import { healthRouter } from "./health";
 import { customerSession } from "./auth/sessionCustomer";
 import { adminSession } from "./auth/sessionAdmin";
+import { enforceProductionDefaults, logCookieAttributes } from "./config/production";
+import healthRoutes from "./routes/health";
 
 const app = express();
 
+// Enforce production defaults and log configuration
+try {
+  enforceProductionDefaults();
+  logCookieAttributes();
+} catch (error) {
+  logger.error('CONFIG', 'Production configuration error', { error });
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1); // Exit if production config is invalid
+  }
+}
+
 // Remove security-revealing headers
 app.disable('x-powered-by');
+
+// Trust proxy for proper HTTPS detection (critical for Secure cookies)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 // Apply Content Security Policy and security headers
 app.use(contentSecurityPolicy);
@@ -27,6 +45,7 @@ app.use(corsMw);
 
 // Mount health endpoints early (before auth)
 app.use(healthRouter());
+app.use(healthRoutes); // Add the new health routes with auth status
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

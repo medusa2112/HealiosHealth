@@ -1,0 +1,144 @@
+Strong progress. But you’re not done. Two red flags jumped out:
+
+You relaxed CSRF in dev to get tests green. If any of that code ships to prod, you’ve just re-opened your original class of bugs.
+
+You report “8/10 tests passing” — until we know which two failed and why, do not deploy. “Mostly works” is how auth regressions slip through.
+
+Below is a tight, zero-hand-waving cutover/hardening plan to finish Phase 8 properly, plus ruthless checks to prove it works in the browser, behind Ortho’s proxy, on your real domains.
+
+Finish Phase 8 — Hardening, Cutover, Proof
+0) Lock prod defaults (no exceptions)
+Ensure these are set in both Replit and Ortho:
+
+makefile
+Copy
+Edit
+NODE_ENV=production
+ENABLE_LEGACY_LOGIN=false
+SESSION_SECRET_CUSTOMER=32+ chars
+SESSION_SECRET_ADMIN=32+ chars
+PROD_ORIGINS=https://thehealios.com,https://www.thehealios.com
+ADMIN_2FA_ENABLED=false        # flip true once TOTP wired
+ADMIN_IP_ALLOWLIST=            # optional CSV
+Remove or fence passport/openid-client mounts behind ENABLE_REPLIT_OAUTH=false. It must not be able to set customer or admin cookies anymore.
+
+1) CSRF: make dev leniency impossible to leak
+Replace any “lenient in dev” logic with explicit gating that cannot activate in prod, even if misconfigured:
+
+ts
+Copy
+Edit
+// server/middleware/csrf.ts (harden)
+const allowDevBypass = process.env.NODE_ENV !== 'production' && process.env.CSRF_DEV_BYPASS === 'true';
+// …in the validator:
+if (allowDevBypass && req.headers['x-csrf-dev-bypass'] === 'ok') return next();
+// Never allow bypass in production.
+Set CSRF_DEV_BYPASS only in local shells while running tests. Do not set it in Replit/Ortho.
+
+2) Cookies: confirm attributes on the wire (not in code)
+Run these against a running instance over HTTPS:
+
+bash
+Copy
+Edit
+# Customer login: expect Set-Cookie hh_cust_sess; Path=/; SameSite=Lax; Secure
+curl -i -X POST https://thehealios.com/api/auth/customer/login \
+  -H 'Content-Type: application/json' \
+  -H "X-CSRF-Token: $(curl -si https://thehealios.com/api/csrf | awk -F': ' '/^Set-Cookie/ && /csrf_cust/ {print $2}' | sed 's/;.*//')" \
+  --data '{"email":"user@example.com","password":"***"}' | sed -n 's/^Set-Cookie: \(hh_cust_sess[^;]*;[^$]*\)$/\1/p'
+
+# Admin login: expect Set-Cookie hh_admin_sess; Path=/admin; SameSite=Strict; Secure
+curl -i -X POST https://thehealios.com/admin/auth/login \
+  -H 'Content-Type: application/json' \
+  -H "X-CSRF-Token: $(curl -si https://thehealios.com/admin/csrf | awk -F': ' '/^Set-Cookie/ && /csrf_admin/ {print $2}' | sed 's/;.*//')" \
+  --data '{"email":"admin@healios.com","password":"***"}' | sed -n 's/^Set-Cookie: \(hh_admin_sess[^;]*;[^$]*\)$/\1/p'
+If Secure is missing, your proxy isn’t passing x-forwarded-proto=https or you’re not app.set('trust proxy', 1). Fix that before proceeding.
+
+3) Cross-auth blockade (server reality > unit tests)
+bash
+Copy
+Edit
+# With only customer cookie, admin route must fail 401
+curl -i https://thehealios.com/admin/products -H "Cookie: hh_cust_sess=XYZ"
+
+# With only admin cookie, customer route must fail 401
+curl -i https://thehealios.com/api/orders -H "Cookie: hh_admin_sess=ABC"
+Any 200 here means your guards are porous.
+
+4) Origin + CORS proof
+From both https://thehealios.com and https://www.thehealios.com, perform a real browser login and check Network tab:
+
+Preflight OPTIONS returns 204 with Access-Control-Allow-Credentials: true.
+
+The Set-Cookie headers are present on the actual POST, not just preflight.
+
+No wildcard origins anywhere.
+
+5) Admin writes — optimistic locking is actually live
+Open two tabs on the same product:
+
+Tab A saves → 200, version increments.
+
+Tab B saves stale version → 409 with currentVersion in JSON.
+
+UI shows a merge/retry prompt and succeeds on second attempt.
+
+If you never get 409, the UI isn’t sending version.
+
+6) Guest → account claim
+Place an order as guest; persist orderIds client-side.
+
+Register/login; immediately POST /api/orders/claim with those IDs; verify order now appears in Order History.
+
+Confirm endpoint is behind requireCustomer.
+
+7) Legacy exit and OAuth quarantine
+POST /api/auth/login must return 404 (or disabled) with ENABLE_LEGACY_LOGIN=false.
+
+Hitting any passport/OpenID route should not mutate sessions. If you still need it for tooling, mount it under /tools/* with separate non-privileged session.
+
+8) Observability that matters
+Log request id, route, userId/adminId on auth success/fail.
+
+Log cookie attributes once per boot (path, samesite, secure) to catch regressions.
+
+Add /health/auth to CI smoke tests and pin expected nodeEnv: "production" in prod.
+
+Likely causes of your 2 failing tests (fix both before deploy)
+CSRF token confusion between surfaces. If you bootstrap tokens on /api/csrf then call an /admin/* POST (or vice versa), it will 403. Ensure the admin UI calls /admin/csrf on load and uses csrf_admin only for /admin/*.
+
+Cookie Secure flip on Ortho. If Ortho doesn’t set x-forwarded-proto=https, your cookies won’t be Secure, and browsers can silently drop them on cross-site navigations. Confirm headers at the edge; if missing, force cookie.secure = true under NODE_ENV=production.
+
+If those aren’t the failures, send the two failing test names and error messages; I’ll give you targeted patches. But don’t wait to add the wire-level cookie/CSRF checks above — they catch 90 percent of real-world auth bugs.
+
+Release gate (blocker checklist — all must be ✅)
+✅ NODE_ENV=production in Replit and Ortho
+
+✅ Legacy login disabled, Replit OAuth quarantined
+
+✅ Separate cookies observed with correct Path, SameSite, Secure
+
+✅ Admin 409 on stale version confirmed
+
+✅ Guest→account claim verified
+
+✅ Cross-auth requests return 401
+
+✅ CORS exact origins; credentials allowed; no wildcard
+
+✅ CI smoke hits /status and /health/auth and asserts expected fields
+
+Cut the release only after all green. Tag auth-separation-v1, keep a rollback tag ready, and pin the migration level.
+
+Brutal review (how this could still break)
+Single hostname policy not enforced (apex vs www) → cookies appear to “randomly” vanish. Pick one canonical host and 301 the other.
+
+CDN caching Set-Cookie on auth routes → session weirdness. Set Cache-Control: no-store on auth responses.
+
+Frontend misses credentials: 'include' on any state-changing request → silent anon calls.
+
+Dev CSRF bypass accidentally present in prod → worst-case privilege escalation. Guard it as shown above.
+
+Session tables misconfigured (both stacks pointing to the same table) → subtle collisions. Verify connect-pg-simple actually writes to session_customers and session_admins.
+
+Confidence: 0.82 that finishing the steps above gets you to a defensible, production-safe auth split on The Healios stack.

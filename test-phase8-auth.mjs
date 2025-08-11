@@ -18,7 +18,7 @@ const RESET = '\x1b[0m';
 
 // Test credentials
 const CUSTOMER_EMAIL = 'test.customer@example.com';
-const CUSTOMER_PASSWORD = 'TestPassword123!';
+const CUSTOMER_PASSWORD = 'TestCustomer123!';  // Updated to match setup script
 const ADMIN_EMAIL = 'dn@thefourths.com';
 const ADMIN_PASSWORD = process.env.ADM_PW || 'admin123';
 

@@ -62,15 +62,14 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  // In development, be more lenient with CSRF for testing Phase 8
-  if (process.env.NODE_ENV === 'development') {
-    const fullPath = req.originalUrl || req.url || req.path;
-    
-    // Skip CSRF for all auth endpoints in development
-    if (fullPath.includes('/auth/')) {
-      console.log('[CSRF] Development mode - skipping auth endpoint:', fullPath);
-      return next();
-    }
+  // HARDENED: Dev bypass ONLY with explicit env var AND special header
+  // This cannot accidentally activate in production
+  const allowDevBypass = process.env.NODE_ENV !== 'production' && 
+                         process.env.CSRF_DEV_BYPASS === 'true';
+  
+  if (allowDevBypass && req.headers['x-csrf-dev-bypass'] === 'ok') {
+    console.log('[CSRF] Dev bypass activated for:', req.originalUrl);
+    return next();
   }
 
   // Skip CSRF for auth endpoints during initial login/register/password reset/verification
