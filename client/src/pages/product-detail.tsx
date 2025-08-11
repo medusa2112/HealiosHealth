@@ -293,31 +293,6 @@ export default function ProductDetail() {
       question: "Is this suitable for vegetarians/vegans?",
       answer: product?.id === 'vitamin-d3' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
     }
-  ] : product?.id === 'vitamin-d3' ? [
-    {
-      question: "Why do I need 4000 IU of Vitamin D3?",
-      answer: "4000 IU provides therapeutic levels for immune support and bone health, especially during UK winter months when sun exposure is limited. This dose is well within safe limits and helps maintain optimal blood levels."
-    },
-    {
-      question: "When should I take Vitamin D3?",
-      answer: "Take 1 gummy daily with a meal containing fat for optimal absorption. Morning is ideal as vitamin D can support natural energy levels and won't interfere with sleep."
-    },
-    {
-      question: "Can children take these gummies?",
-      answer: "These high-potency gummies are formulated for adults and teens 12+. For younger children, consult your healthcare provider for appropriate dosing recommendations."
-    },
-    {
-      question: "How long before I see benefits?",
-      answer: "Most people notice improved energy and mood within 4-6 weeks of consistent use. For immune benefits, maintaining steady levels year-round is most effective, especially during winter months."
-    },
-    {
-      question: "Should I get my vitamin D levels tested?",
-      answer: "A blood test can help determine your current vitamin D status. Optimal levels are 75-125 nmol/L (30-50 ng/mL). Your GP can arrange testing if you have concerns about deficiency."
-    },
-    {
-      question: "Is this suitable for vegetarians and vegans?",
-      answer: "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 derived from lanolin (sheep's wool), which is the most bioactive form of vitamin D."
-    }
   ];
 
   return (
