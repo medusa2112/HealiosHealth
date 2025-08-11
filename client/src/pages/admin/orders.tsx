@@ -412,11 +412,11 @@ export default function AdminOrders() {
                 <div className="flex flex-wrap gap-2 mb-4">
                   <div className="text-xs">
                     <span className="text-muted-foreground mr-1">Refund:</span>
-                    {getStatusBadge(order.refundStatus, 'refund')}
+                    {getStatusBadge(order.refundStatus || 'none', 'refund')}
                   </div>
                   <div className="text-xs">
                     <span className="text-muted-foreground mr-1">Dispute:</span>
-                    {getStatusBadge(order.disputeStatus, 'dispute')}
+                    {getStatusBadge(order.disputeStatus || 'none', 'dispute')}
                   </div>
                   {order.stripePaymentIntentId && (
                     <div className="text-xs">
