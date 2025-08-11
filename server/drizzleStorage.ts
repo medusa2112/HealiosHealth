@@ -39,15 +39,21 @@ export class DrizzleStorage implements IStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const id = user.id || `user-${randomUUID()}`;
+    const id = `user-${randomUUID()}`;
     const hashedPassword = user.password ? await bcrypt.hash(user.password, 10) : null;
     
     const [created] = await db.insert(users).values({
-      ...user,
-      id,
+      email: user.email,
+      role: user.role || 'customer',
+      firstName: user.firstName,
+      lastName: user.lastName,
       password: hashedPassword,
-      createdAt: user.createdAt || new Date().toISOString(),
-      email_verified: user.email_verified || null
+      stripeCustomerId: user.stripeCustomerId,
+      emailVerified: user.emailVerified || null,
+      verificationCodeHash: user.verificationCodeHash,
+      verificationExpiresAt: user.verificationExpiresAt,
+      verificationAttempts: user.verificationAttempts || 0,
+      isActive: user.isActive ?? true
     }).returning();
     
     return created;
@@ -72,6 +78,12 @@ export class DrizzleStorage implements IStorage {
       return (await this.updateUser(user.id, user))!;
     }
     return this.createUser(user);
+  }
+
+  async updateUserRole(userId: string, role: 'admin' | 'customer'): Promise<void> {
+    await db.update(users)
+      .set({ role, updatedAt: new Date().toISOString() })
+      .where(eq(users.id, userId));
   }
 
   // Products

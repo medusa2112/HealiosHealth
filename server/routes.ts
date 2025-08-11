@@ -64,6 +64,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register auth routes
   app.use('/api/auth', authRoutes);
   
+  // Register admin OAuth routes
+  const adminOAuthRoutes = await import('./routes/adminOAuth');
+  app.use('/api/admin/oauth', adminOAuthRoutes.default);
+  
   // DISABLED: Custom authentication routes - using Replit Auth only
   // app.use('/api/auth/customer', customerAuthRouter);
   

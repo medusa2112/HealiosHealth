@@ -174,6 +174,9 @@ export interface IStorage {
   getAbandonedCarts(hoursCutoff?: number): Promise<any[]>;
   getReorderCandidates(daysBack?: number): Promise<any[]>;
   
+  // Admin role management
+  updateUserRole(userId: string, role: 'admin' | 'customer'): Promise<void>;
+  
   // Phase 20: Referral System
   createReferral(referral: { referrerId: string; code: string; rewardType: string; rewardValue: number; isActive: boolean; usedCount: number; maxUses: number; }): Promise<any>;
   getReferralByCode(code: string): Promise<any | undefined>;
@@ -681,6 +684,12 @@ export class MemStorage implements IStorage {
     return newUser; 
   }
   async updateUser(id: string, updates: Partial<User>): Promise<User | undefined> { const user = this.users.get(id); if (!user) return undefined; const updated = { ...user, ...updates, updatedAt: new Date().toISOString() }; this.users.set(id, updated); return updated; }
+  async updateUserRole(userId: string, role: 'admin' | 'customer'): Promise<void> { 
+    const user = this.users.get(userId); 
+    if (user) { 
+      this.users.set(userId, { ...user, role, updatedAt: new Date().toISOString() }); 
+    } 
+  }
   async getAddressesByUserId(userId: string): Promise<Address[]> { return Array.from(this.addresses.values()).filter(a => a.userId === userId); }
   async createAddress(address: InsertAddress): Promise<Address> { 
     const id = randomUUID(); 

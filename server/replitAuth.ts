@@ -246,15 +246,36 @@ export async function setupAuth(app: Express) {
         return res.redirect('/api/login');
       }
 
-      // Determine redirect based on user role
+      // Check if this is an admin login attempt
+      const isAdminLogin = (req.session as any)?.adminLoginAttempt || (req.session as any)?.adminLoginRedirect;
+      const userEmail = (req.user as any).email;
       const userRole = (req.user as any).role;
-      console.log(`[OAUTH_CALLBACK] Authenticated user role: ${userRole}, email: ${(req.user as any).email}`);
       
-      if (userRole === 'admin') {
-        console.log('[OAUTH_CALLBACK] Redirecting admin user to admin dashboard');
+      console.log(`[OAUTH_CALLBACK] Authenticated user: ${userEmail}, role: ${userRole}, adminLogin: ${isAdminLogin}`);
+      
+      // Check if user is an admin (either by role or by email)
+      const adminEmails = (process.env.ALLOWED_ADMIN_EMAILS || '').split(',').map(e => e.trim());
+      const isAdmin = userRole === 'admin' || adminEmails.includes(userEmail);
+      
+      if (isAdminLogin && isAdmin) {
+        console.log('[OAUTH_CALLBACK] Admin login successful - redirecting to admin dashboard');
+        // Clear admin login flags
+        delete (req.session as any).adminLoginAttempt;
+        delete (req.session as any).adminLoginRedirect;
+        return res.redirect('/admin');
+      } else if (isAdminLogin && !isAdmin) {
+        console.log('[OAUTH_CALLBACK] Admin login failed - user is not an admin');
+        // Clear session and redirect to admin login with error
+        req.logout(() => {
+          req.session.destroy(() => {
+            res.redirect('/admin/login?error=not_authorized');
+          });
+        });
+      } else if (userRole === 'admin') {
+        console.log('[OAUTH_CALLBACK] Admin user logged in - redirecting to admin dashboard');
         return res.redirect('/admin');
       } else {
-        console.log('[OAUTH_CALLBACK] Redirecting customer user to homepage');
+        console.log('[OAUTH_CALLBACK] Customer user logged in - redirecting to homepage');
         return res.redirect('/');
       }
     });
