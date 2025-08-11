@@ -122,7 +122,7 @@ function Router() {
   );
 }
 
-function App() {
+function AppContent() {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
   const [location] = useLocation();
@@ -130,45 +130,53 @@ function App() {
   // Check if current route should bypass layout
   const isStandaloneRoute = location === '/admin/login';
 
+  if (isStandaloneRoute) {
+    // Standalone pages without layout
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <Router />
+        <Toaster />
+      </div>
+    );
+  }
+
+  // Full layout for all other pages
+  return (
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
+      <StockUpdateBanner />
+      <Header />
+      <main className="flex-1">
+        <Router />
+      </main>
+      <Footer />
+      <CartSidebar />
+      <StockNotification />
+      
+      {/* AI Assistant */}
+      {!isAIAssistantOpen && (
+        <ChatBubble onClick={() => setIsAIAssistantOpen(true)} />
+      )}
+      
+      <AIAssistant 
+        isOpen={isAIAssistantOpen}
+        onToggle={() => setIsAIAssistantOpen(!isAIAssistantOpen)}
+        isMinimized={isAIAssistantMinimized}
+        onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
+      />
+      <Toaster />
+      <CookieConsent />
+    </div>
+  );
+}
+
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
           <AuthProvider>
             <CartProvider>
-              {isStandaloneRoute ? (
-                // Standalone pages without layout
-                <div className="min-h-screen bg-white dark:bg-gray-900">
-                  <Router />
-                  <Toaster />
-                </div>
-              ) : (
-                // Full layout for all other pages
-                <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
-                  <StockUpdateBanner />
-                  <Header />
-                  <main className="flex-1">
-                    <Router />
-                  </main>
-                  <Footer />
-                  <CartSidebar />
-                  <StockNotification />
-                  
-                  {/* AI Assistant */}
-                  {!isAIAssistantOpen && (
-                    <ChatBubble onClick={() => setIsAIAssistantOpen(true)} />
-                  )}
-                  
-                  <AIAssistant 
-                    isOpen={isAIAssistantOpen}
-                    onToggle={() => setIsAIAssistantOpen(!isAIAssistantOpen)}
-                    isMinimized={isAIAssistantMinimized}
-                    onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
-                  />
-                  <Toaster />
-                  <CookieConsent />
-                </div>
-              )}
+              <AppContent />
             </CartProvider>
           </AuthProvider>
         </TooltipProvider>
