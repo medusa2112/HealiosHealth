@@ -16,9 +16,9 @@ import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAcces
 import authRoutes from "./routes/auth";
 // All auth middleware now consolidated in ./lib/auth
 import adminRoutes from "./routes/admin";
-// Phase 5-6: Dual authentication routes
-import { customerAuthRouter } from "./auth/customerAuth";
-import { adminAuthRouter } from "./auth/adminAuth";
+// DISABLED: Custom authentication routes - using Replit Auth only
+// import { customerAuthRouter } from "./auth/customerAuth";
+// import { adminAuthRouter } from "./auth/adminAuth";
 // Phase 4: Middleware guards
 import { requireCustomer } from "./mw/requireCustomer";
 import { requireAdmin } from "./mw/requireAdmin";
@@ -46,8 +46,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static files from client/public directory (including hero videos)
   app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
-  // Setup Replit Auth BEFORE other routes
-  // await setupAuth(app); // Quarantined - using dual auth instead
+  // Setup Replit Auth BEFORE other routes (PRIMARY AUTH METHOD)
+  const { setupAuth } = await import('./replitAuth');
+  await setupAuth(app);
   
 
   
@@ -63,8 +64,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register auth routes
   app.use('/api/auth', authRoutes);
   
-  // Phase 5-6: Register dual authentication routes
-  app.use('/api/auth/customer', customerAuthRouter);
+  // DISABLED: Custom authentication routes - using Replit Auth only
+  // app.use('/api/auth/customer', customerAuthRouter);
   
   // Import admin access middleware
   const { blockAdminInProduction } = await import('./middleware/adminAccess');
@@ -73,8 +74,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/auth/admin', blockAdminInProduction);
   app.use('/api/admin', blockAdminInProduction);
   
+  // DISABLED: Custom admin authentication routes - using Replit Auth only
+  // app.use('/api/auth/admin', adminAuthRouter);
+  
   // Register admin routes only after protection middleware
-  app.use('/api/auth/admin', adminAuthRouter);
+
   app.use('/api/admin', adminRoutes);
   
   // Admin publish routes (only if admin enabled)

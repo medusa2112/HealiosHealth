@@ -9,8 +9,9 @@ import { logger } from "./lib/logger";
 import { ENV } from "./config/env";
 import { corsMw } from "./security/cors";
 import { healthRouter } from "./health";
-import { customerSession } from "./auth/sessionCustomer";
-import { adminSession } from "./auth/sessionAdmin";
+// DISABLED: Custom session middlewares - using Replit Auth only
+// import { customerSession } from "./auth/sessionCustomer";
+// import { adminSession } from "./auth/sessionAdmin";
 import { enforceProductionDefaults, logCookieAttributes } from "./config/production";
 import healthRoutes from "./routes/health";
 import { securityHeaders } from "./middleware/security-headers";
@@ -70,33 +71,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser()); // Parse cookies for session management
 
-// Phase 4: Dual Session Middlewares
-// Customer session for public routes (wider scope)
-app.use('/api', (req, res, next) => {
-  // Skip customer session for admin-specific routes
-  // Note: req.path doesn't include the '/api' prefix since it's already stripped by Express
-  if (req.path.startsWith('/admin') || req.path.startsWith('/auth/admin')) {
-    return next();
-  }
-  customerSession(req, res, next);
-});
+// REPLIT AUTH ONLY: Disabled dual session middleware - using single Replit OAuth system
+// Session handling is now managed by Replit Auth in server/replitAuth.ts
 
-// Admin protection and session for admin routes (restricted scope)
-// Apply admin protection middleware BEFORE session middleware
+// Admin protection for admin routes (if enabled)
 app.use('/api/admin', protectAdmin);
 app.use('/api/auth/admin', protectAdmin);
-
-// Only add admin session if admin is enabled
-if (ADMIN_CONFIG.enabled) {
-  app.use('/api/admin', (req, res, next) => {
-    console.log('[DEBUG] Applying admin session to:', req.path);
-    adminSession(req, res, next);
-  });
-  app.use('/api/auth/admin', (req, res, next) => {
-    console.log('[DEBUG] Applying admin session to auth:', req.path);
-    adminSession(req, res, next);
-  });
-}
 
 // CSRF protection for state-changing operations
 app.use('/api', csrfProtection);

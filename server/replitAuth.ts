@@ -108,15 +108,27 @@ export async function setupAuth(app: Express) {
   ) => {
     try {
       const claims = tokens.claims();
+      if (!claims) {
+        console.error('[OAUTH_VERIFY] No claims found in tokens');
+        return verified(new Error('No claims found'));
+      }
       console.log(`[OAUTH_VERIFY] Processing user: ${claims["email"]} with ID: ${claims["sub"]}`);
       
       // First ensure user is properly stored
+      if (!claims) {
+        console.error('[OAUTH_VERIFY] Claims is undefined, cannot upsert user');
+        return verified(new Error('Claims undefined'));
+      }
       await upsertUser(claims);
       
       // Small delay to ensure storage completes
       await new Promise(resolve => setTimeout(resolve, 100));
       
       // Verify the user was stored
+      if (!claims?.sub) {
+        console.error('[OAUTH_VERIFY] Claims.sub is undefined');
+        return verified(new Error('Claims.sub undefined'));
+      }
       const dbUser = await storage.getUserById(claims["sub"]);
       
       if (!dbUser) {
