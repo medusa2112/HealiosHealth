@@ -1,2 +1,2 @@
 This is a temporary file to help debug the syntax error in the product comprehensive page.
-The issue appears to be with the marineCollagenEditorialSVG declaration.
+The issue appears to be with the marineCollagenEditorialSVG declaration.import passport from 'passport';

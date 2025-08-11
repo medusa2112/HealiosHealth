@@ -11,6 +11,7 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
+import passport from "passport";
 import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess, validateCustomerEmail } from "./lib/auth";
 // import { setupAuth } from "./replitAuth"; // Quarantined
 import authRoutes from "./routes/auth";

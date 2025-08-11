@@ -19,7 +19,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   // Check admin authentication status
   const { data: admin, isLoading } = useQuery<User | null>({
-    queryKey: ['/api/auth/admin/me'],
+    queryKey: ['/api/admin/oauth/status'],
     queryFn: () => adminAuth.checkSession(),
     retry: false,
     refetchOnWindowFocus: false,

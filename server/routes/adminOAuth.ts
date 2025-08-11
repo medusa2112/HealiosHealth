@@ -1,5 +1,5 @@
 // ADMIN OAUTH ROUTES - DEDICATED ADMIN-ONLY OAUTH FLOW
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import passport from 'passport';
 import { storage } from '../storage';
 
@@ -48,22 +48,39 @@ router.post('/logout', (req, res) => {
   });
 });
 
-// Check admin status
-router.get('/status', (req, res) => {
-  const isAdmin = (req.session as any)?.isAdmin;
-  const adminEmail = (req.session as any)?.adminEmail;
+// Check admin status - requires passport session
+router.get('/status', async (req: Request, res: Response) => {
+  // First check passport session
+  const user = req.user as any;
   
-  if (isAdmin && adminEmail) {
-    res.json({ 
-      authenticated: true, 
-      email: adminEmail,
-      role: 'admin'
-    });
-  } else {
-    res.json({ 
-      authenticated: false 
-    });
+  console.log('[ADMIN_OAUTH_STATUS] Checking admin status:', {
+    hasUser: !!user,
+    userEmail: user?.email,
+    userRole: user?.role,
+    isAuthenticated: req.isAuthenticated(),
+    sessionID: req.sessionID,
+    hasSession: !!req.session
+  });
+  
+  // If user is authenticated via passport
+  if (req.isAuthenticated() && user) {
+    // Check if user has admin role
+    if (user.role === 'admin') {
+      console.log('[ADMIN_OAUTH_STATUS] Admin authenticated:', user.email);
+      return res.json({ 
+        authenticated: true, 
+        email: user.email,
+        role: 'admin'
+      });
+    } else {
+      console.log('[ADMIN_OAUTH_STATUS] User authenticated but not admin:', user.email, user.role);
+    }
   }
+  
+  // Not authenticated as admin
+  res.json({ 
+    authenticated: false 
+  });
 });
 
 export default router;
