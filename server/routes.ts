@@ -16,6 +16,12 @@ import { setupAuth } from "./replitAuth";
 import authRoutes from "./routes/auth";
 // All auth middleware now consolidated in ./lib/auth
 import adminRoutes from "./routes/admin";
+// Phase 5-6: Dual authentication routes
+import { customerAuthRouter } from "./auth/customerAuth";
+import { adminAuthRouter } from "./auth/adminAuth";
+// Phase 4: Middleware guards
+import { requireCustomer } from "./mw/requireCustomer";
+import { requireAdmin } from "./mw/requireAdmin";
 import portalRoutes from "./routes/portal";
 import stripeRoutes from "./routes/stripe";
 import cartRoutes from "./routes/cart";
@@ -50,6 +56,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register auth routes
   app.use('/api/auth', authRoutes);
+  
+  // Phase 5-6: Register dual authentication routes
+  app.use('/api/auth/customer', customerAuthRouter);
+  app.use('/api/auth/admin', adminAuthRouter);
+  
+  // Original admin routes (for backward compatibility)
   app.use('/api/admin', adminRoutes);
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);

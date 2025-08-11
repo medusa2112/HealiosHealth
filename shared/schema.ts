@@ -1,10 +1,21 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, decimal, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, decimal, integer, boolean, serial, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Import ALFR3D security issues schema
 export * from './alfr3d-schema';
+
+// Separate admins table for security
+export const admins = pgTable('admins', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  lastLoginAt: timestamp('last_login_at'),
+  totpSecret: text('totp_secret'), // optional 2FA
+  active: boolean('active').default(true).notNull(),
+});
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -52,6 +63,8 @@ export const products = pgTable("products", {
   seoTitle: text("seo_title"),
   seoDescription: text("seo_description"),
   seoKeywords: text("seo_keywords").array(),
+  // Optimistic locking
+  version: integer('version').default(0).notNull(),
   // Timestamps for tracking changes
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
@@ -252,6 +265,11 @@ export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
 
+export const insertAdminsSchema = createInsertSchema(admins).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Phase 14: Product variant schema
 export const insertProductVariantSchema = createInsertSchema(productVariants).omit({
   id: true,
@@ -287,6 +305,8 @@ export const adminLogs = pgTable("admin_logs", {
 });
 
 // Type exports
+export type Admin = typeof admins.$inferSelect;
+export type InsertAdmin = z.infer<typeof insertAdminsSchema>;
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;

@@ -5,6 +5,11 @@ import { requestLogger, errorLogger } from "./middleware/requestLogger";
 import { csrfProtection } from "./middleware/csrf";
 import { contentSecurityPolicy } from "./middleware/csp";
 import { logger } from "./lib/logger";
+import { ENV } from "./config/env";
+import { corsMw } from "./security/cors";
+import { healthRouter } from "./health";
+import { customerSession } from "./auth/sessionCustomer";
+import { adminSession } from "./auth/sessionAdmin";
 
 const app = express();
 
@@ -17,42 +22,35 @@ app.use(contentSecurityPolicy);
 // Add comprehensive request logging BEFORE body parsing
 app.use(requestLogger);
 
-// CORS configuration for production security
-app.use((req, res, next) => {
-  const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? ['https://thehealios.com', 'https://www.thehealios.com']
-    : ['http://localhost:5000', 'http://127.0.0.1:5000'];
-  
-  const origin = req.headers.origin;
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
-  res.setHeader('Access-Control-Max-Age', '86400');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  
-  next();
-});
+// Use the new hardened CORS middleware
+app.use(corsMw);
+
+// Mount health endpoints early (before auth)
+app.use(healthRouter());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session management is handled in replitAuth.ts
+// Phase 4: Dual Session Middlewares
+// Customer session for public routes (wider scope)
+app.use('/api', (req, res, next) => {
+  // Skip customer session for admin-specific routes
+  if (req.path.startsWith('/api/admin')) {
+    return next();
+  }
+  customerSession(req, res, next);
+});
 
-// CSRF protection for state-changing operations (applied after demo login)
+// Admin session for admin routes (restricted scope)
+app.use('/api/admin', adminSession);
+
+// CSRF protection for state-changing operations
 app.use('/api', csrfProtection);
 
 // Log application startup
 logger.info('SERVER', 'Starting application', {
-  env: process.env.NODE_ENV,
-  port: process.env.PORT || '5000'
+  env: ENV.NODE_ENV,
+  port: ENV.PORT
 });
 
 app.use((req, res, next) => {
