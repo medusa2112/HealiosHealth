@@ -5,17 +5,32 @@ export function enforceProductionDefaults() {
   const isProd = process.env.NODE_ENV === 'production';
   
   if (isProd) {
-    // Enforce critical production settings
-    const requiredEnvVars = {
-      'SESSION_SECRET_CUSTOMER': process.env.SESSION_SECRET_CUSTOMER,
-      'SESSION_SECRET_ADMIN': process.env.SESSION_SECRET_ADMIN,
+    // Ensure at least SESSION_SECRET is provided (minimum requirement)
+    if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32) {
+      throw new Error('Production requires SESSION_SECRET to be at least 32 characters');
+    }
+    
+    // Validate session secrets if they are provided explicitly
+    const sessionSecrets = {
+      customer: process.env.SESSION_SECRET_CUSTOMER,
+      admin: process.env.SESSION_SECRET_ADMIN,
     };
     
-    // Check for required secrets
-    for (const [key, value] of Object.entries(requiredEnvVars)) {
-      if (!value || value.length < 32) {
-        throw new Error(`Production requires ${key} to be at least 32 characters`);
+    // Check explicit session secrets if provided
+    for (const [type, secret] of Object.entries(sessionSecrets)) {
+      if (secret && secret.length < 32) {
+        throw new Error(`SESSION_SECRET_${type.toUpperCase()} must be at least 32 characters if provided`);
       }
+    }
+    
+    // Ensure different secrets if both are explicitly provided
+    if (sessionSecrets.customer && sessionSecrets.admin && sessionSecrets.customer === sessionSecrets.admin) {
+      throw new Error('SESSION_SECRET_CUSTOMER and SESSION_SECRET_ADMIN must be different');
+    }
+    
+    // Warn if using fallback (single secret for both)
+    if (!sessionSecrets.customer || !sessionSecrets.admin) {
+      console.warn('[SECURITY] Using SESSION_SECRET fallback for session management. For enhanced security, provide separate SESSION_SECRET_CUSTOMER and SESSION_SECRET_ADMIN.');
     }
     
     // Disable legacy auth
