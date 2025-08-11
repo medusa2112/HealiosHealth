@@ -5,10 +5,10 @@ import { ENV } from '../config/env';
 const allowedIps = new Set(ENV.ADMIN_IP_ALLOWLIST);
 
 export const requireAdmin: RequestHandler = async (req, res, next) => {
-  const sid = req.cookies?.['hh_admin_sess'];
+  const adminSid = req.cookies?.['hh_admin_sess'];
   
   // Check for admin session cookie and adminId in session
-  if (!sid || !req.session?.adminId) {
+  if (!adminSid || !req.session?.adminId) {
     return res.status(401).json({ 
       error: 'Admin authentication required',
       code: 'ADMIN_AUTH_REQUIRED'
@@ -27,13 +27,9 @@ export const requireAdmin: RequestHandler = async (req, res, next) => {
     }
   }
   
-  // Ensure this is not a customer trying to use admin routes
-  if (req.cookies?.['hh_cust_sess']) {
-    return res.status(403).json({ 
-      error: 'Customer users cannot access admin routes',
-      code: 'INVALID_USER_TYPE'
-    });
-  }
+  // Note: We don't block based on customer cookie presence since the same browser
+  // might have both customer and admin sessions. The admin session takes precedence
+  // when accessing admin routes as long as it's valid.
   
   // TODO: Add 2FA check here if ENV.ADMIN_2FA_ENABLED
   if (ENV.ADMIN_2FA_ENABLED) {
