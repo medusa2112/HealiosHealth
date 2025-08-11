@@ -65,10 +65,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Phase 5-6: Register dual authentication routes
   app.use('/api/auth/customer', customerAuthRouter);
-  app.use('/api/auth/admin', adminAuthRouter);
   
-  // Original admin routes (for backward compatibility)
+  // Import admin access middleware
+  const { blockAdminInProduction } = await import('./middleware/adminAccess');
+  
+  // Apply admin blocking middleware to all admin routes
+  app.use('/api/auth/admin', blockAdminInProduction);
+  app.use('/api/admin', blockAdminInProduction);
+  
+  // Register admin routes only after protection middleware
+  app.use('/api/auth/admin', adminAuthRouter);
   app.use('/api/admin', adminRoutes);
+  
+  // Admin publish routes (only if admin enabled)
+  if (process.env.ADMIN_ENABLED !== 'false') {
+    const adminPublishRoutes = await import('./routes/adminPublish');
+    app.use('/api/admin', adminPublishRoutes.default);
+  }
+  
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
   

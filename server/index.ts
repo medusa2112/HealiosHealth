@@ -21,6 +21,8 @@ import {
   passwordResetLimiter, 
   registrationLimiter 
 } from "./middleware/rate-limiter";
+import { protectAdmin } from "./middleware/adminAccess";
+import { ADMIN_CONFIG } from "./config/adminConfig";
 
 const app = express();
 
@@ -76,8 +78,16 @@ app.use('/api', (req, res, next) => {
   customerSession(req, res, next);
 });
 
-// Admin session for admin routes (restricted scope)
-app.use('/api/admin', adminSession);
+// Admin protection and session for admin routes (restricted scope)
+// Apply admin protection middleware BEFORE session middleware
+app.use('/api/admin', protectAdmin);
+app.use('/api/auth/admin', protectAdmin);
+
+// Only add admin session if admin is enabled
+if (ADMIN_CONFIG.enabled) {
+  app.use('/api/admin', adminSession);
+  app.use('/api/auth/admin', adminSession);
+}
 
 // CSRF protection for state-changing operations
 app.use('/api', csrfProtection);

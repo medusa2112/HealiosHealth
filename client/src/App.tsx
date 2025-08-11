@@ -8,12 +8,12 @@ import { CartProvider } from "@/hooks/use-cart";
 import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/hooks/use-auth";
-import { AdminAuthProvider } from "@/hooks/use-admin-auth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
+import { isAdminEnabled } from "@/config/adminConfig";
 // Chat functionality removed as requested
 import Home from "@/pages/home";
 import Products from "@/pages/products";
@@ -30,16 +30,6 @@ import Article from "@/pages/article";
 
 import Quiz from "@/pages/quiz";
 import Planet from "@/pages/planet";
-import AdminDashboard from "@/pages/admin";
-import AdminOrders from "@/pages/admin/orders";
-import AdminCarts from "@/pages/admin/carts";
-import AdminLogs from "@/pages/admin/logs";
-import AbandonedCarts from "@/pages/admin/abandoned-carts";
-import AdminBundles from "@/pages/AdminBundles";
-import ReorderAnalytics from "@/pages/admin/reorder-analytics";
-import AdminDiscountCodes from "@/pages/AdminDiscountCodes";
-import AdminProducts from "@/pages/admin-products";
-import AdminProductEdit from "@/pages/admin-product-edit";
 import CustomerPortal from "@/pages/customer-portal";
 import PortalSubscriptions from "@/pages/PortalSubscriptions";
 import ALFR3D from "@/pages/alfr3d";
@@ -51,14 +41,66 @@ import { Privacy } from "@/pages/privacy";
 import { Affiliate } from "@/pages/affiliate";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-import AdminLogin from "@/pages/admin-login";
 import Verify from "@/pages/verify";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { CookieConsent } from "@/components/cookie-consent";
+
+// Import admin components conditionally
+import { lazy, Suspense } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
+
+// Import AdminAuthProvider conditionally
+import { AdminAuthProvider as AdminAuthProviderImport } from "@/hooks/use-admin-auth";
+const AdminAuthProvider = isAdminEnabled()
+  ? AdminAuthProviderImport
+  : ({ children }: any) => <>{children}</>;
+
+const AdminLogin = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin-login"))
+  : () => <NotFound />;
+
+const AdminDashboard = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin"))
+  : () => <NotFound />;
+
+const AdminOrders = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/orders"))
+  : () => <NotFound />;
+
+const AdminCarts = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/carts"))
+  : () => <NotFound />;
+
+const AdminLogs = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/logs"))
+  : () => <NotFound />;
+
+const AbandonedCarts = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/abandoned-carts"))
+  : () => <NotFound />;
+
+const AdminBundles = isAdminEnabled() 
+  ? lazy(() => import("@/pages/AdminBundles"))
+  : () => <NotFound />;
+
+const ReorderAnalytics = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/reorder-analytics"))
+  : () => <NotFound />;
+
+const AdminDiscountCodes = isAdminEnabled() 
+  ? lazy(() => import("@/pages/AdminDiscountCodes"))
+  : () => <NotFound />;
+
+const AdminProducts = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin-products"))
+  : () => <NotFound />;
+
+const AdminProductEdit = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin-product-edit"))
+  : () => <NotFound />;
 
 function Router() {
   // Automatically scroll to top on page navigation
@@ -67,7 +109,13 @@ function Router() {
   return (
     <Switch>
       {/* Standalone Admin Login - No Layout */}
-      <Route path="/admin/login" component={AdminLogin} />
+      {isAdminEnabled() && (
+        <Route path="/admin/login">
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminLogin />
+          </Suspense>
+        </Route>
+      )}
       
       {/* All other routes with full layout */}
       <Route path="/" component={Home} />
@@ -85,17 +133,24 @@ function Router() {
 
       <Route path="/quiz" component={Quiz} />
       <Route path="/planet" component={Planet} />
-      <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><AdminOrders /></ProtectedRoute>} />
-      <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><AdminCarts /></ProtectedRoute>} />
-      <Route path="/admin/abandoned-carts" component={() => <ProtectedRoute requiredRole="admin"><AbandonedCarts /></ProtectedRoute>} />
-      <Route path="/admin/logs" component={() => <ProtectedRoute requiredRole="admin"><AdminLogs /></ProtectedRoute>} />
-      <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><ReorderAnalytics /></ProtectedRoute>} />
-      <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><AdminDiscountCodes /></ProtectedRoute>} />
-      <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><AdminBundles /></ProtectedRoute>} />
-      <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminProducts /></ProtectedRoute>} />
-      <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminProductEdit /></ProtectedRoute>} />
-      <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><ALFR3D /></ProtectedRoute>} />
+      
+      {/* Admin routes - only rendered if admin is enabled */}
+      {isAdminEnabled() && (
+        <>
+          <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminDashboard /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminOrders /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminCarts /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/abandoned-carts" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AbandonedCarts /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/logs" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminLogs /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><ReorderAnalytics /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminDiscountCodes /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminBundles /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminProducts /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminProductEdit /></Suspense></ProtectedRoute>} />
+          <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><ALFR3D /></Suspense></ProtectedRoute>} />
+        </>
+      )}
+      
       <Route path="/portal" component={() => <ProtectedRoute requiredRole="customer"><CustomerPortal /></ProtectedRoute>} />
       <Route path="/portal/subscriptions" component={() => <ProtectedRoute requiredRole="customer"><PortalSubscriptions /></ProtectedRoute>} />
       
@@ -129,7 +184,7 @@ function AppContent() {
   const [location] = useLocation();
   
   // Check if current route should bypass layout
-  const isStandaloneRoute = location === '/admin/login';
+  const isStandaloneRoute = isAdminEnabled() && location === '/admin/login';
 
   if (isStandaloneRoute) {
     // Standalone pages without layout
