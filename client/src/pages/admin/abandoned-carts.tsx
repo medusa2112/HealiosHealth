@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Trash2, Send, ShoppingCart, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { CartItem, AbandonedCart } from '@shared/types';
-import { AdminNavbar } from '@/components/admin-navbar';
+
 import { useLocation } from "wouter";
 
 interface CartStats {
@@ -199,16 +199,8 @@ export default function AbandonedCartsPage() {
 
 
 
-  const handleTabChange = (tab: string) => {
-    // Navigation handled by the AdminNavbar component
-    if (tab !== "carts") {
-      setLocation(`/admin`);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <AdminNavbar activeTab="carts" onTabChange={handleTabChange} />
       <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -323,7 +315,7 @@ export default function AbandonedCartsPage() {
                         </div>
                         <p className="text-sm text-gray-600">
                           Created: {formatTimeAgo(cart.createdAt)} • 
-                          Last Updated: {formatTimeAgo(cart.lastUpdated)}
+                          Last Updated: {formatTimeAgo(cart.lastUpdated || cart.createdAt)}
                         </p>
                       </div>
                       <div className="text-right">
@@ -379,6 +371,7 @@ export default function AbandonedCartsPage() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

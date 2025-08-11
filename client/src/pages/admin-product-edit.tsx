@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import AdminImageUpload from "@/components/AdminImageUpload";
 import { SEOHead } from '@/components/seo-head';
 import { Separator } from "@/components/ui/separator";
-import { AdminNavbar } from '@/components/admin-navbar';
+
 
 interface ProductFormData {
   name: string;
@@ -310,7 +310,7 @@ export default function AdminProductEdit() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <AdminNavbar activeTab="products" onTabChange={handleTabChange} />
+
       <SEOHead 
         title={`${isEditing ? 'Edit' : 'Create'} Product - Admin | Healios`}
         description="Create and edit product details, pricing, inventory, and SEO settings in the Healios admin panel."
@@ -523,7 +523,7 @@ export default function AdminProductEdit() {
                       <Label className="text-black dark:text-white">Current Status</Label>
                       <div className="mt-2">
                         <Badge variant={
-                          formData.availability === 'IN_STOCK' ? 'success' :
+                          formData.availability === 'IN_STOCK' ? 'default' :
                           formData.availability === 'PREORDER_OPEN' ? 'secondary' :
                           'destructive'
                         }>
