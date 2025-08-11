@@ -113,8 +113,6 @@ export default function AdminCarts() {
     );
   }
 
-
-
   return (
     <div className="max-w-7xl mx-auto px-6 space-y-6">
       <SEOHead 
@@ -288,7 +286,7 @@ export default function AdminCarts() {
                           {formatCurrency(cartValue)}
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {formatTimeAgo(cart.lastUpdated)}
+                          {formatTimeAgo(cart.lastUpdated || cart.createdAt)}
                         </div>
                       </div>
                     </div>
