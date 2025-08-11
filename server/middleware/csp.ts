@@ -23,7 +23,7 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
     // Production CSP - strict security policy
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
-      "script-src 'self' https://js.stripe.com https://cdn.jsdelivr.net",
+      "script-src 'self' https://js.stripe.com https://cdn.jsdelivr.net https://replit.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https://healios-health-dominic96.replit.app https://cdn.stripe.com",
