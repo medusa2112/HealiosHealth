@@ -131,6 +131,13 @@ export const adminAuth = {
       body: JSON.stringify({ email, password, totp })
     });
     
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      // If not JSON, likely an HTML error page or redirect
+      throw new Error('Server error: Expected JSON response but received ' + (contentType || 'unknown content type'));
+    }
+    
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Admin login failed');

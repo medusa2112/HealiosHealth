@@ -221,6 +221,29 @@ export default function AdminLogin() {
                 )}
               </Button>
               
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-300 dark:border-gray-700" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white dark:bg-black px-2 text-gray-500 dark:text-gray-400">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900 text-black dark:text-white"
+                onClick={() => window.location.href = '/api/login'}
+              >
+                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.5 7h-4.621a.5.5 0 0 0-.354.146l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .354.146H18.5a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5z"/>
+                </svg>
+                Login with Replit
+              </Button>
+              
               <div className="text-center text-sm text-gray-600 dark:text-gray-400">
                 <a href="/" className="hover:underline">
                   ← Back to store
