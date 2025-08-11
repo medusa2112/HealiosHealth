@@ -140,15 +140,46 @@ router.post('/logout', async (req, res) => {
 
 // Admin Session Check - GET /api/auth/admin/me
 router.get('/me', async (req, res) => {
+  // Check for traditional admin session first
   const adminId = req.session?.adminId;
   
+  // If no traditional admin session, check for Replit OAuth admin session
   if (!adminId) {
+    // Check if user is authenticated via Replit OAuth
+    const user = req.user as any;
+    const userId = user?.id || user?.userId || (req.session as any)?.userId;
+    
+    if (userId && user?.role === 'admin') {
+      // User is authenticated via Replit OAuth as admin
+      try {
+        // Import storage to get user data
+        const { storage } = await import('../storage');
+        const userData = await storage.getUserById(userId);
+        
+        if (userData && userData.role === 'admin') {
+          // Return admin data compatible with the expected format
+          const adminData = {
+            id: userData.id,
+            email: userData.email,
+            active: userData.isActive ?? true,
+            createdAt: userData.createdAt,
+            lastLoginAt: new Date().toISOString() // Current login
+          };
+          
+          return res.json({ admin: adminData });
+        }
+      } catch (error) {
+        logger.error('ADMIN_AUTH', 'Replit OAuth admin check error', { error });
+      }
+    }
+    
     return res.status(401).json({ 
       error: 'Not authenticated',
       code: 'NO_SESSION'
     });
   }
   
+  // Handle traditional admin session
   try {
     const [admin] = await db
       .select()
