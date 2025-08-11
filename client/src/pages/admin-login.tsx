@@ -77,7 +77,7 @@ export default function AdminLogin() {
       const result = await adminAuth.login(data.email, data.password, data.totp);
       
       // Redirect to admin dashboard
-      setLocation('/admin/dashboard');
+      setLocation('/admin');
     } catch (err: any) {
       console.error('Admin login error:', err);
       
