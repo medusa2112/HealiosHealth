@@ -15,6 +15,8 @@ import { Plus, Edit, Trash2, TrendingUp, Users, Percent } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import type { DiscountCode, InsertDiscountCode } from '@shared/schema';
 import { SEOHead } from '@/components/seo-head';
+import { AdminNavbar } from '@/components/admin-navbar';
+import { useLocation } from "wouter";
 
 interface CreateDiscountForm {
   code: string;
@@ -35,6 +37,7 @@ const initialFormState: CreateDiscountForm = {
 };
 
 function AdminDiscountCodes() {
+  const [, setLocation] = useLocation();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingCode, setEditingCode] = useState<DiscountCode | null>(null);
   const [form, setForm] = useState<CreateDiscountForm>(initialFormState);
@@ -177,8 +180,16 @@ function AdminDiscountCodes() {
   const activeCodesCount = discountCodes.filter((c: DiscountCode) => c.isActive).length;
   const totalUsage = discountCodes.reduce((sum: number, c: DiscountCode) => sum + ((c.usageCount ?? 0)), 0);
 
+  const handleTabChange = (tab: string) => {
+    // Navigation handled by the AdminNavbar component
+    if (tab !== "discounts") {
+      setLocation(`/admin`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <AdminNavbar activeTab="discounts" onTabChange={handleTabChange} />
       <SEOHead 
         title="Discount Codes - Admin | Healios"
         description="Manage promotional codes and discounts in the Healios admin panel."

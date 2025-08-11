@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Mail, Clock, Users, TrendingUp, Play, Pause, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { AdminNavbar } from '@/components/admin-navbar';
+import { useLocation } from "wouter";
 
 interface EmailJobStats {
   abandonedCarts: {
@@ -23,6 +25,7 @@ interface EmailJobStats {
 }
 
 export default function AdminEmailJobs() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -126,8 +129,17 @@ export default function AdminEmailJobs() {
     },
   });
 
+  const handleTabChange = (tab: string) => {
+    // Navigation handled by the AdminNavbar component
+    if (tab !== "emails") {
+      setLocation(`/admin`);
+    }
+  };
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <AdminNavbar activeTab="emails" onTabChange={handleTabChange} />
+      <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Automated Email Jobs</h1>
@@ -399,6 +411,7 @@ export default function AdminEmailJobs() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
