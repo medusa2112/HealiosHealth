@@ -83,8 +83,9 @@ router.get('/user', isAuthenticated, async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  // Password-based registration for local development/testing
+// DISABLED: Password-based authentication - Using only Replit OAuth
+if (false) {
+  // Password-based registration DISABLED
   router.post("/register", loginLimiter, async (req, res) => {
     try {
     const registerSchema = z.object({

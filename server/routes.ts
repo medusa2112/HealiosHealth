@@ -78,9 +78,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/auth/admin', blockAdminInProduction);
   app.use('/api/admin', blockAdminInProduction);
   
-  // Enable admin authentication routes for traditional login (works alongside Replit OAuth)
-  const { adminAuthRouter } = await import('./auth/adminAuth');
-  app.use('/api/auth/admin', adminAuthRouter);
+  // DISABLED: Admin password auth - using Replit OAuth only
+  // const { adminAuthRouter } = await import('./auth/adminAuth');
+  // app.use('/api/auth/admin', adminAuthRouter);
   
   // Register admin routes only after protection middleware
 

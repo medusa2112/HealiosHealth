@@ -40,26 +40,11 @@ export async function initializeAdminCsrf(): Promise<void> {
   }
 }
 
-// Customer authentication functions
+// Customer authentication functions - REPLIT OAUTH ONLY
 export const customerAuth = {
+  // DISABLED: Password login - use Replit OAuth
   async login(email: string, password: string) {
-    const csrfToken = getCustCsrf();
-    const response = await fetch('/api/auth/customer/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
-      },
-      body: JSON.stringify({ email, password })
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Login failed');
-    }
-    
-    return response.json();
+    throw new Error('Password authentication is disabled. Please use Replit OAuth.');
   },
 
   async register(email: string, password: string, firstName: string, lastName: string) {
@@ -117,38 +102,18 @@ export const customerAuth = {
   }
 };
 
-// Admin authentication functions
+// Admin authentication functions - REPLIT OAUTH ONLY
 export const adminAuth = {
+  // DISABLED: Password login - use Replit OAuth
   async login(email: string, password: string, totp?: string) {
-    const csrfToken = getAdminCsrf();
-    const response = await fetch('/api/auth/admin/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
-      },
-      body: JSON.stringify({ email, password, totp })
-    });
-    
-    // Check if response is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      // If not JSON, likely an HTML error page or redirect
-      throw new Error('Server error: Expected JSON response but received ' + (contentType || 'unknown content type'));
-    }
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Admin login failed');
-    }
-    
-    return response.json();
+    // Redirect to Replit OAuth instead
+    window.location.href = '/api/admin/oauth/login';
+    return { message: 'Redirecting to Replit OAuth...' };
   },
-
+  
   async logout() {
     const csrfToken = getAdminCsrf();
-    const response = await fetch('/api/auth/admin/logout', {
+    const response = await fetch('/api/admin/oauth/logout', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -162,42 +127,19 @@ export const adminAuth = {
     
     return response;
   },
-
+  
   async checkSession() {
-    const response = await fetch('/api/auth/admin/me', {
+    const response = await fetch('/api/admin/oauth/status', {
       method: 'GET',
       credentials: 'include'
     });
     
     if (!response.ok) {
-      if (response.status === 401) {
-        return null; // Not authenticated
-      }
-      throw new Error('Admin session check failed');
+      return null;
     }
     
     const data = await response.json();
-    return data.admin;
-  },
-
-  async changePassword(currentPassword: string, newPassword: string) {
-    const csrfToken = getAdminCsrf();
-    const response = await fetch('/api/auth/admin/change-password', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
-      },
-      body: JSON.stringify({ currentPassword, newPassword })
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Password change failed');
-    }
-    
-    return response.json();
+    return data.authenticated ? data : null;
   }
 };
 
