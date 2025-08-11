@@ -259,10 +259,23 @@ export async function setupAuth(app: Express) {
       const isAdmin = userRole === 'admin' || adminEmails.includes(userEmail);
       
       if (isAdminLogin && isAdmin) {
-        console.log('[OAUTH_CALLBACK] Admin login successful - redirecting to admin dashboard');
+        console.log('[OAUTH_CALLBACK] Admin login successful - setting up admin session');
         // Clear admin login flags
         delete (req.session as any).adminLoginAttempt;
         delete (req.session as any).adminLoginRedirect;
+        
+        // Set up admin session data that requireAdmin middleware expects
+        (req.session as any).adminId = (req.user as any).id;
+        
+        // Set admin session cookie that requireAdmin middleware checks for
+        res.cookie('hh_admin_sess', 'true', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
+        });
+        
+        console.log('[OAUTH_CALLBACK] Admin session setup complete');
         
         // Send admin login notification email
         EmailService.sendAdminLoginNotification({
@@ -284,7 +297,20 @@ export async function setupAuth(app: Express) {
           });
         });
       } else if (userRole === 'admin') {
-        console.log('[OAUTH_CALLBACK] Admin user logged in - redirecting to admin dashboard');
+        console.log('[OAUTH_CALLBACK] Admin user logged in - setting up admin session');
+        
+        // Set up admin session data that requireAdmin middleware expects
+        (req.session as any).adminId = (req.user as any).id;
+        
+        // Set admin session cookie that requireAdmin middleware checks for
+        res.cookie('hh_admin_sess', 'true', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
+        });
+        
+        console.log('[OAUTH_CALLBACK] Admin session setup complete');
         
         // Send admin login notification email
         EmailService.sendAdminLoginNotification({
