@@ -7,11 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Shield, User, Database, Settings, ShoppingCart, FileText, LogIn, LogOut, Search, Filter } from "lucide-react";
 import type { AdminLog } from "@shared/schema";
-import { AdminNavbar } from '@/components/admin-navbar';
-import { useLocation } from "wouter";
+
 
 export default function AdminLogsPage() {
-  const [, setLocation] = useLocation();
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("all");
   const [targetFilter, setTargetFilter] = useState("all");
@@ -76,17 +74,8 @@ export default function AdminLogsPage() {
 
 
 
-  const handleTabChange = (tab: string) => {
-    // Navigation handled by the AdminNavbar component
-    if (tab !== "logs") {
-      setLocation(`/admin`);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <AdminNavbar activeTab="logs" onTabChange={handleTabChange} />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black dark:text-white mb-2">

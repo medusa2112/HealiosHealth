@@ -22,8 +22,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { SecurityIssue } from "@shared/schema";
 import type { FixPrompt } from "../../../types/alfr3d";
-import { AdminNavbar } from '@/components/admin-navbar';
-import { useLocation } from "wouter";
+
 
 interface SecurityStatus {
   isScanning: boolean;
@@ -165,18 +164,9 @@ ${prompt.testingApproach}
     }
   };
 
-  const handleTabChange = (tab: string) => {
-    // Navigation handled by the AdminNavbar component
-    if (tab !== "security") {
-      setLocation(`/admin`);
-    }
-  };
-
   if (issuesLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900">
-        <AdminNavbar activeTab="security" onTabChange={handleTabChange} />
-        <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6">
         <div className="flex items-center gap-2">
           <Shield className="w-6 h-6" />
           <h1 className="text-2xl font-bold">ALFR3D Security Dashboard</h1>
@@ -185,15 +175,12 @@ ${prompt.testingApproach}
           <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4" />
           <p>Loading security analysis...</p>
         </div>
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <AdminNavbar activeTab="security" onTabChange={handleTabChange} />
-      <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -434,7 +421,6 @@ ${prompt.testingApproach}
           )}
         </CardContent>
       </Card>
-      </div>
     </div>
   );
 }
