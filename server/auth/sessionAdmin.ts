@@ -13,7 +13,7 @@ export const adminSession = session({
   cookie: {
     httpOnly: true,
     sameSite: 'strict' as const,
-    path: '/admin',
+    path: '/', // Changed from '/admin' to '/' so cookie is sent to all admin-related endpoints
     secure: false, // Will be set dynamically based on HTTPS
     maxAge: 4 * 60 * 60 * 1000, // 4 hours for admin sessions
   },
