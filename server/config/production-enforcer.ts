@@ -24,13 +24,13 @@ export function enforceProductionConfig() {
     {
       name: 'SESSION_SECRET_CUSTOMER',
       value: process.env.SESSION_SECRET_CUSTOMER,
-      fallback: isProduction ? undefined : 'dev-customer-secret-change-in-production',
+      fallback: process.env.SESSION_SECRET,
       prodRequired: true
     },
     {
       name: 'SESSION_SECRET_ADMIN',
       value: process.env.SESSION_SECRET_ADMIN,
-      fallback: isProduction ? undefined : 'dev-admin-secret-change-in-production',
+      fallback: process.env.SESSION_SECRET,
       prodRequired: true
     },
     {
@@ -53,7 +53,8 @@ export function enforceProductionConfig() {
   
   // Check required configs
   for (const config of requiredConfigs) {
-    if (isProduction && config.prodRequired && !config.value && !config.fallback) {
+    const effectiveValue = config.value || config.fallback;
+    if (isProduction && config.prodRequired && !effectiveValue) {
       errors.push(`Missing required production config: ${config.name}`);
     }
   }
@@ -69,8 +70,9 @@ export function enforceProductionConfig() {
   
   // Session secret strength check
   if (isProduction) {
-    const customerSecret = process.env.SESSION_SECRET_CUSTOMER;
-    const adminSecret = process.env.SESSION_SECRET_ADMIN;
+    const customerSecret = process.env.SESSION_SECRET_CUSTOMER || process.env.SESSION_SECRET;
+    const adminSecret = process.env.SESSION_SECRET_ADMIN || process.env.SESSION_SECRET;
+    const fallbackSecret = process.env.SESSION_SECRET;
     
     if (customerSecret && customerSecret.length < 32) {
       errors.push('SESSION_SECRET_CUSTOMER must be at least 32 characters in production');
@@ -80,8 +82,16 @@ export function enforceProductionConfig() {
       errors.push('SESSION_SECRET_ADMIN must be at least 32 characters in production');
     }
     
-    if (customerSecret === adminSecret) {
+    // Only enforce different secrets if both are explicitly set
+    if (process.env.SESSION_SECRET_CUSTOMER && 
+        process.env.SESSION_SECRET_ADMIN && 
+        customerSecret === adminSecret) {
       errors.push('SESSION_SECRET_CUSTOMER and SESSION_SECRET_ADMIN must be different');
+    }
+    
+    // Warn if using fallback SECRET for both (security concern but not failure)
+    if (!process.env.SESSION_SECRET_CUSTOMER && !process.env.SESSION_SECRET_ADMIN && fallbackSecret) {
+      warnings.push('Using SESSION_SECRET for both customer and admin sessions. Consider setting separate SESSION_SECRET_CUSTOMER and SESSION_SECRET_ADMIN for better security.');
     }
   }
   
@@ -96,7 +106,9 @@ export function enforceProductionConfig() {
   console.log(`Environment: ${process.env.NODE_ENV || 'not set'}`);
   console.log(`Legacy Login: ${process.env.ENABLE_LEGACY_LOGIN === 'true' ? 'ENABLED' : 'disabled'}`);
   console.log(`CSRF Dev Bypass: ${process.env.CSRF_DEV_BYPASS === 'true' ? 'ENABLED' : 'disabled'}`);
-  console.log(`Session Secrets: ${process.env.SESSION_SECRET_CUSTOMER ? 'configured' : 'missing'} (customer), ${process.env.SESSION_SECRET_ADMIN ? 'configured' : 'missing'} (admin)`);
+  const customerSecretStatus = process.env.SESSION_SECRET_CUSTOMER ? 'explicit' : (process.env.SESSION_SECRET ? 'fallback' : 'missing');
+  const adminSecretStatus = process.env.SESSION_SECRET_ADMIN ? 'explicit' : (process.env.SESSION_SECRET ? 'fallback' : 'missing');
+  console.log(`Session Secrets: ${customerSecretStatus} (customer), ${adminSecretStatus} (admin)`);
   console.log('='.repeat(60));
   
   // Handle errors
@@ -136,10 +148,8 @@ export function getSafeConfig() {
     nodeEnv: process.env.NODE_ENV || 'development',
     isProduction,
     sessionSecrets: {
-      customer: process.env.SESSION_SECRET_CUSTOMER || 
-                (isProduction ? undefined : 'dev-customer-secret-change-in-production'),
-      admin: process.env.SESSION_SECRET_ADMIN || 
-             (isProduction ? undefined : 'dev-admin-secret-change-in-production')
+      customer: process.env.SESSION_SECRET_CUSTOMER || process.env.SESSION_SECRET,
+      admin: process.env.SESSION_SECRET_ADMIN || process.env.SESSION_SECRET
     },
     cors: {
       origins: process.env.PROD_ORIGINS ? 

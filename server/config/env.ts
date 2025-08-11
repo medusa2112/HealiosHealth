@@ -3,9 +3,9 @@ import * as z from 'zod';
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   DATABASE_URL: z.string().url(),
-  SESSION_SECRET: z.string().min(32), // We'll use existing for now, split later
-  SESSION_SECRET_CUSTOMER: z.string().min(32).optional(), // For future use
-  SESSION_SECRET_ADMIN: z.string().min(32).optional(), // For future use
+  SESSION_SECRET: z.string().min(32), // Fallback for both customer and admin sessions
+  SESSION_SECRET_CUSTOMER: z.string().min(32).optional(), // Preferred for customer sessions
+  SESSION_SECRET_ADMIN: z.string().min(32).optional(), // Preferred for admin sessions
   PROD_ORIGINS: z.string().optional(), // csv
   DEV_ORIGINS: z.string().optional(),  // csv
   ADMIN_IP_ALLOWLIST: z.string().optional(), // csv
@@ -27,12 +27,23 @@ if (!parsed.success) {
 const replitDomains = process.env.REPLIT_DOMAINS ? 
   process.env.REPLIT_DOMAINS.split(',').map(d => `https://${d}`) : [];
 
+// Helper to get session secret with fallback
+const getSessionSecret = (specific: string | undefined, fallback: string) => {
+  return specific || fallback;
+};
+
 export const ENV = {
   NODE_ENV: parsed.data?.NODE_ENV || 'development',
   DATABASE_URL: parsed.data?.DATABASE_URL || process.env.DATABASE_URL!,
   SESSION_SECRET: parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!,
-  SESSION_SECRET_CUSTOMER: parsed.data?.SESSION_SECRET_CUSTOMER || parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!,
-  SESSION_SECRET_ADMIN: parsed.data?.SESSION_SECRET_ADMIN || parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!,
+  SESSION_SECRET_CUSTOMER: getSessionSecret(
+    parsed.data?.SESSION_SECRET_CUSTOMER || process.env.SESSION_SECRET_CUSTOMER,
+    parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!
+  ),
+  SESSION_SECRET_ADMIN: getSessionSecret(
+    parsed.data?.SESSION_SECRET_ADMIN || process.env.SESSION_SECRET_ADMIN,
+    parsed.data?.SESSION_SECRET || process.env.SESSION_SECRET!
+  ),
   PROD_ORIGINS: (parsed.data?.PROD_ORIGINS ?? 'https://thehealios.com,https://www.thehealios.com').split(',').filter(Boolean),
   DEV_ORIGINS: [
     ...((parsed.data?.DEV_ORIGINS ?? 'http://localhost:5000,http://127.0.0.1:5000').split(',').filter(Boolean)),
@@ -54,4 +65,11 @@ console.log('[ENV] Configuration loaded:', {
   ADMIN_IP_ALLOWLIST: ENV.ADMIN_IP_ALLOWLIST.length > 0 ? `${ENV.ADMIN_IP_ALLOWLIST.length} IPs` : 'none',
   PROD_ORIGINS: ENV.PROD_ORIGINS.length,
   DEV_ORIGINS: ENV.DEV_ORIGINS.length,
+  SESSION_SECRETS: {
+    customer: process.env.SESSION_SECRET_CUSTOMER ? 'explicit' : 'fallback',
+    admin: process.env.SESSION_SECRET_ADMIN ? 'explicit' : 'fallback',
+    customerLength: ENV.SESSION_SECRET_CUSTOMER?.length || 0,
+    adminLength: ENV.SESSION_SECRET_ADMIN?.length || 0,
+    different: ENV.SESSION_SECRET_CUSTOMER !== ENV.SESSION_SECRET_ADMIN
+  }
 });
