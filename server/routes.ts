@@ -505,7 +505,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       // Apply discount through Stripe if applicable
-      if (discountAmount > 0) {
+      if (discountAmount > 0 && stripe) {
         // Create a one-time coupon for this discount
         const coupon = await stripe.coupons.create({
           amount_off: discountAmount,
@@ -520,6 +520,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Create Stripe Checkout Session
+      if (!stripe) {
+        return res.status(500).json({ message: "Stripe is not configured" });
+      }
       const session = await stripe.checkout.sessions.create(sessionConfig);
       
       res.json({ 

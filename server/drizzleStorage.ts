@@ -583,19 +583,46 @@ export class DrizzleStorage implements IStorage {
     return updated;
   }
 
-  async deleteDiscountCode(id: string): Promise<void> {
-    await db.delete(discountCodes).where(eq(discountCodes.id, id));
+  async deleteDiscountCode(id: string): Promise<boolean> {
+    const result = await db.delete(discountCodes).where(eq(discountCodes.id, id));
+    return result.rowCount > 0;
   }
 
-  async incrementDiscountCodeUsage(id: string): Promise<DiscountCode | undefined> {
+  async validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }> {
+    try {
+      const discount = await this.getDiscountCodeByCode(code);
+      
+      if (!discount) {
+        return { valid: false, error: "Discount code not found" };
+      }
+      
+      if (!discount.isActive) {
+        return { valid: false, error: "Discount code is inactive" };
+      }
+      
+      // Check if expired
+      if (discount.expiresAt && new Date(discount.expiresAt) < new Date()) {
+        return { valid: false, error: "Discount code has expired" };
+      }
+      
+      // Check usage limit
+      if (discount.usageLimit && discount.usedCount >= discount.usageLimit) {
+        return { valid: false, error: "Discount code usage limit reached" };
+      }
+      
+      return { valid: true, discount };
+    } catch (error) {
+      return { valid: false, error: "Error validating discount code" };
+    }
+  }
+
+  async incrementDiscountCodeUsage(id: string): Promise<void> {
     const code = await db.select().from(discountCodes).where(eq(discountCodes.id, id)).limit(1);
-    if (!code[0]) return undefined;
+    if (!code[0]) return;
     
-    const [updated] = await db.update(discountCodes)
+    await db.update(discountCodes)
       .set({ usedCount: code[0].usedCount + 1 })
-      .where(eq(discountCodes.id, id))
-      .returning();
-    return updated;
+      .where(eq(discountCodes.id, id));
   }
 
   // Product bundles

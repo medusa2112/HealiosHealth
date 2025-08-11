@@ -4,7 +4,7 @@ import { type Order } from '@shared/schema';
 import { QuizRecommendationService } from './quiz-service';
 import { storage } from './storage';
 
-interface CartItem {
+export interface CartItem {
   product: {
     id: string;
     name: string;
@@ -342,6 +342,10 @@ export class EmailService {
       console.log('📧 Sending admin emails to:', adminEmails);
       for (const adminEmail of adminEmails) {
         try {
+          if (!resend) {
+            console.warn('Resend not configured - skipping admin email');
+            continue;
+          }
           const adminResult = await resend.emails.send({
             from: this.FROM_EMAIL,
             to: adminEmail,
@@ -415,6 +419,10 @@ export class EmailService {
 
       console.log('📧 Sending customer confirmation email to:', preOrder.customerEmail);
       try {
+        if (!resend) {
+          console.warn('Resend not configured - skipping customer email');
+          return false;
+        }
         const customerResult = await resend.emails.send({
           from: this.FROM_EMAIL,
           to: preOrder.customerEmail,
@@ -557,6 +565,10 @@ export class EmailService {
       console.log('📧 Sending restock notification to admins:', adminEmails);
       for (const adminEmail of adminEmails) {
         try {
+          if (!resend) {
+            console.warn('Resend not configured - skipping admin email');
+            continue;
+          }
           const adminResult = await resend.emails.send({
             from: this.FROM_EMAIL,
             to: adminEmail,
@@ -573,6 +585,10 @@ export class EmailService {
 
       // Send confirmation to customer
       try {
+        if (!resend) {
+          console.warn('Resend not configured - skipping customer email');
+          return false;
+        }
         const customerResult = await resend.emails.send({
           from: this.FROM_EMAIL,
           to: email,
@@ -652,6 +668,10 @@ export class EmailService {
 
       for (const adminEmail of this.ADMIN_EMAILS) {
         try {
+          if (!resend) {
+            console.warn('Resend not configured - skipping admin email');
+            continue;
+          }
           await resend.emails.send({
             from: this.FROM_EMAIL,
             to: adminEmail,
@@ -1262,8 +1282,12 @@ The Healios Team
     productName: string
   ): Promise<boolean> {
     try {
-      if (!resend) return false;
-    const { data, error } = await resend.emails.send({
+      if (!resend) {
+        console.warn('Resend not configured - skipping email');
+        return false;
+      }
+    
+      const { data, error } = await resend.emails.send({
         from: 'Healios <notifications@thehealios.com>',
         to: [email],
         subject: `We'll notify you when ${productName} is back in stock`,
