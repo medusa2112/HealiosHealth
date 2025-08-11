@@ -14,6 +14,7 @@ import { CartSidebar } from "@/components/cart-sidebar";
 import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
 import { isAdminEnabled } from "@/config/adminConfig";
+import { AdminLayout } from "@/components/AdminLayout";
 // Chat functionality removed as requested
 import Home from "@/pages/home";
 import Products from "@/pages/products";
@@ -102,6 +103,10 @@ const AdminProductEdit = isAdminEnabled()
   ? lazy(() => import("@/pages/admin-product-edit"))
   : () => <NotFound />;
 
+const EmailJobs = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/EmailJobs"))
+  : () => <NotFound />;
+
 function Router() {
   // Automatically scroll to top on page navigation
   useScrollToTop();
@@ -137,17 +142,18 @@ function Router() {
       {/* Admin routes - only rendered if admin is enabled */}
       {isAdminEnabled() && (
         <>
-          <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminDashboard /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminOrders /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminCarts /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/abandoned-carts" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AbandonedCarts /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/logs" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminLogs /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><ReorderAnalytics /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminDiscountCodes /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminBundles /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminProducts /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><AdminProductEdit /></Suspense></ProtectedRoute>} />
-          <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><Suspense fallback={<div>Loading...</div>}><ALFR3D /></Suspense></ProtectedRoute>} />
+          <Route path="/admin" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminDashboard /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/orders" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminOrders /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/carts" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminCarts /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/abandoned-carts" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AbandonedCarts /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/admin-logs" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminLogs /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/reorder-analytics" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><ReorderAnalytics /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/discount-codes" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminDiscountCodes /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/bundles" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminBundles /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminProducts /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminProductEdit /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/email-jobs" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><EmailJobs /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><ALFR3D /></Suspense></AdminLayout></ProtectedRoute>} />
         </>
       )}
       
@@ -183,11 +189,11 @@ function AppContent() {
   const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
   const [location] = useLocation();
   
-  // Check if current route should bypass layout
-  const isStandaloneRoute = isAdminEnabled() && location.startsWith('/admin');
+  // Check if current route should bypass layout (only admin/login)
+  const isStandaloneRoute = isAdminEnabled() && location === '/admin/login';
 
   if (isStandaloneRoute) {
-    // Standalone pages without layout
+    // Standalone admin login without layout
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900">
         <Router />
