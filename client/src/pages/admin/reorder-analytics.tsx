@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, TrendingUp, Users, ShoppingCart, Activity, Mail } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { AdminNavbar } from '@/components/admin-navbar';
 
 interface ReorderLog {
   id: string;
@@ -27,6 +28,7 @@ interface ReorderLog {
 }
 
 export default function ReorderAnalyticsPage() {
+  const [, setLocation] = useLocation();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [channelFilter, setChannelFilter] = useState<string>("all");
   const [limit, setLimit] = useState(100);
@@ -88,8 +90,13 @@ export default function ReorderAnalyticsPage() {
     );
   }
 
+  const handleTabChange = (tab: string) => {
+    setLocation(`/admin`);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-black">
+      <AdminNavbar activeTab="analytics" onTabChange={handleTabChange} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">

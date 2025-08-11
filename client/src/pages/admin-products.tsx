@@ -12,6 +12,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from '@/components/seo-head';
+import { AdminNavbar } from '@/components/admin-navbar';
 
 const availableCategories = [
   "Vitamins", "Minerals", "Gummies", "Probiotics", "Adaptogens", 
@@ -115,8 +116,13 @@ export default function AdminProducts() {
     );
   }
 
+  const handleTabChange = (tab: string) => {
+    setLocation(`/admin`);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-black">
+      <AdminNavbar activeTab="products" onTabChange={handleTabChange} />
       <SEOHead 
         title="Product Management - Admin | Healios"
         description="Manage products, inventory, and product details in the Healios admin panel."

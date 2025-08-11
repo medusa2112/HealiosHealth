@@ -8,6 +8,8 @@ import { Download, ShoppingCart, Users, DollarSign, Clock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SEOHead } from '@/components/seo-head';
 import type { CartItem, AbandonedCart } from '@shared/types';
+import { AdminNavbar } from '@/components/admin-navbar';
+import { useLocation } from "wouter";
 
 interface CartAnalytics {
   totalAbandoned: number;
@@ -18,6 +20,7 @@ interface CartAnalytics {
 }
 
 export default function AdminCarts() {
+  const [, setLocation] = useLocation();
   const [timeRange, setTimeRange] = useState<string>("1");
   
   const { data: cartsData, isLoading: cartsLoading } = useQuery({
@@ -112,8 +115,13 @@ export default function AdminCarts() {
     );
   }
 
+  const handleTabChange = (tab: string) => {
+    setLocation(`/admin`);
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <AdminNavbar activeTab="carts" onTabChange={handleTabChange} />
       <SEOHead 
         title="Abandoned Cart Analytics - Admin | Healios"
         description="Track and analyze abandoned shopping carts to identify recovery opportunities in the Healios admin panel."
