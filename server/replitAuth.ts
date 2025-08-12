@@ -226,9 +226,20 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/login", (req, res, next) => {
+    // Check if a specific OAuth provider was requested
+    const provider = req.query.provider as string;
+    
+    if (provider) {
+      console.log(`[OAUTH_LOGIN] Provider-specific authentication requested: ${provider}`);
+      // Store provider preference in session for potential use
+      (req.session as any).requestedProvider = provider;
+    }
+    
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
+      // Add provider hint if available (Replit OAuth may support this)
+      ...(provider && { login_hint: provider }),
     })(req, res, next);
   });
 

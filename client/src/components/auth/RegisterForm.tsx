@@ -10,35 +10,39 @@ export function RegisterForm() {
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
 
-  // Customer OAuth provider configurations - Using actual Replit Auth endpoint
+  // Customer OAuth provider configurations - Direct provider endpoints
   const oauthProviders = [
     {
       name: 'Google',
       icon: SiGoogle,
       color: 'bg-[#4285f4] hover:bg-[#3367d6] text-white',
+      endpoint: '/api/auth/google',
       enabled: true
     },
     {
       name: 'GitHub',
       icon: Github,
       color: 'bg-[#24292e] hover:bg-[#1b1f23] text-white',
+      endpoint: '/api/auth/github',
       enabled: true
     },
     {
       name: 'Apple',
       icon: SiApple,
       color: 'bg-black hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black',
+      endpoint: '/api/auth/apple',
       enabled: true
     },
     {
       name: 'X',
       icon: SiX,
       color: 'bg-black hover:bg-gray-800 text-white',
+      endpoint: '/api/auth/twitter',
       enabled: true
     },
   ].filter(provider => provider.enabled);
 
-  const handleCustomerAuth = () => {
+  const handleCustomerAuth = (provider: { endpoint: string; name: string }) => {
     try {
       // Store return URL for post-auth redirect (customer portal) 
       const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
@@ -54,10 +58,32 @@ export function RegisterForm() {
       // Clear any admin session data to ensure customer registration
       sessionStorage.removeItem('admin_auth_return_url');
       
-      // Redirect to the verified Replit Auth endpoint for CUSTOMER authentication
+      // Redirect to the specific OAuth provider endpoint
+      window.location.href = provider.endpoint;
+    } catch (error) {
+      console.error(`${provider.name} authentication error:`, error);
+      setError('Authentication service temporarily unavailable. Please try again.');
+    }
+  };
+
+  // Email/fallback authentication (uses original Replit OAuth)
+  const handleEmailAuth = () => {
+    try {
+      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
+      
+      fetch('/api/customer/set-return-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ returnUrl })
+      }).catch(err => console.warn('Could not set return URL:', err));
+      
+      sessionStorage.removeItem('admin_auth_return_url');
+      
+      // Email authentication still uses main Replit OAuth
       window.location.href = '/api/login';
     } catch (error) {
-      console.error('Customer authentication error:', error);
+      console.error('Email authentication error:', error);
       setError('Authentication service temporarily unavailable. Please try again.');
     }
   };
@@ -97,7 +123,7 @@ export function RegisterForm() {
                 key={provider.name}
                 type="button"
                 variant="outline"
-                onClick={handleCustomerAuth}
+                onClick={() => handleCustomerAuth(provider)}
                 className={`w-full h-12 font-medium transition-all duration-200 hover:scale-[0.99] ${provider.color}`}
               >
                 <provider.icon className="w-5 h-5 mr-3" />
@@ -118,7 +144,7 @@ export function RegisterForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={handleCustomerAuth}
+              onClick={handleEmailAuth}
               className="w-full h-12 border-gray-300 dark:border-gray-700 text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200 hover:scale-[0.99]"
             >
               <Mail className="w-5 h-5 mr-3" />
