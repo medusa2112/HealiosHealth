@@ -233,14 +233,25 @@ export async function setupAuth(app: Express) {
       console.log(`[OAUTH_LOGIN] Provider-specific authentication requested: ${provider}`);
       // Store provider preference in session for potential use
       (req.session as any).requestedProvider = provider;
+      (req.session as any).customerAuth = true;
     }
     
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    // For Replit Auth, we need to let the configured providers in the Auth pane handle the flow
+    // The provider hint will be passed to the Replit Auth system
+    const authOptions: any = {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
-      // Add provider hint if available (Replit OAuth may support this)
-      ...(provider && { login_hint: provider }),
-    })(req, res, next);
+    };
+    
+    // Add provider hint for Replit Auth to route to the correct OAuth provider
+    if (provider) {
+      authOptions.login_hint = provider;
+      // Additional parameters that Replit Auth might recognize
+      authOptions.provider = provider;
+      authOptions.connection = provider;
+    }
+    
+    passport.authenticate(`replitauth:${req.hostname}`, authOptions)(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {

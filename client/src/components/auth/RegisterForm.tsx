@@ -16,33 +16,33 @@ export function RegisterForm() {
       name: 'Google',
       icon: SiGoogle,
       color: 'bg-[#4285f4] hover:bg-[#3367d6] text-white',
-      endpoint: '/api/auth/google',
+      provider: 'google',
       enabled: true
     },
     {
       name: 'GitHub',
       icon: Github,
       color: 'bg-[#24292e] hover:bg-[#1b1f23] text-white',
-      endpoint: '/api/auth/github',
+      provider: 'github',
       enabled: true
     },
     {
       name: 'Apple',
       icon: SiApple,
       color: 'bg-black hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black',
-      endpoint: '/api/auth/apple',
+      provider: 'apple',
       enabled: true
     },
     {
       name: 'X',
       icon: SiX,
       color: 'bg-black hover:bg-gray-800 text-white',
-      endpoint: '/api/auth/twitter',
+      provider: 'twitter',
       enabled: true
     },
   ].filter(provider => provider.enabled);
 
-  const handleCustomerAuth = (provider: { endpoint: string; name: string }) => {
+  const handleCustomerAuth = (provider: { provider: string; name: string }) => {
     try {
       // Store return URL for post-auth redirect (customer portal) 
       const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
@@ -58,8 +58,9 @@ export function RegisterForm() {
       // Clear any admin session data to ensure customer registration
       sessionStorage.removeItem('admin_auth_return_url');
       
-      // Redirect to the specific OAuth provider endpoint
-      window.location.href = provider.endpoint;
+      // Use the main Replit OAuth endpoint with provider hint
+      // This works with the Replit Auth tool configuration
+      window.location.href = `/api/login?provider=${provider.provider}`;
     } catch (error) {
       console.error(`${provider.name} authentication error:`, error);
       setError('Authentication service temporarily unavailable. Please try again.');
