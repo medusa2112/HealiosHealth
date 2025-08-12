@@ -15,6 +15,24 @@ interface EmailData {
   [key: string]: any;
 }
 
+// Rate limiting for email sends (Resend allows 2 per second)
+let lastEmailTime = 0;
+const EMAIL_RATE_LIMIT_MS = 600; // 600ms between emails (safer than 500ms)
+
+async function rateLimitedSend(fn: () => Promise<any>): Promise<any> {
+  const now = Date.now();
+  const timeSinceLastEmail = now - lastEmailTime;
+  
+  if (timeSinceLastEmail < EMAIL_RATE_LIMIT_MS) {
+    const delay = EMAIL_RATE_LIMIT_MS - timeSinceLastEmail;
+    console.log(`[EMAIL RATE LIMIT] Waiting ${delay}ms before sending next email`);
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  
+  lastEmailTime = Date.now();
+  return fn();
+}
+
 export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   if (!isEmailEnabled || !resend) {
     console.warn('Email service not configured - skipping email to:', to);
@@ -235,11 +253,13 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   };
 
   try {
-    const result = await resend.emails.send({
-      from: "Healios <dn@thefourths.com>",
-      to,
-      subject: subjectMap[type],
-      html: bodyMap[type](data),
+    const result = await rateLimitedSend(async () => {
+      return await resend.emails.send({
+        from: "Healios <dn@thefourths.com>",
+        to,
+        subject: subjectMap[type],
+        html: bodyMap[type](data),
+      });
     });
 
     console.log(`Email sent successfully: ${type} to ${to}`, result);
