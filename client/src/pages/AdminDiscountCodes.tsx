@@ -430,7 +430,6 @@ function AdminDiscountCodes() {
           </Table>
         </CardContent>
       </Card>
-      </div>
     </div>
   );
 }

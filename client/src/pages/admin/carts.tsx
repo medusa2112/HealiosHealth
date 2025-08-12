@@ -317,7 +317,6 @@ export default function AdminCarts() {
           )}
         </CardContent>
       </Card>
-      </div>
     </div>
   );
 }

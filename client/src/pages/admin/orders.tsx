@@ -478,7 +478,6 @@ export default function AdminOrders() {
           })
         )}
       </div>
-      </div>
     </div>
   );
 }

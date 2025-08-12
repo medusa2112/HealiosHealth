@@ -157,6 +157,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register SEO routes (sitemap.xml, robots.txt)
   const seoRoutes = await import('./routes/seo');
   app.use('/', seoRoutes.default);
+
+  // Register image optimization routes - ADMIN ONLY
+  const imageOptimizationRoutes = await import('./routes/imageOptimization');
+  app.use('/api/admin/images/optimize', imageOptimizationRoutes.default);
   
 
   // Cache for product data - 5 minute cache

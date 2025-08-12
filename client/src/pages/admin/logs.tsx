@@ -314,7 +314,6 @@ export default function AdminLogsPage() {
             )}
           </CardContent>
         </Card>
-      </div>
     </div>
   );
 }

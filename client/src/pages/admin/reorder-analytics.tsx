@@ -424,7 +424,6 @@ export default function ReorderAnalyticsPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
     </div>
   );
 }
