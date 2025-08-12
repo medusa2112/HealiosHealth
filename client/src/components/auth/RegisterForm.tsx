@@ -1,103 +1,57 @@
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, UserPlus } from 'lucide-react';
-import { RegisterSchema, type RegisterFormData } from '@/lib/validators/register';
-import { customerAuth, claimGuestOrders } from '@/lib/authClient';
-import { queryClient } from '@/lib/queryClient';
+import { UserPlus, Github, Mail } from 'lucide-react';
+import { SiGoogle, SiApple, SiX } from 'react-icons/si';
 
 export function RegisterForm() {
   const [, setLocation] = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      firstName: '',
-      lastName: ''
-    }
-  });
+  // OAuth provider configurations
+  const oauthProviders = [
+    {
+      name: 'Google',
+      icon: SiGoogle,
+      color: 'bg-[#4285f4] hover:bg-[#3367d6] text-white',
+      href: '/auth/google'
+    },
+    {
+      name: 'GitHub',
+      icon: Github,
+      color: 'bg-[#24292e] hover:bg-[#1b1f23] text-white',
+      href: '/auth/github'
+    },
+    {
+      name: 'Apple',
+      icon: SiApple,
+      color: 'bg-black hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black',
+      href: '/auth/apple'
+    },
+    {
+      name: 'X',
+      icon: SiX,
+      color: 'bg-black hover:bg-gray-800 text-white',
+      href: '/auth/twitter'
+    },
+  ];
 
-  // Fetch CSRF token on mount
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await fetch('/api/csrf/token', {
-          credentials: 'include'
-        });
-        const data = await response.json();
-        setCsrfToken(data.csrfToken);
-      } catch (err) {
-        console.error('Failed to fetch CSRF token:', err);
-        setError('Unable to initialise security token. Please refresh the page.');
-      }
-    };
+  const handleOAuthLogin = (provider: string, href: string) => {
+    // Store current location for post-auth redirect
+    const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
+    sessionStorage.setItem('auth_return_url', returnUrl);
+    
+    // For now, redirect to Replit OAuth (the actual implementation)
+    // TODO: Replace with actual provider-specific endpoints when available
+    window.location.href = '/auth/oauth';
+  };
 
-    fetchCsrfToken();
-  }, []);
-
-  const onSubmit = async (data: RegisterFormData) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Use the new customer authentication endpoint
-      const result = await customerAuth.register(
-        data.email, 
-        data.password, 
-        data.firstName, 
-        data.lastName
-      );
-
-      // Check for guest orders to claim
-      const guestOrderIds = localStorage.getItem('guestOrderIds');
-      if (guestOrderIds) {
-        try {
-          const orderIds = JSON.parse(guestOrderIds);
-          await claimGuestOrders(orderIds);
-          localStorage.removeItem('guestOrderIds');
-        } catch (claimError) {
-          console.error('Failed to claim guest orders:', claimError);
-        }
-      }
-
-      // Invalidate the auth query to force a refresh
-      await queryClient.invalidateQueries({ queryKey: ['/api/auth/customer/me'] });
-
-      // Redirect to verification page if email verification required
-      if (result.requiresVerification) {
-        setLocation(`/verify?email=${encodeURIComponent(data.email)}`);
-      } else {
-        // Direct redirect if no verification needed
-        setLocation('/portal');
-      }
-    } catch (err: any) {
-      console.error('Registration error:', err);
-      setError(err.message || 'Registration failed. Please try again.');
-      
-      // Focus first invalid input
-      const firstErrorField = document.querySelector('[aria-invalid="true"]') as HTMLElement;
-      if (firstErrorField) {
-        firstErrorField.focus();
-      }
-    } finally {
-      setIsLoading(false);
-    }
+  const handleEmailSignup = () => {
+    // For email signup, also redirect to Replit OAuth
+    // Replit OAuth includes email as an option
+    window.location.href = '/auth/oauth';
   };
 
   return (
@@ -117,170 +71,88 @@ export function RegisterForm() {
           </CardDescription>
         </CardHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+        <CardContent className="space-y-6">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-black dark:text-white">
-                  First name
-                </Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="First name"
-                  className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-black dark:text-white focus:ring-black dark:focus:ring-white"
-                  aria-invalid={errors.firstName ? 'true' : 'false'}
-                  aria-describedby={errors.firstName ? 'firstName-error' : undefined}
-                  {...register('firstName')}
-                />
-                {errors.firstName && (
-                  <p id="firstName-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                    {errors.firstName.message}
-                  </p>
-                )}
+          {/* OAuth Providers */}
+          <div className="space-y-3">
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4">
+              Sign up with your preferred provider:
+            </p>
+            
+            {oauthProviders.map((provider) => (
+              <Button
+                key={provider.name}
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin(provider.name, provider.href)}
+                className={`w-full h-12 font-medium transition-all duration-200 hover:scale-[0.99] ${provider.color}`}
+              >
+                <provider.icon className="w-5 h-5 mr-3" />
+                Continue with {provider.name}
+              </Button>
+            ))}
+
+            {/* Email option */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300 dark:border-gray-700" />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-black dark:text-white">
-                  Last name
-                </Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Last name"
-                  className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-black dark:text-white focus:ring-black dark:focus:ring-white"
-                  aria-invalid={errors.lastName ? 'true' : 'false'}
-                  aria-describedby={errors.lastName ? 'lastName-error' : undefined}
-                  {...register('lastName')}
-                />
-                {errors.lastName && (
-                  <p id="lastName-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                    {errors.lastName.message}
-                  </p>
-                )}
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white dark:bg-black px-2 text-gray-500 dark:text-gray-400">Or</span>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-black dark:text-white">
-                Email address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-black dark:text-white focus:ring-black dark:focus:ring-white"
-                aria-invalid={errors.email ? 'true' : 'false'}
-                aria-describedby={errors.email ? 'email-error' : undefined}
-                {...register('email')}
-              />
-              {errors.email && (
-                <p id="email-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-black dark:text-white">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Create a password"
-                className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-black dark:text-white focus:ring-black dark:focus:ring-white"
-                aria-invalid={errors.password ? 'true' : 'false'}
-                aria-describedby={errors.password ? 'password-error' : undefined}
-                {...register('password')}
-              />
-              {errors.password && (
-                <p id="password-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-black dark:text-white">
-                Confirm password
-              </Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm your password"
-                className="bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-black dark:text-white focus:ring-black dark:focus:ring-white"
-                aria-invalid={errors.confirmPassword ? 'true' : 'false'}
-                aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-                {...register('confirmPassword')}
-              />
-              {errors.confirmPassword && (
-                <p id="confirmPassword-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
             </div>
 
             <Button
-              type="submit"
-              disabled={isLoading || !csrfToken}
-              className="w-full bg-black hover:bg-gray-900 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-black transition-all duration-200 hover:scale-[0.99]"
+              type="button"
+              variant="outline"
+              onClick={handleEmailSignup}
+              className="w-full h-12 border-gray-300 dark:border-gray-700 text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200 hover:scale-[0.99]"
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Creating account...
-                </>
-              ) : (
-                <>
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Create account
-                </>
-              )}
+              <Mail className="w-5 h-5 mr-3" />
+              Continue with Email
             </Button>
-          </CardContent>
+          </div>
 
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-center w-full text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Already have an account?</span>{' '}
+          <div className="text-center">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              By creating an account you agree to our{' '}
               <button
                 type="button"
-                className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors underline font-medium"
-                onClick={() => setLocation('/login')}
+                className="underline hover:text-black dark:hover:text-white transition-colors"
+                onClick={() => setLocation('/terms')}
               >
-                Sign in
+                Terms
+              </button>{' '}
+              and acknowledge our{' '}
+              <button
+                type="button"
+                className="underline hover:text-black dark:hover:text-white transition-colors"
+                onClick={() => setLocation('/privacy')}
+              >
+                Privacy Policy
               </button>
-            </div>
+              .
+            </p>
+          </div>
+        </CardContent>
 
-            <div className="text-center">
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                By creating an account you agree to our{' '}
-                <button
-                  type="button"
-                  className="underline hover:text-black dark:hover:text-white transition-colors"
-                  onClick={() => setLocation('/terms')}
-                >
-                  Terms
-                </button>{' '}
-                and acknowledge our{' '}
-                <button
-                  type="button"
-                  className="underline hover:text-black dark:hover:text-white transition-colors"
-                  onClick={() => setLocation('/privacy')}
-                >
-                  Privacy Policy
-                </button>
-                .
-              </p>
-            </div>
-          </CardFooter>
-        </form>
+        <CardFooter className="pt-0">
+          <div className="text-center w-full text-sm">
+            <span className="text-gray-600 dark:text-gray-400">Already have an account?</span>{' '}
+            <button
+              type="button"
+              className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors underline font-medium"
+              onClick={() => setLocation('/login')}
+            >
+              Sign in
+            </button>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );
