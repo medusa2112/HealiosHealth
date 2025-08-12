@@ -61,7 +61,7 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-sm" onClick={handleClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-sm" onClick={handleClose} role="dialog" aria-labelledby="preorder-modal-title" aria-describedby="preorder-modal-description">
       {/* Modal */}
       <div 
         className="relative bg-white dark:bg-gray-900 p-6 sm:p-8 max-w-sm sm:max-w-md w-full max-h-[95vh] overflow-y-auto rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700" 
@@ -83,10 +83,10 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
               <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-3 sm:mb-4">
                 <Percent className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 id="preorder-modal-title" className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">
                 Get 10% Off When Available
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed px-2">
+              <p id="preorder-modal-description" className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed px-2">
                 <strong>{productName}</strong> will be restocking soon. Secure your spot in line and save 10% on your order when new stock arrives on August 28th.
               </p>
             </div>

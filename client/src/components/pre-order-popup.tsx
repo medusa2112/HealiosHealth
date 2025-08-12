@@ -75,13 +75,13 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-end p-4">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-end p-4" role="dialog" aria-labelledby="preorder-title" aria-describedby="preorder-description">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[80vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center space-x-2">
             <Package className="h-5 w-5 text-black" />
-            <h3 className="font-medium text-black">Pre-Order Product</h3>
+            <h3 id="preorder-title" className="font-medium text-black">Pre-Order Product</h3>
           </div>
           <Button
             variant="ghost"
@@ -105,7 +105,7 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
         ) : (
           <>
             {/* Product Info */}
-            <div className="p-4 border-b bg-gray-50">
+            <div id="preorder-description" className="p-4 border-b bg-gray-50">
               <div className="flex items-center space-x-3">
                 <img 
                   src={product.imageUrl} 

@@ -1492,7 +1492,8 @@ export default function ProductComprehensive() {
             {/* Subscription Section - Show for products that support subscriptions */}
             {product.inStock && (() => {
               // Check if this product has subscription-enabled variants
-              const subscriptionVariant = allProducts?.find(p => p.id === product.id)?.variants?.find(v => v.isSubscriptionAvailable);
+              // Skip subscription section for now since variants need to be properly implemented
+              const subscriptionVariant = null;
               
               if (!subscriptionVariant) return null;
               

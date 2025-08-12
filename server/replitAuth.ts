@@ -370,12 +370,17 @@ export async function setupAuth(app: Express) {
         sameSite: 'strict'
       });
 
-      res.redirect(
-        client.buildEndSessionUrl(config, {
-          client_id: process.env.REPL_ID!,
-          post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
-        }).href
-      );
+      // Return JSON response for AJAX requests
+      if (req.headers.accept?.includes('application/json')) {
+        res.json({ message: 'Logged out successfully' });
+      } else {
+        res.redirect(
+          client.buildEndSessionUrl(config, {
+            client_id: process.env.REPL_ID!,
+            post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
+          }).href
+        );
+      }
     });
   });
 }

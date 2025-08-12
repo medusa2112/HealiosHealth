@@ -6,7 +6,7 @@ import { requireSessionOrAuth, requireAuth, rateLimit } from "../lib/auth";
 const router = express.Router();
 
 // Sync cart data to database (for both guest and logged-in users)
-router.post("/sync", requireSessionOrAuth, rateLimit(20, 60000), async (req, res) => {
+router.post("/sync", rateLimit(20, 60000), async (req, res) => {
   try {
     const syncSchema = z.object({
       session_token: z.string().min(1),

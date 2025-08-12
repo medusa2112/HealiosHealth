@@ -227,9 +227,11 @@ export const addresses = pgTable("addresses", {
   type: varchar("type", { length: 10 }).notNull(), // 'shipping' | 'billing'
   line1: text("line1").notNull(),
   line2: text("line2"),
-  city: varchar("city", { length: 100 }),
-  zip: varchar("zip", { length: 20 }),
+  city: text("city"),
+  state: varchar("state", { length: 100 }),
+  zipCode: varchar("zip_code", { length: 20 }),
   country: varchar("country", { length: 100 }),
+  isDefault: boolean("is_default").default(false),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
