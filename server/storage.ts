@@ -705,7 +705,9 @@ export class MemStorage implements IStorage {
       line1: address.line1,
       line2: address.line2 ?? null,
       city: address.city ?? null,
-      zip: address.zip ?? null,
+      zipCode: address.zipCode ?? null,
+      state: address.state ?? null,
+      isDefault: address.isDefault ?? null,
       country: address.country ?? null,
       createdAt: new Date().toISOString()
     }; 
@@ -735,6 +737,8 @@ export class MemStorage implements IStorage {
   async getOrdersByUserId(userId: string): Promise<Order[]> { return Array.from(this.orders.values()).filter(order => order.userId === userId); }
   async getOrderByIdAndUserId(orderId: string, userId: string): Promise<Order | undefined> { const order = this.orders.get(orderId); return (order && order.userId === userId) ? order : undefined; }
   async getAllOrders(): Promise<Order[]> { return Array.from(this.orders.values()); }
+  async getAllUsers(): Promise<User[]> { return Array.from(this.users.values()); }
+  async getAllCarts(): Promise<Cart[]> { return Array.from(this.carts.values()); }
   async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.stripePaymentIntentId === paymentIntentId); }
   async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated = { ...order, refundStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
   async upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> { const existing = Array.from(this.carts.values()).find(c => c.sessionToken === cart.sessionToken); if (existing) { const updated = { ...existing, ...cart, lastUpdated: new Date().toISOString() }; this.carts.set(existing.id, updated); return updated; } const id = randomUUID(); const newCart: Cart = { ...cart, id, createdAt: new Date().toISOString(), lastUpdated: new Date().toISOString() } as Cart; this.carts.set(id, newCart); return newCart; }
@@ -868,9 +872,9 @@ export class MemStorage implements IStorage {
   async getLastScanTimestamp(): Promise<string | null> { return this.lastScanTimestamp; }
   async updateLastScanTimestamp(): Promise<void> { this.lastScanTimestamp = new Date().toISOString(); }
   async updateSecurityIssueWithFixPrompt(id: string, fixPrompt: any): Promise<SecurityIssue | undefined> { const issue = this.securityIssues.get(id); if (!issue) return undefined; const updated = { ...issue, fixPrompt }; this.securityIssues.set(id, updated); return updated; }
-  async archiveSecurityIssue(id: string, archivedBy: string): Promise<SecurityIssue | undefined> { const issue = this.securityIssues.get(id); if (!issue) return undefined; const updated = { ...issue, archived: true, archivedBy, archivedAt: new Date().toISOString() }; this.securityIssues.set(id, updated); return updated; }
-  async unarchiveSecurityIssue(id: string): Promise<SecurityIssue | undefined> { const issue = this.securityIssues.get(id); if (!issue) return undefined; const updated = { ...issue, archived: false, archivedBy: null, archivedAt: null }; this.securityIssues.set(id, updated); return updated; }
-  async getArchivedSecurityIssues(): Promise<SecurityIssue[]> { return Array.from(this.securityIssues.values()).filter(issue => issue.archived); }
+  async archiveSecurityIssue(id: string, archivedBy: string): Promise<SecurityIssue | undefined> { const issue = this.securityIssues.get(id); if (!issue) return undefined; const updated = { ...issue, fixed: true }; this.securityIssues.set(id, updated); return updated; }
+  async unarchiveSecurityIssue(id: string): Promise<SecurityIssue | undefined> { const issue = this.securityIssues.get(id); if (!issue) return undefined; const updated = { ...issue, fixed: false }; this.securityIssues.set(id, updated); return updated; }
+  async getArchivedSecurityIssues(): Promise<SecurityIssue[]> { return Array.from(this.securityIssues.values()).filter(issue => issue.fixed); }
   async recordFixAttempt(issueId: string, attempt: any): Promise<any> { const id = randomUUID(); const fixAttempt = { ...attempt, id, issueId, createdAt: new Date().toISOString() }; this.fixAttempts.set(id, fixAttempt); return fixAttempt; }
   async getFixAttempts(issueId: string): Promise<any[]> { return Array.from(this.fixAttempts.values()).filter(attempt => attempt.issueId === issueId); }
   async getSecurityIssueById(id: string): Promise<SecurityIssue | undefined> { return this.securityIssues.get(id); }
