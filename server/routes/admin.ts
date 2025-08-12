@@ -30,6 +30,10 @@ router.use('/discount-codes', discountCodesRouter);
 // Mount activity logs subrouter
 router.use('/logs', logsRouter);
 
+// Mount analytics subrouter
+import analyticsRouter from './admin/analytics';
+router.use('/analytics', analyticsRouter);
+
 // Admin Dashboard - Overview stats with real-time data
 router.get('/', requireAdmin, async (req, res) => {
   try {

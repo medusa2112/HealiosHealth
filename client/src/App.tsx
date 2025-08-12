@@ -107,6 +107,10 @@ const EmailJobs = isAdminEnabled()
   ? lazy(() => import("@/pages/admin/EmailJobs"))
   : () => <NotFound />;
 
+const AdminAnalytics = isAdminEnabled() 
+  ? lazy(() => import("@/pages/admin/analytics"))
+  : () => <NotFound />;
+
 function Router() {
   // Automatically scroll to top on page navigation
   useScrollToTop();
@@ -153,6 +157,7 @@ function Router() {
           <Route path="/admin/products" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminProducts /></Suspense></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/products/:id" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminProductEdit /></Suspense></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/email-jobs" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><EmailJobs /></Suspense></AdminLayout></ProtectedRoute>} />
+          <Route path="/admin/analytics" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><AdminAnalytics /></Suspense></AdminLayout></ProtectedRoute>} />
           <Route path="/admin/alfr3d" component={() => <ProtectedRoute requiredRole="admin"><AdminLayout><Suspense fallback={<div>Loading...</div>}><ALFR3D /></Suspense></AdminLayout></ProtectedRoute>} />
         </>
       )}
