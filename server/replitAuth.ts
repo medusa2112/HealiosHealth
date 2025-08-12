@@ -83,6 +83,9 @@ async function upsertUser(
   const { determineUserRole } = await import('./lib/auth');
   const role = determineUserRole(claims["email"]);
   
+  console.log(`[ROLE_DEBUG] Determining role for ${claims["email"]}: ${role}`);
+  console.log(`[ROLE_DEBUG] Admin emails env: ${process.env.ALLOWED_ADMIN_EMAILS}`);
+  
   await storage.upsertUser({
     id: claims["sub"],
     email: claims["email"],

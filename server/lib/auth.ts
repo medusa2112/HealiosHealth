@@ -298,6 +298,9 @@ export const getAdminEmails = (): string[] => {
 // Helper function to determine role based on email
 export const determineUserRole = (email: string): 'admin' | 'customer' => {
   const adminEmails = getAdminEmails();
-  const isAdminEmail = adminEmails.includes(email);
+  // Add your email directly for now
+  const allAdminEmails = [...adminEmails, 'dominic@oricle.app'];
+  const isAdminEmail = allAdminEmails.includes(email);
+  console.log(`[ROLE_DEBUG] Checking ${email} against admin emails: ${allAdminEmails.join(', ')} - Result: ${isAdminEmail ? 'admin' : 'customer'}`);
   return isAdminEmail ? 'admin' : 'customer';
 };
