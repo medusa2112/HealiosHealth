@@ -44,11 +44,8 @@ function AdminLogin() {
             Sign in with Replit
           </Button>
           
-          <div className="text-center text-sm text-gray-600 space-y-2">
+          <div className="text-center text-sm text-gray-600">
             <p>Authorized administrators only</p>
-            <div className="text-xs text-gray-500">
-              dominic96@replit.com • jv@thefourths.com • dn@thefourths.com • admin@healios.com
-            </div>
           </div>
         </CardContent>
       </Card>
