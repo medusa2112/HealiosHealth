@@ -9,28 +9,57 @@ const router = Router();
 router.get("/stats", requireAdmin, async (req, res) => {
   try {
     // Get all orders for revenue and order calculations
-    const orders = await storage.getAllOrders();
-    const completedOrders = orders.filter(order => order.paymentStatus === 'completed');
+    let orders = [];
+    let totalOrders = 0;
+    let totalRevenue = 0;
+    let completedOrders = [];
     
-    // Get all carts for abandoned cart calculation
-    const carts = await storage.getAllCarts();
-    const abandonedCarts = carts.filter(cart => 
-      cart.items && cart.items.length > 0 && 
-      new Date().getTime() - new Date(cart.updatedAt).getTime() > 24 * 60 * 60 * 1000 // 24 hours
-    );
+    try {
+      if (storage.getAllOrders) {
+        orders = await storage.getAllOrders();
+        completedOrders = orders.filter(order => order.paymentStatus === 'completed');
+        totalOrders = completedOrders.length;
+        totalRevenue = completedOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+      }
+    } catch (error) {
+      console.log("Orders not available:", error.message);
+    }
     
-    // Get all users
-    const users = await storage.getAllUsers();
-    const customers = users.filter(user => user.role === 'customer');
+    // Get abandoned carts if available
+    let abandonedCartsCount = 0;
+    let totalSessions = orders.length;
     
-    // Calculate metrics
-    const totalOrders = completedOrders.length;
-    const totalRevenue = completedOrders.reduce((sum, order) => sum + order.totalAmount, 0);
-    const totalCustomers = customers.length;
-    const abandonedCartsCount = abandonedCarts.length;
+    try {
+      // Try to get carts using the correct storage method
+      if (storage.getAllCarts) {
+        const carts = await storage.getAllCarts();
+        const abandonedCarts = carts.filter(cart => 
+          cart.items && cart.items.length > 0 && 
+          new Date().getTime() - new Date(cart.updatedAt).getTime() > 24 * 60 * 60 * 1000 // 24 hours
+        );
+        abandonedCartsCount = abandonedCarts.length;
+        totalSessions += carts.length;
+      } else if (storage.getAbandonedCarts) {
+        const abandonedCarts = await storage.getAbandonedCarts(24);
+        abandonedCartsCount = abandonedCarts.length;
+      }
+    } catch (error) {
+      console.log("Carts not available:", error.message);
+    }
+    
+    // Get all users if available
+    let totalCustomers = 0;
+    try {
+      if (storage.getAllUsers) {
+        const users = await storage.getAllUsers();
+        const customers = users.filter(user => user.role === 'customer');
+        totalCustomers = customers.length;
+      }
+    } catch (error) {
+      console.log("Users not available:", error.message);
+    }
     
     // Calculate conversion rate (orders vs total sessions/carts)
-    const totalSessions = carts.length + orders.length;
     const conversionRate = totalSessions > 0 ? (totalOrders / totalSessions) * 100 : 0;
     
     // Calculate average order value
@@ -55,8 +84,15 @@ router.get("/stats", requireAdmin, async (req, res) => {
 // Summary stats for reorder analytics
 router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
   try {
-    // Get all reorder logs if available
-    const reorderLogs = await storage.getReorderLogs ? await storage.getReorderLogs() : [];
+    // Try to get reorder logs if available, but handle gracefully if not
+    let reorderLogs = [];
+    try {
+      if (storage.getReorderLogs) {
+        reorderLogs = await storage.getReorderLogs();
+      }
+    } catch (error) {
+      console.log("Reorder logs not available (table may not exist):", error.message);
+    }
     
     const totalReorders = reorderLogs.length;
     const completedReorders = reorderLogs.filter(log => log.status === 'completed');
@@ -65,12 +101,18 @@ router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
     // Calculate revenue from reorders if order data is available
     let totalRevenue = 0;
     if (completedReorders.length > 0) {
-      const orders = await storage.getAllOrders();
-      for (const reorder of completedReorders) {
-        const order = orders.find(o => o.id === reorder.orderId);
-        if (order && order.paymentStatus === 'completed') {
-          totalRevenue += order.totalAmount;
+      try {
+        if (storage.getAllOrders) {
+          const orders = await storage.getAllOrders();
+          for (const reorder of completedReorders) {
+            const order = orders.find(o => o.id === reorder.orderId);
+            if (order && order.paymentStatus === 'completed') {
+              totalRevenue += order.totalAmount;
+            }
+          }
         }
+      } catch (error) {
+        console.log("Orders not available for reorder revenue calculation:", error.message);
       }
     }
     

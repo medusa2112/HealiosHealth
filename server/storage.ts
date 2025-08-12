@@ -89,12 +89,16 @@ export interface IStorage {
   getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>;
   updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
   
+  // Admin User methods
+  getAllUsers(): Promise<User[]>;
+  
   // Cart methods (Phase 7: Abandoned Cart Tracking)
   upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart>;
   getCartById(id: string): Promise<Cart | undefined>;
   getCartBySessionToken(sessionToken: string): Promise<Cart | undefined>;
   markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined>;
   getAbandonedCarts(hoursThreshold: number): Promise<Cart[]>;
+  getAllCarts(): Promise<Cart[]>;
   
   // Phase 8: Guest to User conversion
   linkGuestOrdersToUser(email: string, userId: string): Promise<void>;

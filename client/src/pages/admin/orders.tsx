@@ -40,7 +40,7 @@ export default function AdminOrders() {
 
   // Fetch orders with filtering
   const { data: ordersResponse, isLoading: ordersLoading, error: ordersError } = useQuery<OrdersResponse>({
-    queryKey: ['/admin/orders', filter, dateFilter, customerEmailFilter],
+    queryKey: ['/api/admin/orders', filter, dateFilter, customerEmailFilter],
     queryFn: () => {
       const params = new URLSearchParams();
       if (filter !== "all") {
@@ -55,8 +55,13 @@ export default function AdminOrders() {
       if (customerEmailFilter.trim()) params.append('customerEmail', customerEmailFilter.trim());
       
       const queryString = params.toString();
-      return fetch(`/admin/orders${queryString ? `?${queryString}` : ''}`)
-        .then(res => res.json());
+      return fetch(`/api/admin/orders${queryString ? `?${queryString}` : ''}`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`Failed to fetch orders: ${res.status}`);
+          }
+          return res.json();
+        });
     }
   });
   

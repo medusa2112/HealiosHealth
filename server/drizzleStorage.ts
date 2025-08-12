@@ -5,7 +5,7 @@ import {
   addresses, carts, adminLogs, reorderLogs, discountCodes, productBundles,
   bundleItems, subscriptions, securityIssues
 } from "@shared/schema";
-import { eq, desc, and, or, gte, lte, sql, like, inArray } from "drizzle-orm";
+import { eq, desc, and, or, gte, lte, sql, like, inArray, isNull } from "drizzle-orm";
 import type { IStorage } from "./storage";
 import type {
   User, InsertUser, UpsertUser, Product, InsertProduct, ProductVariant,
@@ -70,6 +70,10 @@ export class DrizzleStorage implements IStorage {
       .returning();
     
     return updated;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
   }
 
   async upsertUser(user: UpsertUser): Promise<User> {
@@ -407,6 +411,10 @@ export class DrizzleStorage implements IStorage {
         eq(carts.convertedToOrder, false),
         lte(carts.lastUpdated, threshold)
       ));
+  }
+
+  async getAllCarts(): Promise<Cart[]> {
+    return await db.select().from(carts);
   }
 
   async linkGuestOrdersToUser(email: string, userId: string): Promise<void> {
