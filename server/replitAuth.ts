@@ -302,15 +302,8 @@ export async function setupAuth(app: Express) {
         
         console.log('[OAUTH_CALLBACK] Admin session setup complete');
         
-        // Send admin login notification email
-        EmailService.sendAdminLoginNotification({
-          email: userEmail,
-          ipAddress: req.ip,
-          timestamp: new Date(),
-          userAgent: req.headers['user-agent']
-        }).catch(error => {
-          console.error('[OAUTH_CALLBACK] Failed to send admin login notification:', error);
-        });
+        // Email notifications disabled per user request
+        console.log('[OAUTH_CALLBACK] Admin login notification email disabled');
         
         return res.redirect('/admin');
       } else if (isAdminLogin && !isAdmin) {
@@ -337,15 +330,8 @@ export async function setupAuth(app: Express) {
         
         console.log('[OAUTH_CALLBACK] Admin session setup complete');
         
-        // Send admin login notification email
-        EmailService.sendAdminLoginNotification({
-          email: userEmail,
-          ipAddress: req.ip,
-          timestamp: new Date(),
-          userAgent: req.headers['user-agent']
-        }).catch(error => {
-          console.error('[OAUTH_CALLBACK] Failed to send admin login notification:', error);
-        });
+        // Email notifications disabled per user request
+        console.log('[OAUTH_CALLBACK] Admin login notification email disabled');
         
         return res.redirect('/admin');
       } else {
