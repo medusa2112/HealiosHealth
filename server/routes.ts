@@ -226,7 +226,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Sort with optimized comparisons
       productsWithAvailability.sort((a, b) => {
         // Primary: availability (in_stock > preorder_open > out_of_stock)
-        const availOrder = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
+        const availOrder: Record<string, number> = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
         const availDiff = availOrder[a.availability] - availOrder[b.availability];
         if (availDiff !== 0) return availDiff;
         
@@ -1265,6 +1265,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: 'Email test failed', 
         error: error instanceof Error ? error.message : 'Unknown error'
       });
+    }
+  });
+
+  // Customer return URL endpoint for OAuth flows
+  app.post("/api/customer/set-return-url", (req, res) => {
+    try {
+      const { returnUrl } = req.body;
+      if (typeof returnUrl === 'string') {
+        (req.session as any).customer_return_url = returnUrl;
+        res.json({ success: true });
+      } else {
+        res.status(400).json({ success: false, message: 'Invalid return URL' });
+      }
+    } catch (error) {
+      console.error('Error setting customer return URL:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
     }
   });
 

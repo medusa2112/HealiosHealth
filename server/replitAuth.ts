@@ -324,8 +324,11 @@ export async function setupAuth(app: Express) {
         
         return res.redirect('/admin');
       } else {
-        console.log('[OAUTH_CALLBACK] Customer user logged in - redirecting to homepage');
-        return res.redirect('/');
+        console.log('[OAUTH_CALLBACK] Customer user logged in - redirecting to customer portal');
+        // Check for stored return URL for customers
+        const returnUrl = (req.session as any)?.customer_return_url || '/portal';
+        delete (req.session as any).customer_return_url;
+        return res.redirect(returnUrl);
       }
     });
   });

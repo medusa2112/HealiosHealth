@@ -10,48 +10,56 @@ export function RegisterForm() {
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
 
-  // OAuth provider configurations
+  // Customer OAuth provider configurations - Using actual Replit Auth endpoint
   const oauthProviders = [
     {
       name: 'Google',
       icon: SiGoogle,
       color: 'bg-[#4285f4] hover:bg-[#3367d6] text-white',
-      href: '/auth/google'
+      enabled: true
     },
     {
       name: 'GitHub',
       icon: Github,
       color: 'bg-[#24292e] hover:bg-[#1b1f23] text-white',
-      href: '/auth/github'
+      enabled: true
     },
     {
       name: 'Apple',
       icon: SiApple,
       color: 'bg-black hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black',
-      href: '/auth/apple'
+      enabled: true
     },
     {
       name: 'X',
       icon: SiX,
       color: 'bg-black hover:bg-gray-800 text-white',
-      href: '/auth/twitter'
+      enabled: true
     },
-  ];
+  ].filter(provider => provider.enabled);
 
-  const handleOAuthLogin = (provider: string, href: string) => {
-    // Store current location for post-auth redirect
-    const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
-    sessionStorage.setItem('auth_return_url', returnUrl);
-    
-    // For now, redirect to Replit OAuth (the actual implementation)
-    // TODO: Replace with actual provider-specific endpoints when available
-    window.location.href = '/auth/oauth';
-  };
-
-  const handleEmailSignup = () => {
-    // For email signup, also redirect to Replit OAuth
-    // Replit OAuth includes email as an option
-    window.location.href = '/auth/oauth';
+  const handleCustomerAuth = () => {
+    try {
+      // Store return URL for post-auth redirect (customer portal) 
+      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
+      
+      // Send the return URL to server for session storage (more reliable than sessionStorage)
+      fetch('/api/customer/set-return-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ returnUrl })
+      }).catch(err => console.warn('Could not set return URL:', err));
+      
+      // Clear any admin session data to ensure customer registration
+      sessionStorage.removeItem('admin_auth_return_url');
+      
+      // Redirect to the verified Replit Auth endpoint for CUSTOMER authentication
+      window.location.href = '/api/login';
+    } catch (error) {
+      console.error('Customer authentication error:', error);
+      setError('Authentication service temporarily unavailable. Please try again.');
+    }
   };
 
   return (
@@ -89,7 +97,7 @@ export function RegisterForm() {
                 key={provider.name}
                 type="button"
                 variant="outline"
-                onClick={() => handleOAuthLogin(provider.name, provider.href)}
+                onClick={handleCustomerAuth}
                 className={`w-full h-12 font-medium transition-all duration-200 hover:scale-[0.99] ${provider.color}`}
               >
                 <provider.icon className="w-5 h-5 mr-3" />
@@ -110,7 +118,7 @@ export function RegisterForm() {
             <Button
               type="button"
               variant="outline"
-              onClick={handleEmailSignup}
+              onClick={handleCustomerAuth}
               className="w-full h-12 border-gray-300 dark:border-gray-700 text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200 hover:scale-[0.99]"
             >
               <Mail className="w-5 h-5 mr-3" />
