@@ -6,7 +6,7 @@ import { SiTrustpilot } from "react-icons/si";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,7 @@ export function Header() {
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isLearnDropdownOpen, setIsLearnDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const totalItems = getTotalItems();
 
@@ -322,7 +323,7 @@ export function Header() {
             </Button>
             
             {/* Mobile menu */}
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
@@ -334,26 +335,34 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-black border-gray-700">
                 <nav className="flex flex-col space-y-4 mt-6">
-                  <Link href="/products">
-                    <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                      Shop
-                    </span>
-                  </Link>
-                  <Link href="/quiz">
-                    <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                      Supplement Quiz
-                    </span>
-                  </Link>
-                  <Link href="/about">
-                    <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                      About
-                    </span>
-                  </Link>
-                  <Link href="/science">
-                    <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                      Science
-                    </span>
-                  </Link>
+                  <SheetClose asChild>
+                    <Link href="/products">
+                      <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                        Shop
+                      </span>
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/quiz">
+                      <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                        Supplement Quiz
+                      </span>
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/about">
+                      <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                        About
+                      </span>
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/science">
+                      <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                        Science
+                      </span>
+                    </Link>
+                  </SheetClose>
                   
                   {/* Mobile User Menu */}
                   <div className="border-t border-gray-700 mt-4 pt-4">
@@ -361,41 +370,53 @@ export function Header() {
                       <>
                         <p className="px-3 py-2 text-sm text-gray-400">{user.email}</p>
                         {user.role === 'admin' && (
-                          <Link href="/admin">
+                          <SheetClose asChild>
+                            <Link href="/admin">
+                              <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                                Admin Dashboard
+                              </span>
+                            </Link>
+                          </SheetClose>
+                        )}
+                        <SheetClose asChild>
+                          <Link href="/portal">
                             <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                              Admin Dashboard
+                              My Account
                             </span>
                           </Link>
-                        )}
-                        <Link href="/portal">
-                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                            My Account
-                          </span>
-                        </Link>
-                        <Link href="/orders">
-                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                            Order History
-                          </span>
-                        </Link>
-                        <button
-                          onClick={handleLogout}
-                          className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gray-300"
-                        >
-                          Sign Out
-                        </button>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <Link href="/orders">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                              Order History
+                            </span>
+                          </Link>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gray-300"
+                          >
+                            Sign Out
+                          </button>
+                        </SheetClose>
                       </>
                     ) : (
                       <>
-                        <Link href="/login">
-                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                            Sign In
-                          </span>
-                        </Link>
-                        <Link href="/register">
-                          <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
-                            Create Account
-                          </span>
-                        </Link>
+                        <SheetClose asChild>
+                          <Link href="/login">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                              Sign In
+                            </span>
+                          </Link>
+                        </SheetClose>
+                        <SheetClose asChild>
+                          <Link href="/register">
+                            <span className="block px-3 py-2 text-base font-medium text-white hover:text-gray-300">
+                              Create Account
+                            </span>
+                          </Link>
+                        </SheetClose>
                       </>
                     )}
                   </div>
