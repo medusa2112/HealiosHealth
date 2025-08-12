@@ -22,10 +22,13 @@ export default function AdminCarts() {
   const [timeRange, setTimeRange] = useState<string>("1");
   
   const { data: cartsData, isLoading: cartsLoading } = useQuery({
-    queryKey: ['/api/admin/carts', 'abandoned', timeRange],
+    queryKey: ['/api/admin/abandoned-carts', timeRange],
     queryFn: () => 
-      fetch(`/api/admin/carts?hours=${timeRange}`, { credentials: 'include' })
-        .then(res => res.json())
+      fetch(`/api/admin/abandoned-carts?hours=${timeRange}`, { credentials: 'include' })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch abandoned carts');
+          return res.json();
+        })
   });
 
   const { data: analyticsData, isLoading: analyticsLoading } = useQuery({
@@ -36,7 +39,13 @@ export default function AdminCarts() {
   });
 
   const carts: AbandonedCart[] = cartsData?.carts || [];
-  const analytics: CartAnalytics = cartsData?.analytics || { 
+  const analytics: CartAnalytics = cartsData?.stats ? {
+    totalAbandoned: cartsData.stats.totalAbandoned || 0,
+    totalValue: cartsData.stats.totalValue || 0,
+    avgValue: cartsData.stats.averageValue || 0,
+    guestCarts: cartsData.carts?.filter((cart: AbandonedCart) => !cart.userId).length || 0,
+    registeredCarts: cartsData.carts?.filter((cart: AbandonedCart) => cart.userId).length || 0
+  } : { 
     totalAbandoned: 0, 
     totalValue: 0, 
     avgValue: 0, 

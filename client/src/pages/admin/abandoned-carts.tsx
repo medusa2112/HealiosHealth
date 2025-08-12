@@ -35,12 +35,23 @@ export default function AbandonedCartsPage() {
     try {
       setLoading(true);
       
-      const response = await fetch(`/api/admin/abandoned-carts?hours=${timeFilter}`);
-      if (!response.ok) throw new Error('Failed to fetch abandoned carts');
+      const response = await fetch(`/api/admin/abandoned-carts?hours=${timeFilter}`, {
+        credentials: 'include'
+      });
+      
+      if (response.status === 401) {
+        // Admin authentication lost, redirect to login
+        setLocation('/admin/login');
+        return;
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
       
       const data = await response.json();
-      setCarts(data.carts);
-      setStats(data.stats);
+      setCarts(data.carts || []);
+      setStats(data.stats || { totalAbandoned: 0, totalValue: 0, averageValue: 0, recoveryRate: 0 });
     } catch (error) {
       console.error('Error fetching abandoned carts:', error);
       toast({
@@ -48,6 +59,8 @@ export default function AbandonedCartsPage() {
         description: "Failed to fetch abandoned carts data",
         variant: "destructive",
       });
+      setCarts([]);
+      setStats({ totalAbandoned: 0, totalValue: 0, averageValue: 0, recoveryRate: 0 });
     } finally {
       setLoading(false);
     }
@@ -60,6 +73,7 @@ export default function AbandonedCartsPage() {
       const response = await fetch('/api/admin/send-recovery-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ 
           cartId,
           sessionToken: cartData.sessionToken,

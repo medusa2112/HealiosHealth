@@ -8,7 +8,7 @@ import { auditAction } from '../../lib/auditMiddleware';
 const router = express.Router();
 
 // Get abandoned carts with analytics
-router.get('/abandoned-carts', requireAdmin, async (req, res) => {
+router.get('/', requireAdmin, async (req, res) => {
   try {
     const querySchema = z.object({
       hours: z.string().optional().transform(val => val ? parseInt(val, 10) : 24)
