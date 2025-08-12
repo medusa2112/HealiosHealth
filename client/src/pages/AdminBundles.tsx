@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Edit, Trash2, Package, DollarSign, Calendar, Hash } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -421,6 +421,9 @@ export default function AdminBundles() {
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create New Bundle</DialogTitle>
+              <DialogDescription>
+                Create a new product bundle with custom pricing and settings.
+              </DialogDescription>
             </DialogHeader>
             <BundleForm 
               onSubmit={handleCreate} 
@@ -537,6 +540,9 @@ export default function AdminBundles() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Bundle</DialogTitle>
+            <DialogDescription>
+              Edit the bundle settings and configuration.
+            </DialogDescription>
           </DialogHeader>
           <BundleForm 
             onSubmit={handleUpdate} 
