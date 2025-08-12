@@ -51,7 +51,15 @@ export default function AbandonedCartsPage() {
       
       const data = await response.json();
       setCarts(data.carts || []);
-      setStats(data.stats || { totalAbandoned: 0, totalValue: 0, averageValue: 0, recoveryRate: 0 });
+      
+      // Ensure all stats values are numbers
+      const stats = data.stats || {};
+      setStats({
+        totalAbandoned: typeof stats.totalAbandoned === 'number' ? stats.totalAbandoned : 0,
+        totalValue: typeof stats.totalValue === 'number' ? stats.totalValue : 0,
+        averageValue: typeof stats.averageValue === 'number' ? stats.averageValue : 0,
+        recoveryRate: typeof stats.recoveryRate === 'number' ? stats.recoveryRate : 0
+      });
     } catch (error) {
       console.error('Error fetching abandoned carts:', error);
       toast({
@@ -240,7 +248,7 @@ export default function AbandonedCartsPage() {
       </div>
 
       {/* Stats Cards */}
-      {stats && (
+      {stats && stats.totalAbandoned !== undefined && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-6">
@@ -260,7 +268,7 @@ export default function AbandonedCartsPage() {
                 <DollarSign className="w-5 h-5 text-green-600" />
                 <div>
                   <p className="text-sm font-medium text-gray-600">Total Value</p>
-                  <p className="text-2xl font-bold">R{stats.totalValue.toFixed(2)}</p>
+                  <p className="text-2xl font-bold">R{(typeof stats.totalValue === 'number' ? stats.totalValue : 0).toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>
@@ -272,7 +280,7 @@ export default function AbandonedCartsPage() {
                 <TrendingUp className="w-5 h-5 text-blue-600" />
                 <div>
                   <p className="text-sm font-medium text-gray-600">Average Value</p>
-                  <p className="text-2xl font-bold">R{stats.averageValue.toFixed(2)}</p>
+                  <p className="text-2xl font-bold">R{(typeof stats.averageValue === 'number' ? stats.averageValue : 0).toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>
@@ -284,7 +292,7 @@ export default function AbandonedCartsPage() {
                 <Clock className="w-5 h-5 text-purple-600" />
                 <div>
                   <p className="text-sm font-medium text-gray-600">Recovery Rate</p>
-                  <p className="text-2xl font-bold">{stats.recoveryRate.toFixed(1)}%</p>
+                  <p className="text-2xl font-bold">{(typeof stats.recoveryRate === 'number' ? stats.recoveryRate : 0).toFixed(1)}%</p>
                 </div>
               </div>
             </CardContent>
