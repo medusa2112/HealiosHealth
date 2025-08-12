@@ -18,13 +18,13 @@ export class EmailJobScheduler {
     console.log("[SCHEDULER] Starting email job scheduler (runs every hour)");
     this.isRunning = true;
 
-    // Run immediately on start
-    this.runJobs();
-
-    // Schedule to run every hour
+    // FIXED: Do NOT run immediately on start to prevent emails on server restart
+    // Only schedule the interval - first run will be after 1 hour
     this.intervalId = setInterval(() => {
       this.runJobs();
     }, EMAIL_JOB_INTERVAL);
+    
+    console.log("[SCHEDULER] Next email job run scheduled in 1 hour");
   }
 
   stop(): void {
@@ -66,5 +66,11 @@ export const emailScheduler = new EmailJobScheduler();
 
 // Auto-start scheduler when this module is imported (for production)
 if (process.env.NODE_ENV === 'production') {
-  emailScheduler.start();
+  // Only auto-start if explicitly enabled to prevent unwanted emails
+  if (process.env.AUTO_START_EMAIL_SCHEDULER === 'true') {
+    emailScheduler.start();
+  } else {
+    console.log("[SCHEDULER] Email scheduler available but not auto-started");
+    console.log("[SCHEDULER] Set AUTO_START_EMAIL_SCHEDULER=true to enable automatic startup");
+  }
 }

@@ -34,7 +34,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - **AI Integration**: OpenAI GPT-4o-mini for intelligent chatbot responses.
 - **Text Processing**: Comprehensive text formatting system for markdown, bullets, and special characters.
 - **Authentication System**: Consolidated to Replit OAuth only for single sign-on with automatic user provisioning and role management. Customer registration uses `/api/login` endpoint for seamless OAuth flow with Google, GitHub, Apple, X/Twitter, and Email providers.
-- **Email Integration**: Complete Resend API integration for transactional emails (order confirmations, refunds, abandoned cart recovery, admin alerts).
+- **Email Integration**: Complete Resend API integration for transactional emails (order confirmations, refunds, abandoned cart recovery, admin alerts). Email scheduler fixed to prevent unwanted emails on server restart.
 - **Production Payment Processing**: Live Stripe integration with production keys for real payment processing.
 - **Session Management**: Secure session handling with SESSION_SECRET for user authentication and security.
 - **Performance Optimization**: Comprehensive caching system with 98% performance improvement - product API responses reduced from 18+ seconds to 344ms.

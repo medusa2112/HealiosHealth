@@ -1299,6 +1299,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (process.env.NODE_ENV === 'development') {
     const { emailScheduler } = await import('./jobs/scheduler');
     console.log("[SERVER] Starting email job scheduler in development mode...");
+    console.log("[SERVER] IMPORTANT: Email jobs will NOT run immediately on startup");
+    console.log("[SERVER] This prevents abandoned cart emails on every app reload");
     emailScheduler.start();
   }
 
