@@ -34,6 +34,10 @@ router.use('/logs', logsRouter);
 import analyticsRouter from './admin/analytics';
 router.use('/analytics', analyticsRouter);
 
+// Mount security subrouter
+import securityRouter from './admin/security';
+router.use('/security', securityRouter);
+
 // Admin Dashboard - Overview stats with real-time data
 router.get('/', requireAdmin, async (req, res) => {
   try {
