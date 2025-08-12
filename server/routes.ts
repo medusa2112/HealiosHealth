@@ -153,38 +153,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const alfr3dRoutes = await import('./routes/alfr3d');
     app.use('/api/alfr3d', alfr3dRoutes.default);
   }
+
+  // Register SEO routes (sitemap.xml, robots.txt)
+  const seoRoutes = await import('./routes/seo');
+  app.use('/', seoRoutes.default);
   
 
-  // Get all products - FROM DATABASE with availability sorting
+  // Cache for product data - 5 minute cache
+  let productCache: any = null;
+  let productCacheTime = 0;
+  const PRODUCT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  // Get all products - OPTIMIZED with caching and selective fields
   app.get("/api/products", async (req, res) => {
     try {
-      const dbProducts = await db.select().from(products);
+      // Check cache first
+      const now = Date.now();
+      if (productCache && (now - productCacheTime) < PRODUCT_CACHE_TTL) {
+        return res.json(productCache);
+      }
+
+      // Optimize query - select only necessary fields
+      const dbProducts = await db.select({
+        id: products.id,
+        name: products.name,
+        description: products.description,
+        price: products.price,
+        originalPrice: products.originalPrice,
+        imageUrl: products.imageUrl,
+        categories: products.categories,
+        featured: products.featured,
+        inStock: products.inStock,
+        stockQuantity: products.stockQuantity,
+        allowPreorder: products.allowPreorder,
+        preorderCap: products.preorderCap,
+        preorderCount: products.preorderCount,
+        rating: products.rating,
+        reviewCount: products.reviewCount,
+        type: products.type,
+        supplyDays: products.supplyDays
+      }).from(products);
       
-      // Add availability and sort by availability rank
+      // Batch process availability - more efficient
       const productsWithAvailability = dbProducts.map(product => {
-        const availability = deriveAvailability({
-          stockQuantity: product.stockQuantity || 0,
-          allowPreorder: product.allowPreorder || false,
-          preorderCap: product.preorderCap,
-          preorderCount: product.preorderCount || 0
-        });
+        const stockQty = product.stockQuantity || 0;
+        const preorderCount = product.preorderCount || 0;
+        const preorderCap = product.preorderCap;
+        
+        let availability = 'in_stock';
+        let isOrderable = true;
+        
+        if (stockQty <= 0) {
+          if (product.allowPreorder && preorderCap && preorderCount < preorderCap) {
+            availability = 'preorder_open';
+          } else {
+            availability = 'out_of_stock';
+            isOrderable = false;
+          }
+        }
         
         return {
           ...product,
           availability,
-          isOrderable: isOrderable(availability)
+          isOrderable
         };
       });
       
-      // Sort by availability rank (in stock first, then preorder open, then out of stock/closed)
+      // Sort with optimized comparisons
       productsWithAvailability.sort((a, b) => {
-        const rankA = availabilityRank(a.availability);
-        const rankB = availabilityRank(b.availability);
-        if (rankA !== rankB) return rankA - rankB;
-        // Secondary sort by featured status and name
+        // Primary: availability (in_stock > preorder_open > out_of_stock)
+        const availOrder = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
+        const availDiff = availOrder[a.availability] - availOrder[b.availability];
+        if (availDiff !== 0) return availDiff;
+        
+        // Secondary: featured
         if (a.featured !== b.featured) return b.featured ? 1 : -1;
+        
+        // Tertiary: name
         return a.name.localeCompare(b.name);
       });
+      
+      // Cache the result
+      productCache = productsWithAvailability;
+      productCacheTime = now;
       
       res.json(productsWithAvailability);
     } catch (error) {
@@ -203,15 +254,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get product by ID - FROM DATABASE
+  // Product details cache
+  const productDetailsCache = new Map();
+  const PRODUCT_DETAIL_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+  // Get product by ID - OPTIMIZED with caching
   app.get("/api/products/:id", async (req, res) => {
     try {
-      const [product] = await db.select().from(products).where(eq(products.id, req.params.id));
+      const productId = req.params.id;
+      const cacheKey = `product_${productId}`;
+      const cached = productDetailsCache.get(cacheKey);
+      
+      // Check cache
+      if (cached && (Date.now() - cached.timestamp) < PRODUCT_DETAIL_CACHE_TTL) {
+        return res.json(cached.data);
+      }
+
+      const [product] = await db.select().from(products).where(eq(products.id, productId)).limit(1);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+
+      // Cache the result
+      productDetailsCache.set(cacheKey, {
+        data: product,
+        timestamp: Date.now()
+      });
+      
       res.json(product);
     } catch (error) {
+      console.error("Failed to fetch product:", error);
       res.status(500).json({ message: "Failed to fetch product" });
     }
   });

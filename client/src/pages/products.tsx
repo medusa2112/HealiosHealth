@@ -15,9 +15,11 @@ export default function Products() {
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
+    staleTime: 5 * 60 * 1000, // 5 minutes cache for products
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
 
-  // Dynamically generate categories from actual products in database
+  // Dynamically generate categories from actual products in database - memoized for performance
   const categories = useMemo(() => {
     if (!products) return ["All"];
     
@@ -55,36 +57,47 @@ export default function Products() {
       .join(' ');
   };
 
-  const filteredProducts = products?.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+  // Memoize filtered products for better performance
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
     
-    // Check if product matches selected category
-    const matchesCategory = selectedCategory === "All" || 
-                           (product.categories && Array.isArray(product.categories) && 
-                            product.categories.includes(selectedCategory));
-    
-    return matchesSearch && matchesCategory;
-  }) || [];
+    return products.filter((product) => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Check if product matches selected category
+      const matchesCategory = selectedCategory === "All" || 
+                             (product.categories && Array.isArray(product.categories) && 
+                              product.categories.includes(selectedCategory));
+      
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, selectedCategory]);
 
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    // First priority: in-stock products come first
-    if (a.inStock !== b.inStock) {
-      return b.inStock ? 1 : -1; // in-stock items (true) come before out-of-stock (false)
-    }
+  // Optimize sorting with useMemo to prevent unnecessary re-computation
+  const sortedProducts = useMemo(() => {
+    if (!filteredProducts.length) return [];
     
-    // Second priority: apply the selected sort criteria
-    switch (sortBy) {
-      case "price-low":
-        return parseFloat(a.price) - parseFloat(b.price);
-      case "price-high":
-        return parseFloat(b.price) - parseFloat(a.price);
-      case "rating":
-        return parseFloat(b.rating || "0") - parseFloat(a.rating || "0");
-      default:
-        return a.name.localeCompare(b.name);
-    }
-  });
+    return [...filteredProducts].sort((a, b) => {
+      // First priority: availability (already computed on server)
+      if (a.availability !== b.availability) {
+        const order = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
+        return order[a.availability] - order[b.availability];
+      }
+      
+      // Second priority: apply the selected sort criteria
+      switch (sortBy) {
+        case "price-low":
+          return parseFloat(a.price) - parseFloat(b.price);
+        case "price-high":
+          return parseFloat(b.price) - parseFloat(a.price);
+        case "rating":
+          return parseFloat(b.rating || "0") - parseFloat(a.rating || "0");
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+  }, [filteredProducts, sortBy]);
 
   const productsStructuredData = {
     "@context": "https://schema.org",

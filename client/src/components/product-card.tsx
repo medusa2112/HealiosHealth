@@ -6,13 +6,13 @@ import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import { PreOrderPopup } from "@/components/pre-order-popup";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 interface ProductCardProps {
   product: Product;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export const ProductCard = memo(({ product }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { toast } = useToast();
   const [showPreOrderModal, setShowPreOrderModal] = useState(false);
@@ -160,4 +160,4 @@ export function ProductCard({ product }: ProductCardProps) {
     />
     </>
   );
-}
+});

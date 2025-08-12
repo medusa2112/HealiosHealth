@@ -161,9 +161,9 @@ export const queryClient = new QueryClient({
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
       refetchOnWindowFocus: false,
-      // Cache admin queries for 5 minutes to prevent excessive re-fetching
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime in v5)
+      // Optimize caching for better performance
+      staleTime: 2 * 60 * 1000, // 2 minutes - faster updates
+      gcTime: 15 * 60 * 1000, // 15 minutes - longer garbage collection
       retry: false,
     },
     mutations: {

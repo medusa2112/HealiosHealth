@@ -1,36 +1,25 @@
 User-agent: *
 Allow: /
 
-# High-priority pages
+# Important pages for crawling
 Allow: /products
 Allow: /products/*
-Allow: /about
-Allow: /science
-Allow: /consultation
 Allow: /quiz
-Allow: /contact
+Allow: /about
+Allow: /blog
+Allow: /newsletter
 
-# Crawl-delay for better server performance
-Crawl-delay: 1
+# Block admin and internal pages
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /portal/*
+Disallow: /src/*
+Disallow: /*.json$
+Disallow: /*.xml$
 
 # Sitemap location
-Sitemap: https://thehealios.com/sitemap.xml
+Sitemap: https://healios.com/sitemap.xml
 
-# Block admin areas (if any)
-Disallow: /admin/
-Disallow: /api/
-Disallow: /.git/
-Disallow: /node_modules/
-
-# Allow important bot crawlers
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
+# Crawl delay for politeness
+Crawl-delay: 1
