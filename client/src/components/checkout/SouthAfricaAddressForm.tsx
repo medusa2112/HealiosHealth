@@ -217,7 +217,13 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         document.body.removeChild(testContainer);
         
       } catch (error) {
-        console.error('Google Places blocked by API restrictions, using manual entry:', error);
+        console.error('Google Places API Error:', error);
+        console.log('📋 Google Places API Troubleshooting:');
+        console.log('1. Check if billing is enabled in Google Cloud Console');
+        console.log('2. Verify Places API (New) is enabled in APIs & Services');
+        console.log('3. API changes can take up to 30 minutes to propagate');
+        console.log('4. Manual address entry remains fully functional');
+        
         setGoogleMapsLoaded(false);
         setShowGoogleMapsError(true);
         
