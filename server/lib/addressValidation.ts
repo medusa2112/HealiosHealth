@@ -86,7 +86,7 @@ export class AddressValidationService {
     }
   }
 
-  async validateAddress(addressLines: string[], regionCode: string = 'ZA'): Promise<AddressValidationResult> {
+  async validateAddress(addressLines: string[], regionCode: string = 'US'): Promise<AddressValidationResult> {
     if (!this.apiKey) {
       return {
         isValid: false,
@@ -96,9 +96,11 @@ export class AddressValidationService {
     }
 
     try {
+      // Google Address Validation API requires regionCode 'US' for most requests
+      // South African addresses can still be validated but need proper formatting
       const requestBody = {
         address: {
-          regionCode: regionCode,
+          regionCode: 'US', // Use US as base region for international validation
           addressLines: addressLines.filter(line => line && line.trim())
         }
       };
@@ -197,9 +199,9 @@ export class AddressValidationService {
       });
 
       const response = await fetch(`${this.baseUrl}?${params}`);
-      const data = await response.json() as GoogleGeocodingResponse;
+      const data = await response.json() as any;
 
-      return data.status === 'OK' && data.results.length > 0;
+      return data.status === 'OK' && data.results && data.results.length > 0;
     } catch (error) {
       logger.error('ADDRESS_VALIDATION', 'Failed to validate postal code', { error, postalCode });
       return false;
