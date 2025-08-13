@@ -145,7 +145,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           setGoogleMapsLoaded(true);
           console.log('✅ Google Places autocomplete ready');
         } catch (error) {
-          console.log('❌ Google Places autocomplete failed, using manual entry');
+          console.log('❌ Google Places autocomplete failed:', error);
+          console.log('Domain may need to be added to API key restrictions');
           setShowGoogleMapsError(true);
         }
 
