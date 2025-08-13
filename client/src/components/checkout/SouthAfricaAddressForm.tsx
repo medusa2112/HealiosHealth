@@ -21,6 +21,7 @@ declare global {
         };
       };
     };
+    initGoogleMaps?: () => void;
   }
 }
 
@@ -74,70 +75,102 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<any>(null);
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+  const [showGoogleMapsError, setShowGoogleMapsError] = useState(false);
   
   const autocompleteRef = useRef<any>(null);
   const addressInputRef = useRef<HTMLInputElement>(null);
 
-  // Load Google Maps API
+  // Attempt to load Google Maps API (graceful degradation if it fails)
   useEffect(() => {
-    const loadGoogleMaps = async () => {
+    const tryLoadGoogleMaps = async () => {
       try {
+        // Check if Google Maps is already loaded
+        if (window.google?.maps?.places?.Autocomplete) {
+          console.log('Google Maps API already loaded');
+          setGoogleMapsLoaded(true);
+          return;
+        }
+
         const response = await fetch('/api/config/google-maps-key');
         if (!response.ok) {
-          console.warn('Google Maps API key not available');
+          console.log('Google Maps API key not available - using manual address entry');
+          setShowGoogleMapsError(true);
           return;
         }
         
         const { apiKey } = await response.json();
-        
-        if (window.google?.maps?.places) {
-          setGoogleMapsLoaded(true);
+        if (!apiKey) {
+          console.log('No API key - using manual address entry');
+          setShowGoogleMapsError(true);
           return;
         }
 
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA`;
-        script.async = true;
-        script.defer = true;
-        script.onload = () => {
+        // Try to load Google Maps with a timeout
+        const timeoutId = setTimeout(() => {
+          console.log('Google Maps loading timeout - falling back to manual entry');
+          setShowGoogleMapsError(true);
+        }, 5000);
+
+        const callbackName = `initGoogleMaps${Date.now()}`;
+        (window as any)[callbackName] = () => {
+          clearTimeout(timeoutId);
+          console.log('Google Maps API loaded successfully');
           setGoogleMapsLoaded(true);
+          delete (window as any)[callbackName];
         };
+        
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA&callback=${callbackName}`;
+        script.async = true;
+        
         script.onerror = () => {
-          console.error('Failed to load Google Maps API');
+          clearTimeout(timeoutId);
+          console.log('Google Maps API failed to load - using manual address entry');
+          setShowGoogleMapsError(true);
+          delete (window as any)[callbackName];
         };
+        
         document.head.appendChild(script);
       } catch (error) {
-        console.error('Error loading Google Maps API:', error);
+        console.log('Error with Google Maps setup - using manual address entry');
+        setShowGoogleMapsError(true);
       }
     };
 
-    loadGoogleMaps();
+    tryLoadGoogleMaps();
   }, []);
 
   // Initialize Google Places Autocomplete
   useEffect(() => {
     if (googleMapsLoaded && addressInputRef.current && !autocompleteRef.current) {
       try {
+        console.log('Initializing Google Places Autocomplete...');
         const google = window.google;
-        if (google?.maps?.places?.Autocomplete) {
-          autocompleteRef.current = new google.maps.places.Autocomplete(
-            addressInputRef.current,
-            {
-              componentRestrictions: { country: 'ZA' },
-              fields: ['address_components', 'formatted_address', 'place_id'],
-              types: ['address'],
-            }
-          );
+        
+        if (!google?.maps?.places?.Autocomplete) {
+          console.error('Google Places Autocomplete not available');
+          return;
         }
 
-        if (autocompleteRef.current) {
-          autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current.getPlace();
-            if (place.address_components) {
-              parseGooglePlace(place);
-            }
-          });
-        }
+        autocompleteRef.current = new google.maps.places.Autocomplete(
+          addressInputRef.current,
+          {
+            componentRestrictions: { country: 'ZA' },
+            fields: ['address_components', 'formatted_address', 'place_id'],
+            types: ['address'],
+          }
+        );
+
+        console.log('Google Places Autocomplete initialized');
+
+        autocompleteRef.current.addListener('place_changed', () => {
+          console.log('Place changed event triggered');
+          const place = autocompleteRef.current.getPlace();
+          if (place.address_components) {
+            parseGooglePlace(place);
+          }
+        });
+        
       } catch (error) {
         console.error('Error initializing Google Places Autocomplete:', error);
       }
@@ -351,7 +384,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
               ref={addressInputRef}
               id="line1"
               type="text"
-              placeholder="Start typing your address..."
+              placeholder={googleMapsLoaded ? "Start typing your address..." : "Enter your street address (e.g., 123 Main Street)"}
               value={address.line1 || ''}
               onChange={(e) => handleFieldChange('line1', e.target.value)}
               className={hasFieldError('line1') ? 'border-red-500' : ''}
@@ -366,9 +399,18 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
                 </AlertDescription>
               </Alert>
             )}
+            
+            {/* Google Maps status messages */}
             {googleMapsLoaded && (
-              <p className="text-xs text-gray-500 mt-1">
-                Powered by Google
+              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" />
+                Powered by Google - Address autocomplete enabled
+              </p>
+            )}
+            {showGoogleMapsError && (
+              <p className="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                Manual address entry - validation available after entering details
               </p>
             )}
           </div>
@@ -460,38 +502,43 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         </div>
 
         {/* Address Validation */}
-        {address.line1 && address.city && (
-          <div className="flex items-center gap-2 pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={validateWithGoogle}
-              disabled={isValidating}
-              className="flex items-center gap-2"
-              data-testid="button-validate-address"
-            >
-              {isValidating ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <MapPin className="h-4 w-4" />
+        {address.line1 && address.city && address.region && (
+          <div className="space-y-2 pt-3 border-t border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={validateWithGoogle}
+                disabled={isValidating}
+                className="flex items-center gap-2"
+                data-testid="button-validate-address"
+              >
+                {isValidating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <MapPin className="h-4 w-4" />
+                )}
+                {isValidating ? 'Validating...' : 'Verify Address with Google'}
+              </Button>
+              
+              {validationResult && (
+                <div className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <span className="text-green-600">
+                    Verified ({validationResult.confidence} confidence)
+                  </span>
+                </div>
               )}
-              {isValidating ? 'Validating...' : 'Validate Address'}
-            </Button>
-            
-            {validationResult && (
-              <div className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                <span className="text-green-600">
-                  Address validated ({validationResult.confidence} confidence)
-                </span>
-              </div>
-            )}
+            </div>
             
             {validationErrors.addressValidation && (
-              <span className="text-sm text-amber-600">
-                ⚠️ {validationErrors.addressValidation}
-              </span>
+              <Alert className="py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  {validationErrors.addressValidation}
+                </AlertDescription>
+              </Alert>
             )}
           </div>
         )}
