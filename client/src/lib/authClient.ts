@@ -98,7 +98,8 @@ export const customerAuth = {
     }
     
     const data = await response.json();
-    return data.user;
+    // API returns user object directly, not wrapped in a 'user' property
+    return data;
   }
 };
 
