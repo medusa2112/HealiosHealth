@@ -8,6 +8,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LogIn, Mail, Loader2 } from 'lucide-react';
 
 export function LoginForm() {
+  console.log('=== LOGIN FORM COMPONENT LOADED ===');
+  
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -15,6 +17,8 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'pin'>('email');
   const [pin, setPin] = useState('');
+  
+  console.log('Login form state:', { step, email, pin, isLoading });
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
