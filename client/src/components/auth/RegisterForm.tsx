@@ -27,6 +27,30 @@ export function RegisterForm() {
     setError(null);
 
     try {
+      // First check if user already exists
+      const checkResponse = await fetch('/api/auth/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email: email.trim() })
+      });
+
+      const checkData = await checkResponse.json();
+
+      if (!checkResponse.ok) {
+        throw new Error(checkData.message || 'Failed to verify email');
+      }
+
+      // If user already exists, redirect to login
+      if (checkData.exists) {
+        setError('An account with this email already exists. Redirecting to sign in...');
+        setTimeout(() => {
+          setLocation(`/login?email=${encodeURIComponent(email.trim())}&message=${encodeURIComponent('Please sign in to your existing account')}`);
+        }, 2000);
+        return;
+      }
+
+      // User doesn't exist, proceed with registration
       const response = await fetch('/api/auth/send-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,9 +98,23 @@ export function RegisterForm() {
         throw new Error(data.message || 'Invalid PIN');
       }
 
-      // Successful authentication - redirect to portal
-      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
-      window.location.href = returnUrl;
+      // Successful authentication - handle redirect properly based on profile completion
+      const { user, needsProfileCompletion, redirectTo } = data;
+      
+      if (needsProfileCompletion) {
+        // New user or incomplete profile - redirect to profile completion
+        const targetUrl = redirectTo || '/profile';
+        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 1500);
+      } else {
+        // Existing user with complete profile - redirect to shopping
+        const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
+        setTimeout(() => {
+          window.location.href = returnUrl;
+        }, 1500);
+      }
     } catch (error) {
       console.error('PIN verification error:', error);
       setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');

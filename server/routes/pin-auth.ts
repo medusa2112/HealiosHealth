@@ -6,6 +6,35 @@ import { sendPinEmail } from '../lib/email';
 
 const router = Router();
 
+// Check if user exists endpoint
+router.post('/check-user', async (req, res) => {
+  try {
+    const { email } = z.object({
+      email: z.string().email('Please enter a valid email address')
+    }).parse(req.body);
+
+    const existingUser = await storage.getUserByEmail(email);
+    
+    res.json({
+      exists: !!existingUser,
+      email: email
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.errors[0].message
+      });
+    }
+
+    console.error('[CHECK_USER] Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to check user status. Please try again.'
+    });
+  }
+});
+
 // In-memory PIN storage (in production, use Redis or similar)
 const pinStore = new Map<string, {
   pin: string;

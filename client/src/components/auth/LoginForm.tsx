@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,20 @@ export function LoginForm() {
   const [pin, setPin] = useState('');
   
   console.log('Login form state:', { step, email, pin, isLoading });
+
+  // Check URL parameters for pre-filled email and messages
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlEmail = urlParams.get('email');
+    const urlMessage = urlParams.get('message');
+    
+    if (urlEmail) {
+      setEmail(urlEmail);
+    }
+    if (urlMessage) {
+      setSuccess(urlMessage);
+    }
+  }, []);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
