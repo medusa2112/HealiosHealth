@@ -34,15 +34,23 @@ router.post('/send-pin', async (req, res) => {
     const pin = generatePin();
     const pinId = crypto.randomUUID();
     
-    pinStore.set(pinId, {
+    const pinData = {
       pin,
       email,
       createdAt: Date.now(),
       attempts: 0
-    });
-
+    };
+    
+    pinStore.set(pinId, pinData);
+    
     // Store PIN ID in session for verification
     (req.session as any).pinId = pinId;
+    
+    // DEVELOPMENT: Also store by email for cross-session access
+    if (process.env.NODE_ENV === 'development') {
+      pinStore.set(`email:${email}`, pinData);
+      console.log(`[PIN_AUTH] Development mode - stored PIN by email key for cross-session access`);
+    }
 
     // Send PIN via email using Resend
     console.log(`[PIN_AUTH] Generated PIN for ${email}: ${pin}`);
@@ -100,26 +108,31 @@ router.post('/verify-pin', async (req, res) => {
       pin: z.string().length(6, 'PIN must be 6 digits')
     }).parse(req.body);
 
+    let pinData: any = null;
     const pinId = (req.session as any).pinId;
+    
     console.log(`[PIN_VERIFY] Session ID: ${req.sessionID}`);
     console.log(`[PIN_VERIFY] PIN ID from session: ${pinId}`);
     console.log(`[PIN_VERIFY] Email from request: ${email}`);
     
-    if (!pinId) {
-      console.log(`[PIN_VERIFY] No PIN ID found in session`);
-      return res.status(400).json({
-        success: false,
-        message: 'No PIN request found. Please request a new PIN.'
-      });
+    // Try session-based lookup first
+    if (pinId) {
+      pinData = pinStore.get(pinId);
+      console.log(`[PIN_VERIFY] Found PIN data from session: ${!!pinData}`);
     }
-
-    const pinData = pinStore.get(pinId);
-    console.log(`[PIN_VERIFY] Looking for PIN with ID: ${pinId}`);
+    
+    // DEVELOPMENT: Fallback to email-based lookup if session fails
+    if (!pinData && process.env.NODE_ENV === 'development') {
+      const emailKey = `email:${email}`;
+      pinData = pinStore.get(emailKey);
+      console.log(`[PIN_VERIFY] Development mode - trying email key: ${emailKey}`);
+      console.log(`[PIN_VERIFY] Found PIN data from email key: ${!!pinData}`);
+    }
+    
     console.log(`[PIN_VERIFY] Available PINs in store:`, Array.from(pinStore.keys()));
-    console.log(`[PIN_VERIFY] PIN data found:`, !!pinData);
     
     if (!pinData) {
-      console.log(`[PIN_VERIFY] PIN not found in store - may have expired or been cleaned up`);
+      console.log(`[PIN_VERIFY] No PIN found - may have expired or been cleaned up`);
       return res.status(400).json({
         success: false,
         message: 'PIN has expired. Please request a new PIN.'
