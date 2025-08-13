@@ -77,15 +77,19 @@ export function LoginForm() {
       // Successful authentication - redirect based on profile completion
       const { user, needsProfileCompletion, redirectTo } = data;
       
+      console.log('PIN Verification Response:', data);
+      console.log('needsProfileCompletion:', needsProfileCompletion);
+      console.log('redirectTo:', redirectTo);
+      
       if (needsProfileCompletion) {
         // New user or incomplete profile - redirect to profile completion
-        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Please complete your profile to continue shopping.`);
-        setTimeout(() => {
-          setLocation(redirectTo || '/profile');
-        }, 2000);
+        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
+        console.log('Redirecting to profile:', redirectTo || '/profile');
+        setLocation(redirectTo || '/profile');
       } else {
         // Existing user with complete profile - redirect to shopping
         const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
+        console.log('Redirecting to shopping:', returnUrl);
         setLocation(returnUrl);
       }
     } catch (error) {
