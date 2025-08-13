@@ -81,12 +81,12 @@ export function LoginForm() {
         // New user or incomplete profile - redirect to profile completion
         setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Please complete your profile to continue shopping.`);
         setTimeout(() => {
-          window.location.href = redirectTo || '/profile';
+          setLocation(redirectTo || '/profile');
         }, 2000);
       } else {
         // Existing user with complete profile - redirect to shopping
         const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
-        window.location.href = returnUrl;
+        setLocation(returnUrl);
       }
     } catch (error) {
       console.error('PIN verification error:', error);
