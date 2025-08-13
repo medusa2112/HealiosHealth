@@ -298,6 +298,10 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
   // Send email using Resend API
   try {
+    console.log(`[EMAIL DEBUG] Attempting to send ${type} email to ${to}`);
+    console.log(`[EMAIL DEBUG] Resend client exists:`, !!resend);
+    console.log(`[EMAIL DEBUG] API Key exists:`, !!process.env.RESEND_API_KEY);
+    
     const result = await rateLimitedSend(async () => {
       return await resend!.emails.send({
         from: 'Healios <onboarding@resend.dev>',
@@ -307,10 +311,12 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
       });
     });
 
+    console.log(`[EMAIL DEBUG] Full Resend result:`, JSON.stringify(result, null, 2));
     console.log(`[EMAIL SENT] ${type} email sent to ${to} - ID: ${result.data?.id}`);
     return { id: result.data?.id || 'unknown', success: true };
   } catch (error) {
     console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
+    console.error(`[EMAIL ERROR] Error details:`, JSON.stringify(error, null, 2));
     return { id: 'error-' + Date.now(), success: false };
   }
 }
