@@ -1,9 +1,9 @@
 import { Resend } from "resend";
 
-// Email service is optional - gracefully handle missing API key
-const isEmailEnabled = !!process.env.RESEND_API_KEY;
+// Email service is DISABLED - all emails will be skipped
+const isEmailEnabled = false; // MANUALLY DISABLED - ALL EMAILS OFF
 
-export const resend = isEmailEnabled ? new Resend(process.env.RESEND_API_KEY!) : null;
+export const resend = null; // DISABLED - NO EMAILS WILL BE SENT
 
 export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome";
 
@@ -252,30 +252,9 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     `
   };
 
-  try {
-    const result = await rateLimitedSend(async () => {
-      return await resend.emails.send({
-        from: "Healios <dn@thefourths.com>",
-        to,
-        subject: subjectMap[type],
-        html: bodyMap[type](data),
-      });
-    });
-
-    console.log(`Email sent successfully: ${type} to ${to}`, result);
-    return result;
-  } catch (error) {
-    console.error(`Failed to send email: ${type} to ${to}`, error);
-    // Log the full error details
-    if (error instanceof Error) {
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
-    }
-    throw error;
-  }
+  // EMAIL DISABLED - All email sending is disabled
+  console.log(`[EMAIL DISABLED] Email skipped: ${type} to ${to}`);
+  return { id: 'disabled-' + Date.now(), success: false };
 }
 
 // Send admin alert emails for critical issues
@@ -329,19 +308,9 @@ export async function sendSubscriptionCancelled(data: {
     </div>
   `;
 
-  try {
-    const result = await resend.emails.send({
-      from: "Healios <onboarding@resend.dev>",
-      to: data.customerEmail,
-      subject,
-      html,
-    });
-    console.log(`Subscription cancellation email sent to ${data.customerEmail}`, result);
-    return result;
-  } catch (error) {
-    console.error(`Failed to send subscription cancellation email to ${data.customerEmail}`, error);
-    throw error;
-  }
+  // EMAIL DISABLED - Subscription cancellation email skipped
+  console.log(`[EMAIL DISABLED] Subscription cancellation email skipped for ${data.customerEmail}`);
+  return { id: 'disabled-' + Date.now(), success: false };
 }
 
 export async function sendSubscriptionPaymentFailed(data: {
@@ -383,19 +352,9 @@ export async function sendSubscriptionPaymentFailed(data: {
     </div>
   `;
 
-  try {
-    const result = await resend.emails.send({
-      from: "Healios <onboarding@resend.dev>",
-      to: data.customerEmail,
-      subject,
-      html,
-    });
-    console.log(`Subscription payment failed email sent to ${data.customerEmail}`, result);
-    return result;
-  } catch (error) {
-    console.error(`Failed to send subscription payment failed email to ${data.customerEmail}`, error);
-    throw error;
-  }
+  // EMAIL DISABLED - Subscription payment failed email skipped
+  console.log(`[EMAIL DISABLED] Subscription payment failed email skipped for ${data.customerEmail}`);
+  return { id: 'disabled-' + Date.now(), success: false };
 }
 
 export async function sendSubscriptionCreated(data: {
@@ -439,17 +398,7 @@ export async function sendSubscriptionCreated(data: {
     </div>
   `;
 
-  try {
-    const result = await resend.emails.send({
-      from: "Healios <onboarding@resend.dev>",
-      to: data.customerEmail,
-      subject,
-      html,
-    });
-    console.log(`Subscription created email sent to ${data.customerEmail}`, result);
-    return result;
-  } catch (error) {
-    console.error(`Failed to send subscription created email to ${data.customerEmail}`, error);
-    throw error;
-  }
+  // EMAIL DISABLED - Subscription created email skipped
+  console.log(`[EMAIL DISABLED] Subscription created email skipped for ${data.customerEmail}`);
+  return { id: 'disabled-' + Date.now(), success: false };
 }

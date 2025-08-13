@@ -83,26 +83,9 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
     </html>
   `;
 
-  try {
-    const result = await resend.emails.send({
-      from: "Healios <dn@thefourths.com>",
-      to: email,
-      subject,
-      html,
-    });
-    console.log(`Verification email sent to ${email} with code: ${code.substring(0, 2)}****`, result);
-  } catch (error) {
-    console.error('Failed to send verification email to', email, ':', error);
-    // Log the full error details for debugging
-    if (error instanceof Error) {
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
-    }
-    throw new Error('Failed to send verification email');
-  }
+  // EMAIL DISABLED - Verification email skipped
+  console.log(`[EMAIL DISABLED] Verification email skipped for ${email} with code: ${code.substring(0, 2)}****`);
+  // Note: Verification codes are still stored in database but emails are not sent
 }
 
 // Check rate limiting (max 5 attempts per hour)
