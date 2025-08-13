@@ -27,6 +27,7 @@ import portalRoutes from "./routes/portal";
 import stripeRoutes from "./routes/stripe";
 import cartRoutes from "./routes/cart";
 import emailTestRoutes from "./routes/email-test";
+import documentationRoutes from "./routes/documentation";
 
 // Stripe imports moved to dedicated service
 import { stripe } from "./lib/stripe";
