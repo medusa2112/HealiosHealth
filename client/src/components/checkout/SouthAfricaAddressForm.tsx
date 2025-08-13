@@ -91,7 +91,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
     // loadGoogleMaps();
   }, []);
 
-  // Initialize Google Places Autocomplete (when available) (when available)
+  // Initialize Google Places Autocomplete (when available)
   useEffect(() => {
     if (googleMapsLoaded && addressInputRef.current && !autocompleteRef.current) {
       try {
@@ -160,20 +160,37 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
     setIsValidating(true);
 
     try {
-      // Mock validation for now - in production this would call Google Address Validation API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      
-      // Simple South African address format validation
-      const hasStreetNumber = /\d+/.test(address.line1);
-      const isValidCity = address.city.length >= 2;
-      const isValidProvince = SOUTH_AFRICAN_PROVINCES.some(p => p.value === address.region);
-      const hasPostalCode = address.postal_code && /^\d{4}$/.test(address.postal_code);
+      // Call the backend address validation API
+      const addressLines = [
+        address.line1,
+        address.line2,
+        address.city,
+        address.region,
+        address.postal_code,
+        'South Africa'
+      ].filter(line => line && line.trim());
 
-      if (hasStreetNumber && isValidCity && isValidProvince) {
+      console.log('Validating address:', { addressLines, regionCode: 'ZA' });
+
+      const response = await fetch('/api/validate-address/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          addressLines,
+          regionCode: 'ZA'
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Validation response:', data);
+
+      if (response.ok && data.success && data.validation?.isValid) {
         setValidationResult({
-          confidence: 'HIGH',
+          confidence: data.validation.confidence || 'HIGH',
           verdict: 'VALID',
-          completeness: hasPostalCode ? 'COMPLETE' : 'MISSING_POSTAL_CODE'
+          completeness: 'COMPLETE'
         });
         
         setValidationErrors(prev => {
@@ -181,19 +198,39 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           delete newErrors.addressValidation;
           return newErrors;
         });
-        
-        if (!hasPostalCode) {
+      } else {
+        // Fallback to local validation if API fails
+        const hasStreetNumber = /\d+/.test(address.line1);
+        const isValidCity = address.city.length >= 2;
+        const isValidProvince = SA_PROVINCES.includes(address.region);
+        const hasPostalCode = address.postal_code && /^\d{4}$/.test(address.postal_code);
+
+        if (hasStreetNumber && isValidCity && isValidProvince) {
+          setValidationResult({
+            confidence: 'MEDIUM',
+            verdict: 'VALID',
+            completeness: hasPostalCode ? 'COMPLETE' : 'MISSING_POSTAL_CODE'
+          });
+          
+          setValidationErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors.addressValidation;
+            return newErrors;
+          });
+          
+          if (!hasPostalCode) {
+            setValidationErrors(prev => ({ 
+              ...prev, 
+              addressValidation: 'Address format looks good! Postal code recommended for better delivery.' 
+            }));
+          }
+        } else {
           setValidationErrors(prev => ({ 
             ...prev, 
-            addressValidation: 'Address looks good! Consider adding postal code for better delivery.' 
+            addressValidation: 'Please check: street number, city name, and province selection' 
           }));
+          setValidationResult(null);
         }
-      } else {
-        setValidationErrors(prev => ({ 
-          ...prev, 
-          addressValidation: 'Please check: street number, city name, and province selection' 
-        }));
-        setValidationResult(null);
       }
     } catch (error) {
       console.error('Address validation error:', error);

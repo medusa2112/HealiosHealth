@@ -72,6 +72,12 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
+  // Skip CSRF for address validation in development
+  if (process.env.NODE_ENV === 'development' && req.originalUrl.includes('/validate-address/')) {
+    console.log('[CSRF] Development bypass for address validation:', req.originalUrl);
+    return next();
+  }
+
   // Skip CSRF for auth endpoints during initial login/register/password reset/verification
   const fullPath = req.originalUrl || req.url || req.path;
   if (fullPath.includes('/auth/login') || 

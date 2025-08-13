@@ -23,12 +23,21 @@ const addressValidationSchema = z.object({
   regionCode: z.string().optional().default('ZA')
 });
 
-// Validate complete address using Google Address Validation API
-router.post('/validate', async (req, res) => {
-  // Bypass CSRF in development
+// CSRF bypass middleware for address validation in development
+const bypassCSRFForDev = (req: any, res: any, next: any) => {
   if (process.env.NODE_ENV === 'development') {
-    console.log('[ADDRESS_VALIDATION] Development mode - bypassing CSRF check');
+    console.log('[ADDRESS_VALIDATION] Development mode - bypassing CSRF');
+    // Skip to route handler
+    return next('route');
   }
+  next();
+};
+
+// Validate complete address using Google Address Validation API
+router.post('/validate', bypassCSRFForDev);
+
+// Development route (no CSRF)
+router.post('/validate', async (req, res) => {
   try {
     const validationResult = addressValidationSchema.safeParse(req.body);
     
