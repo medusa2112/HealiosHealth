@@ -1,10 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, AlertCircle, MapPin, Loader2 } from 'lucide-react';
 import { z } from 'zod';
+
+// Google Maps type declarations
+declare global {
+  interface Window {
+    google?: {
+      maps: {
+        places: {
+          AutocompleteService: new () => any;
+          PlacesService: new (div: HTMLDivElement) => any;
+          PlacesServiceStatus: {
+            OK: string;
+          };
+        };
+      };
+    };
+  }
+}
 
 // Address validation schema
 const addressSchema = z.object({
@@ -76,6 +94,52 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
   
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [isValid, setIsValid] = useState(false);
+  const [isValidatingAddress, setIsValidatingAddress] = useState(false);
+  const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  
+  const addressInputRef = useRef<HTMLInputElement>(null);
+  const autocompleteService = useRef<any>(null);
+  const placesService = useRef<any>(null);
+
+  // Initialize Google Maps Places API
+  useEffect(() => {
+    const initializePlacesAPI = () => {
+      if (typeof window !== 'undefined' && window.google && window.google.maps && window.google.maps.places) {
+        autocompleteService.current = new window.google.maps.places.AutocompleteService();
+        placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'));
+      }
+    };
+
+    // Load Google Maps JavaScript API
+    const loadGoogleMapsAPI = async () => {
+      try {
+        // Get the API key from the backend
+        const response = await fetch('/api/config/google-maps-key');
+        const { apiKey } = await response.json();
+        
+        if (!apiKey) {
+          console.warn('Google Maps API key not available');
+          return;
+        }
+        
+        if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+          const script = document.createElement('script');
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+          script.async = true;
+          script.defer = true;
+          script.onload = initializePlacesAPI;
+          document.head.appendChild(script);
+        } else {
+          initializePlacesAPI();
+        }
+      } catch (error) {
+        console.warn('Failed to load Google Maps API:', error);
+      }
+    };
+
+    loadGoogleMapsAPI();
+  }, []);
 
   // Parse existing address if it exists
   useEffect(() => {
@@ -138,6 +202,135 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
 
   const updateField = (field: keyof AddressData, value: string) => {
     setStructuredAddress(prev => ({ ...prev, [field]: value }));
+    
+    // Trigger address suggestions for street address
+    if (field === 'line1' && value.length > 3 && autocompleteService.current) {
+      getAddressSuggestions(value);
+    } else if (field === 'line1' && value.length <= 3) {
+      setAddressSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  // Get address suggestions from Google Places API
+  const getAddressSuggestions = async (input: string) => {
+    if (!autocompleteService.current) return;
+    
+    try {
+      const request = {
+        input,
+        componentRestrictions: { country: structuredAddress.country === 'South Africa' ? 'za' : 'us' },
+        types: ['address']
+      };
+      
+      autocompleteService.current.getPlacePredictions(request, (predictions: any[], status: any) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+          setAddressSuggestions(predictions.slice(0, 5));
+          setShowSuggestions(true);
+        } else {
+          setAddressSuggestions([]);
+          setShowSuggestions(false);
+        }
+      });
+    } catch (error) {
+      console.error('Error getting address suggestions:', error);
+    }
+  };
+
+  // Select an address suggestion
+  const selectAddressSuggestion = async (placeId: string) => {
+    if (!placesService.current) return;
+    
+    setIsValidatingAddress(true);
+    setShowSuggestions(false);
+    
+    try {
+      const request = {
+        placeId,
+        fields: ['address_components', 'formatted_address', 'name']
+      };
+      
+      placesService.current.getDetails(request, (place: any, status: any) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && place.address_components) {
+          const addressComponents = place.address_components;
+          
+          // Parse Google Places address components
+          const getComponent = (types: string[]) => {
+            const component = addressComponents.find((comp: any) => 
+              types.some(type => comp.types.includes(type))
+            );
+            return component ? component.long_name : '';
+          };
+          
+          const streetNumber = getComponent(['street_number']);
+          const streetName = getComponent(['route']);
+          const subpremise = getComponent(['subpremise']);
+          const city = getComponent(['locality', 'administrative_area_level_2']);
+          const state = getComponent(['administrative_area_level_1']);
+          const postalCode = getComponent(['postal_code']);
+          const country = getComponent(['country']);
+          
+          // Build structured address
+          const line1 = [streetNumber, streetName].filter(Boolean).join(' ') || place.name;
+          const line2 = subpremise || '';
+          
+          setStructuredAddress(prev => ({
+            ...prev,
+            line1,
+            line2,
+            city: city || prev.city,
+            state: state || prev.state,
+            zipCode: postalCode || prev.zipCode,
+            country: country === 'South Africa' ? 'South Africa' : prev.country,
+          }));
+        }
+        setIsValidatingAddress(false);
+      });
+    } catch (error) {
+      console.error('Error getting place details:', error);
+      setIsValidatingAddress(false);
+    }
+  };
+
+  // Validate address with Google Maps
+  const validateAddressWithGoogle = async () => {
+    if (!autocompleteService.current || !structuredAddress.line1) return;
+    
+    setIsValidatingAddress(true);
+    
+    try {
+      const fullAddress = [
+        structuredAddress.line1,
+        structuredAddress.line2,
+        structuredAddress.city,
+        structuredAddress.state,
+        structuredAddress.zipCode,
+        structuredAddress.country
+      ].filter(Boolean).join(', ');
+      
+      const request = {
+        input: fullAddress,
+        componentRestrictions: { country: structuredAddress.country === 'South Africa' ? 'za' : 'us' },
+        types: ['address']
+      };
+      
+      autocompleteService.current.getPlacePredictions(request, (predictions: any[], status: any) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
+          // Address found in Google Places
+          setValidationErrors(prev => ({ ...prev, googleValidation: '' }));
+        } else {
+          // Address not found
+          setValidationErrors(prev => ({ 
+            ...prev, 
+            googleValidation: 'Address could not be verified. Please check the details.' 
+          }));
+        }
+        setIsValidatingAddress(false);
+      });
+    } catch (error) {
+      console.error('Error validating address:', error);
+      setIsValidatingAddress(false);
+    }
   };
 
   const getFieldError = (field: string) => validationErrors[field];
@@ -226,18 +419,51 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         <h4 className="font-medium">Shipping Address</h4>
         
         <div className="space-y-3">
-          <div>
+          <div className="relative">
             <Label htmlFor="line1">Street Address *</Label>
-            <Input
-              id="line1"
-              type="text"
-              placeholder="123 Main Street"
-              value={structuredAddress.line1 || ''}
-              onChange={(e) => updateField('line1', e.target.value)}
-              className={hasFieldError('line1') ? 'border-red-500 focus:border-red-500' : ''}
-              data-testid="input-address-line1"
-              required
-            />
+            <div className="relative">
+              <Input
+                ref={addressInputRef}
+                id="line1"
+                type="text"
+                placeholder="123 Main Street"
+                value={structuredAddress.line1 || ''}
+                onChange={(e) => updateField('line1', e.target.value)}
+                onFocus={() => {
+                  if (addressSuggestions.length > 0) setShowSuggestions(true);
+                }}
+                onBlur={() => {
+                  // Delay hiding suggestions to allow clicking
+                  setTimeout(() => setShowSuggestions(false), 200);
+                }}
+                className={hasFieldError('line1') ? 'border-red-500 focus:border-red-500' : ''}
+                data-testid="input-address-line1"
+                required
+              />
+              {isValidatingAddress && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                </div>
+              )}
+            </div>
+            
+            {/* Address suggestions dropdown */}
+            {showSuggestions && addressSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 z-10 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                {addressSuggestions.map((suggestion, index) => (
+                  <button
+                    key={suggestion.place_id}
+                    type="button"
+                    onClick={() => selectAddressSuggestion(suggestion.place_id)}
+                    className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                  >
+                    <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-sm">{suggestion.description}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            
             {hasFieldError('line1') && (
               <Alert className="mt-1 py-2">
                 <AlertCircle className="h-4 w-4" />
@@ -379,6 +605,31 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         </div>
       </div>
 
+      {/* Address Validation Button */}
+      {structuredAddress.line1 && structuredAddress.city && structuredAddress.zipCode && (
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={validateAddressWithGoogle}
+            disabled={isValidatingAddress}
+            className="flex items-center gap-2"
+            data-testid="button-validate-address"
+          >
+            {isValidatingAddress ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <MapPin className="h-4 w-4" />
+            )}
+            {isValidatingAddress ? 'Validating...' : 'Verify Address'}
+          </Button>
+          {getFieldError('googleValidation') && (
+            <span className="text-sm text-amber-600">⚠️ Address verification recommended</span>
+          )}
+        </div>
+      )}
+
       {/* Validation Summary */}
       {!isValid && Object.keys(validationErrors).length > 0 && (
         <Alert>
@@ -386,7 +637,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
           <AlertDescription>
             Please fix the following errors to continue:
             <ul className="mt-2 list-disc list-inside">
-              {Object.values(validationErrors).map((error, index) => (
+              {Object.values(validationErrors).filter(error => error && error !== '').map((error, index) => (
                 <li key={index} className="text-sm">{error}</li>
               ))}
             </ul>

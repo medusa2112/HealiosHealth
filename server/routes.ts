@@ -158,6 +158,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   if (process.env.NODE_ENV === 'development') {
     app.use('/api/email', emailTestRoutes);
   }
+  
+  // Register configuration routes
+  const { configRouter } = await import('./routes/config');
+  app.use('/api/config', configRouter);
 
   // Register object storage routes  
   const objectStorageRoutes = await import('./routes/objectStorage');
