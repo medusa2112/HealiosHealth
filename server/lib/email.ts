@@ -348,7 +348,7 @@ export async function sendPinEmail(userEmail: string, pin: string): Promise<{ su
   
   if (isDevelopment) {
     // In development/testing: send to all admin accounts
-    const adminEmails = ["admin@thehealios.com", "dn@thefourths.com"];
+    const adminEmails = ["admin@thehealios.com", "dn@thefourths.com", "jv@thefourths.com"];
     console.log(`[PIN_AUTH] Development mode - sending PIN to admin accounts instead of user email`);
     
     let lastResult = { success: false, id: 'no-attempts' };
