@@ -268,6 +268,13 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
             Your login PIN
           </h1>
           
+          ${data.originalUserEmail ? `
+          <div style="background-color: #e3f2fd; padding: 20px; margin: 0 0 30px 0; border-left: 4px solid #2196f3; border-radius: 4px;">
+            <div style="font-size: 14px; font-weight: 600; color: #1976d2; margin-bottom: 8px;">DEVELOPMENT MODE</div>
+            <div style="font-size: 16px; color: #333;">PIN requested for user: <strong>${data.originalUserEmail}</strong></div>
+          </div>
+          ` : ''}
+          
           <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
             Use this PIN to complete your sign-in to Healios. Enter it on the login page to access your account.
           </p>
@@ -336,12 +343,48 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 }
 
 // Send PIN authentication email
-export async function sendPinEmail(email: string, pin: string): Promise<{ success: boolean; id?: string }> {
-  return await sendEmail(email, "pin_auth", {
-    pin,
-    amount: 0,
-    id: 'pin-' + Date.now()
-  });
+export async function sendPinEmail(userEmail: string, pin: string): Promise<{ success: boolean; id?: string }> {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  if (isDevelopment) {
+    // In development/testing: send to all admin accounts
+    const adminEmails = ["admin@thehealios.com", "dn@thefourths.com"];
+    console.log(`[PIN_AUTH] Development mode - sending PIN to admin accounts instead of user email`);
+    
+    let lastResult = { success: false, id: 'no-attempts' };
+    
+    for (const adminEmail of adminEmails) {
+      try {
+        const result = await sendEmail(adminEmail, "pin_auth", {
+          pin,
+          amount: 0,
+          id: 'pin-' + Date.now(),
+          originalUserEmail: userEmail // Include original email in the data
+        });
+        
+        if (result.success) {
+          console.log(`[PIN_AUTH] PIN sent successfully to admin: ${adminEmail}`);
+          lastResult = result;
+          break; // Stop on first successful send
+        } else {
+          console.log(`[PIN_AUTH] Failed to send to admin: ${adminEmail}`);
+          lastResult = result;
+        }
+      } catch (error) {
+        console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
+      }
+    }
+    
+    return lastResult;
+  } else {
+    // In production: send to the actual user email
+    console.log(`[PIN_AUTH] Production mode - sending PIN to user email: ${userEmail}`);
+    return await sendEmail(userEmail, "pin_auth", {
+      pin,
+      amount: 0,
+      id: 'pin-' + Date.now()
+    });
+  }
 }
 
 // Send admin alert emails for critical issues
