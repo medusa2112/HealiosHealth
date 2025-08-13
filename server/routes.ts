@@ -65,9 +65,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register auth routes
   app.use('/api/auth', authRoutes);
   
-  // OAuth provider routes removed - now using unified Replit Auth with provider hints
-  // All OAuth providers (Google, GitHub, Apple, X) are configured in Replit Auth tool
-  // and accessed via /api/login?provider=<provider_name>
+  // Register OAuth provider routes for direct social login
+  const oauthProvidersRoutes = await import('./routes/oauth-providers');
+  app.use('/api/auth', oauthProvidersRoutes.default);
   
   // Register admin OAuth routes
   const adminOAuthRoutes = await import('./routes/adminOAuth');
