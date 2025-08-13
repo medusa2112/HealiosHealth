@@ -80,15 +80,66 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
   const autocompleteRef = useRef<any>(null);
   const addressInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize Google Maps (currently disabled due to API key restrictions)
+  // Load Google Maps API for Places autocomplete
   useEffect(() => {
-    // Google Places autocomplete temporarily disabled due to API key restrictions
-    // The form works perfectly with manual entry and backend address validation
-    console.log('Google Places autocomplete: API key restricted, using manual entry');
-    setShowGoogleMapsError(true);
-    
-    // TODO: Enable when Google API keys are properly configured with correct restrictions
-    // loadGoogleMaps();
+    const loadGoogleMaps = async () => {
+      try {
+        // Check if already loaded
+        if (window.google?.maps?.places?.Autocomplete) {
+          setGoogleMapsLoaded(true);
+          return;
+        }
+
+        const response = await fetch('/api/config/google-maps-key');
+        if (!response.ok) {
+          console.log('Google Maps API key not available, using manual entry');
+          setShowGoogleMapsError(true);
+          return;
+        }
+        
+        const { apiKey } = await response.json();
+        if (!apiKey) {
+          console.log('No Google Maps API key configured, using manual entry');
+          setShowGoogleMapsError(true);
+          return;
+        }
+
+        // Remove any existing Google Maps scripts
+        const existingScripts = document.querySelectorAll('script[src*="maps.googleapis.com"]');
+        existingScripts.forEach(script => script.remove());
+
+        const timeoutId = setTimeout(() => {
+          console.log('Google Maps API timeout, using manual entry fallback');
+          setShowGoogleMapsError(true);
+        }, 10000);
+
+        const callbackName = `googleMapsCallback${Date.now()}`;
+        (window as any)[callbackName] = () => {
+          clearTimeout(timeoutId);
+          console.log('Google Maps API loaded successfully');
+          setGoogleMapsLoaded(true);
+          delete (window as any)[callbackName];
+        };
+        
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA&callback=${callbackName}`;
+        script.async = true;
+        
+        script.onerror = (error) => {
+          clearTimeout(timeoutId);
+          console.log('Google Maps script failed to load, using manual entry fallback');
+          setShowGoogleMapsError(true);
+          delete (window as any)[callbackName];
+        };
+        
+        document.head.appendChild(script);
+      } catch (error) {
+        console.log('Error loading Google Maps, using manual entry fallback');
+        setShowGoogleMapsError(true);
+      }
+    };
+
+    loadGoogleMaps();
   }, []);
 
   // Initialize Google Places Autocomplete (when available)
@@ -378,10 +429,22 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
                 Powered by Google - Address autocomplete enabled
               </p>
             )}
+            {!googleMapsLoaded && !showGoogleMapsError && (
+              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Loading address autocomplete...
+              </p>
+            )}
             {showGoogleMapsError && (
               <p className="text-xs text-blue-600 mt-1 flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
-                South African address form - enter details manually
+                Manual entry mode - autocomplete unavailable
+              </p>
+            )}
+            {googleMapsLoaded && !showGoogleMapsError && (
+              <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3" />
+                Address autocomplete enabled - start typing
               </p>
             )}
           </div>
