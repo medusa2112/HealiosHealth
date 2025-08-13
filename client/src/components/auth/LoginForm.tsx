@@ -202,7 +202,7 @@ export function LoginForm() {
               </Button>
             </form>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4" onSubmit={(e) => { console.log('BLOCKED DIV SUBMIT'); e.preventDefault(); e.stopPropagation(); return false; }}>
               <div className="space-y-2">
                 <Label htmlFor="pin" className="text-black dark:text-white">
                   Enter PIN
@@ -214,46 +214,78 @@ export function LoginForm() {
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   onKeyDown={(e) => {
+                    console.log('KEY PRESSED:', e.key);
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       e.stopPropagation();
-                      console.log('ENTER KEY BLOCKED - CALLING HANDLER');
+                      console.log('ENTER KEY BLOCKED - CALLING HANDLER DIRECTLY');
                       handlePinVerification();
+                      return false;
+                    }
+                  }}
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return false;
                     }
                   }}
                   disabled={isLoading}
                   className="w-full text-center text-lg tracking-widest"
                   maxLength={6}
                   data-testid="input-pin"
+                  autoComplete="off"
                 />
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Sent to: {email}
                 </p>
               </div>
               
-              <Button
-                type="button"
+              <div 
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('=== BUTTON CLICK EVENT ===');
-                  console.log('Event object:', e);
-                  console.log('About to call handlePinVerification...');
-                  handlePinVerification();
+                  console.log('=== WRAPPER DIV CLICK EVENT ===');
+                  console.log('Target:', e.target);
+                  console.log('CurrentTarget:', e.currentTarget);
+                  if (e.target === e.currentTarget) {
+                    console.log('Clicked wrapper div, ignoring...');
+                    return false;
+                  }
                 }}
-                disabled={isLoading || !pin.trim()}
-                className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                data-testid="button-verify-pin"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  'Verify & Sign In'
-                )}
-              </Button>
+                <Button
+                  type="button"
+                  onMouseDown={(e) => {
+                    console.log('MOUSE DOWN EVENT');
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onClick={(e) => {
+                    console.log('=== BUTTON CLICK EVENT STARTED ===');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Event type:', e.type);
+                    console.log('Event target:', e.target);
+                    console.log('About to call handlePinVerification...');
+                    handlePinVerification();
+                    console.log('=== BUTTON CLICK EVENT COMPLETED ===');
+                    return false;
+                  }}
+                  disabled={isLoading || !pin.trim()}
+                  className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
+                  data-testid="button-verify-pin"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    'Verify & Sign In'
+                  )}
+                </Button>
+              </div>
               
               <Button
                 type="button"
