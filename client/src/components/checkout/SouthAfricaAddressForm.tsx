@@ -127,7 +127,10 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         
         script.onerror = (error) => {
           clearTimeout(timeoutId);
-          console.log('Google Maps script failed to load, using manual entry fallback');
+          console.error('Google Maps script error:', error);
+          console.log('Google Maps script failed to load - likely API key restriction');
+          console.log('Current domain:', window.location.origin);
+          console.log('Script URL:', script.src);
           setShowGoogleMapsError(true);
           delete (window as any)[callbackName];
         };
