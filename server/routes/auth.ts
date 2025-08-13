@@ -428,7 +428,7 @@ if (false) {
 }
 
 // Customer profile update endpoint
-router.patch('/customer/profile', async (req, res) => {
+router.patch('/profile', async (req, res) => {
   try {
     const userId = (req.session as any)?.userId;
     
