@@ -101,7 +101,12 @@ router.post('/verify-pin', async (req, res) => {
     }).parse(req.body);
 
     const pinId = (req.session as any).pinId;
+    console.log(`[PIN_VERIFY] Session ID: ${req.sessionID}`);
+    console.log(`[PIN_VERIFY] PIN ID from session: ${pinId}`);
+    console.log(`[PIN_VERIFY] Email from request: ${email}`);
+    
     if (!pinId) {
+      console.log(`[PIN_VERIFY] No PIN ID found in session`);
       return res.status(400).json({
         success: false,
         message: 'No PIN request found. Please request a new PIN.'
@@ -109,7 +114,12 @@ router.post('/verify-pin', async (req, res) => {
     }
 
     const pinData = pinStore.get(pinId);
+    console.log(`[PIN_VERIFY] Looking for PIN with ID: ${pinId}`);
+    console.log(`[PIN_VERIFY] Available PINs in store:`, Array.from(pinStore.keys()));
+    console.log(`[PIN_VERIFY] PIN data found:`, !!pinData);
+    
     if (!pinData) {
+      console.log(`[PIN_VERIFY] PIN not found in store - may have expired or been cleaned up`);
       return res.status(400).json({
         success: false,
         message: 'PIN has expired. Please request a new PIN.'
