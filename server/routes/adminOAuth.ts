@@ -32,49 +32,44 @@ router.post('/logout', (req, res) => {
   
   console.log(`[ADMIN_OAUTH] Admin logout: ${adminEmail}`);
   
-  req.logout(() => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('[ADMIN_OAUTH] Session destroy error:', err);
-      }
-      
-      // Clear all cookies
-      res.clearCookie('healios.sid');
-      res.clearCookie('hh_admin_sess');
-      res.clearCookie('hh_cust_sess');
-      
-      res.json({ message: 'Admin logged out successfully' });
-    });
+  // Clear session data
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('[ADMIN_OAUTH] Session destroy error:', err);
+    }
+    
+    // Clear all cookies
+    res.clearCookie('healios.sid');
+    res.clearCookie('hh_admin_sess');
+    res.clearCookie('hh_cust_sess');
+    
+    res.json({ message: 'Admin logged out successfully' });
   });
 });
 
-// Check admin status - requires passport session
+// Check admin status - uses session-based auth (PIN system)
 router.get('/status', async (req: Request, res: Response) => {
-  // First check passport session
-  const user = req.user as any;
+  // Check session for admin authentication
+  const session = req.session as any;
+  const adminEmail = session?.adminEmail;
+  const isAdminAuthenticated = session?.adminAuthenticated;
   
   console.log('[ADMIN_OAUTH_STATUS] Checking admin status:', {
-    hasUser: !!user,
-    userEmail: user?.email,
-    userRole: user?.role,
-    isAuthenticated: req.isAuthenticated(),
+    hasAdminEmail: !!adminEmail,
+    adminEmail: adminEmail,
+    isAdminAuthenticated,
     sessionID: req.sessionID,
     hasSession: !!req.session
   });
   
-  // If user is authenticated via passport
-  if (req.isAuthenticated() && user) {
-    // Check if user has admin role
-    if (user.role === 'admin') {
-      console.log('[ADMIN_OAUTH_STATUS] Admin authenticated:', user.email);
-      return res.json({ 
-        authenticated: true, 
-        email: user.email,
-        role: 'admin'
-      });
-    } else {
-      console.log('[ADMIN_OAUTH_STATUS] User authenticated but not admin:', user.email, user.role);
-    }
+  // If admin is authenticated via session
+  if (isAdminAuthenticated && adminEmail) {
+    console.log('[ADMIN_OAUTH_STATUS] Admin authenticated:', adminEmail);
+    return res.json({ 
+      authenticated: true, 
+      email: adminEmail,
+      role: 'admin'
+    });
   }
   
   // Not authenticated as admin
