@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User, Loader2, CheckCircle } from 'lucide-react';
 import { useUser } from '@/hooks/use-auth';
+import { getCustCsrf } from '@/lib/authClient';
 
 export default function Profile() {
   const [, setLocation] = useLocation();
@@ -39,11 +40,13 @@ export default function Profile() {
     setError(null);
 
     try {
+      const csrfToken = getCustCsrf();
       const response = await fetch('/api/auth/customer/profile', {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
+          ...(csrfToken && { 'X-CSRF-Token': csrfToken })
         },
         credentials: 'include',
         body: JSON.stringify({
