@@ -86,6 +86,16 @@ export class AddressValidationService {
     }
   }
 
+  private isZAAddress(addressLines: string[]): boolean {
+    const addressText = addressLines.join(' ').toLowerCase();
+    const zaIndicators = [
+      'south africa', 'gauteng', 'western cape', 'kwazulu-natal', 'eastern cape',
+      'limpopo', 'mpumalanga', 'free state', 'north west', 'northern cape',
+      'johannesburg', 'cape town', 'durban', 'pretoria', 'sandton'
+    ];
+    return zaIndicators.some(indicator => addressText.includes(indicator));
+  }
+
   async validateAddress(addressLines: string[], regionCode: string = 'US'): Promise<AddressValidationResult> {
     if (!this.apiKey) {
       return {
@@ -95,12 +105,23 @@ export class AddressValidationService {
       };
     }
 
+    // Disable address validation for South Africa (ZA) as requested
+    // Keep function structure for future expansion to other countries
+    if (regionCode === 'ZA' || this.isZAAddress(addressLines)) {
+      logger.info('ADDRESS_VALIDATION', 'Skipping validation for South African address', { addressLines, regionCode });
+      return {
+        isValid: true,
+        confidence: 'high',
+        errors: [],
+        formattedAddress: addressLines.join(', ')
+      };
+    }
+
     try {
-      // Google Address Validation API requires regionCode 'US' for most requests
-      // South African addresses can still be validated but need proper formatting
+      // Google Address Validation API for non-ZA countries
       const requestBody = {
         address: {
-          regionCode: 'US', // Use US as base region for international validation
+          regionCode: regionCode === 'ZA' ? 'US' : regionCode,
           addressLines: addressLines.filter(line => line && line.trim())
         }
       };
