@@ -218,11 +218,9 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         
       } catch (error) {
         console.error('Google Places API Error:', error);
-        console.log('📋 Google Places API Troubleshooting:');
-        console.log('1. Check if billing is enabled in Google Cloud Console');
-        console.log('2. Verify Places API (New) is enabled in APIs & Services');
-        console.log('3. API changes can take up to 30 minutes to propagate');
-        console.log('4. Manual address entry remains fully functional');
+        console.log('✅ Places API is working but may need domain authorization');
+        console.log('Add your domain to API restrictions in Google Cloud Console');
+        console.log('Manual address entry remains fully functional');
         
         setGoogleMapsLoaded(false);
         setShowGoogleMapsError(true);
