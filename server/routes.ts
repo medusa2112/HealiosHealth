@@ -81,6 +81,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const pinAuthRoutes = await import('./routes/pin-auth');
   app.use('/api/auth', pinAuthRoutes.default);
   
+  // Register customer authentication routes
+  app.use('/api/auth/customer', authRoutes);
+  
   // Register admin OAuth routes
   const adminOAuthRoutes = await import('./routes/adminOAuth');
   app.use('/api/admin/oauth', adminOAuthRoutes.default);
