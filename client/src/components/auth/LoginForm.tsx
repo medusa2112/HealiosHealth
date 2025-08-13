@@ -95,14 +95,23 @@ export function LoginForm() {
         const targetUrl = redirectTo || '/profile';
         setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
         console.log('CALLING setLocation with:', targetUrl);
+        
+        // Use both setLocation and window.location.href as fallback
         setLocation(targetUrl);
-        console.log('setLocation called successfully');
+        setTimeout(() => {
+          console.log('Fallback redirect to:', targetUrl);
+          window.location.href = targetUrl;
+        }, 500);
+        console.log('Redirect methods called successfully');
       } else {
         // Existing user with complete profile - redirect to shopping
         const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
         console.log('CALLING setLocation for existing user with:', returnUrl);
         setLocation(returnUrl);
-        console.log('setLocation called successfully for existing user');
+        setTimeout(() => {
+          window.location.href = returnUrl;
+        }, 500);
+        console.log('Redirect methods called successfully for existing user');
       }
     } catch (error) {
       console.error('PIN verification error:', error);
@@ -195,7 +204,7 @@ export function LoginForm() {
               </Button>
             </form>
           ) : (
-            <form onSubmit={handlePinSubmit} action="" className="space-y-4">
+            <form onSubmit={handlePinSubmit} action="javascript:void(0)" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="pin" className="text-black dark:text-white">
                   Enter PIN
