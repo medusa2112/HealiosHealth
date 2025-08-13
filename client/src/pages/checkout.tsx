@@ -11,6 +11,8 @@ import { ArrowLeft, ShoppingBag, Tag, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 import { apiRequest } from '@/lib/queryClient';
+import { AddressForm } from '@/components/checkout/AddressForm';
+import type { CheckoutAddress } from '@shared/schema';
 
 // Extend Window interface for Google Analytics
 declare global {
@@ -40,6 +42,10 @@ const CheckoutForm = () => {
     discountAmount: number;
   } | null>(null);
   const [isValidatingDiscount, setIsValidatingDiscount] = useState(false);
+  
+  // Address validation state
+  const [isAddressValid, setIsAddressValid] = useState(false);
+  const [structuredAddress, setStructuredAddress] = useState<CheckoutAddress | null>(null);
 
   // Calculate totals with discount
   const subtotal = cart.items.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
@@ -96,13 +102,19 @@ const CheckoutForm = () => {
     });
   };
 
+  // Address validation handler
+  const handleAddressValidation = (isValid: boolean, address?: CheckoutAddress) => {
+    setIsAddressValid(isValid);
+    setStructuredAddress(address || null);
+  };
+
   const handleStripeCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!customerInfo.email || !customerInfo.address) {
+    if (!isAddressValid || !structuredAddress) {
       toast({
-        title: "Missing Information",
-        description: "Please fill in your email and shipping address.",
+        title: "Invalid Address",
+        description: "Please fill in all required address fields correctly.",
         variant: "destructive",
       });
       return;
@@ -111,13 +123,27 @@ const CheckoutForm = () => {
     setIsProcessing(true);
 
     try {
-      // Prepare order data
+      // Prepare order data with structured address
       const orderData = {
-        customerEmail: customerInfo.email,
-        customerName: customerInfo.name || null,
-        customerPhone: customerInfo.phone || null,
-        shippingAddress: customerInfo.address,
-        billingAddress: customerInfo.address,
+        customerEmail: structuredAddress.email,
+        customerName: structuredAddress.name || null,
+        customerPhone: structuredAddress.phone || null,
+        shippingAddress: JSON.stringify({
+          line1: structuredAddress.line1,
+          line2: structuredAddress.line2,
+          city: structuredAddress.city,
+          state: structuredAddress.state,
+          zipCode: structuredAddress.zipCode,
+          country: structuredAddress.country,
+        }),
+        billingAddress: JSON.stringify({
+          line1: structuredAddress.line1,
+          line2: structuredAddress.line2,
+          city: structuredAddress.city,
+          state: structuredAddress.state,
+          zipCode: structuredAddress.zipCode,
+          country: structuredAddress.country,
+        }),
         orderItems: JSON.stringify(cart.items),
         totalAmount: total.toFixed(2),
         discountCode: appliedDiscount?.code || null,
@@ -172,10 +198,10 @@ const CheckoutForm = () => {
   const handleShopifyCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!customerInfo.email) {
+    if (!isAddressValid || !structuredAddress) {
       toast({
-        title: "Missing Information",
-        description: "Please fill in your email address.",
+        title: "Invalid Address",
+        description: "Please fill in all required address fields correctly.",
         variant: "destructive",
       });
       return;
@@ -184,13 +210,27 @@ const CheckoutForm = () => {
     setIsProcessing(true);
 
     try {
-      // Prepare order data
+      // Prepare order data with structured address
       const orderData = {
-        customerEmail: customerInfo.email,
-        customerName: customerInfo.name || null,
-        customerPhone: customerInfo.phone || null,
-        shippingAddress: customerInfo.address || 'To be collected at checkout',
-        billingAddress: customerInfo.address || 'To be collected at checkout',
+        customerEmail: structuredAddress.email,
+        customerName: structuredAddress.name || null,
+        customerPhone: structuredAddress.phone || null,
+        shippingAddress: JSON.stringify({
+          line1: structuredAddress.line1,
+          line2: structuredAddress.line2,
+          city: structuredAddress.city,
+          state: structuredAddress.state,
+          zipCode: structuredAddress.zipCode,
+          country: structuredAddress.country,
+        }),
+        billingAddress: JSON.stringify({
+          line1: structuredAddress.line1,
+          line2: structuredAddress.line2,
+          city: structuredAddress.city,
+          state: structuredAddress.state,
+          zipCode: structuredAddress.zipCode,
+          country: structuredAddress.country,
+        }),
         orderItems: JSON.stringify(cart.items),
         totalAmount: total.toFixed(2),
         discountCode: appliedDiscount?.code || null,
@@ -338,44 +378,12 @@ const CheckoutForm = () => {
         </CardHeader>
         <CardContent>
           <form className="space-y-6">
-            {/* Customer Information */}
-            <div className="space-y-4">
-              <h4 className="font-medium">Contact Information</h4>
-              <input
-                type="email"
-                placeholder="Email address *"
-                value={customerInfo.email}
-                onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Full name"
-                value={customerInfo.name}
-                onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
-              />
-              <input
-                type="tel"
-                placeholder="Phone number"
-                value={customerInfo.phone}
-                onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
-                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none"
-              />
-            </div>
-
-            {/* Shipping Address */}
-            <div className="space-y-4">
-              <h4 className="font-medium">Shipping Address</h4>
-              <textarea
-                placeholder="Full shipping address including postal code *"
-                value={customerInfo.address}
-                onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
-                className="w-full p-3 border border-gray-300 focus:border-black focus:outline-none h-24 resize-none"
-                required
-              />
-            </div>
+            {/* Enhanced Address Form with Validation */}
+            <AddressForm
+              customerInfo={customerInfo}
+              onCustomerInfoChange={setCustomerInfo}
+              onValidationChange={handleAddressValidation}
+            />
 
             {/* Payment Method Selection */}
             <div className="space-y-4">
@@ -408,11 +416,16 @@ const CheckoutForm = () => {
 
             <Button 
               type="submit" 
-              disabled={isProcessing}
+              disabled={isProcessing || !isAddressValid}
               onClick={paymentMethod === 'stripe' ? handleStripeCheckout : handleShopifyCheckout}
-              className="w-full bg-black hover:bg-gray-800 text-white py-3 text-lg font-medium"
+              className={`w-full py-3 text-lg font-medium transition-colors duration-200 ${
+                !isAddressValid 
+                  ? 'bg-gray-400 cursor-not-allowed text-gray-700' 
+                  : 'bg-black hover:bg-gray-800 text-white'
+              }`}
+              data-testid="button-checkout"
             >
-              {isProcessing ? "Redirecting..." : `Continue to ${paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} - R${total.toFixed(2)}`}
+              {isProcessing ? "Redirecting..." : !isAddressValid ? "Please complete address" : `Continue to ${paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} - R${total.toFixed(2)}`}
             </Button>
             
             <p className="text-sm text-gray-600 text-center">

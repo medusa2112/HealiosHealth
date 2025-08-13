@@ -278,9 +278,30 @@ export const insertProductVariantSchema = createInsertSchema(productVariants).om
   createdAt: true,
 });
 
+// Enhanced address validation schema
 export const insertAddressSchema = createInsertSchema(addresses).omit({
   id: true,
   createdAt: true,
+}).extend({
+  // Enhanced validation rules for address fields
+  line1: z.string().min(5, "Street address must be at least 5 characters").max(200, "Street address too long"),
+  city: z.string().min(2, "City is required").max(100, "City name too long").optional(),
+  state: z.string().min(2, "State/Province is required").max(100, "State name too long").optional(),
+  zipCode: z.string().min(3, "Postal/ZIP code is required").max(20, "Postal code too long").optional(),
+  country: z.string().min(2, "Country is required").max(100, "Country name too long").optional(),
+});
+
+// Checkout address validation schema (more flexible for external checkouts)
+export const checkoutAddressSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name too long").optional(),
+  phone: z.string().min(10, "Phone number must be at least 10 digits").max(20, "Phone number too long").optional(),
+  line1: z.string().min(5, "Street address must be at least 5 characters").max(200, "Street address too long"),
+  line2: z.string().max(200, "Address line 2 too long").optional(),
+  city: z.string().min(2, "City is required").max(100, "City name too long"),
+  state: z.string().min(2, "State/Province is required").max(100, "State name too long").optional(),
+  zipCode: z.string().min(3, "Postal/ZIP code is required").max(20, "Postal code too long"),
+  country: z.string().min(2, "Country is required").max(100, "Country name too long").default("South Africa"),
 });
 
 export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
@@ -311,6 +332,8 @@ export type Admin = typeof admins.$inferSelect;
 export type InsertAdmin = z.infer<typeof insertAdminsSchema>;
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
+export type CheckoutAddress = z.infer<typeof checkoutAddressSchema>;
+export type CheckoutAddress = z.infer<typeof checkoutAddressSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type Cart = typeof carts.$inferSelect;
