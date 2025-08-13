@@ -312,6 +312,20 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     });
 
     console.log(`[EMAIL DEBUG] Full Resend result:`, JSON.stringify(result, null, 2));
+    
+    // Check if there's an error from Resend
+    if (result.error) {
+      console.error(`[EMAIL ERROR] Resend API error:`, result.error);
+      
+      // Handle testing mode limitation
+      if (result.error.statusCode === 403 && result.error.error?.includes('testing emails')) {
+        console.warn(`[EMAIL WARNING] Resend is in testing mode - can only send to verified email address`);
+        return { id: 'testing-mode-' + Date.now(), success: false, error: 'testing_mode' };
+      }
+      
+      return { id: 'error-' + Date.now(), success: false, error: result.error };
+    }
+    
     console.log(`[EMAIL SENT] ${type} email sent to ${to} - ID: ${result.data?.id}`);
     return { id: result.data?.id || 'unknown', success: true };
   } catch (error) {
