@@ -11,7 +11,7 @@ import { ArrowLeft, ShoppingBag, Tag, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 import { apiRequest } from '@/lib/queryClient';
-import { AddressForm } from '@/components/checkout/AddressForm';
+import { SouthAfricaAddressForm } from '@/components/checkout/SouthAfricaAddressForm';
 import type { CheckoutAddress } from '@shared/schema';
 
 // Extend Window interface for Google Analytics
@@ -378,10 +378,8 @@ const CheckoutForm = () => {
         </CardHeader>
         <CardContent>
           <form className="space-y-6">
-            {/* Enhanced Address Form with Validation */}
-            <AddressForm
-              customerInfo={customerInfo}
-              onCustomerInfoChange={setCustomerInfo}
+            {/* South Africa Address Form with Google Places */}
+            <SouthAfricaAddressForm
               onValidationChange={handleAddressValidation}
             />
 
@@ -459,7 +457,7 @@ export default function CheckoutPage() {
         items: cart.items.map(item => ({
           item_id: item.product.id,
           item_name: item.product.name,
-          category: item.product.category || 'Supplements',
+          category: (item.product.categories && item.product.categories.length > 0) ? item.product.categories[0] : 'Supplements',
           quantity: item.quantity,
           price: parseFloat(item.product.price)
         }))

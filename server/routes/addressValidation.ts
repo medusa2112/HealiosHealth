@@ -15,17 +15,13 @@ const bypassCSRF = (req: any, res: any, next: any) => {
   }
 };
 
-// Address validation schema
+// Address validation schema for South Africa
 const addressValidationSchema = z.object({
-  line1: z.string().min(1, 'Street address is required'),
-  line2: z.string().optional(),
-  city: z.string().min(1, 'City is required'),
-  state: z.string().min(1, 'State/Province is required'),
-  postalCode: z.string().min(1, 'Postal code is required'),
-  country: z.string().min(1, 'Country is required')
+  addressLines: z.array(z.string()).min(1, 'At least one address line is required'),
+  regionCode: z.string().optional().default('ZA')
 });
 
-// Validate complete address
+// Validate complete address using Google Address Validation API
 router.post('/validate', bypassCSRF, async (req, res) => {
   try {
     const validationResult = addressValidationSchema.safeParse(req.body);
@@ -37,12 +33,12 @@ router.post('/validate', bypassCSRF, async (req, res) => {
       });
     }
 
-    const address = validationResult.data;
-    const result = await addressValidation.validateAddress(address);
+    const { addressLines, regionCode } = validationResult.data;
+    const result = await addressValidation.validateAddress(addressLines, regionCode);
 
     logger.info('ADDRESS_VALIDATION', 'Address validation request', { 
-      address: address.line1,
-      city: address.city,
+      addressLines,
+      regionCode,
       isValid: result.isValid,
       confidence: result.confidence
     });

@@ -1,39 +1,72 @@
 import fetch from 'node-fetch';
 import { logger } from './logger';
 
-interface GoogleGeocodingResponse {
-  results: Array<{
-    address_components: Array<{
-      long_name: string;
-      short_name: string;
-      types: string[];
-    }>;
-    formatted_address: string;
-    geometry: {
-      location: {
-        lat: number;
-        lng: number;
-      };
-      location_type: string;
+interface GoogleAddressValidationResponse {
+  result: {
+    verdict: {
+      inputGranularity: string;
+      validationGranularity: string;
+      geocodeGranularity: string;
+      addressComplete: boolean;
+      hasUnconfirmedComponents: boolean;
+      hasInferredComponents: boolean;
+      hasReplacedComponents: boolean;
     };
-    place_id: string;
-    types: string[];
-  }>;
-  status: string;
+    address: {
+      formattedAddress: string;
+      postalAddress: {
+        regionCode: string;
+        languageCode: string;
+        postalCode: string;
+        sortingCode: string;
+        administrativeArea: string;
+        locality: string;
+        sublocality: string;
+        addressLines: string[];
+      };
+      addressComponents: Array<{
+        componentName: {
+          text: string;
+          languageCode: string;
+        };
+        componentType: string;
+        confirmationLevel: string;
+      }>;
+    };
+    geocode: {
+      location: {
+        latitude: number;
+        longitude: number;
+      };
+      plusCode: {
+        globalCode: string;
+        compoundCode: string;
+      };
+      bounds: {
+        low: { latitude: number; longitude: number };
+        high: { latitude: number; longitude: number };
+      };
+      featureSizeMeters: number;
+      placeId: string;
+      placeType: string[];
+    };
+  };
+}
+
+interface StructuredAddress {
+  line1: string;
+  line2?: string;
+  city: string;
+  region: string;
+  postal_code: string;
+  country: string;
 }
 
 interface AddressValidationResult {
   isValid: boolean;
   confidence: 'high' | 'medium' | 'low';
   formattedAddress?: string;
-  components?: {
-    streetNumber?: string;
-    streetName?: string;
-    city?: string;
-    state?: string;
-    postalCode?: string;
-    country?: string;
-  };
+  structuredAddress?: StructuredAddress;
   coordinates?: {
     lat: number;
     lng: number;
@@ -43,7 +76,7 @@ interface AddressValidationResult {
 
 export class AddressValidationService {
   private apiKey: string;
-  private baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+  private baseUrl = 'https://addressvalidation.googleapis.com/v1:validateAddress';
 
   constructor() {
     this.apiKey = process.env.GOOGLE_MAPS_SERVER_KEY || '';
@@ -52,14 +85,7 @@ export class AddressValidationService {
     }
   }
 
-  async validateAddress(address: {
-    line1: string;
-    line2?: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-  }): Promise<AddressValidationResult> {
+  async validateAddress(addressLines: string[], regionCode: string = 'ZA'): Promise<AddressValidationResult> {
     if (!this.apiKey) {
       return {
         isValid: false,
@@ -69,53 +95,58 @@ export class AddressValidationService {
     }
 
     try {
-      // Construct full address for geocoding
-      const fullAddress = [
-        address.line1,
-        address.line2,
-        address.city,
-        address.state,
-        address.postalCode,
-        address.country
-      ].filter(Boolean).join(', ');
-
-      // Make request to Google Geocoding API
-      const params = new URLSearchParams({
-        address: fullAddress,
-        key: this.apiKey,
-        region: address.country === 'South Africa' ? 'za' : 'us'
-      });
-
-      const response = await fetch(`${this.baseUrl}?${params}`);
-      const data = await response.json() as GoogleGeocodingResponse;
-
-      if (data.status !== 'OK' || !data.results.length) {
-        return {
-          isValid: false,
-          confidence: 'low',
-          errors: [`Address could not be verified: ${data.status}`]
-        };
-      }
-
-      const result = data.results[0];
-      const components = this.parseAddressComponents(result.address_components);
-
-      // Determine confidence based on location type and match quality
-      const confidence = this.determineConfidence(result, address);
-
-      return {
-        isValid: true,
-        confidence,
-        formattedAddress: result.formatted_address,
-        components,
-        coordinates: {
-          lat: result.geometry.location.lat,
-          lng: result.geometry.location.lng
+      const requestBody = {
+        address: {
+          regionCode: regionCode,
+          addressLines: addressLines.filter(line => line && line.trim())
         }
       };
 
+      const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json() as GoogleAddressValidationResponse;
+
+      if (!data.result) {
+        return {
+          isValid: false,
+          confidence: 'low',
+          errors: ['Address validation failed - no result returned']
+        };
+      }
+
+      const verdict = data.result.verdict;
+      const address = data.result.address;
+      const geocode = data.result.geocode;
+
+      // Determine confidence based on validation granularity and completeness
+      const confidence = this.determineConfidence(verdict);
+
+      // Map address components to structured format for South Africa
+      const structuredAddress = this.mapToStructuredAddress(address);
+
+      return {
+        isValid: verdict.addressComplete && !verdict.hasUnconfirmedComponents,
+        confidence,
+        formattedAddress: address.formattedAddress,
+        structuredAddress,
+        coordinates: geocode ? {
+          lat: geocode.location.latitude,
+          lng: geocode.location.longitude
+        } : undefined
+      };
+
     } catch (error) {
-      logger.error('ADDRESS_VALIDATION', 'Failed to validate address', { error, address });
+      logger.error('ADDRESS_VALIDATION', 'Failed to validate address', { error, addressLines });
       return {
         isValid: false,
         confidence: 'low',
@@ -124,43 +155,32 @@ export class AddressValidationService {
     }
   }
 
-  private parseAddressComponents(components: GoogleGeocodingResponse['results'][0]['address_components']) {
-    const getComponent = (types: string[]) => {
-      const component = components.find(comp => 
-        types.some(type => comp.types.includes(type))
-      );
-      return component ? component.long_name : undefined;
-    };
-
+  private mapToStructuredAddress(address: GoogleAddressValidationResponse['result']['address']): StructuredAddress {
+    const postalAddress = address.postalAddress;
+    const addressLines = postalAddress.addressLines || [];
+    
     return {
-      streetNumber: getComponent(['street_number']),
-      streetName: getComponent(['route']),
-      city: getComponent(['locality', 'administrative_area_level_2']),
-      state: getComponent(['administrative_area_level_1']),
-      postalCode: getComponent(['postal_code']),
-      country: getComponent(['country'])
+      line1: addressLines[0] || '',
+      line2: addressLines.length > 1 ? addressLines.slice(1).join(', ') : undefined,
+      city: postalAddress.locality || '',
+      region: postalAddress.administrativeArea || '', // This maps to province in South Africa
+      postal_code: postalAddress.postalCode || '',
+      country: 'South Africa' // Always South Africa for ZA region code
     };
   }
 
-  private determineConfidence(
-    result: GoogleGeocodingResponse['results'][0], 
-    inputAddress: any
-  ): 'high' | 'medium' | 'low' {
-    const locationType = result.geometry.location_type;
-    
-    // High confidence: exact rooftop match
-    if (locationType === 'ROOFTOP') {
+  private determineConfidence(verdict: GoogleAddressValidationResponse['result']['verdict']): 'high' | 'medium' | 'low' {
+    // High confidence: complete address with confirmed components
+    if (verdict.addressComplete && !verdict.hasUnconfirmedComponents && !verdict.hasInferredComponents) {
       return 'high';
     }
     
-    // Medium confidence: good interpolation or premise level
-    if (locationType === 'RANGE_INTERPOLATED' || 
-        result.types.includes('premise') ||
-        result.types.includes('subpremise')) {
+    // Medium confidence: complete but with some inferred components
+    if (verdict.addressComplete && !verdict.hasUnconfirmedComponents) {
       return 'medium';
     }
     
-    // Low confidence: geometric center or approximate
+    // Low confidence: incomplete or unconfirmed components
     return 'low';
   }
 

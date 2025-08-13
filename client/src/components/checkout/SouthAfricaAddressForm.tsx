@@ -1,0 +1,501 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { z } from 'zod';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader2, MapPin, AlertCircle, CheckCircle2 } from 'lucide-react';
+
+// Extend window type for Google Places API
+declare global {
+  interface Window {
+    google?: {
+      maps?: {
+        places?: {
+          Autocomplete: new (input: HTMLInputElement, options: any) => any;
+          AutocompleteService: new () => any;
+          PlacesServiceStatus: {
+            OK: string;
+          };
+        };
+      };
+    };
+  }
+}
+
+// South African provinces
+const SA_PROVINCES = [
+  'Eastern Cape',
+  'Free State', 
+  'Gauteng',
+  'KwaZulu-Natal',
+  'Limpopo',
+  'Mpumalanga',
+  'North West',
+  'Northern Cape',
+  'Western Cape',
+];
+
+// Address validation schema
+const addressSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  phone: z.string().min(10, "Phone number must be at least 10 digits").optional(),
+  line1: z.string().min(5, "Street address must be at least 5 characters"),
+  line2: z.string().optional(),
+  city: z.string().min(2, "City is required"),
+  region: z.string().min(2, "Province is required"),
+  postal_code: z.string().min(4, "Postal code must be at least 4 characters"),
+  country: z.literal("South Africa"),
+});
+
+type AddressData = z.infer<typeof addressSchema>;
+
+interface SouthAfricaAddressFormProps {
+  onValidationChange: (isValid: boolean, address?: AddressData) => void;
+}
+
+export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddressFormProps) => {
+  const [address, setAddress] = useState<Partial<AddressData>>({
+    email: '',
+    name: '',
+    phone: '',
+    line1: '',
+    line2: '',
+    city: '',
+    region: '',
+    postal_code: '',
+    country: 'South Africa',
+  });
+  
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [isValid, setIsValid] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationResult, setValidationResult] = useState<any>(null);
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+  
+  const autocompleteRef = useRef<any>(null);
+  const addressInputRef = useRef<HTMLInputElement>(null);
+
+  // Load Google Maps API
+  useEffect(() => {
+    const loadGoogleMaps = async () => {
+      try {
+        const response = await fetch('/api/config/google-maps-key');
+        if (!response.ok) {
+          console.warn('Google Maps API key not available');
+          return;
+        }
+        
+        const { apiKey } = await response.json();
+        
+        if (window.google?.maps?.places) {
+          setGoogleMapsLoaded(true);
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA`;
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          setGoogleMapsLoaded(true);
+        };
+        script.onerror = () => {
+          console.error('Failed to load Google Maps API');
+        };
+        document.head.appendChild(script);
+      } catch (error) {
+        console.error('Error loading Google Maps API:', error);
+      }
+    };
+
+    loadGoogleMaps();
+  }, []);
+
+  // Initialize Google Places Autocomplete
+  useEffect(() => {
+    if (googleMapsLoaded && addressInputRef.current && !autocompleteRef.current) {
+      try {
+        const google = window.google;
+        if (google?.maps?.places?.Autocomplete) {
+          autocompleteRef.current = new google.maps.places.Autocomplete(
+            addressInputRef.current,
+            {
+              componentRestrictions: { country: 'ZA' },
+              fields: ['address_components', 'formatted_address', 'place_id'],
+              types: ['address'],
+            }
+          );
+        }
+
+        if (autocompleteRef.current) {
+          autocompleteRef.current.addListener('place_changed', () => {
+            const place = autocompleteRef.current.getPlace();
+            if (place.address_components) {
+              parseGooglePlace(place);
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error initializing Google Places Autocomplete:', error);
+      }
+    }
+  }, [googleMapsLoaded]);
+
+  // Parse Google Places result
+  const parseGooglePlace = (place: any) => {
+    const components = place.address_components;
+    const getComponent = (types: string[]) => {
+      const component = components.find((comp: any) => 
+        types.some((type: string) => comp.types.includes(type))
+      );
+      return component ? component.long_name : '';
+    };
+
+    const streetNumber = getComponent(['street_number']);
+    const route = getComponent(['route']);
+    const line1 = `${streetNumber} ${route}`.trim();
+
+    setAddress(prev => ({
+      ...prev,
+      line1: line1 || place.formatted_address,
+      city: getComponent(['locality', 'administrative_area_level_2']),
+      region: getComponent(['administrative_area_level_1']),
+      postal_code: getComponent(['postal_code']),
+      country: 'South Africa'
+    }));
+  };
+
+  // Validate address with Google Address Validation API
+  const validateWithGoogle = async () => {
+    if (!address.line1 || !address.city) return;
+    
+    setIsValidating(true);
+    
+    try {
+      const addressLines = [
+        address.line1,
+        address.line2,
+        address.city,
+        address.region,
+        address.postal_code,
+        'South Africa'
+      ].filter(line => line && line.trim());
+
+      const response = await fetch('/api/validate-address/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          addressLines,
+          regionCode: 'ZA'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.validation.isValid) {
+        setValidationResult(data.validation);
+        
+        // Update address with validated components if available
+        if (data.validation.structuredAddress) {
+          const validated = data.validation.structuredAddress;
+          setAddress(prev => ({
+            ...prev,
+            line1: validated.line1 || prev.line1,
+            line2: validated.line2 || prev.line2,
+            city: validated.city || prev.city,
+            region: validated.region || prev.region,
+            postal_code: validated.postal_code || prev.postal_code,
+            country: 'South Africa'
+          }));
+        }
+        
+        // Clear validation errors
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.addressValidation;
+          return newErrors;
+        });
+      } else {
+        const errorMessage = data.validation?.errors?.[0] || 'Address could not be verified';
+        setValidationErrors(prev => ({ 
+          ...prev, 
+          addressValidation: errorMessage
+        }));
+        setValidationResult(null);
+      }
+    } catch (error) {
+      console.error('Address validation error:', error);
+      setValidationErrors(prev => ({ 
+        ...prev, 
+        addressValidation: 'Address validation service temporarily unavailable'
+      }));
+      setValidationResult(null);
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  // Handle field changes
+  const handleFieldChange = (field: keyof AddressData, value: string) => {
+    setAddress(prev => ({ ...prev, [field]: value }));
+    
+    // Clear field-specific errors
+    if (validationErrors[field]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  // Validate form
+  useEffect(() => {
+    const result = addressSchema.safeParse(address);
+    
+    if (result.success) {
+      setIsValid(true);
+      setValidationErrors({});
+      // Map region to state for Stripe compatibility
+      const stripeCompatibleAddress = {
+        ...result.data,
+        state: result.data.region // Map region to state for Stripe
+      };
+      onValidationChange(true, stripeCompatibleAddress as AddressData);
+    } else {
+      setIsValid(false);
+      const errors: Record<string, string> = {};
+      result.error.errors.forEach(error => {
+        errors[error.path[0] as string] = error.message;
+      });
+      setValidationErrors(errors);
+      onValidationChange(false);
+    }
+  }, [address, onValidationChange]);
+
+  const getFieldError = (field: string) => validationErrors[field];
+  const hasFieldError = (field: string) => !!validationErrors[field];
+
+  return (
+    <div className="space-y-6">
+      {/* Customer Information */}
+      <div className="space-y-4">
+        <h4 className="font-medium">Customer Information</h4>
+        
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="email">Email Address *</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="your@email.com"
+              value={address.email || ''}
+              onChange={(e) => handleFieldChange('email', e.target.value)}
+              className={hasFieldError('email') ? 'border-red-500' : ''}
+              data-testid="input-email"
+              required
+            />
+            {hasFieldError('email') && (
+              <Alert className="mt-1 py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  {getFieldError('email')}
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="John Doe"
+                value={address.name || ''}
+                onChange={(e) => handleFieldChange('name', e.target.value)}
+                className={hasFieldError('name') ? 'border-red-500' : ''}
+                data-testid="input-name"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+27 82 123 4567"
+                value={address.phone || ''}
+                onChange={(e) => handleFieldChange('phone', e.target.value)}
+                className={hasFieldError('phone') ? 'border-red-500' : ''}
+                data-testid="input-phone"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* South African Shipping Address */}
+      <div className="space-y-4">
+        <h4 className="font-medium">Shipping Address</h4>
+        
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="line1">Street Address *</Label>
+            <Input
+              ref={addressInputRef}
+              id="line1"
+              type="text"
+              placeholder="Start typing your address..."
+              value={address.line1 || ''}
+              onChange={(e) => handleFieldChange('line1', e.target.value)}
+              className={hasFieldError('line1') ? 'border-red-500' : ''}
+              data-testid="input-address-line1"
+              required
+            />
+            {hasFieldError('line1') && (
+              <Alert className="mt-1 py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  {getFieldError('line1')}
+                </AlertDescription>
+              </Alert>
+            )}
+            {googleMapsLoaded && (
+              <p className="text-xs text-gray-500 mt-1">
+                Powered by Google
+              </p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="line2">Apartment, suite, etc. (optional)</Label>
+            <Input
+              id="line2"
+              type="text"
+              placeholder="Unit 4B"
+              value={address.line2 || ''}
+              onChange={(e) => handleFieldChange('line2', e.target.value)}
+              data-testid="input-address-line2"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label htmlFor="city">City *</Label>
+              <Input
+                id="city"
+                type="text"
+                placeholder="Cape Town"
+                value={address.city || ''}
+                onChange={(e) => handleFieldChange('city', e.target.value)}
+                className={hasFieldError('city') ? 'border-red-500' : ''}
+                data-testid="input-city"
+                required
+              />
+              {hasFieldError('city') && (
+                <Alert className="mt-1 py-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-sm">
+                    {getFieldError('city')}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="postal_code">Postal Code *</Label>
+              <Input
+                id="postal_code"
+                type="text"
+                placeholder="8001"
+                value={address.postal_code || ''}
+                onChange={(e) => handleFieldChange('postal_code', e.target.value)}
+                className={hasFieldError('postal_code') ? 'border-red-500' : ''}
+                data-testid="input-postal-code"
+                required
+              />
+              {hasFieldError('postal_code') && (
+                <Alert className="mt-1 py-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription className="text-sm">
+                    {getFieldError('postal_code')}
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="region">Province *</Label>
+            <Select 
+              value={address.region || ''} 
+              onValueChange={(value) => handleFieldChange('region', value)}
+            >
+              <SelectTrigger className={hasFieldError('region') ? 'border-red-500' : ''}>
+                <SelectValue placeholder="Select province" />
+              </SelectTrigger>
+              <SelectContent>
+                {SA_PROVINCES.map((province) => (
+                  <SelectItem key={province} value={province}>
+                    {province}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {hasFieldError('region') && (
+              <Alert className="mt-1 py-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  {getFieldError('region')}
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </div>
+
+        {/* Address Validation */}
+        {address.line1 && address.city && (
+          <div className="flex items-center gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={validateWithGoogle}
+              disabled={isValidating}
+              className="flex items-center gap-2"
+              data-testid="button-validate-address"
+            >
+              {isValidating ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <MapPin className="h-4 w-4" />
+              )}
+              {isValidating ? 'Validating...' : 'Validate Address'}
+            </Button>
+            
+            {validationResult && (
+              <div className="flex items-center gap-2 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-green-600">
+                  Address validated ({validationResult.confidence} confidence)
+                </span>
+              </div>
+            )}
+            
+            {validationErrors.addressValidation && (
+              <span className="text-sm text-amber-600">
+                ⚠️ {validationErrors.addressValidation}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
