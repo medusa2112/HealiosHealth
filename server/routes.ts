@@ -47,9 +47,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static files from client/public directory (including hero videos)
   app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
-  // Setup Replit Auth BEFORE other routes (PRIMARY AUTH METHOD)
-  const { setupAuth } = await import('./replitAuth');
-  await setupAuth(app);
+  // Setup session middleware for PIN authentication
+  const session = await import('express-session');
+  const sessionStore = await import('memorystore');
+  const MemoryStore = sessionStore.default(session.default);
+  
+  app.use(session.default({
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
+    secret: process.env.SESSION_SECRET || 'fallback-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    },
+  }));
   
 
   
@@ -62,12 +77,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use('/api/csrf', csrfRoutes.default);
   app.use('/api/admin', csrfRoutes.adminCsrfRouter);
   
-  // Register auth routes
-  app.use('/api/auth', authRoutes);
-  
-  // Register OAuth provider routes for direct social login
-  const oauthProvidersRoutes = await import('./routes/oauth-providers');
-  app.use('/api/auth', oauthProvidersRoutes.default);
+  // Register PIN authentication routes (replaces Replit Auth)
+  const pinAuthRoutes = await import('./routes/pin-auth');
+  app.use('/api/auth', pinAuthRoutes.default);
   
   // Register admin OAuth routes
   const adminOAuthRoutes = await import('./routes/adminOAuth');

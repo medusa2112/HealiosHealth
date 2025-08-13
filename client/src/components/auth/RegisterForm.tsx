@@ -2,90 +2,94 @@ import { useState } from 'react';
 import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { UserPlus, Github, Mail } from 'lucide-react';
-import { SiGoogle, SiApple, SiX } from 'react-icons/si';
+import { UserPlus, Mail, Loader2 } from 'lucide-react';
 
 export function RegisterForm() {
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState<'email' | 'pin'>('email');
+  const [pin, setPin] = useState('');
 
-  // Customer OAuth provider configurations - Direct provider endpoints
-  const oauthProviders = [
-    {
-      name: 'Google',
-      icon: SiGoogle,
-      color: 'bg-[#4285f4] hover:bg-[#3367d6] text-white',
-      provider: 'google',
-      enabled: true
-    },
-    {
-      name: 'GitHub',
-      icon: Github,
-      color: 'bg-[#24292e] hover:bg-[#1b1f23] text-white',
-      provider: 'github',
-      enabled: true
-    },
-    {
-      name: 'Apple',
-      icon: SiApple,
-      color: 'bg-black hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-200 dark:text-black',
-      provider: 'apple',
-      enabled: true
-    },
-    {
-      name: 'X',
-      icon: SiX,
-      color: 'bg-black hover:bg-gray-800 text-white',
-      provider: 'twitter',
-      enabled: true
-    },
-  ].filter(provider => provider.enabled);
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
 
-  const handleCustomerAuth = (provider: { provider: string; name: string }) => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      // Store return URL for post-auth redirect (customer portal) 
-      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
-      
-      // Send the return URL to server for session storage (more reliable than sessionStorage)
-      fetch('/api/customer/set-return-url', {
+      const response = await fetch('/api/auth/send-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ returnUrl })
-      }).catch(err => console.warn('Could not set return URL:', err));
-      
-      // Clear any admin session data to ensure customer registration
-      sessionStorage.removeItem('admin_auth_return_url');
-      
-      // Use direct OAuth provider endpoints instead of Replit Auth proxy
-      window.location.href = `/api/auth/${provider.provider}`;
+        body: JSON.stringify({ email: email.trim() })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send PIN');
+      }
+
+      setSuccess('A one-time PIN has been sent to your email. Please check your inbox.');
+      setStep('pin');
     } catch (error) {
-      console.error(`${provider.name} authentication error:`, error);
-      setError('Authentication service temporarily unavailable. Please try again.');
+      console.error('Email registration error:', error);
+      setError(error instanceof Error ? error.message : 'Failed to send PIN. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Email/fallback authentication (uses original Replit OAuth)
-  const handleEmailAuth = () => {
+  const handlePinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pin.trim()) {
+      setError('Please enter the PIN from your email');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
     try {
-      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
-      
-      fetch('/api/customer/set-return-url', {
+      const response = await fetch('/api/auth/verify-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ returnUrl })
-      }).catch(err => console.warn('Could not set return URL:', err));
-      
-      sessionStorage.removeItem('admin_auth_return_url');
-      
-      // Email authentication still uses main Replit OAuth
-      window.location.href = '/api/login';
+        body: JSON.stringify({ email, pin: pin.trim() })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Invalid PIN');
+      }
+
+      // Successful authentication - redirect to portal
+      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
+      window.location.href = returnUrl;
     } catch (error) {
-      console.error('Email authentication error:', error);
-      setError('Authentication service temporarily unavailable. Please try again.');
+      console.error('PIN verification error:', error);
+      setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleBackToEmail = () => {
+    setStep('email');
+    setPin('');
+    setError(null);
+    setSuccess(null);
   };
 
   return (
@@ -94,14 +98,21 @@ export function RegisterForm() {
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto mb-4">
             <div className="w-12 h-12 mx-auto mb-4 bg-black dark:bg-white flex items-center justify-center">
-              <UserPlus className="w-6 h-6 text-white dark:text-black" />
+              {step === 'email' ? (
+                <UserPlus className="w-6 h-6 text-white dark:text-black" />
+              ) : (
+                <Mail className="w-6 h-6 text-white dark:text-black" />
+              )}
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-black dark:text-white">
-            Create your account
+            {step === 'email' ? 'Create your account' : 'Enter PIN'}
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            Join Healios to access premium wellness products and personalised health insights.
+            {step === 'email' 
+              ? 'Enter your email address to get started with Healios premium wellness products.' 
+              : 'We sent a PIN to your email. Enter it below to complete registration.'
+            }
           </CardDescription>
         </CardHeader>
 
@@ -112,45 +123,99 @@ export function RegisterForm() {
             </Alert>
           )}
 
-          {/* OAuth Providers */}
-          <div className="space-y-3">
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4">
-              Sign up with your preferred provider:
-            </p>
-            
-            {oauthProviders.map((provider) => (
+          {success && (
+            <Alert>
+              <AlertDescription className="text-green-700 dark:text-green-400">{success}</AlertDescription>
+            </Alert>
+          )}
+
+          {step === 'email' ? (
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-black dark:text-white">
+                  Email address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  className="w-full"
+                  data-testid="input-email"
+                />
+              </div>
+              
               <Button
-                key={provider.name}
+                type="submit"
+                disabled={isLoading || !email.trim()}
+                className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
+                data-testid="button-send-pin"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Sending PIN...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send PIN
+                  </>
+                )}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handlePinSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="pin" className="text-black dark:text-white">
+                  Enter PIN
+                </Label>
+                <Input
+                  id="pin"
+                  type="text"
+                  placeholder="Enter the 6-digit PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                  disabled={isLoading}
+                  className="w-full text-center text-lg tracking-widest"
+                  maxLength={6}
+                  data-testid="input-pin"
+                />
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                  Sent to: {email}
+                </p>
+              </div>
+              
+              <Button
+                type="submit"
+                disabled={isLoading || !pin.trim()}
+                className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
+                data-testid="button-verify-pin"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  'Verify & Sign In'
+                )}
+              </Button>
+              
+              <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleCustomerAuth(provider)}
-                className={`w-full h-12 font-medium transition-all duration-200 hover:scale-[0.99] ${provider.color}`}
+                onClick={handleBackToEmail}
+                disabled={isLoading}
+                className="w-full"
+                data-testid="button-back"
               >
-                <provider.icon className="w-5 h-5 mr-3" />
-                Continue with {provider.name}
+                Back to Email
               </Button>
-            ))}
-
-            {/* Email option */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300 dark:border-gray-700" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white dark:bg-black px-2 text-gray-500 dark:text-gray-400">Or</span>
-              </div>
-            </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleEmailAuth}
-              className="w-full h-12 border-gray-300 dark:border-gray-700 text-black dark:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200 hover:scale-[0.99]"
-            >
-              <Mail className="w-5 h-5 mr-3" />
-              Continue with Email
-            </Button>
-          </div>
+            </form>
+          )}
 
           <div className="text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">

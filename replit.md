@@ -33,7 +33,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Content Management**: EFSA-backed research content, compliant product messaging, and authentic product data.
 - **AI Integration**: OpenAI GPT-4o-mini for intelligent chatbot responses.
 - **Text Processing**: Comprehensive text formatting system for markdown, bullets, and special characters.
-- **Authentication System**: Consolidated to Replit OAuth only for single sign-on with automatic user provisioning and role management. Customer registration uses `/api/login` endpoint with provider hints (e.g., `/api/login?provider=google`) for seamless OAuth flow with Google, GitHub, Apple, X/Twitter, and Email providers. OAuth providers are configured via Replit Auth tool and automatically integrated.
+- **Authentication System**: Email-only PIN authentication for customers, completely replacing social login and Replit Auth. Users register and sign in by entering their email address and receiving a 6-digit PIN via email for verification. PIN expires after 5 minutes with max 3 attempts. Session-based authentication using express-session with memory store for session persistence.
 - **Email Integration**: ⚠️ ALL EMAILS DISABLED - Resend API integration completely turned off. No emails will be sent (order confirmations, refunds, abandoned cart recovery, admin alerts, verification emails). Email functions return mock responses to prevent system errors.
 - **Production Payment Processing**: Live Stripe integration with production keys for real payment processing.
 - **Session Management**: Secure session handling with SESSION_SECRET for user authentication and security.
