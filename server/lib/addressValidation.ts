@@ -79,9 +79,10 @@ export class AddressValidationService {
   private baseUrl = 'https://addressvalidation.googleapis.com/v1:validateAddress';
 
   constructor() {
+    // Use server key for backend Address Validation API calls
     this.apiKey = process.env.GOOGLE_MAPS_SERVER_KEY || '';
     if (!this.apiKey) {
-      logger.warn('ADDRESS_VALIDATION', 'Google Maps Server API key not configured');
+      logger.warn('ADDRESS_VALIDATION', 'Google Maps Server API key not configured - add GOOGLE_MAPS_SERVER_KEY environment variable');
     }
   }
 
