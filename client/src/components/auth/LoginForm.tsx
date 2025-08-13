@@ -74,9 +74,20 @@ export function LoginForm() {
         throw new Error(data.message || 'Invalid PIN');
       }
 
-      // Successful authentication - redirect to portal
-      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/portal';
-      window.location.href = returnUrl;
+      // Successful authentication - redirect based on profile completion
+      const { user, needsProfileCompletion, redirectTo } = data;
+      
+      if (needsProfileCompletion) {
+        // New user or incomplete profile - redirect to profile completion
+        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Please complete your profile to continue shopping.`);
+        setTimeout(() => {
+          window.location.href = redirectTo || '/profile';
+        }, 2000);
+      } else {
+        // Existing user with complete profile - redirect to shopping
+        const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
+        window.location.href = returnUrl;
+      }
     } catch (error) {
       console.error('PIN verification error:', error);
       setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');

@@ -178,6 +178,7 @@ router.post('/verify-pin', async (req, res) => {
 
     // PIN is valid - create/find user and log them in
     let user = await storage.getUserByEmail(email);
+    let isNewUser = false;
     
     if (!user) {
       // Create new user
@@ -187,7 +188,11 @@ router.post('/verify-pin', async (req, res) => {
         lastName: '',
         role: 'customer'
       });
+      isNewUser = true;
     }
+
+    // Check if profile is incomplete
+    const needsProfileCompletion = !user.firstName || !user.lastName || user.firstName.trim() === '' || user.lastName.trim() === '';
 
     // Set up session
     (req.session as any).userId = user.id;
@@ -207,7 +212,10 @@ router.post('/verify-pin', async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role
-      }
+      },
+      isNewUser,
+      needsProfileCompletion,
+      redirectTo: needsProfileCompletion ? '/profile' : '/'
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

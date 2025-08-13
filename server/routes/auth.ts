@@ -427,6 +427,60 @@ if (false) {
   });
 }
 
+// Customer profile update endpoint
+router.patch('/customer/profile', async (req, res) => {
+  try {
+    const userId = (req.session as any)?.userId;
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authenticated'
+      });
+    }
+
+    const updateSchema = z.object({
+      firstName: z.string().min(1, 'First name is required').trim(),
+      lastName: z.string().min(1, 'Last name is required').trim()
+    });
+
+    const result = updateSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: result.error.errors[0].message
+      });
+    }
+
+    const { firstName, lastName } = result.data;
+
+    // Update user profile
+    const updatedUser = await storage.updateUser(userId, {
+      firstName,
+      lastName
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      user: sanitizeUser(updatedUser)
+    });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update profile. Please try again.'
+    });
+  }
+});
+
 // Logout endpoint
 router.post('/logout', async (req, res) => {
   const user = req.user as any;

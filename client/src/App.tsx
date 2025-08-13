@@ -45,6 +45,7 @@ import Register from "@/pages/register";
 import Verify from "@/pages/verify";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
+import Profile from "@/pages/profile";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import { CookieConsent } from "@/components/cookie-consent";
@@ -183,6 +184,7 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/verify" component={Verify} />
       <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/profile" component={() => <ProtectedRoute requiredRole="customer"><Profile /></ProtectedRoute>} />
       {/* Legacy redirect - reset-password now handled by /verify?type=reset */}
       <Route path="/reset-password" component={() => {
         window.location.href = '/verify?type=reset';
