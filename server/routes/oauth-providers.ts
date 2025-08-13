@@ -4,24 +4,26 @@ import passport from 'passport';
 const router = Router();
 
 // Individual OAuth provider endpoints
-// These redirect users directly to the specific OAuth provider login pages
+// These work with Replit Auth by setting provider context and redirecting to /api/login
 
 router.get('/google', (req, res, next) => {
   console.log('[OAUTH] Initiating Google OAuth authentication');
   
-  // Set customer authentication context
+  // Set customer authentication context and provider preference
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'google';
+  (req.session as any).requestedProvider = 'google';
   
   // Save session before redirect
   req.session.save((err) => {
     if (err) {
       console.error('[OAUTH] Session save error:', err);
+      return res.redirect('/register?error=session_error');
     }
     
-    // For now, redirect to main OAuth endpoint with Google hint
-    // In a full implementation, this would be configured with Google OAuth credentials
-    res.redirect('/api/login?provider=google');
+    // Redirect to main OAuth endpoint with explicit Google provider hint
+    // This should trigger Replit Auth to route to Google's OAuth
+    res.redirect('/api/login?provider=google&prompt=select_account');
   });
 });
 
@@ -30,13 +32,15 @@ router.get('/github', (req, res, next) => {
   
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'github';
+  (req.session as any).requestedProvider = 'github';
   
   req.session.save((err) => {
     if (err) {
       console.error('[OAUTH] Session save error:', err);
+      return res.redirect('/register?error=session_error');
     }
     
-    res.redirect('/api/login?provider=github');
+    res.redirect('/api/login?provider=github&prompt=select_account');
   });
 });
 
@@ -45,13 +49,15 @@ router.get('/apple', (req, res, next) => {
   
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'apple';
+  (req.session as any).requestedProvider = 'apple';
   
   req.session.save((err) => {
     if (err) {
       console.error('[OAUTH] Session save error:', err);
+      return res.redirect('/register?error=session_error');
     }
     
-    res.redirect('/api/login?provider=apple');
+    res.redirect('/api/login?provider=apple&prompt=select_account');
   });
 });
 
@@ -60,13 +66,15 @@ router.get('/twitter', (req, res, next) => {
   
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'twitter';
+  (req.session as any).requestedProvider = 'twitter';
   
   req.session.save((err) => {
     if (err) {
       console.error('[OAUTH] Session save error:', err);
+      return res.redirect('/register?error=session_error');
     }
     
-    res.redirect('/api/login?provider=twitter');
+    res.redirect('/api/login?provider=twitter&prompt=select_account');
   });
 });
 
@@ -82,7 +90,7 @@ router.get('/email', (req, res, next) => {
       console.error('[OAUTH] Session save error:', err);
     }
     
-    res.redirect('/api/login?provider=email');
+    res.redirect('/api/login');
   });
 });
 

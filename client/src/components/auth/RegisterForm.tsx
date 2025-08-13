@@ -58,9 +58,8 @@ export function RegisterForm() {
       // Clear any admin session data to ensure customer registration
       sessionStorage.removeItem('admin_auth_return_url');
       
-      // Use the main Replit OAuth endpoint with provider hint
-      // This works with the Replit Auth tool configuration
-      window.location.href = `/api/login?provider=${provider.provider}`;
+      // Use direct OAuth provider endpoints instead of Replit Auth proxy
+      window.location.href = `/api/auth/${provider.provider}`;
     } catch (error) {
       console.error(`${provider.name} authentication error:`, error);
       setError('Authentication service temporarily unavailable. Please try again.');
