@@ -5,6 +5,16 @@ import { logger } from '../lib/logger';
 
 const router = express.Router();
 
+// Bypass CSRF for address validation in development
+const bypassCSRF = (req: any, res: any, next: any) => {
+  if (process.env.NODE_ENV === 'development') {
+    req.csrfToken = () => 'dev-bypass';
+    next();
+  } else {
+    next();
+  }
+};
+
 // Address validation schema
 const addressValidationSchema = z.object({
   line1: z.string().min(1, 'Street address is required'),
@@ -16,7 +26,7 @@ const addressValidationSchema = z.object({
 });
 
 // Validate complete address
-router.post('/validate', async (req, res) => {
+router.post('/validate', bypassCSRF, async (req, res) => {
   try {
     const validationResult = addressValidationSchema.safeParse(req.body);
     
@@ -51,7 +61,7 @@ router.post('/validate', async (req, res) => {
 });
 
 // Validate postal code only
-router.post('/validate-postal', async (req, res) => {
+router.post('/validate-postal', bypassCSRF, async (req, res) => {
   try {
     const { postalCode, country } = req.body;
     

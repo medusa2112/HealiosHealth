@@ -224,7 +224,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
       };
       
       autocompleteService.current.getPlacePredictions(request, (predictions: any[], status: any) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+        if (status === window.google?.maps?.places?.PlacesServiceStatus?.OK && predictions) {
           setAddressSuggestions(predictions.slice(0, 5));
           setShowSuggestions(true);
         } else {
@@ -251,7 +251,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
       };
       
       placesService.current.getDetails(request, (place: any, status: any) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK && place.address_components) {
+        if (status === window.google?.maps?.places?.PlacesServiceStatus?.OK && place.address_components) {
           const addressComponents = place.address_components;
           
           // Parse Google Places address components
@@ -299,10 +299,15 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
     setIsValidatingAddress(true);
     
     try {
+      // Get CSRF token for the request
+      const csrfResponse = await fetch('/api/csrf');
+      const csrfData = await csrfResponse.json();
+      
       const response = await fetch('/api/address/validate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfData.csrfToken,
         },
         body: JSON.stringify({
           line1: structuredAddress.line1,
