@@ -213,6 +213,14 @@ export function LoginForm() {
                   placeholder="Enter the 6-digit PIN"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('ENTER KEY BLOCKED - CALLING HANDLER');
+                      handlePinVerification();
+                    }
+                  }}
                   disabled={isLoading}
                   className="w-full text-center text-lg tracking-widest"
                   maxLength={6}
@@ -225,7 +233,14 @@ export function LoginForm() {
               
               <Button
                 type="button"
-                onClick={handlePinVerification}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('=== BUTTON CLICK EVENT ===');
+                  console.log('Event object:', e);
+                  console.log('About to call handlePinVerification...');
+                  handlePinVerification();
+                }}
                 disabled={isLoading || !pin.trim()}
                 className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
                 data-testid="button-verify-pin"
