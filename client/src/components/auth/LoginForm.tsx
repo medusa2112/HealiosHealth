@@ -51,16 +51,21 @@ export function LoginForm() {
   };
 
   const handlePinSubmit = async (e: React.FormEvent) => {
+    console.log('FORM SUBMIT HANDLER CALLED');
     e.preventDefault();
+    e.stopPropagation();
+    
     if (!pin.trim()) {
       setError('Please enter the PIN from your email');
       return;
     }
 
+    console.log('Starting PIN verification...');
     setIsLoading(true);
     setError(null);
 
     try {
+      console.log('Making fetch request to verify PIN...');
       const response = await fetch('/api/auth/verify-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,7 +73,9 @@ export function LoginForm() {
         body: JSON.stringify({ email, pin: pin.trim() })
       });
 
+      console.log('Fetch response received, status:', response.status);
       const data = await response.json();
+      console.log('Response data:', JSON.stringify(data, null, 2));
 
       if (!response.ok) {
         throw new Error(data.message || 'Invalid PIN');
@@ -77,25 +84,31 @@ export function LoginForm() {
       // Successful authentication - redirect based on profile completion
       const { user, needsProfileCompletion, redirectTo } = data;
       
-      console.log('PIN Verification Response:', data);
+      console.log('=== PIN VERIFICATION SUCCESSFUL ===');
+      console.log('User:', user);
       console.log('needsProfileCompletion:', needsProfileCompletion);
       console.log('redirectTo:', redirectTo);
+      console.log('About to call setLocation...');
       
       if (needsProfileCompletion) {
         // New user or incomplete profile - redirect to profile completion
+        const targetUrl = redirectTo || '/profile';
         setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
-        console.log('Redirecting to profile:', redirectTo || '/profile');
-        setLocation(redirectTo || '/profile');
+        console.log('CALLING setLocation with:', targetUrl);
+        setLocation(targetUrl);
+        console.log('setLocation called successfully');
       } else {
         // Existing user with complete profile - redirect to shopping
         const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
-        console.log('Redirecting to shopping:', returnUrl);
+        console.log('CALLING setLocation for existing user with:', returnUrl);
         setLocation(returnUrl);
+        console.log('setLocation called successfully for existing user');
       }
     } catch (error) {
       console.error('PIN verification error:', error);
       setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
     } finally {
+      console.log('Setting loading to false');
       setIsLoading(false);
     }
   };
@@ -182,7 +195,7 @@ export function LoginForm() {
               </Button>
             </form>
           ) : (
-            <form onSubmit={handlePinSubmit} className="space-y-4">
+            <form onSubmit={handlePinSubmit} action="" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="pin" className="text-black dark:text-white">
                   Enter PIN

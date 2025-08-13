@@ -1,0 +1,1468 @@
+ 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+ [LaunchDarkly] LaunchDarkly client initialized
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+  Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'battery'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'layout-animations'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'navigation-override'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'oversized-images'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'publickey-credentials'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'speaker-selection'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'unoptimized-images'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'unsized-media'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Unrecognized feature: 'pointer-lock'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-cd8f1c81067bee2c.js:1
+  Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-cd8f1c81067bee2c.js:1
+ [Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+ [Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+HealiosHealth:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+ stallwart: failed ping 1
+ stallwart: failed ping 2
+ stallwart: failed ping 3
+ stallwart: failed ping 4
+ stallwart: failed ping 5
+ stallwart: session stalled
+  WebSocket connection to 'wss://eval.janeway.platform.replit.com/wsv2/v2.public.Q2dZSWhQM3l4QVlTQmdpam1mUEVCaUlIYW1GdVpYZGhlVEFBT293Q0NpUmxZMkl3TVRnMlpTMDFZelF4TFRRNE5XWXRPR0ZoTlMxbFl6UXdPR0ZpTUdWaU1ERVNBMjVwZUJvWmNtVndiR2wwTFhKbGNHd3RabWxzWlhNdGFtRnVaWGRoZVNJTlNHVmhiR2x2YzBobFlXeDBhQ29KWkc5dGFXNXBZemsyUWxjS0duSmxjR3hwZEMxeVpYQnNMV0pzYjJOcmN5MXFZVzVsZDJGNUVoaHlaWEJzYVhRdGNtVndiQzF0WlhSaExXcGhibVYzWVhrYUgzSmxjR3hwZEMxdFlYSm5ZWEpwYm1VdFlteHZZMnR6TFdwaGJtVjNZWGxLQndqSnhad1RFQUZRQUZvUGFXNTBaVzUwWDJKMWMybHVaWE56V2hadmJtSnZZWEprYVc1blgzS...SE15VXlRbk5RT0hRMFdsYzFhRlJsVEUxV04zQjRlakJOV0NVeVFrVnNUR05DTVdSMlMzWlhVVkVsTWtZMFYyczRXWFJEYzNrNE5GWm1TRmRaVTJSYU56TnFNall4VEdGMFpURnhaRWh3WmxWbU4zRmhiaVV5UmxZNFREUmpZMjFtZWxsVWQwNWliM2RYWjJGalVVWkhhWFZ4WTNaT01FNUVSRFZtVEV0b2RGQk1jbWt6UnpsSmVXUnpPSGxGYnpoa0pUSkNUM0p3WVU1TWJWWkNWbmRZVEhZMmNrUkdlR3RqYVVGaFoyOUtOMUZTY2tGQk4zVnpla3h4U1VGbE0yOTBOWFZyVjNaSlpUQkVTeVV5UWtsbGR5VXpSQ1V6UkE9PdugxqH1SUMb_nwxJeThy4wtp6eOP-ZiEMzPHwxZswBngNFXVwdzumQg3VmPZKqtUnHQXvKPH3n09epkZ5X3XA4.Q2dad2NtOWtPak1pQ25KbGNHeHBkQzVqYjIwPQ' failed: WebSocket is closed before the connection is established.
+cleanupSocket @ 3635-7f18935c697a3f8e.js:1
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+content.js:1  Uncaught (in promise) 
+content.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+classifier.js:1  Uncaught (in promise) 
+  task queue exceeded allotted deadline by 24ms
+(anonymous) @ _app-67eee34e3c86cc29.js:13
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar20p%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+ [ADMIN CONFIG] Client-side admin enabled: true
+ [QUERY] Fetching [object Object]
+ Video loading started
+ TheFourths video loading started
+ [QUERY] Response [object Object]
+ [QUERY] Data received [object Object]
+ [AUTH] Admin CSRF token initialized
+ [AUTH] Customer CSRF token initialized
+ Video can play
+ TheFourths video loaded
+ TheFourths video can play
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.getShouldTriggerAutomaticLogin (classifier.js:1:408485)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+ Video can play
+  `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+  Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+classifier.js:1  Uncaught (in promise) Error: Extension context invalidated.
+    at classifier.js:1:200286
+    at new Promise (<anonymous>)
+    at p (classifier.js:1:200212)
+    at Object.apply (classifier.js:1:197802)
+    at _r.sendMessage (classifier.js:1:442134)
+    at _r.windowClick (classifier.js:1:405512)
+    at _r.o (classifier.js:1:383444)
+    at o.next (<anonymous>)
+    at classifier.js:1:383997
+    at new Promise (<anonymous>)
+[NEW] Explain Console errors by using Copilot in Edge: click
+         
+         to explain an error. 
+        Learn more
+        Don't show again
