@@ -161,34 +161,84 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
 
   // Initialize Google Places Autocomplete (when available)
   useEffect(() => {
-    if (googleMapsLoaded && addressInputRef.current && !autocompleteRef.current) {
+    if (!googleMapsLoaded || !addressInputRef.current || autocompleteRef.current) {
+      return;
+    }
+
+    // Add delay and try to initialize autocomplete safely
+    const initTimeout = setTimeout(() => {
       try {
         const google = window.google;
         
         if (!google?.maps?.places?.Autocomplete) {
+          console.log('Google Places Autocomplete not available');
+          setShowGoogleMapsError(true);
           return;
         }
 
-        autocompleteRef.current = new google.maps.places.Autocomplete(
-          addressInputRef.current,
-          {
-            componentRestrictions: { country: 'ZA' },
-            fields: ['address_components', 'formatted_address', 'place_id'],
-            types: ['address'],
-          }
-        );
+        // Test if we can create autocomplete without restrictions error
+        const testContainer = document.createElement('div');
+        const testInput = document.createElement('input');
+        testContainer.style.position = 'absolute';
+        testContainer.style.left = '-9999px';
+        testContainer.appendChild(testInput);
+        document.body.appendChild(testContainer);
+
+        const testAutocomplete = new google.maps.places.Autocomplete(testInput, {
+          componentRestrictions: { country: 'ZA' }
+        });
+
+        // If test passes, create the real one
+        if (addressInputRef.current) {
+          autocompleteRef.current = new google.maps.places.Autocomplete(
+            addressInputRef.current,
+            {
+              componentRestrictions: { country: 'ZA' },
+              fields: ['address_components', 'formatted_address', 'place_id'],
+              types: ['address'],
+            }
+          );
+        }
 
         autocompleteRef.current.addListener('place_changed', () => {
-          const place = autocompleteRef.current.getPlace();
-          if (place.address_components) {
-            parseGooglePlace(place);
+          try {
+            const place = autocompleteRef.current.getPlace();
+            if (place.address_components) {
+              parseGooglePlace(place);
+            }
+          } catch (error) {
+            console.error('Error processing place selection:', error);
           }
         });
+
+        console.log('Google Places Autocomplete initialized successfully');
+        
+        // Cleanup test elements
+        document.body.removeChild(testContainer);
         
       } catch (error) {
-        console.error('Error initializing Google Places Autocomplete:', error);
+        console.error('Google Places blocked by API restrictions, using manual entry:', error);
+        setGoogleMapsLoaded(false);
+        setShowGoogleMapsError(true);
+        
+        // Ensure the input field remains functional for manual entry
+        if (addressInputRef.current) {
+          addressInputRef.current.disabled = false;
+          addressInputRef.current.readOnly = false;
+        }
       }
-    }
+    }, 1000);
+
+    return () => {
+      clearTimeout(initTimeout);
+      if (autocompleteRef.current && window.google?.maps && 'event' in window.google.maps) {
+        try {
+          (window.google.maps as any).event.clearInstanceListeners(autocompleteRef.current);
+        } catch (error) {
+          // Ignore cleanup errors
+        }
+      }
+    };
   }, [googleMapsLoaded]);
 
   // Parse Google Places result
