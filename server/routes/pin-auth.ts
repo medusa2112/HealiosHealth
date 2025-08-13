@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { storage } from '../storage';
 import crypto from 'crypto';
+import { sendPinEmail } from '../lib/email';
 
 const router = Router();
 
@@ -43,12 +44,26 @@ router.post('/send-pin', async (req, res) => {
     // Store PIN ID in session for verification
     (req.session as any).pinId = pinId;
 
-    // In production, send email with PIN
-    // For now, log PIN for development
+    // Send PIN via email using Resend
     console.log(`[PIN_AUTH] Generated PIN for ${email}: ${pin}`);
     
-    // TODO: Implement email sending
-    // await sendPinEmail(email, pin);
+    try {
+      const emailResult = await sendPinEmail(email, pin);
+      if (!emailResult.success) {
+        console.error('[PIN_AUTH] Failed to send PIN email:', emailResult);
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to send PIN email. Please try again.'
+        });
+      }
+      console.log(`[PIN_AUTH] PIN email sent successfully to ${email} - ID: ${emailResult.id}`);
+    } catch (error) {
+      console.error('[PIN_AUTH] Error sending PIN email:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send PIN email. Please try again.'
+      });
+    }
 
     res.json({ 
       success: true, 

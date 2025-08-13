@@ -1,11 +1,11 @@
 import { Resend } from "resend";
 
-// Email service is DISABLED - all emails will be skipped
-const isEmailEnabled = false; // MANUALLY DISABLED - ALL EMAILS OFF
+// Email service is ENABLED for PIN authentication
+const isEmailEnabled = true; // ENABLED for PIN emails
 
-export const resend = null; // DISABLED - NO EMAILS WILL BE SENT
+export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome" | "pin_auth";
 
 interface EmailData {
   amount: number;
@@ -49,6 +49,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     reorder_final: "A final gentle reminder from Healios",
     referral_reward: "Great news! You've earned a reward",
     referral_welcome: "Welcome to Healios! Your discount has been applied",
+    pin_auth: "Your Healios Login PIN",
   };
 
   const bodyMap: Record<EmailType, (data: EmailData) => string> = {
@@ -249,12 +250,78 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         
         <p>Welcome to the family,<br>The Healios Team</p>
       </div>
+    `,
+    pin_auth: (data) => `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Your Healios Login PIN</title>
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
+            LOGIN AUTHENTICATION
+          </div>
+          
+          <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
+            Your login PIN
+          </h1>
+          
+          <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
+            Use this PIN to complete your sign-in to Healios. Enter it on the login page to access your account.
+          </p>
+          
+          <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-left: 4px solid #000; margin: 0 0 40px 0;">
+            <div style="font-size: 36px; font-weight: 600; letter-spacing: 8px; color: #000; font-family: monospace;">
+              ${data.pin}
+            </div>
+            <div style="font-size: 14px; color: #666; margin-top: 15px;">
+              This PIN expires in 5 minutes
+            </div>
+          </div>
+          
+          <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
+            If you didn't request this login PIN, please ignore this email. Your account security remains protected.
+          </p>
+          
+          <div style="border-top: 1px solid #e0e0e0; padding-top: 30px; margin-top: 50px;">
+            <p style="color: #999; font-size: 14px; line-height: 1.5; margin: 0;">
+              This is an automated message from Healios. Please do not reply to this email.
+            </p>
+          </div>
+        </div>
+      </body>
+      </html>
     `
   };
 
-  // EMAIL DISABLED - All email sending is disabled
-  console.log(`[EMAIL DISABLED] Email skipped: ${type} to ${to}`);
-  return { id: 'disabled-' + Date.now(), success: false };
+  // Send email using Resend API
+  try {
+    const result = await rateLimitedSend(async () => {
+      return await resend!.emails.send({
+        from: 'Healios <onboarding@resend.dev>',
+        to: [to],
+        subject: subjectMap[type],
+        html: bodyMap[type](data),
+      });
+    });
+
+    console.log(`[EMAIL SENT] ${type} email sent to ${to} - ID: ${result.data?.id}`);
+    return { id: result.data?.id || 'unknown', success: true };
+  } catch (error) {
+    console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
+    return { id: 'error-' + Date.now(), success: false };
+  }
+}
+
+// Send PIN authentication email
+export async function sendPinEmail(email: string, pin: string): Promise<{ success: boolean; id?: string }> {
+  return await sendEmail(email, "pin_auth", {
+    pin,
+    amount: 0,
+    id: 'pin-' + Date.now()
+  });
 }
 
 // Send admin alert emails for critical issues
