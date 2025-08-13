@@ -169,7 +169,7 @@ export function LoginForm() {
           )}
 
           {step === 'email' ? (
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-black dark:text-white">
                   Email address
@@ -180,14 +180,31 @@ export function LoginForm() {
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('EMAIL ENTER KEY BLOCKED');
+                      handleEmailSubmit(e);
+                      return false;
+                    }
+                  }}
                   disabled={isLoading}
                   className="w-full"
                   data-testid="input-email"
+                  autoComplete="off"
                 />
               </div>
               
               <Button
-                type="submit"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log('EMAIL BUTTON CLICKED');
+                  handleEmailSubmit(e);
+                  return false;
+                }}
                 disabled={isLoading || !email.trim()}
                 className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
                 data-testid="button-send-pin"
@@ -204,7 +221,7 @@ export function LoginForm() {
                   </>
                 )}
               </Button>
-            </form>
+            </div>
           ) : (
             <div className="space-y-4" onSubmit={(e) => { console.log('BLOCKED DIV SUBMIT'); e.preventDefault(); e.stopPropagation(); return false; }}>
               <div className="space-y-2">
