@@ -8,7 +8,9 @@ const router = express.Router();
 // Bypass CSRF for address validation in development
 const bypassCSRF = (req: any, res: any, next: any) => {
   if (process.env.NODE_ENV === 'development') {
+    console.log('[ADDRESS_VALIDATION] Bypassing CSRF in development mode');
     req.csrfToken = () => 'dev-bypass';
+    // Skip CSRF validation
     next();
   } else {
     next();
@@ -22,7 +24,11 @@ const addressValidationSchema = z.object({
 });
 
 // Validate complete address using Google Address Validation API
-router.post('/validate', bypassCSRF, async (req, res) => {
+router.post('/validate', async (req, res) => {
+  // Bypass CSRF in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[ADDRESS_VALIDATION] Development mode - bypassing CSRF check');
+  }
   try {
     const validationResult = addressValidationSchema.safeParse(req.body);
     
