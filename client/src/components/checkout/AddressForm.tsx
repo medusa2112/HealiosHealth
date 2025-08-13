@@ -292,43 +292,64 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
     }
   };
 
-  // Validate address with Google Maps
+  // Validate address with server-side Google Maps API
   const validateAddressWithGoogle = async () => {
-    if (!autocompleteService.current || !structuredAddress.line1) return;
+    if (!structuredAddress.line1 || !structuredAddress.city || !structuredAddress.zipCode) return;
     
     setIsValidatingAddress(true);
     
     try {
-      const fullAddress = [
-        structuredAddress.line1,
-        structuredAddress.line2,
-        structuredAddress.city,
-        structuredAddress.state,
-        structuredAddress.zipCode,
-        structuredAddress.country
-      ].filter(Boolean).join(', ');
-      
-      const request = {
-        input: fullAddress,
-        componentRestrictions: { country: structuredAddress.country === 'South Africa' ? 'za' : 'us' },
-        types: ['address']
-      };
-      
-      autocompleteService.current.getPlacePredictions(request, (predictions: any[], status: any) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions && predictions.length > 0) {
-          // Address found in Google Places
-          setValidationErrors(prev => ({ ...prev, googleValidation: '' }));
-        } else {
-          // Address not found
-          setValidationErrors(prev => ({ 
-            ...prev, 
-            googleValidation: 'Address could not be verified. Please check the details.' 
+      const response = await fetch('/api/address/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          line1: structuredAddress.line1,
+          line2: structuredAddress.line2,
+          city: structuredAddress.city,
+          state: structuredAddress.state,
+          postalCode: structuredAddress.zipCode,
+          country: structuredAddress.country,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.validation.isValid) {
+        // Address validated successfully
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors.googleValidation;
+          return newErrors;
+        });
+        
+        // Optionally update address with formatted version
+        if (data.validation.components) {
+          const components = data.validation.components;
+          setStructuredAddress(prev => ({
+            ...prev,
+            // Update with more accurate components if available
+            city: components.city || prev.city,
+            state: components.state || prev.state,
+            zipCode: components.postalCode || prev.zipCode,
           }));
         }
-        setIsValidatingAddress(false);
-      });
+      } else {
+        // Address could not be validated
+        const errorMessage = data.validation?.errors?.[0] || 'Address could not be verified. Please check the details.';
+        setValidationErrors(prev => ({ 
+          ...prev, 
+          googleValidation: errorMessage
+        }));
+      }
     } catch (error) {
       console.error('Error validating address:', error);
+      setValidationErrors(prev => ({ 
+        ...prev, 
+        googleValidation: 'Address validation service temporarily unavailable.' 
+      }));
+    } finally {
       setIsValidatingAddress(false);
     }
   };
@@ -625,7 +646,10 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
             {isValidatingAddress ? 'Validating...' : 'Verify Address'}
           </Button>
           {getFieldError('googleValidation') && (
-            <span className="text-sm text-amber-600">⚠️ Address verification recommended</span>
+            <span className="text-sm text-amber-600">⚠️ {getFieldError('googleValidation')}</span>
+          )}
+          {!getFieldError('googleValidation') && structuredAddress.line1 && structuredAddress.city && (
+            <span className="text-sm text-green-600">✓ Ready for verification</span>
           )}
         </div>
       )}

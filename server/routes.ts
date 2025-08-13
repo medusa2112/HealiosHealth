@@ -162,6 +162,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register configuration routes
   const { configRouter } = await import('./routes/config');
   app.use('/api/config', configRouter);
+  
+  // Register address validation routes
+  const addressValidationRoutes = await import('./routes/addressValidation');
+  app.use('/api/address', addressValidationRoutes.default);
 
   // Register object storage routes  
   const objectStorageRoutes = await import('./routes/objectStorage');
