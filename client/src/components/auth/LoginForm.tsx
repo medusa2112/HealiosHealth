@@ -50,10 +50,8 @@ export function LoginForm() {
     }
   };
 
-  const handlePinSubmit = async (e: React.FormEvent) => {
-    console.log('FORM SUBMIT HANDLER CALLED');
-    e.preventDefault();
-    e.stopPropagation();
+  const handlePinVerification = async () => {
+    console.log('BUTTON CLICK HANDLER CALLED - NO FORM SUBMISSION');
     
     if (!pin.trim()) {
       setError('Please enter the PIN from your email');
@@ -101,7 +99,7 @@ export function LoginForm() {
         setTimeout(() => {
           console.log('Fallback redirect to:', targetUrl);
           window.location.href = targetUrl;
-        }, 500);
+        }, 100);
         console.log('Redirect methods called successfully');
       } else {
         // Existing user with complete profile - redirect to shopping
@@ -110,7 +108,7 @@ export function LoginForm() {
         setLocation(returnUrl);
         setTimeout(() => {
           window.location.href = returnUrl;
-        }, 500);
+        }, 100);
         console.log('Redirect methods called successfully for existing user');
       }
     } catch (error) {
@@ -204,7 +202,7 @@ export function LoginForm() {
               </Button>
             </form>
           ) : (
-            <form onSubmit={handlePinSubmit} action="javascript:void(0)" className="space-y-4">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="pin" className="text-black dark:text-white">
                   Enter PIN
@@ -226,7 +224,8 @@ export function LoginForm() {
               </div>
               
               <Button
-                type="submit"
+                type="button"
+                onClick={handlePinVerification}
                 disabled={isLoading || !pin.trim()}
                 className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
                 data-testid="button-verify-pin"
@@ -251,7 +250,7 @@ export function LoginForm() {
               >
                 Back to Email
               </Button>
-            </form>
+            </div>
           )}
 
           <div className="text-center">
