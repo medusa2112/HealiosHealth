@@ -8,7 +8,7 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
   if (process.env.NODE_ENV === 'development') {
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://replit.com ws: wss:",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://replit.com https://maps.googleapis.com ws: wss:",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
@@ -23,12 +23,12 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
     // Production CSP - balanced security policy
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.jsdelivr.net https://replit.com",
+      "script-src 'self' 'unsafe-inline' https://js.stripe.com https://cdn.jsdelivr.net https://replit.com https://maps.googleapis.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' data: https: blob:",
-      "connect-src 'self' https://api.stripe.com https://healios-health-dominic96.replit.app https://ipapi.co",
+      "connect-src 'self' https://api.stripe.com https://healios-health-dominic96.replit.app https://ipapi.co https://maps.googleapis.com",
       "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
       "object-src 'none'",
       "base-uri 'self'",

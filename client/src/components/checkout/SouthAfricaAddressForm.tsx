@@ -104,38 +104,51 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           return;
         }
 
-        // Remove any existing Google Maps scripts
-        const existingScripts = document.querySelectorAll('script[src*="maps.googleapis.com"]');
-        existingScripts.forEach(script => script.remove());
+        console.log('Loading Google Maps with API key:', apiKey.substring(0, 20) + '...');
 
-        const timeoutId = setTimeout(() => {
-          console.log('Google Maps API timeout, using manual entry fallback');
-          setShowGoogleMapsError(true);
-        }, 10000);
+        // Try direct script loading without callback first
+        const directScript = document.createElement('script');
+        directScript.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA`;
+        directScript.async = true;
+        
+        const loadPromise = new Promise((resolve, reject) => {
+          directScript.onload = () => {
+            console.log('Google Maps script loaded, checking for Places API...');
+            
+            // Poll for Places API availability
+            let attempts = 0;
+            const checkPlaces = () => {
+              attempts++;
+              if (window.google?.maps?.places?.Autocomplete) {
+                console.log(`Google Places API ready after ${attempts} attempts`);
+                resolve(true);
+              } else if (attempts < 20) {
+                setTimeout(checkPlaces, 100);
+              } else {
+                console.log('Places API not available after 20 attempts');
+                reject(new Error('Places API not available'));
+              }
+            };
+            checkPlaces();
+          };
+          
+          directScript.onerror = (error) => {
+            console.error('Google Maps direct load failed:', error);
+            reject(error);
+          };
+        });
 
-        const callbackName = `googleMapsCallback${Date.now()}`;
-        (window as any)[callbackName] = () => {
-          clearTimeout(timeoutId);
-          console.log('Google Maps API loaded successfully');
+        document.head.appendChild(directScript);
+
+        try {
+          await loadPromise;
           setGoogleMapsLoaded(true);
-          delete (window as any)[callbackName];
-        };
-        
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA&callback=${callbackName}`;
-        script.async = true;
-        
-        script.onerror = (error) => {
-          clearTimeout(timeoutId);
-          console.error('Google Maps script error:', error);
-          console.log('Google Maps script failed to load - likely API key restriction');
-          console.log('Current domain:', window.location.origin);
-          console.log('Script URL:', script.src);
+          console.log('✅ Google Places autocomplete ready');
+        } catch (error) {
+          console.log('❌ Google Places autocomplete failed, using manual entry');
           setShowGoogleMapsError(true);
-          delete (window as any)[callbackName];
-        };
-        
-        document.head.appendChild(script);
+        }
+
       } catch (error) {
         console.log('Error loading Google Maps, using manual entry fallback');
         setShowGoogleMapsError(true);
