@@ -83,9 +83,56 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
     </html>
   `;
 
-  // EMAIL DISABLED - Verification email skipped
-  console.log(`[EMAIL DISABLED] Verification email skipped for ${email} with code: ${code.substring(0, 2)}****`);
-  // Note: Verification codes are still stored in database but emails are not sent
+  // Send PIN authentication email using the centralized email service
+  try {
+    if (!resend) {
+      console.warn('[EMAIL] Resend not configured - PIN email not sent');
+      console.log(`[EMAIL DEBUG] PIN for ${email}: ${code}`);
+      return;
+    }
+
+    // In development, send to admin emails with original user info
+    // In production, send to the actual user
+    const isDev = process.env.NODE_ENV === 'development';
+    const adminEmails = ['dn@thefourths.com', 'jv@thefourths.com'];
+    
+    const emailData = {
+      pin: code,
+      originalUserEmail: isDev ? email : undefined
+    };
+    
+    if (isDev && adminEmails.includes(email)) {
+      // Send to admin email in dev
+      console.log(`[EMAIL DEV] Sending PIN to admin: ${email}`);
+      await sendPinEmail(email, emailData);
+    } else if (isDev) {
+      // Send to admin emails in dev mode but include original user info
+      console.log(`[EMAIL DEV] Sending PIN for ${email} to admin emails`);
+      for (const adminEmail of adminEmails) {
+        await sendPinEmail(adminEmail, emailData);
+      }
+    } else {
+      // Production mode - send to actual user
+      console.log(`[EMAIL PROD] Sending PIN to user: ${email}`);
+      await sendPinEmail(email, emailData);
+    }
+    
+    console.log(`[EMAIL] PIN verification sent to ${isDev ? 'admin emails' : email}`);
+  } catch (error) {
+    console.error('[EMAIL ERROR] Failed to send PIN verification email:', error);
+  }
+}
+
+// Helper function to send PIN emails using the centralized email system
+async function sendPinEmail(to: string, data: { pin: string; originalUserEmail?: string }) {
+  const { sendEmail } = await import('./email');
+  
+  return sendEmail(to, 'pin_auth', {
+    amount: 0, // Required by interface but not used for PIN emails
+    id: 'pin-auth',
+    pin: data.pin,
+    originalUserEmail: data.originalUserEmail
+  });
 }
 
 // Check rate limiting (max 5 attempts per hour)
