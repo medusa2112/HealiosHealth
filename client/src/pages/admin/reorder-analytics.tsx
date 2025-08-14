@@ -255,11 +255,19 @@ export default function ReorderAnalyticsPage() {
                           <div className="bg-gray-50 dark:bg-gray-800 p-3 text-sm">
                             <p className="font-medium text-black dark:text-white mb-2">Metadata:</p>
                             <div className="grid grid-cols-2 gap-2 text-gray-600 dark:text-gray-400">
-                              {Object.entries(log.metadata).map(([key, value]) => (
-                                <div key={key}>
-                                  <span className="font-medium">{key}:</span> {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                                </div>
-                              ))}
+                              {Object.entries(log.metadata).map(([key, value]) => {
+                                // Sanitize metadata display to prevent XSS
+                                const sanitizedKey = String(key).replace(/[<>'"&]/g, '');
+                                const sanitizedValue = typeof value === 'object' 
+                                  ? JSON.stringify(value).replace(/[<>'"&]/g, '') 
+                                  : String(value).replace(/[<>'"&]/g, '');
+                                
+                                return (
+                                  <div key={key}>
+                                    <span className="font-medium">{sanitizedKey}:</span> {sanitizedValue}
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         )}
