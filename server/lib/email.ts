@@ -52,249 +52,408 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     pin_auth: "Your Healios Login PIN",
   };
 
-  const bodyMap: Record<EmailType, (data: EmailData) => string> = {
-    order_confirm: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Order Confirmation</h1>
-        <p>Hi${data.customerName ? ` ${data.customerName}` : ''},</p>
-        <p>Thank you for your order! Your payment of <strong>R${data.amount.toFixed(2)}</strong> has been received.</p>
-        <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #000; margin: 20px 0;">
-          <p><strong>Order ID:</strong> ${data.id}</p>
-          <p><strong>Payment Status:</strong> Completed</p>
-          <p><strong>Order Status:</strong> Processing</p>
+  const healiosEmailTemplate = (title: string, content: string, footerNote?: string) => `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${title}</title>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      </style>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; line-height: 1.6; color: #000000; background-color: #ffffff;">
+      
+      <!-- Header with Healios branding -->
+      <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 24px 0; text-align: center;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 0 20px;">
+          <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.025em;">Healios</h1>
+          <p style="margin: 8px 0 0 0; color: #ffffff; font-size: 14px; opacity: 0.9;">Premium Wellness Supplements</p>
         </div>
-        ${data.items ? `
-        <h3>Order Items:</h3>
-        <ul style="list-style: none; padding: 0;">
-          ${data.items.map((item: any) => `
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-              <strong>${item.productName || item.product?.name}</strong> - Qty: ${item.quantity} - R${(parseFloat(item.price || item.product?.price || '0') * item.quantity).toFixed(2)}
-            </li>
-          `).join('')}
-        </ul>
+      </div>
+
+      <!-- Main content -->
+      <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff;">
+        <h2 style="margin: 0 0 24px 0; color: #000000; font-size: 24px; font-weight: 600; letter-spacing: -0.025em; border-bottom: 2px solid #000000; padding-bottom: 12px;">${title}</h2>
+        
+        ${content}
+        
+        ${footerNote ? `
+        <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #e5e5e5;">
+          <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.5;">${footerNote}</p>
+        </div>
         ` : ''}
-        <p>We'll send you an update once your order has been shipped.</p>
-        <p>Thank you for choosing Healios!</p>
       </div>
-    `,
-    refund: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Refund Processed</h1>
-        <p>Your refund of <strong>R${data.amount.toFixed(2)}</strong> has been processed successfully.</p>
-        <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #000; margin: 20px 0;">
-          <p><strong>Payment Intent ID:</strong> ${data.id}</p>
-          <p><strong>Refund Amount:</strong> R${data.amount.toFixed(2)}</p>
+
+      <!-- Footer -->
+      <div style="background-color: #f8f9fa; padding: 32px 20px; text-align: center; border-top: 1px solid #e5e5e5;">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <p style="margin: 0 0 16px 0; color: #666666; font-size: 14px;">
+            This email was sent from Healios. If you have any questions, please don't hesitate to contact us.
+          </p>
+          <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.4;">
+            © ${new Date().getFullYear()} Healios. All rights reserved.<br>
+            Premium wellness supplements for your health journey.
+          </p>
         </div>
-        <p>It may take 5–10 business days for the refund to appear in your account, depending on your bank.</p>
-        <p>If you have any questions, please don't hesitate to contact us.</p>
       </div>
-    `,
-    reorder: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">Reorder Confirmation</h1>
-        <p>Hi${data.customerName ? ` ${data.customerName}` : ''},</p>
-        <p>Your reorder has been confirmed! Total amount: <strong>R${data.amount.toFixed(2)}</strong></p>
-        <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #000; margin: 20px 0;">
-          <p><strong>Session ID:</strong> ${data.id}</p>
-          <p><strong>Status:</strong> Processing</p>
-        </div>
-        <p>You'll receive an update once your order has been shipped.</p>
-        <p>Thank you for your continued trust in Healios!</p>
-      </div>
-    `,
-    admin_alert: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">🚨 Admin Alert</h1>
-        <p><strong>Alert:</strong> ${data.id}</p>
-        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin: 20px 0;">
-          <p><strong>Details:</strong> ${JSON.stringify(data, null, 2)}</p>
-        </div>
-        <p>Please review this alert and take appropriate action if necessary.</p>
-      </div>
-    `,
-    abandoned_cart_1h: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">We're here when you're ready</h1>
-        <p>Hi ${data.userName},</p>
-        <p>We noticed you were exploring some of our wellness products earlier. There's absolutely no rush – we just wanted to let you know we've saved everything in your cart for whenever you're ready to continue.</p>
+    </body>
+    </html>
+  `;
+
+  const bodyMap: Record<EmailType, (data: EmailData) => string> = {
+    order_confirm: (data) => healiosEmailTemplate(
+      "Order Confirmation",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi${data.customerName ? ` ${data.customerName}` : ''},</p>
         
-        <div style="background-color: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #6c757d;">
-          <p style="margin: 0; color: #495057;">Take your time to make the right choice for your wellness journey. We're here to support you, not pressure you.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Thank you for your order! Your payment of <strong style="color: #000000;">R${data.amount.toFixed(2)}</strong> has been received and is being processed.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">ORDER DETAILS</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Order ID:</strong> ${data.id}</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Payment Status:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 500;">Completed</span></p>
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Order Status:</strong> <span style="color: hsl(220, 100%, 40%); font-weight: 500;">Processing</span></p>
+          </div>
         </div>
         
-        <div style="text-align: center; margin: 30px 0;">
+        ${data.items ? `
+        <div style="margin: 32px 0;">
+          <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #000000; letter-spacing: -0.025em;">Order Items</h3>
+          <div style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+            ${data.items.map((item: any, index: number) => `
+              <div style="padding: 16px; ${index > 0 ? 'border-top: 1px solid #e5e5e5;' : ''} background-color: ${index % 2 === 0 ? '#ffffff' : '#f8f9fa'};">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 500; color: #000000;">${item.productName || item.product?.name}</p>
+                    <p style="margin: 0; font-size: 14px; color: #666666;">Quantity: ${item.quantity}</p>
+                  </div>
+                  <p style="margin: 0; font-size: 16px; font-weight: 600; color: #000000;">R${(parseFloat(item.price || item.product?.price || '0') * item.quantity).toFixed(2)}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        ` : ''}
+        
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">We'll send you an update once your order has been shipped. Thank you for choosing Healios for your wellness journey!</p>
+      `,
+      "Questions about your order? Simply reply to this email and we'll be happy to help."
+    ),
+    refund: (data) => healiosEmailTemplate(
+      "Refund Processed",
+      `
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Your refund of <strong style="color: #000000;">R${data.amount.toFixed(2)}</strong> has been processed successfully.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">REFUND DETAILS</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Payment Intent ID:</strong> ${data.id}</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Refund Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${data.amount.toFixed(2)}</span></p>
+          </div>
+        </div>
+        
+        <p style="margin: 24px 0; font-size: 16px; color: #000000;">It may take 5–10 business days for the refund to appear in your account, depending on your bank's processing time.</p>
+        
+        <p style="margin: 0; font-size: 16px; color: #000000;">If you have any questions about this refund, please don't hesitate to contact us.</p>
+      `,
+      "We appreciate your understanding and look forward to serving you again in the future."
+    ),
+    reorder: (data) => healiosEmailTemplate(
+      "Reorder Confirmation",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi${data.customerName ? ` ${data.customerName}` : ''},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Your reorder has been confirmed! Thank you for continuing your wellness journey with us.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">REORDER DETAILS</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Total Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${data.amount.toFixed(2)}</span></p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Session ID:</strong> ${data.id}</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Status:</strong> <span style="color: hsl(220, 100%, 40%); font-weight: 500;">Processing</span></p>
+          </div>
+        </div>
+        
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">You'll receive an update once your order has been shipped. Thank you for your continued trust in Healios!</p>
+      `,
+      "We appreciate your loyalty and are committed to supporting your wellness goals."
+    ),
+    admin_alert: (data) => healiosEmailTemplate(
+      "🚨 Admin Alert",
+      `
+        <div style="background: linear-gradient(135deg, hsl(0, 84.2%, 60.2%), hsl(320, 100%, 50%)); padding: 20px; border-radius: 8px; margin: 0 0 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #000000;">URGENT: System Alert</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Alert Type:</strong> ${data.id}</p>
+          </div>
+        </div>
+        
+        <div style="background-color: #fff3cd; border: 2px solid #ffb74d; border-radius: 8px; padding: 20px; margin: 24px 0;">
+          <p style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #000000;">Alert Details:</p>
+          <pre style="background-color: #f8f9fa; padding: 16px; border-radius: 4px; font-size: 14px; color: #000000; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word;">${JSON.stringify(data, null, 2)}</pre>
+        </div>
+        
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Please review this alert immediately and take appropriate action if necessary.</p>
+      `,
+      "This is an automated alert from the Healios system monitoring."
+    ),
+    abandoned_cart_1h: (data) => healiosEmailTemplate(
+      "We're here when you're ready",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">We noticed you were exploring some of our wellness products earlier. There's absolutely no rush – we just wanted to let you know we've saved everything in your cart for whenever you're ready to continue.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0; font-size: 16px; color: #000000; font-style: italic;">Take your time to make the right choice for your wellness journey. We're here to support you, not pressure you.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin: 32px 0;">
           <a href="${data.resumeCheckoutUrl}" 
-             style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Continue When Ready
           </a>
         </div>
-        <p style="font-size: 14px; color: #6c757d;">Have questions about any products? Just reply to this email – we'd love to help you find exactly what you're looking for.</p>
-        <p>Warmly,<br>The Healios Team</p>
-      </div>
-    `,
-    abandoned_cart_24h: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">A gentle reminder about your wellness selections</h1>
-        <p>Hi ${data.userName},</p>
-        <p>We hope you've had time to consider the wellness products you were exploring yesterday. We understand that choosing the right supplements is an important decision.</p>
         
-        <p style="color: #6c757d; font-style: italic;">Why we reach out gently: We believe wellness is a personal journey that shouldn't be rushed. We're simply here to remind you of the products you showed interest in, in case you'd like to continue exploring them.</p>
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Have questions about any products? Just reply to this email – we'd love to help you find exactly what you're looking for.</p>
         
-        <div style="background-color: #e8f4fd; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #4dabf7;">
-          <h3 style="color: #1864ab; margin-top: 0; font-size: 16px;">As a thank you for considering us</h3>
-          <p style="margin-bottom: 0;">If you do decide to proceed, use <strong>${data.discountCode}</strong> for <strong>${data.discountAmount} off</strong> your order as our way of saying thank you for taking the time to explore our products.</p>
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Warmly,<br><strong>The Healios Team</strong></p>
+      `,
+      "Your wellness journey is personal. We're here to support, never to pressure."
+    ),
+    abandoned_cart_24h: (data) => healiosEmailTemplate(
+      "A gentle reminder about your wellness selections",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">We hope you've had time to consider the wellness products you were exploring yesterday. We understand that choosing the right supplements is an important decision.</p>
+        
+        <div style="background-color: #f8f9fa; padding: 24px; border-radius: 8px; border-left: 4px solid hsl(30, 25%, 65%); margin: 24px 0;">
+          <p style="margin: 0; font-size: 16px; color: #000000; font-style: italic;"><strong>Why we reach out gently:</strong> We believe wellness is a personal journey that shouldn't be rushed. We're simply here to remind you of the products you showed interest in, in case you'd like to continue exploring them.</p>
         </div>
         
-        <div style="text-align: center; margin: 30px 0;">
+        ${data.discountCode ? `
+        <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <h3 style="color: #000000; margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">As a thank you for considering us</h3>
+            <p style="margin: 0; font-size: 16px; color: #000000;">If you do decide to proceed, use <strong style="color: hsl(280, 100%, 35%);">${data.discountCode}</strong> for <strong style="color: hsl(160, 100%, 35%);">${data.discountAmount} off</strong> your order as our way of saying thank you for taking the time to explore our products.</p>
+          </div>
+        </div>
+        ` : ''}
+        
+        <div style="text-align: center; margin: 32px 0;">
           <a href="${data.resumeCheckoutUrl}" 
-             style="background-color: #4dabf7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Review Your Selections
           </a>
         </div>
-        <p style="font-size: 14px; color: #6c757d;">Remember, there's no pressure at all. We'll keep your selections safe for a few more days, and if you decide not to proceed, that's perfectly okay too.</p>
-        <p>With care,<br>The Healios Team</p>
-      </div>
-    `,
-    reorder_reminder: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #000; border-bottom: 2px solid #000; padding-bottom: 10px;">A thoughtful reminder about your ${data.productName}</h1>
-        <p>Hi ${data.userName},</p>
-        <p>We hope your wellness journey with <strong>${data.productName}</strong> has been going well! It's been ${data.orderAge} days since your last order, and we wanted to gently remind you that you might be running low soon.</p>
         
-        <p style="color: #6c757d; font-style: italic;">Why we send these gentle reminders: We don't want your wellness routine to be interrupted unexpectedly. This is simply a helpful nudge based on typical usage patterns – not a sales push.</p>
+        <p style="margin: 24px 0; font-size: 16px; color: #666666;">Remember, there's no pressure at all. We'll keep your selections safe for a few more days, and if you decide not to proceed, that's perfectly okay too.</p>
         
-        <div style="background-color: #fff8e1; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ffb74d;">
-          <p style="margin-top: 0;"><strong>Gentle timing reminder:</strong></p>
-          <p style="margin-bottom: 0;">Based on typical usage, you might want to consider reordering in about <strong>${data.daysRemaining} days</strong>. Of course, you know your routine best, so please adjust this timing as needed.</p>
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">With care,<br><strong>The Healios Team</strong></p>
+      `,
+      "Your wellness is worth the wait. We're here when you're ready."
+    ),
+    reorder_reminder: (data) => healiosEmailTemplate(
+      `A thoughtful reminder about your ${data.productName}`,
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">We hope your wellness journey with <strong>${data.productName}</strong> has been going well! It's been ${data.orderAge} days since your last order, and we wanted to gently remind you that you might be running low soon.</p>
+        
+        <div style="background-color: #f8f9fa; padding: 24px; border-radius: 8px; border-left: 4px solid hsl(30, 25%, 65%); margin: 24px 0;">
+          <p style="margin: 0; font-size: 16px; color: #000000; font-style: italic;"><strong>Why we send these gentle reminders:</strong> We don't want your wellness routine to be interrupted unexpectedly. This is simply a helpful nudge based on typical usage patterns – not a sales push.</p>
         </div>
         
-        <div style="text-align: center; margin: 30px 0;">
+        <div style="background: linear-gradient(135deg, hsl(30, 25%, 65%), hsl(160, 100%, 35%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000;">Gentle timing reminder:</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;">Based on typical usage, you might want to consider reordering in about <strong style="color: hsl(280, 100%, 35%);">${data.daysRemaining} days</strong>. Of course, you know your routine best, so please adjust this timing as needed.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin: 32px 0;">
           <a href="${data.reorderUrl}" 
-             style="background-color: #ffb74d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(30, 25%, 65%), hsl(160, 100%, 35%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Reorder When Ready
           </a>
         </div>
-        <p style="font-size: 12px; color: #999;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
-        <p>Supporting your wellness journey,<br>The Healios Team</p>
-      </div>
-    `,
-    reorder_final: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #6c757d; border-bottom: 2px solid #6c757d; padding-bottom: 10px;">A final gentle reminder about your ${data.productName}</h1>
-        <p>Hi ${data.userName},</p>
-        <p>We hope this message finds you well. It's been <strong>${data.orderAge} days</strong> since your last <strong>${data.productName}</strong> order, and you might be running low by now.</p>
         
-        <p style="color: #6c757d; font-style: italic;">Why this is our final reminder: We believe in respecting your choices. This will be our last gentle nudge about reordering – we trust you to manage your wellness routine in the way that works best for you.</p>
+        <p style="margin: 24px 0; font-size: 14px; color: #666666;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
         
-        <div style="background-color: #f1f3f4; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #9e9e9e;">
-          <p style="margin-top: 0;"><strong>If you're still using ${data.productName}:</strong></p>
-          <p style="margin-bottom: 0;">You might want to consider reordering soon to avoid any gap in your routine. If your needs have changed or you're taking a break, that's perfectly fine too.</p>
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Supporting your wellness journey,<br><strong>The Healios Team</strong></p>
+      `,
+      "We're here to support your routine, not pressure you into purchases."
+    ),
+    reorder_final: (data) => healiosEmailTemplate(
+      `A final gentle reminder about your ${data.productName}`,
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">We hope this message finds you well. It's been <strong>${data.orderAge} days</strong> since your last <strong>${data.productName}</strong> order, and you might be running low by now.</p>
+        
+        <div style="background-color: #f8f9fa; padding: 24px; border-radius: 8px; border-left: 4px solid hsl(280, 100%, 35%); margin: 24px 0;">
+          <p style="margin: 0; font-size: 16px; color: #000000; font-style: italic;"><strong>Why this is our final reminder:</strong> We believe in respecting your choices. This will be our last gentle nudge about reordering – we trust you to manage your wellness routine in the way that works best for you.</p>
         </div>
         
-        <div style="text-align: center; margin: 30px 0;">
+        <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000;">If you're still using ${data.productName}:</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;">You might want to consider reordering soon to avoid any gap in your routine. If your needs have changed or you're taking a break, that's perfectly fine too.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin: 32px 0;">
           <a href="${data.reorderUrl}" 
-             style="background-color: #6c757d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Reorder If Needed
           </a>
         </div>
-        <p style="font-size: 12px; color: #999;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
-        <p style="font-size: 14px; color: #6c757d;">Thank you for being part of our wellness community. Whether you reorder or not, we appreciate the trust you've placed in us.</p>
-        <p>With gratitude,<br>The Healios Team</p>
-      </div>
-    `,
-    referral_reward: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 10px;">🎉 You've Earned a Reward!</h1>
-        <p>Hi ${data.userName},</p>
-        <p>Wonderful news! ${data.refereeFirstName} just used your referral code <strong>${data.code}</strong> and made their first Healios purchase.</p>
         
-        <div style="background-color: #d4edda; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #28a745;">
-          <p style="margin-top: 0;"><strong>Your Reward:</strong></p>
-          <p style="font-size: 18px; font-weight: bold; color: #155724; margin-bottom: 0;">R${data.rewardAmount} Credit</p>
-          <p style="font-size: 14px; color: #6c757d; margin-bottom: 0;">This will be automatically applied to your next order</p>
+        <p style="margin: 24px 0; font-size: 14px; color: #666666;">Reference: Order #${data.originalOrderId} from ${data.originalOrderDate}</p>
+        
+        <p style="margin: 24px 0; font-size: 16px; color: #666666;">Thank you for being part of our wellness community. Whether you reorder or not, we appreciate the trust you've placed in us.</p>
+        
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">With gratitude,<br><strong>The Healios Team</strong></p>
+      `,
+      "Your wellness journey is entirely your own. We're grateful to have been part of it."
+    ),
+    referral_reward: (data) => healiosEmailTemplate(
+      "🎉 You've Earned a Reward!",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Wonderful news! ${data.refereeFirstName} just used your referral code <strong>${data.code}</strong> and made their first Healios purchase.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: 600; color: #000000;">Your Reward:</p>
+            <p style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: hsl(160, 100%, 35%);">R${data.rewardAmount} Credit</p>
+            <p style="margin: 0; font-size: 14px; color: #666666;">This will be automatically applied to your next order</p>
+          </div>
         </div>
         
-        <p style="color: #6c757d; font-style: italic;">Thank you for sharing Healios with your friends and helping us grow our wellness community. Your support means everything to us!</p>
+        <p style="margin: 24px 0; font-size: 16px; color: #666666; font-style: italic;">Thank you for sharing Healios with your friends and helping us grow our wellness community. Your support means everything to us!</p>
         
-        <div style="text-align: center; margin: 30px 0;">
+        <div style="text-align: center; margin: 32px 0;">
           <a href="https://healios.com/portal/referrals" 
-             style="background-color: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Share Your Code Again
           </a>
         </div>
         
-        <p>Keep sharing the wellness,<br>The Healios Team</p>
-      </div>
-    `,
-    referral_welcome: (data) => `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Welcome to Healios!</h1>
-        <p>Hi ${data.userName},</p>
-        <p>What a great way to start your wellness journey! ${data.referrerFirstName} referred you to Healios, and we've applied your ${data.discountUsed} discount to your first order.</p>
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Keep sharing the wellness,<br><strong>The Healios Team</strong></p>
+      `,
+      "Thank you for helping us grow our wellness community through referrals."
+    ),
+    referral_welcome: (data) => healiosEmailTemplate(
+      "Welcome to Healios!",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.userName},</p>
         
-        <div style="background-color: #cce5ff; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #007bff;">
-          <p style="margin-top: 0;"><strong>Your First Order Benefits:</strong></p>
-          <p>✓ ${data.discountUsed} discount applied automatically</p>
-          <p>✓ Welcome to our wellness community</p>
-          <p style="margin-bottom: 0;">✓ Access to premium supplements and expert guidance</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">What a great way to start your wellness journey! ${data.referrerFirstName} referred you to Healios, and we've applied your ${data.discountUsed} discount to your first order.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #000000;">Your First Order Benefits:</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;">✓ ${data.discountUsed} discount applied automatically</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;">✓ Welcome to our wellness community</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;">✓ Access to premium supplements and expert guidance</p>
+          </div>
         </div>
         
-        <p style="color: #6c757d; font-style: italic;">When you're ready, you can also create your own referral code and earn rewards when you share Healios with friends!</p>
+        <p style="margin: 24px 0; font-size: 16px; color: #666666; font-style: italic;">When you're ready, you can also create your own referral code and earn rewards when you share Healios with friends!</p>
         
-        <div style="text-align: center; margin: 30px 0;">
+        <div style="text-align: center; margin: 32px 0;">
           <a href="https://healios.com/portal" 
-             style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 14px;">
+             style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
             Explore Your Portal
           </a>
         </div>
         
-        <p>Welcome to the family,<br>The Healios Team</p>
-      </div>
-    `,
+        <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Welcome to the family,<br><strong>The Healios Team</strong></p>
+      `,
+      "We're excited to have you join our wellness community!"
+    ),
     pin_auth: (data) => `
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Your Healios Login PIN</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        </style>
       </head>
-      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 40px; background-color: #ffffff; color: #000;">
-        <div style="max-width: 600px; margin: 0 auto;">
-          <div style="color: #666; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px;">
-            LOGIN AUTHENTICATION
+      <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; line-height: 1.6; color: #000000; background-color: #f8f9fa;">
+        <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);">
+          
+          <!-- Header with Healios brand gradient -->
+          <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 48px 40px; text-align: center;">
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.025em;">
+              Healios
+            </h1>
+            <p style="margin: 12px 0 0 0; color: #ffffff; font-size: 16px; opacity: 0.9; font-weight: 500;">
+              Your secure login PIN
+            </p>
           </div>
           
-          <h1 style="font-size: 32px; font-weight: 400; line-height: 1.2; margin: 0 0 30px 0; color: #000;">
-            Your login PIN
-          </h1>
+          <!-- Content -->
+          <div style="padding: 48px 40px;">
+            <h2 style="margin: 0 0 24px 0; color: #000000; font-size: 28px; font-weight: 600; line-height: 1.3; letter-spacing: -0.025em;">
+              Welcome back!
+            </h2>
           
-          ${data.originalUserEmail ? `
-          <div style="background-color: #e3f2fd; padding: 20px; margin: 0 0 30px 0; border-left: 4px solid #2196f3; border-radius: 4px;">
-            <div style="font-size: 14px; font-weight: 600; color: #1976d2; margin-bottom: 8px;">DEVELOPMENT MODE</div>
-            <div style="font-size: 16px; color: #333;">PIN requested for user: <strong>${data.originalUserEmail}</strong></div>
-          </div>
-          ` : ''}
-          
-          <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
-            Use this PIN to complete your sign-in to Healios. Enter it on the login page to access your account.
-          </p>
-          
-          <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-left: 4px solid #000; margin: 0 0 40px 0;">
-            <div style="font-size: 36px; font-weight: 600; letter-spacing: 8px; color: #000; font-family: monospace;">
-              ${data.pin}
+            ${data.originalUserEmail ? `
+            <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 2px; border-radius: 8px; margin: 0 0 32px 0;">
+              <div style="background-color: #ffffff; padding: 20px; border-radius: 6px;">
+                <p style="margin: 0; font-size: 14px; color: #000000; font-weight: 500;">
+                  <strong>Development Mode:</strong> This PIN was generated for <strong>${data.originalUserEmail}</strong> but sent to this admin account for testing.
+                </p>
+              </div>
             </div>
-            <div style="font-size: 14px; color: #666; margin-top: 15px;">
-              This PIN expires in 5 minutes
+            ` : ''}
+          
+            <p style="font-size: 18px; line-height: 1.6; color: #000000; margin: 0 0 40px 0;">
+              Use this PIN to complete your sign-in to Healios. Enter it on the login page to access your account.
+            </p>
+          
+            <!-- PIN Display with Healios branding -->
+            <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 3px; border-radius: 12px; margin: 0 0 40px 0;">
+              <div style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-radius: 9px;">
+                <div style="font-size: 48px; font-weight: 700; letter-spacing: 12px; color: #000000; font-family: 'Inter', monospace; margin: 0 0 16px 0;">
+                  ${data.pin}
+                </div>
+                <div style="font-size: 16px; color: hsl(280, 100%, 35%); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">
+                  Expires in 5 minutes
+                </div>
+              </div>
             </div>
+          
+            <div style="background-color: #f8f9fa; padding: 24px; border-radius: 8px; border-left: 4px solid hsl(320, 100%, 50%); margin: 0 0 32px 0;">
+              <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #000000;">
+                <strong>Security Note:</strong> If you didn't request this login PIN, please ignore this email. Your account security remains protected.
+              </p>
+            </div>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #666666; margin: 0; text-align: center;">
+              Need help? Simply reply to this email and we'll assist you right away.
+            </p>
           </div>
-          
-          <p style="font-size: 16px; line-height: 1.6; color: #666; margin: 0 0 40px 0;">
-            If you didn't request this login PIN, please ignore this email. Your account security remains protected.
-          </p>
-          
-          <div style="border-top: 1px solid #e0e0e0; padding-top: 30px; margin-top: 50px;">
-            <p style="color: #999; font-size: 14px; line-height: 1.5; margin: 0;">
-              This is an automated message from Healios. Please do not reply to this email.
+
+          <!-- Footer -->
+          <div style="background-color: #f8f9fa; padding: 32px 40px; text-align: center; border-top: 1px solid #e5e5e5;">
+            <p style="margin: 0 0 8px 0; color: #666666; font-size: 14px;">
+              This is an automated security message from Healios.
+            </p>
+            <p style="margin: 0; color: #999999; font-size: 12px;">
+              © ${new Date().getFullYear()} Healios - Premium wellness supplements for your health journey.
             </p>
           </div>
         </div>
