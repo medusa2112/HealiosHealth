@@ -163,6 +163,11 @@ export class EmailService {
         </html>
       `;
 
+      if (!resend) {
+        console.warn('Email system disabled - RESEND_API_KEY not found');
+        return false;
+      }
+
       await resend.emails.send({
         from: this.FROM_EMAIL,
         to: newsletter.email,
@@ -237,6 +242,11 @@ export class EmailService {
         </body>
         </html>
       `;
+
+      if (!resend) {
+        console.warn('Email system disabled - RESEND_API_KEY not found');
+        return false;
+      }
 
       await resend.emails.send({
         from: this.FROM_EMAIL,
@@ -902,6 +912,11 @@ The Healios Team
     `;
     
     try {
+      if (!resend) {
+        console.warn('Email system disabled - RESEND_API_KEY not found');
+        return;
+      }
+
       const data = await resend.emails.send({
         from: 'Healios Team <noreply@healios.com>',
         to: [email],
@@ -1066,6 +1081,11 @@ The Healios Team
         </html>
       `;
 
+      if (!resend) {
+        console.warn('Email system disabled - RESEND_API_KEY not found');
+        return false;
+      }
+
       const result = await resend.emails.send({
         from: this.FROM_EMAIL,
         to: [quizResult.email],
@@ -1158,6 +1178,11 @@ The Healios Team
         </html>
       `;
 
+      if (!resend) {
+        console.warn('Email system disabled - RESEND_API_KEY not found');
+        return false;
+      }
+
       const result = await resend.emails.send({
         from: this.FROM_EMAIL,
         to: ['dn@thefourths.com'],
@@ -1202,6 +1227,11 @@ The Healios Team
           notes: null,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          userId: null,
+          refundStatus: null,
+          disputeStatus: null,
+          stripeSessionId: null,
+          discountCode: null,
         },
         orderItems: [
           {
