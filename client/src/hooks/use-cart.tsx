@@ -45,9 +45,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Sync cart to server whenever it changes
   const syncCartToServer = async (cartItems: CartItem[]) => {
     try {
+      // Validate cart items before syncing
+      if (!Array.isArray(cartItems)) {
+        console.error('Cart items must be an array');
+        return;
+      }
+
       const totalAmount = cartItems.reduce((sum, item) => {
-        return sum + (parseFloat(item.product.price) * item.quantity);
+        const price = parseFloat(item.product?.price || '0');
+        const quantity = parseInt(String(item.quantity || 0));
+        return sum + (price * quantity);
       }, 0);
+
+      // Ensure sessionToken exists
+      if (!sessionToken) {
+        console.error('Session token is missing');
+        return;
+      }
 
       await apiRequest('POST', '/api/cart/sync', {
         session_token: sessionToken,
@@ -57,6 +71,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       });
     } catch (error) {
       console.error('Failed to sync cart to server:', error);
+      // Don't throw error to prevent cart operations from failing
     }
   };
 

@@ -333,7 +333,6 @@ export type InsertAdmin = z.infer<typeof insertAdminsSchema>;
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
 export type CheckoutAddress = z.infer<typeof checkoutAddressSchema>;
-export type CheckoutAddress = z.infer<typeof checkoutAddressSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type Cart = typeof carts.$inferSelect;

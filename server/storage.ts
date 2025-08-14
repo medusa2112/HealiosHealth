@@ -741,7 +741,29 @@ export class MemStorage implements IStorage {
   async getAllCarts(): Promise<Cart[]> { return Array.from(this.carts.values()); }
   async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.stripePaymentIntentId === paymentIntentId); }
   async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated = { ...order, refundStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
-  async upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> { const existing = Array.from(this.carts.values()).find(c => c.sessionToken === cart.sessionToken); if (existing) { const updated = { ...existing, ...cart, lastUpdated: new Date().toISOString() }; this.carts.set(existing.id, updated); return updated; } const id = randomUUID(); const newCart: Cart = { ...cart, id, createdAt: new Date().toISOString(), lastUpdated: new Date().toISOString() } as Cart; this.carts.set(id, newCart); return newCart; }
+  async upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> { 
+    const existing = Array.from(this.carts.values()).find(c => c.sessionToken === cart.sessionToken); 
+    if (existing) { 
+      const updated = { ...existing, ...cart, lastUpdated: new Date().toISOString() }; 
+      this.carts.set(existing.id, updated); 
+      return updated; 
+    } 
+    const id = randomUUID(); 
+    const newCart: Cart = { 
+      ...cart, 
+      id, 
+      userId: cart.userId || null,
+      items: cart.items || '[]',
+      totalAmount: cart.totalAmount || null,
+      currency: cart.currency || 'ZAR',
+      convertedToOrder: false,
+      stripeSessionId: null,
+      createdAt: new Date().toISOString(), 
+      lastUpdated: new Date().toISOString() 
+    }; 
+    this.carts.set(id, newCart); 
+    return newCart; 
+  }
   async getCartById(id: string): Promise<Cart | undefined> { return this.carts.get(id); }
   async getCartBySessionToken(sessionToken: string): Promise<Cart | undefined> { return Array.from(this.carts.values()).find(cart => cart.sessionToken === sessionToken); }
   async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> { const cart = this.carts.get(cartId); if (!cart) return undefined; const updated = { ...cart, convertedToOrder: true, stripeSessionId: stripeSessionId ?? null, lastUpdated: new Date().toISOString() }; this.carts.set(cartId, updated); return updated; }
