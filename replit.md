@@ -90,3 +90,13 @@ The application employs a monorepo structure, separating client, server, and sha
 - ESBuild
 - PostCSS
 - Drizzle Kit
+
+## Recent Security Updates (January 14, 2025)
+- ✅ Removed vulnerable csurf package (custom CSRF implementation in use)
+- ✅ Updated @types/node to latest version (22.10.6)
+- ✅ Updated drizzle-kit to version 0.31.4
+- ✅ Updated tsx to version 4.20.4
+- ✅ Updated vite to version 7.1.2
+- ✅ Updated vitest to version 3.2.4
+- ✅ Updated @vitejs/plugin-react to version 4.3.4
+- ⚠️ Remaining: 4 moderate vulnerabilities in drizzle-kit dependencies (development only, not affecting production)

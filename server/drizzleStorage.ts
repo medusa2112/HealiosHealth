@@ -740,6 +740,28 @@ export class DrizzleStorage implements IStorage {
     return updated;
   }
 
+  async updateSubscriptionStatus(id: string, status: string): Promise<Subscription | undefined> {
+    const [updated] = await db.update(subscriptions)
+      .set({ status })
+      .where(eq(subscriptions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getUserSubscriptions(userId: string): Promise<Subscription[]> {
+    return await db.select().from(subscriptions)
+      .where(eq(subscriptions.userId, userId))
+      .orderBy(desc(subscriptions.startDate));
+  }
+
+  async getSubscription(id: string): Promise<Subscription | undefined> {
+    return this.getSubscriptionById(id);
+  }
+
+  async getAllSubscriptions(): Promise<Subscription[]> {
+    return this.getSubscriptions();
+  }
+
   // Security Issues
   async getSecurityIssues(): Promise<SecurityIssue[]> {
     return await db.select().from(securityIssues)

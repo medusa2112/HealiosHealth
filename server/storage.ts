@@ -149,8 +149,10 @@ export interface IStorage {
   // Phase 18: Subscriptions
   getUserSubscriptions(userId: string): Promise<Subscription[]>;
   getSubscription(id: string): Promise<Subscription | undefined>;
+  getSubscriptions(): Promise<Subscription[]>;
   createSubscription(subscription: InsertSubscription): Promise<Subscription>;
   updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined>;
+  updateSubscriptionStatus(id: string, status: string): Promise<Subscription | undefined>;
   getAllSubscriptions(): Promise<Subscription[]>;
   
   // ALFR3D Security Dashboard
