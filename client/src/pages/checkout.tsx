@@ -154,18 +154,34 @@ const CheckoutForm = () => {
       };
 
       // Prepare line items for Stripe
-      const lineItems = cart.items.map(item => ({
-        price_data: {
-          currency: 'zar',
-          product_data: {
-            name: item.product.name,
-            images: [item.product.imageUrl],
-            description: item.product.description?.substring(0, 100) || '',
+      const lineItems = cart.items.map(item => {
+        // Ensure we have a valid absolute URL for Stripe
+        let validImageUrl;
+        if (item.product.imageUrl) {
+          if (item.product.imageUrl.startsWith('http://') || item.product.imageUrl.startsWith('https://')) {
+            validImageUrl = item.product.imageUrl;
+          } else {
+            // Convert relative URL to absolute URL
+            validImageUrl = `${window.location.origin}${item.product.imageUrl}`;
+          }
+        } else {
+          // Fallback to placeholder image
+          validImageUrl = `${window.location.origin}/placeholder-product.png`;
+        }
+        
+        return {
+          price_data: {
+            currency: 'zar',
+            product_data: {
+              name: item.product.name,
+              images: [validImageUrl],
+              description: item.product.description?.substring(0, 100) || '',
+            },
+            unit_amount: Math.round(parseFloat(item.product.price) * 100), // Convert to cents
           },
-          unit_amount: Math.round(parseFloat(item.product.price) * 100), // Convert to cents
-        },
-        quantity: item.quantity,
-      }));
+          quantity: item.quantity,
+        };
+      });
 
       // Create Stripe checkout session using the centralized API request with CSRF handling
       const response = await apiRequest('POST', '/api/create-checkout-session', {
