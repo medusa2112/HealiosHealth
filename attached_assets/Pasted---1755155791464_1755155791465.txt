@@ -1,0 +1,317 @@
+ 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+ [LaunchDarkly] LaunchDarkly client initialized
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+attached_assets/image_1755121797171.png:1   Failed to load resource: the server responded with a status of 404 ()
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+[Report Only] Refused to compile or instantiate WebAssembly module because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self'".
+
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+  Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'battery'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'layout-animations'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'navigation-override'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'oversized-images'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'publickey-credentials'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'speaker-selection'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'unoptimized-images'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'unsized-media'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Unrecognized feature: 'pointer-lock'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+framework-8e075ba9c43a4fa2.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-8e075ba9c43a4fa2.js:1
+HealiosHealth:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+_app-b8e1045474b92498.js:13  WARN: A component changed from uncontrolled to controlled.
+(anonymous) @ _app-b8e1045474b92498.js:13
+_app-b8e1045474b92498.js:13  WARN: A component changed from controlled to uncontrolled.
+(anonymous) @ _app-b8e1045474b92498.js:13
+_app-b8e1045474b92498.js:13  WARN: A component changed from uncontrolled to controlled.
+(anonymous) @ _app-b8e1045474b92498.js:13
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+_app-b8e1045474b92498.js:13  WARN: A component changed from uncontrolled to controlled.
+(anonymous) @ _app-b8e1045474b92498.js:13
+_app-b8e1045474b92498.js:13  WARN: A component changed from uncontrolled to controlled.
+(anonymous) @ _app-b8e1045474b92498.js:13
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+content_script.js:1  Uncaught TypeError: Cannot read properties of null (reading 'ControlLooksLikePasswordCredentialField')
+    at shouldOfferCompletionListForField (content_script.js:1:418255)
+    at HTMLDocument.keyDownEventHandler (content_script.js:1:420976)
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar13l%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+Refused to load the font '<URL>' because it violates the following Content Security Policy directive: "font-src 'self' <URL>".
+
+ [ADMIN CONFIG] Client-side admin enabled: true
+ [QUERY] Fetching [object Object]
+ Video loading started
+ TheFourths video loading started
+ [QUERY] Response [object Object]
+ [AUTH] Admin CSRF token initialized
+ [AUTH] Customer CSRF token initialized
+ [QUERY] Data received [object Object]
+ Video can play
+ Video can play
+ TheFourths video loaded
+ TheFourths video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ Video can play
+ [QUERY] Fetching [object Object]
+ [QUERY] Response [object Object]
+ [QUERY] Data received [object Object]
+ [QUERY] Fetching [object Object]
+ [QUERY] Response [object Object]
+ [QUERY] Data received [object Object]
+ [API_REQUEST] Starting request [object Object]
+ [CSRF] customer token fetched and cached: 69bf643390...
+ [CSRF] Customer token added to request: 69bf643390...
+ [API_REQUEST] Response received [object Object]
+  Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+ Loading Google Maps with API key: AIzaSyDOe0pbPlgV-haB...
+  Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+ Google Maps script loaded, checking for Places API...
+ Google Places API ready after 1 attempts
+ ✅ Google Places autocomplete ready
+  As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+  As of March 1st, 2025, google.maps.places.Autocomplete is not available to new customers. Please use google.maps.places.PlaceAutocompleteElement instead. At this time, google.maps.places.Autocomplete is not scheduled to be discontinued, but google.maps.places.PlaceAutocompleteElement is recommended over google.maps.places.Autocomplete. While google.maps.places.Autocomplete will continue to receive bug fixes for any major regressions, existing bugs in google.maps.places.Autocomplete will not be addressed. At least 12 months notice will be given before support is discontinued. Please see https://developers.google.com/maps/legacy for additional details and https://developers.google.com/maps/documentation/javascript/places-migration-overview for the migration guide.
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+ Google Places Autocomplete initialized successfully
+ [API_REQUEST] Starting request [object Object]
+ [CSRF] Customer token added to request: 69bf643390...
+ [API_REQUEST] Response received [object Object]
+ Checkout session response: [object Object]
+ [API_REQUEST] Starting request [object Object]
+ Redirecting to Stripe: https://checkout.stripe.com/c/pay/cs_test_a1MhRkawhntwvs7GuUfhf8e9sxpH8Df3hPldASzZQgFtj88V6byYygrl0J#fidkdWxOYHwnPyd1blpxYHZxWjA0V3B8cWk2M3NuXWlEaklNdGBubzEwYlBsR3JRVzRPMEFOXXVsZlxkUU9ybD1TM2dCd2dzf2pqVWJWYkA0RGFCdm9HNEtdYEdBTDdGf3VpQm1UUlBXYHYwNTVAf1xgMFZzZicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl
+ [CSRF] Customer token added to request: 69bf643390...
+  [API_REQUEST] Request failed [object Object]
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+  Failed to sync cart to server: TypeError: Failed to fetch
+Mt.forEach.n.<computed> @ ecb0186e-5c41-485f-8…da/3.2.3/eruda.js:2
+checkout.stripe.com/c/pay/cs_test_a1MhRkawhntwvs7GuUfhf8e9sxpH8Df3hPldASzZQgFtj88V6byYygrl0J#fidkdWxOYHwnPyd1blpxYHZxWjA0V3B8cWk2M3NuXWlEaklNdGBubzEwYlBsR3JRVzRPMEFOXXVsZlxkUU9ybD1TM2dCd2dzf2pqVWJWYkA0RGFCdm9HNEtdYEdBTDdGf3VpQm1UUlBXYHYwNTVAf1xgMFZzZicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl:1  <link rel=preload> uses an unsupported `as` value
+checkout.stripe.com/c/pay/cs_test_a1MhRkawhntwvs7GuUfhf8e9sxpH8Df3hPldASzZQgFtj88V6byYygrl0J#fidkdWxOYHwnPyd1blpxYHZxWjA0V3B8cWk2M3NuXWlEaklNdGBubzEwYlBsR3JRVzRPMEFOXXVsZlxkUU9ybD1TM2dCd2dzf2pqVWJWYkA0RGFCdm9HNEtdYEdBTDdGf3VpQm1UUlBXYHYwNTVAf1xgMFZzZicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPyd2bGtiaWBabHFgaCcpJ2BrZGdpYFVpZGZgbWppYWB3dic%2FcXdwYHgl:1  <link rel=preload> uses an unsupported `as` value
+cs_test_a1MhRkawhntwvs7GuUfhf8e9sxpH8Df3hPldASzZQgFtj88V6byYygrl0J:6  Uncaught (in promise) Error: Cannot find module './en'
+    at cs_test_a1MhRkawhntwvs7GuUfhf8e9sxpH8Df3hPldASzZQgFtj88V6byYygrl0J:6:306888
+checkout-app-init-40423669f9cb83d5a304c803462b3931.js:1  Stripe Checkout is not able to run in an iFrame. Please redirect to Checkout at the top level.
+n.Z @ checkout-app-init-40423669f9cb83d5a304c803462b3931.js:1
+[Violation] Potential permissions policy violation: payment is not allowed in this document.
+[Violation] Potential permissions policy violation: payment is not allowed in this document.
+[NEW] Explain Console errors by using Copilot in Edge: click
+         
+         to explain an error. 
+        Learn more
+        Don't show again
