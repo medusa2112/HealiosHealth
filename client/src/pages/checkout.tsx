@@ -192,13 +192,22 @@ const CheckoutForm = () => {
         sessionToken: localStorage.getItem('cart_session_token'),
       });
 
-      const { sessionUrl } = await response.json();
+      const responseData = await response.json();
+      console.log('Checkout session response:', responseData);
+      
+      if (!responseData.sessionUrl) {
+        throw new Error('No session URL received from server');
+      }
       
       // Clear cart before redirecting
       clearCart();
       
-      // Redirect to Stripe Checkout
-      window.location.href = sessionUrl;
+      console.log('Redirecting to Stripe:', responseData.sessionUrl);
+      
+      // Redirect to Stripe Checkout with a small delay to ensure cart clearing
+      setTimeout(() => {
+        window.location.href = responseData.sessionUrl;
+      }, 100);
       
     } catch (error) {
       console.error('Stripe checkout error:', error);
