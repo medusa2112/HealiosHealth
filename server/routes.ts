@@ -596,7 +596,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           customerEmail: orderData.customerEmail,
           customerName: orderData.customerName || null,
           customerPhone: orderData.customerPhone || null,
-          orderItems: orderData.orderItems,
+          // Store minimal order items info to stay under 500 char limit
+          itemCount: orderItems.length.toString(),
+          totalItems: orderItems.reduce((sum: number, item: any) => sum + item.quantity, 0).toString(),
           notes: orderData.notes || null,
           sessionToken: sessionToken || null,
           discountCode: appliedDiscountCode?.code || null,
