@@ -91,6 +91,7 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       fullPath.includes('/auth/resend-code') ||
       fullPath.includes('/auth/send-pin') ||  // PIN authentication endpoints
       fullPath.includes('/auth/verify-pin') ||  // PIN verification
+      fullPath.includes('/auth/check-user') ||  // PIN authentication check user endpoint
       fullPath === '/auth/demo-admin-login' ||
       fullPath.includes('/validate-discount')) {  // Public discount validation endpoint
     return next();

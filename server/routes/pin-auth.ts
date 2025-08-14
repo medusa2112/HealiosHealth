@@ -90,7 +90,7 @@ router.post('/send-pin', async (req, res) => {
         console.error('[PIN_AUTH] Failed to send PIN email:', emailResult);
         
         // Handle Resend testing mode limitation
-        if (emailResult.error === 'testing_mode') {
+        if ((emailResult as any).error === 'testing_mode') {
           console.log(`[PIN_AUTH] Resend in testing mode - showing PIN in logs for development`);
           console.log(`[PIN_AUTH] Development PIN for ${email}: ${pin}`);
           // In development/testing mode, continue as if email was sent
