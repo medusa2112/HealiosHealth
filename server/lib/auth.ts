@@ -199,7 +199,7 @@ export const requireSessionOrAuth = async (req: Request, res: Response, next: Ne
 
 // Validation middleware for customer email
 export const validateCustomerEmail = [
-  body('customerEmail')
+  body('orderData.customerEmail')
     .isEmail()
     .withMessage('Must be a valid email address')
     .normalizeEmail()
@@ -220,7 +220,7 @@ export const validateOrderAccess = async (req: Request, res: Response, next: Nex
     }
     
     // Use validated data directly instead of destructuring
-    const customerEmail = req.body.customerEmail;
+    const customerEmail = req.body.orderData?.customerEmail;
     
     // If user is authenticated, must match their email
     if (req.user && req.user.email !== customerEmail) {
