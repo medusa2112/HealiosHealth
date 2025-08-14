@@ -309,9 +309,12 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     console.log(`[EMAIL DEBUG] Resend client exists:`, !!resend);
     console.log(`[EMAIL DEBUG] API Key exists:`, !!process.env.RESEND_API_KEY);
     
+    // Use environment variable for from address, fallback to testing address
+    const fromAddress = process.env.RESEND_FROM_ADDRESS || 'Healios <onboarding@resend.dev>';
+    
     const result = await rateLimitedSend(async () => {
       return await resend!.emails.send({
-        from: 'Healios <onboarding@resend.dev>',
+        from: fromAddress,
         to: [to],
         subject: subjectMap[type],
         html: bodyMap[type](data),
