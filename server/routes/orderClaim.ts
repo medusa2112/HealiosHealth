@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { db } from '../db';
 import { orders } from '@shared/schema';
 import { eq, and, isNull, inArray } from 'drizzle-orm';
@@ -6,31 +7,28 @@ import { requireCustomer } from '../mw/requireCustomer';
 
 const router = Router();
 
+// Zod schema for order claim request
+const claimOrdersSchema = z.object({
+  orderIds: z.array(z.string().min(1)).min(1, 'At least one order ID is required')
+});
+
 /**
  * Guest to Account Order Claim Endpoint
  * Claims guest orders and associates them with the logged-in user
  */
 router.post('/claim', requireCustomer, async (req, res) => {
   const userId = req.session.customerUserId;
-  const { orderIds } = req.body;
   
-  // Validate input
-  if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
+  // Validate request body with Zod
+  const validation = claimOrdersSchema.safeParse(req.body);
+  if (!validation.success) {
     return res.status(400).json({ 
-      error: 'Invalid request. Please provide an array of order IDs.' 
+      error: 'Invalid request',
+      details: validation.error.errors
     });
   }
   
-  // Validate order IDs format
-  const validOrderIds = orderIds.filter(id => 
-    typeof id === 'string' && id.length > 0
-  );
-  
-  if (validOrderIds.length === 0) {
-    return res.status(400).json({ 
-      error: 'No valid order IDs provided.' 
-    });
-  }
+  const { orderIds } = validation.data;
   
   try {
     // Start transaction to ensure consistency

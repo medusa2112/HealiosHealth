@@ -11,7 +11,7 @@ const schema = z.object({
   ADMIN_IP_ALLOWLIST: z.string().optional(), // csv
   ADMIN_2FA_ENABLED: z.enum(['true', 'false']).default('false'),
   PORT: z.string().default('5000'),
-  ADM_PW: z.string().optional(), // Existing admin password
+  // ADM_PW removed for security - use OAuth for admin authentication
 });
 
 const parsed = schema.safeParse(process.env);
@@ -52,7 +52,7 @@ export const ENV = {
   ADMIN_IP_ALLOWLIST: (parsed.data?.ADMIN_IP_ALLOWLIST ?? '').split(',').filter(Boolean),
   ADMIN_2FA_ENABLED: parsed.data?.ADMIN_2FA_ENABLED === 'true',
   PORT: parsed.data?.PORT || '5000',
-  ADM_PW: parsed.data?.ADM_PW || process.env.ADM_PW,
+  // ADM_PW removed for security - OAuth authentication should be used
   isProd: (parsed.data?.NODE_ENV || process.env.NODE_ENV) === 'production',
   isDev: (parsed.data?.NODE_ENV || process.env.NODE_ENV) === 'development',
 };

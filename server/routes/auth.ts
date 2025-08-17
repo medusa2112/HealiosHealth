@@ -16,13 +16,26 @@ import {
   sendVerificationEmail,
   canAttemptVerification 
 } from '../lib/verification';
+// Phase 2 Security: Import enhanced rate limiting
+import { 
+  authRateLimiter, 
+  passwordResetRateLimiter,
+  progressiveDelay,
+  trackFailedLogin,
+  clearFailedLoginAttempts 
+} from '../middleware/rateLimiting';
 
 const router = express.Router();
 
-// Rate limiting for login endpoints to prevent brute force attacks
+// Phase 2 Security: Use enhanced rate limiting with progressive delays
 // Disable for test environment to avoid issues with rapid test login attempts
 const loginLimiter = process.env.NODE_ENV === 'test' || process.env.DISABLE_RATE_LIMIT === 'true'
   ? (req: any, res: any, next: any) => next() // Bypass rate limiter in test environment
+  : authRateLimiter;
+
+// Legacy rate limiter kept for backwards compatibility
+const legacyLoginLimiter = process.env.NODE_ENV === 'test' || process.env.DISABLE_RATE_LIMIT === 'true'
+  ? (req: any, res: any, next: any) => next()
   : rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
       max: 5, // Limit each IP to 5 requests per windowMs

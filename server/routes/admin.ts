@@ -38,11 +38,27 @@ router.use('/analytics', analyticsRouter);
 import securityRouter from './admin/security';
 router.use('/security', securityRouter);
 
+// Zod schema for dashboard query parameters
+const dashboardQuerySchema = z.object({
+  limit: z.string().optional().transform(val => {
+    const num = parseInt(val || '1000');
+    return isNaN(num) ? 1000 : Math.min(Math.max(num, 1), 5000);
+  })
+});
+
 // Admin Dashboard - Overview stats with real-time data
 router.get('/', requireAdmin, async (req, res) => {
   try {
-    // Query limit for performance with large datasets
-    const queryLimit = parseInt(req.query.limit as string) || 1000;
+    // Validate query parameters
+    const validation = dashboardQuerySchema.safeParse(req.query);
+    if (!validation.success) {
+      return res.status(400).json({ 
+        error: 'Invalid query parameters',
+        details: validation.error.errors
+      });
+    }
+    
+    const queryLimit = validation.data.limit || 1000;
     
     // Query database directly with proper serialization
     const dbProducts = await db.select().from(products);

@@ -10,17 +10,20 @@ export const customerSession = session({
   resave: false,
   saveUninitialized: false,
   rolling: true,
+  proxy: ENV.isProd, // Trust the proxy in production (for proper secure cookie handling)
   cookie: {
-    httpOnly: true,
-    sameSite: 'lax' as const,
+    httpOnly: true, // Prevent XSS attacks
+    sameSite: 'lax' as const, // Lax for customer sessions (allows navigation from external sites)
     path: '/',
-    secure: false, // Will be set dynamically based on HTTPS
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    secure: ENV.isProd, // HTTPS only in production
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days for customer convenience
+    domain: undefined, // Let browser handle domain
   },
   store: ENV.isProd ? new PgSession({
     tableName: 'session_customers',
     conString: ENV.DATABASE_URL,
     ttl: 7 * 24 * 60 * 60, // 7 days in seconds
+    createTableIfMissing: true, // Ensure table exists
   }) : undefined, // Use memory store in development
 });
 

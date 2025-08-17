@@ -43,10 +43,9 @@ try {
 // Remove security-revealing headers
 app.disable('x-powered-by');
 
-// Trust proxy for proper HTTPS detection (critical for Secure cookies)
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
+// Trust proxy for proper HTTPS detection and rate limiting
+// Phase 2 Security: Enable trust proxy for all environments to fix rate limiting
+app.set('trust proxy', 1);
 
 // Apply comprehensive security headers (CSP, HSTS, X-Headers)
 app.use(securityHeaders);

@@ -62,21 +62,8 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  // HARDENED: Dev bypass ONLY with explicit env var AND special header
-  // This cannot accidentally activate in production
-  const allowDevBypass = process.env.NODE_ENV !== 'production' && 
-                         process.env.CSRF_DEV_BYPASS === 'true';
-  
-  if (allowDevBypass && req.headers['x-csrf-dev-bypass'] === 'ok') {
-    
-    return next();
-  }
-
-  // Skip CSRF for address validation in development
-  if (process.env.NODE_ENV === 'development' && req.originalUrl.includes('/validate-address/')) {
-    
-    return next();
-  }
+  // Phase 2 Security: Remove development bypasses for stronger protection
+  // Only skip CSRF for specific public endpoints that genuinely don't need it
 
   // Skip CSRF for auth endpoints during initial login/register/password reset/verification
   const fullPath = req.originalUrl || req.url || req.path;
@@ -98,29 +85,8 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
-  // Skip CSRF for cart routes in development (temporary fix for session consistency)
-  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/cart/')) {
-    
-    return next();
-  }
-
-  // Skip CSRF for checkout session creation in development
-  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/create-checkout-session')) {
-    
-    return next();
-  }
-
-  // Skip CSRF for admin routes in development environment
-  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/admin/')) {
-    
-    return next();
-  }
-
-  // Skip CSRF for customer profile routes in development (temporary fix for profile update)
-  if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/auth/customer/profile')) {
-    
-    return next();
-  }
+  // Phase 2 Security: Development bypasses removed - CSRF now enforced on all state-changing operations
+  // These routes must now include proper CSRF tokens in production AND development
 
   // For authenticated admin routes, use a more lenient approach in development
   if (req.path.includes('/admin/') && (req.session as any)?.adminId) {

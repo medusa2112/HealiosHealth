@@ -10,17 +10,20 @@ export const adminSession = session({
   resave: false,
   saveUninitialized: false,
   rolling: true,
+  proxy: ENV.isProd, // Trust the proxy in production (for proper secure cookie handling)
   cookie: {
-    httpOnly: true,
-    sameSite: 'strict' as const,
-    path: '/', // Changed from '/admin' to '/' so cookie is sent to all admin-related endpoints
-    secure: false, // Will be set dynamically based on HTTPS
-    maxAge: 4 * 60 * 60 * 1000, // 4 hours for admin sessions
+    httpOnly: true, // Prevent XSS attacks
+    sameSite: 'strict' as const, // Strict CSRF protection for admin
+    path: '/', // Available to all endpoints
+    secure: ENV.isProd, // HTTPS only in production
+    maxAge: 2 * 60 * 60 * 1000, // Reduced to 2 hours for admin sessions (more secure)
+    domain: undefined, // Let browser handle domain
   },
   store: ENV.isProd ? new PgSession({
     tableName: 'session_admins',
     conString: ENV.DATABASE_URL,
-    ttl: 4 * 60 * 60, // 4 hours in seconds
+    ttl: 2 * 60 * 60, // 2 hours in seconds (matching cookie maxAge)
+    createTableIfMissing: true, // Ensure table exists
   }) : undefined, // Use memory store in development
 });
 
