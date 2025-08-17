@@ -464,12 +464,15 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
   // Send email using Resend API
   try {
+    console.log(`[EMAIL] Attempting to send ${type} email to ${to}`);
 
     const fromAddress = process.env.RESEND_FROM_ADDRESS 
       ? (process.env.RESEND_FROM_ADDRESS.includes('<') 
          ? process.env.RESEND_FROM_ADDRESS 
          : `Healios <${process.env.RESEND_FROM_ADDRESS}>`)
       : 'Healios <onboarding@resend.dev>';
+
+    console.log(`[EMAIL] From address: ${fromAddress}`);
 
     const result = await rateLimitedSend(async () => {
       return await resend!.emails.send({
@@ -480,23 +483,26 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
       });
     });
     
+    console.log(`[EMAIL] Resend result:`, { hasError: !!result.error, hasData: !!result.data });
+    
     // Check if there's an error from Resend
     if (result.error) {
-      // // console.error(`[EMAIL ERROR] Resend API error:`, result.error);
+      console.error(`[EMAIL ERROR] Resend API error:`, result.error);
       
       // Handle testing mode limitation
       if (result.error.statusCode === 403 && result.error.error?.includes('testing emails')) {
-        
+        console.log(`[EMAIL] Resend in testing mode - allowing fallback`);
         return { id: 'testing-mode-' + Date.now(), success: false, error: 'testing_mode' };
       }
       
       return { id: 'error-' + Date.now(), success: false, error: result.error };
     }
 
+    console.log(`[EMAIL] Email sent successfully with ID: ${result.data?.id}`);
     return { id: result.data?.id || 'unknown', success: true };
   } catch (error) {
-    // // console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
-    // console.error(`[EMAIL ERROR] Error details:`, JSON.stringify(error, null, 2));
+    console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
+    console.error(`[EMAIL ERROR] Error details:`, JSON.stringify(error, null, 2));
     return { id: 'error-' + Date.now(), success: false };
   }
 }
@@ -504,10 +510,12 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 // Send PIN authentication email
 export async function sendPinEmail(userEmail: string, pin: string): Promise<{ success: boolean; id?: string }> {
   const isDevelopment = process.env.NODE_ENV === 'development';
+  console.log(`[PIN_EMAIL] Sending PIN for ${userEmail}, isDevelopment: ${isDevelopment}, NODE_ENV: ${process.env.NODE_ENV}`);
   
   if (isDevelopment) {
     // In development/testing: send to all admin accounts
     const adminEmails = ["dn@thefourths.com", "jv@thefourths.com"];
+    console.log(`[PIN_EMAIL] Development mode - sending to admin emails: ${adminEmails.join(', ')}`);
 
     let lastResult = { success: false, id: 'no-attempts' };
     
@@ -521,27 +529,31 @@ export async function sendPinEmail(userEmail: string, pin: string): Promise<{ su
         });
         
         if (result.success) {
-          
+          console.log(`[PIN_EMAIL] Successfully sent to admin ${adminEmail}`);
           lastResult = result;
           break; // Stop on first successful send
         } else {
-          
+          console.log(`[PIN_EMAIL] Failed to send to admin ${adminEmail}:`, result);
           lastResult = result;
         }
       } catch (error) {
-        // // console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
+        console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
       }
     }
     
     return lastResult;
   } else {
     // In production: send to the actual user email
+    console.log(`[PIN_EMAIL] Production mode - sending to user email: ${userEmail}`);
     
-    return await sendEmail(userEmail, "pin_auth", {
+    const result = await sendEmail(userEmail, "pin_auth", {
       pin,
       amount: 0,
       id: 'pin-' + Date.now()
     });
+    
+    console.log(`[PIN_EMAIL] Production send result:`, { success: result.success, id: result.id });
+    return result;
   }
 }
 
