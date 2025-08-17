@@ -24,7 +24,7 @@ export default function CustomerPortal() {
 
   // Check auth status
   const { data: user, isLoading: authLoading } = useQuery<UserType | null>({
-    queryKey: ["/auth/me"],
+    queryKey: ["/api/auth/customer/me"],
     retry: false,
   });
 

@@ -10,7 +10,7 @@ import type { User, Order, QuizResult, CustomerPortalData } from "@shared/types"
 export default function CustomerPortal() {
   // Check auth status
   const { data: user, isLoading: authLoading } = useQuery<User | null>({
-    queryKey: ["/auth/me"],
+    queryKey: ["/api/auth/customer/me"],
     retry: false,
   });
 
