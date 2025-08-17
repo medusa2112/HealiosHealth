@@ -25,6 +25,10 @@ import {
 } from "./middleware/rate-limiter";
 import { protectAdmin } from "./middleware/adminAccess";
 import { ADMIN_CONFIG } from "./config/adminConfig";
+// Phase 3 Security: Import enhanced security middlewares
+import { globalErrorHandler, setupUncaughtExceptionHandlers, notFoundHandler } from "./middleware/errorHandler";
+import { createApiSecurityMiddleware } from "./middleware/apiSecurity";
+import { monitorDatabaseQueries } from "./middleware/databaseSecurity";
 
 const app = express();
 
@@ -65,6 +69,21 @@ app.use(corsMw);
 // Mount health endpoints early (before auth)
 app.use(healthRouter());
 app.use(healthRoutes); // Add the new health routes with auth status
+
+// Phase 3 Security: Setup uncaught exception handlers
+setupUncaughtExceptionHandlers();
+
+// Phase 3 Security: Enhanced API security middleware
+app.use('/api', createApiSecurityMiddleware({
+  maxRequestSize: 10 * 1024 * 1024, // 10MB limit
+  maxComplexity: 100,
+  enableSignatureValidation: false, // Disabled by default, can be enabled for critical operations
+  trustedIPs: [],
+  rateLimitByEndpoint: true
+}));
+
+// Phase 3 Security: Database query monitoring
+app.use(monitorDatabaseQueries());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -119,17 +138,6 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Use error logger middleware
-  app.use(errorLogger);
-  
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
-
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
@@ -138,6 +146,15 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+
+  // Use error logger middleware
+  app.use(errorLogger);
+  
+  // Phase 3 Security: Handle 404 errors for API routes only
+  app.use('/api/*', notFoundHandler);
+  
+  // Phase 3 Security: Enhanced global error handler
+  app.use(globalErrorHandler);
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.

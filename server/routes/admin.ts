@@ -3,9 +3,9 @@ import { z } from 'zod';
 import { query, body, param, validationResult } from 'express-validator';
 import { requireAdmin } from '../mw/requireAdmin';
 import { storage } from '../storage';
-import { products, orders, insertProductSchema, quizResults } from '@shared/schema';
+import { products, orders, insertProductSchema, quizResults, carts } from '@shared/schema';
 import { db } from '../db';
-import { eq, sql, desc, sum, count, countDistinct } from 'drizzle-orm';
+import { eq, sql, desc, sum, count, countDistinct, gte, and } from 'drizzle-orm';
 import { AdminLogger } from '../lib/admin-logger';
 import { auditAction } from '../lib/auditMiddleware';
 import ordersRouter from './admin/orders';
@@ -117,20 +117,36 @@ router.get('/', requireAdmin, async (req, res) => {
       totalQuizCompletions = 0;
     }
 
-    // Calculate cart abandonment rate
+    // Calculate cart abandonment rate using safe Drizzle ORM queries
     let abandonmentRate = 0;
     try {
-      const cartResults = await db.execute(
-        sql`SELECT 
-          COUNT(CASE WHEN converted_to_order = false THEN 1 END) as abandoned,
-          COUNT(*) as total 
-          FROM carts 
-          WHERE created_at::timestamp >= NOW() - INTERVAL '30 days'`
-      );
-      const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
-      abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
+      // Phase 3 Security: Replace raw SQL with parameterized Drizzle queries
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      // Get total carts in last 30 days
+      const totalCartsResult = await db
+        .select({ count: count() })
+        .from(carts)
+        .where(gte(carts.createdAt, thirtyDaysAgo.toISOString()));
+      
+      // Get abandoned carts (not converted to orders) in last 30 days
+      const abandonedCartsResult = await db
+        .select({ count: count() })
+        .from(carts)
+        .where(
+          and(
+            gte(carts.createdAt, thirtyDaysAgo.toISOString()),
+            eq(carts.convertedToOrder, false)
+          )
+        );
+      
+      const totalCarts = totalCartsResult[0]?.count || 0;
+      const abandonedCarts = abandonedCartsResult[0]?.count || 0;
+      abandonmentRate = totalCarts > 0 ? (abandonedCarts / totalCarts) * 100 : 0;
     } catch (cartError: any) {
-      // Cart abandonment calculation failed
+      // Cart abandonment calculation failed - using default value
+      abandonmentRate = 0;
     }
 
     // Serialize low stock products properly
@@ -147,14 +163,18 @@ router.get('/', requireAdmin, async (req, res) => {
     // Calculate active users (customers who placed orders in last 30 days)
     let activeUsers = 0;
     try {
-      // Use safe Drizzle query with countDistinct instead of raw SQL
+      // Phase 3 Security: Use parameterized date instead of raw SQL interval
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
       const activeUsersResult = await db
         .select({ count: countDistinct(orders.customerEmail) })
         .from(orders)
-        .where(sql`created_at::timestamp >= NOW() - INTERVAL '30 days'`);
+        .where(gte(orders.createdAt, thirtyDaysAgo.toISOString()));
       activeUsers = activeUsersResult[0]?.count || 0;
     } catch (activeUsersError: any) {
-      // Active users calculation failed
+      // Active users calculation failed - using default value
+      activeUsers = 0;
     }
 
     res.json({

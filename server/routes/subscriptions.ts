@@ -8,12 +8,25 @@ import { subscriptions, productVariants, insertSubscriptionSchema } from "@share
 import { eq } from "drizzle-orm";
 import { protectRoute } from "../lib/auth";
 import { storage } from "../storage";
+// Phase 3 Security: Import enhanced payment security
+import { 
+  paymentFraudDetection, 
+  validateIdempotencyKey, 
+  securePaymentLogging 
+} from "../middleware/paymentSecurity";
+import { securityEventLogger } from "../middleware/securityMonitoring";
 
 const router = Router();
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-06-30.basil' }) : null;
 
-// Create subscription checkout session
-router.post("/checkout", protectRoute(["customer", "admin"]), async (req, res) => {
+// Phase 3 Security: Enhanced subscription checkout with fraud detection
+router.post("/checkout", 
+  protectRoute(["customer", "admin"]),
+  securityEventLogger('authentication', 'medium'),
+  paymentFraudDetection(),
+  validateIdempotencyKey(),
+  securePaymentLogging(),
+  async (req, res) => {
   try {
     const createSubscriptionSchema = z.object({
       variantId: z.string(),
@@ -45,6 +58,11 @@ router.post("/checkout", protectRoute(["customer", "admin"]), async (req, res) =
       return res.status(400).json({ error: "Subscription not available for this product" });
     }
 
+    // Check if Stripe is configured
+    if (!stripe) {
+      return res.status(500).json({ error: "Payment processing not configured" });
+    }
+
     // Create or get Stripe customer
     const user = await storage.getUser(userId);
     let stripeCustomerId = user?.stripeCustomerId;
@@ -60,7 +78,7 @@ router.post("/checkout", protectRoute(["customer", "admin"]), async (req, res) =
       await storage.updateUser(userId, { stripeCustomerId });
     }
 
-    // Create subscription checkout session
+    // Create subscription checkout session  
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: stripeCustomerId,
@@ -121,6 +139,11 @@ router.post("/:id/cancel", protectRoute(["customer", "admin"]), async (req, res)
       return res.status(403).json({ error: "Unauthorized" });
     }
 
+    // Check if Stripe is configured
+    if (!stripe) {
+      return res.status(500).json({ error: "Payment processing not configured" });
+    }
+
     // Cancel at period end in Stripe
     await stripe.subscriptions.update(subscription.stripeSubscriptionId, {
       cancel_at_period_end: true,
@@ -166,6 +189,11 @@ router.post("/:id/reactivate", protectRoute(["customer", "admin"]), async (req, 
 
     if (subscription.userId !== userId && req.user?.role !== "admin") {
       return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    // Check if Stripe is configured
+    if (!stripe) {
+      return res.status(500).json({ error: "Payment processing not configured" });
     }
 
     // Reactivate in Stripe

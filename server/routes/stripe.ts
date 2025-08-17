@@ -2,11 +2,23 @@ import express from "express";
 import { stripe } from "../lib/stripe";
 import { storage } from "../storage";
 import { insertOrderSchema } from "@shared/schema";
+// Phase 3 Security: Import enhanced payment security
+import { 
+  paymentFraudDetection, 
+  validateIdempotencyKey, 
+  securePaymentLogging,
+  validateStripeWebhook 
+} from "../middleware/paymentSecurity";
+import { securityEventLogger } from "../middleware/securityMonitoring";
 
 const router = express.Router();
 
-// Stripe webhook handler - must use raw body parser for signature verification
-router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+// Phase 3 Security: Enhanced Stripe webhook with security validation
+router.post("/webhook", 
+  express.raw({ type: "application/json" }),
+  securityEventLogger('authentication', 'medium'),
+  validateStripeWebhook(process.env.STRIPE_WEBHOOK_SECRET || ''), 
+  async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
 
