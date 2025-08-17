@@ -1,7 +1,14 @@
-# E-commerce Application
+# Healios Wellness E-Commerce Platform
 
 ## Overview
 This project is a full-stack e-commerce application for a premium supplement company, aiming to provide a modern, accessible, and high-performance online shopping experience. It supports product browsing, shopping cart functionality, secure checkout, and comprehensive product information. The business vision is to establish a robust digital storefront to effectively showcase products and expand market reach, particularly in regions like South Africa, while also promoting environmental responsibility.
+
+## Recent Changes (2025-08-17)
+- ✅ Fixed health endpoint routing - APIs now return proper JSON responses instead of HTML
+- ✅ Configured CSRF bypass for PIN authentication endpoints in development mode
+- ✅ Created automated test suite (`test-pin-auth-flow.mjs`) for API verification
+- ✅ Verified email delivery system functional with admin redirection in development
+- ✅ Documented fix implementation in `docs/FIX_VERIFICATION_REPORT.md`
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.

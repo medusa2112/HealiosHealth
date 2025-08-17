@@ -73,6 +73,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // This is critical for webhook signature verification
   app.use('/stripe', stripeRoutes);
 
+  // Register health check routes - must be early for monitoring
+  const healthRoutes = await import('./routes/health');
+  app.use('/api', healthRoutes.default);
+  
   // Register CSRF token endpoints
   const csrfRoutes = await import('./routes/csrf');
   app.use('/api/csrf', csrfRoutes.default);
