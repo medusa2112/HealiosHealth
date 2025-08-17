@@ -513,35 +513,18 @@ export async function sendPinEmail(userEmail: string, pin: string): Promise<{ su
   console.log(`[PIN_EMAIL] Sending PIN for ${userEmail}, isDevelopment: ${isDevelopment}, NODE_ENV: ${process.env.NODE_ENV}`);
   
   if (isDevelopment) {
-    // In development/testing: send to all admin accounts
-    const adminEmails = ["dn@thefourths.com", "jv@thefourths.com"];
-    console.log(`[PIN_EMAIL] Development mode - sending to admin emails: ${adminEmails.join(', ')}`);
-
-    let lastResult = { success: false, id: 'no-attempts' };
+    // In development/testing: send to actual user email for testing PIN delivery
+    console.log(`[PIN_EMAIL] Development mode - sending directly to user email: ${userEmail}`);
     
-    for (const adminEmail of adminEmails) {
-      try {
-        const result = await sendEmail(adminEmail, "pin_auth", {
-          pin,
-          amount: 0,
-          id: 'pin-' + Date.now(),
-          originalUserEmail: userEmail // Include original email in the data
-        });
-        
-        if (result.success) {
-          console.log(`[PIN_EMAIL] Successfully sent to admin ${adminEmail}`);
-          lastResult = result;
-          break; // Stop on first successful send
-        } else {
-          console.log(`[PIN_EMAIL] Failed to send to admin ${adminEmail}:`, result);
-          lastResult = result;
-        }
-      } catch (error) {
-        console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
-      }
-    }
+    const result = await sendEmail(userEmail, "pin_auth", {
+      pin,
+      amount: 0,
+      id: 'pin-' + Date.now(),
+      originalUserEmail: userEmail // Include original email in the data
+    });
     
-    return lastResult;
+    console.log(`[PIN_EMAIL] Development send result:`, { success: result.success, id: result.id });
+    return result;
   } else {
     // In production: send to the actual user email
     console.log(`[PIN_EMAIL] Production mode - sending to user email: ${userEmail}`);
