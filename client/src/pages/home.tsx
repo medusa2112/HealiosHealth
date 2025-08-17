@@ -841,13 +841,12 @@ export default function HomePage() {
             </video>
             
             {/* Fallback content when video fails */}
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
-              <div className="text-center text-white opacity-50">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center">
-                  <Leaf className="w-8 h-8" />
-                </div>
-                <p className="text-sm">Premium Wellness Experience</p>
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img
+                src={probioticVitaminsImg}
+                alt="Healios Probiotic + Vitamins gummy supplements bottle with colorful gradient design"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
 
