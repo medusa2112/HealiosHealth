@@ -983,8 +983,8 @@ export default function HomePage() {
             }}
           >
             <img
-              src={probioticVitaminsImg}
-              alt="Healios Probiotic + Vitamins gummy supplements bottle with colorful gradient design"
+              src={vitaminD3Img}
+              alt="Healios laboratory quality supplements"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
           </div>
