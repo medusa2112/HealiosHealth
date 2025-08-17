@@ -300,9 +300,9 @@ export default function Science() {
           loop
           playsInline
           preload="metadata"
-          onLoadStart={() => }
-          onCanPlay={() => }
-          onLoadedData={() => }
+          onLoadStart={() => console.log('Video loading started')}
+          onCanPlay={() => console.log('Video can play')}
+          onLoadedData={() => console.log('Video loaded')}
         >
           <source src="/assets/title-video-compressed.mp4" type="video/mp4" />
           <source src="/assets/title-video.webm" type="video/webm" />

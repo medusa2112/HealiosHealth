@@ -19,7 +19,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
         orders = await storage.getAllOrders();
         completedOrders = orders.filter(order => order.paymentStatus === 'completed');
         totalOrders = completedOrders.length;
-        totalRevenue = completedOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+        totalRevenue = completedOrders.reduce((sum, order) => sum + (parseFloat(order.totalAmount) || 0), 0);
       }
     } catch (error) {
       
@@ -35,7 +35,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
         const carts = await storage.getAllCarts();
         const abandonedCarts = carts.filter(cart => 
           cart.items && cart.items.length > 0 && 
-          new Date().getTime() - new Date(cart.updatedAt).getTime() > 24 * 60 * 60 * 1000 // 24 hours
+          cart.lastUpdated && new Date().getTime() - new Date(cart.lastUpdated).getTime() > 24 * 60 * 60 * 1000 // 24 hours
         );
         abandonedCartsCount = abandonedCarts.length;
         totalSessions += carts.length;
@@ -85,7 +85,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
 router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
   try {
     // Try to get reorder logs if available, but handle gracefully if not
-    let reorderLogs = [];
+    let reorderLogs: any[] = [];
     try {
       if (storage.getReorderLogs) {
         reorderLogs = await storage.getReorderLogs();
@@ -107,7 +107,7 @@ router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
           for (const reorder of completedReorders) {
             const order = orders.find(o => o.id === reorder.orderId);
             if (order && order.paymentStatus === 'completed') {
-              totalRevenue += order.totalAmount;
+              totalRevenue += parseFloat(order.totalAmount) || 0;
             }
           }
         }

@@ -56,10 +56,10 @@ export default function Planet() {
           playsInline
           preload="auto"
           className="w-full h-[60vh] lg:h-[70vh] object-cover"
-          onLoadStart={() => }
-          onCanPlay={() => }
-          onLoadedData={() => }
-          onError={(e) => }
+          onLoadStart={() => console.log('Video loading started')}
+          onCanPlay={() => console.log('Video can play')}
+          onLoadedData={() => console.log('Video loaded')}
+          onError={(e) => console.error('Video error:', e)}
         >
           <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/webm" />
           <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/mp4" />

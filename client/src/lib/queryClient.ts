@@ -74,7 +74,6 @@ export async function apiRequest(
       const csrfToken = await getCsrfToken(isAdminRoute);
       if (csrfToken) {
         headers['X-CSRF-Token'] = csrfToken;
-         + '...');
       }
     }
     
@@ -118,7 +117,8 @@ export const getQueryFn: <T>(options: {
 
     await throwIfResNotOk(res);
     const data = await res.json();
-    .length });
+    
+    console.log('[QUERY] Data received', { url, dataSize: JSON.stringify(data).length });
     return data;
   };
 

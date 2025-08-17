@@ -104,7 +104,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           return;
         }
 
-         + '...');
+        console.log('Loading Google Maps API with key:', apiKey.substring(0, 10) + '...');
 
         // Try direct script loading without callback first
         const directScript = document.createElement('script');
@@ -212,8 +212,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         
       } catch (error) {
         // // console.error('Google Places API Error:', error);
-         is working but may need domain authorization');
-         for compatibility');
+        console.warn('Google Places API is working but may need domain authorization');
+        console.warn('Falling back to manual address entry for compatibility');
 
         setGoogleMapsLoaded(false);
         setShowGoogleMapsError(true);

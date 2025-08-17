@@ -84,7 +84,8 @@ export function LoginForm() {
       });
 
       const data = await response.json();
-      );
+      
+      console.log('PIN verification response:', { success: response.ok });
 
       if (!response.ok) {
         throw new Error(data.message || 'Invalid PIN');
