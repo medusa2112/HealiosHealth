@@ -276,6 +276,7 @@ export async function setupAuth(app: Express) {
         
         // Set up admin session data that requireAdmin middleware expects
         (req.session as any).adminId = (req.user as any).id;
+        (req.session as any).adminEmail = userEmail; // Also set email for status endpoint
         
         // Set admin session cookie that requireAdmin middleware checks for
         res.cookie('hh_admin_sess', 'true', {
@@ -296,6 +297,7 @@ export async function setupAuth(app: Express) {
       } else if (userRole === 'admin') {
         
         (req.session as any).adminId = (req.user as any).id;
+        (req.session as any).adminEmail = userEmail; // Also set email for status endpoint
         
         // Set admin session cookie that requireAdmin middleware checks for
         res.cookie('hh_admin_sess', 'true', {

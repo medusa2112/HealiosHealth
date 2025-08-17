@@ -44,16 +44,20 @@ router.post('/logout', (req, res) => {
 
 // Check admin status - uses session-based auth (PIN system)
 router.get('/status', async (req: Request, res: Response) => {
-  // Check session for admin authentication
+  // Check session for admin authentication - matching what replitAuth.ts sets
   const session = req.session as any;
-  const adminEmail = session?.adminEmail;
-  const isAdminAuthenticated = session?.adminAuthenticated;
-
-  if (isAdminAuthenticated && adminEmail) {
+  const adminId = session?.adminId;
+  const adminSessCookie = req.cookies?.['hh_admin_sess'];
+  
+  // Check if admin is authenticated using the same criteria as requireAdmin middleware
+  if (adminId && adminSessCookie) {
+    // Get user details if needed
+    const user = req.user as any;
     
     return res.json({ 
       authenticated: true, 
-      email: adminEmail,
+      id: adminId,
+      email: user?.email || session?.adminEmail || 'admin@healios.com',
       role: 'admin'
     });
   }
