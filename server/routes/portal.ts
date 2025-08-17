@@ -264,12 +264,24 @@ router.get("/addresses", async (req, res) => {
 router.post("/addresses", async (req, res) => {
   try {
     const userId = req.user!.id;
-    const result = insertAddressSchema.safeParse({
-      ...req.body,
-      userId
-    });
+    
+    // Map frontend field names to database field names
+    const addressData = {
+      userId,
+      type: req.body.type,
+      line1: req.body.line1,
+      line2: req.body.line2 || null,
+      city: req.body.city || null,
+      zipCode: req.body.zipCode || req.body.zip || null, // Support both field names
+      country: req.body.country || null,
+      state: req.body.state || null,
+      isDefault: req.body.isDefault || false
+    };
+    
+    const result = insertAddressSchema.safeParse(addressData);
     
     if (!result.success) {
+      console.error('Address validation error:', result.error.errors);
       return res.status(400).json({ 
         error: 'Invalid address data',
         details: result.error.errors
@@ -281,7 +293,7 @@ router.post("/addresses", async (req, res) => {
     const address = await storage.createAddress(validatedData);
     res.status(201).json(address);
   } catch (error) {
-    // // console.error('Error creating address:', error);
+    console.error('Error creating address:', error);
     res.status(500).json({ message: 'Failed to create address' });
   }
 });

@@ -82,12 +82,16 @@ export interface CustomerPortalData {
 
 export interface Address {
   id: string;
+  userId?: string;
   type: string;
   line1: string;
   line2: string | null;
   city: string | null;
-  zip: string | null;
+  state?: string | null;
+  zipCode: string | null;  // Changed from zip to zipCode to match database schema
   country: string | null;
+  isDefault?: boolean | null;
+  createdAt?: string;
 }
 
 export interface QuizResult {

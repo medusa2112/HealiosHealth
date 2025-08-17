@@ -44,12 +44,6 @@ export default function CustomerPortal() {
   const { data: addresses, isLoading: addressesLoading } = useQuery<Address[]>({
     queryKey: ["/api/portal/addresses"],
     enabled: !!user && user.role === 'customer',
-    onSuccess: (data) => {
-      console.log("[ADDRESS] Fetched addresses:", data);
-    },
-    onError: (error) => {
-      console.error("[ADDRESS] Error fetching addresses:", error);
-    },
   });
 
   // Reorder mutation
@@ -160,9 +154,9 @@ export default function CustomerPortal() {
     const addressData = {
       type: formData.get("type"),
       line1: formData.get("line1"),
-      line2: formData.get("line2"),
-      city: formData.get("city"),
-      zip: formData.get("zip"),
+      line2: formData.get("line2") || "",
+      city: formData.get("city") || "",
+      zipCode: formData.get("zipCode") || "", // Fixed: use zipCode instead of zip
       country: formData.get("country"),
     };
 
@@ -466,10 +460,10 @@ export default function CustomerPortal() {
                             />
                           </div>
                           <div>
-                            <Label htmlFor="zip">ZIP Code</Label>
+                            <Label htmlFor="zipCode">ZIP Code</Label>
                             <Input 
-                              name="zip" 
-                              defaultValue={selectedAddress?.zip || ""} 
+                              name="zipCode" 
+                              defaultValue={selectedAddress?.zipCode || ""} 
                             />
                           </div>
                         </div>
@@ -511,7 +505,7 @@ export default function CustomerPortal() {
                   <div className="text-black dark:text-white">Loading addresses...</div>
                 ) : addresses && addresses.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {addresses.map((address) => (
+                    {addresses.map((address: Address) => (
                       <div key={address.id} className="border border-gray-200 dark:border-gray-700 p-4">
                         <div className="flex justify-between items-start mb-2">
                           <Badge variant="secondary">{address.type}</Badge>
@@ -539,7 +533,7 @@ export default function CustomerPortal() {
                         <div className="text-black dark:text-white">
                           <p>{address.line1}</p>
                           {address.line2 && <p>{address.line2}</p>}
-                          <p>{address.city}, {address.zip}</p>
+                          <p>{address.city}, {address.zipCode}</p>
                           <p>{address.country}</p>
                         </div>
                       </div>
