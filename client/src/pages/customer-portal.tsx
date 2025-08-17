@@ -42,8 +42,14 @@ export default function CustomerPortal() {
 
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery<Address[]>({
-    queryKey: ["/api/portal/addresses", user?.id],
+    queryKey: ["/api/portal/addresses"],
     enabled: !!user && user.role === 'customer',
+    onSuccess: (data) => {
+      console.log("[ADDRESS] Fetched addresses:", data);
+    },
+    onError: (error) => {
+      console.error("[ADDRESS] Error fetching addresses:", error);
+    },
   });
 
   // Reorder mutation
