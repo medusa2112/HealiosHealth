@@ -42,7 +42,7 @@ export default function CustomerPortal() {
 
   // Fetch addresses
   const { data: addresses, isLoading: addressesLoading } = useQuery<Address[]>({
-    queryKey: ["/portal/addresses", user?.id],
+    queryKey: ["/api/portal/addresses", user?.id],
     enabled: !!user && user.role === 'customer',
   });
 
@@ -73,11 +73,13 @@ export default function CustomerPortal() {
   // Address mutations
   const createAddressMutation = useMutation({
     mutationFn: async (addressData: any) => {
-      return apiRequest("POST", "/portal/addresses", addressData);
+      console.log("[ADDRESS] Creating address:", addressData);
+      return apiRequest("POST", "/api/portal/addresses", addressData);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });
-      queryClient.invalidateQueries({ queryKey: ["/portal"] });
+    onSuccess: (data) => {
+      console.log("[ADDRESS] Address created successfully:", data);
+      queryClient.invalidateQueries({ queryKey: ["/api/portal/addresses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/portal"] });
       setAddressDialogOpen(false);
       setSelectedAddress(null);
       toast({
@@ -85,15 +87,25 @@ export default function CustomerPortal() {
         description: "Address saved successfully.",
       });
     },
+    onError: (error) => {
+      console.error("[ADDRESS] Error creating address:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save address. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   const updateAddressMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      return apiRequest("PUT", `/portal/addresses/${id}`, data);
+      console.log("[ADDRESS] Updating address:", id, data);
+      return apiRequest("PUT", `/api/portal/addresses/${id}`, data);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });
-      queryClient.invalidateQueries({ queryKey: ["/portal"] });
+    onSuccess: (data) => {
+      console.log("[ADDRESS] Address updated successfully:", data);
+      queryClient.invalidateQueries({ queryKey: ["/api/portal/addresses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/portal"] });
       setAddressDialogOpen(false);
       setSelectedAddress(null);
       toast({
@@ -101,18 +113,36 @@ export default function CustomerPortal() {
         description: "Address updated successfully.",
       });
     },
+    onError: (error) => {
+      console.error("[ADDRESS] Error updating address:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update address. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   const deleteAddressMutation = useMutation({
     mutationFn: async (id: string) => {
-      return apiRequest("DELETE", `/portal/addresses/${id}`);
+      console.log("[ADDRESS] Deleting address:", id);
+      return apiRequest("DELETE", `/api/portal/addresses/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/portal/addresses"] });
-      queryClient.invalidateQueries({ queryKey: ["/portal"] });
+      console.log("[ADDRESS] Address deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["/api/portal/addresses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/portal"] });
       toast({
         title: "Success",
         description: "Address deleted successfully.",
+      });
+    },
+    onError: (error) => {
+      console.error("[ADDRESS] Error deleting address:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete address. Please try again.",
+        variant: "destructive",
       });
     },
   });
