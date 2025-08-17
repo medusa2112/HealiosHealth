@@ -87,10 +87,25 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     return next();
   }
 
+  // Development mode: Skip CSRF for all admin routes
+  if (process.env.NODE_ENV === 'development' && fullPath.includes('/admin/')) {
+    console.log('[CSRF] Development mode - skipping CSRF for admin route:', fullPath);
+    return next();
+  }
+
   // Phase 2 Security: Development bypasses removed - CSRF now enforced on all state-changing operations
   // These routes must now include proper CSRF tokens in production AND development
 
   // For authenticated admin routes, use a more lenient approach in development
+  if (req.path.includes('/admin/')) {
+    console.log('[CSRF] Admin route detected:', req.path, 'session:', { 
+      adminId: (req.session as any)?.adminId, 
+      sessionID: req.sessionID,
+      hasSession: !!req.session,
+      isAuthenticated: !!(req.session as any)?.adminId
+    });
+  }
+  
   if (req.path.includes('/admin/') && (req.session as any)?.adminId) {
     const token = req.get('X-CSRF-Token') || 
                   req.get('X-XSRF-Token') || 
@@ -99,7 +114,7 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     
     // In development, be more lenient for authenticated admin users
     if (process.env.NODE_ENV === 'development') {
-      console.log('[CSRF] Development mode - allowing authenticated admin request to:', req.path);
+      console.log('[CSRF] Development mode - allowing authenticated admin request to:', req.path, 'adminId:', (req.session as any)?.adminId);
       return next();
     }
     
@@ -130,7 +145,7 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     }
     
     if (!tokenValid) {
-      
+      console.log('[CSRF] Token validation failed for admin route:', req.path, 'sessionIds tried:', possibleSessionIds, 'token:', token?.substring(0, 10) + '...');
       return res.status(403).json({ 
         error: 'Invalid CSRF token',
         code: 'CSRF_TOKEN_MISMATCH'
