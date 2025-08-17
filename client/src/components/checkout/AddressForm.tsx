@@ -119,7 +119,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         const { apiKey } = await response.json();
         
         if (!apiKey) {
-          console.warn('Google Maps API key not available');
+          
           return;
         }
         
@@ -134,7 +134,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
           initializePlacesAPI();
         }
       } catch (error) {
-        console.warn('Failed to load Google Maps API:', error);
+        
       }
     };
 
@@ -233,7 +233,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         }
       });
     } catch (error) {
-      console.error('Error getting address suggestions:', error);
+      // // console.error('Error getting address suggestions:', error);
     }
   };
 
@@ -287,7 +287,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         setIsValidatingAddress(false);
       });
     } catch (error) {
-      console.error('Error getting place details:', error);
+      // // console.error('Error getting place details:', error);
       setIsValidatingAddress(false);
     }
   };
@@ -349,7 +349,7 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
         }));
       }
     } catch (error) {
-      console.error('Error validating address:', error);
+      // // console.error('Error validating address:', error);
       setValidationErrors(prev => ({ 
         ...prev, 
         googleValidation: 'Address validation service temporarily unavailable.' 

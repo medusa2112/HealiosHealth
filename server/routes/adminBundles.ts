@@ -13,7 +13,7 @@ router.get("/", requireAdmin, async (req, res) => {
     const bundles = await storage.getProductBundles();
     res.json(bundles);
   } catch (error) {
-    console.error("Error fetching bundles:", error);
+    // // console.error("Error fetching bundles:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -42,7 +42,7 @@ router.get("/:id", requireAdmin, async (req, res) => {
     
     res.json(bundleWithItems);
   } catch (error) {
-    console.error("Error fetching bundle:", error);
+    // // console.error("Error fetching bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -88,7 +88,7 @@ router.get("/variants/eligible", requireAdmin, async (req, res) => {
     
     res.json(variantsWithProducts);
   } catch (error) {
-    console.error("Error fetching eligible variants:", error);
+    // // console.error("Error fetching eligible variants:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -132,7 +132,7 @@ router.post("/", requireAdmin, async (req, res) => {
 
     res.status(201).json(newBundle);
   } catch (error) {
-    console.error("Error creating bundle:", error);
+    // // console.error("Error creating bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -224,7 +224,7 @@ router.post("/:id/items", requireAdmin, async (req, res) => {
       items: createdItems 
     });
   } catch (error) {
-    console.error("Error adding bundle items:", error);
+    // // console.error("Error adding bundle items:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -276,7 +276,7 @@ router.put("/:id", [
 
     res.json(updatedBundle);
   } catch (error) {
-    console.error("Error updating bundle:", error);
+    // // console.error("Error updating bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -319,7 +319,7 @@ router.delete("/:bundleId/items/:itemId", [
 
     res.json({ message: "Bundle item removed successfully" });
   } catch (error) {
-    console.error("Error removing bundle item:", error);
+    // // console.error("Error removing bundle item:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -369,7 +369,7 @@ router.delete("/:id", [
 
     res.json({ message: "Bundle deleted successfully" });
   } catch (error) {
-    console.error("Error deleting bundle:", error);
+    // // console.error("Error deleting bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

@@ -67,9 +67,9 @@ export function auditAction(actionType: string, targetType: string) {
 async function logAdminAction(logData: InsertAdminLog) {
   try {
     await storage.createAdminLog(logData);
-    console.log(`[AUDIT] ${logData.actionType} by ${logData.adminId} on ${logData.targetType}:${logData.targetId}`);
+    
   } catch (error) {
-    console.error('[AUDIT] Failed to log admin action:', error);
+    // // console.error('[AUDIT] Failed to log admin action:', error);
   }
 }
 
@@ -107,7 +107,7 @@ export async function auditLogin(adminId: string, success: boolean, details?: an
       })
     });
   } catch (error) {
-    console.error('[AUDIT] Failed to log login attempt:', error);
+    // // console.error('[AUDIT] Failed to log login attempt:', error);
   }
 }
 
@@ -125,6 +125,6 @@ export async function auditLogout(adminId: string) {
       })
     });
   } catch (error) {
-    console.error('[AUDIT] Failed to log logout:', error);
+    // // console.error('[AUDIT] Failed to log logout:', error);
   }
 }

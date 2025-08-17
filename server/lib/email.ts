@@ -25,7 +25,7 @@ async function rateLimitedSend(fn: () => Promise<any>): Promise<any> {
   
   if (timeSinceLastEmail < EMAIL_RATE_LIMIT_MS) {
     const delay = EMAIL_RATE_LIMIT_MS - timeSinceLastEmail;
-    console.log(`[EMAIL RATE LIMIT] Waiting ${delay}ms before sending next email`);
+    
     await new Promise(resolve => setTimeout(resolve, delay));
   }
   
@@ -35,7 +35,7 @@ async function rateLimitedSend(fn: () => Promise<any>): Promise<any> {
 
 export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   if (!isEmailEnabled || !resend) {
-    console.warn('Email service not configured - skipping email to:', to);
+    
     return { id: 'mock-' + Date.now(), success: false };
   }
   const subjectMap: Record<EmailType, string> = {
@@ -464,19 +464,13 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
   // Send email using Resend API
   try {
-    console.log(`[EMAIL DEBUG] Attempting to send ${type} email to ${to}`);
-    console.log(`[EMAIL DEBUG] Resend client exists:`, !!resend);
-    console.log(`[EMAIL DEBUG] API Key exists:`, !!process.env.RESEND_API_KEY);
-    
-    // Use environment variable for from address, fallback to testing address
+
     const fromAddress = process.env.RESEND_FROM_ADDRESS 
       ? (process.env.RESEND_FROM_ADDRESS.includes('<') 
          ? process.env.RESEND_FROM_ADDRESS 
          : `Healios <${process.env.RESEND_FROM_ADDRESS}>`)
       : 'Healios <onboarding@resend.dev>';
-    
-    console.log(`[EMAIL DEBUG] Using from address: ${fromAddress}`);
-    
+
     const result = await rateLimitedSend(async () => {
       return await resend!.emails.send({
         from: fromAddress,
@@ -485,27 +479,24 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         html: bodyMap[type](data),
       });
     });
-
-    console.log(`[EMAIL DEBUG] Full Resend result:`, JSON.stringify(result, null, 2));
     
     // Check if there's an error from Resend
     if (result.error) {
-      console.error(`[EMAIL ERROR] Resend API error:`, result.error);
+      // // console.error(`[EMAIL ERROR] Resend API error:`, result.error);
       
       // Handle testing mode limitation
       if (result.error.statusCode === 403 && result.error.error?.includes('testing emails')) {
-        console.warn(`[EMAIL WARNING] Resend is in testing mode - can only send to verified email address`);
+        
         return { id: 'testing-mode-' + Date.now(), success: false, error: 'testing_mode' };
       }
       
       return { id: 'error-' + Date.now(), success: false, error: result.error };
     }
-    
-    console.log(`[EMAIL SENT] ${type} email sent to ${to} - ID: ${result.data?.id}`);
+
     return { id: result.data?.id || 'unknown', success: true };
   } catch (error) {
-    console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
-    console.error(`[EMAIL ERROR] Error details:`, JSON.stringify(error, null, 2));
+    // // console.error(`[EMAIL ERROR] Failed to send ${type} email to ${to}:`, error);
+    // console.error(`[EMAIL ERROR] Error details:`, JSON.stringify(error, null, 2));
     return { id: 'error-' + Date.now(), success: false };
   }
 }
@@ -517,8 +508,7 @@ export async function sendPinEmail(userEmail: string, pin: string): Promise<{ su
   if (isDevelopment) {
     // In development/testing: send to all admin accounts
     const adminEmails = ["dn@thefourths.com", "jv@thefourths.com"];
-    console.log(`[PIN_AUTH] Development mode - sending PIN to admin accounts instead of user email`);
-    
+
     let lastResult = { success: false, id: 'no-attempts' };
     
     for (const adminEmail of adminEmails) {
@@ -531,22 +521,22 @@ export async function sendPinEmail(userEmail: string, pin: string): Promise<{ su
         });
         
         if (result.success) {
-          console.log(`[PIN_AUTH] PIN sent successfully to admin: ${adminEmail}`);
+          
           lastResult = result;
           break; // Stop on first successful send
         } else {
-          console.log(`[PIN_AUTH] Failed to send to admin: ${adminEmail}`);
+          
           lastResult = result;
         }
       } catch (error) {
-        console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
+        // // console.error(`[PIN_AUTH] Error sending to admin ${adminEmail}:`, error);
       }
     }
     
     return lastResult;
   } else {
     // In production: send to the actual user email
-    console.log(`[PIN_AUTH] Production mode - sending PIN to user email: ${userEmail}`);
+    
     return await sendEmail(userEmail, "pin_auth", {
       pin,
       amount: 0,
@@ -567,7 +557,7 @@ export async function sendAdminAlert(message: string, data?: any) {
         ...data
       });
     } catch (error) {
-      console.error(`Failed to send admin alert to ${email}:`, error);
+      // // console.error(`Failed to send admin alert to ${email}:`, error);
       // Don't throw - admin alerts should not break the main flow
     }
   }
@@ -607,7 +597,7 @@ export async function sendSubscriptionCancelled(data: {
   `;
 
   // EMAIL DISABLED - Subscription cancellation email skipped
-  console.log(`[EMAIL DISABLED] Subscription cancellation email skipped for ${data.customerEmail}`);
+  
   return { id: 'disabled-' + Date.now(), success: false };
 }
 
@@ -651,7 +641,7 @@ export async function sendSubscriptionPaymentFailed(data: {
   `;
 
   // EMAIL DISABLED - Subscription payment failed email skipped
-  console.log(`[EMAIL DISABLED] Subscription payment failed email skipped for ${data.customerEmail}`);
+  
   return { id: 'disabled-' + Date.now(), success: false };
 }
 
@@ -697,6 +687,6 @@ export async function sendSubscriptionCreated(data: {
   `;
 
   // EMAIL DISABLED - Subscription created email skipped
-  console.log(`[EMAIL DISABLED] Subscription created email skipped for ${data.customerEmail}`);
+  
   return { id: 'disabled-' + Date.now(), success: false };
 }

@@ -47,7 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       // Validate cart items before syncing
       if (!Array.isArray(cartItems)) {
-        console.error('Cart items must be an array');
+        // // console.error('Cart items must be an array');
         return;
       }
 
@@ -59,7 +59,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       // Ensure sessionToken exists
       if (!sessionToken) {
-        console.error('Session token is missing');
+        // // console.error('Session token is missing');
         return;
       }
 
@@ -70,7 +70,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         currency: 'ZAR'
       });
     } catch (error) {
-      console.error('Failed to sync cart to server:', error);
+      // // console.error('Failed to sync cart to server:', error);
       // Don't throw error to prevent cart operations from failing
     }
   };

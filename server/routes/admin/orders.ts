@@ -69,7 +69,7 @@ router.get("/", requireAdmin, async (req, res) => {
       filters: filters
     });
   } catch (error) {
-    console.error("Error fetching orders:", error);
+    // // console.error("Error fetching orders:", error);
     res.status(500).json({ message: "Failed to fetch orders" });
   }
 });
@@ -104,7 +104,7 @@ router.get("/:id", requireAdmin, async (req, res) => {
       items: orderItems
     });
   } catch (error) {
-    console.error("Error fetching order details:", error);
+    // // console.error("Error fetching order details:", error);
     res.status(500).json({ message: "Failed to fetch order details" });
   }
 });
@@ -183,9 +183,9 @@ router.post("/:id/refund", requireAdmin, auditAction('process_refund', 'order'),
           id: refund.payment_intent as string,
           customerName: order.customerName
         });
-        console.log("Refund confirmation email sent to:", order.customerEmail);
+        
       } catch (emailError) {
-        console.error("Failed to send refund email:", emailError);
+        // // console.error("Failed to send refund email:", emailError);
       }
     }
 
@@ -201,7 +201,7 @@ router.post("/:id/refund", requireAdmin, auditAction('process_refund', 'order'),
     });
 
   } catch (error: any) {
-    console.error("Refund failed:", error);
+    // // console.error("Refund failed:", error);
     
     // Handle Stripe-specific errors
     if (error.type === 'StripeCardError' || error.type === 'StripeInvalidRequestError') {
@@ -278,7 +278,6 @@ router.put("/:id/status", requireAdmin, auditAction('update_order_status', 'orde
     }
 
     // Log the status change (audit logging handled by middleware)
-    console.log(`[ORDER_STATUS] Order ${orderId} status changed from '${currentStatus}' to '${status}' by admin`);
 
     res.json({ 
       success: true, 
@@ -291,7 +290,7 @@ router.put("/:id/status", requireAdmin, auditAction('update_order_status', 'orde
     });
 
   } catch (error) {
-    console.error("Error updating order status:", error);
+    // // console.error("Error updating order status:", error);
     res.status(500).json({ message: "Failed to update order status" });
   }
 });
@@ -316,7 +315,7 @@ router.get("/stats/summary", requireAdmin, async (req, res) => {
 
     res.json(stats);
   } catch (error) {
-    console.error("Error fetching order stats:", error);
+    // // console.error("Error fetching order stats:", error);
     res.status(500).json({ message: "Failed to fetch order statistics" });
   }
 });

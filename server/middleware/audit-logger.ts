@@ -39,7 +39,7 @@ class AuditLogger {
     try {
       await fs.mkdir(this.logPath, { recursive: true });
     } catch (error) {
-      console.error('[AUDIT] Failed to create log directory:', error);
+      // // console.error('[AUDIT] Failed to create log directory:', error);
     }
   }
   
@@ -68,7 +68,7 @@ class AuditLogger {
       const lines = events.map(event => JSON.stringify(event)).join('\n') + '\n';
       await fs.appendFile(logFile, lines);
     } catch (error) {
-      console.error('[AUDIT] Failed to write audit log:', error);
+      // // console.error('[AUDIT] Failed to write audit log:', error);
       // Re-add events to buffer to retry
       this.buffer.unshift(...events);
     }

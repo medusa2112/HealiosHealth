@@ -32,7 +32,7 @@ export function getSession() {
   if (process.env.NODE_ENV === 'development') {
     // Memory store - sessions lost on server restart (good for development)
     sessionStore = undefined; // Use default memory store
-    console.log('[SESSION] Using memory store - sessions will not persist across server restarts');
+    
   } else {
     // PostgreSQL store for production persistence
     const pgStore = connectPg(session);
@@ -42,7 +42,7 @@ export function getSession() {
       ttl: sessionTtl,
       tableName: "sessions",
     });
-    console.log('[SESSION] Using PostgreSQL store - sessions will persist');
+    
   }
   
   return session({
@@ -82,10 +82,7 @@ async function upsertUser(
 ) {
   const { determineUserRole } = await import('./lib/auth');
   const role = determineUserRole(claims["email"]);
-  
-  console.log(`[ROLE_DEBUG] Determining role for ${claims["email"]}: ${role}`);
-  console.log(`[ROLE_DEBUG] Admin emails env: ${process.env.ALLOWED_ADMIN_EMAILS}`);
-  
+
   await storage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
@@ -94,8 +91,7 @@ async function upsertUser(
     profileImageUrl: claims["profile_image_url"],
     role, // Assign role during user creation
   });
-  
-  console.log(`[REPLIT_AUTH] User upserted: ${claims["email"]} with role: ${role}`);
+
 }
 
 export async function setupAuth(app: Express) {
@@ -113,14 +109,12 @@ export async function setupAuth(app: Express) {
     try {
       const claims = tokens.claims();
       if (!claims) {
-        console.error('[OAUTH_VERIFY] No claims found in tokens');
+        // // console.error('[OAUTH_VERIFY] No claims found in tokens');
         return verified(new Error('No claims found'));
       }
-      console.log(`[OAUTH_VERIFY] Processing user: ${claims["email"]} with ID: ${claims["sub"]}`);
       
-      // First ensure user is properly stored
       if (!claims) {
-        console.error('[OAUTH_VERIFY] Claims is undefined, cannot upsert user');
+        // // console.error('[OAUTH_VERIFY] Claims is undefined, cannot upsert user');
         return verified(new Error('Claims undefined'));
       }
       await upsertUser(claims);
@@ -130,18 +124,16 @@ export async function setupAuth(app: Express) {
       
       // Verify the user was stored
       if (!claims?.sub) {
-        console.error('[OAUTH_VERIFY] Claims.sub is undefined');
+        // // console.error('[OAUTH_VERIFY] Claims.sub is undefined');
         return verified(new Error('Claims.sub undefined'));
       }
       const dbUser = await storage.getUserById(claims["sub"]);
       
       if (!dbUser) {
-        console.error(`[OAUTH_VERIFY] Failed to store/retrieve user with ID: ${claims["sub"]}`);
+        // // console.error(`[OAUTH_VERIFY] Failed to store/retrieve user with ID: ${claims["sub"]}`);
         return verified(new Error('Failed to store user'));
       }
-      
-      console.log(`[OAUTH_VERIFY] User successfully stored/retrieved: ${dbUser.email} with role: ${dbUser.role}`);
-      
+
       const user = {};
       updateUserSession(user, tokens);
       
@@ -153,7 +145,7 @@ export async function setupAuth(app: Express) {
       };
       verified(null, enrichedUser);
     } catch (error) {
-      console.error(`[OAUTH_VERIFY] Error during verification:`, error);
+      // // console.error(`[OAUTH_VERIFY] Error during verification:`, error);
       verified(error as Error);
     }
   };
@@ -187,7 +179,6 @@ export async function setupAuth(app: Express) {
       _internal_refresh_token: (user as any)._internal_refresh_token,
       expires_at: (user as any).expires_at
     };
-    console.log(`[REPLIT_AUTH] Serializing user: ${serializedUser.email} (${serializedUser.role})`);
     cb(null, serializedUser);
   });
   
@@ -212,17 +203,16 @@ export async function setupAuth(app: Express) {
               _internal_refresh_token: serializedUser._internal_refresh_token,
               expires_at: serializedUser.expires_at
             };
-            console.log(`[REPLIT_AUTH] Deserialized user: ${user.email} (${user.role})`);
             return cb(null, user);
           }
         } catch (storageError) {
-          console.error('[REPLIT_AUTH] Storage error during deserialization:', storageError);
+          // // console.error('[REPLIT_AUTH] Storage error during deserialization:', storageError);
           // Continue with serialized user if storage fails
         }
       }
       cb(null, serializedUser);
     } catch (error) {
-      console.error('[REPLIT_AUTH] Deserialization error:', error);
+      // // console.error('[REPLIT_AUTH] Deserialization error:', error);
       // Return false instead of failing to prevent 500 errors on public endpoints
       cb(null, false);
     }
@@ -233,8 +223,7 @@ export async function setupAuth(app: Express) {
     const provider = req.query.provider as string;
     
     if (provider) {
-      console.log(`[OAUTH_LOGIN] Provider-specific authentication requested: ${provider}`);
-      // Store provider preference in session for potential use
+      
       (req.session as any).requestedProvider = provider;
       (req.session as any).customerAuth = true;
     }
@@ -262,13 +251,13 @@ export async function setupAuth(app: Express) {
       failureRedirect: "/api/login",
     })(req, res, (err: any) => {
       if (err) {
-        console.error('[OAUTH_CALLBACK] Authentication error:', err);
+        // // console.error('[OAUTH_CALLBACK] Authentication error:', err);
         return res.redirect('/api/login');
       }
 
       // Check if user is authenticated
       if (!req.user) {
-        console.log('[OAUTH_CALLBACK] No user in session after authentication');
+        
         return res.redirect('/api/login');
       }
 
@@ -276,16 +265,12 @@ export async function setupAuth(app: Express) {
       const isAdminLogin = (req.session as any)?.adminLoginAttempt || (req.session as any)?.adminLoginRedirect;
       const userEmail = (req.user as any).email;
       const userRole = (req.user as any).role;
-      
-      console.log(`[OAUTH_CALLBACK] Authenticated user: ${userEmail}, role: ${userRole}, adminLogin: ${isAdminLogin}`);
-      
-      // Check if user is an admin (either by role or by email)
+
       const adminEmails = (process.env.ALLOWED_ADMIN_EMAILS || '').split(',').map(e => e.trim());
       const isAdmin = userRole === 'admin' || adminEmails.includes(userEmail);
       
       if (isAdminLogin && isAdmin) {
-        console.log('[OAUTH_CALLBACK] Admin login successful - setting up admin session');
-        // Clear admin login flags
+        
         delete (req.session as any).adminLoginAttempt;
         delete (req.session as any).adminLoginRedirect;
         
@@ -299,25 +284,17 @@ export async function setupAuth(app: Express) {
           sameSite: 'strict',
           maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
         });
-        
-        console.log('[OAUTH_CALLBACK] Admin session setup complete');
-        
-        // Email notifications disabled per user request
-        console.log('[OAUTH_CALLBACK] Admin login notification email disabled');
-        
+
         return res.redirect('/admin');
       } else if (isAdminLogin && !isAdmin) {
-        console.log('[OAUTH_CALLBACK] Admin login failed - user is not an admin');
-        // Clear session and redirect to admin login with error
+        
         req.logout(() => {
           req.session.destroy(() => {
             res.redirect('/admin/login?error=not_authorized');
           });
         });
       } else if (userRole === 'admin') {
-        console.log('[OAUTH_CALLBACK] Admin user logged in - setting up admin session');
         
-        // Set up admin session data that requireAdmin middleware expects
         (req.session as any).adminId = (req.user as any).id;
         
         // Set admin session cookie that requireAdmin middleware checks for
@@ -327,16 +304,10 @@ export async function setupAuth(app: Express) {
           sameSite: 'strict',
           maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
         });
-        
-        console.log('[OAUTH_CALLBACK] Admin session setup complete');
-        
-        // Email notifications disabled per user request
-        console.log('[OAUTH_CALLBACK] Admin login notification email disabled');
-        
+
         return res.redirect('/admin');
       } else {
-        console.log('[OAUTH_CALLBACK] Customer user logged in - redirecting to customer portal');
-        // Check for stored return URL for customers
+        
         const returnUrl = (req.session as any)?.customer_return_url || '/portal';
         delete (req.session as any).customer_return_url;
         return res.redirect(returnUrl);
@@ -354,13 +325,13 @@ export async function setupAuth(app: Express) {
           const { auditLogout } = await import("./lib/auditMiddleware");
           await auditLogout(userId);
         } catch (error) {
-          console.error("[REPLIT_AUTH] Logout audit failed:", error);
+          // // console.error("[REPLIT_AUTH] Logout audit failed:", error);
         }
       }
 
       if (req.session) {
         req.session.destroy(err => {
-          if (err) console.error("[REPLIT_AUTH] Session destroy error:", err);
+          // Session destroy error handling
         });
       }
 

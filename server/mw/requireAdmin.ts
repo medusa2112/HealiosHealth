@@ -19,7 +19,7 @@ export const requireAdmin: RequestHandler = async (req, res, next) => {
   if (allowedIps.size > 0) {
     const clientIp = req.ip || req.socket.remoteAddress || '';
     if (!allowedIps.has(clientIp)) {
-      console.log(`[ADMIN AUTH] IP ${clientIp} not in allowlist`);
+      
       return res.status(403).json({ 
         error: 'Access denied from this IP address',
         code: 'IP_NOT_ALLOWED'
@@ -35,7 +35,7 @@ export const requireAdmin: RequestHandler = async (req, res, next) => {
   if (ENV.ADMIN_2FA_ENABLED) {
     // Implementation for 2FA would go here
     // For now, just log it
-    console.log('[ADMIN AUTH] 2FA check would happen here');
+    
   }
   
   next();

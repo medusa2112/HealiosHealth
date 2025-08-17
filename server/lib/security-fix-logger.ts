@@ -39,8 +39,7 @@ export async function logMultipleSecurityFixes(fixes: SecurityFixLog[]): Promise
   
   const failed = results.filter(result => result.status === 'rejected').length;
   if (failed > 0) {
-    console.warn(`${failed} out of ${fixes.length} security fix logs failed to save`);
+    
   }
-  
-  console.log(`✅ Batch logged ${fixes.length - failed} security fixes`);
+
 }

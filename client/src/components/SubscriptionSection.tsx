@@ -64,7 +64,7 @@ export function SubscriptionSection({ variant, productName }: SubscriptionSectio
       window.location.href = url;
 
     } catch (error) {
-      console.error('Subscription error:', error);
+      // // console.error('Subscription error:', error);
       toast({
         title: "Error",
         description: "Failed to start subscription checkout. Please try again.",

@@ -104,7 +104,7 @@ export function AIAssistant({ isOpen, onToggle, isMinimized, onMinimize }: AIAss
       setMessages(prev => [...prev, assistantMessage]);
     },
     onError: (error) => {
-      console.error('Chat error:', error);
+      
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',

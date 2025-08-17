@@ -3,7 +3,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 
 if (!process.env.SENDGRID_API_KEY) {
-  console.warn("SENDGRID_API_KEY not set - email functionality will be limited");
+  
 }
 
 const mailService = new MailService();
@@ -21,11 +21,9 @@ interface DocumentEmailParams {
 export async function sendTechnicalDocument(params: DocumentEmailParams): Promise<boolean> {
   try {
     if (!process.env.SENDGRID_API_KEY) {
-      console.log('📧 Email system disabled - printing document info instead');
-      console.log(`Recipients: ${params.to.join(', ')}`);
-      console.log(`Subject: ${params.subject}`);
-      console.log(`Document: ${params.documentPath}`);
-      console.log('Would send technical documentation via email if enabled');
+      
+      }`);
+
       return false;
     }
 
@@ -89,11 +87,11 @@ Document path: ${params.documentPath}
 
     await Promise.all(emailPromises);
     
-    console.log(`📧 Technical document sent successfully to: ${params.to.join(', ')}`);
+    }`);
     return true;
 
   } catch (error) {
-    console.error('Failed to send technical document:', error);
+    // // console.error('Failed to send technical document:', error);
     return false;
   }
 }

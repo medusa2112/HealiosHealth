@@ -13,7 +13,6 @@ import type { Product } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from '@/components/seo-head';
 
-
 const availableCategories = [
   "Vitamins", "Minerals", "Gummies", "Probiotics", "Adaptogens", 
   "Beauty", "Prenatal", "Children", "Men's Health", "Women's Health", 
@@ -115,8 +114,6 @@ export default function AdminProducts() {
       </div>
     );
   }
-
-
 
   const handleTabChange = (tab: string) => {
     // Navigation handled by the AdminNavbar component

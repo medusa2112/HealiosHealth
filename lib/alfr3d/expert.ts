@@ -49,7 +49,7 @@ export class Alfr3dExpert {
       };
 
     } catch (error) {
-      console.error('[ALFR3D Expert] Failed to generate fix prompt:', error);
+      // // console.error('[ALFR3D Expert] Failed to generate fix prompt:', error);
       throw new Error(`Failed to generate AI fix prompt: ${error.message}`);
     }
   }

@@ -16,7 +16,7 @@ const schema = z.object({
 
 const parsed = schema.safeParse(process.env);
 if (!parsed.success) {
-  console.error('[ENV] Validation failed:', parsed.error.flatten());
+  // Environment validation failed - check configuration
   // In development, use defaults; in production, fail
   if (process.env.NODE_ENV === 'production') {
     process.exit(1);
@@ -57,19 +57,4 @@ export const ENV = {
   isDev: (parsed.data?.NODE_ENV || process.env.NODE_ENV) === 'development',
 };
 
-console.log('[ENV] Configuration loaded:', {
-  NODE_ENV: ENV.NODE_ENV,
-  isProd: ENV.isProd,
-  isDev: ENV.isDev,
-  ADMIN_2FA_ENABLED: ENV.ADMIN_2FA_ENABLED,
-  ADMIN_IP_ALLOWLIST: ENV.ADMIN_IP_ALLOWLIST.length > 0 ? `${ENV.ADMIN_IP_ALLOWLIST.length} IPs` : 'none',
-  PROD_ORIGINS: ENV.PROD_ORIGINS.length,
-  DEV_ORIGINS: ENV.DEV_ORIGINS.length,
-  SESSION_SECRETS: {
-    customer: process.env.SESSION_SECRET_CUSTOMER ? 'explicit' : 'fallback',
-    admin: process.env.SESSION_SECRET_ADMIN ? 'explicit' : 'fallback',
-    customerLength: ENV.SESSION_SECRET_CUSTOMER?.length || 0,
-    adminLength: ENV.SESSION_SECRET_ADMIN?.length || 0,
-    different: ENV.SESSION_SECRET_CUSTOMER !== ENV.SESSION_SECRET_ADMIN
-  }
-});
+// Configuration loaded successfully - sensitive details not logged for security

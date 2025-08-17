@@ -77,7 +77,7 @@ router.post("/chat", async (req, res) => {
     });
     
   } catch (error) {
-    console.error('AI Assistant Chat Error:', error);
+    // // console.error('AI Assistant Chat Error:', error);
     res.status(500).json({ 
       error: "I'm experiencing technical difficulties. Please try again or contact support.",
       requiresEscalation: true
@@ -113,7 +113,7 @@ router.post("/escalate", requireAuth, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Escalation Error:', error);
+    // // console.error('Escalation Error:', error);
     res.status(500).json({ error: "Failed to escalate to support" });
   }
 });
@@ -150,7 +150,7 @@ router.get("/session/:id", requireAuth, async (req, res) => {
     res.json(session);
     
   } catch (error) {
-    console.error('Get Session Error:', error);
+    // // console.error('Get Session Error:', error);
     res.status(500).json({ error: "Failed to retrieve session" });
   }
 });
@@ -170,7 +170,7 @@ router.get("/sessions", requireAuth, async (req, res) => {
     res.json(sortedSessions);
     
   } catch (error) {
-    console.error('Get Sessions Error:', error);
+    // // console.error('Get Sessions Error:', error);
     res.status(500).json({ error: "Failed to retrieve sessions" });
   }
 });
@@ -208,7 +208,7 @@ router.post("/feedback", requireAuth, async (req, res) => {
     res.json({ success: true, message: "Thank you for your feedback!" });
     
   } catch (error) {
-    console.error('Feedback Error:', error);
+    // // console.error('Feedback Error:', error);
     res.status(500).json({ error: "Failed to submit feedback" });
   }
 });

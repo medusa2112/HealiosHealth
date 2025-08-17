@@ -31,8 +31,6 @@ export default function About() {
                 </p>
               </div>
 
-
-
               <Link href="/products">
                 <button className="bg-black text-white px-8 py-4 text-sm font-medium hover:bg-gray-800 transition-colors">
                   Explore our range →
@@ -51,8 +49,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      
 
       {/* Our Principles */}
       <section className="py-24 bg-white dark:bg-gray-900">

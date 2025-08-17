@@ -81,7 +81,7 @@ export class ImageOptimizer {
         savings
       };
     } catch (error) {
-      console.error('Image optimization failed:', error);
+      // // console.error('Image optimization failed:', error);
       throw error;
     }
   }
@@ -116,7 +116,7 @@ export class ImageOptimizer {
         });
         results[variant] = outputPath;
       } catch (error) {
-        console.error(`Failed to generate ${variant} variant:`, error);
+        // // console.error(`Failed to generate ${variant} variant:`, error);
       }
     }
 
@@ -158,10 +158,8 @@ export class ImageOptimizer {
           totalOriginalSize += result.originalSize;
           totalOptimizedSize += result.optimizedSize;
           processed++;
-
-          console.log(`✓ Optimized ${file}: ${result.savings.toFixed(1)}% savings`);
         } catch (error) {
-          console.error(`✗ Failed to optimize ${file}:`, error);
+          // // console.error(`✗ Failed to optimize ${file}:`, error);
         }
       }
 
@@ -172,7 +170,7 @@ export class ImageOptimizer {
         totalSavings
       };
     } catch (error) {
-      console.error('Directory optimization failed:', error);
+      // // console.error('Directory optimization failed:', error);
       throw error;
     }
   }
@@ -195,7 +193,7 @@ export class ImageOptimizer {
         hasAlpha: metadata.hasAlpha
       };
     } catch (error) {
-      console.error('Failed to get image info:', error);
+      // // console.error('Failed to get image info:', error);
       throw error;
     }
   }

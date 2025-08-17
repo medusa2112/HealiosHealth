@@ -11,11 +11,10 @@ export class EmailJobScheduler {
 
   start(): void {
     if (this.isRunning) {
-      console.log("[SCHEDULER] Email job scheduler is already running");
+      
       return;
     }
 
-    console.log("[SCHEDULER] Starting email job scheduler (runs every hour)");
     this.isRunning = true;
 
     // FIXED: Do NOT run immediately on start to prevent emails on server restart
@@ -23,8 +22,7 @@ export class EmailJobScheduler {
     this.intervalId = setInterval(() => {
       this.runJobs();
     }, EMAIL_JOB_INTERVAL);
-    
-    console.log("[SCHEDULER] Next email job run scheduled in 1 hour");
+
   }
 
   stop(): void {
@@ -33,12 +31,11 @@ export class EmailJobScheduler {
       this.intervalId = null;
     }
     this.isRunning = false;
-    console.log("[SCHEDULER] Email job scheduler stopped");
+    
   }
 
   private async runJobs(): Promise<void> {
     const startTime = Date.now();
-    console.log(`[SCHEDULER] Running email jobs at ${new Date().toISOString()}`);
 
     try {
       // Run jobs in parallel
@@ -48,15 +45,15 @@ export class EmailJobScheduler {
       ]);
 
       const duration = Date.now() - startTime;
-      console.log(`[SCHEDULER] ✓ All email jobs completed in ${duration}ms`);
+      
     } catch (error) {
-      console.error("[SCHEDULER] Error running email jobs:", error);
+      // // console.error("[SCHEDULER] Error running email jobs:", error);
     }
   }
 
   // Manual trigger for testing
   async runNow(): Promise<void> {
-    console.log("[SCHEDULER] Manually triggering email jobs...");
+    
     await this.runJobs();
   }
 }
@@ -70,7 +67,6 @@ if (process.env.NODE_ENV === 'production') {
   if (process.env.AUTO_START_EMAIL_SCHEDULER === 'true') {
     emailScheduler.start();
   } else {
-    console.log("[SCHEDULER] Email scheduler available but not auto-started");
-    console.log("[SCHEDULER] Set AUTO_START_EMAIL_SCHEDULER=true to enable automatic startup");
+
   }
 }

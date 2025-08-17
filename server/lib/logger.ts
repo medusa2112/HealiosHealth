@@ -48,18 +48,18 @@ class SystemLogger {
     switch (level) {
       case LogLevel.ERROR:
       case LogLevel.CRITICAL:
-        console.error(formattedLog);
+        
         break;
       case LogLevel.WARN:
-        console.warn(formattedLog);
+        
         break;
       case LogLevel.DEBUG:
         if (this.isDevelopment) {
-          console.log(formattedLog);
+          
         }
         break;
       default:
-        console.log(formattedLog);
+        
     }
 
     // In production, could send to external logging service

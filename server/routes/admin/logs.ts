@@ -71,7 +71,7 @@ router.get("/", requireAdmin, requireAdmin, async (req, res) => {
       hasMore: page < totalPages
     });
   } catch (error) {
-    console.error("Failed to fetch admin logs:", error);
+    // // console.error("Failed to fetch admin logs:", error);
     res.status(500).json({ message: "Failed to fetch admin logs" });
   }
 });
@@ -97,7 +97,7 @@ router.get("/admin/:adminId", [
     const logs = await storage.getAdminLogsByAdmin(adminId);
     res.json(logs);
   } catch (error) {
-    console.error("Failed to fetch admin logs by admin:", error);
+    // // console.error("Failed to fetch admin logs by admin:", error);
     res.status(500).json({ message: "Failed to fetch admin logs" });
   }
 });
@@ -125,7 +125,7 @@ router.get("/target/:targetType/:targetId", [
     const logs = await storage.getAdminLogsByTarget(targetType, targetId);
     res.json(logs);
   } catch (error) {
-    console.error("Failed to fetch logs by target:", error);
+    // // console.error("Failed to fetch logs by target:", error);
     res.status(500).json({ message: "Failed to fetch logs by target" });
   }
 });

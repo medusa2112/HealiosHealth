@@ -187,7 +187,7 @@ export default function HomePage() {
         const data = await response.json();
         setUserCountry(data.country_code);
       } catch (error) {
-        console.error('Geolocation detection failed:', error);
+        // // console.error('Geolocation detection failed:', error);
         // Default to showing product if geolocation fails
         setUserCountry('ZA');
       }
@@ -200,8 +200,6 @@ export default function HomePage() {
   const [selectedProductName, setSelectedProductName] = useState('');
   const [selectedSalePrice, setSelectedSalePrice] = useState('');
 
-
-  
   // Removed animation state for fitness video - now static display
   
   // Animation state for right image (Science section)
@@ -373,8 +371,8 @@ export default function HomePage() {
           playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
-          onLoadStart={() => console.log('Video loading started')}
-          onCanPlay={() => console.log('Video can play')}
+          onLoadStart={() => {}}
+          onCanPlay={() => {}}
         >
           <source src="/hero-video.webm" type="video/webm" />
           <source src="/hero-video.mp4" type="video/mp4" />
@@ -678,7 +676,6 @@ export default function HomePage() {
               }`}>
                 {getFilteredProducts().map((product: any) => {
 
-
                   const productGradients = {
                     'apple-cider-vinegar': 'from-orange-100 to-yellow-200',
                     'vitamin-d3': 'from-yellow-100 to-orange-200',
@@ -711,8 +708,6 @@ export default function HomePage() {
                     'healios-oversized-tee': 'Lifestyle',
                   };
 
-
-
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>
                       <div className={`group cursor-pointer ${!(product.inStock && product.stockQuantity > 0) ? 'grayscale opacity-60 hover:grayscale-0 hover:opacity-100' : ''} transition-all duration-300`} itemScope itemType="https://schema.org/Product">
@@ -742,7 +737,7 @@ export default function HomePage() {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 // TODO: Implement add to cart functionality
-                                console.log('Add to cart:', product.name);
+                                
                               }}
                               className="absolute bottom-3 right-3 bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors opacity-0 group-hover:opacity-100"
                             >
@@ -828,11 +823,10 @@ export default function HomePage() {
               playsInline
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
-              onLoadStart={() => console.log('TheFourths video loading started')}
-              onCanPlay={() => console.log('TheFourths video can play')}
-              onLoadedData={() => console.log('TheFourths video loaded')}
+              onLoadStart={() => {}}
+              onCanPlay={() => {}}
+              onLoadedData={() => {}}
               onError={(e) => {
-                console.warn('TheFourths video could not load (QuickTime format may not be supported in this browser)');
                 // Hide the video element gracefully on error
                 if (e.currentTarget) {
                   e.currentTarget.style.opacity = '0';

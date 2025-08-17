@@ -193,8 +193,6 @@ export default function Products() {
           </Select>
         </div>
 
-
-
         {/* Products Grid */}
         {isLoading ? (
           <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-4">

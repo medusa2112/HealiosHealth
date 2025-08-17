@@ -8,8 +8,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useCart } from '@/hooks/use-cart';
 import { SEOHead } from '@/components/seo-head';
 
-
-
 export default function ProductPage() {
   const { id } = useParams();
   const { toast } = useToast();

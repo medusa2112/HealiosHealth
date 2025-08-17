@@ -25,14 +25,13 @@ export async function logSecurityFix(fixLog: SecurityFixLog): Promise<void> {
 
     if (!response.ok) {
       // If server logging fails, at least log to console
-      console.warn('Failed to log security fix to server, logging locally:', fixLog);
+      
       logSecurityFixLocally(fixLog);
       return;
     }
 
-    console.log(`✅ Security fix logged: ${fixLog.type} in ${fixLog.route}`);
   } catch (error) {
-    console.error('Failed to log security fix:', error);
+    // // console.error('Failed to log security fix:', error);
     // Fallback to local logging
     logSecurityFixLocally(fixLog);
   }
@@ -50,10 +49,7 @@ function logSecurityFixLocally(fixLog: SecurityFixLog): void {
 
   const emoji = fixTypeEmoji[fixLog.type] || '🔧';
   const severity = (fixLog.severity || 'medium').toUpperCase();
-  
-  console.log(`${emoji} SECURITY FIX [${severity}]: ${fixLog.type} fixed in ${fixLog.route} by ${fixLog.fixedBy}`);
-  
-  // Store in localStorage for potential retry
+
   const logKey = `security_fix_${Date.now()}`;
   localStorage.setItem(logKey, JSON.stringify(fixLog));
 }
@@ -68,7 +64,7 @@ export async function retryFailedSecurityLogs(): Promise<void> {
       await logSecurityFix(logData);
       localStorage.removeItem(key); // Remove after successful retry
     } catch (error) {
-      console.warn('Failed to retry security log:', error);
+      
     }
   }
 }

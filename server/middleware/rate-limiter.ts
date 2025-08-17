@@ -43,10 +43,7 @@ export const adminAuthLimiter = rateLimit({
   // Count all requests (including failed attempts) toward the limit
   handler: (req: Request, res: Response) => {
     // Log suspicious activity
-    console.warn('[SECURITY] Admin login rate limit exceeded:', {
-      ip: req.ip,
-      email: req.body?.email,
-      userAgent: req.get('user-agent'),
+    ,
       timestamp: new Date().toISOString()
     });
     

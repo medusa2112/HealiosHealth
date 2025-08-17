@@ -28,7 +28,7 @@ router.get('/audit', requireAdmin, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Security audit error:', error);
+    // // console.error('Security audit error:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to run security audit',
@@ -66,7 +66,7 @@ router.post('/fix-log', requireAdmin, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Failed to log security fix:', error);
+    // // console.error('Failed to log security fix:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to log security fix',

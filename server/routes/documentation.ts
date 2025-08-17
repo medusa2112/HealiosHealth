@@ -45,7 +45,7 @@ router.post('/email-guide', async (req, res) => {
     }
 
   } catch (error) {
-    console.error('Documentation email error:', error);
+    // // console.error('Documentation email error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to send documentation email'

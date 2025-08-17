@@ -83,7 +83,7 @@ router.get('/', requireAdmin, async (req, res) => {
       totalRevenue = parseFloat(revenueResult[0]?.total || '0');
       
     } catch (ordersError) {
-      console.log('Orders table query failed, using default values:', ordersError.message);
+      // Orders table query failed, using default values
       dbOrders = [];
       totalRevenue = 0;
       totalOrdersCount = 0;
@@ -97,7 +97,7 @@ router.get('/', requireAdmin, async (req, res) => {
       const quizCount = await db.select({ count: count() }).from(quizResults);
       totalQuizCompletions = quizCount[0]?.count || 0;
     } catch (quizError) {
-      console.log('Quiz results table not found, using default count');
+      // Quiz results table not found, using default count
       totalQuizCompletions = 0;
     }
 
@@ -114,7 +114,7 @@ router.get('/', requireAdmin, async (req, res) => {
       const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
       abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
     } catch (cartError: any) {
-      console.log('Cart abandonment calculation failed:', cartError.message);
+      // Cart abandonment calculation failed
     }
 
     // Serialize low stock products properly
@@ -138,7 +138,7 @@ router.get('/', requireAdmin, async (req, res) => {
         .where(sql`created_at::timestamp >= NOW() - INTERVAL '30 days'`);
       activeUsers = activeUsersResult[0]?.count || 0;
     } catch (activeUsersError: any) {
-      console.log('Active users calculation failed:', activeUsersError.message);
+      // Active users calculation failed
     }
 
     res.json({
@@ -168,7 +168,7 @@ router.get('/', requireAdmin, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Admin dashboard error:', error);
+    // // console.error('Admin dashboard error:', error);
     res.status(500).json({ message: 'Failed to load dashboard data', error: error.message });
   }
 });
@@ -220,7 +220,7 @@ router.get('/products', requireAdmin, async (req, res) => {
       performanceWarning: serializedProducts.length > 500 ? 'Large dataset detected - consider using filters' : null
     });
   } catch (error) {
-    console.error('Failed to fetch products:', error);
+    // // console.error('Failed to fetch products:', error);
     res.status(500).json({ message: 'Failed to fetch products' });
   }
 });
@@ -259,28 +259,14 @@ router.get('/products/:id', requireAdmin, async (req, res) => {
       isOrderable: isOrderable(availability)
     });
   } catch (error) {
-    console.error('Failed to fetch product:', error);
+    // // console.error('Failed to fetch product:', error);
     res.status(500).json({ message: 'Failed to fetch product' });
   }
 });
 
 router.post('/products', requireAdmin, auditAction('create_product', 'product'), async (req, res) => {
-  console.log('[ADMIN_PRODUCT] POST /products - Request received', {
-    userId: (req as any).session?.userId,
-    userEmail: (req as any).user?.email,
-    bodyKeys: Object.keys(req.body),
-    bodySize: JSON.stringify(req.body).length
-  });
-  
   try {
-    console.log('[ADMIN_PRODUCT] Validating product data', {
-      name: req.body.name,
-      price: req.body.price,
-      priceType: typeof req.body.price,
-      categories: req.body.categories
-    });
     
-    // Preprocess data before validation
     const preprocessedData = {
       ...req.body,
       // Fix stock validation: inStock should be false when stockQuantity is 0
@@ -294,31 +280,16 @@ router.post('/products', requireAdmin, auditAction('create_product', 'product'),
     // Use SINGLE SOURCE OF TRUTH - shared schema
     const result = insertProductSchema.safeParse(preprocessedData);
     if (!result.success) {
-      console.error('[ADMIN_PRODUCT] Validation failed', {
-        errors: result.error.errors,
-        receivedData: preprocessedData,
-        issues: result.error.issues
-      });
+      // 
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: result.error.errors
       });
     }
-    
-    console.log('[ADMIN_PRODUCT] Validation successful, inserting to database', {
-      validatedData: result.data
-    });
-    
-    // Use validated data DIRECTLY - no double conversion needed
+
     const validatedProductData = result.data;
     const [product] = await db.insert(products).values(validatedProductData).returning();
-    
-    console.log('[ADMIN_PRODUCT] Product created successfully', {
-      productId: product.id,
-      productName: product.name
-    });
-    
-    // Log admin action (no auth required)
+
     await AdminLogger.logProductAction(
       'system-admin',
       'create',
@@ -328,25 +299,12 @@ router.post('/products', requireAdmin, auditAction('create_product', 'product'),
     
     res.status(201).json(product);
   } catch (error: any) {
-    console.error('[ADMIN_PRODUCT] Failed to create product', {
-      error: error.message,
-      stack: error.stack,
-      name: error.name,
-      code: error.code
-    });
+    // 
     res.status(500).json({ message: 'Failed to create product', error: error.message });
   }
 });
 
 router.put('/products/:id', requireAdmin, auditAction('update_product', 'product'), async (req, res) => {
-  console.log('[ADMIN_PRODUCT] PUT /products/:id - Request received', {
-    productId: req.params.id,
-    userId: (req as any).session?.userId,
-    userEmail: (req as any).user?.email,
-    bodyKeys: Object.keys(req.body),
-    bodySize: JSON.stringify(req.body).length
-  });
-  
   try {
     const paramsSchema = z.object({
       id: z.string().min(1)
@@ -354,22 +312,12 @@ router.put('/products/:id', requireAdmin, auditAction('update_product', 'product
     
     const paramsResult = paramsSchema.safeParse(req.params);
     if (!paramsResult.success) {
-      console.error('[ADMIN_PRODUCT] Invalid product ID', {
-        params: req.params,
-        errors: paramsResult.error.errors
-      });
+      // 
       return res.status(400).json({ 
         error: 'Invalid product ID',
         details: paramsResult.error.errors
       });
     }
-    
-    console.log('[ADMIN_PRODUCT] Validating update data', {
-      productId: req.params.id,
-      updateFields: Object.keys(req.body),
-      price: req.body.price,
-      priceType: typeof req.body.price
-    });
     
     // Preprocess data before validation
     const preprocessedData = {
@@ -397,11 +345,7 @@ router.put('/products/:id', requireAdmin, auditAction('update_product', 'product
     const updateSchema = insertProductSchema.partial();
     const bodyResult = updateSchema.safeParse(preprocessedData);
     if (!bodyResult.success) {
-      console.error('[ADMIN_PRODUCT] Update validation failed', {
-        errors: bodyResult.error.errors,
-        receivedData: preprocessedData,
-        issues: bodyResult.error.issues
-      });
+      // 
       return res.status(400).json({ 
         error: 'Invalid product data',
         details: bodyResult.error.errors
@@ -409,13 +353,7 @@ router.put('/products/:id', requireAdmin, auditAction('update_product', 'product
     }
     
     const { id } = paramsResult.data;
-    
-    console.log('[ADMIN_PRODUCT] Validation successful, updating database', {
-      productId: id,
-      updates: bodyResult.data
-    });
-    
-    // Use validated data DIRECTLY - add timestamp for updates
+
     const updates = {
       ...bodyResult.data,
       updatedAt: sql`CURRENT_TIMESTAMP`
@@ -423,16 +361,10 @@ router.put('/products/:id', requireAdmin, auditAction('update_product', 'product
 
     const [product] = await db.update(products).set(updates).where(eq(products.id, id)).returning();
     if (!product) {
-      console.warn('[ADMIN_PRODUCT] Product not found', { productId: id });
+      
       return res.status(404).json({ message: 'Product not found' });
     }
-    
-    console.log('[ADMIN_PRODUCT] Product updated successfully', {
-      productId: product.id,
-      productName: product.name
-    });
-    
-    // Log admin action (no auth required)
+
     await AdminLogger.logProductAction(
       'system-admin',
       'update',
@@ -442,13 +374,7 @@ router.put('/products/:id', requireAdmin, auditAction('update_product', 'product
 
     res.json(product);
   } catch (error: any) {
-    console.error('[ADMIN_PRODUCT] Failed to update product', {
-      productId: req.params.id,
-      error: error.message,
-      stack: error.stack,
-      name: error.name,
-      code: error.code
-    });
+    // 
     res.status(500).json({ message: 'Failed to update product', error: error.message });
   }
 });
@@ -482,7 +408,7 @@ router.delete('/products/:id', requireAdmin, auditAction('delete_product', 'prod
     
     res.status(204).end();
   } catch (error) {
-    console.error('Failed to delete product:', error);
+    // // console.error('Failed to delete product:', error);
     res.status(500).json({ message: 'Failed to delete product' });
   }
 });
@@ -535,7 +461,7 @@ router.put('/products/:id/stock', requireAdmin, auditAction('update_stock', 'pro
 
     res.json(product);
   } catch (error) {
-    console.error('Failed to update stock:', error);
+    // // console.error('Failed to update stock:', error);
     res.status(500).json({ message: 'Failed to update stock' });
   }
 });
@@ -600,7 +526,7 @@ router.get('/orders', requireAdmin, async (req, res) => {
       performanceWarning: totalCount > 1000 ? 'Large dataset - consider using filters' : null
     });
   } catch (error) {
-    console.error('Failed to fetch orders:', error);
+    // // console.error('Failed to fetch orders:', error);
     res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
   }
 });
@@ -624,7 +550,7 @@ router.get('/quiz/analytics', requireAdmin, async (req, res) => {
       const countQuery = await db.select({ count: count() }).from(quizResults);
       totalCompletions = countQuery[0]?.count || 0;
     } catch (dbError) {
-      console.log('Quiz results table not found or empty, returning empty results');
+      
       quizResultsList = [];
       totalCompletions = 0;
     }
@@ -640,7 +566,7 @@ router.get('/quiz/analytics', requireAdmin, async (req, res) => {
       }))
     });
   } catch (error) {
-    console.error('Quiz analytics error:', error);
+    // // console.error('Quiz analytics error:', error);
     res.status(500).json({ message: 'Failed to get quiz analytics' });
   }
 });
@@ -674,7 +600,7 @@ router.get("/reorder-logs", [
     const logs = await storage.getReorderLogs(options);
     res.json(logs);
   } catch (error) {
-    console.error("Error fetching reorder logs:", error);
+    // // console.error("Error fetching reorder logs:", error);
     res.status(500).json({ error: "Failed to fetch reorder logs" });
   }
 });
@@ -759,7 +685,7 @@ router.get("/reorder-analytics", requireAdmin, async (req, res) => {
     
     res.json(analytics);
   } catch (error) {
-    console.error("Error calculating reorder analytics:", error);
+    // // console.error("Error calculating reorder analytics:", error);
     res.status(500).json({ error: "Failed to calculate reorder analytics" });
   }
 });
@@ -788,7 +714,7 @@ router.get('/metrics', requireAdmin, async (req, res) => {
         .where(eq(orders.paymentStatus, 'completed'));
       totalRevenue = parseFloat(revenueResult[0]?.total || '0');
     } catch (error) {
-      console.log('Orders metrics query failed:', error.message);
+      
     }
     
     let abandonmentRate = 0;
@@ -803,7 +729,7 @@ router.get('/metrics', requireAdmin, async (req, res) => {
       const { abandoned, total } = cartResults.rows[0] || { abandoned: 0, total: 0 };
       abandonmentRate = total > 0 ? (abandoned / total) * 100 : 0;
     } catch (error) {
-      console.log('Cart abandonment metrics failed:', error.message);
+      
     }
     
     let activeUsers = 0;
@@ -818,7 +744,7 @@ router.get('/metrics', requireAdmin, async (req, res) => {
         .where(sql`${orders.createdAt} >= ${thirtyDaysAgo}`);
       activeUsers = activeUsersResult[0]?.count || 0;
     } catch (error) {
-      console.log('Active users metrics failed:', error.message);
+      
     }
     
     const lowStockCount = dbProducts.filter(p => (p.stockQuantity || 0) < 5).length;
@@ -839,7 +765,7 @@ router.get('/metrics', requireAdmin, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Metrics API error:', error);
+    // // console.error('Metrics API error:', error);
     res.status(500).json({ message: 'Failed to fetch metrics', error: error.message });
   }
 });
@@ -895,7 +821,7 @@ router.get('/orders/summary', requireAdmin, async (req, res) => {
       lastUpdated: new Date().toISOString()
     });
   } catch (error) {
-    console.error('Orders summary API error:', error);
+    // // console.error('Orders summary API error:', error);
     res.status(500).json({ message: 'Failed to fetch orders summary', error: error.message });
   }
 });
@@ -906,7 +832,7 @@ router.get('/products/:id/variants', requireAdmin, async (req, res) => {
     const variants = await storage.getProductVariants(req.params.id);
     res.json(variants);
   } catch (error) {
-    console.error('Failed to fetch product variants:', error);
+    // // console.error('Failed to fetch product variants:', error);
     res.status(500).json({ message: 'Failed to fetch product variants' });
   }
 });
@@ -982,7 +908,7 @@ router.post('/products/:id/variants', [
     
     res.status(201).json(variant);
   } catch (error) {
-    console.error('Failed to create product variant:', error);
+    // // console.error('Failed to create product variant:', error);
     res.status(500).json({ message: 'Failed to create product variant' });
   }
 });
@@ -1034,7 +960,7 @@ router.put('/product-variants/:id', requireAdmin, async (req, res) => {
     
     res.json(variant);
   } catch (error) {
-    console.error('Failed to update product variant:', error);
+    // // console.error('Failed to update product variant:', error);
     res.status(500).json({ message: 'Failed to update product variant' });
   }
 });
@@ -1068,7 +994,7 @@ router.delete('/product-variants/:id', requireAdmin, async (req, res) => {
     
     res.json({ message: 'Product variant deleted successfully' });
   } catch (error) {
-    console.error('Failed to delete product variant:', error);
+    // // console.error('Failed to delete product variant:', error);
     res.status(500).json({ message: 'Failed to delete product variant' });
   }
 });

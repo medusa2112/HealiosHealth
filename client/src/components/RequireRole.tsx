@@ -30,7 +30,7 @@ export function RequireRole({
       if (!isLoading && !hasRedirected) {
         // If user is not logged in, redirect to login
         if (!user) {
-          console.warn(`🔒 Access denied: Authentication required for role '${role}'`);
+          
           setLocation(fallbackPath);
           setHasRedirected(true);
           return;
@@ -38,7 +38,7 @@ export function RequireRole({
 
         // If user doesn't have any of the allowed roles
         if (!allowedRoles.includes(user.role as any)) {
-          console.warn(`🔒 Access denied: User role '${user.role}' not in allowed roles [${allowedRoles.join(', ')}]`);
+          }]`);
           
           // Smart redirect based on user's actual role
           if (user.role === "admin" && !allowedRoles.includes("admin")) {

@@ -73,16 +73,14 @@ router.post('/claim', requireCustomer, async (req, res) => {
         message: `Successfully claimed ${unclaimedOrders.length} order(s).`
       };
     });
-    
-    console.log(`[ORDER CLAIM] User ${userId} claimed ${result.claimed} orders`);
-    
+
     return res.json({
       success: true,
       ...result
     });
     
   } catch (error) {
-    console.error('[ORDER CLAIM] Error claiming orders:', error);
+    // // console.error('[ORDER CLAIM] Error claiming orders:', error);
     return res.status(500).json({ 
       error: 'Failed to claim orders. Please try again.' 
     });

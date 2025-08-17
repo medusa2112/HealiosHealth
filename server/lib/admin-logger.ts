@@ -19,9 +19,9 @@ export class AdminLogger {
       };
 
       await storage.createAdminLog(logData);
-      console.log(`📝 Admin log: ${adminId} performed ${actionType} on ${targetType}:${targetId}`);
+      
     } catch (error) {
-      console.error("Failed to create admin log:", error);
+      // // console.error("Failed to create admin log:", error);
       // Don't throw - logging failures shouldn't break admin actions
     }
   }

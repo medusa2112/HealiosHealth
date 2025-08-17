@@ -16,5 +16,5 @@ export const isAdminEnabled = (): boolean => {
 
 // Log configuration for transparency (only in development)
 if (import.meta.env.DEV) {
-  console.log('[ADMIN CONFIG] Client-side admin enabled:', isAdminEnabled());
+  );
 }

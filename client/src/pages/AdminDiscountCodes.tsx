@@ -17,7 +17,6 @@ import { apiRequest } from '@/lib/queryClient';
 import type { DiscountCode, InsertDiscountCode } from '@shared/schema';
 import { SEOHead } from '@/components/seo-head';
 
-
 interface CreateDiscountForm {
   code: string;
   type: 'percent' | 'fixed';

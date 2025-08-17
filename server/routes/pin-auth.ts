@@ -27,7 +27,7 @@ router.post('/check-user', async (req, res) => {
       });
     }
 
-    console.error('[CHECK_USER] Error:', error);
+    // // console.error('[CHECK_USER] Error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to check user status. Please try again.'
@@ -78,22 +78,19 @@ router.post('/send-pin', async (req, res) => {
     // DEVELOPMENT: Also store by email for cross-session access
     if (process.env.NODE_ENV === 'development') {
       pinStore.set(`email:${email}`, pinData);
-      console.log(`[PIN_AUTH] Development mode - stored PIN by email key for cross-session access`);
+      
     }
 
     // Send PIN via email using Resend
-    console.log(`[PIN_AUTH] Generated PIN for ${email}: ${pin}`);
-    
+
     try {
       const emailResult = await sendPinEmail(email, pin);
       if (!emailResult.success) {
-        console.error('[PIN_AUTH] Failed to send PIN email:', emailResult);
+        // // console.error('[PIN_AUTH] Failed to send PIN email:', emailResult);
         
         // Handle Resend testing mode limitation
         if ((emailResult as any).error === 'testing_mode') {
-          console.log(`[PIN_AUTH] Resend in testing mode - showing PIN in logs for development`);
-          console.log(`[PIN_AUTH] Development PIN for ${email}: ${pin}`);
-          // In development/testing mode, continue as if email was sent
+
         } else {
           return res.status(500).json({
             success: false,
@@ -101,12 +98,12 @@ router.post('/send-pin', async (req, res) => {
           });
         }
       } else {
-        console.log(`[PIN_AUTH] PIN email sent successfully to ${email} - ID: ${emailResult.id}`);
+        
       }
     } catch (error) {
-      console.error('[PIN_AUTH] Error sending PIN email:', error);
+      // // console.error('[PIN_AUTH] Error sending PIN email:', error);
       // In development, show PIN in logs as fallback
-      console.log(`[PIN_AUTH] Email failed - Development PIN for ${email}: ${pin}`);
+      
     }
 
     res.json({ 
@@ -121,7 +118,7 @@ router.post('/send-pin', async (req, res) => {
       });
     }
 
-    console.error('[PIN_AUTH] Send PIN error:', error);
+    // // console.error('[PIN_AUTH] Send PIN error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to send PIN. Please try again.'
@@ -139,29 +136,21 @@ router.post('/verify-pin', async (req, res) => {
 
     let pinData: any = null;
     const pinId = (req.session as any).pinId;
-    
-    console.log(`[PIN_VERIFY] Session ID: ${req.sessionID}`);
-    console.log(`[PIN_VERIFY] PIN ID from session: ${pinId}`);
-    console.log(`[PIN_VERIFY] Email from request: ${email}`);
-    
-    // Try session-based lookup first
+
     if (pinId) {
       pinData = pinStore.get(pinId);
-      console.log(`[PIN_VERIFY] Found PIN data from session: ${!!pinData}`);
+      
     }
     
     // DEVELOPMENT: Fallback to email-based lookup if session fails
     if (!pinData && process.env.NODE_ENV === 'development') {
       const emailKey = `email:${email}`;
       pinData = pinStore.get(emailKey);
-      console.log(`[PIN_VERIFY] Development mode - trying email key: ${emailKey}`);
-      console.log(`[PIN_VERIFY] Found PIN data from email key: ${!!pinData}`);
+
     }
     
-    console.log(`[PIN_VERIFY] Available PINs in store:`, Array.from(pinStore.keys()));
-    
     if (!pinData) {
-      console.log(`[PIN_VERIFY] No PIN found - may have expired or been cleaned up`);
+      
       return res.status(400).json({
         success: false,
         message: 'PIN has expired. Please request a new PIN.'
@@ -254,7 +243,7 @@ router.post('/verify-pin', async (req, res) => {
       });
     }
 
-    console.error('[PIN_AUTH] Verify PIN error:', error);
+    // // console.error('[PIN_AUTH] Verify PIN error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to verify PIN. Please try again.'
@@ -298,7 +287,7 @@ router.get('/me', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('[PIN_AUTH] Get user error:', error);
+    // // console.error('[PIN_AUTH] Get user error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get user information'
@@ -320,7 +309,7 @@ router.post('/logout', (req, res) => {
       message: 'Logged out successfully'
     });
   } catch (error) {
-    console.error('[PIN_AUTH] Logout error:', error);
+    // // console.error('[PIN_AUTH] Logout error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to logout'

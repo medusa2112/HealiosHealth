@@ -112,7 +112,6 @@ export function Header() {
       ]
     },
 
-
     {
       title: "Healios Journal",
       items: [
@@ -190,8 +189,6 @@ export function Header() {
             </Link>
 
             {/* Auth removed - no user account menu */}
-            
-
 
           </div>
           
@@ -576,9 +573,6 @@ export function Header() {
           </div>
         </div>
       </div>
-      
-
-
 
     </header>
   );

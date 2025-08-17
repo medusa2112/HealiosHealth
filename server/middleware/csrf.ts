@@ -68,13 +68,13 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
                          process.env.CSRF_DEV_BYPASS === 'true';
   
   if (allowDevBypass && req.headers['x-csrf-dev-bypass'] === 'ok') {
-    console.log('[CSRF] Dev bypass activated for:', req.originalUrl);
+    
     return next();
   }
 
   // Skip CSRF for address validation in development
   if (process.env.NODE_ENV === 'development' && req.originalUrl.includes('/validate-address/')) {
-    console.log('[CSRF] Development bypass for address validation:', req.originalUrl);
+    
     return next();
   }
 
@@ -100,25 +100,25 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
 
   // Skip CSRF for cart routes in development (temporary fix for session consistency)
   if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/cart/')) {
-    console.log('[CSRF] Development mode - bypassing CSRF for cart route:', fullPath);
+    
     return next();
   }
 
   // Skip CSRF for checkout session creation in development
   if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/create-checkout-session')) {
-    console.log('[CSRF] Development mode - bypassing CSRF for checkout session:', fullPath);
+    
     return next();
   }
 
   // Skip CSRF for admin routes in development environment
   if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/admin/')) {
-    console.log('[CSRF] Development mode - bypassing CSRF for admin route:', fullPath);
+    
     return next();
   }
 
   // Skip CSRF for customer profile routes in development (temporary fix for profile update)
   if (process.env.NODE_ENV === 'development' && fullPath.includes('/api/auth/customer/profile')) {
-    console.log('[CSRF] Development mode - bypassing CSRF for customer profile route:', fullPath);
+    
     return next();
   }
 
@@ -129,19 +129,9 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
                   req.body?._csrf ||
                   req.query?._csrf;
     
-    // Log for debugging
-    console.log('[CSRF] Admin route check:', {
-      path: req.path,
-      sessionId,
-      tokenProvided: !!token,
-      nodeEnv: process.env.NODE_ENV,
-      adminId: (req.session as any)?.adminId,
-      providedToken: token ? token.substring(0, 10) + '...' : 'none'
-    });
-    
     // In development, be more lenient for authenticated admin users
     if (process.env.NODE_ENV === 'development') {
-      console.log('[CSRF] Development mode - allowing authenticated admin request');
+      
       return next();
     }
     
@@ -165,14 +155,14 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     let tokenValid = false;
     for (const sid of possibleSessionIds) {
       if (sid && verifyCSRFToken(sid as string, token as string)) {
-        console.log('[CSRF] Token valid for sessionId:', sid);
+        
         tokenValid = true;
         break;
       }
     }
     
     if (!tokenValid) {
-      console.log('[CSRF] Token invalid for all session IDs:', possibleSessionIds);
+      
       return res.status(403).json({ 
         error: 'Invalid CSRF token',
         code: 'CSRF_TOKEN_MISMATCH'
@@ -205,12 +195,6 @@ export function csrfTokenEndpoint(req: CSRFRequest, res: Response) {
   // Use the same session ID logic as the middleware
   const sessionId = req.sessionID || req.session?.id || `${req.ip}-${req.get('user-agent')}`;
   const token = generateCSRFToken(sessionId);
-  
-  console.log('[CSRF] Token endpoint called:', {
-    sessionId,
-    tokenGenerated: token.substring(0, 10) + '...',
-    userId: (req.session as any)?.userId
-  });
   
   res.json({ 
     csrfToken: token,

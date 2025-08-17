@@ -24,27 +24,22 @@ export default function AdminImageUpload({
 
   const handleGetUploadParameters = async () => {
     try {
-      console.log('[ADMIN_IMAGE_UPLOAD] Requesting upload URL...');
+      
       const response = await apiRequest("POST", "/api/admin/images/upload-url");
-      
-      console.log('[ADMIN_IMAGE_UPLOAD] Response received:', response);
-      
-      // Parse the JSON response
+
       const data = await response.json();
-      console.log('[ADMIN_IMAGE_UPLOAD] Parsed data:', data);
-      
+
       if (!data.uploadURL) {
-        console.error('[ADMIN_IMAGE_UPLOAD] No uploadURL in response:', data);
+        // // console.error('[ADMIN_IMAGE_UPLOAD] No uploadURL in response:', data);
         throw new Error("No upload URL received");
       }
 
-      console.log('[ADMIN_IMAGE_UPLOAD] Returning upload parameters with URL:', data.uploadURL);
       return {
         method: "PUT" as const,
         url: data.uploadURL,
       };
     } catch (error) {
-      console.error("[ADMIN_IMAGE_UPLOAD] Failed to get upload URL:", error);
+      // // console.error("[ADMIN_IMAGE_UPLOAD] Failed to get upload URL:", error);
       toast({
         title: "Upload Error",
         description: error instanceof Error ? error.message : "Failed to prepare image upload. Please try again.",
@@ -63,7 +58,7 @@ export default function AdminImageUpload({
       }
 
       const uploadedFile = result.successful[0];
-      console.log('[ADMIN_IMAGE_UPLOAD] Uploaded file data:', uploadedFile);
+      
       const uploadURL = uploadedFile.uploadURL || (uploadedFile as any).url;
 
       if (!uploadURL) {
@@ -71,19 +66,17 @@ export default function AdminImageUpload({
       }
 
       // Confirm the upload with our backend
-      console.log('[ADMIN_IMAGE_UPLOAD] Confirming upload with URL:', uploadURL);
+      
       const confirmResponse = await apiRequest("POST", "/api/admin/images/confirm", { uploadURL });
       
       // Parse the JSON response
       const confirmData = await confirmResponse.json();
-      console.log('[ADMIN_IMAGE_UPLOAD] Confirm parsed data:', confirmData);
 
       if (!confirmData.imageUrl) {
-        console.error('[ADMIN_IMAGE_UPLOAD] No imageUrl in confirmation response:', confirmData);
+        // // console.error('[ADMIN_IMAGE_UPLOAD] No imageUrl in confirmation response:', confirmData);
         throw new Error("No image URL returned from confirmation");
       }
 
-      console.log('[ADMIN_IMAGE_UPLOAD] Image uploaded successfully:', confirmData.imageUrl);
       onImageUploaded(confirmData.imageUrl);
       
       toast({
@@ -91,7 +84,7 @@ export default function AdminImageUpload({
         description: "Image has been uploaded successfully.",
       });
     } catch (error) {
-      console.error("Upload completion failed:", error);
+      // // console.error("Upload completion failed:", error);
       toast({
         title: "Upload Error",
         description: "Failed to complete image upload. Please try again.",

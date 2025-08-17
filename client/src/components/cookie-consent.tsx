@@ -40,9 +40,7 @@ export function CookieConsent() {
 
   const enableCookies = (types: string[]) => {
     // This would integrate with your analytics/marketing tools
-    console.log('Enabling cookies:', types);
     
-    // Example: Enable Google Analytics if analytics consent given
     if (types.includes('analytics')) {
       // Initialize GA here
     }

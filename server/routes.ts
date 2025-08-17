@@ -66,9 +66,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     },
   }));
-  
 
-  
   // Register Stripe webhook routes BEFORE body parsing middleware
   // This is critical for webhook signature verification
   app.use('/stripe', stripeRoutes);
@@ -193,7 +191,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register image optimization routes - ADMIN ONLY
   const imageOptimizationRoutes = await import('./routes/imageOptimization');
   app.use('/api/admin/images/optimize', imageOptimizationRoutes.default);
-  
 
   // Cache for product data - 5 minute cache
   let productCache: any = null;
@@ -275,7 +272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(productsWithAvailability);
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      // // console.error("Failed to fetch products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
     }
   });
@@ -319,7 +316,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(product);
     } catch (error) {
-      console.error("Failed to fetch product:", error);
+      // // console.error("Failed to fetch product:", error);
       res.status(500).json({ message: "Failed to fetch product" });
     }
   });
@@ -354,7 +351,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
       res.json(dbProducts);
     } catch (error) {
-      console.error('Product category search error:', error);
+      // // console.error('Product category search error:', error);
       res.status(500).json({ message: "Failed to fetch products by category" });
     }
   });
@@ -379,7 +376,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         bookingId: booking.id
       });
     } catch (error) {
-      console.error('Consultation booking error:', error);
+      // // console.error('Consultation booking error:', error);
       res.status(400).json({ 
         success: false, 
         message: "Failed to book consultation" 
@@ -402,7 +399,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(latestArticle);
     } catch (error) {
-      console.error('Error fetching latest article:', error);
+      // // console.error('Error fetching latest article:', error);
       res.status(500).json({ message: "Failed to fetch latest article" });
     }
   });
@@ -414,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const variants = await storage.getProductVariants(id);
       res.json(variants);
     } catch (error) {
-      console.error('Error fetching product variants:', error);
+      // // console.error('Error fetching product variants:', error);
       res.status(500).json({ message: "Failed to fetch product variants" });
     }
   });
@@ -428,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(variant);
     } catch (error) {
-      console.error('Error fetching product variant:', error);
+      // // console.error('Error fetching product variant:', error);
       res.status(500).json({ message: "Failed to fetch product variant" });
     }
   });
@@ -442,7 +439,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(productWithVariants);
     } catch (error) {
-      console.error('Error fetching product with variants:', error);
+      // // console.error('Error fetching product with variants:', error);
       res.status(500).json({ message: "Failed to fetch product with variants" });
     }
   });
@@ -457,7 +454,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         await EmailService.sendNewsletterConfirmation(subscription);
       } catch (emailError) {
-        console.error('Failed to send newsletter confirmation emails:', emailError);
+        // // console.error('Failed to send newsletter confirmation emails:', emailError);
         // Don't fail the subscription if email fails
       }
       
@@ -484,7 +481,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           validatedData.productName
         );
       } catch (emailError) {
-        console.error('Failed to send restock confirmation email:', emailError);
+        // // console.error('Failed to send restock confirmation email:', emailError);
         // Don't fail the notification if email fails
       }
       
@@ -496,7 +493,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to set restock notification" });
     }
   });
-
 
   // Create Stripe Checkout Session for external payment processing
   app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req: express.Request, res: express.Response) => {
@@ -556,15 +552,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Increment usage count immediately (before checkout)
         await storage.incrementDiscountCodeUsage(discount.id);
-
-        console.log('🎟️ Applied discount code:', {
-          code: discount.code,
-          type: discount.type,
-          value: discount.value,
-          originalTotal: originalTotal / 100,
-          discountAmount: discountAmount / 100,
-          finalTotal: (originalTotal - discountAmount) / 100
-        });
       }
 
       // Create order first to get order ID for success URL
@@ -644,7 +631,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         discountCode: appliedDiscountCode?.code || null,
       });
     } catch (error: any) {
-      console.error("Stripe checkout session error:", error);
+      // // console.error("Stripe checkout session error:", error);
       res.status(500).json({ message: "Error creating checkout session: " + error.message });
     }
   });
@@ -685,7 +672,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         orderId: order.id
       });
     } catch (error: any) {
-      console.error("Shopify checkout error:", error);
+      // // console.error("Shopify checkout error:", error);
       res.status(500).json({ message: "Error creating Shopify checkout: " + error.message });
     }
   });
@@ -751,7 +738,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         finalTotal: total ? Math.max(0, total - discountAmount) : undefined
       });
     } catch (error) {
-      console.error("Error validating discount code:", error);
+      // // console.error("Error validating discount code:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
@@ -776,7 +763,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           await storage.incrementDiscountCodeUsage(validatedData.discountCode);
         } catch (discountError) {
-          console.error('Failed to increment discount code usage:', discountError);
+          // // console.error('Failed to increment discount code usage:', discountError);
           // Don't fail the order creation for this
         }
       }
@@ -787,7 +774,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Check if product is now out of stock
         if (updatedProduct && (updatedProduct.stockQuantity || 0) <= 0) {
-          console.log(`Product ${updatedProduct.name} is now out of stock`);
+          
         }
       }
 
@@ -795,7 +782,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         await EmailService.sendOrderConfirmation({ order, orderItems });
       } catch (emailError) {
-        console.error('Failed to send order emails:', emailError);
+        // // console.error('Failed to send order emails:', emailError);
       }
 
       res.json(order);
@@ -803,7 +790,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid order data", errors: error.errors });
       }
-      console.error('Order creation error:', error);
+      // // console.error('Order creation error:', error);
       res.status(500).json({ message: "Failed to create order" });
     }
   });
@@ -864,7 +851,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
           }
         } catch (error) {
-          console.error(`Failed to fetch product ${item.productId}:`, error);
+          // // console.error(`Failed to fetch product ${item.productId}:`, error);
         }
       }
 
@@ -911,7 +898,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.send(html);
     } catch (error) {
-      console.error('Cart route error:', error);
+      // // console.error('Cart route error:', error);
       res.redirect('/');
     }
   });
@@ -1014,12 +1001,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const preOrder = await storage.createPreOrder(validatedData);
       
       // Send email notification using Resend
-      console.log('🚀 Attempting to send pre-order email notification...');
+      
       try {
         const emailResult = await EmailService.sendPreOrderNotification(preOrder);
-        console.log('📧 Email sending result:', emailResult);
+        
       } catch (emailError) {
-        console.error('❌ Failed to send pre-order email notification:', emailError);
+        // // console.error('❌ Failed to send pre-order email notification:', emailError);
         // Don't fail the pre-order if email fails
       }
       
@@ -1049,7 +1036,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const { firstName, email, product, restockDate } = parsed.data;
 
-      console.log('🚀 Sending restock notification emails...');
       const success = await EmailService.sendRestockNotification({
         firstName,
         email,
@@ -1063,7 +1049,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(500).json({ message: "Failed to send notification emails" });
       }
     } catch (error) {
-      console.error('Error handling restock notification:', error);
+      // // console.error('Error handling restock notification:', error);
       res.status(500).json({ message: "Failed to process notification request" });
     }
   });
@@ -1140,7 +1126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const emailSuccess = await EmailService.sendQuizRecommendations(quizResult, recommendations);
       
       if (!emailSuccess) {
-        console.error('Failed to send quiz completion emails');
+        // // console.error('Failed to send quiz completion emails');
         // Still return success as the quiz was saved, just log the email failure
       }
       
@@ -1152,7 +1138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
     } catch (error) {
-      console.error("Quiz completion failed:", error);
+      // // console.error("Quiz completion failed:", error);
       res.status(500).json({ 
         message: "Failed to process quiz completion", 
         error: (error as Error).message 
@@ -1188,7 +1174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Test email endpoint - sends samples of all email templates
   app.post("/api/test-emails", requireAuth, async (req, res) => {
     try {
-      console.log('🧪 Testing all email templates...');
+      
       const results: string[] = [];
       
       // Ensure we return JSON response
@@ -1286,14 +1272,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         results.push('❌ Restock notification failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
 
-      console.log('🧪 Email test results:', results);
       return res.json({ 
         success: true, 
         message: 'Email tests completed', 
         results 
       });
     } catch (error) {
-      console.error('❌ Email test endpoint error:', error);
+      // // console.error('❌ Email test endpoint error:', error);
       return res.status(500).json({ 
         success: false, 
         message: 'Email test failed', 
@@ -1313,7 +1298,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(400).json({ success: false, message: 'Invalid return URL' });
       }
     } catch (error) {
-      console.error('Error setting customer return URL:', error);
+      // // console.error('Error setting customer return URL:', error);
       res.status(500).json({ success: false, message: 'Server error' });
     }
   });
@@ -1332,9 +1317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Phase 19: Start email scheduler in development mode
   if (process.env.NODE_ENV === 'development') {
     const { emailScheduler } = await import('./jobs/scheduler');
-    console.log("[SERVER] Starting email job scheduler in development mode...");
-    console.log("[SERVER] IMPORTANT: Email jobs will NOT run immediately on startup");
-    console.log("[SERVER] This prevents abandoned cart emails on every app reload");
+
     emailScheduler.start();
   }
 

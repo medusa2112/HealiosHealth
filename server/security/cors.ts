@@ -4,7 +4,7 @@ import { ENV } from '../config/env';
 // No wildcard origins with credentials
 const getAllowedOrigins = () => {
   const origins = ENV.isProd ? ENV.PROD_ORIGINS : ENV.DEV_ORIGINS;
-  console.log('[CORS] Allowed origins:', origins);
+  
   return origins;
 };
 
@@ -23,7 +23,7 @@ export const corsMw = cors({
     }
     
     // Block disallowed origins
-    console.log('[CORS] Blocked origin:', origin);
+    
     callback(new Error(`CORS policy: Origin ${origin} not allowed`));
   },
   credentials: true, // Allow cookies

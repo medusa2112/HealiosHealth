@@ -41,7 +41,7 @@ router.get("/", requireAdmin, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("Failed to fetch abandoned carts:", error);
+    // // console.error("Failed to fetch abandoned carts:", error);
     res.status(500).json({ message: "Failed to fetch abandoned carts" });
   }
 });
@@ -70,7 +70,7 @@ router.get("/analytics", requireAdmin, async (req, res) => {
     
     res.json(analytics);
   } catch (error) {
-    console.error("Failed to fetch cart analytics:", error);
+    // // console.error("Failed to fetch cart analytics:", error);
     res.status(500).json({ message: "Failed to fetch cart analytics" });
   }
 });
@@ -111,7 +111,7 @@ router.post("/:cartId/recover", [
       recoveryMethod: 'manual_recovery'
     });
   } catch (error) {
-    console.error("Failed to recover cart:", error);
+    // // console.error("Failed to recover cart:", error);
     res.status(500).json({ message: "Failed to recover cart" });
   }
 });

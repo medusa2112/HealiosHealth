@@ -29,14 +29,8 @@ export const ADMIN_CONFIG = {
 
 // Fail fast in production if admin is accidentally enabled
 if (process.env.NODE_ENV === 'production' && ADMIN_CONFIG.enabled) {
-  console.error('❌ CRITICAL: Admin panel cannot be enabled in production!');
+  
   process.exit(1);
 }
 
 // Log configuration for transparency
-console.log('[ADMIN CONFIG]', {
-  enabled: ADMIN_CONFIG.enabled,
-  environment: process.env.NODE_ENV,
-  ipAllowlistCount: ADMIN_CONFIG.ipAllowlist.length,
-  auditLog: ADMIN_CONFIG.auditLog,
-});

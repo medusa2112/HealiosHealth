@@ -86,8 +86,7 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
   // Send PIN authentication email using the centralized email service
   try {
     if (!resend) {
-      console.warn('[EMAIL] Resend not configured - PIN email not sent');
-      console.log(`[EMAIL DEBUG] PIN for ${email}: ${code}`);
+
       return;
     }
 
@@ -103,23 +102,22 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
     
     if (isDev && adminEmails.includes(email)) {
       // Send to admin email in dev
-      console.log(`[EMAIL DEV] Sending PIN to admin: ${email}`);
+      
       await sendPinEmail(email, emailData);
     } else if (isDev) {
       // Send to admin emails in dev mode but include original user info
-      console.log(`[EMAIL DEV] Sending PIN for ${email} to admin emails`);
+      
       for (const adminEmail of adminEmails) {
         await sendPinEmail(adminEmail, emailData);
       }
     } else {
       // Production mode - send to actual user
-      console.log(`[EMAIL PROD] Sending PIN to user: ${email}`);
+      
       await sendPinEmail(email, emailData);
     }
-    
-    console.log(`[EMAIL] PIN verification sent to ${isDev ? 'admin emails' : email}`);
+
   } catch (error) {
-    console.error('[EMAIL ERROR] Failed to send PIN verification email:', error);
+    // // console.error('[EMAIL ERROR] Failed to send PIN verification email:', error);
   }
 }
 

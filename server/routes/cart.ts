@@ -42,7 +42,7 @@ router.post("/sync", rateLimit(20, 60000), async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Cart sync error:", error);
+    // // console.error("Cart sync error:", error);
     res.status(500).json({ message: "Failed to sync cart" });
   }
 });
@@ -80,7 +80,7 @@ router.get("/:sessionToken", requireAuth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Get cart error:", error);
+    // // console.error("Get cart error:", error);
     res.status(500).json({ message: "Failed to get cart" });
   }
 });
@@ -111,7 +111,7 @@ router.put("/:cartId/abandon", requireAuth, async (req, res) => {
     res.json({ success: true, message: "Cart marked as abandoned" });
 
   } catch (error) {
-    console.error("Abandon cart error:", error);
+    // // console.error("Abandon cart error:", error);
     res.status(500).json({ message: "Failed to mark cart as abandoned" });
   }
 });

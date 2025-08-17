@@ -4,17 +4,11 @@ import { sendEmail } from "../lib/email";
 
 export async function processAbandonedCartEmails(): Promise<void> {
   try {
-    console.log("[ABANDONED CART JOB] Starting abandoned cart email processing...");
     
-    // Get carts abandoned 1 hour ago
     const abandoned1h = await storage.getAbandonedCarts(1);
-    console.log(`[ABANDONED CART JOB] Found ${abandoned1h.length} carts abandoned for 1 hour`);
     
-    // Get carts abandoned 24 hours ago  
     const abandoned24h = await storage.getAbandonedCarts(24);
-    console.log(`[ABANDONED CART JOB] Found ${abandoned24h.length} carts abandoned for 24 hours`);
-
-    // Process 1-hour abandoned carts (soft reminder)  
+    
     for (const cart of abandoned1h) {
       const user = cart.userId ? await storage.getUserById(cart.userId) : null;
       const userEmail = user?.email;
@@ -24,8 +18,6 @@ export async function processAbandonedCartEmails(): Promise<void> {
       const alreadySent1h = await storage.hasEmailBeenSent("abandoned_cart_1h", cart.id);
       if (alreadySent1h) continue;
 
-      console.log(`[ABANDONED CART JOB] Sending 1h reminder to ${userEmail} for cart ${cart.id}`);
-      
       try {
         await sendEmail(
           userEmail,
@@ -46,9 +38,8 @@ export async function processAbandonedCartEmails(): Promise<void> {
           emailAddress: userEmail
         });
 
-        console.log(`[ABANDONED CART JOB] ✓ 1h reminder sent to ${userEmail}`);
       } catch (error) {
-        console.error(`[ABANDONED CART JOB] Failed to send 1h email to ${userEmail}:`, error);
+        // // console.error(`[ABANDONED CART JOB] Failed to send 1h email to ${userEmail}:`, error);
       }
     }
 
@@ -67,8 +58,6 @@ export async function processAbandonedCartEmails(): Promise<void> {
       const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
       if (cartAge > threeDaysMs) continue;
 
-      console.log(`[ABANDONED CART JOB] Sending 24h reminder to ${userEmail} for cart ${cart.id}`);
-      
       try {
         await sendEmail(
           userEmail,
@@ -91,15 +80,13 @@ export async function processAbandonedCartEmails(): Promise<void> {
           emailAddress: userEmail
         });
 
-        console.log(`[ABANDONED CART JOB] ✓ 24h reminder sent to ${userEmail}`);
       } catch (error) {
-        console.error(`[ABANDONED CART JOB] Failed to send 24h email to ${userEmail}:`, error);
+        // // console.error(`[ABANDONED CART JOB] Failed to send 24h email to ${userEmail}:`, error);
       }
     }
 
-    console.log("[ABANDONED CART JOB] ✓ Abandoned cart email processing completed");
   } catch (error) {
-    console.error("[ABANDONED CART JOB] Error processing abandoned cart emails:", error);
+    // // console.error("[ABANDONED CART JOB] Error processing abandoned cart emails:", error);
   }
 }
 

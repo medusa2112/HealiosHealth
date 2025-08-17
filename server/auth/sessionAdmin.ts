@@ -24,9 +24,7 @@ export const adminSession = session({
   }) : undefined, // Use memory store in development
 });
 
-console.log('[ADMIN SESSION] Configured with:', {
-  cookie: 'hh_admin_sess',
-  store: ENV.isProd ? 'PostgreSQL (session_admins)' : 'Memory',
+' : 'Memory',
   ttl: '4 hours',
   path: '/', // Fixed to reflect actual configuration
 });

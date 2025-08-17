@@ -67,13 +67,13 @@ export class SecurityLogger {
       const message = `${event.type} - User: ${event.userId || 'anonymous'} (${event.userRole || 'unknown'}) - IP: ${event.ipAddress}`;
       
       if (event.severity === 'critical' || event.severity === 'high') {
-        console.error(`${prefix} ${message}`, event.details);
+        // // console.error(`${prefix} ${message}`, event.details);
       } else {
-        console.warn(`${prefix} ${message}`, event.details);
+        
       }
 
     } catch (error) {
-      console.error('Failed to log security event:', error);
+      // // console.error('Failed to log security event:', error);
     }
   }
 
@@ -226,10 +226,9 @@ export class SecurityLogger {
 
       const emoji = fixTypeEmoji[fixLog.type] || '🔧';
       const severity = (fixLog.severity || 'medium').toUpperCase();
-      console.log(`${emoji} SECURITY FIX [${severity}]: ${fixLog.type} fixed in ${fixLog.route} by ${fixLog.fixedBy}`);
-      
+
     } catch (error) {
-      console.error('Failed to log security fix:', error);
+      // // console.error('Failed to log security fix:', error);
     }
   }
 }

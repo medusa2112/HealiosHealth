@@ -107,34 +107,23 @@ export const protectRoute = (roles: ('admin' | 'customer' | 'guest')[]) => {
       // Get user from session or passport user (OAuth)
       const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId || (req.user as any)?.id;
       
-      console.log(`[PROTECT_ROUTE] Checking access for roles [${roles.join(', ')}], userId: ${userId}`);
-      console.log(`[PROTECT_ROUTE] Session userId: ${(req.session as any)?.userId}, Passport user: ${(req.user as any)?.claims?.sub || (req.user as any)?.userId}`);
-      console.log(`[PROTECT_ROUTE] Request user object:`, req.user ? { id: (req.user as any).id, email: req.user.email, role: req.user.role } : 'null');
-      
       if (!userId) {
-        console.log('[PROTECT_ROUTE] No userId in session or passport user');
         return res.status(401).json({ message: 'Authentication required' });
       }
 
       const user = await storage.getUserById(userId);
       
       if (!user) {
-        console.log(`[PROTECT_ROUTE] User not found for userId: ${userId}`);
         return res.status(401).json({ message: 'User not found' });
       }
       
-      console.log(`[PROTECT_ROUTE] Found user: ${user.email}, role: ${user.role}`);
-      
       if (!roles.includes(user.role as 'admin' | 'customer' | 'guest')) {
-        console.log(`[PROTECT_ROUTE] Access denied - User role '${user.role}' not in allowed roles [${roles.join(', ')}]`);
         return res.status(403).json({ message: 'Access denied' });
       }
       
-      console.log(`[PROTECT_ROUTE] Access granted for ${user.email} (${user.role})`);
       req.user = { ...user, claims: (req.user as any)?.claims };
       next();
     } catch (err) {
-      console.error('Auth error:', err);
       return res.status(401).json({ message: 'Authentication failed' });
     }
   };
@@ -145,27 +134,19 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   try {
     const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId || (req.user as any)?.id;
     
-    console.log(`[REQUIRE_AUTH] Checking auth for userId: ${userId}`);
-    console.log(`[REQUIRE_AUTH] Session:`, (req.session as any)?.userId ? 'present' : 'missing');
-    console.log(`[REQUIRE_AUTH] Passport user:`, req.user ? 'present' : 'missing');
-    
     if (!userId) {
-      console.log('[REQUIRE_AUTH] No userId found');
       return res.status(401).json({ message: 'Authentication required' });
     }
 
     const user = await storage.getUserById(userId);
     
     if (!user) {
-      console.log(`[REQUIRE_AUTH] User not found for userId: ${userId}`);
       return res.status(401).json({ message: 'Invalid session' });
     }
     
-    console.log(`[REQUIRE_AUTH] Auth successful for ${user.email}`);
     req.user = { ...user, claims: (req.user as any)?.claims };
     next();
   } catch (err) {
-    console.error('Auth error:', err);
     return res.status(401).json({ message: 'Authentication failed' });
   }
 };
@@ -192,7 +173,6 @@ export const requireSessionOrAuth = async (req: Request, res: Response, next: Ne
 
     return res.status(401).json({ message: 'Authentication or valid session token required' });
   } catch (error) {
-    console.error('Session auth error:', error);
     return res.status(401).json({ message: 'Authentication failed' });
   }
 };
@@ -229,7 +209,6 @@ export const validateOrderAccess = async (req: Request, res: Response, next: Nex
     
     next();
   } catch (error) {
-    console.error('Order access validation error:', error);
     return res.status(500).json({ message: 'Validation failed' });
   }
 };
@@ -301,6 +280,5 @@ export const determineUserRole = (email: string): 'admin' | 'customer' => {
   // Add your email directly for now
   const allAdminEmails = [...adminEmails, 'dominic@oricle.app'];
   const isAdminEmail = allAdminEmails.includes(email);
-  console.log(`[ROLE_DEBUG] Checking ${email} against admin emails: ${allAdminEmails.join(', ')} - Result: ${isAdminEmail ? 'admin' : 'customer'}`);
   return isAdminEmail ? 'admin' : 'customer';
 };

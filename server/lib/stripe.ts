@@ -2,7 +2,7 @@ import Stripe from "stripe";
 
 // Stripe is optional for development
 if (!process.env.STRIPE_SECRET_KEY) {
-  console.warn('STRIPE_SECRET_KEY not configured - Stripe operations will be disabled');
+  
 }
 
 export const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {

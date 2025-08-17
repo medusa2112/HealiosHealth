@@ -7,9 +7,7 @@ const router = Router();
 // These work with Replit Auth by setting provider context and redirecting to /api/login
 
 router.get('/google', (req, res, next) => {
-  console.log('[OAUTH] Initiating Google OAuth authentication');
   
-  // Set customer authentication context and provider preference
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'google';
   (req.session as any).requestedProvider = 'google';
@@ -17,7 +15,7 @@ router.get('/google', (req, res, next) => {
   // Save session before redirect
   req.session.save((err) => {
     if (err) {
-      console.error('[OAUTH] Session save error:', err);
+      
       return res.redirect('/register?error=session_error');
     }
     
@@ -28,15 +26,14 @@ router.get('/google', (req, res, next) => {
 });
 
 router.get('/github', (req, res, next) => {
-  console.log('[OAUTH] Initiating GitHub OAuth authentication');
-  
+
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'github';
   (req.session as any).requestedProvider = 'github';
   
   req.session.save((err) => {
     if (err) {
-      console.error('[OAUTH] Session save error:', err);
+      
       return res.redirect('/register?error=session_error');
     }
     
@@ -45,15 +42,14 @@ router.get('/github', (req, res, next) => {
 });
 
 router.get('/apple', (req, res, next) => {
-  console.log('[OAUTH] Initiating Apple OAuth authentication');
-  
+
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'apple';
   (req.session as any).requestedProvider = 'apple';
   
   req.session.save((err) => {
     if (err) {
-      console.error('[OAUTH] Session save error:', err);
+      
       return res.redirect('/register?error=session_error');
     }
     
@@ -62,15 +58,14 @@ router.get('/apple', (req, res, next) => {
 });
 
 router.get('/twitter', (req, res, next) => {
-  console.log('[OAUTH] Initiating X/Twitter OAuth authentication');
-  
+
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'twitter';
   (req.session as any).requestedProvider = 'twitter';
   
   req.session.save((err) => {
     if (err) {
-      console.error('[OAUTH] Session save error:', err);
+      
       return res.redirect('/register?error=session_error');
     }
     
@@ -80,14 +75,13 @@ router.get('/twitter', (req, res, next) => {
 
 // Email authentication (fallback to main OAuth)
 router.get('/email', (req, res, next) => {
-  console.log('[OAUTH] Initiating email OAuth authentication');
-  
+
   (req.session as any).customerAuth = true;
   (req.session as any).oauthProvider = 'email';
   
   req.session.save((err) => {
     if (err) {
-      console.error('[OAUTH] Session save error:', err);
+      
     }
     
     res.redirect('/api/login');

@@ -29,7 +29,7 @@ router.get("/orders", async (req, res) => {
     
     res.json(enrichedOrders);
   } catch (error) {
-    console.error('Error fetching customer orders:', error);
+    // // console.error('Error fetching customer orders:', error);
     res.status(500).json({ message: 'Failed to fetch orders' });
   }
 });
@@ -64,7 +64,7 @@ router.get("/orders/:id", async (req, res) => {
       items 
     });
   } catch (error) {
-    console.error('Error fetching order details:', error);
+    // // console.error('Error fetching order details:', error);
     res.status(500).json({ message: 'Failed to fetch order details' });
   }
 });
@@ -131,14 +131,6 @@ router.post("/orders/:id/reorder", async (req, res) => {
       }
     });
 
-    console.log('📊 Phase 13: Authenticated reorder initiated with comprehensive tracking:', {
-      reorderLogId: initiatedLog.id,
-      originalOrderId: orderId,
-      userId: userId,
-      itemsCount: items.length
-    });
-    
-    // Get current product data and verify availability
     const lineItems = [];
     let totalAmount = 0;
     
@@ -244,8 +236,6 @@ router.post("/orders/:id/reorder", async (req, res) => {
       }
     });
 
-    console.log('🔄 Phase 13: Reorder checkout session created with comprehensive tracking');
-    
     res.json({ 
       url: session.url,
       orderId: newOrder.id,
@@ -253,7 +243,7 @@ router.post("/orders/:id/reorder", async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error creating reorder:', error);
+    // // console.error('Error creating reorder:', error);
     res.status(500).json({ message: 'Failed to create reorder' });
   }
 });
@@ -265,7 +255,7 @@ router.get("/addresses", async (req, res) => {
     const addresses = await storage.getAddressesByUserId(userId);
     res.json(addresses);
   } catch (error) {
-    console.error('Error fetching addresses:', error);
+    // // console.error('Error fetching addresses:', error);
     res.status(500).json({ message: 'Failed to fetch addresses' });
   }
 });
@@ -291,7 +281,7 @@ router.post("/addresses", async (req, res) => {
     const address = await storage.createAddress(validatedData);
     res.status(201).json(address);
   } catch (error) {
-    console.error('Error creating address:', error);
+    // // console.error('Error creating address:', error);
     res.status(500).json({ message: 'Failed to create address' });
   }
 });
@@ -339,7 +329,7 @@ router.put("/addresses/:id", async (req, res) => {
     
     res.json(updatedAddress);
   } catch (error) {
-    console.error('Error updating address:', error);
+    // // console.error('Error updating address:', error);
     res.status(500).json({ message: 'Failed to update address' });
   }
 });
@@ -373,7 +363,7 @@ router.delete("/addresses/:id", async (req, res) => {
     await storage.deleteAddress(addressId);
     res.status(204).end();
   } catch (error) {
-    console.error('Error deleting address:', error);
+    // // console.error('Error deleting address:', error);
     res.status(500).json({ message: 'Failed to delete address' });
   }
 });
@@ -406,7 +396,7 @@ router.get("/", async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error fetching portal data:', error);
+    // // console.error('Error fetching portal data:', error);
     res.status(500).json({ message: 'Failed to fetch portal data' });
   }
 });

@@ -11,14 +11,14 @@ const router = Router();
 // Manual trigger for abandoned cart emails (Admin only)
 router.post("/abandoned-carts", requireAdmin, async (req, res) => {
   try {
-    console.log("[EMAIL-JOBS API] Manually triggering abandoned cart emails...");
+    
     await processAbandonedCartEmails();
     res.json({ 
       success: true, 
       message: "Abandoned cart emails processed successfully" 
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error processing abandoned cart emails:", error);
+    // // console.error("[EMAIL-JOBS API] Error processing abandoned cart emails:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to process abandoned cart emails" 
@@ -29,14 +29,14 @@ router.post("/abandoned-carts", requireAdmin, async (req, res) => {
 // Manual trigger for reorder reminder emails (Admin only)
 router.post("/reorder-reminders", requireAdmin, async (req, res) => {
   try {
-    console.log("[EMAIL-JOBS API] Manually triggering reorder reminder emails...");
+    
     await processReorderReminders();
     res.json({ 
       success: true, 
       message: "Reorder reminder emails processed successfully" 
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error processing reorder reminder emails:", error);
+    // // console.error("[EMAIL-JOBS API] Error processing reorder reminder emails:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to process reorder reminder emails" 
@@ -47,14 +47,14 @@ router.post("/reorder-reminders", requireAdmin, async (req, res) => {
 // Trigger both email jobs at once
 router.post("/all", requireAdmin, async (req, res) => {
   try {
-    console.log("[EMAIL-JOBS API] Manually triggering all email jobs...");
+    
     await emailScheduler.runNow();
     res.json({ 
       success: true, 
       message: "All email jobs processed successfully" 
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error processing email jobs:", error);
+    // // console.error("[EMAIL-JOBS API] Error processing email jobs:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to process email jobs" 
@@ -92,7 +92,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error getting stats:", error);
+    // // console.error("[EMAIL-JOBS API] Error getting stats:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to get email job statistics" 
@@ -109,7 +109,7 @@ router.post("/scheduler/start", requireAdmin, async (req, res) => {
       message: "Email scheduler started successfully" 
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error starting scheduler:", error);
+    // // console.error("[EMAIL-JOBS API] Error starting scheduler:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to start email scheduler" 
@@ -125,7 +125,7 @@ router.post("/scheduler/stop", requireAdmin, async (req, res) => {
       message: "Email scheduler stopped successfully" 
     });
   } catch (error) {
-    console.error("[EMAIL-JOBS API] Error stopping scheduler:", error);
+    // // console.error("[EMAIL-JOBS API] Error stopping scheduler:", error);
     res.status(500).json({ 
       success: false, 
       error: "Failed to stop email scheduler" 

@@ -168,7 +168,7 @@ export async function processReferralClaim(
     }
 
   } catch (error) {
-    console.error("Failed to process referral claim:", error);
+    // // console.error("Failed to process referral claim:", error);
     throw error;
   }
 }

@@ -11,13 +11,13 @@ const router = express.Router();
 // Get upload URL for product images
 router.post("/upload-url", requireAdmin, async (req, res) => {
   try {
-    console.log("Admin image upload URL requested");
+    
     const objectStorageService = new ObjectStorageService();
     const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-    console.log("Upload URL generated successfully");
+    
     res.json({ uploadURL });
   } catch (error) {
-    console.error("Error generating upload URL:", error);
+    // // console.error("Error generating upload URL:", error);
     res.status(500).json({ error: "Failed to generate upload URL" });
   }
 });
@@ -48,7 +48,7 @@ router.post("/confirm", [
       publicUrl: `${process.env.FRONTEND_URL || 'https://your-domain.replit.app'}${objectPath}`
     });
   } catch (error) {
-    console.error("Error confirming image upload:", error);
+    // // console.error("Error confirming image upload:", error);
     res.status(500).json({ error: "Failed to confirm image upload" });
   }
 });

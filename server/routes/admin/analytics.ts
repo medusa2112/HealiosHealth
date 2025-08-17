@@ -22,7 +22,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
         totalRevenue = completedOrders.reduce((sum, order) => sum + order.totalAmount, 0);
       }
     } catch (error) {
-      console.log("Orders not available:", error.message);
+      
     }
     
     // Get abandoned carts if available
@@ -44,7 +44,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
         abandonedCartsCount = abandonedCarts.length;
       }
     } catch (error) {
-      console.log("Carts not available:", error.message);
+      
     }
     
     // Get all users if available
@@ -56,7 +56,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
         totalCustomers = customers.length;
       }
     } catch (error) {
-      console.log("Users not available:", error.message);
+      
     }
     
     // Calculate conversion rate (orders vs total sessions/carts)
@@ -76,7 +76,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
     
     res.json(stats);
   } catch (error) {
-    console.error("Error fetching analytics stats:", error);
+    // // console.error("Error fetching analytics stats:", error);
     res.status(500).json({ error: "Failed to fetch analytics stats" });
   }
 });
@@ -91,7 +91,7 @@ router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
         reorderLogs = await storage.getReorderLogs();
       }
     } catch (error) {
-      console.log("Reorder logs not available (table may not exist):", error.message);
+      // Reorder logs not available
     }
     
     const totalReorders = reorderLogs.length;
@@ -112,7 +112,7 @@ router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
           }
         }
       } catch (error) {
-        console.log("Orders not available for reorder revenue calculation:", error.message);
+        
       }
     }
     
@@ -123,7 +123,7 @@ router.get("/reorder-analytics/summary", requireAdmin, async (req, res) => {
       completedReorders: completedReorders.length
     });
   } catch (error) {
-    console.error("Error fetching reorder analytics summary:", error);
+    // // console.error("Error fetching reorder analytics summary:", error);
     // Return default values if reorder functionality is not implemented
     res.json({
       totalReorders: 0,

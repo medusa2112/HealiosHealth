@@ -11,7 +11,7 @@ router.get("/", requireAuth, async (req, res) => {
     const bundles = await storage.getProductBundles();
     res.json(bundles);
   } catch (error) {
-    console.error("Error fetching bundles:", error);
+    // // console.error("Error fetching bundles:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -74,7 +74,7 @@ router.get("/:id", requireAuth, async (req, res) => {
     
     res.json(response);
   } catch (error) {
-    console.error("Error fetching bundle:", error);
+    // // console.error("Error fetching bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -158,7 +158,7 @@ router.post("/validate", requireAuth, async (req, res) => {
       items: validationResults
     });
   } catch (error) {
-    console.error("Error validating bundle:", error);
+    // // console.error("Error validating bundle:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

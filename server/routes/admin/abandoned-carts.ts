@@ -31,7 +31,7 @@ router.get('/', requireAdmin, async (req, res) => {
       try {
         parsedItems = JSON.parse(cart.items);
       } catch (error) {
-        console.warn('Failed to parse cart items:', error);
+        
       }
       
       return {
@@ -62,7 +62,7 @@ router.get('/', requireAdmin, async (req, res) => {
       stats
     });
   } catch (error) {
-    console.error('Error fetching abandoned carts:', error);
+    // // console.error('Error fetching abandoned carts:', error);
     res.status(500).json({ message: 'Failed to fetch abandoned carts' });
   }
 });
@@ -106,7 +106,7 @@ router.post('/send-recovery-email', requireAdmin, auditAction('send_recovery_ema
           customerName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email.split('@')[0];
         }
       } catch (error) {
-        console.log('Could not fetch user details, using defaults');
+        
       }
     }
     
@@ -140,9 +140,9 @@ router.post('/send-recovery-email', requireAdmin, auditAction('send_recovery_ema
           relatedId: cartId,
           emailAddress: userEmail
         });
-        console.log(`[EMAIL_EVENT] Logged abandoned cart email for cart ${cartId}`);
+        
       } catch (logError) {
-        console.error('Failed to log email event:', logError);
+        // // console.error('Failed to log email event:', logError);
       }
       
       res.json({ 
@@ -153,12 +153,12 @@ router.post('/send-recovery-email', requireAdmin, auditAction('send_recovery_ema
       });
       
     } catch (emailError) {
-      console.error('Failed to send cart recovery email:', emailError);
+      // // console.error('Failed to send cart recovery email:', emailError);
       res.status(500).json({ message: 'Failed to send recovery email' });
     }
     
   } catch (error) {
-    console.error('Error processing recovery email request:', error);
+    // // console.error('Error processing recovery email request:', error);
     res.status(500).json({ message: 'Failed to process recovery email request' });
   }
 });
@@ -204,7 +204,7 @@ router.get('/cart-analytics', requireAdmin, async (req, res) => {
     
     res.json({ analytics });
   } catch (error) {
-    console.error('Error fetching cart analytics:', error);
+    // // console.error('Error fetching cart analytics:', error);
     res.status(500).json({ message: 'Failed to fetch cart analytics' });
   }
 });
@@ -228,10 +228,10 @@ router.post('/cleanup-expired', requireAdmin, async (req, res) => {
       try {
         // Mark cart as expired or delete it
         // For now we'll just log it - in production you might want to soft-delete
-        console.log(`[CART_CLEANUP] Expired cart ${cart.id} created ${cart.createdAt}`);
+        
         cleanedCount++;
       } catch (error) {
-        console.error(`Failed to clean cart ${cart.id}:`, error);
+        // // console.error(`Failed to clean cart ${cart.id}:`, error);
       }
     }
     
@@ -242,7 +242,7 @@ router.post('/cleanup-expired', requireAdmin, async (req, res) => {
       expireThreshold: daysToExpire + ' days'
     });
   } catch (error) {
-    console.error('Error cleaning up expired carts:', error);
+    // // console.error('Error cleaning up expired carts:', error);
     res.status(500).json({ message: 'Failed to clean up expired carts' });
   }
 });
@@ -275,7 +275,7 @@ router.post('/preview-email', requireAdmin, async (req, res) => {
     try {
       items = JSON.parse(cart.items);
     } catch (error) {
-      console.warn('Failed to parse cart items for preview');
+      
     }
     
     const recoveryLink = `${process.env.BASE_URL || 'https://healios.replit.app'}/cart?recover=${cart.sessionToken}`;
@@ -305,7 +305,7 @@ router.post('/preview-email', requireAdmin, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error generating email preview:', error);
+    // // console.error('Error generating email preview:', error);
     res.status(500).json({ message: 'Failed to generate email preview' });
   }
 });

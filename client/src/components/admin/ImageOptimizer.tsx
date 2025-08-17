@@ -68,7 +68,7 @@ export function ImageOptimizer() {
         throw new Error(data.error || 'Optimization failed');
       }
     } catch (error) {
-      console.error('Optimization error:', error);
+      // // console.error('Optimization error:', error);
       toast({
         title: "Optimization failed",
         description: "Failed to optimize the image. Please try again.",
@@ -97,7 +97,7 @@ export function ImageOptimizer() {
         throw new Error(data.error || 'Asset optimization failed');
       }
     } catch (error) {
-      console.error('Asset optimization error:', error);
+      // // console.error('Asset optimization error:', error);
       toast({
         title: "Asset optimization failed",
         description: "Failed to optimize existing assets. Please try again.",

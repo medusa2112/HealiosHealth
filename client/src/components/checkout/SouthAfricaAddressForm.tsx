@@ -92,19 +92,19 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
 
         const response = await fetch('/api/config/google-maps-key');
         if (!response.ok) {
-          console.log('Google Maps API key not available, using manual entry');
+          
           setShowGoogleMapsError(true);
           return;
         }
         
         const { apiKey } = await response.json();
         if (!apiKey) {
-          console.log('No Google Maps API key configured, using manual entry');
+          
           setShowGoogleMapsError(true);
           return;
         }
 
-        console.log('Loading Google Maps with API key:', apiKey.substring(0, 20) + '...');
+         + '...');
 
         // Try direct script loading without callback first
         const directScript = document.createElement('script');
@@ -113,19 +113,17 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         
         const loadPromise = new Promise((resolve, reject) => {
           directScript.onload = () => {
-            console.log('Google Maps script loaded, checking for Places API...');
             
-            // Poll for Places API availability
             let attempts = 0;
             const checkPlaces = () => {
               attempts++;
               if (window.google?.maps?.places?.Autocomplete) {
-                console.log(`Google Places API ready after ${attempts} attempts`);
+                
                 resolve(true);
               } else if (attempts < 20) {
                 setTimeout(checkPlaces, 100);
               } else {
-                console.log('Places API not available after 20 attempts');
+                
                 reject(new Error('Places API not available'));
               }
             };
@@ -133,7 +131,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           };
           
           directScript.onerror = (error) => {
-            console.error('Google Maps direct load failed:', error);
+            // // console.error('Google Maps direct load failed:', error);
             reject(error);
           };
         });
@@ -143,15 +141,14 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         try {
           await loadPromise;
           setGoogleMapsLoaded(true);
-          console.log('✅ Google Places autocomplete ready');
+          
         } catch (error) {
-          console.log('❌ Google Places autocomplete failed:', error);
-          console.log('Domain may need to be added to API key restrictions');
+
           setShowGoogleMapsError(true);
         }
 
       } catch (error) {
-        console.log('Error loading Google Maps, using manual entry fallback');
+        
         setShowGoogleMapsError(true);
       }
     };
@@ -171,7 +168,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         const google = window.google;
         
         if (!google?.maps?.places?.Autocomplete) {
-          console.log('Google Places Autocomplete not available');
+          
           setShowGoogleMapsError(true);
           return;
         }
@@ -207,21 +204,17 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
               parseGooglePlace(place);
             }
           } catch (error) {
-            console.error('Error processing place selection:', error);
+            // // console.error('Error processing place selection:', error);
           }
         });
 
-        console.log('Google Places Autocomplete initialized successfully');
-        
-        // Cleanup test elements
         document.body.removeChild(testContainer);
         
       } catch (error) {
-        console.error('Google Places API Error:', error);
-        console.log('✅ Places API (classic) is working but may need domain authorization');
-        console.log('Note: Use Places API, not Places API (New) for compatibility');
-        console.log('Manual address entry remains fully functional');
-        
+        // // console.error('Google Places API Error:', error);
+         is working but may need domain authorization');
+         for compatibility');
+
         setGoogleMapsLoaded(false);
         setShowGoogleMapsError(true);
         
@@ -292,8 +285,6 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         'South Africa'
       ].filter(line => line && line.trim());
 
-      console.log('Validating address:', { addressLines, regionCode: 'ZA' });
-
       const response = await fetch('/api/validate-address/validate', {
         method: 'POST',
         headers: {
@@ -306,7 +297,6 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
       });
 
       const data = await response.json();
-      console.log('Validation response:', data);
 
       if (response.ok && data.success && data.validation?.isValid) {
         setValidationResult({
@@ -355,7 +345,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         }
       }
     } catch (error) {
-      console.error('Address validation error:', error);
+      // // console.error('Address validation error:', error);
       setValidationErrors(prev => ({ 
         ...prev, 
         addressValidation: 'Address validation temporarily unavailable'

@@ -151,7 +151,7 @@ export default function QuizPage() {
       }, 3000);
     },
     onError: (error) => {
-      console.error('Booking failed:', error);
+      // // console.error('Booking failed:', error);
       toast({
         title: "Booking Failed",
         description: "Sorry, we couldn't process your booking. Please try again.",
@@ -537,7 +537,6 @@ export default function QuizPage() {
               </div>
             </div>
           </div>
-
 
           {/* Personal Trainer Modal */}
           {showPTModal && (

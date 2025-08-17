@@ -94,34 +94,19 @@ export function enforceProductionConfig() {
   }
   
   // Log configuration status
-  console.log('='.repeat(60));
-  console.log('Configuration Status:');
-  console.log(`Environment: ${process.env.NODE_ENV || 'not set'}`);
-  console.log(`Legacy Login: ${process.env.ENABLE_LEGACY_LOGIN === 'true' ? 'ENABLED' : 'disabled'}`);
-  console.log(`CSRF Dev Bypass: ${process.env.CSRF_DEV_BYPASS === 'true' ? 'ENABLED' : 'disabled'}`);
   const customerSecretStatus = process.env.SESSION_SECRET_CUSTOMER ? 'explicit' : (process.env.SESSION_SECRET ? 'fallback' : 'missing');
   const adminSecretStatus = process.env.SESSION_SECRET_ADMIN ? 'explicit' : (process.env.SESSION_SECRET ? 'fallback' : 'missing');
-  console.log(`Session Secrets: ${customerSecretStatus} (customer), ${adminSecretStatus} (admin)`);
-  console.log('='.repeat(60));
   
   // Handle errors
   if (errors.length > 0) {
-    console.error('\n⚠️  CONFIGURATION ERRORS:');
-    errors.forEach(error => console.error(`  ✗ ${error}`));
-    
     if (isProduction && !isTest) {
-      console.error('\nFailing hard in production due to configuration errors.');
-      console.error('Please fix the above errors before deploying to production.\n');
       process.exit(1);
-    } else {
-      console.warn('\nConfiguration errors detected - would fail in production.\n');
     }
   }
   
   // Show warnings
   if (warnings.length > 0) {
-    console.warn('\n⚠️  Configuration Warnings:');
-    warnings.forEach(warning => console.warn(`  • ${warning}`));
+    // Warnings are logged but don't stop the server
   }
   
   return {

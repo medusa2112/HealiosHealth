@@ -65,7 +65,7 @@ router.post("/optimize", requireAuth, protectRoute(['admin']), upload.single('im
     });
 
   } catch (error) {
-    console.error("Image optimization error:", error);
+    // // console.error("Image optimization error:", error);
     res.status(500).json({ error: "Failed to optimize image" });
   }
 });
@@ -98,7 +98,7 @@ router.post("/responsive", requireAuth, protectRoute(['admin']), upload.single('
     });
 
   } catch (error) {
-    console.error("Responsive image generation error:", error);
+    // // console.error("Responsive image generation error:", error);
     res.status(500).json({ error: "Failed to generate responsive images" });
   }
 });
@@ -121,7 +121,7 @@ router.post("/optimize-assets", requireAuth, protectRoute(['admin']), async (req
     });
 
   } catch (error) {
-    console.error("Asset optimization error:", error);
+    // // console.error("Asset optimization error:", error);
     res.status(500).json({ error: "Failed to optimize assets" });
   }
 });
@@ -140,7 +140,7 @@ router.get("/info/:filename", requireAuth, protectRoute(['admin']), async (req, 
     });
 
   } catch (error) {
-    console.error("Image info error:", error);
+    // // console.error("Image info error:", error);
     res.status(500).json({ error: "Failed to get image info" });
   }
 });

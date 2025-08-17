@@ -31,7 +31,7 @@ function findAllFiles(dir: string): string[] {
         : trackedFiles.includes(extname(entry.name)) ? [join(dir, entry.name)] : []
     );
   } catch (error) {
-    console.warn(`Warning: Could not read directory ${dir}`);
+    
     return [];
   }
 }
@@ -83,18 +83,16 @@ async function scanFile(path: string) {
 
     return results;
   } catch (error) {
-    console.warn(`Warning: Could not scan file ${path}:`, error instanceof Error ? error.message : String(error));
+    );
     return [];
   }
 }
 
 async function run() {
   try {
-    console.log('🔍 Starting security scan...');
-    
+
     const files = findAllFiles(srcPath);
-    console.log(`📁 Scanning ${files.length} files...`);
-    
+
     const allIssues = (await Promise.all(files.map(scanFile))).flat();
 
     // Insert issues into database
@@ -102,7 +100,7 @@ async function run() {
       try {
         await db.insert(securityIssues).values(issue);
       } catch (error) {
-        console.warn(`Warning: Could not insert issue:`, error instanceof Error ? error.message : String(error));
+        );
       }
     }
 
@@ -118,23 +116,16 @@ async function run() {
         issueCount: allIssues.length,
       });
     } catch (error) {
-      console.warn(`Warning: Could not insert fix attempt:`, error instanceof Error ? error.message : String(error));
+      );
     }
 
-    console.log(`✅ Scan complete!`);
-    console.log(`📊 Results:`);
-    console.log(`   - Files scanned: ${files.length}`);
-    console.log(`   - Issues found: ${allIssues.length}`);
-    console.log(`   - Fix attempt ID: ${attemptId}`);
-
-    // Summary by issue type
     const issueTypes = allIssues.reduce((acc, issue) => {
       acc[issue.type] = (acc[issue.type] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     if (Object.keys(issueTypes).length > 0) {
-      console.log(`\n🔒 Issues by type:`);
+      
       for (const [type, count] of Object.entries(issueTypes)) {
         const typeLabels: Record<string, string> = {
           unauthRoute: 'Unauthenticated Routes',
@@ -143,18 +134,18 @@ async function run() {
           sensitiveResp: 'Sensitive Response Data',
           duplicateRoute: 'Duplicate Routes'
         };
-        console.log(`   - ${typeLabels[type] || type}: ${count}`);
+        
       }
     }
 
   } catch (error) {
-    console.error('❌ CLI Error:', error);
+    // // console.error('❌ CLI Error:', error);
     process.exit(1);
   }
 }
 
 // Run the scan
 run().catch((err) => {
-  console.error('❌ Unexpected error:', err);
+  // // console.error('❌ Unexpected error:', err);
   process.exit(1);
 });

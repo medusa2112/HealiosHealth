@@ -15,9 +15,7 @@ export async function createTestUsers() {
       lastName: 'User',
       role: 'admin'
     });
-    console.log('✅ Created admin user:', adminUser.email);
-
-    // Create customer user
+    
     const customerUser = await storage.createUser({
       email: 'customer@healios.com', 
       password: null, // OAuth-based auth - no password needed
@@ -25,14 +23,13 @@ export async function createTestUsers() {
       lastName: 'User',
       role: 'customer'
     });
-    console.log('✅ Created customer user:', customerUser.email);
-    
-    console.log('\n🔐 Phase 10 Test Users Ready (OAuth-based):');
-    console.log('Admin: admin@healios.com (use Replit OAuth)');
-    console.log('Customer: customer@healios.com (use Replit OAuth)');
+
+    :');
+    ');
+    ');
     
   } catch (error) {
-    console.error('❌ Error creating test users:', error);
+    // // console.error('❌ Error creating test users:', error);
   }
 }
 

@@ -57,7 +57,7 @@ export default function OrderConfirmationPage() {
         setOrder(orderData);
       }
     } catch (error) {
-      console.error('Failed to fetch order:', error);
+      // // console.error('Failed to fetch order:', error);
     } finally {
       setLoading(false);
     }

@@ -18,7 +18,7 @@ router.get("/my-referral", requireAuth, async (req, res) => {
       shareUrl: `https://healios.com?ref=${referral.code}`,
     });
   } catch (error) {
-    console.error("Failed to create/get referral:", error);
+    // // console.error("Failed to create/get referral:", error);
     res.status(500).json({ error: "Failed to process referral" });
   }
 });
@@ -33,7 +33,7 @@ router.get("/stats", requireAuth, async (req, res) => {
     const stats = await getReferralStats(req.user.id);
     res.json(stats);
   } catch (error) {
-    console.error("Failed to get referral stats:", error);
+    // // console.error("Failed to get referral stats:", error);
     res.status(500).json({ error: "Failed to get referral statistics" });
   }
 });
@@ -62,7 +62,7 @@ router.post("/validate", requireAuth, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Failed to validate referral code:", error);
+    // // console.error("Failed to validate referral code:", error);
     res.status(400).json({ error: "Invalid request" });
   }
 });
@@ -82,7 +82,7 @@ router.post("/claim", requireAuth, async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    console.error("Failed to process referral claim:", error);
+    // // console.error("Failed to process referral claim:", error);
     res.status(500).json({ error: "Failed to process referral claim" });
   }
 });

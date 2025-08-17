@@ -30,7 +30,7 @@ export function enforceProductionDefaults() {
     
     // Warn if using fallback (single secret for both)
     if (!sessionSecrets.customer || !sessionSecrets.admin) {
-      console.warn('[SECURITY] Using SESSION_SECRET fallback for session management. For enhanced security, provide separate SESSION_SECRET_CUSTOMER and SESSION_SECRET_ADMIN.');
+      
     }
     
     // Disable legacy auth
@@ -44,14 +44,7 @@ export function enforceProductionDefaults() {
     }
     
     // Log production configuration (without sensitive values)
-    console.log('[PRODUCTION] Configuration validated:');
-    console.log('  - NODE_ENV: production');
-    console.log('  - Legacy login: disabled');
-    console.log('  - CSRF dev bypass: disabled');
-    console.log('  - Session secrets: configured');
-    console.log('  - Admin 2FA:', process.env.ADMIN_2FA_ENABLED === 'true' ? 'enabled' : 'disabled');
-    
-    // Set production defaults if not explicitly set
+
     if (!process.env.PROD_ORIGINS) {
       process.env.PROD_ORIGINS = 'https://thehealios.com,https://www.thehealios.com';
     }
@@ -87,16 +80,5 @@ export function getCookieConfig(type: 'customer' | 'admin') {
 export function logCookieAttributes() {
   const customerCookie = getCookieConfig('customer');
   const adminCookie = getCookieConfig('admin');
-  
-  console.log('[COOKIES] Configuration:');
-  console.log(`  Customer: ${customerCookie.name}`);
-  console.log(`    - Path: ${customerCookie.path}`);
-  console.log(`    - SameSite: ${customerCookie.sameSite}`);
-  console.log(`    - Secure: ${customerCookie.secure}`);
-  console.log(`    - HttpOnly: ${customerCookie.httpOnly}`);
-  console.log(`  Admin: ${adminCookie.name}`);
-  console.log(`    - Path: ${adminCookie.path}`);
-  console.log(`    - SameSite: ${adminCookie.sameSite}`);
-  console.log(`    - Secure: ${adminCookie.secure}`);
-  console.log(`    - HttpOnly: ${adminCookie.httpOnly}`);
+
 }

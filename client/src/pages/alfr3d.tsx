@@ -23,7 +23,6 @@ import { useToast } from "@/hooks/use-toast";
 import type { SecurityIssue } from "@shared/schema";
 import type { FixPrompt } from "../../../types/alfr3d";
 
-
 interface SecurityStatus {
   isScanning: boolean;
   lastScan: string;
@@ -50,8 +49,7 @@ export default function Alfr3dDashboard() {
   // Generate fix prompt mutation - Individual issue processing
   const generateFixMutation = useMutation({
     mutationFn: async (issueId: string) => {
-      console.log(`[ALFR3D Frontend] Generating fix prompt for issue: ${issueId}`);
-      
+
       const response = await apiRequest('POST', `/api/alfr3d/issues/${issueId}/fix-prompt`);
       
       if (!response.ok) {
@@ -62,9 +60,7 @@ export default function Alfr3dDashboard() {
       return response.json();
     },
     onSuccess: (data, issueId) => {
-      console.log(`[ALFR3D Frontend] ✓ Fix prompt generated for issue: ${issueId}`);
       
-      // Store the generated prompt for this specific issue
       setGeneratedPrompts(prev => ({
         ...prev,
         [issueId]: data.fixPrompt
@@ -79,7 +75,7 @@ export default function Alfr3dDashboard() {
       });
     },
     onError: (error) => {
-      console.error('[ALFR3D Frontend] Failed to generate fix prompt:', error);
+      // // console.error('[ALFR3D Frontend] Failed to generate fix prompt:', error);
       toast({
         title: "Failed to Generate Fix Prompt",
         description: error.message,

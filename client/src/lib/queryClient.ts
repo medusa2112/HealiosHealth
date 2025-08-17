@@ -3,12 +3,7 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
-    console.error('[API_ERROR] Response not OK', {
-      status: res.status,
-      statusText: res.statusText,
-      url: res.url,
-      responseText: text
-    });
+    // 
     throw new Error(`${res.status}: ${text}`);
   }
 }
@@ -43,11 +38,10 @@ async function getCsrfToken(isAdminRoute = false): Promise<string | null> {
         cachedCustomerCsrfToken = token;
       }
       
-      console.log(`[CSRF] ${cacheKey} token fetched and cached:`, token.substring(0, 10) + '...');
       return token;
     }
   } catch (csrfError) {
-    console.warn(`[CSRF] Failed to get ${cacheKey} token`, csrfError);
+    
   }
   return null;
 }
@@ -56,7 +50,7 @@ async function getCsrfToken(isAdminRoute = false): Promise<string | null> {
 export function clearCsrfToken() {
   cachedCustomerCsrfToken = null;
   cachedAdminCsrfToken = null;
-  console.log('[CSRF] Token cache cleared');
+  
 }
 
 export async function apiRequest(
@@ -64,14 +58,7 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  console.log('[API_REQUEST] Starting request', {
-    method,
-    url,
-    hasData: !!data,
-    dataType: data ? typeof data : 'none'
-    // Removed 'data' to prevent circular reference errors
-  });
-  
+
   const startTime = Date.now();
   
   try {
@@ -87,7 +74,7 @@ export async function apiRequest(
       const csrfToken = await getCsrfToken(isAdminRoute);
       if (csrfToken) {
         headers['X-CSRF-Token'] = csrfToken;
-        console.log(`[CSRF] ${isAdminRoute ? 'Admin' : 'Customer'} token added to request:`, csrfToken.substring(0, 10) + '...');
+         + '...');
       }
     }
     
@@ -99,26 +86,12 @@ export async function apiRequest(
     });
 
     const duration = Date.now() - startTime;
-    console.log('[API_REQUEST] Response received', {
-      url,
-      status: res.status,
-      statusText: res.statusText,
-      ok: res.ok,
-      duration: `${duration}ms`
-      // Removed headers to prevent circular reference errors
-    });
 
     await throwIfResNotOk(res);
     return res;
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error('[API_REQUEST] Request failed', {
-      url,
-      method,
-      error,
-      duration: `${duration}ms`,
-      message: error instanceof Error ? error.message : 'Unknown error'
-    });
+    // 
     throw error;
   }
 }
@@ -130,28 +103,22 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const url = queryKey.join("/") as string;
-    console.log('[QUERY] Fetching', { url, queryKey });
-    
+
     const startTime = Date.now();
     const res = await fetch(url, {
       credentials: "include",
     });
 
     const duration = Date.now() - startTime;
-    console.log('[QUERY] Response', {
-      url,
-      status: res.status,
-      duration: `${duration}ms`
-    });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      console.log('[QUERY] 401 - Returning null as configured');
+      
       return null;
     }
 
     await throwIfResNotOk(res);
     const data = await res.json();
-    console.log('[QUERY] Data received', { url, dataSize: JSON.stringify(data).length });
+    .length });
     return data;
   };
 

@@ -67,7 +67,7 @@ export function RegisterForm() {
       setSuccess('A one-time PIN has been sent to your email. Please check your inbox.');
       setStep('pin');
     } catch (error) {
-      console.error('Email registration error:', error);
+      // // console.error('Email registration error:', error);
       setError(error instanceof Error ? error.message : 'Failed to send PIN. Please try again.');
     } finally {
       setIsLoading(false);
@@ -116,7 +116,7 @@ export function RegisterForm() {
         }, 1500);
       }
     } catch (error) {
-      console.error('PIN verification error:', error);
+      // // console.error('PIN verification error:', error);
       setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
     } finally {
       setIsLoading(false);

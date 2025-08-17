@@ -61,7 +61,7 @@ export default function AbandonedCartsPage() {
         recoveryRate: typeof stats.recoveryRate === 'number' ? stats.recoveryRate : 0
       });
     } catch (error) {
-      console.error('Error fetching abandoned carts:', error);
+      // // console.error('Error fetching abandoned carts:', error);
       toast({
         title: "Error",
         description: "Failed to fetch abandoned carts data",
@@ -100,7 +100,7 @@ export default function AbandonedCartsPage() {
       // Refresh data
       await fetchAbandonedCarts();
     } catch (error) {
-      console.error('Error sending recovery email:', error);
+      // // console.error('Error sending recovery email:', error);
       toast({
         title: "Error",
         description: "Failed to send recovery email",
@@ -129,7 +129,7 @@ export default function AbandonedCartsPage() {
       setEmailPreview(data.preview);
       setShowPreview(true);
     } catch (error) {
-      console.error('Error previewing email:', error);
+      // // console.error('Error previewing email:', error);
       toast({
         title: "Error",
         description: "Failed to generate email preview",
@@ -156,7 +156,7 @@ export default function AbandonedCartsPage() {
       // Refresh data
       await fetchAbandonedCarts();
     } catch (error) {
-      console.error('Error cleaning up carts:', error);
+      // // console.error('Error cleaning up carts:', error);
       toast({
         title: "Error",
         description: "Failed to cleanup expired carts",
@@ -218,8 +218,6 @@ export default function AbandonedCartsPage() {
       </div>
     );
   }
-
-
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">

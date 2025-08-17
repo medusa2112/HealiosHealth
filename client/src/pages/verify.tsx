@@ -40,7 +40,7 @@ export default function Verify() {
         const data = await response.json();
         setCsrfToken(data.csrfToken);
       } catch (err) {
-        console.error('Failed to fetch CSRF token:', err);
+        // // console.error('Failed to fetch CSRF token:', err);
         setError('Unable to initialise security token. Please refresh the page.');
       }
     };
@@ -154,7 +154,7 @@ export default function Verify() {
         setError(result.message || (isPasswordReset ? 'Password reset failed' : 'Verification failed'));
       }
     } catch (err) {
-      console.error('Verification error:', err);
+      // // console.error('Verification error:', err);
       setError('Unable to process request. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
@@ -197,7 +197,7 @@ export default function Verify() {
         setError(result.message || 'Failed to resend code');
       }
     } catch (err) {
-      console.error('Resend error:', err);
+      // // console.error('Resend error:', err);
       setError('Unable to resend code. Please try again.');
     } finally {
       setIsResending(false);

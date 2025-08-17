@@ -80,7 +80,7 @@ router.post("/checkout", protectRoute(["customer", "admin"]), async (req, res) =
     res.json({ url: session.url });
 
   } catch (error) {
-    console.error("Subscription checkout error:", error);
+    // // console.error("Subscription checkout error:", error);
     res.status(500).json({ error: "Failed to create subscription checkout" });
   }
 });
@@ -97,7 +97,7 @@ router.get("/", protectRoute(["customer", "admin"]), async (req, res) => {
     res.json(userSubscriptions);
 
   } catch (error) {
-    console.error("Get subscriptions error:", error);
+    // // console.error("Get subscriptions error:", error);
     res.status(500).json({ error: "Failed to get subscriptions" });
   }
 });
@@ -135,7 +135,7 @@ router.post("/:id/cancel", protectRoute(["customer", "admin"]), async (req, res)
     res.json({ success: true, message: "Subscription will be canceled at the end of the current period" });
 
   } catch (error) {
-    console.error("Cancel subscription error:", error);
+    // // console.error("Cancel subscription error:", error);
     res.status(500).json({ error: "Failed to cancel subscription" });
   }
 });
@@ -182,7 +182,7 @@ router.post("/:id/reactivate", protectRoute(["customer", "admin"]), async (req, 
     res.json({ success: true, message: "Subscription reactivated" });
 
   } catch (error) {
-    console.error("Reactivate subscription error:", error);
+    // // console.error("Reactivate subscription error:", error);
     res.status(500).json({ error: "Failed to reactivate subscription" });
   }
 });
@@ -194,7 +194,7 @@ router.get("/admin", protectRoute(["admin"]), async (req, res) => {
     res.json(allSubscriptions);
 
   } catch (error) {
-    console.error("Admin get subscriptions error:", error);
+    // // console.error("Admin get subscriptions error:", error);
     res.status(500).json({ error: "Failed to get all subscriptions" });
   }
 });

@@ -8,7 +8,6 @@ import { AlertCircle, Mail, Clock, Users, TrendingUp, Play, Pause, RefreshCw } f
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
-
 interface EmailJobStats {
   abandonedCarts: {
     oneHour: number;

@@ -24,8 +24,6 @@ export const customerSession = session({
   }) : undefined, // Use memory store in development
 });
 
-console.log('[CUSTOMER SESSION] Configured with:', {
-  cookie: 'hh_cust_sess',
-  store: ENV.isProd ? 'PostgreSQL (session_customers)' : 'Memory',
+' : 'Memory',
   ttl: '7 days',
 });

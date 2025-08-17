@@ -81,20 +81,20 @@ export function ObjectUploader({
     uppyInstance.use(AwsS3, {
       shouldUseMultipart: false,
       getUploadParameters: async (file) => {
-        console.log('[OBJECT_UPLOADER] Getting upload parameters for file:', file.name);
+        
         try {
           const params = await callbacksRef.current.onGetUploadParameters();
-          console.log('[OBJECT_UPLOADER] Got upload parameters:', params);
+          
           return params;
         } catch (error) {
-          console.error('[OBJECT_UPLOADER] Failed to get upload parameters:', error);
+          // // console.error('[OBJECT_UPLOADER] Failed to get upload parameters:', error);
           throw error;
         }
       },
     });
     
     uppyInstance.on("complete", (result) => {
-      console.log('[OBJECT_UPLOADER] Upload complete:', result);
+      
       if (callbacksRef.current.onComplete) {
         callbacksRef.current.onComplete(result);
       }
@@ -103,7 +103,7 @@ export function ObjectUploader({
     });
     
     uppyInstance.on("error", (error) => {
-      console.error('[OBJECT_UPLOADER] Upload error:', error);
+      // // console.error('[OBJECT_UPLOADER] Upload error:', error);
     });
     
     return uppyInstance;
@@ -119,7 +119,7 @@ export function ObjectUploader({
   const handleButtonClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('[OBJECT_UPLOADER] Button clicked, opening modal');
+    
     setShowModal(true);
   };
 
@@ -137,7 +137,7 @@ export function ObjectUploader({
         uppy={uppy}
         open={showModal}
         onRequestClose={() => {
-          console.log('[OBJECT_UPLOADER] Modal close requested');
+          
           setShowModal(false);
         }}
         proudlyDisplayPoweredByUppy={false}

@@ -4,11 +4,8 @@ import { sendEmail } from "../lib/email";
 
 export async function processReorderReminders(): Promise<void> {
   try {
-    console.log("[REORDER JOB] Starting reorder reminder processing...");
     
-    // Get reorder candidates (orders from last 45 days that might need reordering)
     const candidates = await storage.getReorderCandidates(45);
-    console.log(`[REORDER JOB] Found ${candidates.length} reorder candidates`);
 
     for (const candidate of candidates) {
       const { order, user, item, variant, orderAge, intervalDays } = candidate;
@@ -36,8 +33,6 @@ export async function processReorderReminders(): Promise<void> {
       const alreadySent = await storage.hasEmailBeenSent(emailType, order.id);
       if (alreadySent) continue;
 
-      console.log(`[REORDER JOB] Sending ${emailType} to ${user.email} for order ${order.id}`);
-      
       try {
         const productName = variant.name;
         const daysRemaining = intervalDays - orderAge;
@@ -68,15 +63,13 @@ export async function processReorderReminders(): Promise<void> {
           emailAddress: user.email
         });
 
-        console.log(`[REORDER JOB] ✓ ${emailType} sent to ${user.email} for ${productName}`);
       } catch (error) {
-        console.error(`[REORDER JOB] Failed to send ${emailType} to ${user.email}:`, error);
+        // // console.error(`[REORDER JOB] Failed to send ${emailType} to ${user.email}:`, error);
       }
     }
 
-    console.log("[REORDER JOB] ✓ Reorder reminder processing completed");
   } catch (error) {
-    console.error("[REORDER JOB] Error processing reorder reminders:", error);
+    // // console.error("[REORDER JOB] Error processing reorder reminders:", error);
   }
 }
 

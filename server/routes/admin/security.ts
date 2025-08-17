@@ -17,7 +17,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
 
     res.json(securityStats);
   } catch (error) {
-    console.error('Error fetching security stats:', error);
+    // // console.error('Error fetching security stats:', error);
     res.status(500).json({ 
       error: 'Failed to fetch security statistics',
       details: error instanceof Error ? error.message : 'Unknown error'
@@ -83,7 +83,7 @@ router.get('/checks', requireAdmin, async (req, res) => {
 
     res.json(securityChecks);
   } catch (error) {
-    console.error('Error fetching security checks:', error);
+    // // console.error('Error fetching security checks:', error);
     res.status(500).json({ 
       error: 'Failed to fetch security checks',
       details: error instanceof Error ? error.message : 'Unknown error'

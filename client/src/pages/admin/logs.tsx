@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, User, Database, Settings, ShoppingCart, FileText, LogIn, LogOut, Search, Filter } from "lucide-react";
 import type { AdminLog } from "@shared/schema";
 
-
 export default function AdminLogsPage() {
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("all");

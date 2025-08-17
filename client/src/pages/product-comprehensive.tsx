@@ -198,7 +198,6 @@ const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURICom
 // Fixed: Use existing image for marine collagen
 const marineCollagenEditorialSVG = appleVinegarEditorialImg;
 
-
 // Helper function to determine the correct unit for products
 const getProductUnit = (product: Product): string => {
   const name = product.name.toLowerCase();

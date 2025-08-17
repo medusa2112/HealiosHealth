@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, TrendingUp, Users, ShoppingCart, Activity, Mail } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
-
 interface ReorderLog {
   id: string;
   userId: string;
@@ -88,8 +87,6 @@ export default function ReorderAnalyticsPage() {
       </div>
     );
   }
-
-
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

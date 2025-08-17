@@ -68,7 +68,7 @@ router.post("/test", requireAuth, async (req, res) => {
     });
 
   } catch (error: any) {
-    console.error("Email test error:", error);
+    // // console.error("Email test error:", error);
     res.status(500).json({
       success: false,
       error: error.message || "Failed to send test email"

@@ -16,7 +16,6 @@ import ReferralsPage from "./portal/Referrals";
 import { SEOHead } from '@/components/seo-head';
 import type { User as UserType, Order, Address, CustomerPortalData } from "@shared/types";
 
-
 export default function CustomerPortal() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();

@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SEOHead } from '@/components/seo-head';
 import type { CartItem, AbandonedCart } from '@shared/types';
 
-
 interface CartAnalytics {
   totalAbandoned: number;
   totalValue: number;

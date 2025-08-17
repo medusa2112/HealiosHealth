@@ -22,9 +22,9 @@ export async function initializeCustomerCsrf(): Promise<void> {
       method: 'GET',
       credentials: 'include'
     });
-    console.log('[AUTH] Customer CSRF token initialized');
+    
   } catch (error) {
-    console.error('[AUTH] Failed to initialize customer CSRF:', error);
+    // // console.error('[AUTH] Failed to initialize customer CSRF:', error);
   }
 }
 
@@ -34,9 +34,9 @@ export async function initializeAdminCsrf(): Promise<void> {
       method: 'GET',
       credentials: 'include'
     });
-    console.log('[AUTH] Admin CSRF token initialized');
+    
   } catch (error) {
-    console.error('[AUTH] Failed to initialize admin CSRF:', error);
+    // // console.error('[AUTH] Failed to initialize admin CSRF:', error);
   }
 }
 
@@ -78,7 +78,7 @@ export const customerAuth = {
     });
     
     if (!response.ok) {
-      console.error('[AUTH] Logout failed:', response.status);
+      // // console.error('[AUTH] Logout failed:', response.status);
     }
     
     return response;
@@ -123,7 +123,7 @@ export const adminAuth = {
     });
     
     if (!response.ok) {
-      console.error('[AUTH] Admin logout failed:', response.status);
+      // // console.error('[AUTH] Admin logout failed:', response.status);
     }
     
     return response;

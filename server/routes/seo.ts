@@ -46,7 +46,7 @@ ${allPages.map(page => `  <url>
     res.set('Content-Type', 'application/xml');
     res.send(sitemapXml);
   } catch (error) {
-    console.error("Error generating sitemap:", error);
+    // // console.error("Error generating sitemap:", error);
     res.status(500).send("Error generating sitemap");
   }
 });

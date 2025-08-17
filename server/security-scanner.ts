@@ -60,7 +60,7 @@ function findAllFiles(dir: string): string[] {
         : trackedFiles.includes(extname(entry.name)) ? [join(dir, entry.name)] : []
     );
   } catch (error) {
-    console.warn(`Warning: Could not read directory ${dir}`);
+    
     return [];
   }
 }
@@ -154,19 +154,15 @@ async function scanFile(path: string): Promise<SecurityIssue[]> {
 
     return results;
   } catch (error) {
-    console.warn(`Warning: Could not scan file ${path}:`, error instanceof Error ? error.message : String(error));
+    );
     return [];
   }
 }
 
 function outputResults(issues: SecurityIssue[], files: string[]) {
-  console.log(`\n✅ Security Scan Complete!`);
-  console.log(`📊 Results:`);
-  console.log(`   - Files scanned: ${files.length}`);
-  console.log(`   - Issues found: ${issues.length}`);
 
   if (issues.length === 0) {
-    console.log(`\n🎉 No security issues found! Great job!`);
+    
     return;
   }
 
@@ -176,12 +172,11 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
     return acc;
   }, {} as Record<string, number>);
 
-  console.log(`\n🔒 Issues by severity:`);
   const severityOrder = ['critical', 'high', 'medium', 'low'];
   for (const severity of severityOrder) {
     if (bySeverity[severity]) {
       const emoji = severity === 'critical' ? '🚨' : severity === 'high' ? '⚠️' : '📋';
-      console.log(`   ${emoji} ${severity}: ${bySeverity[severity]}`);
+      
     }
   }
 
@@ -191,7 +186,6 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
     return acc;
   }, {} as Record<string, number>);
 
-  console.log(`\n📋 Issues by type:`);
   const typeLabels: Record<string, string> = {
     unauthRoute: 'Unauthenticated Routes',
     unvalidatedInput: 'Unvalidated Input',
@@ -201,7 +195,7 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
   };
   
   for (const [type, count] of Object.entries(byType)) {
-    console.log(`   - ${typeLabels[type] || type}: ${count}`);
+    
   }
 
   // Show top 10 critical/high issues
@@ -210,12 +204,10 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
     .slice(0, 10);
 
   if (criticalIssues.length > 0) {
-    console.log(`\n🚨 Top Critical/High Issues:`);
+    
     criticalIssues.forEach((issue, index) => {
-      console.log(`   ${index + 1}. [${issue.severity.toUpperCase()}] ${issue.description}`);
-      console.log(`      📁 ${issue.filePath}:${issue.line}`);
-      console.log(`      📝 ${issue.snippet}`);
-      console.log();
+      }] ${issue.description}`);
+
     });
   }
 }
@@ -237,22 +229,15 @@ function exportToCSV(issues: SecurityIssue[], filename = 'security-issues.csv') 
   }).join('\n');
   
   writeFileSync(filename, headers + rows);
-  console.log(`📄 Results exported to ${filename}`);
+  
 }
 
 async function run() {
-  console.log('🔍 Starting Security Fix Tracker...');
-  console.log('🎯 Scanning for:');
-  console.log('   - Routes missing requireAuth');
-  console.log('   - Unvalidated request inputs (req.body, req.params, req.query)');
-  console.log('   - Raw SQL string construction');
-  console.log('   - JSON responses exposing sensitive fields');
-  console.log('   - Duplicate route definitions');
-  console.log();
+
+  ');
 
   const files = findAllFiles(srcPath);
-  console.log(`📁 Scanning ${files.length} TypeScript files...`);
-  
+
   const allIssues = (await Promise.all(files.map(scanFile))).flat();
 
   outputResults(allIssues, files);
@@ -265,6 +250,6 @@ async function run() {
 
 // Run the scan
 run().catch((err) => {
-  console.error('❌ Security scanner error:', err);
+  // // console.error('❌ Security scanner error:', err);
   process.exit(1);
 });

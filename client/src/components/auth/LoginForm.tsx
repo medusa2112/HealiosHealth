@@ -8,8 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LogIn, Mail, Loader2 } from 'lucide-react';
 
 export function LoginForm() {
-  console.log('=== LOGIN FORM COMPONENT LOADED ===');
-  
+
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -17,10 +16,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<'email' | 'pin'>('email');
   const [pin, setPin] = useState('');
-  
-  console.log('Login form state:', { step, email, pin, isLoading });
 
-  // Check URL parameters for pre-filled email and messages
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlEmail = urlParams.get('email');
@@ -61,7 +57,7 @@ export function LoginForm() {
       setSuccess('A one-time PIN has been sent to your email. Please check your inbox.');
       setStep('pin');
     } catch (error) {
-      console.error('Email login error:', error);
+      // // console.error('Email login error:', error);
       setError(error instanceof Error ? error.message : 'Failed to send PIN. Please try again.');
     } finally {
       setIsLoading(false);
@@ -69,19 +65,17 @@ export function LoginForm() {
   };
 
   const handlePinVerification = async () => {
-    console.log('BUTTON CLICK HANDLER CALLED - NO FORM SUBMISSION');
-    
+
     if (!pin.trim()) {
       setError('Please enter the PIN from your email');
       return;
     }
 
-    console.log('Starting PIN verification...');
     setIsLoading(true);
     setError(null);
 
     try {
-      console.log('Making fetch request to verify PIN...');
+      
       const response = await fetch('/api/auth/verify-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,9 +83,8 @@ export function LoginForm() {
         body: JSON.stringify({ email, pin: pin.trim() })
       });
 
-      console.log('Fetch response received, status:', response.status);
       const data = await response.json();
-      console.log('Response data:', JSON.stringify(data, null, 2));
+      );
 
       if (!response.ok) {
         throw new Error(data.message || 'Invalid PIN');
@@ -99,41 +92,33 @@ export function LoginForm() {
 
       // Successful authentication - redirect based on profile completion
       const { user, needsProfileCompletion, redirectTo } = data;
-      
-      console.log('=== PIN VERIFICATION SUCCESSFUL ===');
-      console.log('User:', user);
-      console.log('needsProfileCompletion:', needsProfileCompletion);
-      console.log('redirectTo:', redirectTo);
-      console.log('About to call setLocation...');
-      
+
       if (needsProfileCompletion) {
         // New user or incomplete profile - redirect to profile completion
         const targetUrl = redirectTo || '/profile';
         setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
-        console.log('CALLING setLocation with:', targetUrl);
         
-        // Use both setLocation and window.location.href as fallback
         setLocation(targetUrl);
         setTimeout(() => {
-          console.log('Fallback redirect to:', targetUrl);
+          
           window.location.href = targetUrl;
         }, 100);
-        console.log('Redirect methods called successfully');
+        
       } else {
         // Existing user with complete profile - redirect to shopping
         const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
-        console.log('CALLING setLocation for existing user with:', returnUrl);
+        
         setLocation(returnUrl);
         setTimeout(() => {
           window.location.href = returnUrl;
         }, 100);
-        console.log('Redirect methods called successfully for existing user');
+        
       }
     } catch (error) {
-      console.error('PIN verification error:', error);
+      // // console.error('PIN verification error:', error);
       setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
     } finally {
-      console.log('Setting loading to false');
+      
       setIsLoading(false);
     }
   };
@@ -198,7 +183,7 @@ export function LoginForm() {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       e.stopPropagation();
-                      console.log('EMAIL ENTER KEY BLOCKED');
+                      
                       handleEmailSubmit(e);
                       return false;
                     }
@@ -215,7 +200,7 @@ export function LoginForm() {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('EMAIL BUTTON CLICKED');
+                  
                   handleEmailSubmit(e);
                   return false;
                 }}
@@ -237,7 +222,7 @@ export function LoginForm() {
               </Button>
             </div>
           ) : (
-            <div className="space-y-4" onSubmit={(e) => { console.log('BLOCKED DIV SUBMIT'); e.preventDefault(); e.stopPropagation(); return false; }}>
+            <div className="space-y-4" onSubmit={(e) => {  e.preventDefault(); e.stopPropagation(); return false; }}>
               <div className="space-y-2">
                 <Label htmlFor="pin" className="text-black dark:text-white">
                   Enter PIN
@@ -249,11 +234,11 @@ export function LoginForm() {
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   onKeyDown={(e) => {
-                    console.log('KEY PRESSED:', e.key);
+                    
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       e.stopPropagation();
-                      console.log('ENTER KEY BLOCKED - CALLING HANDLER DIRECTLY');
+                      
                       handlePinVerification();
                       return false;
                     }
@@ -280,11 +265,9 @@ export function LoginForm() {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log('=== WRAPPER DIV CLICK EVENT ===');
-                  console.log('Target:', e.target);
-                  console.log('CurrentTarget:', e.currentTarget);
+
                   if (e.target === e.currentTarget) {
-                    console.log('Clicked wrapper div, ignoring...');
+                    
                     return false;
                   }
                 }}
@@ -292,19 +275,17 @@ export function LoginForm() {
                 <Button
                   type="button"
                   onMouseDown={(e) => {
-                    console.log('MOUSE DOWN EVENT');
+                    
                     e.preventDefault();
                     e.stopPropagation();
                   }}
                   onClick={(e) => {
-                    console.log('=== BUTTON CLICK EVENT STARTED ===');
+                    
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Event type:', e.type);
-                    console.log('Event target:', e.target);
-                    console.log('About to call handlePinVerification...');
+
                     handlePinVerification();
-                    console.log('=== BUTTON CLICK EVENT COMPLETED ===');
+                    
                     return false;
                   }}
                   disabled={isLoading || !pin.trim()}

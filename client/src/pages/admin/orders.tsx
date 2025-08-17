@@ -12,7 +12,6 @@ import { formatCurrency } from "@/lib/utils";
 import { SEOHead } from '@/components/seo-head';
 import type { Order } from '@shared/types';
 
-
 interface OrderStats {
   totalOrders: number;
   completedOrders: number;
@@ -176,8 +175,6 @@ export default function AdminOrders() {
       </div>
     );
   }
-
-
 
   return (
     <div className="max-w-7xl mx-auto px-6 space-y-6">

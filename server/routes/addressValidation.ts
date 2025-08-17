@@ -8,7 +8,7 @@ const router = express.Router();
 // Bypass CSRF for address validation in development
 const bypassCSRF = (req: any, res: any, next: any) => {
   if (process.env.NODE_ENV === 'development') {
-    console.log('[ADDRESS_VALIDATION] Bypassing CSRF in development mode');
+    
     req.csrfToken = () => 'dev-bypass';
     // Skip CSRF validation
     next();
@@ -26,8 +26,7 @@ const addressValidationSchema = z.object({
 // CSRF bypass middleware for address validation in development
 const bypassCSRFForDev = (req: any, res: any, next: any) => {
   if (process.env.NODE_ENV === 'development') {
-    console.log('[ADDRESS_VALIDATION] Development mode - bypassing CSRF');
-    // Skip to route handler
+    
     return next('route');
   }
   next();

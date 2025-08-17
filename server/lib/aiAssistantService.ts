@@ -216,7 +216,7 @@ export async function handleReturnRequest(userId: string, orderId?: string): Pro
        Order placed: ${daysSinceOrder} days ago`
     );
   } catch (error) {
-    console.log('Email notification failed, but return request still created');
+    
   }
   
   return `I've created a return request for order #${targetOrder.id.slice(0, 8)}. Our support team will contact you within 24 hours to arrange the return. You'll receive a return label and instructions via email.`;
@@ -391,7 +391,7 @@ export async function processAIAssistantRequest(
     };
     
   } catch (error) {
-    console.error('AI Assistant Error:', error);
+    // // console.error('AI Assistant Error:', error);
     return {
       response: "I'm experiencing technical difficulties. Please contact our support team at support@healios.com for immediate assistance.",
       requiresEscalation: true
@@ -443,10 +443,10 @@ export async function escalateToSupport(
          ${session.messages}`
       );
     } catch (error) {
-      console.log('Email notification failed, but escalation ticket still created');
+      
     }
     
   } catch (error) {
-    console.error('Escalation Error:', error);
+    // // console.error('Escalation Error:', error);
   }
 }

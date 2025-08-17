@@ -39,26 +39,21 @@ router.get('/me', async (req, res) => {
   try {
     // Check if user is authenticated through Replit Auth or session
     const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
-    
-    console.log(`[AUTH_ME] Checking auth status for userId: ${userId}`);
-    console.log(`[AUTH_ME] Session:`, (req.session as any)?.userId ? 'present' : 'missing');
-    console.log(`[AUTH_ME] Passport user:`, req.user ? 'present' : 'missing');
-    
+
     if (!userId) {
-      console.log('[AUTH_ME] No authentication found');
+      
       return res.json(null);
     }
 
     const user = await storage.getUserById(userId);
     if (!user) {
-      console.log(`[AUTH_ME] User not found for userId: ${userId}`);
+      
       return res.json(null);
     }
 
-    console.log(`[AUTH_ME] User found: ${user.email} (${user.role})`);
     res.json(sanitizeUser(user));
   } catch (error) {
-    console.error('Auth me error:', error);
+    // // console.error('Auth me error:', error);
     res.json(null);
   }
 });
@@ -78,7 +73,7 @@ router.get('/user', isAuthenticated, async (req, res) => {
 
     res.json(sanitizeUser(user));
   } catch (error) {
-    console.error('Auth user error:', error);
+    // // console.error('Auth user error:', error);
     res.json(null);
   }
 });
@@ -146,7 +141,7 @@ if (false) {
     try {
       await sendVerificationEmail(email, verificationCode, firstName);
     } catch (emailError) {
-      console.error('Failed to send verification email:', emailError);
+      // // console.error('Failed to send verification email:', emailError);
       // Continue registration even if email fails
     }
 
@@ -159,7 +154,7 @@ if (false) {
     });
 
     } catch (error) {
-      console.error('Registration error:', error);
+      // // console.error('Registration error:', error);
       res.status(500).json({ message: 'Registration failed' });
     }
   });
@@ -168,8 +163,7 @@ if (false) {
   router.post('/login', loginLimiter, async (req, res) => {
     try {
     // Avoid logging sensitive information such as passwords or headers
-    console.log('[LOGIN] Attempt for email:', req.body?.email);
-    
+
     const loginSchema = z.object({
       email: z.string().email(),
       password: z.string().min(1)
@@ -186,9 +180,9 @@ if (false) {
     const { email, password } = result.data;
 
     // Get user by email
-    console.log('[LOGIN] Looking up user:', email);
+    
     const user = await storage.getUserByEmail(email);
-    console.log('[LOGIN] User found:', user ? 'yes' : 'no', user?.id);
+    
     if (!user) {
       await auditLogin(email, false, {
         error: 'User not found',
@@ -265,7 +259,7 @@ if (false) {
       redirectUrl 
     });
   } catch (error) {
-    console.error('Auth error:', error);
+    // // console.error('Auth error:', error);
     // Log failed login attempt
     const emailResult = z.object({ email: z.string().optional() }).safeParse(req.body);
     if (emailResult.success && emailResult.data.email) {
@@ -363,7 +357,7 @@ if (false) {
       redirectUrl
     });
     } catch (error) {
-      console.error('Verification error:', error);
+      // // console.error('Verification error:', error);
       res.status(500).json({ message: 'Verification failed' });
     }
   });
@@ -412,7 +406,7 @@ if (false) {
     try {
       await sendVerificationEmail(email, verificationCode, user.firstName);
     } catch (emailError) {
-      console.error('Failed to send verification email:', emailError);
+      // // console.error('Failed to send verification email:', emailError);
       return res.status(500).json({ message: 'Failed to send verification email' });
     }
 
@@ -421,7 +415,7 @@ if (false) {
       message: 'New verification code sent to your email'
     });
     } catch (error) {
-      console.error('Resend code error:', error);
+      // // console.error('Resend code error:', error);
       res.status(500).json({ message: 'Failed to resend verification code' });
     }
   });
@@ -473,7 +467,7 @@ router.patch('/profile', async (req, res) => {
       user: sanitizeUser(updatedUser)
     });
   } catch (error) {
-    console.error('Profile update error:', error);
+    // // console.error('Profile update error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to update profile. Please try again.'
@@ -494,7 +488,7 @@ router.post('/logout', async (req, res) => {
   req.logout(() => {
     if (req.session) {
       req.session.destroy((err: any) => {
-        if (err) console.error('Session destroy error:', err);
+        // Session destroy error handling
       });
     }
     res.clearCookie('healios.sid', {
@@ -566,7 +560,7 @@ router.post('/mock-login', loginLimiter, async (req, res) => {
       redirectUrl 
     });
   } catch (error) {
-    console.error('Auth error:', error);
+    // // console.error('Auth error:', error);
     // Log failed login attempt
     const emailResult = z.object({ email: z.string().optional() }).safeParse(req.body);
     if (emailResult.success && emailResult.data.email) {
@@ -593,21 +587,17 @@ router.get('/callback', async (req, res) => {
     
     res.redirect('/auth/login');
   } catch (error) {
-    console.error('Callback error:', error);
+    // // console.error('Callback error:', error);
     res.redirect('/auth/login');
   }
 });
-
-
 
 if (process.env.NODE_ENV !== 'production') {
 // Development-only demo login (admin access)
 if (process.env.NODE_ENV === 'development') {
   router.post('/demo-admin-login', loginLimiter, async (req, res) => {
     try {
-      console.log('[DEMO_LOGIN] Admin demo login requested');
       
-      // Get the admin user from storage
       const adminUser = await storage.getUserById('admin-user-id');
       if (!adminUser) {
         return res.status(404).json({ message: 'Admin demo user not found' });
@@ -616,7 +606,7 @@ if (process.env.NODE_ENV === 'development') {
       // Set up the session manually for demo purposes
       req.login(adminUser, async (err) => {
         if (err) {
-          console.error('[DEMO_LOGIN] Login error:', err);
+          // // console.error('[DEMO_LOGIN] Login error:', err);
           await auditLogin(adminUser.id, false, {
             type: 'demo_login',
             error: err.message,
@@ -633,8 +623,7 @@ if (process.env.NODE_ENV === 'development') {
           ip: req.ip || req.connection.remoteAddress,
           userAgent: req.get('User-Agent')
         });
-        
-        console.log(`[DEMO_LOGIN] Successfully logged in as admin: ${adminUser.email}`);
+
         res.json({ 
           message: 'Demo login successful', 
           user: sanitizeUser(adminUser)
@@ -642,7 +631,7 @@ if (process.env.NODE_ENV === 'development') {
       });
       
     } catch (error) {
-      console.error('[DEMO_LOGIN] Demo login error:', error);
+      // // console.error('[DEMO_LOGIN] Demo login error:', error);
       res.status(500).json({ message: 'Demo login failed' });
     }
   });
@@ -670,7 +659,7 @@ router.post('/forgot-password', loginLimiter, async (req, res) => {
     
     // Always return success to prevent email enumeration attacks
     if (!user) {
-      console.log(`[FORGOT_PASSWORD] Password reset requested for non-existent email: ${email}`);
+      
       return res.json({ 
         success: true,
         message: 'If an account exists with this email, password reset instructions have been sent.'
@@ -692,9 +681,9 @@ router.post('/forgot-password', loginLimiter, async (req, res) => {
     // Send password reset email
     try {
       await sendVerificationEmail(email, resetCode, user.firstName, 'reset');
-      console.log(`[FORGOT_PASSWORD] Password reset email sent to: ${email}`);
+      
     } catch (emailError) {
-      console.error('[FORGOT_PASSWORD] Failed to send reset email:', emailError);
+      // // console.error('[FORGOT_PASSWORD] Failed to send reset email:', emailError);
       // Still return success to prevent enumeration
     }
 
@@ -703,7 +692,7 @@ router.post('/forgot-password', loginLimiter, async (req, res) => {
       message: 'If an account exists with this email, password reset instructions have been sent.'
     });
   } catch (error) {
-    console.error('[FORGOT_PASSWORD] Error:', error);
+    // // console.error('[FORGOT_PASSWORD] Error:', error);
     res.status(500).json({ 
       message: 'Failed to process password reset request. Please try again.' 
     });
@@ -783,14 +772,12 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
       verificationAttempts: 0
     });
 
-    console.log(`[RESET_PASSWORD] Password successfully reset for: ${email}`);
-
     res.json({ 
       success: true,
       message: 'Password has been successfully reset. You can now login with your new password.'
     });
   } catch (error) {
-    console.error('[RESET_PASSWORD] Error:', error);
+    // // console.error('[RESET_PASSWORD] Error:', error);
     res.status(500).json({ 
       message: 'Failed to reset password. Please try again.' 
     });

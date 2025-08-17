@@ -70,7 +70,7 @@ export class EmailService {
           productDataMap.set(productId, product);
         }
       } catch (error) {
-        console.error(`Failed to fetch product data for ${productId}:`, error);
+        // // console.error(`Failed to fetch product data for ${productId}:`, error);
       }
     }
 
@@ -103,7 +103,7 @@ export class EmailService {
 
   static async sendNewsletterConfirmation(newsletter: Newsletter): Promise<boolean> {
     if (!resend) {
-      console.warn('Resend API not configured - skipping email');
+      
       return false;
     }
     
@@ -164,7 +164,7 @@ export class EmailService {
       `;
 
       if (!resend) {
-        console.warn('Email system disabled - RESEND_API_KEY not found');
+        
         return false;
       }
 
@@ -177,7 +177,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      console.error('Failed to send newsletter confirmation email:', error);
+      // // console.error('Failed to send newsletter confirmation email:', error);
       return false;
     }
   }
@@ -244,7 +244,7 @@ export class EmailService {
       `;
 
       if (!resend) {
-        console.warn('Email system disabled - RESEND_API_KEY not found');
+        
         return false;
       }
 
@@ -257,7 +257,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      console.error('Failed to send order confirmation email:', error);
+      // // console.error('Failed to send order confirmation email:', error);
       return false;
     }
   }
@@ -267,7 +267,7 @@ export class EmailService {
   }
 
   static async sendPreOrderNotification(preOrder: PreOrder): Promise<boolean> {
-    console.log('📧 Starting pre-order email notification process for:', preOrder.customerEmail);
+    
     try {
       // Admin notification
       const adminHtml = `
@@ -348,12 +348,11 @@ export class EmailService {
 
       // Send to both admin emails
       const adminEmails = ['dn@thefourths.com', 'ms@thefourths.com'];
-      
-      console.log('📧 Sending admin emails to:', adminEmails);
+
       for (const adminEmail of adminEmails) {
         try {
           if (!resend) {
-            console.warn('Resend not configured - skipping admin email');
+            
             continue;
           }
           const adminResult = await resend.emails.send({
@@ -362,9 +361,9 @@ export class EmailService {
             subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
             html: adminHtml,
           });
-          console.log(`📧 Admin email sent to ${adminEmail}:`, adminResult);
+          
         } catch (error) {
-          console.error(`❌ Failed to send admin email to ${adminEmail}:`, error);
+          // // console.error(`❌ Failed to send admin email to ${adminEmail}:`, error);
         }
         
         // Add delay to avoid rate limiting
@@ -427,10 +426,9 @@ export class EmailService {
         </html>
       `;
 
-      console.log('📧 Sending customer confirmation email to:', preOrder.customerEmail);
       try {
         if (!resend) {
-          console.warn('Resend not configured - skipping customer email');
+          
           return false;
         }
         const customerResult = await resend.emails.send({
@@ -439,16 +437,15 @@ export class EmailService {
           subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
           html: customerHtml,
         });
-        console.log('📧 Customer email sent:', customerResult);
+        
       } catch (error) {
-        console.error('❌ Failed to send customer email:', error);
+        // // console.error('❌ Failed to send customer email:', error);
         return false;
       }
 
-      console.log('✅ All pre-order emails sent successfully');
       return true;
     } catch (error) {
-      console.error('Error sending pre-order notification emails:', error);
+      // // console.error('Error sending pre-order notification emails:', error);
       return false;
     }
   }
@@ -571,12 +568,11 @@ export class EmailService {
 
       // Send to admin emails
       const adminEmails = ['dn@thefourths.com', 'ms@thefourths.com'];
-      
-      console.log('📧 Sending restock notification to admins:', adminEmails);
+
       for (const adminEmail of adminEmails) {
         try {
           if (!resend) {
-            console.warn('Resend not configured - skipping admin email');
+            
             continue;
           }
           const adminResult = await resend.emails.send({
@@ -585,9 +581,9 @@ export class EmailService {
             subject: `📦 Restock Request: ${product} - ${firstName}`,
             html: adminHtml,
           });
-          console.log(`📧 Admin restock email sent to ${adminEmail}:`, adminResult);
+          
         } catch (error) {
-          console.error(`❌ Failed to send admin restock email to ${adminEmail}:`, error);
+          // // console.error(`❌ Failed to send admin restock email to ${adminEmail}:`, error);
         }
         
         await this.sleep(600);
@@ -596,7 +592,7 @@ export class EmailService {
       // Send confirmation to customer
       try {
         if (!resend) {
-          console.warn('Resend not configured - skipping customer email');
+          
           return false;
         }
         const customerResult = await resend.emails.send({
@@ -605,15 +601,15 @@ export class EmailService {
           subject: `Restock Notification Set: ${product} - Healios`,
           html: customerHtml,
         });
-        console.log('📧 Customer restock email sent:', customerResult);
+        
       } catch (error) {
-        console.error('❌ Failed to send customer restock email:', error);
+        // // console.error('❌ Failed to send customer restock email:', error);
         return false;
       }
 
       return true;
     } catch (error) {
-      console.error('Error sending restock notification emails:', error);
+      // // console.error('Error sending restock notification emails:', error);
       return false;
     }
   }
@@ -679,7 +675,7 @@ export class EmailService {
       for (const adminEmail of this.ADMIN_EMAILS) {
         try {
           if (!resend) {
-            console.warn('Resend not configured - skipping admin email');
+            
             continue;
           }
           await resend.emails.send({
@@ -689,7 +685,7 @@ export class EmailService {
             html,
           });
         } catch (error) {
-          console.error(`Failed to send low stock alert to ${adminEmail}:`, error);
+          // // console.error(`Failed to send low stock alert to ${adminEmail}:`, error);
         }
         
         await this.sleep(600);
@@ -697,7 +693,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      console.error('Error sending low stock alert:', error);
+      // // console.error('Error sending low stock alert:', error);
       return false;
     }
   }
@@ -709,7 +705,7 @@ export class EmailService {
     userAgent?: string;
   }): Promise<boolean> {
     if (!resend) {
-      console.error('❌ Resend API not configured - skipping admin login notification');
+      // // console.error('❌ Resend API not configured - skipping admin login notification');
       return false;
     }
 
@@ -806,10 +802,9 @@ export class EmailService {
         html,
       });
 
-      console.log('📧 Admin login notification sent:', result);
       return true;
     } catch (error) {
-      console.error('❌ Failed to send admin login notification:', error);
+      // // console.error('❌ Failed to send admin login notification:', error);
       return false;
     }
   }
@@ -913,7 +908,7 @@ The Healios Team
     
     try {
       if (!resend) {
-        console.warn('Email system disabled - RESEND_API_KEY not found');
+        
         return;
       }
 
@@ -924,10 +919,9 @@ The Healios Team
         html,
         text,
       });
-      
-      console.log('✅ Consultation booking confirmation email sent:', data.data?.id);
+
     } catch (error) {
-      console.error('❌ Failed to send consultation booking confirmation email:', error);
+      // // console.error('❌ Failed to send consultation booking confirmation email:', error);
       throw error;
     }
   }
@@ -948,7 +942,7 @@ The Healios Team
       
       return userEmailSuccess && adminEmailSuccess;
     } catch (error) {
-      console.error('Error sending quiz recommendation emails:', error);
+      // // console.error('Error sending quiz recommendation emails:', error);
       return false;
     }
   }
@@ -1082,7 +1076,7 @@ The Healios Team
       `;
 
       if (!resend) {
-        console.warn('Email system disabled - RESEND_API_KEY not found');
+        
         return false;
       }
 
@@ -1095,7 +1089,7 @@ The Healios Team
 
       return result.error ? false : true;
     } catch (error) {
-      console.error('Error sending user quiz recommendations:', error);
+      // // console.error('Error sending user quiz recommendations:', error);
       return false;
     }
   }
@@ -1179,7 +1173,7 @@ The Healios Team
       `;
 
       if (!resend) {
-        console.warn('Email system disabled - RESEND_API_KEY not found');
+        
         return false;
       }
 
@@ -1192,7 +1186,7 @@ The Healios Team
 
       return result.error ? false : true;
     } catch (error) {
-      console.error('Error sending quiz admin notification:', error);
+      // // console.error('Error sending quiz admin notification:', error);
       return false;
     }
   }
@@ -1262,13 +1256,10 @@ The Healios Team
 
       // Send test emails
       await this.sendNewsletterConfirmation(testNewsletterData);
-      console.log('✅ Newsletter confirmation test email sent');
 
       await this.sendOrderConfirmation(testOrderData);
-      console.log('✅ Order confirmation test email sent');
 
       await this.sendPreOrderNotification(testPreOrderData);
-      console.log('✅ Pre-order notification test emails sent');
 
       await this.sendConsultationBookingConfirmation({
         email: 'test@example.com',
@@ -1276,7 +1267,6 @@ The Healios Team
         type: 'trainer',
         bookingId: 'test-booking-123'
       });
-      console.log('✅ Consultation booking confirmation test email sent');
 
       await this.sendRestockNotification({
         firstName: 'John',
@@ -1284,21 +1274,19 @@ The Healios Team
         product: 'Ashwagandha Capsules',
         restockDate: 'September 1st, 2025'
       });
-      console.log('✅ Restock notification test emails sent');
 
       await this.sendLowStockAlert({
         productName: 'Vitamin D3 4000 IU Gummies',
         currentStock: 2,
         threshold: 5
       });
-      console.log('✅ Low stock alert test email sent');
 
       return {
         success: true,
         message: 'All test emails sent successfully! Check your inbox at dn@thefourths.com and ms@thefourths.com'
       };
     } catch (error) {
-      console.error('Error sending test emails:', error);
+      // // console.error('Error sending test emails:', error);
       return {
         success: false,
         message: `Failed to send test emails: ${error}`
@@ -1313,7 +1301,7 @@ The Healios Team
   ): Promise<boolean> {
     try {
       if (!resend) {
-        console.warn('Resend not configured - skipping email');
+        
         return false;
       }
     
@@ -1371,14 +1359,13 @@ The Healios Team
       });
 
       if (error) {
-        console.error('Resend error:', error);
+        // // console.error('Resend error:', error);
         return false;
       }
 
-      console.log('Restock notification confirmation sent:', data);
       return true;
     } catch (error) {
-      console.error('Error sending restock notification confirmation:', error);
+      // // console.error('Error sending restock notification confirmation:', error);
       return false;
     }
   }

@@ -193,24 +193,20 @@ const CheckoutForm = () => {
       });
 
       const responseData = await response.json();
-      console.log('Checkout session response:', responseData);
-      
+
       if (!responseData.sessionUrl) {
         throw new Error('No session URL received from server');
       }
       
       // Clear cart before redirecting
       clearCart();
-      
-      console.log('Redirecting to Stripe:', responseData.sessionUrl);
-      
-      // Redirect to Stripe Checkout with a small delay to ensure cart clearing
+
       setTimeout(() => {
         window.location.href = responseData.sessionUrl;
       }, 100);
       
     } catch (error) {
-      console.error('Stripe checkout error:', error);
+      // // console.error('Stripe checkout error:', error);
       toast({
         title: "Checkout Failed",
         description: "There was an error creating your checkout session. Please try again.",
@@ -290,7 +286,7 @@ const CheckoutForm = () => {
       window.location.href = checkoutUrl;
       
     } catch (error) {
-      console.error('Shopify checkout error:', error);
+      // // console.error('Shopify checkout error:', error);
       toast({
         title: "Checkout Failed",
         description: "There was an error creating your Shopify checkout. Please try again.",
@@ -299,8 +295,6 @@ const CheckoutForm = () => {
       setIsProcessing(false);
     }
   };
-
-
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

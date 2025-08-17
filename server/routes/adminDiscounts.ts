@@ -12,7 +12,7 @@ router.get("/", requireAdmin, async (req, res) => {
     const discountCodes = await storage.getDiscountCodes();
     res.json(discountCodes);
   } catch (error) {
-    console.error("Error fetching discount codes:", error);
+    // // console.error("Error fetching discount codes:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -78,7 +78,7 @@ router.post("/", requireAdmin, async (req, res) => {
 
     res.status(201).json(newDiscountCode);
   } catch (error) {
-    console.error("Error creating discount code:", error);
+    // // console.error("Error creating discount code:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -160,7 +160,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
 
     res.json(updatedDiscountCode);
   } catch (error) {
-    console.error("Error updating discount code:", error);
+    // // console.error("Error updating discount code:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -212,7 +212,7 @@ router.delete("/:id", requireAdmin, async (req, res) => {
 
     res.json({ message: "Discount code deleted successfully" });
   } catch (error) {
-    console.error("Error deleting discount code:", error);
+    // // console.error("Error deleting discount code:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -237,7 +237,7 @@ router.post("/validate", requireAdmin, async (req, res) => {
     const validation = await storage.validateDiscountCode(code);
     res.json(validation);
   } catch (error) {
-    console.error("Error validating discount code:", error);
+    // // console.error("Error validating discount code:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

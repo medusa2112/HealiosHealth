@@ -22,7 +22,7 @@ router.get("/issues", async (req, res) => {
     const issues = await storage.getSecurityIssues();
     res.json(issues);
   } catch (error) {
-    console.error('[ALFR3D] Error fetching security issues:', error);
+    // // console.error('[ALFR3D] Error fetching security issues:', error);
     res.status(500).json({ error: "Failed to fetch security issues" });
   }
 });
@@ -40,7 +40,7 @@ router.get("/status", async (req, res) => {
       issuesCount: (await storage.getSecurityIssues()).length
     });
   } catch (error) {
-    console.error('[ALFR3D] Error fetching scan status:', error);
+    // // console.error('[ALFR3D] Error fetching scan status:', error);
     res.status(500).json({ error: "Failed to fetch scan status" });
   }
 });
@@ -61,10 +61,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     }
     
     const { id } = parsed.data;
-    
-    console.log(`[ALFR3D] Generating fix prompt for issue: ${id}`);
-    
-    // Get the security issue
+
     const issues = await storage.getSecurityIssues();
     const issue = issues.find(i => i.id === id);
     
@@ -77,9 +74,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     
     // Update the issue with the generated prompt
     await storage.updateSecurityIssueWithFixPrompt(id, fixPrompt);
-    
-    console.log(`[ALFR3D] ✓ Generated fix prompt for issue: ${issue.id}`);
-    
+
     res.json({
       success: true,
       fixPrompt,
@@ -87,7 +82,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
     });
     
   } catch (error) {
-    console.error('[ALFR3D] Error generating fix prompt:', error);
+    // // console.error('[ALFR3D] Error generating fix prompt:', error);
     res.status(500).json({ 
       error: "Failed to generate AI fix prompt. Please try again.",
       details: error instanceof Error ? error.message : 'Unknown error' 
@@ -100,9 +95,7 @@ router.post("/issues/:id/fix-prompt", async (req, res) => {
  */
 router.post("/scan", async (req, res) => {
   try {
-    console.log('[ALFR3D] Starting actual security scan...');
     
-    // Run the security scanner
     const scannerPath = path.join(process.cwd(), 'server', 'security-scanner.ts');
     const scanProcess = spawn('tsx', [scannerPath], {
       cwd: process.cwd(),
@@ -123,10 +116,7 @@ router.post("/scan", async (req, res) => {
     scanProcess.on('close', async (code) => {
       try {
         if (code === 0) {
-          console.log('[ALFR3D] Security scan completed successfully');
-          console.log('[ALFR3D] Scan output:', scanOutput);
-          
-          // Read the updated CSV file with scan results
+
           try {
             const csvPath = path.join(process.cwd(), 'security-issues.csv');
             const csvContent = readFileSync(csvPath, 'utf-8');
@@ -153,18 +143,16 @@ router.post("/scan", async (req, res) => {
             
             // Update storage with fresh scan results
             await storage.updateAllSecurityIssues(updatedIssues);
-            console.log(`[ALFR3D] Updated ${updatedIssues.length} security issues in storage`);
-            
+
           } catch (csvError) {
-            console.warn('[ALFR3D] Could not read/parse CSV file:', csvError instanceof Error ? csvError.message : csvError);
-            // Continue anyway - the scan might not have found issues
+            
           }
         } else {
-          console.error('[ALFR3D] Security scan failed with code:', code);
-          console.error('[ALFR3D] Scan error:', scanError);
+          // // console.error('[ALFR3D] Security scan failed with code:', code);
+          // console.error('[ALFR3D] Scan error:', scanError);
         }
       } catch (updateError) {
-        console.error('[ALFR3D] Error updating scan results:', updateError);
+        // // console.error('[ALFR3D] Error updating scan results:', updateError);
       }
     });
     
@@ -176,7 +164,7 @@ router.post("/scan", async (req, res) => {
     });
     
   } catch (error) {
-    console.error('[ALFR3D] Error starting security scan:', error);
+    // // console.error('[ALFR3D] Error starting security scan:', error);
     res.status(500).json({ error: "Failed to start security scan" });
   }
 });
@@ -221,7 +209,7 @@ router.patch("/issues/:id/status", async (req, res) => {
     });
     
   } catch (error) {
-    console.error('[ALFR3D] Error updating issue status:', error);
+    // // console.error('[ALFR3D] Error updating issue status:', error);
     res.status(500).json({ error: "Failed to update issue status" });
   }
 });
