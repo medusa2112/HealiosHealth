@@ -15,6 +15,8 @@ This project is a full-stack e-commerce application for a premium supplement com
 - ✅ Created automated test suite (`test-pin-auth-flow.mjs`) for API verification
 - ✅ Verified email delivery system functional with admin redirection in development
 - ✅ Documented fix implementation in `docs/FIX_VERIFICATION_REPORT.md`
+- ✅ **Customer Portal Address System Fix**: Resolved field name mismatches between frontend and database (zip vs zipCode), enhanced address creation API with compatibility layer, fixed type definitions and query endpoints
+- ✅ **Homepage Image Update**: Updated science section image to feature new Healios Probiotic + Vitamins product with signature gradient design
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
