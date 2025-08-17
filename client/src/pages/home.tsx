@@ -13,7 +13,8 @@ import magnesiumImg from '@assets/healios-health44.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/healios-health31.jpg';
 import pharmacistsImg from '@assets/healios-health48.jpg';
-import probioticVitaminsImg from '@assets/Porbiotic_Vitamins_1755450588498.png';
+// Using direct path to public assets
+const probioticVitaminsImg = '/probiotic-vitamins.png';
 import childrenMultivitaminImg from '@assets/healios-health49.png';
 import collagenComplexImg from '@assets/healios-health11.png';
 import haloGlowTextImg from '@assets/HaloGlow_1754394641788.png';
