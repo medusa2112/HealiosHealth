@@ -50,7 +50,7 @@ async function getCsrfToken(isAdminRoute = false): Promise<string | null> {
 export function clearCsrfToken() {
   cachedCustomerCsrfToken = null;
   cachedAdminCsrfToken = null;
-  
+  console.log('[CSRF] Cleared cached CSRF tokens');
 }
 
 export async function apiRequest(

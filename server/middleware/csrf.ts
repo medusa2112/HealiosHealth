@@ -99,7 +99,7 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     
     // In development, be more lenient for authenticated admin users
     if (process.env.NODE_ENV === 'development') {
-      
+      console.log('[CSRF] Development mode - allowing authenticated admin request to:', req.path);
       return next();
     }
     

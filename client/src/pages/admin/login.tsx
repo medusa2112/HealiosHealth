@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield, Mail, KeyRound } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { clearCsrfToken } from '@/lib/queryClient';
 
 function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -71,6 +72,9 @@ function AdminLogin() {
       const data = await response.json();
       
       if (response.ok) {
+        // Clear cached CSRF tokens after successful authentication
+        clearCsrfToken();
+        
         toast({
           title: 'Success',
           description: 'Logged in successfully',
