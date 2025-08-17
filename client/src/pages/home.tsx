@@ -983,7 +983,7 @@ export default function HomePage() {
             }}
           >
             <img
-              src="/generated_images/Modern_laboratory_science_scene_3462a4bc.png"
+              src="/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png"
               alt="Healios laboratory quality supplements"
               className="w-full h-full min-h-[400px] lg:min-h-full object-cover"
             />
