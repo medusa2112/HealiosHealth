@@ -86,17 +86,56 @@ router.post("/webhook",
             await storage.markCartAsConverted(metadata.cartId, transaction.reference);
           }
           
+          // Enrich order items with full product data
+          let enrichedOrderItems = [];
+          try {
+            const orderItems = JSON.parse(metadata.orderItems || '[]');
+            
+            // Fetch full product data for each item to include images and complete info
+            for (const item of orderItems) {
+              try {
+                const productId = item.product?.id || item.productId;
+                if (productId) {
+                  const products = await storage.getProducts();
+                  const fullProduct = products.find(p => p.id === productId);
+                  if (fullProduct) {
+                    enrichedOrderItems.push({
+                      ...item,
+                      product: fullProduct,
+                      productName: fullProduct.name,
+                      imageUrl: fullProduct.imageUrl,
+                      price: fullProduct.price
+                    });
+                  } else {
+                    // Fallback to item data if product not found
+                    enrichedOrderItems.push({
+                      ...item,
+                      productName: item.product?.name || item.productName || 'Product',
+                      imageUrl: item.product?.imageUrl || item.imageUrl || '/objects/placeholder-product.jpg',
+                      price: item.product?.price || item.price || '0'
+                    });
+                  }
+                } else {
+                  enrichedOrderItems.push(item);
+                }
+              } catch (productError) {
+                console.error('Error enriching product data:', productError);
+                enrichedOrderItems.push(item);
+              }
+            }
+            
+            // Update the order with enriched items
+            // Note: Storage doesn't have updateOrder method yet, but we'll store enriched items for display
+            
+            console.log(`Order ${order.id} items enriched with product data`);
+          } catch (e) {
+            console.error('Could not enrich order items:', e);
+            enrichedOrderItems = JSON.parse(metadata.orderItems || '[]');
+          }
+
           // Send order confirmation email
           try {
             const { sendEmail } = await import('../lib/email');
-            
-            // Parse order items for email template
-            let orderItems = [];
-            try {
-              orderItems = JSON.parse(metadata.orderItems || '[]');
-            } catch (e) {
-              console.log('Could not parse order items for email');
-            }
             
             const emailResult = await sendEmail(
               transaction.customer.email, 
@@ -105,7 +144,7 @@ router.post("/webhook",
                 id: order.id,
                 amount: parseFloat(order.totalAmount),
                 customerName: order.customerName || '',
-                items: orderItems
+                items: enrichedOrderItems
               }
             );
             
@@ -264,6 +303,14 @@ router.get("/verify/:reference",
       const result: any = await paystack.verifyTransaction(reference);
       
       if (result.status) {
+        // Try to find the order by PayStack reference
+        let order = null;
+        try {
+          order = await storage.getOrderByPaystackReference(reference);
+        } catch (e) {
+          console.log('Order not found for reference:', reference);
+        }
+        
         res.json({
           success: true,
           status: result.data.status,
@@ -272,7 +319,8 @@ router.get("/verify/:reference",
           customer: result.data.customer,
           metadata: result.data.metadata,
           paid_at: result.data.paid_at,
-          created_at: result.data.created_at
+          created_at: result.data.created_at,
+          order: order // Include order data for order confirmation page
         });
       } else {
         throw new Error(result.message || "Failed to verify transaction");
