@@ -351,6 +351,8 @@ export class MemStorage implements IStorage {
         role: 'admin',
         firstName: 'Admin',
         lastName: 'Demo',
+        paystackCustomerCode: null,
+        paystackCustomerId: null,
         stripeCustomerId: null,
         emailVerified: null,
         verificationCodeHash: null,
@@ -541,6 +543,13 @@ export class MemStorage implements IStorage {
       disputeStatus: order.disputeStatus ?? null,
       stripePaymentIntentId: order.stripePaymentIntentId ?? null,
       stripeSessionId: order.stripeSessionId ?? null,
+      paymentMethod: order.paymentMethod ?? null,
+      paystackReference: order.paystackReference ?? null,
+      paystackAccessCode: order.paystackAccessCode ?? null,
+      discountAmount: order.discountAmount ?? null,
+      taxAmount: order.taxAmount ?? null,
+      shippingCost: order.shippingCost ?? null,
+      metadata: order.metadata ?? null,
       trackingNumber: order.trackingNumber ?? null,
       discountCode: order.discountCode ?? null,
       notes: order.notes ?? null,
@@ -657,6 +666,8 @@ export class MemStorage implements IStorage {
       lastName: user.lastName ?? null,
       password: null,
       role: user.role || 'customer',
+      paystackCustomerCode: null,
+      paystackCustomerId: null,
       stripeCustomerId: null,
       emailVerified: null,
       verificationCodeHash: null,
@@ -680,6 +691,8 @@ export class MemStorage implements IStorage {
       lastName: user.lastName ?? null,
       password: user.password ?? null,
       role: user.role ?? 'customer',
+      paystackCustomerCode: user.paystackCustomerCode ?? null,
+      paystackCustomerId: user.paystackCustomerId ?? null,
       stripeCustomerId: user.stripeCustomerId ?? null,
       emailVerified: user.emailVerified ?? null,
       verificationCodeHash: user.verificationCodeHash ?? null,
@@ -744,6 +757,7 @@ export class MemStorage implements IStorage {
   async getAllUsers(): Promise<User[]> { return Array.from(this.users.values()); }
   async getAllCarts(): Promise<Cart[]> { return Array.from(this.carts.values()); }
   async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.stripePaymentIntentId === paymentIntentId); }
+  async getOrderByPaystackReference(reference: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.paystackReference === reference); }
   async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated = { ...order, refundStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
   async upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> { 
     const existing = Array.from(this.carts.values()).find(c => c.sessionToken === cart.sessionToken); 
@@ -760,6 +774,7 @@ export class MemStorage implements IStorage {
       items: cart.items || '[]',
       totalAmount: cart.totalAmount || null,
       currency: cart.currency || 'ZAR',
+      paystackReference: cart.paystackReference ?? null,
       convertedToOrder: false,
       stripeSessionId: null,
       createdAt: new Date().toISOString(), 
@@ -861,16 +876,24 @@ export class MemStorage implements IStorage {
       id,
       userId: subscription.userId,
       productVariantId: subscription.productVariantId,
-      stripeCustomerId: subscription.stripeCustomerId,
-      stripeSubscriptionId: subscription.stripeSubscriptionId,
-      intervalDays: subscription.intervalDays,
+      variantId: subscription.variantId ?? null,
+      paystackSubscriptionId: subscription.paystackSubscriptionId ?? null,
+      paystackCustomerId: subscription.paystackCustomerId ?? null,
+      paystackPlanId: subscription.paystackPlanId ?? null,
+      stripeSubscriptionId: subscription.stripeSubscriptionId ?? null,
+      stripeCustomerId: subscription.stripeCustomerId ?? null,
       status: subscription.status ?? null,
-      metadata: subscription.metadata ?? null,
+      quantity: subscription.quantity ?? null,
+      interval: subscription.interval ?? null,
+      intervalDays: subscription.intervalDays,
+      pricePerUnit: subscription.pricePerUnit ?? null,
       currentPeriodStart: subscription.currentPeriodStart ?? null,
       currentPeriodEnd: subscription.currentPeriodEnd ?? null,
       cancelAt: subscription.cancelAt ?? null,
       canceledAt: subscription.canceledAt ?? null,
-      startDate: new Date().toISOString()
+      cancelAtPeriodEnd: subscription.cancelAtPeriodEnd ?? null,
+      startDate: new Date().toISOString(),
+      metadata: subscription.metadata ?? null
     }; 
     this.subscriptions.set(id, newSub); 
     return newSub; 
@@ -884,6 +907,9 @@ export class MemStorage implements IStorage {
     const updated = { ...sub, status }; 
     this.subscriptions.set(id, updated); 
     return updated; 
+  }
+  async getSubscriptionByPaystackId(paystackSubscriptionId: string): Promise<Subscription | undefined> { 
+    return Array.from(this.subscriptions.values()).find(sub => sub.paystackSubscriptionId === paystackSubscriptionId); 
   }
   async getSecurityIssues(): Promise<SecurityIssue[]> { return Array.from(this.securityIssues.values()); }
   async createSecurityIssue(issue: InsertSecurityIssue): Promise<SecurityIssue> { 
