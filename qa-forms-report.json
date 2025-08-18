@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-08-18T14:31:02.422Z",
+  "timestamp": "2025-08-18T14:37:22.668Z",
   "summary": {
     "total": 27,
-    "passed": 23,
+    "passed": 24,
     "protected": 3,
     "notFound": 0,
-    "percentage": "85.2"
+    "percentage": "88.9"
   },
   "results": {
     "emails": {
@@ -14,12 +14,8 @@
         "status": 200
       },
       "Customer PIN Email": {
-        "success": false,
-        "status": 403,
-        "error": {
-          "error": "Invalid CSRF token",
-          "code": "CSRF_TOKEN_MISMATCH"
-        }
+        "success": true,
+        "status": 200
       },
       "Newsletter Subscription": {
         "success": true,
@@ -90,14 +86,14 @@
       "CSRF Token (Customer)": {
         "success": true,
         "data": {
-          "csrfToken": "e81e7f8a53ac931e3c3249c84a6c1f48e7e775cc3ca35c69606d816965bbf942",
+          "csrfToken": "71740dd2ecbd2e1772c216019eee2d06351fbdf5b5ff58c303a8a3ba21faa2c3",
           "surface": "customer"
         }
       },
       "CSRF Token (Admin)": {
         "success": true,
         "data": {
-          "csrfToken": "e81e7f8a53ac931e3c3249c84a6c1f48e7e775cc3ca35c69606d816965bbf942",
+          "csrfToken": "71740dd2ecbd2e1772c216019eee2d06351fbdf5b5ff58c303a8a3ba21faa2c3",
           "surface": "admin"
         }
       }

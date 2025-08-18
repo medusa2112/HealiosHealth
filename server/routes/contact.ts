@@ -18,20 +18,11 @@ router.post('/', rateLimit(5, 300000), async (req, res) => {
   try {
     const validatedData = contactFormSchema.parse(req.body);
     
-    // Send admin alert notification
-    try {
-      await EmailService.sendAdminAlert({
-        subject: `Contact Form: ${validatedData.subject}`,
-        message: `New contact form submission from ${validatedData.name} (${validatedData.email}): ${validatedData.message}`,
-        severity: 'info'
-      });
-      
-      console.log(`[CONTACT] Contact form submitted by ${validatedData.name} <${validatedData.email}>: ${validatedData.subject}`);
-      
-    } catch (emailError) {
-      console.error('Failed to send contact form notification:', emailError);
-      // Don't fail the form submission if email fails
-    }
+    // Log contact form submission (email service method doesn't exist yet)
+    console.log(`[CONTACT] Contact form submitted by ${validatedData.name} <${validatedData.email}>: ${validatedData.subject}`);
+    console.log(`[CONTACT] Message: ${validatedData.message}`);
+    
+    // TODO: Implement EmailService.sendAdminAlert method for notifications
     
     res.json({ 
       success: true,

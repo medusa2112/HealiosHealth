@@ -32,17 +32,11 @@ router.post('/', rateLimit(3, 300000), async (req, res) => {
     // Store review (this would go to database in real implementation)
     console.log('[REVIEW] New review submitted:', review);
     
-    // Send admin alert notification
-    try {
-      await EmailService.sendAdminAlert({
-        subject: `New Product Review: ${review.title}`,
-        message: `New review for product ${review.productId} by ${review.customerName} (${review.customerEmail}). Rating: ${review.rating}/5. Comment: ${review.comment}`,
-        severity: 'info'
-      });
-    } catch (emailError) {
-      console.error('Failed to send review notification:', emailError);
-      // Don't fail the review submission if email fails
-    }
+    // Log review submission (email service method doesn't exist yet)  
+    console.log(`[REVIEW] New review for product ${review.productId} by ${review.customerName} <${review.customerEmail}>`);
+    console.log(`[REVIEW] Rating: ${review.rating}/5, Title: "${review.title}", Comment: "${review.comment}"`);
+    
+    // TODO: Implement EmailService.sendAdminAlert method for notifications
     
     res.json({ 
       success: true,
