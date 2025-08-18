@@ -1,0 +1,81 @@
+{
+  "timestamp": "2025-08-18T05:26:43.898Z",
+  "environment": "PRODUCTION",
+  "totalForms": 12,
+  "passingForms": 0,
+  "failingForms": 12,
+  "forms": [
+    {
+      "name": "Newsletter Subscription Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:79:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:78:3)"
+    },
+    {
+      "name": "Pre-order Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:103:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:102:3)"
+    },
+    {
+      "name": "Customer Login Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:142:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:141:3)"
+    },
+    {
+      "name": "Customer Registration Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:165:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:164:3)"
+    },
+    {
+      "name": "Forgot Password Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:188:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:187:3)"
+    },
+    {
+      "name": "Stock Notification Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:209:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:208:3)"
+    },
+    {
+      "name": "Consultation Booking Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:235:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:234:3)"
+    },
+    {
+      "name": "Wellness Quiz Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:259:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:258:3)"
+    },
+    {
+      "name": "Admin Login Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:290:18\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:288:3)"
+    },
+    {
+      "name": "Contact Form API",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:301:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:300:3)"
+    },
+    {
+      "name": "Profile Update Form",
+      "status": "ERROR",
+      "error": "Unexpected token 'N', \"Not Found\" is not valid JSON",
+      "stack": "SyntaxError: Unexpected token 'N', \"Not Found\" is not valid JSON\n    at JSON.parse (<anonymous>)\n    at Response.json (file:///home/runner/workspace/node_modules/node-fetch/src/body.js:149:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async getCsrfToken (file:///home/runner/workspace/qa-forms-audit.mjs:65:16)\n    at async file:///home/runner/workspace/qa-forms-audit.mjs:325:23\n    at async testForm (file:///home/runner/workspace/qa-forms-audit.mjs:31:20)\n    at async runAllTests (file:///home/runner/workspace/qa-forms-audit.mjs:324:3)"
+    },
+    {
+      "name": "Checkout Form (Stripe)",
+      "status": "FAILED",
+      "error": "Status 404",
+      "details": "Health check endpoint accessible (Stripe configured)"
+    }
+  ]
+}
