@@ -997,25 +997,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Pre-order submission
   app.post("/api/pre-orders", async (req, res) => {
     try {
+      console.log('Pre-order request body:', req.body);
       const validatedData = insertPreOrderSchema.parse(req.body);
+      console.log('Validated pre-order data:', validatedData);
       const preOrder = await storage.createPreOrder(validatedData);
       
       // Send email notification using Resend
-      
       try {
         const emailResult = await EmailService.sendPreOrderNotification(preOrder);
-        
+        console.log('Pre-order email sent successfully');
       } catch (emailError) {
-        // // console.error('❌ Failed to send pre-order email notification:', emailError);
+        console.error('❌ Failed to send pre-order email notification:', emailError);
         // Don't fail the pre-order if email fails
       }
       
       res.json(preOrder);
     } catch (error) {
+      console.error('Pre-order creation error:', error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid input", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create pre-order" });
+      res.status(500).json({ message: "Failed to create pre-order", error: error.message });
     }
   });
 
