@@ -472,11 +472,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   try {
     console.log(`[EMAIL] Attempting to send ${type} email to ${to}`);
 
-    const fromAddress = process.env.RESEND_FROM_ADDRESS 
-      ? (process.env.RESEND_FROM_ADDRESS.includes('<') 
-         ? process.env.RESEND_FROM_ADDRESS 
-         : `Healios <${process.env.RESEND_FROM_ADDRESS}>`)
-      : 'Healios <onboarding@resend.dev>';
+    const fromAddress = 'Healios <dn@thefourths.com>';
 
     console.log(`[EMAIL] From address: ${fromAddress}`);
 

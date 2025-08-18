@@ -70,7 +70,7 @@ Document path: ${params.documentPath}
     const emailPromises = params.to.map(async (email) => {
       return await mailService.send({
         to: email,
-        from: 'noreply@healios-health.com', // Use your verified sender
+        from: 'Healios <dn@thefourths.com>', // Updated sender address
         subject: params.subject,
         text: textContent,
         html: htmlContent,

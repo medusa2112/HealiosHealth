@@ -19,15 +19,19 @@ router.post("/webhook",
   async (req, res) => {
     const signature = req.headers["x-paystack-signature"] as string;
     
-    if (!signature) {
+    if (!signature && process.env.NODE_ENV !== 'development') {
       return res.status(400).send("No signature provided");
     }
     
-    // Verify webhook signature
-    const isValid = paystack.verifyWebhookSignature(req.body.toString(), signature);
-    
-    if (!isValid) {
-      return res.status(400).send("Invalid signature");
+    // Verify webhook signature (skip in development for testing)
+    if (process.env.NODE_ENV !== 'development') {
+      const isValid = paystack.verifyWebhookSignature(req.body.toString(), signature);
+      
+      if (!isValid) {
+        return res.status(400).send("Invalid signature");
+      }
+    } else {
+      console.log('[PAYSTACK] Development mode - skipping webhook signature verification');
     }
     
     const event = JSON.parse(req.body.toString());
@@ -84,11 +88,28 @@ router.post("/webhook",
           
           // Send order confirmation email
           try {
-            await fetch(`${process.env.VITE_API_URL || 'http://localhost:5000'}/api/send-order-confirmation`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ orderId: order.id })
-            });
+            const { sendEmail } = await import('../lib/email');
+            
+            // Parse order items for email template
+            let orderItems = [];
+            try {
+              orderItems = JSON.parse(metadata.orderItems || '[]');
+            } catch (e) {
+              console.log('Could not parse order items for email');
+            }
+            
+            const emailResult = await sendEmail(
+              transaction.customer.email, 
+              'order_confirm', 
+              {
+                id: order.id,
+                amount: parseFloat(order.totalAmount),
+                customerName: order.customerName || '',
+                items: orderItems
+              }
+            );
+            
+            console.log(`[EMAIL] Order confirmation email sent: ${emailResult.success ? 'SUCCESS' : 'FAILED'}`, emailResult);
           } catch (emailError) {
             console.error('Failed to send order confirmation email:', emailError);
           }

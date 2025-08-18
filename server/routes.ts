@@ -148,6 +148,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const aiAssistantRoutes = await import('./routes/aiAssistant');
   app.use('/api/ai-assistant', aiAssistantRoutes.aiAssistantRoutes);
   
+  // Register newsletter and form routes
+  const newsletterRoutes = await import('./routes/newsletter');
+  app.use('/api/newsletter', newsletterRoutes.default);
+  
+  const restockRoutes = await import('./routes/restock-notifications');
+  app.use('/api/restock-notifications', restockRoutes.default);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);
