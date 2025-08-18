@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Package, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Package, ArrowLeft, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'wouter';
 import { SEOHead } from '@/components/seo-head';
 
@@ -15,6 +15,7 @@ declare global {
 interface Order {
   id: string;
   customerEmail: string;
+  customerName?: string;
   totalAmount: string;
   orderItems: string;
   shippingAddress: string;
@@ -88,6 +89,31 @@ export default function OrderConfirmationPage() {
       return JSON.parse(orderItemsJson);
     } catch {
       return [];
+    }
+  };
+
+  const parseAddress = (addressString: string) => {
+    try {
+      const address = JSON.parse(addressString);
+      return {
+        name: order?.customerName || 'Customer',
+        line1: address.line1 || '',
+        line2: address.line2 || '',
+        city: address.city || '',
+        state: address.state || '',
+        zipCode: address.zipCode || '',
+        country: address.country || 'South Africa'
+      };
+    } catch (error) {
+      return {
+        name: order?.customerName || 'Customer',
+        line1: addressString || '',
+        line2: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'South Africa'
+      };
     }
   };
 
@@ -190,12 +216,24 @@ export default function OrderConfirmationPage() {
               {/* Shipping Address */}
               <Card className="mb-8">
                 <CardHeader>
-                  <CardTitle>Shipping Address</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5" />
+                    Shipping Address
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="whitespace-pre-line text-gray-700">
-                    {order.shippingAddress}
-                  </div>
+                  {(() => {
+                    const address = parseAddress(order.shippingAddress);
+                    return (
+                      <div className="space-y-1 text-gray-700">
+                        <p className="font-medium">{address.name}</p>
+                        <p>{address.line1}</p>
+                        {address.line2 && <p>{address.line2}</p>}
+                        <p>{address.city}, {address.state} {address.zipCode}</p>
+                        <p>{address.country}</p>
+                      </div>
+                    );
+                  })()}
                 </CardContent>
               </Card>
             </>
@@ -204,12 +242,43 @@ export default function OrderConfirmationPage() {
           {/* What's Next */}
           <Card className="mb-8 bg-black text-white">
             <CardContent className="pt-6">
-              <h3 className="text-lg font-semibold mb-3">What's Next?</h3>
-              <div className="space-y-2 text-sm">
+              <h3 className="text-lg font-semibold mb-4">What's Next?</h3>
+              <div className="space-y-2 text-sm mb-6">
                 <p>• We'll process your order within 1-2 business days</p>
                 <p>• You'll receive tracking information via email</p>
                 <p>• Standard delivery takes 3-5 business days</p>
-                <p>• Questions? Contact us at support@thehealios.com</p>
+                <p>• Your order will be carefully packaged for safe delivery</p>
+              </div>
+              
+              <div className="border-t border-gray-600 pt-4">
+                <h4 className="font-semibold mb-3">Need Help? Contact Support</h4>
+                <div className="space-y-3 text-sm">
+                  <a 
+                    href="mailto:support@thehealios.com" 
+                    className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                    support@thehealios.com
+                  </a>
+                  <a 
+                    href="tel:+27123456789" 
+                    className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    +27 12 345 6789
+                  </a>
+                  <button 
+                    onClick={() => {
+                      // You can integrate with a chat widget here (e.g., Intercom, Zendesk, Crisp)
+                      // For now, opens email client with pre-filled subject
+                      window.location.href = `mailto:support@thehealios.com?subject=Order Support - ${order?.id ? '#' + order.id.slice(-8) : 'General'}`;
+                    }}
+                    className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Live Chat Support
+                  </button>
+                </div>
               </div>
             </CardContent>
           </Card>
