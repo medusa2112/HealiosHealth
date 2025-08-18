@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-08-18T14:24:48.714Z",
+  "timestamp": "2025-08-18T14:31:02.422Z",
   "summary": {
     "total": 27,
-    "passed": 19,
+    "passed": 23,
     "protected": 3,
     "notFound": 0,
-    "percentage": "70.4"
+    "percentage": "85.2"
   },
   "results": {
     "emails": {
@@ -32,20 +32,16 @@
     },
     "forms": {
       "Contact Form": {
-        "success": false,
-        "status": 403
+        "success": true
       },
       "Wellness Quiz": {
-        "success": false,
-        "status": 403
+        "success": true
       },
       "Product Review": {
-        "success": false,
-        "status": 403
+        "success": true
       },
       "Referral": {
-        "success": false,
-        "status": 403
+        "success": true
       }
     },
     "adminEndpoints": {
@@ -94,14 +90,14 @@
       "CSRF Token (Customer)": {
         "success": true,
         "data": {
-          "csrfToken": "2c390ef34663c47e19929ca64f97bab820c60587981c1ec20aa9361622c4df79",
+          "csrfToken": "e81e7f8a53ac931e3c3249c84a6c1f48e7e775cc3ca35c69606d816965bbf942",
           "surface": "customer"
         }
       },
       "CSRF Token (Admin)": {
         "success": true,
         "data": {
-          "csrfToken": "2c390ef34663c47e19929ca64f97bab820c60587981c1ec20aa9361622c4df79",
+          "csrfToken": "e81e7f8a53ac931e3c3249c84a6c1f48e7e775cc3ca35c69606d816965bbf942",
           "surface": "admin"
         }
       }

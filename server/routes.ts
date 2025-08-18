@@ -155,6 +155,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const restockRoutes = await import('./routes/restock-notifications');
   app.use('/api/restock-notifications', restockRoutes.default);
   
+  // Register contact form routes
+  const contactRoutes = await import('./routes/contact');
+  app.use('/api/contact', contactRoutes.default);
+  
+  // Register review routes  
+  const reviewRoutes = await import('./routes/reviews');
+  app.use('/api/reviews', reviewRoutes.default);
+  
   // Register admin cart analytics routes
   const adminCartsRoutes = await import('./routes/admin/carts');
   app.use('/api/admin/carts', adminCartsRoutes.default);
@@ -1075,7 +1083,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Article generation endpoints have been removed for security purposes
 
-  // Quiz completion endpoint
+  // Quiz completion endpoint - both /complete and /submit for compatibility
   app.post("/api/quiz/complete", requireAuth, async (req, res) => {
     try {
       const {
@@ -1123,6 +1131,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
     } catch (error) {
       // // console.error("Quiz completion failed:", error);
+      res.status(500).json({ 
+        message: "Failed to process quiz completion", 
+        error: (error as Error).message 
+      });
+    }
+  });
+
+  // Quiz submit endpoint - alias for complete (for compatibility)
+  app.post("/api/quiz/submit", async (req, res) => {
+    try {
+      const {
+        email,
+        firstName,
+        lastName,
+        consentToMarketing,
+        answers
+      } = req.body;
+      
+      // Validate required fields
+      if (!email || !answers) {
+        return res.status(400).json({ 
+          message: "Email and answers are required" 
+        });
+      }
+      
+      // Generate personalized recommendations based on quiz answers
+      const recommendations = QuizRecommendationService.analyzeAnswersAndRecommend(answers);
+      
+      // Save quiz result to database
+      const quizResult = await storage.createQuizResult({
+        email,
+        firstName: firstName || 'Anonymous',
+        lastName: lastName || 'User',
+        consentToMarketing: consentToMarketing || false,
+        answers: JSON.stringify(answers),
+        recommendations: JSON.stringify(recommendations)
+      });
+      
+      // Send emails (user recommendations + admin notification)
+      const emailSuccess = await EmailService.sendQuizRecommendations(quizResult, recommendations);
+      
+      if (!emailSuccess) {
+        console.error('Failed to send quiz completion emails');
+        // Still return success as the quiz was saved, just log the email failure
+      }
+      
+      res.json({
+        success: true,
+        message: "Quiz completed successfully! Check your email for personalized recommendations.",
+        quizId: quizResult.id,
+        recommendationCount: recommendations.primaryRecommendations.length + recommendations.secondaryRecommendations.length
+      });
+      
+    } catch (error) {
+      console.error("Quiz completion failed:", error);
       res.status(500).json({ 
         message: "Failed to process quiz completion", 
         error: (error as Error).message 

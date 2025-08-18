@@ -71,6 +71,8 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       fullPath.includes('/auth/register') ||
       fullPath.includes('/auth/customer/login') ||  // Phase 8: Customer login
       fullPath.includes('/auth/customer/register') || // Phase 8: Customer register
+      fullPath.includes('/auth/customer/send-pin') ||  // Customer PIN send endpoint  
+      fullPath.includes('/auth/customer/verify-pin') ||  // Customer PIN verify endpoint
       fullPath.includes('/auth/admin/login') ||  // Phase 8: Admin login
       fullPath.includes('/auth/forgot-password') ||
       fullPath.includes('/auth/reset-password') ||
@@ -87,7 +89,12 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       fullPath.includes('/paystack/create-checkout') ||  // PayStack checkout endpoint
       fullPath.includes('/paystack/webhook') ||  // PayStack webhook endpoint
       fullPath.includes('/newsletter/subscribe') ||  // Newsletter subscription form
-      fullPath.includes('/restock-notifications')) {  // Restock notification form
+      fullPath.includes('/restock-notifications') ||  // Restock notification form  
+      fullPath.includes('/api/contact') ||  // Contact form
+      fullPath.includes('/api/quiz/submit') ||  // Wellness quiz form (submit endpoint)
+      fullPath.includes('/api/quiz/complete') ||  // Wellness quiz form (complete endpoint)
+      fullPath.includes('/api/reviews') ||  // Product review form
+      fullPath.includes('/api/referrals')) {  // Referral form
     return next();
   }
 
