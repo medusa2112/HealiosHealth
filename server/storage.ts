@@ -875,6 +875,14 @@ export class MemStorage implements IStorage {
   }
   async updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined> { const sub = this.subscriptions.get(id); if (!sub) return undefined; const updated = { ...sub, ...updates }; this.subscriptions.set(id, updated); return updated; }
   async getAllSubscriptions(): Promise<Subscription[]> { return Array.from(this.subscriptions.values()); }
+  async getSubscriptions(): Promise<Subscription[]> { return Array.from(this.subscriptions.values()); }
+  async updateSubscriptionStatus(id: string, status: string): Promise<Subscription | undefined> { 
+    const sub = this.subscriptions.get(id); 
+    if (!sub) return undefined; 
+    const updated = { ...sub, status }; 
+    this.subscriptions.set(id, updated); 
+    return updated; 
+  }
   async getSecurityIssues(): Promise<SecurityIssue[]> { return Array.from(this.securityIssues.values()); }
   async createSecurityIssue(issue: InsertSecurityIssue): Promise<SecurityIssue> { 
     const id = randomUUID(); 

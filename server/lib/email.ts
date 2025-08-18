@@ -8,10 +8,16 @@ export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND
 export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "abandoned_cart_1h" | "abandoned_cart_24h" | "reorder_reminder" | "reorder_final" | "referral_reward" | "referral_welcome" | "pin_auth";
 
 interface EmailData {
-  amount: number;
-  id: string;
+  amount?: number;
+  id?: string;
   customerName?: string;
   items?: any[];
+  cart?: any;
+  userName?: string;
+  cartItems?: any[];
+  resumeCheckoutUrl?: string;
+  discountCode?: string;
+  discountAmount?: string;
   [key: string]: any;
 }
 
@@ -108,7 +114,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
       `
         <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi${data.customerName ? ` ${data.customerName}` : ''},</p>
         
-        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Thank you for your order! Your payment of <strong style="color: #000000;">R${data.amount.toFixed(2)}</strong> has been received and is being processed.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Thank you for your order! Your payment of <strong style="color: #000000;">R${(data.amount || 0).toFixed(2)}</strong> has been received and is being processed.</p>
         
         <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
           <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
@@ -145,13 +151,13 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     refund: (data) => healiosEmailTemplate(
       "Refund Processed",
       `
-        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Your refund of <strong style="color: #000000;">R${data.amount.toFixed(2)}</strong> has been processed successfully.</p>
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Your refund of <strong style="color: #000000;">R${(data.amount || 0).toFixed(2)}</strong> has been processed successfully.</p>
         
         <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
           <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
             <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">REFUND DETAILS</p>
             <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Payment Intent ID:</strong> ${data.id}</p>
-            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Refund Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${data.amount.toFixed(2)}</span></p>
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Refund Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${(data.amount || 0).toFixed(2)}</span></p>
           </div>
         </div>
         
@@ -171,7 +177,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
           <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
             <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">REORDER DETAILS</p>
-            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Total Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${data.amount.toFixed(2)}</span></p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Total Amount:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 600;">R${(data.amount || 0).toFixed(2)}</span></p>
             <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Session ID:</strong> ${data.id}</p>
             <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Status:</strong> <span style="color: hsl(220, 100%, 40%); font-weight: 500;">Processing</span></p>
           </div>
