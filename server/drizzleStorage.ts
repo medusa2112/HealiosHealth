@@ -551,17 +551,28 @@ export class DrizzleStorage implements IStorage {
       conditions.push(eq(reorderLogs.status, options.status));
     }
     
-    let query = conditions.length > 0 
-      ? db.select().from(reorderLogs).where(and(...conditions))
-      : db.select().from(reorderLogs);
-    
-    query = query.orderBy(desc(reorderLogs.timestamp));
-    
-    if (options?.limit) {
-      query = query.limit(options.limit);
+    // Build query in one chain to avoid TypeScript inference issues
+    if (conditions.length > 0) {
+      if (options?.limit) {
+        return await db.select().from(reorderLogs)
+          .where(and(...conditions))
+          .orderBy(desc(reorderLogs.timestamp))
+          .limit(options.limit);
+      } else {
+        return await db.select().from(reorderLogs)
+          .where(and(...conditions))
+          .orderBy(desc(reorderLogs.timestamp));
+      }
+    } else {
+      if (options?.limit) {
+        return await db.select().from(reorderLogs)
+          .orderBy(desc(reorderLogs.timestamp))
+          .limit(options.limit);
+      } else {
+        return await db.select().from(reorderLogs)
+          .orderBy(desc(reorderLogs.timestamp));
+      }
     }
-    
-    return await query;
   }
 
   async getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]> {
@@ -911,18 +922,35 @@ export class DrizzleStorage implements IStorage {
   }
   
   async getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]> {
-    // Get all variants and filter by tags
-    const allVariants = await db.select().from(productVariants);
+    // Get all variants with their associated products to access tags
+    const variantsWithProducts = await db.select({
+      id: productVariants.id,
+      productId: productVariants.productId,
+      name: productVariants.name,
+      price: productVariants.price,
+      sku: productVariants.sku,
+      imageUrl: productVariants.imageUrl,
+      stockQuantity: productVariants.stockQuantity,
+      inStock: productVariants.inStock,
+      isDefault: productVariants.isDefault,
+      subscriptionPriceId: productVariants.subscriptionPriceId,
+      subscriptionIntervalDays: productVariants.subscriptionIntervalDays,
+      subscriptionEnabled: productVariants.subscriptionEnabled,
+      createdAt: productVariants.createdAt,
+      tags: products.tags
+    })
+    .from(productVariants)
+    .leftJoin(products, eq(productVariants.productId, products.id));
     
     if (excludeTags.length === 0) {
-      return allVariants;
+      return variantsWithProducts.map(({ tags, ...variant }) => variant) as ProductVariant[];
     }
     
     // Filter variants that don't have any of the excluded tags
-    return allVariants.filter(variant => {
+    return variantsWithProducts.filter(variant => {
       const tags = variant.tags || [];
       return !excludeTags.some(excludeTag => tags.includes(excludeTag));
-    });
+    }).map(({ tags, ...variant }) => variant) as ProductVariant[];
   }
 
   // Email events - not implemented yet, would require email_events table
