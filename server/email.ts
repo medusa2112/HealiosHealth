@@ -177,7 +177,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      // // console.error('Failed to send newsletter confirmation email:', error);
+      console.error('Failed to send newsletter confirmation email:', error);
       return false;
     }
   }
@@ -257,7 +257,7 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      // // console.error('Failed to send order confirmation email:', error);
+      console.error('Failed to send order confirmation email:', error);
       return false;
     }
   }
@@ -1206,6 +1206,7 @@ The Healios Team
       const testOrderData: OrderEmailData = {
         order: {
           id: 'test-order-12345678',
+          metadata: null,
           customerEmail: 'test@example.com',
           customerName: 'John Doe',
           customerPhone: '+27123456789',
@@ -1216,7 +1217,10 @@ The Healios Team
           currency: 'ZAR',
           paymentStatus: 'completed',
           orderStatus: 'processing',
-          stripePaymentIntentId: 'pi_test123',
+          paymentMethod: 'paystack',
+          paystackReference: 'test-ref-123',
+          paystackAccessCode: 'test-access-123',
+          stripeSessionId: null,
           trackingNumber: null,
           notes: null,
           createdAt: new Date().toISOString(),
@@ -1224,8 +1228,10 @@ The Healios Team
           userId: null,
           refundStatus: null,
           disputeStatus: null,
-          stripeSessionId: null,
           discountCode: null,
+          discountAmount: null,
+          shippingCost: '0.00',
+          taxAmount: '0.00',
         },
         orderItems: [
           {

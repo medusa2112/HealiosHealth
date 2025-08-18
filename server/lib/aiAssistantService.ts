@@ -6,6 +6,17 @@ import { randomUUID } from "crypto";
 const userRequestCounts: Map<string, { count: number; resetTime: number }> = new Map();
 const MAX_REQUESTS_PER_HOUR = 10;
 
+// Clean up expired rate limit entries to prevent memory leaks
+function cleanupExpiredRateLimits(now: number) {
+  if (userRequestCounts.size > 1000) { // Only cleanup when we have many entries
+    for (const [userId, limit] of userRequestCounts.entries()) {
+      if (now > limit.resetTime) {
+        userRequestCounts.delete(userId);
+      }
+    }
+  }
+}
+
 // Healios FAQ Knowledge Base
 const FAQ_KNOWLEDGE_BASE = [
   {
@@ -70,6 +81,9 @@ function checkRateLimit(userId: string): boolean {
       count: 1,
       resetTime: now + (60 * 60 * 1000) // 1 hour from now
     });
+    
+    // Clean up expired entries to prevent memory leaks
+    cleanupExpiredRateLimits(now);
     return true;
   }
   
@@ -141,7 +155,7 @@ export async function handleOrderTracking(userId: string): Promise<string> {
     : `${orderItems.length} items`;
   
   let statusMessage = "";
-  const orderStatus = (latestOrder as any).status || latestOrder.stripePaymentStatus;
+  const orderStatus = (latestOrder as any).status || latestOrder.paymentStatus;
   switch (orderStatus) {
     case 'pending':
       statusMessage = "Your order is being processed and will ship soon.";
@@ -209,11 +223,13 @@ export async function handleReturnRequest(userId: string, orderId?: string): Pro
   try {
     await sendEmail(
       'support@healios.com',
-      'order-confirmation',
-      `Customer requested return for order #${targetOrder.id.slice(0, 8)}. 
-       Customer: ${user?.email}
-       Order amount: R${targetOrder.totalAmount}
-       Order placed: ${daysSinceOrder} days ago`
+      'admin_alert',
+      {
+        subject: `Return Request - Order #${targetOrder.id.slice(0, 8)}`,
+        customerName: user?.email || 'Unknown Customer',
+        id: targetOrder.id,
+        amount: parseFloat(targetOrder.totalAmount || '0')
+      }
     );
   } catch (error) {
     
@@ -433,14 +449,14 @@ export async function escalateToSupport(
     try {
       await sendEmail(
         'support@healios.com',
-        'order-confirmation',
-        `AI conversation escalated to support.
-         Ticket ID: ${ticket.id}
-         Reason: ${reason}
-         Customer: ${email}
-         
-         Conversation transcript:
-         ${session.messages}`
+        'admin_alert',
+        {
+          subject: `AI Escalation - Ticket #${ticket.id}`,
+          customerName: email,
+          id: ticket.id,
+          escalationReason: reason,
+          transcript: session.messages
+        }
       );
     } catch (error) {
       

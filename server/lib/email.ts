@@ -22,20 +22,32 @@ interface EmailData {
 }
 
 // Rate limiting for email sends (Resend allows 2 per second)
-let lastEmailTime = 0;
+// Thread-safe rate limiting using Map to avoid race conditions
+const userEmailLimits = new Map<string, number>();
 const EMAIL_RATE_LIMIT_MS = 600; // 600ms between emails (safer than 500ms)
 
-async function rateLimitedSend(fn: () => Promise<any>): Promise<any> {
+async function rateLimitedSend(fn: () => Promise<any>, userId: string = 'global'): Promise<any> {
   const now = Date.now();
-  const timeSinceLastEmail = now - lastEmailTime;
+  const lastTime = userEmailLimits.get(userId) || 0;
+  const timeSinceLastEmail = now - lastTime;
   
   if (timeSinceLastEmail < EMAIL_RATE_LIMIT_MS) {
     const delay = EMAIL_RATE_LIMIT_MS - timeSinceLastEmail;
-    
     await new Promise(resolve => setTimeout(resolve, delay));
   }
   
-  lastEmailTime = Date.now();
+  userEmailLimits.set(userId, Date.now());
+  
+  // Clean up old entries periodically to prevent memory leaks
+  if (userEmailLimits.size > 1000) {
+    const cutoff = Date.now() - (60 * 60 * 1000); // 1 hour ago
+    for (const [key, timestamp] of userEmailLimits.entries()) {
+      if (timestamp < cutoff) {
+        userEmailLimits.delete(key);
+      }
+    }
+  }
+  
   return fn();
 }
 
