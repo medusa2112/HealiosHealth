@@ -5,79 +5,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { UserPlus, Mail, Loader2 } from 'lucide-react';
+import { UserPlus, Loader2, CheckCircle } from 'lucide-react';
 
 export function RegisterForm() {
   const [, setLocation] = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: ''
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<'email' | 'pin'>('email');
-  const [pin, setPin] = useState('');
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) {
+    
+    // Validate form data
+    if (!formData.email.trim()) {
       setError('Please enter your email address');
       return;
     }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // First check if user already exists
-      const checkResponse = await fetch('/api/auth/check-user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: email.trim() })
-      });
-
-      const checkData = await checkResponse.json();
-
-      if (!checkResponse.ok) {
-        throw new Error(checkData.message || 'Failed to verify email');
-      }
-
-      // If user already exists, redirect to login
-      if (checkData.exists) {
-        setError('An account with this email already exists. Redirecting to sign in...');
-        setTimeout(() => {
-          setLocation(`/login?email=${encodeURIComponent(email.trim())}&message=${encodeURIComponent('Please sign in to your existing account')}`);
-        }, 2000);
-        return;
-      }
-
-      // User doesn't exist, proceed with registration
-      const response = await fetch('/api/auth/send-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: email.trim() })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to send PIN');
-      }
-
-      setSuccess('A one-time PIN has been sent to your email. Please check your inbox.');
-      setStep('pin');
-    } catch (error) {
-      // // console.error('Email registration error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to send PIN. Please try again.');
-    } finally {
-      setIsLoading(false);
+    if (!formData.firstName.trim()) {
+      setError('Please enter your first name');
+      return;
     }
-  };
-
-  const handlePinSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pin.trim()) {
-      setError('Please enter the PIN from your email');
+    if (!formData.lastName.trim()) {
+      setError('Please enter your last name');
       return;
     }
 
@@ -85,49 +39,45 @@ export function RegisterForm() {
     setError(null);
 
     try {
-      const response = await fetch('/api/auth/verify-pin', {
+      // Create user account directly
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, pin: pin.trim() })
+        body: JSON.stringify({
+          email: formData.email.trim(),
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim()
+        })
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Invalid PIN');
+        if (response.status === 400 && data.message?.includes('already exists')) {
+          setError('An account with this email already exists. Redirecting to sign in...');
+          setTimeout(() => {
+            setLocation(`/login?email=${encodeURIComponent(formData.email.trim())}&message=${encodeURIComponent('Please sign in to your existing account')}`);
+          }, 2000);
+          return;
+        }
+        throw new Error(data.message || 'Failed to create account');
       }
 
-      // Successful authentication - handle redirect properly based on profile completion
-      const { user, needsProfileCompletion, redirectTo } = data;
+      // Account created successfully
+      setSuccess(`Welcome to Healios, ${formData.firstName}! Your account has been created successfully.`);
       
-      if (needsProfileCompletion) {
-        // New user or incomplete profile - redirect to profile completion
-        const targetUrl = redirectTo || '/profile';
-        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1500);
-      } else {
-        // Existing user with complete profile - redirect to shopping
-        const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
-        setTimeout(() => {
-          window.location.href = returnUrl;
-        }, 1500);
-      }
+      // Redirect to sign in page after 3 seconds
+      setTimeout(() => {
+        setLocation(`/login?email=${encodeURIComponent(formData.email.trim())}&message=${encodeURIComponent('Account created! Please sign in to access your account.')}`);
+      }, 3000);
+      
     } catch (error) {
-      // // console.error('PIN verification error:', error);
-      setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
+      console.error('Registration error:', error);
+      setError(error instanceof Error ? error.message : 'Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleBackToEmail = () => {
-    setStep('email');
-    setPin('');
-    setError(null);
-    setSuccess(null);
   };
 
   return (
@@ -136,20 +86,20 @@ export function RegisterForm() {
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto mb-4">
             <div className="w-12 h-12 mx-auto mb-4 bg-black dark:bg-white flex items-center justify-center">
-              {step === 'email' ? (
-                <UserPlus className="w-6 h-6 text-white dark:text-black" />
+              {success ? (
+                <CheckCircle className="w-6 h-6 text-white dark:text-black" />
               ) : (
-                <Mail className="w-6 h-6 text-white dark:text-black" />
+                <UserPlus className="w-6 h-6 text-white dark:text-black" />
               )}
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-black dark:text-white">
-            {step === 'email' ? 'Create your account' : 'Enter PIN'}
+            {success ? 'Account Created!' : 'Create your account'}
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            {step === 'email' 
-              ? 'Enter your email address to get started with Healios premium wellness products.' 
-              : 'We sent a PIN to your email. Enter it below to complete registration.'
+            {success 
+              ? 'You can now sign in to access your account.' 
+              : 'Enter your details to create your Healios account.'
             }
           </CardDescription>
         </CardHeader>
@@ -167,18 +117,50 @@ export function RegisterForm() {
             </Alert>
           )}
 
-          {step === 'email' ? (
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
+          {!success && (
+            <form onSubmit={handleRegisterSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName" className="text-black dark:text-white">
+                  First Name
+                </Label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="Enter your first name"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  disabled={isLoading}
+                  className="w-full"
+                  data-testid="input-firstname"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="lastName" className="text-black dark:text-white">
+                  Last Name
+                </Label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Enter your last name"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  disabled={isLoading}
+                  className="w-full"
+                  data-testid="input-lastname"
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-black dark:text-white">
-                  Email address
+                  Email Address
                 </Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   disabled={isLoading}
                   className="w-full"
                   data-testid="input-email"
@@ -187,70 +169,21 @@ export function RegisterForm() {
               
               <Button
                 type="submit"
-                disabled={isLoading || !email.trim()}
+                disabled={isLoading || !formData.email.trim() || !formData.firstName.trim() || !formData.lastName.trim()}
                 className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                data-testid="button-send-pin"
+                data-testid="button-create-account"
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Sending PIN...
+                    Creating Account...
                   </>
                 ) : (
                   <>
-                    <Mail className="w-4 h-4 mr-2" />
-                    Send PIN
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Create Account
                   </>
                 )}
-              </Button>
-            </form>
-          ) : (
-            <form onSubmit={handlePinSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="pin" className="text-black dark:text-white">
-                  Enter PIN
-                </Label>
-                <Input
-                  id="pin"
-                  type="text"
-                  placeholder="Enter the 6-digit PIN"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  disabled={isLoading}
-                  className="w-full text-center text-lg tracking-widest"
-                  maxLength={6}
-                  data-testid="input-pin"
-                />
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                  Sent to: {email}
-                </p>
-              </div>
-              
-              <Button
-                type="submit"
-                disabled={isLoading || !pin.trim()}
-                className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                data-testid="button-verify-pin"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  'Verify & Sign In'
-                )}
-              </Button>
-              
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleBackToEmail}
-                disabled={isLoading}
-                className="w-full"
-                data-testid="button-back"
-              >
-                Back to Email
               </Button>
             </form>
           )}
@@ -273,22 +206,22 @@ export function RegisterForm() {
               >
                 Privacy Policy
               </button>
-              .
             </p>
           </div>
         </CardContent>
 
-        <CardFooter className="pt-0">
-          <div className="text-center w-full text-sm">
-            <span className="text-gray-600 dark:text-gray-400">Already have an account?</span>{' '}
+        <CardFooter className="text-center border-t border-gray-200 dark:border-gray-800 pt-6">
+          <p className="text-sm text-gray-600 dark:text-gray-400 w-full">
+            Already have an account?{' '}
             <button
               type="button"
-              className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors underline font-medium"
+              className="font-medium text-black dark:text-white hover:underline"
               onClick={() => setLocation('/login')}
+              data-testid="link-signin"
             >
               Sign in
             </button>
-          </div>
+          </p>
         </CardFooter>
       </Card>
     </div>

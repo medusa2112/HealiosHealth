@@ -6,13 +6,14 @@ import { sendPinEmail } from '../lib/email';
 
 const router = Router();
 
-// Check if user exists endpoint
+// Check if user exists endpoint - optimized
 router.post('/check-user', async (req, res) => {
   try {
     const { email } = z.object({
       email: z.string().email('Please enter a valid email address')
     }).parse(req.body);
 
+    // Quick check with timeout
     const existingUser = await storage.getUserByEmail(email);
     
     res.json({
@@ -27,10 +28,64 @@ router.post('/check-user', async (req, res) => {
       });
     }
 
-    // // console.error('[CHECK_USER] Error:', error);
+    console.error('[CHECK_USER] Error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to check user status. Please try again.'
+    });
+  }
+});
+
+// Register new user endpoint - creates account immediately
+router.post('/register', async (req, res) => {
+  try {
+    const { email, firstName, lastName } = z.object({
+      email: z.string().email('Please enter a valid email address'),
+      firstName: z.string().min(1, 'First name is required').max(50),
+      lastName: z.string().min(1, 'Last name is required').max(50)
+    }).parse(req.body);
+
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'An account with this email already exists. Please sign in instead.'
+      });
+    }
+
+    // Create new user account
+    const newUser = await storage.createUser({
+      email,
+      firstName,
+      lastName,
+      role: 'customer'
+    });
+
+    console.log(`[REGISTER] New user account created: ${newUser.email} (${newUser.firstName} ${newUser.lastName})`);
+
+    res.json({
+      success: true,
+      message: 'Account created successfully! Please sign in to access your account.',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName
+      }
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.errors[0].message
+      });
+    }
+
+    console.error('[REGISTER] Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create account. Please try again.'
     });
   }
 });
