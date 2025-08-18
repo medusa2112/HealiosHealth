@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import Stripe from "stripe";
+// import Stripe from "stripe"; // DEPRECATED - removed for PayStack migration
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
 import type { CartItem } from "./email";
@@ -31,7 +31,7 @@ import emailTestRoutes from "./routes/email-test";
 import documentationRoutes from "./routes/documentation";
 
 // Stripe imports moved to dedicated service
-import { stripe } from "./lib/stripe";
+// import { stripe } from "./lib/stripe"; // DEPRECATED - removed for PayStack migration
 // Availability imports
 import { deriveAvailability, isOrderable, availabilityRank } from "../lib/availability";
 
@@ -497,8 +497,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create Stripe Checkout Session for external payment processing
+  // DEPRECATED - Stripe checkout session removed for PayStack migration
   app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req: express.Request, res: express.Response) => {
+    console.warn('DEPRECATED: Stripe checkout called - use PayStack instead');
+    res.status(410).json({ error: 'Stripe integration deprecated - use PayStack' });
     try {
       const bodySchema = z.object({
         orderData: z.object({}).passthrough(),
@@ -643,41 +645,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Use /stripe/webhook for secure webhook handling
 
   // Create Shopify redirect endpoint
+  // DEPRECATED - Shopify checkout removed for PayStack migration
   app.post("/api/create-shopify-checkout", async (req, res) => {
-    try {
-      const { orderData, returnUrl } = req.body;
-      
-      // SECURITY: Validate order data before database insertion
-      const validatedOrderData = insertOrderSchema.parse(orderData);
-      
-      // Create order first
-      const order = await storage.createOrder(validatedOrderData);
-      
-      // Update stock
-      const orderItems = JSON.parse(orderData.orderItems);
-      for (const item of orderItems) {
-        await storage.decreaseProductStock(item.product.id, item.quantity);
-      }
-      
-      // For Shopify, you would typically redirect to your Shopify store's checkout
-      // with cart items. This is a placeholder implementation.
-      const shopifyStoreUrl = process.env.SHOPIFY_STORE_URL || 'https://your-store.myshopify.com';
-      
-      // Build Shopify cart URL with items
-      const cartItems = orderItems.map((item: any) => 
-        `${item.product.id}:${item.quantity}`
-      ).join(',');
-      
-      const shopifyCheckoutUrl = `${shopifyStoreUrl}/cart/${cartItems}?return_to=${encodeURIComponent(returnUrl + '?order_id=' + order.id)}`;
-      
-      res.json({ 
-        checkoutUrl: shopifyCheckoutUrl,  
-        orderId: order.id
-      });
-    } catch (error: any) {
-      // // console.error("Shopify checkout error:", error);
-      res.status(500).json({ message: "Error creating Shopify checkout: " + error.message });
-    }
+    console.warn('DEPRECATED: Shopify checkout called - use PayStack instead');
+    res.status(410).json({ error: 'Shopify integration deprecated - use PayStack' });
   });
 
   // Create order endpoint

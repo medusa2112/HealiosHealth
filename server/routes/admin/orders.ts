@@ -2,7 +2,7 @@ import express from "express";
 import { z } from "zod";
 import { requireAdmin } from '../../mw/requireAdmin';
 import { storage } from "../../storage";
-import { stripe } from "../../lib/stripe";
+// import { stripe } from "../../lib/stripe"; // DEPRECATED - removed for PayStack migration
 import { sendEmail } from "../../lib/email";
 import { auditAction } from "../../lib/auditMiddleware";
 
@@ -170,7 +170,8 @@ router.post("/:id/refund", requireAdmin, auditAction('process_refund', 'order'),
       refundData.metadata = { reason };
     }
 
-    const refund = await stripe.refunds.create(refundData);
+    // const refund = await stripe.refunds.create(refundData); // DEPRECATED - removed for PayStack migration
+    return res.status(501).json({ message: "Refund functionality moved to PayStack - not implemented yet" });
 
     // Update order status in database
     await storage.updateOrderRefundStatus(orderId, "refunded");

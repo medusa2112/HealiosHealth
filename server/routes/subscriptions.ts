@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
-import Stripe from "stripe";
+// import Stripe from "stripe"; // DEPRECATED - removed for PayStack migration
 import { db } from "../db";
 import { subscriptions, productVariants, insertSubscriptionSchema } from "@shared/schema";
 import { eq } from "drizzle-orm";
@@ -17,7 +17,8 @@ import {
 import { securityEventLogger } from "../middleware/securityMonitoring";
 
 const router = Router();
-const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-06-30.basil' }) : null;
+// const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-06-30.basil' }) : null; // DEPRECATED - removed for PayStack migration
+const stripe = null;
 
 // Phase 3 Security: Enhanced subscription checkout with fraud detection
 router.post("/checkout", 

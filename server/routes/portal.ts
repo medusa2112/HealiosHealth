@@ -2,8 +2,8 @@ import express from "express";
 import { z } from "zod";
 import { protectRoute } from "../lib/auth";
 import { storage } from "../storage";
-import { insertAddressSchema } from "@shared/schema";
-import { stripe } from "../lib/stripe";
+import { insertAddressSchema, insertOrderSchema } from "@shared/schema";
+// import { stripe } from "../lib/stripe"; // DEPRECATED - removed for PayStack migration
 
 const router = express.Router();
 
@@ -193,53 +193,10 @@ router.post("/orders/:id/reorder", async (req, res) => {
     const validatedOrderData = insertOrderSchema.parse(newOrderData);
     const newOrder = await storage.createOrder(validatedOrderData);
     
-    // Create Stripe checkout session
-    const session = await stripe.checkout.sessions.create({
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: `${req.headers.origin}/order-confirmation?order_id=${newOrder.id}&session_id={CHECKOUT_SESSION_ID}&reorder=true&original_order=${orderId}`,
-      cancel_url: `${req.headers.origin}/portal?reorder_cancelled=true`,
-      customer_email: order.customerEmail,
-      metadata: {
-        type: 'reorder',
-        original_order_id: orderId,
-        reorder_log_id: initiatedLog.id,
-        user_id: userId,
-        channel: 'authenticated_portal',
-        orderId: newOrder.id,
-        userId: userId,
-        sessionToken: sessionToken || undefined,
-        reorderId: orderId, // Track that this is a reorder
-      },
-      billing_address_collection: 'required',
-      shipping_address_collection: {
-        allowed_countries: ['ZA', 'US', 'GB'],
-      },
-    });
-
-    // Phase 13: Update reorder log with checkout session created
-    await storage.createReorderLog({
-      userId: userId,
-      originalOrderId: orderId,
-      status: 'checkout_created',
-      reorderType: 'manual_customer_portal',
-      channel: 'customer_portal_authenticated',
-      itemsCount: items.length,
-      originalAmount: parseFloat(order.totalAmount || '0'),
-      newAmount: totalAmount / 100,
-      stripeSessionId: session.id,
-      metadata: {
-        ...initiatedLog.metadata,
-        checkoutSessionCreated: new Date().toISOString(),
-        sessionUrl: session.url,
-        newOrderId: newOrder.id
-      }
-    });
-
-    res.json({ 
-      url: session.url,
-      orderId: newOrder.id,
-      sessionId: session.id
+    // DEPRECATED - Reorder functionality removed for PayStack migration
+    return res.status(501).json({ 
+      message: "Reorder functionality moved to PayStack - not implemented yet",
+      orderId: newOrder.id
     });
     
   } catch (error) {

@@ -5,6 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Package, User, Mail } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
+import { Link } from "wouter";
+
+interface Order {
+  id: string;
+  customerEmail: string;
+  totalAmount: string;
+  orderItems: string;
+  orderStatus?: string;
+}
 
 export default function CheckoutSuccess() {
   const [isGuest, setIsGuest] = useState(false);
@@ -15,13 +24,13 @@ export default function CheckoutSuccess() {
   const orderId = urlParams.get("order_id");
 
   // Check if user is logged in
-  const { data: user, isLoading: authLoading } = useQuery({
+  const { data: user, isLoading: authLoading } = useQuery<any>({
     queryKey: ["/auth/me"],
     retry: false,
   });
 
   // Get order details if available
-  const { data: order, isLoading: orderLoading } = useQuery({
+  const { data: order, isLoading: orderLoading } = useQuery<Order>({
     queryKey: ["/api/orders", orderId],
     enabled: !!orderId,
     retry: false,
@@ -33,14 +42,14 @@ export default function CheckoutSuccess() {
 
   // Track conversion in Google Analytics if available
   useEffect(() => {
-    if (sessionId && typeof window !== 'undefined' && window.gtag) {
+    if ((sessionId || orderId) && typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'purchase', {
-        transaction_id: sessionId,
+        transaction_id: orderId || sessionId,
         currency: 'ZAR',
         value: order?.totalAmount || 0,
       });
     }
-  }, [sessionId, order]);
+  }, [sessionId, orderId, order]);
 
   if (authLoading || orderLoading) {
     return (
@@ -124,12 +133,10 @@ export default function CheckoutSuccess() {
                           )}
                           <div>
                             <p className="text-sm font-medium">{item.product?.name || 'Product'}</p>
-                            <p className="text-xs text-gray-600 dark:text-gray-400">Qty: {item.quantity}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">Quantity: {item.quantity}</p>
                           </div>
                         </div>
-                        <p className="text-sm font-semibold">
-                          R{(parseFloat(item.product?.price || '0') * item.quantity).toFixed(2)}
-                        </p>
+                        <p className="text-sm font-medium">R{item.product?.price ? (parseFloat(item.product.price) * item.quantity).toFixed(2) : '0.00'}</p>
                       </div>
                     ))}
                   </div>
@@ -139,111 +146,71 @@ export default function CheckoutSuccess() {
           </Card>
         )}
 
-        {/* Guest Registration Invite */}
-        {isGuest && (
-          <Card className="mb-6 border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-950">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-200">
-                <User className="w-5 h-5" />
-                Create Your Account
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-orange-700 dark:text-orange-300">
-                Want to track your orders, save your preferences, and get personalized recommendations?
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button 
-                  asChild 
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
-                >
-                  <a href={`/register?fromCheckout=true&email=${encodeURIComponent(order?.customerEmail || '')}`}>
-                    Create Account
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <a href="/login">I Already Have an Account</a>
-                </Button>
-              </div>
-              <div className="flex items-start gap-2 text-sm text-orange-600 dark:text-orange-400">
-                <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <p>Your order will be automatically linked to your account when you register with the same email address.</p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Logged-in User Message */}
-        {!isGuest && user && (
-          <Card className="mb-6 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                <p className="text-green-700 dark:text-green-300">
-                  Your order has been saved to your account. You can track its progress in your customer portal.
-                </p>
-              </div>
-              <div className="mt-4">
-                <Button asChild variant="outline">
-                  <a href="/portal">View My Orders</a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Next Steps */}
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle>What Happens Next?</CardTitle>
+            <CardTitle>What happens next?</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-3 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-start gap-3">
-              <div className="bg-blue-100 dark:bg-blue-900 rounded-full p-2 mt-1">
-                <Mail className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              </div>
+              <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
               <div>
-                <p className="font-medium">Order Confirmation</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  You'll receive an email confirmation shortly with your order details.
-                </p>
+                <p className="font-medium text-black dark:text-white">Order Confirmation</p>
+                <p>You'll receive an email confirmation shortly.</p>
               </div>
             </div>
-            
             <div className="flex items-start gap-3">
-              <div className="bg-purple-100 dark:bg-purple-900 rounded-full p-2 mt-1">
-                <Package className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              </div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
               <div>
-                <p className="font-medium">Processing & Shipping</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  We'll process your order within 1-2 business days and send you tracking information.
-                </p>
+                <p className="font-medium text-black dark:text-white">Processing</p>
+                <p>We'll prepare your order for shipping within 24-48 hours.</p>
               </div>
             </div>
-
             <div className="flex items-start gap-3">
-              <div className="bg-green-100 dark:bg-green-900 rounded-full p-2 mt-1">
-                <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
-              </div>
+              <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
               <div>
-                <p className="font-medium">Wellness Journey</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Start enjoying your premium supplements and track your wellness progress.
-                </p>
+                <p className="font-medium text-black dark:text-white">Shipping</p>
+                <p>You'll receive tracking information once your order ships.</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Guest Registration */}
+        {isGuest && order && (
+          <Card className="mb-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <User className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-black dark:text-white mb-1">Create Your Account</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    Track your orders and get personalized wellness recommendations by creating an account with {order.customerEmail}.
+                  </p>
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Create Account
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-8">
-          <Button asChild className="flex-1">
-            <a href="/products">Continue Shopping</a>
-          </Button>
-          <Button variant="outline" asChild className="flex-1">
-            <a href="/">Back to Home</a>
-          </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href="/">
+            <Button variant="outline" className="w-full sm:w-auto">
+              Continue Shopping
+            </Button>
+          </Link>
+          {!isGuest && (
+            <Link href="/portal/orders">
+              <Button className="w-full sm:w-auto bg-black hover:bg-gray-800 text-white">
+                View My Orders
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
