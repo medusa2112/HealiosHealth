@@ -24,7 +24,9 @@ export const users = pgTable("users", {
   role: text("role").notNull().default("guest"), // 'admin', 'customer', 'guest'
   firstName: text("first_name"),
   lastName: text("last_name"),
-  stripeCustomerId: text("stripe_customer_id"), // Phase 18: Stripe customer tracking
+  paystackCustomerCode: text("paystack_customer_code"), // PayStack customer code
+  paystackCustomerId: text("paystack_customer_id"), // PayStack customer ID
+  stripeCustomerId: text("stripe_customer_id"), // DEPRECATED - kept for migration
   emailVerified: text("email_verified"), // Timestamp when email was verified
   verificationCodeHash: text("verification_code_hash"), // Hashed verification code
   verificationExpiresAt: text("verification_expires_at"), // When code expires
@@ -93,14 +95,22 @@ export const subscriptions = pgTable("subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id),
   productVariantId: varchar("product_variant_id").notNull().references(() => productVariants.id),
-  stripeSubscriptionId: varchar("stripe_subscription_id", { length: 128 }).notNull(),
-  stripeCustomerId: varchar("stripe_customer_id", { length: 128 }).notNull(),
+  variantId: varchar("variant_id"), // Alternative field for variant reference
+  paystackSubscriptionId: varchar("paystack_subscription_id", { length: 128 }).unique(), // PayStack subscription code
+  paystackCustomerId: varchar("paystack_customer_id", { length: 128 }), // PayStack customer code
+  paystackPlanId: varchar("paystack_plan_id", { length: 128 }), // PayStack plan code
+  stripeSubscriptionId: varchar("stripe_subscription_id", { length: 128 }), // DEPRECATED - kept for migration
+  stripeCustomerId: varchar("stripe_customer_id", { length: 128 }), // DEPRECATED - kept for migration
   status: varchar("status", { length: 32 }).default("active"), // active, canceled, paused, past_due
+  quantity: integer("quantity").default(1),
+  interval: varchar("interval", { length: 32 }), // daily, weekly, monthly, annually
   intervalDays: integer("interval_days").notNull(), // e.g. 30 for monthly
+  pricePerUnit: decimal("price_per_unit", { precision: 10, scale: 2 }),
   currentPeriodStart: text("current_period_start"),
   currentPeriodEnd: text("current_period_end"),
   cancelAt: text("cancel_at"), // When it will be canceled
   canceledAt: text("canceled_at"), // When it was actually canceled
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
   startDate: text("start_date").default(sql`CURRENT_TIMESTAMP`),
   metadata: text("metadata"), // JSON for additional tracking data
 });
@@ -189,10 +199,17 @@ export const orders = pgTable("orders", {
   orderStatus: text("order_status").default("processing"), // processing, shipped, delivered, cancelled
   refundStatus: text("refund_status").default("none"), // none, partial, full, refunded
   disputeStatus: text("dispute_status").default("none"), // none, disputed, resolved
-  stripePaymentIntentId: text("stripe_payment_intent_id"),
-  stripeSessionId: text("stripe_session_id"), // For webhook correlation
+  paymentMethod: text("payment_method").default("paystack"), // paystack only
+  paystackReference: text("paystack_reference"), // PayStack transaction reference
+  paystackAccessCode: text("paystack_access_code"), // PayStack access code
+  stripePaymentIntentId: text("stripe_payment_intent_id"), // DEPRECATED - kept for migration
+  stripeSessionId: text("stripe_session_id"), // DEPRECATED - kept for migration
   trackingNumber: text("tracking_number"),
   discountCode: text("discount_code"), // Phase 15: Discount code tracking
+  discountAmount: decimal("discount_amount", { precision: 10, scale: 2 }),
+  shippingCost: decimal("shipping_cost", { precision: 10, scale: 2 }),
+  taxAmount: decimal("tax_amount", { precision: 10, scale: 2 }),
+  metadata: text("metadata"), // JSON metadata
   notes: text("notes"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
@@ -260,7 +277,8 @@ export const carts = pgTable("carts", {
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   lastUpdated: text("last_updated").default(sql`CURRENT_TIMESTAMP`),
   convertedToOrder: boolean("converted_to_order").default(false),
-  stripeSessionId: text("stripe_session_id"), // For linking to successful checkouts
+  paystackReference: text("paystack_reference"), // PayStack reference for checkout
+  stripeSessionId: text("stripe_session_id"), // DEPRECATED - kept for migration
 });
 
 export const insertProductSchema = createInsertSchema(products).omit({

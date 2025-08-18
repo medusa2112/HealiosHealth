@@ -30,11 +30,15 @@ export default function OrderConfirmationPage() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Get order ID from URL params
+    // Get PayStack reference from URL params
     const urlParams = new URLSearchParams(window.location.search);
+    const reference = urlParams.get('reference') || urlParams.get('trxref');
     const orderId = urlParams.get('order_id');
     
-    if (orderId) {
+    if (reference) {
+      // Verify PayStack payment
+      verifyPaystackPayment(reference);
+    } else if (orderId) {
       fetchOrder(orderId);
     } else {
       setLoading(false);
@@ -49,6 +53,22 @@ export default function OrderConfirmationPage() {
     }
   }, []);
 
+  const verifyPaystackPayment = async (reference: string) => {
+    try {
+      const response = await fetch(`/api/paystack/verify/${reference}`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.order) {
+          setOrder(result.order);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to verify PayStack payment:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchOrder = async (orderId: string) => {
     try {
       const response = await fetch(`/api/orders/${orderId}`);
@@ -57,7 +77,7 @@ export default function OrderConfirmationPage() {
         setOrder(orderData);
       }
     } catch (error) {
-      // // console.error('Failed to fetch order:', error);
+      console.error('Failed to fetch order:', error);
     } finally {
       setLoading(false);
     }

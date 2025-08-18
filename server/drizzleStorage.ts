@@ -243,6 +243,13 @@ export class DrizzleStorage implements IStorage {
     return result[0];
   }
 
+  async getOrderByPaystackReference(reference: string): Promise<Order | undefined> {
+    const result = await db.select().from(orders)
+      .where(eq(orders.paystackReference, reference))
+      .limit(1);
+    return result[0];
+  }
+
   async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> {
     const [updated] = await db.update(orders)
       .set({ refundStatus: status })
@@ -397,11 +404,11 @@ export class DrizzleStorage implements IStorage {
     return result[0];
   }
 
-  async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> {
+  async markCartAsConverted(cartId: string, paystackReference?: string): Promise<Cart | undefined> {
     const [updated] = await db.update(carts)
       .set({ 
         convertedToOrder: true,
-        stripeSessionId
+        paystackReference
       })
       .where(eq(carts.id, cartId))
       .returning();
@@ -764,6 +771,13 @@ export class DrizzleStorage implements IStorage {
 
   async getAllSubscriptions(): Promise<Subscription[]> {
     return this.getSubscriptions();
+  }
+
+  async getSubscriptionByPaystackId(paystackSubscriptionId: string): Promise<Subscription | undefined> {
+    const result = await db.select().from(subscriptions)
+      .where(eq(subscriptions.paystackSubscriptionId, paystackSubscriptionId))
+      .limit(1);
+    return result[0];
   }
 
   // Security Issues

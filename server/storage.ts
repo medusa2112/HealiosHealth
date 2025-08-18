@@ -86,7 +86,8 @@ export interface IStorage {
   
   // Admin Order methods
   getAllOrders(): Promise<Order[]>;
-  getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>;
+  getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>; // DEPRECATED
+  getOrderByPaystackReference(reference: string): Promise<Order | undefined>;
   updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
   
   // Admin User methods
@@ -96,7 +97,7 @@ export interface IStorage {
   upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart>;
   getCartById(id: string): Promise<Cart | undefined>;
   getCartBySessionToken(sessionToken: string): Promise<Cart | undefined>;
-  markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined>;
+  markCartAsConverted(cartId: string, paystackReference?: string): Promise<Cart | undefined>;
   getAbandonedCarts(hoursThreshold: number): Promise<Cart[]>;
   getAllCarts(): Promise<Cart[]>;
   
@@ -154,6 +155,7 @@ export interface IStorage {
   updateSubscription(id: string, updates: Partial<Subscription>): Promise<Subscription | undefined>;
   updateSubscriptionStatus(id: string, status: string): Promise<Subscription | undefined>;
   getAllSubscriptions(): Promise<Subscription[]>;
+  getSubscriptionByPaystackId(paystackSubscriptionId: string): Promise<Subscription | undefined>;
   
   // ALFR3D Security Dashboard
   getSecurityIssues(): Promise<SecurityIssue[]>;

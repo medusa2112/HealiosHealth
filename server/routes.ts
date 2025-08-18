@@ -24,7 +24,8 @@ import adminRoutes from "./routes/admin";
 import { requireCustomer } from "./mw/requireCustomer";
 import { requireAdmin } from "./mw/requireAdmin";
 import portalRoutes from "./routes/portal";
-import stripeRoutes from "./routes/stripe";
+import stripeRoutes from "./routes/stripe"; // DEPRECATED - to be removed
+import paystackRoutes from "./routes/paystack";
 import cartRoutes from "./routes/cart";
 import emailTestRoutes from "./routes/email-test";
 import documentationRoutes from "./routes/documentation";
@@ -67,9 +68,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     },
   }));
 
-  // Register Stripe webhook routes BEFORE body parsing middleware
-  // This is critical for webhook signature verification
-  app.use('/stripe', stripeRoutes);
+  // Register PayStack routes BEFORE body parsing middleware (for webhook signature)
+  app.use('/api/paystack', paystackRoutes);
+  
+  // DEPRECATED: Stripe routes - to be removed
+  // app.use('/stripe', stripeRoutes);
 
   // Register health check routes - must be early for monitoring
   const healthRoutes = await import('./routes/health');

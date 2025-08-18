@@ -27,7 +27,7 @@ const CheckoutForm = () => {
   const { toast } = useToast();
   const { cart, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'shopify'>('stripe');
+  // PayStack is the only payment method now
   const [customerInfo, setCustomerInfo] = useState({
     email: '',
     name: '',
@@ -108,7 +108,7 @@ const CheckoutForm = () => {
     setStructuredAddress(address || null);
   };
 
-  const handleStripeCheckout = async (e: React.FormEvent) => {
+  const handlePaystackCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isAddressValid || !structuredAddress) {
@@ -153,148 +153,71 @@ const CheckoutForm = () => {
         orderStatus: 'processing'
       };
 
-      // Prepare line items for Stripe
-      const lineItems = cart.items.map(item => {
-        // Ensure we have a valid absolute URL for Stripe
-        let validImageUrl;
-        if (item.product.imageUrl) {
-          if (item.product.imageUrl.startsWith('http://') || item.product.imageUrl.startsWith('https://')) {
-            validImageUrl = item.product.imageUrl;
-          } else {
-            // Convert relative URL to absolute URL
-            validImageUrl = `${window.location.origin}${item.product.imageUrl}`;
-          }
-        } else {
-          // Fallback to placeholder image
-          validImageUrl = `${window.location.origin}/placeholder-product.png`;
-        }
-        
-        return {
-          price_data: {
-            currency: 'zar',
-            product_data: {
-              name: item.product.name,
-              images: [validImageUrl],
-              description: item.product.description?.substring(0, 100) || '',
-            },
-            unit_amount: Math.round(parseFloat(item.product.price) * 100), // Convert to cents
-          },
-          quantity: item.quantity,
-        };
-      });
-
-      // Create Stripe checkout session using the centralized API request with CSRF handling
-      const response = await apiRequest('POST', '/api/create-checkout-session', {
-        orderData,
-        lineItems,
-        successUrl: `${window.location.origin}/checkout-success`,
-        cancelUrl: `${window.location.origin}/checkout`,
-        sessionToken: localStorage.getItem('cart_session_token'),
+      // Create PayStack checkout session
+      const response = await apiRequest('POST', '/api/paystack/create-checkout', {
+        email: structuredAddress.email,
+        amount: total,
+        currency: 'ZAR',
+        metadata: {
+          orderData,
+          cartItems: cart.items,
+          userId: null, // Will be set if user is logged in
+          customerName: structuredAddress.name,
+          customerPhone: structuredAddress.phone,
+          shippingAddress: JSON.stringify({
+            line1: structuredAddress.line1,
+            line2: structuredAddress.line2,
+            city: structuredAddress.city,
+            state: structuredAddress.state,
+            zipCode: structuredAddress.zipCode,
+            country: structuredAddress.country,
+          }),
+          billingAddress: JSON.stringify({
+            line1: structuredAddress.line1,
+            line2: structuredAddress.line2,
+            city: structuredAddress.city,
+            state: structuredAddress.state,
+            zipCode: structuredAddress.zipCode,
+            country: structuredAddress.country,
+          }),
+          orderItems: JSON.stringify(cart.items),
+          discountCode: appliedDiscount?.code || null,
+          discountAmount: discountAmount.toFixed(2),
+          cartId: localStorage.getItem('cart_session_token'),
+        },
+        callback_url: `${window.location.origin}/order-confirmation`,
       });
 
       const responseData = await response.json();
 
-      if (!responseData.sessionUrl) {
-        throw new Error('No session URL received from server');
+      if (!responseData.authorization_url) {
+        throw new Error('No payment URL received from server');
+      }
+      
+      // Save PayStack reference for order tracking
+      if (responseData.reference) {
+        sessionStorage.setItem('paystack_reference', responseData.reference);
       }
       
       // Clear cart before redirecting
       clearCart();
 
       setTimeout(() => {
-        window.location.href = responseData.sessionUrl;
+        window.location.href = responseData.authorization_url;
       }, 100);
       
     } catch (error) {
-      // // console.error('Stripe checkout error:', error);
+      console.error('PayStack checkout error:', error);
       toast({
         title: "Checkout Failed",
-        description: "There was an error creating your checkout session. Please try again.",
+        description: "There was an error creating your payment session. Please try again.",
         variant: "destructive",
       });
       setIsProcessing(false);
     }
   };
 
-  const handleShopifyCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!isAddressValid || !structuredAddress) {
-      toast({
-        title: "Invalid Address",
-        description: "Please fill in all required address fields correctly.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      // Prepare order data with structured address
-      const orderData = {
-        customerEmail: structuredAddress.email,
-        customerName: structuredAddress.name || null,
-        customerPhone: structuredAddress.phone || null,
-        shippingAddress: JSON.stringify({
-          line1: structuredAddress.line1,
-          line2: structuredAddress.line2,
-          city: structuredAddress.city,
-          state: structuredAddress.state,
-          zipCode: structuredAddress.zipCode,
-          country: structuredAddress.country,
-        }),
-        billingAddress: JSON.stringify({
-          line1: structuredAddress.line1,
-          line2: structuredAddress.line2,
-          city: structuredAddress.city,
-          state: structuredAddress.state,
-          zipCode: structuredAddress.zipCode,
-          country: structuredAddress.country,
-        }),
-        orderItems: JSON.stringify(cart.items),
-        totalAmount: total.toFixed(2),
-        discountCode: appliedDiscount?.code || null,
-        discountAmount: discountAmount.toFixed(2),
-        currency: 'ZAR',
-        paymentStatus: 'pending',
-        orderStatus: 'processing'
-      };
-
-      // Create Shopify checkout
-      const response = await fetch('/api/create-shopify-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          orderData,
-          returnUrl: `${window.location.origin}/order-confirmation`,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create Shopify checkout');
-      }
-
-      const { checkoutUrl } = await response.json();
-      
-      // Clear cart before redirecting
-      clearCart();
-      
-      // Redirect to Shopify
-      window.location.href = checkoutUrl;
-      
-    } catch (error) {
-      // // console.error('Shopify checkout error:', error);
-      toast({
-        title: "Checkout Failed",
-        description: "There was an error creating your Shopify checkout. Please try again.",
-        variant: "destructive",
-      });
-      setIsProcessing(false);
-    }
-  };
+  // Removed handleCheckout - using handlePaystackCheckout only
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -402,39 +325,18 @@ const CheckoutForm = () => {
               onValidationChange={handleAddressValidation}
             />
 
-            {/* Payment Method Selection */}
-            <div className="space-y-4">
-              <h4 className="font-medium">Choose Payment Method</h4>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="stripe"
-                    checked={paymentMethod === 'stripe'}
-                    onChange={(e) => setPaymentMethod(e.target.value as 'stripe')}
-                    className="w-4 h-4"
-                  />
-                  <span>Stripe Checkout</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="shopify"
-                    checked={paymentMethod === 'shopify'}
-                    onChange={(e) => setPaymentMethod(e.target.value as 'shopify')}
-                    className="w-4 h-4"
-                  />
-                  <span>Shopify Checkout</span>
-                </label>
-              </div>
+            {/* PayStack Payment Notice */}
+            <div className="space-y-2">
+              <h4 className="font-medium">Secure Payment</h4>
+              <p className="text-sm text-gray-600">
+                Your payment will be processed securely by PayStack, supporting all major payment methods including cards, bank transfer, and mobile money.
+              </p>
             </div>
 
             <Button 
               type="submit" 
               disabled={isProcessing || !isAddressValid}
-              onClick={paymentMethod === 'stripe' ? handleStripeCheckout : handleShopifyCheckout}
+              onClick={handlePaystackCheckout}
               className={`w-full py-3 text-lg font-medium transition-colors duration-200 ${
                 !isAddressValid 
                   ? 'bg-gray-400 cursor-not-allowed text-gray-700' 
@@ -442,11 +344,11 @@ const CheckoutForm = () => {
               }`}
               data-testid="button-checkout"
             >
-              {isProcessing ? "Redirecting..." : !isAddressValid ? "Please complete address" : `Continue to ${paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} - R${total.toFixed(2)}`}
+              {isProcessing ? "Redirecting..." : !isAddressValid ? "Please complete address" : `Continue to Payment - R${total.toFixed(2)}`}
             </Button>
             
             <p className="text-sm text-gray-600 text-center">
-              You'll be redirected to {paymentMethod === 'stripe' ? 'Stripe' : 'Shopify'} to complete your secure payment.
+              You'll be redirected to PayStack to complete your secure payment.
             </p>
           </form>
         </CardContent>
