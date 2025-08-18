@@ -64,7 +64,7 @@ router.post("/test", requireAuth, async (req, res) => {
     res.json({
       success: true,
       message: `Test ${type} email sent successfully`,
-      result: result?.id || result?.message || "sent"
+      result: (result && 'id' in result ? result.id : result && 'message' in result ? result.message : "sent")
     });
 
   } catch (error: any) {
