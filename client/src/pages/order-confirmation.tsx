@@ -186,30 +186,70 @@ export default function OrderConfirmationPage() {
                 </CardContent>
               </Card>
 
-              {/* Items Ordered */}
+              {/* Items Ordered - Compressed View */}
               <Card className="mb-8">
                 <CardHeader>
                   <CardTitle>Items Ordered</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {parseOrderItems(order.orderItems).map((item: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                        <div className="flex items-center gap-4">
-                          <img
-                            src={item.product.imageUrl}
-                            alt={item.product.name}
-                            className="w-16 h-16 object-cover"
-                          />
-                          <div>
-                            <h4 className="font-medium text-gray-900">{item.product.name}</h4>
-                            <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                  <div className="space-y-3">
+                    {parseOrderItems(order.orderItems).length > 0 ? (
+                      parseOrderItems(order.orderItems).map((item: any, index: number) => (
+                        <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                          <div className="flex items-center gap-3">
+                            {/* Product Image - Smaller for compressed view */}
+                            <div className="w-12 h-12 bg-gray-100 rounded-md flex-shrink-0 overflow-hidden">
+                              {item.imageUrl || item.product?.imageUrl ? (
+                                <img
+                                  src={item.imageUrl || item.product?.imageUrl || '/objects/placeholder-product.jpg'}
+                                  alt={item.productName || item.product?.name || 'Product'}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = '/objects/placeholder-product.jpg';
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                  <Package className="w-6 h-6 text-gray-400" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-medium text-gray-900 text-sm leading-5 truncate">
+                                {item.productName || item.product?.name || 'Product'}
+                              </h4>
+                              <p className="text-xs text-gray-600 mt-1">
+                                Qty: {item.quantity} × R{parseFloat(item.price || item.product?.price || '0').toFixed(2)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="font-semibold text-sm text-gray-900">
+                              R{(parseFloat(item.price || item.product?.price || '0') * (item.quantity || 1)).toFixed(2)}
+                            </p>
                           </div>
                         </div>
-                        <p className="font-semibold">R{(parseFloat(item.product.price) * item.quantity).toFixed(2)}</p>
+                      ))
+                    ) : (
+                      <div className="text-center py-6">
+                        <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                        <p className="text-gray-600">No items found in this order</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Order Total: <span className="font-semibold">R{parseFloat(order.totalAmount).toFixed(2)}</span>
+                        </p>
                       </div>
-                    ))}
+                    )}
                   </div>
+                  
+                  {/* Order Summary */}
+                  {parseOrderItems(order.orderItems).length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-gray-900">Order Total</span>
+                        <span className="text-lg font-bold text-gray-900">R{parseFloat(order.totalAmount).toFixed(2)}</span>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
