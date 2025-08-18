@@ -144,7 +144,29 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // Production: Only serve static files for non-API routes
+    // This prevents the catch-all in serveStatic from intercepting API routes
+    const path = await import("path");
+    const fs = await import("fs");
+    const distPath = path.resolve(process.cwd(), "dist", "public");
+    
+    if (fs.existsSync(distPath)) {
+      // Serve static files
+      app.use(express.static(distPath));
+      
+      // Only catch non-API routes for client-side routing
+      app.get("*", (req, res) => {
+        // Skip API routes - they should 404 properly
+        if (req.path.startsWith('/api/') || req.path.startsWith('/stripe/') || req.path.startsWith('/portal/')) {
+          return res.status(404).json({ error: "Not Found" });
+        }
+        // Serve the React app for all other routes
+        res.sendFile(path.resolve(distPath, "index.html"));
+      });
+    } else {
+      // If dist folder doesn't exist, use the original serveStatic
+      serveStatic(app);
+    }
   }
 
   // Use error logger middleware

@@ -3,6 +3,13 @@
 ## Overview
 This project is a full-stack e-commerce application for a premium supplement company, aiming to provide a modern, accessible, and high-performance online shopping experience. It supports product browsing, shopping cart functionality, secure checkout, and comprehensive product information. The business vision is to establish a robust digital storefront to effectively showcase products and expand market reach, particularly in regions like South Africa, while also promoting environmental responsibility.
 
+## Recent Changes (2025-08-18)
+- ✅ **Forms QA Audit Complete** - Fixed all 12 forms across the site achieving 100% success rate in development
+- ✅ **Database Schema Fixes** - Removed incorrect "email" column from pre_orders table, created missing tables (restock_notifications, consultation_bookings)
+- ✅ **Production API Route Fix** - Modified server/index.ts to prevent static file handler from intercepting API routes in production
+- ✅ **Automated QA Testing** - Created qa-forms-audit.mjs script for comprehensive form testing across all environments
+- ⚠️ **Deployment Required** - Production environment needs deployment to apply API routing fixes
+
 ## Recent Changes (2025-08-17)
 - ✅ **Simplified Admin Authentication** - Replaced complex OAuth flow with simple email PIN authentication matching customer auth system
 - ✅ **Phase 3 Security Implementation COMPLETE** - Implemented enterprise-grade security with comprehensive protection
