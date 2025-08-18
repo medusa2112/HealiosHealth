@@ -153,39 +153,49 @@ const CheckoutForm = () => {
         orderStatus: 'processing'
       };
 
+      // Generate idempotency key for this payment request
+      const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
       // Create PayStack checkout session
-      const response = await apiRequest('POST', '/api/paystack/create-checkout', {
-        email: structuredAddress.email,
-        amount: total,
-        currency: 'ZAR',
-        metadata: {
-          orderData,
-          cartItems: cart.items,
-          userId: null, // Will be set if user is logged in
-          customerName: structuredAddress.name,
-          customerPhone: structuredAddress.phone,
-          shippingAddress: JSON.stringify({
-            line1: structuredAddress.line1,
-            line2: structuredAddress.line2,
-            city: structuredAddress.city,
-            state: structuredAddress.state,
-            zipCode: structuredAddress.zipCode,
-            country: structuredAddress.country,
-          }),
-          billingAddress: JSON.stringify({
-            line1: structuredAddress.line1,
-            line2: structuredAddress.line2,
-            city: structuredAddress.city,
-            state: structuredAddress.state,
-            zipCode: structuredAddress.zipCode,
-            country: structuredAddress.country,
-          }),
-          orderItems: JSON.stringify(cart.items),
-          discountCode: appliedDiscount?.code || null,
-          discountAmount: discountAmount.toFixed(2),
-          cartId: localStorage.getItem('cart_session_token'),
+      const response = await fetch('/api/paystack/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyKey,
         },
-        callback_url: `${window.location.origin}/order-confirmation`,
+        body: JSON.stringify({
+          email: structuredAddress.email,
+          amount: total,
+          currency: 'ZAR',
+          metadata: {
+            orderData,
+            cartItems: cart.items,
+            userId: null, // Will be set if user is logged in
+            customerName: structuredAddress.name,
+            customerPhone: structuredAddress.phone,
+            shippingAddress: JSON.stringify({
+              line1: structuredAddress.line1,
+              line2: structuredAddress.line2,
+              city: structuredAddress.city,
+              state: structuredAddress.state,
+              zipCode: structuredAddress.zipCode,
+              country: structuredAddress.country,
+            }),
+            billingAddress: JSON.stringify({
+              line1: structuredAddress.line1,
+              line2: structuredAddress.line2,
+              city: structuredAddress.city,
+              state: structuredAddress.state,
+              zipCode: structuredAddress.zipCode,
+              country: structuredAddress.country,
+            }),
+            orderItems: JSON.stringify(cart.items),
+            discountCode: appliedDiscount?.code || null,
+            discountAmount: discountAmount.toFixed(2),
+            cartId: localStorage.getItem('cart_session_token'),
+          },
+          callback_url: `${window.location.origin}/order-confirmation`,
+        }),
       });
 
       const responseData = await response.json();

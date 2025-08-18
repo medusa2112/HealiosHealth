@@ -190,7 +190,7 @@ router.post("/create-checkout",
       const reference = `healios_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
       
       // Initialize PayStack transaction
-      const result = await paystack.initializeTransaction({
+      const result: any = await paystack.initializeTransaction({
         email,
         amount: Math.round(amount * 100), // Convert to kobo/cents
         currency,
@@ -240,7 +240,7 @@ router.get("/verify/:reference",
         return res.status(400).json({ error: "Reference is required" });
       }
       
-      const result = await paystack.verifyTransaction(reference);
+      const result: any = await paystack.verifyTransaction(reference);
       
       if (result.status) {
         res.json({
@@ -287,7 +287,7 @@ router.post("/refund",
         refundData.amount = Math.round(amount * 100); // Convert to kobo/cents
       }
       
-      const result = await paystack.processRefund(refundData);
+      const result: any = await paystack.processRefund(refundData);
       
       if (result.status) {
         res.json({

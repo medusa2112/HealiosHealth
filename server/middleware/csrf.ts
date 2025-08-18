@@ -83,7 +83,9 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
       fullPath.includes('/admin/oauth/send-pin') ||  // Admin PIN send endpoint
       fullPath.includes('/admin/oauth/verify-pin') ||  // Admin PIN verify endpoint
       fullPath === '/auth/demo-admin-login' ||
-      fullPath.includes('/validate-discount')) {  // Public discount validation endpoint
+      fullPath.includes('/validate-discount') ||  // Public discount validation endpoint
+      fullPath.includes('/paystack/create-checkout') ||  // PayStack checkout endpoint
+      fullPath.includes('/paystack/webhook')) {  // PayStack webhook endpoint
     return next();
   }
 
