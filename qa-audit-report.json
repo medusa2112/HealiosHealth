@@ -1,0 +1,157 @@
+{
+  "timestamp": "2025-08-18T14:22:27.034Z",
+  "summary": {
+    "total": 33,
+    "passed": 1,
+    "failed": 32,
+    "percentage": "3.0"
+  },
+  "results": {
+    "emails": {
+      "Admin PIN Authentication": {
+        "success": true,
+        "status": 200
+      },
+      "Customer PIN Authentication": {
+        "success": false,
+        "status": 403,
+        "error": {
+          "error": "Invalid CSRF token",
+          "code": "CSRF_TOKEN_MISMATCH"
+        }
+      },
+      "Order Confirmation": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/paystack/webhook failed, reason: socket hang up"
+      },
+      "Newsletter Subscription": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/newsletter/subscribe failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Restock Notification": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/restock-notifications failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      }
+    },
+    "forms": {
+      "Contact Form": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/contact failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Wellness Quiz": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/quiz/submit failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Product Review": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/reviews failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Referral Form": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/referrals failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      }
+    },
+    "adminEndpoints": {
+      "Get All Users": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/users failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get User Details": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/users/test-user-id failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Update User Status": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/users/test-user-id/status failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get All Orders": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/orders failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Order Details": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/orders/test-order-id failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Update Order Status": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/orders/test-order-id/status failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Order Analytics": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/analytics/orders failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get All Products (Admin)": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/products failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Update Product": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/products/ashwagandha failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Toggle Product Status": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/products/ashwagandha/toggle failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Customer List": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/customers failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Customer Orders": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/customers/test-customer-id/orders failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Email Queue": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/email-jobs failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Activity Logs": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/logs failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Abandoned Carts": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/carts/abandoned failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Discount Codes": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/discounts failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Create Discount Code": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/admin/discounts failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      }
+    },
+    "authentication": {},
+    "orders": {},
+    "users": {
+      "Customer Registration": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/auth/customer/register failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Customer Login": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/auth/customer/send-pin failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Current User": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/auth/customer/me failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Update Profile": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/portal/profile failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Get Order History": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/portal/orders failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Manage Addresses": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/portal/addresses failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      },
+      "Add Address": {
+        "success": false,
+        "error": "request to http://localhost:5000/api/portal/addresses failed, reason: connect ECONNREFUSED 127.0.0.1:5000"
+      }
+    }
+  }
+}
