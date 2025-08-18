@@ -24,7 +24,7 @@ import adminRoutes from "./routes/admin";
 import { requireCustomer } from "./mw/requireCustomer";
 import { requireAdmin } from "./mw/requireAdmin";
 import portalRoutes from "./routes/portal";
-import stripeRoutes from "./routes/stripe"; // DEPRECATED - to be removed
+
 import paystackRoutes from "./routes/paystack";
 import cartRoutes from "./routes/cart";
 import emailTestRoutes from "./routes/email-test";
@@ -513,151 +513,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // DEPRECATED - Stripe checkout session removed for PayStack migration
-  app.post("/api/create-checkout-session", validateCustomerEmail, validateOrderAccess, rateLimit(5, 60000), async (req: express.Request, res: express.Response) => {
+  app.post("/api/create-checkout-session", async (req: express.Request, res: express.Response) => {
     console.warn('DEPRECATED: Stripe checkout called - use PayStack instead');
     res.status(410).json({ error: 'Stripe integration deprecated - use PayStack' });
-    try {
-      const bodySchema = z.object({
-        orderData: z.object({}).passthrough(),
-        lineItems: z.array(z.object({}).passthrough()).min(1),
-        successUrl: z.string().url(),
-        cancelUrl: z.string().url(),
-        sessionToken: z.string().optional(),
-        discountCode: z.string().optional()
-      });
-      
-      const parsed = bodySchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
-      }
-      
-      const { orderData, lineItems, successUrl, cancelUrl, sessionToken, discountCode } = parsed.data;
-      
-      if (!lineItems || !lineItems.length) {
-        return res.status(400).json({ message: "Line items are required" });
-      }
-
-      let discountAmount = 0;
-      let appliedDiscountCode = null;
-      let originalTotal = 0;
-
-      // Calculate original total
-      originalTotal = lineItems.reduce((sum: number, item: any) => {
-        return sum + (item.price_data.unit_amount * item.quantity);
-      }, 0);
-
-      // Phase 15: Validate and apply discount code if provided
-      if (discountCode && discountCode.trim()) {
-        const validation = await storage.validateDiscountCode(discountCode.trim());
-        
-        if (!validation.valid) {
-          return res.status(400).json({ 
-            message: validation.error || "Invalid discount code" 
-          });
-        }
-
-        const discount = validation.discount!;
-        appliedDiscountCode = discount;
-
-        // Calculate discount amount in cents (Stripe uses cents)
-        if (discount.type === "percent") {
-          discountAmount = Math.round(originalTotal * (parseFloat(discount.value) / 100));
-        } else if (discount.type === "fixed") {
-          // Convert fixed amount to cents (assuming ZAR)
-          discountAmount = Math.round(parseFloat(discount.value) * 100);
-        }
-
-        // Ensure discount doesn't exceed total
-        discountAmount = Math.min(discountAmount, originalTotal);
-
-        // Increment usage count immediately (before checkout)
-        await storage.incrementDiscountCodeUsage(discount.id);
-      }
-
-      // Create order first to get order ID for success URL
-      const finalOrderData = {
-        ...orderData,
-        // Update total amount with discount applied
-        totalAmount: discountAmount > 0 
-          ? ((originalTotal - discountAmount) / 100).toString()
-          : orderData.totalAmount
-      };
-
-      // SECURITY: Validate order data before database insertion
-      const validatedOrderData = insertOrderSchema.parse(finalOrderData);
-      const order = await storage.createOrder(validatedOrderData);
-      
-      // Update stock for each item
-      const orderItems = JSON.parse(orderData.orderItems as string);
-      for (const item of orderItems) {
-        await storage.decreaseProductStock(item.product.id, item.quantity);
-      }
-
-      // Prepare Stripe session configuration
-      const sessionConfig: any = {
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: `${successUrl}?order_id=${order.id}&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: cancelUrl,
-        customer_email: orderData.customerEmail,
-        metadata: {
-          orderId: order.id,
-          userId: orderData.userId || null,
-          customerEmail: orderData.customerEmail,
-          customerName: orderData.customerName || null,
-          customerPhone: orderData.customerPhone || null,
-          // Store minimal order items info to stay under 500 char limit
-          itemCount: orderItems.length.toString(),
-          totalItems: orderItems.reduce((sum: number, item: any) => sum + item.quantity, 0).toString(),
-          notes: orderData.notes || null,
-          sessionToken: sessionToken || null,
-          discountCode: appliedDiscountCode?.code || null,
-          discountAmount: discountAmount > 0 ? (discountAmount / 100).toString() : null,
-        },
-        billing_address_collection: 'required',
-        shipping_address_collection: {
-          allowed_countries: ['ZA', 'US', 'GB'], // Add countries as needed
-        },
-      };
-
-      // Apply discount through Stripe if applicable
-      if (discountAmount > 0 && stripe) {
-        // Create a one-time coupon for this discount
-        const coupon = await stripe.coupons.create({
-          amount_off: discountAmount,
-          currency: 'zar',
-          duration: 'once',
-          name: `Discount Code: ${appliedDiscountCode!.code}`,
-        });
-
-        sessionConfig.discounts = [{
-          coupon: coupon.id,
-        }];
-      }
-
-      // Create Stripe Checkout Session
-      if (!stripe) {
-        return res.status(500).json({ message: "Stripe is not configured" });
-      }
-      const session = await stripe.checkout.sessions.create(sessionConfig);
-      
-      res.json({ 
-        sessionUrl: session.url,
-        orderId: order.id,
-        sessionId: session.id,
-        discountApplied: discountAmount > 0,
-        discountAmount: discountAmount > 0 ? discountAmount / 100 : 0,
-        discountCode: appliedDiscountCode?.code || null,
-      });
-    } catch (error: any) {
-      // // console.error("Stripe checkout session error:", error);
-      res.status(500).json({ message: "Error creating checkout session: " + error.message });
-    }
   });
-
-  // Legacy webhook endpoint - DEPRECATED
-  // Use /stripe/webhook for secure webhook handling
 
   // Create Shopify redirect endpoint
   // DEPRECATED - Shopify checkout removed for PayStack migration
@@ -666,7 +525,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(410).json({ error: 'Shopify integration deprecated - use PayStack' });
   });
 
-  // Create order endpoint
   // Consolidated discount code validation endpoint (Phase 15)
   app.post("/api/validate-discount", rateLimit(30, 60000), async (req, res) => {
     try {
@@ -693,42 +551,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Total must be a number" });
       }
 
-      // Use the comprehensive validation method
-      const validation = await storage.validateDiscountCode(code.trim());
+      const validation = await storage.validateDiscountCode(code);
       
-      if (!validation || !validation.valid) {
-        return res.json({
-          valid: false,
-          error: validation?.error || 'Invalid discount code'
+      if (!validation.valid) {
+        return res.status(400).json({ 
+          error: validation.error || "Invalid discount code" 
         });
       }
 
       const discount = validation.discount!;
       let discountAmount = 0;
 
-      // Calculate discount amount if total provided
       if (total && total > 0) {
         if (discount.type === "percent") {
-          discountAmount = (total * parseFloat(discount.value)) / 100;
+          discountAmount = total * (parseFloat(discount.value) / 100);
         } else if (discount.type === "fixed") {
           discountAmount = parseFloat(discount.value);
         }
-        
+
         // Ensure discount doesn't exceed total
         discountAmount = Math.min(discountAmount, total);
       }
 
       res.json({
         valid: true,
-        code: discount.code,
-        type: discount.type,
-        value: discount.value,
-        discountAmount,
-        finalTotal: total ? Math.max(0, total - discountAmount) : undefined
+        discount: {
+          id: discount.id,
+          code: discount.code,
+          type: discount.type,
+          value: discount.value,
+          discountAmount: discountAmount,
+          description: discount.description,
+          minimumPurchase: discount.minimumPurchase,
+          expiresAt: discount.expiresAt,
+        }
       });
     } catch (error) {
-      // // console.error("Error validating discount code:", error);
-      res.status(500).json({ error: "Internal server error" });
+      // console.error("Discount validation error:", error);
+      res.status(500).json({ error: "Error validating discount code" });
     }
   });
 

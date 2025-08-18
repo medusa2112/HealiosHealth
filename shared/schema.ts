@@ -26,7 +26,7 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   paystackCustomerCode: text("paystack_customer_code"), // PayStack customer code
   paystackCustomerId: text("paystack_customer_id"), // PayStack customer ID
-  stripeCustomerId: text("stripe_customer_id"), // DEPRECATED - kept for migration
+  // DEPRECATED: stripeCustomerId removed for PayStack migration
   emailVerified: text("email_verified"), // Timestamp when email was verified
   verificationCodeHash: text("verification_code_hash"), // Hashed verification code
   verificationExpiresAt: text("verification_expires_at"), // When code expires
@@ -202,7 +202,7 @@ export const orders = pgTable("orders", {
   paymentMethod: text("payment_method").default("paystack"), // paystack only
   paystackReference: text("paystack_reference"), // PayStack transaction reference
   paystackAccessCode: text("paystack_access_code"), // PayStack access code
-  stripePaymentIntentId: text("stripe_payment_intent_id"), // DEPRECATED - kept for migration
+  // DEPRECATED: stripePaymentIntentId removed for PayStack migration
   stripeSessionId: text("stripe_session_id"), // DEPRECATED - kept for migration
   trackingNumber: text("tracking_number"),
   discountCode: text("discount_code"), // Phase 15: Discount code tracking

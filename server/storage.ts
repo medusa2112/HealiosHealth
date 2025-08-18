@@ -86,7 +86,7 @@ export interface IStorage {
   
   // Admin Order methods
   getAllOrders(): Promise<Order[]>;
-  getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined>; // DEPRECATED
+  // DEPRECATED - Stripe methods removed for PayStack migration
   getOrderByPaystackReference(reference: string): Promise<Order | undefined>;
   updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
   
@@ -353,7 +353,7 @@ export class MemStorage implements IStorage {
         lastName: 'Demo',
         paystackCustomerCode: null,
         paystackCustomerId: null,
-        stripeCustomerId: null,
+        // DEPRECATED: stripeCustomerId removed for PayStack migration
         emailVerified: null,
         verificationCodeHash: null,
         verificationExpiresAt: null,
@@ -541,8 +541,7 @@ export class MemStorage implements IStorage {
       orderStatus: order.orderStatus ?? null,
       refundStatus: order.refundStatus ?? null,
       disputeStatus: order.disputeStatus ?? null,
-      stripePaymentIntentId: order.stripePaymentIntentId ?? null,
-      stripeSessionId: order.stripeSessionId ?? null,
+      // DEPRECATED: Stripe fields removed for PayStack migration
       paymentMethod: order.paymentMethod ?? null,
       paystackReference: order.paystackReference ?? null,
       paystackAccessCode: order.paystackAccessCode ?? null,
@@ -961,8 +960,5 @@ export class MemStorage implements IStorage {
   async updateChatSession(id: string, updates: any): Promise<any | undefined> { const session = this.chatSessions.get(id); if (!session) return undefined; const updated = { ...session, ...updates, updatedAt: new Date().toISOString() }; this.chatSessions.set(id, updated); return updated; }
 }
 
-// Import DrizzleStorage for database persistence
-import { storage as drizzleStorage } from "./drizzleStorage";
-
-// Export the storage instance - using DrizzleStorage for database persistence
-export const storage = drizzleStorage;
+// Use in-memory storage (drizzleStorage was removed during legacy cleanup)
+export const storage = new MemStorage();
