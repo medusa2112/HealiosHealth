@@ -1,0 +1,89 @@
+HEALIOS HEALTH ECOMMERCE STORE - COMPLETE BACKUP MANIFEST
+========================================================
+
+Generated: August 19, 2025
+Source: Healios Health Production Store
+Products: 15 total (6 featured, 9 preorder)
+Total Value: ~R6,627
+
+FILES INCLUDED:
+===============
+
+📄 Documentation:
+- README.md - Complete usage and restore instructions
+- MANIFEST.txt - This file listing all contents
+- database_setup.sql - Database indexes and setup
+- import_products.js - Node.js import script for products
+
+📦 Products Database:
+- products/products_backup.json - Full product data export (15 products)
+
+🗃️ Database Schema:
+- schemas/schema.ts - Complete Drizzle ORM schema
+  * Products, variants, subscriptions  
+  * Orders, carts, users, admins
+  * Newsletter, consultations, preorders
+  * Analytics and email tracking
+
+⚛️ React Components:
+- components/product-card.tsx - Product display component
+- components/product*.tsx - Product page components
+- components/admin-product*.tsx - Admin management
+- components/routes.ts - Server API routes
+
+🎨 Product Images (45+ files):
+- images/Apple_cider_vinegar_editorial_lifestyle_*.png
+- images/Active_diverse_group_exercising_*.png  
+- images/Clean_supplement_laboratory_scene_*.png
+- images/Collagen_beauty_face_editorial_*.png
+- images/healios-health*.png - Brand assets
+- images/KSM-66_Ashwagandha_premium_editorial_*.png
+- Plus additional product and marketing imagery
+
+PRODUCT INVENTORY:
+==================
+
+IN STOCK (6 products):
+- Apple Cider Vinegar + Ginger Gummies (92 units) - R299
+- HALO Glow Collagen (18 units) - R429  
+- Healios HealthClub 1984 Tee (50 units) - R750
+- KSM-66® Ashwagandha Capsules (100 units) - R429
+- Probiotic Complex (100 units) - R449
+- Vitamin D3 4000 IU Gummies (100 units) - R449
+
+PREORDER (9 products):
+- Magnesium Complex Capsules (50 cap) - R449
+- Biotin 10,000 µg Gummies (100 cap) - R449
+- Collagen + C + Zinc Gummies (50 cap) - R399
+- Folic Acid 400µg Gummies (100 cap) - R399
+- Gut + Mind + Energy Vitamins (100 cap) - R549
+- Iron + Vitamin C Gummies (50 cap) - R429
+- Magnesium Gummies (50 cap) - R329
+- Lion's Mane Mushroom Gummies (50 cap) - R499
+- Probiotic + Vitamins Gummies (50 cap) - R379
+
+CATEGORIES:
+- Gummies & Vitamins: 8 products
+- Beauty & Collagen: 3 products  
+- Adaptogens: 2 products
+- Probiotics: 3 products
+- Merchandise: 1 product
+
+RESTORE CHECKLIST:
+==================
+☐ Import database schema (schema.ts)
+☐ Run database setup (database_setup.sql)
+☐ Import products (import_products.js or manual)
+☐ Upload images to your storage
+☐ Update image URLs in product data
+☐ Deploy React components
+☐ Test product display and admin functions
+☐ Verify checkout and order processing
+
+TECHNICAL NOTES:
+================
+- Currency: South African Rand (ZAR)
+- Database: PostgreSQL with Drizzle ORM
+- Images: Optimized PNG/JPG/WebP formats
+- Framework: React + TypeScript + Tailwind CSS
+- Features: Stock management, preorders, admin panel
