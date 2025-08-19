@@ -1,0 +1,9 @@
+project="healios"
+environment="prod"
+location="westeurope"
+allowed_origins=["https://app.healios.example"]
+database_url="postgresql://user:pass@host/db?sslmode=require"
+session_secret="CHANGE_ME_MIN_32_CHARS"
+session_secret_customer="CHANGE_ME_MIN_32_CHARS"
+session_secret_admin="CHANGE_ME_MIN_32_CHARS"
+admin_2fa_enabled=true

@@ -1,0 +1,7 @@
+# Remote backend config
+resource_group_name="tfstate-rg"
+storage_account_name="tfstateaccount123"
+container_name="tfstate"
+key="healios/terraform.tfstate"
+subscription_id="<YOUR_SUBSCRIPTION_ID>"
+use_azuread_auth=true
