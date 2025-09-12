@@ -1243,12 +1243,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
 
-  // Phase 19: Start email scheduler in development mode
-  if (process.env.NODE_ENV === 'development') {
-    const { emailScheduler } = await import('./jobs/scheduler');
-
-    emailScheduler.start();
-  }
+  // Note: Email scheduler removed per business requirements
+  // Automated email marketing features have been disabled
 
   return httpServer;
 }

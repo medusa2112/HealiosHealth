@@ -30,17 +30,8 @@ router.post('/subscribe', async (req, res) => {
       
       console.log(`[NEWSLETTER] New subscription: ${email}`);
       
-      // Send welcome email (optional)
-      try {
-        await sendEmail(email, 'referral_welcome', {
-          customerName: `${firstName} ${lastName}`,
-          email: email
-        });
-        console.log(`[NEWSLETTER] Welcome email sent to ${email}`);
-      } catch (emailError) {
-        console.error(`[NEWSLETTER] Failed to send welcome email:`, emailError);
-        // Don't fail the subscription if email fails
-      }
+      // Note: Newsletter subscriptions are stored for manual processing
+      // No automated welcome emails are sent per business requirements
       
       res.json({
         success: true,

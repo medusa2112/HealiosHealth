@@ -98,7 +98,6 @@ export interface IStorage {
   getCartById(id: string): Promise<Cart | undefined>;
   getCartBySessionToken(sessionToken: string): Promise<Cart | undefined>;
   markCartAsConverted(cartId: string, paystackReference?: string): Promise<Cart | undefined>;
-  getAbandonedCarts(hoursThreshold: number): Promise<Cart[]>;
   getAllCarts(): Promise<Cart[]>;
   
   // Phase 8: Guest to User conversion
@@ -175,12 +174,7 @@ export interface IStorage {
   getFixAttempts(issueId: string): Promise<any[]>;
   getSecurityIssueById(id: string): Promise<SecurityIssue | undefined>;
   
-  // Phase 19: Email Events Tracking (Abandoned Cart + Reorder Reminders)
-  createEmailEvent(event: { userId?: string; emailType: string; relatedId: string; emailAddress: string; }): Promise<void>;
-  getEmailEventsByType(emailType: string): Promise<any[]>;
-  hasEmailBeenSent(emailType: string, relatedId: string): Promise<boolean>;
-  getAbandonedCarts(hoursCutoff?: number): Promise<any[]>;
-  getReorderCandidates(daysBack?: number): Promise<any[]>;
+  // Note: Email automation methods removed per business requirements
   
   // Admin role management
   updateUserRole(userId: string, role: 'admin' | 'customer'): Promise<void>;
@@ -228,7 +222,6 @@ export class MemStorage implements IStorage {
   private productBundles: Map<string, ProductBundle>; // Phase 16
   private bundleItems: Map<string, BundleItem>; // Phase 16
   private subscriptions: Map<string, Subscription>; // Phase 18
-  private emailEvents: Map<string, any>; // Phase 19
   private referrals: Map<string, any>; // Phase 20
   private referralClaims: Map<string, any>; // Phase 20
   private supportTickets: Map<string, any>; // Phase 21
@@ -258,7 +251,6 @@ export class MemStorage implements IStorage {
     this.productBundles = new Map(); // Phase 16
     this.bundleItems = new Map(); // Phase 16
     this.subscriptions = new Map(); // Phase 18
-    this.emailEvents = new Map(); // Phase 19
     this.referrals = new Map(); // Phase 20
     this.referralClaims = new Map(); // Phase 20
     this.supportTickets = new Map(); // Phase 21
@@ -785,7 +777,6 @@ export class MemStorage implements IStorage {
   async getCartById(id: string): Promise<Cart | undefined> { return this.carts.get(id); }
   async getCartBySessionToken(sessionToken: string): Promise<Cart | undefined> { return Array.from(this.carts.values()).find(cart => cart.sessionToken === sessionToken); }
   async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> { const cart = this.carts.get(cartId); if (!cart) return undefined; const updated = { ...cart, convertedToOrder: true, stripeSessionId: stripeSessionId ?? null, lastUpdated: new Date().toISOString() }; this.carts.set(cartId, updated); return updated; }
-  async getAbandonedCarts(hoursThreshold: number): Promise<Cart[]> { const threshold = new Date(Date.now() - hoursThreshold * 60 * 60 * 1000); return Array.from(this.carts.values()).filter(cart => !cart.convertedToOrder && cart.lastUpdated && new Date(cart.lastUpdated) < threshold); }
   async linkGuestOrdersToUser(email: string, userId: string): Promise<void> { Array.from(this.orders.values()).forEach(order => { if (order.customerEmail === email && !order.userId) { this.orders.set(order.id, { ...order, userId }); } }); }
   async createAdminLog(log: InsertAdminLog): Promise<AdminLog> { 
     const id = randomUUID(); 
@@ -937,10 +928,6 @@ export class MemStorage implements IStorage {
   async recordFixAttempt(issueId: string, attempt: any): Promise<any> { const id = randomUUID(); const fixAttempt = { ...attempt, id, issueId, createdAt: new Date().toISOString() }; this.fixAttempts.set(id, fixAttempt); return fixAttempt; }
   async getFixAttempts(issueId: string): Promise<any[]> { return Array.from(this.fixAttempts.values()).filter(attempt => attempt.issueId === issueId); }
   async getSecurityIssueById(id: string): Promise<SecurityIssue | undefined> { return this.securityIssues.get(id); }
-  async createEmailEvent(event: any): Promise<void> { const id = randomUUID(); this.emailEvents.set(id, { ...event, id, sentAt: new Date().toISOString() }); }
-  async getEmailEventsByType(emailType: string): Promise<any[]> { return Array.from(this.emailEvents.values()).filter(event => event.emailType === emailType); }
-  async hasEmailBeenSent(emailType: string, relatedId: string): Promise<boolean> { return Array.from(this.emailEvents.values()).some(event => event.emailType === emailType && event.relatedId === relatedId); }
-  async getReorderCandidates(daysBack?: number): Promise<any[]> { return []; }
   async createReferral(referral: any): Promise<any> { const id = randomUUID(); const newReferral = { ...referral, id, createdAt: new Date().toISOString() }; this.referrals.set(id, newReferral); return newReferral; }
   async getReferralByCode(code: string): Promise<any | undefined> { return Array.from(this.referrals.values()).find(ref => ref.code === code); }
   async getReferralByReferrerId(referrerId: string): Promise<any | undefined> { return Array.from(this.referrals.values()).find(ref => ref.referrerId === referrerId); }
