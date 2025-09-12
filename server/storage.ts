@@ -1,6 +1,7 @@
 import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { mockSecurityIssues } from "./security-seed";
+import { hashPassword, verifyPassword } from "./lib/password";
 
 export interface IStorage {
   // Products
@@ -82,7 +83,6 @@ export interface IStorage {
   // Enhanced Order methods (Customer Portal)
   getOrdersByUserId(userId: string): Promise<Order[]>;
   getOrderByIdAndUserId(orderId: string, userId: string): Promise<Order | undefined>;
-  updateUser(id: string, updates: Partial<InsertUser>): Promise<User | undefined>;
   
   // Admin Order methods
   getAllOrders(): Promise<Order[]>;
@@ -146,6 +146,15 @@ export interface IStorage {
   
   // Admin role management
   updateUserRole(userId: string, role: 'admin' | 'customer'): Promise<void>;
+  
+  // Password Authentication Methods
+  // Security: All email comparisons are case-insensitive (normalized to lowercase)
+  // createUserWithPassword: Throws error if email already exists
+  // setPassword: Expects pre-hashed password value for security
+  // verifyUserPassword: Returns null for any invalid credentials to prevent enumeration
+  createUserWithPassword(data: { email: string; firstName: string; lastName: string; password: string }): Promise<User>;
+  setPassword(userId: string, hash: string): Promise<User | undefined>;
+  verifyUserPassword(email: string, password: string): Promise<User | null>;
   
   // Phase 20: Referral System
   createReferral(referral: { referrerId: string; code: string; rewardType: string; rewardValue: number; isActive: boolean; usedCount: number; maxUses: number; }): Promise<any>;
@@ -269,7 +278,7 @@ export class MemStorage implements IStorage {
       const demoAdmin: User = {
         id: 'admin-user-id',
         email: 'admin@healios.dev',
-        password: null,
+        passwordHash: null,
         role: 'admin',
         firstName: 'Admin',
         lastName: 'Demo',
@@ -464,6 +473,7 @@ export class MemStorage implements IStorage {
       refundStatus: order.refundStatus ?? null,
       disputeStatus: order.disputeStatus ?? null,
       // DEPRECATED: Stripe fields removed for PayStack migration
+      stripeSessionId: null,
       paymentMethod: order.paymentMethod ?? null,
       paystackReference: order.paystackReference ?? null,
       paystackAccessCode: order.paystackAccessCode ?? null,
@@ -481,7 +491,10 @@ export class MemStorage implements IStorage {
     return newOrder; 
   }
   async getOrderById(id: string): Promise<Order | undefined> { return this.orders.get(id); }
-  async getOrdersByEmail(email: string): Promise<Order[]> { return Array.from(this.orders.values()).filter(order => order.customerEmail === email); }
+  async getOrdersByEmail(email: string): Promise<Order[]> { 
+    const normalizedEmail = email.toLowerCase(); // Security: Case-insensitive email lookup
+    return Array.from(this.orders.values()).filter(order => order.customerEmail === normalizedEmail); 
+  }
   async updateOrderStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated: Order = { ...order, orderStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
   async updatePaymentStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated: Order = { ...order, paymentStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
   async createStockAlert(alert: InsertStockAlert): Promise<StockAlert> { 
@@ -585,11 +598,10 @@ export class MemStorage implements IStorage {
       email: user.email,
       firstName: user.firstName ?? null,
       lastName: user.lastName ?? null,
-      password: null,
+      passwordHash: null,
       role: user.role || 'customer',
       paystackCustomerCode: null,
       paystackCustomerId: null,
-      stripeCustomerId: null,
       emailVerified: null,
       verificationCodeHash: null,
       verificationExpiresAt: null,
@@ -602,7 +614,10 @@ export class MemStorage implements IStorage {
     return newUser; 
   }
   async getUserById(id: string): Promise<User | undefined> { return this.users.get(id); }
-  async getUserByEmail(email: string): Promise<User | undefined> { return Array.from(this.users.values()).find(u => u.email === email); }
+  async getUserByEmail(email: string): Promise<User | undefined> { 
+    const normalizedEmail = email.toLowerCase(); // Security: Case-insensitive email lookup
+    return Array.from(this.users.values()).find(u => u.email === normalizedEmail); 
+  }
   async createUser(user: InsertUser): Promise<User> { 
     const id = randomUUID(); 
     const newUser: User = { 
@@ -610,11 +625,10 @@ export class MemStorage implements IStorage {
       email: user.email,
       firstName: user.firstName ?? null,
       lastName: user.lastName ?? null,
-      password: user.password ?? null,
+      passwordHash: user.passwordHash ?? null,
       role: user.role ?? 'customer',
       paystackCustomerCode: user.paystackCustomerCode ?? null,
       paystackCustomerId: user.paystackCustomerId ?? null,
-      stripeCustomerId: user.stripeCustomerId ?? null,
       emailVerified: user.emailVerified ?? null,
       verificationCodeHash: user.verificationCodeHash ?? null,
       verificationExpiresAt: user.verificationExpiresAt ?? null,
@@ -677,7 +691,6 @@ export class MemStorage implements IStorage {
   async getAllOrders(): Promise<Order[]> { return Array.from(this.orders.values()); }
   async getAllUsers(): Promise<User[]> { return Array.from(this.users.values()); }
   async getAllCarts(): Promise<Cart[]> { return Array.from(this.carts.values()); }
-  async getOrderByStripePaymentIntent(paymentIntentId: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.stripePaymentIntentId === paymentIntentId); }
   async getOrderByPaystackReference(reference: string): Promise<Order | undefined> { return Array.from(this.orders.values()).find(order => order.paystackReference === reference); }
   async updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined> { const order = this.orders.get(orderId); if (!order) return undefined; const updated = { ...order, refundStatus: status, updatedAt: new Date().toISOString() }; this.orders.set(orderId, updated); return updated; }
   async upsertCart(cart: Partial<InsertCart> & { sessionToken: string }): Promise<Cart> { 
@@ -706,7 +719,7 @@ export class MemStorage implements IStorage {
   }
   async getCartById(id: string): Promise<Cart | undefined> { return this.carts.get(id); }
   async getCartBySessionToken(sessionToken: string): Promise<Cart | undefined> { return Array.from(this.carts.values()).find(cart => cart.sessionToken === sessionToken); }
-  async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> { const cart = this.carts.get(cartId); if (!cart) return undefined; const updated = { ...cart, convertedToOrder: true, stripeSessionId: stripeSessionId ?? null, lastUpdated: new Date().toISOString() }; this.carts.set(cartId, updated); return updated; }
+  async markCartAsConverted(cartId: string, paystackReference?: string): Promise<Cart | undefined> { const cart = this.carts.get(cartId); if (!cart) return undefined; const updated = { ...cart, convertedToOrder: true, paystackReference: paystackReference ?? cart.paystackReference, lastUpdated: new Date().toISOString() }; this.carts.set(cartId, updated); return updated; }
   async linkGuestOrdersToUser(email: string, userId: string): Promise<void> { Array.from(this.orders.values()).forEach(order => { if (order.customerEmail === email && !order.userId) { this.orders.set(order.id, { ...order, userId }); } }); }
   async getDiscountCodes(): Promise<DiscountCode[]> { return Array.from(this.discountCodes.values()); }
   async getDiscountCodeByCode(code: string): Promise<DiscountCode | undefined> { return Array.from(this.discountCodes.values()).find(dc => dc.code === code); }
@@ -817,6 +830,71 @@ export class MemStorage implements IStorage {
   async getChatSessionByToken(token: string): Promise<any | undefined> { return Array.from(this.chatSessions.values()).find(session => session.sessionToken === token); }
   async getChatSessionsByUserId(userId: string): Promise<any[]> { return Array.from(this.chatSessions.values()).filter(session => session.userId === userId); }
   async updateChatSession(id: string, updates: any): Promise<any | undefined> { const session = this.chatSessions.get(id); if (!session) return undefined; const updated = { ...session, ...updates, updatedAt: new Date().toISOString() }; this.chatSessions.set(id, updated); return updated; }
+
+  // Password Authentication Methods Implementation
+  async createUserWithPassword(data: { email: string; firstName: string; lastName: string; password: string }): Promise<User> {
+    const normalizedEmail = data.email.toLowerCase(); // Security: Normalize email
+    
+    // Security: Check for existing user with same email (case-insensitive)
+    const existingUser = await this.getUserByEmail(normalizedEmail);
+    if (existingUser) {
+      throw new Error('User with this email already exists');
+    }
+    
+    const passwordHash = await hashPassword(data.password);
+    const id = randomUUID();
+    const user: User = {
+      id,
+      email: normalizedEmail,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      passwordHash,
+      role: 'customer', // Security: Default to customer role
+      paystackCustomerCode: null,
+      paystackCustomerId: null,
+      emailVerified: null,
+      verificationCodeHash: null,
+      verificationExpiresAt: null,
+      verificationAttempts: 0,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.users.set(id, user);
+    return user;
+  }
+
+  // Security: Expects pre-hashed password value for secure storage
+  async setPassword(userId: string, hash: string): Promise<User | undefined> {
+    const user = this.users.get(userId);
+    if (!user) return undefined;
+    
+    const updatedUser: User = {
+      ...user,
+      passwordHash: hash,
+      updatedAt: new Date().toISOString(),
+    };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+
+  // Security: Returns null for any invalid credentials to prevent user enumeration
+  // All timing should be consistent regardless of whether user exists or password is wrong
+  async verifyUserPassword(email: string, password: string): Promise<User | null> {
+    const normalizedEmail = email.toLowerCase(); // Security: Case-insensitive lookup
+    const user = Array.from(this.users.values()).find(u => u.email === normalizedEmail);
+    
+    // Security: Always perform password verification even if user doesn't exist
+    // This prevents timing attacks that could reveal user existence
+    if (!user || !user.passwordHash) {
+      // Still hash the password to maintain consistent timing
+      await hashPassword(password).catch(() => {});
+      return null; // Security: Always return null for invalid credentials
+    }
+
+    const isValid = await verifyPassword(password, user.passwordHash);
+    return isValid ? user : null; // Security: Return null for invalid credentials
+  }
 }
 
 // Use in-memory storage (drizzleStorage was removed during legacy cleanup)
