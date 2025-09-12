@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { FaInstagram, FaFacebook, FaTiktok, FaGoogle } from "react-icons/fa";
+import { FaInstagram, FaFacebook, FaGoogle } from "react-icons/fa";
 import { SiTrustpilot } from "react-icons/si";
 
 export function Footer() {
@@ -97,15 +97,6 @@ export function Footer() {
                 title="Facebook"
               >
                 <FaFacebook className="h-5 w-5" />
-              </a>
-              <a
-                href="https://www.tiktok.com/@thehealios?_t=ZS-8ycTZGuyvoe&_r=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[#FF0050] transition-colors duration-200 p-2"
-                title="TikTok"
-              >
-                <FaTiktok className="h-5 w-5" />
               </a>
             </div>
           </div>
