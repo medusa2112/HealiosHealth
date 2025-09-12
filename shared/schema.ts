@@ -287,7 +287,7 @@ export const insertAddressSchema = createInsertSchema(addresses).omit({
 
 // Checkout address validation schema (more flexible for external checkouts)
 export const checkoutAddressSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address").transform(v => v.trim().toLowerCase()),
   name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name too long").optional(),
   phone: z.string().min(10, "Phone number must be at least 10 digits").max(20, "Phone number too long").optional(),
   line1: z.string().min(5, "Street address must be at least 5 characters").max(200, "Street address too long"),
@@ -383,17 +383,18 @@ export const insertDiscountCodeSchema = createInsertSchema(discountCodes).omit({
 
 // Customer authentication schemas
 export const customerRegisterSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address").transform(v => v.trim().toLowerCase()),
   firstName: z.string().min(1, "First name is required").max(100, "First name too long"),
   lastName: z.string().min(1, "Last name is required").max(100, "Last name too long"),
   password: z.string().min(8, "Password must be at least 8 characters")
     .regex(/(?=.*[a-z])/, "Password must contain at least one lowercase letter")
     .regex(/(?=.*[A-Z])/, "Password must contain at least one uppercase letter")
     .regex(/(?=.*\d)/, "Password must contain at least one number"),
+  // SECURITY: Role is excluded to prevent privilege escalation - server sets role='customer'
 });
 
 export const customerLoginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address").transform(v => v.trim().toLowerCase()),
   password: z.string().min(1, "Password is required"),
 });
 
