@@ -33,20 +33,16 @@ export const passwordResetLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Admin login rate limit (stricter)
+// ADMIN FUNCTIONALITY REMOVED
+// Admin login rate limit (stricter) - removed since admin functionality has been deleted
+/*
 export const adminAuthLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 3, // Only 3 attempts per 15 minutes
   message: 'Too many admin login attempts. Access temporarily blocked.',
   standardHeaders: true,
   legacyHeaders: false,
-  // Count all requests (including failed attempts) toward the limit
   handler: (req: Request, res: Response) => {
-    // Log suspicious activity
-    ,
-      timestamp: new Date().toISOString()
-    });
-    
     res.status(429).json({
       error: 'Too many admin login attempts',
       code: 'RATE_LIMIT_EXCEEDED',
@@ -54,6 +50,7 @@ export const adminAuthLimiter = rateLimit({
     });
   }
 });
+*/
 
 // Create account rate limit
 export const registrationLimiter = rateLimit({

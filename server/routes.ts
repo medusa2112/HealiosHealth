@@ -16,13 +16,15 @@ import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAcces
 // import { setupAuth } from "./replitAuth"; // Quarantined
 import authRoutes from "./routes/auth";
 // All auth middleware now consolidated in ./lib/auth
-import adminRoutes from "./routes/admin";
+// ADMIN FUNCTIONALITY REMOVED
+// import adminRoutes from "./routes/admin";
 // DISABLED: Custom authentication routes - using Replit Auth only
 // import { customerAuthRouter } from "./auth/customerAuth";
 // import { adminAuthRouter } from "./auth/adminAuth";
 // Phase 4: Middleware guards
 import { requireCustomer } from "./mw/requireCustomer";
-import { requireAdmin } from "./mw/requireAdmin";
+// ADMIN FUNCTIONALITY REMOVED
+// import { requireAdmin } from "./mw/requireAdmin";
 import portalRoutes from "./routes/portal";
 
 import paystackRoutes from "./routes/paystack";
@@ -81,7 +83,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register CSRF token endpoints
   const csrfRoutes = await import('./routes/csrf');
   app.use('/api/csrf', csrfRoutes.default);
-  app.use('/api/admin', csrfRoutes.adminCsrfRouter);
+  // ADMIN FUNCTIONALITY REMOVED
+  // app.use('/api/admin', csrfRoutes.adminCsrfRouter);
   
   // Register PIN authentication routes (replaces Replit Auth)
   const pinAuthRoutes = await import('./routes/pin-auth');
@@ -90,33 +93,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register customer authentication routes
   app.use('/api/auth/customer', authRoutes);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register admin OAuth routes
-  const adminOAuthRoutes = await import('./routes/adminOAuth');
-  app.use('/api/admin/oauth', adminOAuthRoutes.default);
+  // const adminOAuthRoutes = await import('./routes/adminOAuth');
+  // app.use('/api/admin/oauth', adminOAuthRoutes.default);
   
   // DISABLED: Custom authentication routes - using Replit Auth only
   // app.use('/api/auth/customer', customerAuthRouter);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Import admin access middleware
-  const { blockAdminInProduction } = await import('./middleware/adminAccess');
+  // const { blockAdminInProduction } = await import('./middleware/adminAccess');
   
   // Apply admin blocking middleware to all admin routes
-  app.use('/api/auth/admin', blockAdminInProduction);
-  app.use('/api/admin', blockAdminInProduction);
+  // app.use('/api/auth/admin', blockAdminInProduction);
+  // app.use('/api/admin', blockAdminInProduction);
   
   // DISABLED: Admin password auth - using Replit OAuth only
   // const { adminAuthRouter } = await import('./auth/adminAuth');
   // app.use('/api/auth/admin', adminAuthRouter);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register admin routes only after protection middleware
-
-  app.use('/api/admin', adminRoutes);
+  // app.use('/api/admin', adminRoutes);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Admin publish routes (only if admin enabled)
-  if (process.env.ADMIN_ENABLED !== 'false') {
-    const adminPublishRoutes = await import('./routes/adminPublish');
-    app.use('/api/admin', adminPublishRoutes.default);
-  }
+  // if (process.env.ADMIN_ENABLED !== 'false') {
+  //   const adminPublishRoutes = await import('./routes/adminPublish');
+  //   app.use('/api/admin', adminPublishRoutes.default);
+  // }
   
   app.use('/portal', portalRoutes);
   app.use('/api/cart', cartRoutes);
@@ -129,16 +135,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const bundleRoutes = await import('./routes/bundles');
   app.use('/api/bundles', bundleRoutes.default);
   
-  const adminBundleRoutes = await import('./routes/adminBundles');
-  app.use('/api/admin/bundles', requireAuth, protectRoute(['admin']), adminBundleRoutes.default);
+  // ADMIN FUNCTIONALITY REMOVED
+  // const adminBundleRoutes = await import('./routes/adminBundles');
+  // app.use('/api/admin/bundles', requireAuth, protectRoute(['admin']), adminBundleRoutes.default);
   
   // Register subscription routes (Phase 18)
   const subscriptionRoutes = await import('./routes/subscriptions');
   app.use('/api/subscriptions', subscriptionRoutes.subscriptionRoutes);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register email job routes (Phase 19) - Admin only
-  const emailJobsRoutes = await import('./routes/email-jobs');
-  app.use('/api/admin/email-jobs', emailJobsRoutes.default);
+  // const emailJobsRoutes = await import('./routes/email-jobs');
+  // app.use('/api/admin/email-jobs', emailJobsRoutes.default);
   
   // Register referral routes (Phase 20)
   const referralRoutes = await import('./routes/referrals');
@@ -163,17 +171,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const reviewRoutes = await import('./routes/reviews');
   app.use('/api/reviews', reviewRoutes.default);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register admin cart analytics routes
-  const adminCartsRoutes = await import('./routes/admin/carts');
-  app.use('/api/admin/carts', adminCartsRoutes.default);
+  // const adminCartsRoutes = await import('./routes/admin/carts');
+  // app.use('/api/admin/carts', adminCartsRoutes.default);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register admin logging routes
-  const adminLogsRoutes = await import('./routes/admin/logs');
-  app.use('/api/admin/logs', adminLogsRoutes.default);
+  // const adminLogsRoutes = await import('./routes/admin/logs');
+  // app.use('/api/admin/logs', adminLogsRoutes.default);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register security audit routes (admin only)
-  const securityAuditRoutes = await import('./routes/security-audit');
-  app.use('/api/admin/security', securityAuditRoutes.default);
+  // const securityAuditRoutes = await import('./routes/security-audit');
+  // app.use('/api/admin/security', securityAuditRoutes.default);
   
   // Email system (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -192,23 +203,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const objectStorageRoutes = await import('./routes/objectStorage');
   await objectStorageRoutes.registerRoutes(app);
 
+  // ADMIN FUNCTIONALITY REMOVED
   // Register admin image upload routes - PROTECTED
-  const adminImagesRoutes = await import('./routes/adminImages');
-  app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
+  // const adminImagesRoutes = await import('./routes/adminImages');
+  // app.use('/api/admin/images', requireAuth, protectRoute(['admin']), adminImagesRoutes.default);
   
+  // ADMIN FUNCTIONALITY REMOVED
   // Register ALFR3D security dashboard routes - ADMIN ONLY (development)
-  if (process.env.NODE_ENV === 'development') {
-    const alfr3dRoutes = await import('./routes/alfr3d');
-    app.use('/api/alfr3d', alfr3dRoutes.default);
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   const alfr3dRoutes = await import('./routes/alfr3d');
+  //   app.use('/api/alfr3d', alfr3dRoutes.default);
+  // }
 
   // Register SEO routes (sitemap.xml, robots.txt)
   const seoRoutes = await import('./routes/seo');
   app.use('/', seoRoutes.default);
 
+  // ADMIN FUNCTIONALITY REMOVED
   // Register image optimization routes - ADMIN ONLY
-  const imageOptimizationRoutes = await import('./routes/imageOptimization');
-  app.use('/api/admin/images/optimize', imageOptimizationRoutes.default);
+  // const imageOptimizationRoutes = await import('./routes/imageOptimization');
+  // app.use('/api/admin/images/optimize', imageOptimizationRoutes.default);
 
   // Cache for product data - 5 minute cache
   let productCache: any = null;
@@ -1053,7 +1067,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ADMIN FUNCTIONALITY REMOVED
   // Get quiz statistics (admin only)
+  app.get("/api/quiz/stats", (req, res) => {
+    return res.status(404).json({ error: 'Admin functionality has been removed' });
+  });
+  
+  /*
+  // ADMIN FUNCTIONALITY REMOVED - Original quiz stats endpoint
   app.get("/api/quiz/stats", protectRoute(['admin']), async (req, res) => {
     try {
       const quizResults = await storage.getQuizResults();
@@ -1075,6 +1096,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to get quiz statistics" });
     }
   });
+  */
 
   // Chat functionality removed as requested
 

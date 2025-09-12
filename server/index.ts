@@ -17,14 +17,15 @@ import healthRoutes from "./routes/health";
 import { securityHeaders } from "./middleware/security-headers";
 import { enforceProductionConfig } from "./config/production-enforcer";
 import { auditAuthEvents } from "./middleware/audit-logger";
+// ADMIN FUNCTIONALITY REMOVED
 import { 
   authLimiter, 
-  adminAuthLimiter, 
+  // adminAuthLimiter, // REMOVED - admin functionality deleted
   passwordResetLimiter, 
   registrationLimiter 
 } from "./middleware/rate-limiter";
-import { protectAdmin } from "./middleware/adminAccess";
-import { ADMIN_CONFIG } from "./config/adminConfig";
+// import { protectAdmin } from "./middleware/adminAccess"; // REMOVED - admin middleware deleted
+// import { ADMIN_CONFIG } from "./config/adminConfig"; // REMOVED - admin config deleted
 // Phase 3 Security: Import enhanced security middlewares
 import { globalErrorHandler, setupUncaughtExceptionHandlers, notFoundHandler } from "./middleware/errorHandler";
 import { createApiSecurityMiddleware } from "./middleware/apiSecurity";
@@ -92,9 +93,10 @@ app.use(cookieParser()); // Parse cookies for session management
 // REPLIT AUTH ONLY: Disabled dual session middleware - using single Replit OAuth system
 // Session handling is now managed by Replit Auth in server/replitAuth.ts
 
+// ADMIN FUNCTIONALITY REMOVED
 // Admin protection for admin routes (if enabled)
-app.use('/api/admin', protectAdmin);
-app.use('/api/auth/admin', protectAdmin);
+// app.use('/api/admin', protectAdmin); // REMOVED - admin functionality deleted
+// app.use('/api/auth/admin', protectAdmin); // REMOVED - admin functionality deleted
 
 // CSRF protection for state-changing operations
 app.use('/api', csrfProtection);
