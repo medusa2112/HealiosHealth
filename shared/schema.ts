@@ -6,17 +6,6 @@ import { z } from "zod";
 // Import ALFR3D security issues schema
 export * from './alfr3d-schema';
 
-// Separate admins table for security
-export const admins = pgTable('admins', {
-  id: serial('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  passwordHash: text('password_hash').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  lastLoginAt: timestamp('last_login_at'),
-  totpSecret: text('totp_secret'), // optional 2FA
-  active: boolean('active').default(true).notNull(),
-});
-
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
@@ -115,15 +104,6 @@ export const subscriptions = pgTable("subscriptions", {
   metadata: text("metadata"), // JSON for additional tracking data
 });
 
-// Phase 19: Email events tracking for automated flows (abandoned cart, reorder reminders)
-export const emailEvents = pgTable("email_events", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").references(() => users.id),
-  emailType: varchar("email_type", { length: 64 }).notNull(), // "abandoned_cart", "reorder", "abandoned_cart_24h"
-  relatedId: varchar("related_id").notNull(), // cart_id or order_id
-  sentAt: text("sent_at").default(sql`CURRENT_TIMESTAMP`),
-  emailAddress: text("email_address").notNull(), // For tracking purposes
-});
 
 export const quizResults = pgTable("quiz_results", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -285,10 +265,6 @@ export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
 
-export const insertAdminsSchema = createInsertSchema(admins).omit({
-  id: true,
-  createdAt: true,
-});
 
 // Phase 14: Product variant schema
 export const insertProductVariantSchema = createInsertSchema(productVariants).omit({
@@ -333,21 +309,8 @@ export const insertCartSchema = createInsertSchema(carts).omit({
   lastUpdated: true,
 });
 
-// Admin activity logging table for audit trail
-export const adminLogs = pgTable("admin_logs", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  adminId: varchar("admin_id").notNull().references(() => users.id),
-  actionType: varchar("action_type", { length: 64 }).notNull(), // e.g. "refund", "edit_product"
-  targetType: varchar("target_type", { length: 64 }).notNull(), // e.g. "order", "product"
-  targetId: varchar("target_id").notNull(),
-  details: text("details"), // JSON string of metadata
-  ipAddress: varchar("ip_address", { length: 45 }), // Support both IPv4 and IPv6
-  timestamp: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
-});
 
 // Type exports
-export type Admin = typeof admins.$inferSelect;
-export type InsertAdmin = z.infer<typeof insertAdminsSchema>;
 export type Address = typeof addresses.$inferSelect;
 export type InsertAddress = z.infer<typeof insertAddressSchema>;
 export type CheckoutAddress = z.infer<typeof checkoutAddressSchema>;
@@ -355,29 +318,7 @@ export type OrderItem = typeof orderItems.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type Cart = typeof carts.$inferSelect;
 export type InsertCart = z.infer<typeof insertCartSchema>;
-export type AdminLog = typeof adminLogs.$inferSelect;
-export type InsertAdminLog = z.infer<typeof insertAdminLogSchema>;
 
-export const insertAdminLogSchema = createInsertSchema(adminLogs).omit({
-  id: true,
-  timestamp: true,
-});
-
-// Reorder tracking logs for funnel analytics (Phase 13)
-export const reorderLogs = pgTable("reorder_logs", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  originalOrderId: varchar("original_order_id").notNull().references(() => orders.id),
-  status: varchar("status", { length: 32 }).notNull(), // started | success | failed
-  timestamp: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
-  metadata: text("metadata"), // JSON string for total amount, error details
-});
-
-export type ReorderLog = typeof reorderLogs.$inferSelect;
-export const insertReorderLogSchema = createInsertSchema(reorderLogs).omit({
-  id: true,
-  timestamp: true,
-});
 
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,
@@ -440,38 +381,6 @@ export const insertDiscountCodeSchema = createInsertSchema(discountCodes).omit({
   usageCount: true,
 });
 
-// Phase 16: Product bundles for bundling multiple variants together
-export const productBundles = pgTable("product_bundles", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: varchar("name", { length: 128 }).notNull(), // e.g. "Immunity Boost Bundle"
-  description: text("description"),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  originalPrice: decimal("original_price", { precision: 10, scale: 2 }), // Total individual prices
-  imageUrl: text("image_url"),
-  isActive: boolean("is_active").default(true),
-  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
-});
-
-// Junction table for bundle items
-export const bundleItems = pgTable("bundle_items", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  bundleId: varchar("bundle_id").notNull().references(() => productBundles.id, { onDelete: "cascade" }),
-  variantId: varchar("variant_id").notNull().references(() => productVariants.id),
-  quantity: integer("quantity").notNull().default(1),
-  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
-});
-
-export const insertProductBundleSchema = createInsertSchema(productBundles).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertBundleItemSchema = createInsertSchema(bundleItems).omit({
-  id: true,
-  createdAt: true,
-});
 
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -513,10 +422,6 @@ export type InsertRestockNotification = z.infer<typeof insertRestockNotification
 export type RestockNotification = typeof restockNotifications.$inferSelect;
 export type InsertDiscountCode = z.infer<typeof insertDiscountCodeSchema>;
 export type DiscountCode = typeof discountCodes.$inferSelect;
-export type InsertProductBundle = z.infer<typeof insertProductBundleSchema>;
-export type ProductBundle = typeof productBundles.$inferSelect;
-export type InsertBundleItem = z.infer<typeof insertBundleItemSchema>;
-export type BundleItem = typeof bundleItems.$inferSelect;
 
 // Phase 18: Subscription types and schemas
 export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
@@ -527,14 +432,6 @@ export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
 export type Subscription = typeof subscriptions.$inferSelect;
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 
-// Phase 19: Email events schemas
-export const insertEmailEventSchema = createInsertSchema(emailEvents).omit({
-  id: true,
-  sentAt: true,
-});
-
-export type EmailEvent = typeof emailEvents.$inferSelect;
-export type InsertEmailEvent = z.infer<typeof insertEmailEventSchema>;
 
 // Phase 20: Referral system for viral growth
 export const referrals = pgTable("referrals", {

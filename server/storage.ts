@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type AdminLog, type InsertAdminLog, type ReorderLog, type DiscountCode, type InsertDiscountCode, type ProductBundle, type InsertProductBundle, type BundleItem, type InsertBundleItem, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { mockSecurityIssues } from "./security-seed";
 
@@ -103,27 +103,6 @@ export interface IStorage {
   // Phase 8: Guest to User conversion
   linkGuestOrdersToUser(email: string, userId: string): Promise<void>;
   
-  // Admin Activity Logging (Phase 12)
-  createAdminLog(log: InsertAdminLog): Promise<AdminLog>;
-  getAdminLogs(limit?: number): Promise<AdminLog[]>;
-  getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]>;
-  getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]>;
-  getAdminLogsWithPagination(filters: {
-    limit: number;
-    offset: number;
-    search?: string | null;
-    actionFilter?: string | null;
-    targetFilter?: string | null;
-    hours?: number | null;
-    adminId?: string | null;
-    targetType?: string | null;
-    targetId?: string | null;
-  }): Promise<{ logs: AdminLog[], total: number }>;
-  
-  // Reorder logs (Phase 13)
-  createReorderLog(log: any): Promise<ReorderLog>;
-  getReorderLogs(options?: { limit?: number; userId?: string; status?: string }): Promise<ReorderLog[]>;
-  getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]>;
   
   // Phase 15: Discount codes
   getDiscountCodes(): Promise<DiscountCode[]>;
@@ -134,17 +113,6 @@ export interface IStorage {
   validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }>;
   incrementDiscountCodeUsage(id: string): Promise<void>;
   
-  // Phase 16: Product Bundles with Children's Product Exclusion
-  getProductBundles(): Promise<ProductBundle[]>;
-  getProductBundleById(id: string): Promise<ProductBundle | undefined>;
-  createProductBundle(bundle: InsertProductBundle): Promise<ProductBundle>;
-  updateProductBundle(id: string, updates: Partial<ProductBundle>): Promise<ProductBundle | undefined>;
-  deleteProductBundle(id: string): Promise<boolean>;
-  getBundleItems(bundleId: string): Promise<BundleItem[]>;
-  createBundleItem(item: InsertBundleItem): Promise<BundleItem>;
-  deleteBundleItem(id: string): Promise<boolean>;
-  getBundleWithItems(id: string): Promise<(ProductBundle & { items: (BundleItem & { variant: ProductVariant })[] }) | undefined>;
-  getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]>;
 
   // Phase 18: Subscriptions
   getUserSubscriptions(userId: string): Promise<Subscription[]>;
@@ -216,11 +184,7 @@ export class MemStorage implements IStorage {
   private addresses: Map<string, Address>;
   private orderItems: Map<string, OrderItem>;
   private carts: Map<string, Cart>;
-  private adminLogs: Map<string, AdminLog>;
-  private reorderLogs: Map<string, ReorderLog>;
   private discountCodes: Map<string, DiscountCode>; // Phase 15
-  private productBundles: Map<string, ProductBundle>; // Phase 16
-  private bundleItems: Map<string, BundleItem>; // Phase 16
   private subscriptions: Map<string, Subscription>; // Phase 18
   private referrals: Map<string, any>; // Phase 20
   private referralClaims: Map<string, any>; // Phase 20
@@ -245,8 +209,6 @@ export class MemStorage implements IStorage {
     this.addresses = new Map();
     this.orderItems = new Map();
     this.carts = new Map();
-    this.adminLogs = new Map();
-    this.reorderLogs = new Map();
     this.discountCodes = new Map(); // Phase 15
     this.productBundles = new Map(); // Phase 16
     this.bundleItems = new Map(); // Phase 16
@@ -261,10 +223,7 @@ export class MemStorage implements IStorage {
     this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
     this.seedAbandonedCarts();
-    this.seedAdminLogs();
-    this.seedReorderLogs();
     this.seedDiscountCodes(); // Phase 15
-    this.seedBundles(); // Phase 16
     this.seedArticles();
     this.seedSecurityIssues(); // ALFR3D mock data
   }
@@ -293,21 +252,7 @@ export class MemStorage implements IStorage {
     });
   }
 
-  private seedAdminLogs() {
-    const sampleLogs: AdminLog[] = [];
 
-    sampleLogs.forEach(log => {
-      this.adminLogs.set(log.id, log);
-    });
-  }
-
-  private seedReorderLogs() {
-    const sampleReorders: ReorderLog[] = [];
-
-    sampleReorders.forEach(reorder => {
-      this.reorderLogs.set(reorder.id, reorder);
-    });
-  }
 
   private seedDiscountCodes() {
     const sampleCodes: DiscountCode[] = [];
@@ -317,19 +262,6 @@ export class MemStorage implements IStorage {
     });
   }
 
-  private seedBundles() {
-    const sampleBundles: ProductBundle[] = [];
-
-    sampleBundles.forEach(bundle => {
-      this.productBundles.set(bundle.id, bundle);
-    });
-    
-    const sampleBundleItems: BundleItem[] = [];
-    
-    sampleBundleItems.forEach(item => {
-      this.bundleItems.set(item.id, item);
-    });
-  }
 
   private seedUsers() {
     const testUsers: User[] = [];
@@ -778,28 +710,6 @@ export class MemStorage implements IStorage {
   async getCartBySessionToken(sessionToken: string): Promise<Cart | undefined> { return Array.from(this.carts.values()).find(cart => cart.sessionToken === sessionToken); }
   async markCartAsConverted(cartId: string, stripeSessionId?: string): Promise<Cart | undefined> { const cart = this.carts.get(cartId); if (!cart) return undefined; const updated = { ...cart, convertedToOrder: true, stripeSessionId: stripeSessionId ?? null, lastUpdated: new Date().toISOString() }; this.carts.set(cartId, updated); return updated; }
   async linkGuestOrdersToUser(email: string, userId: string): Promise<void> { Array.from(this.orders.values()).forEach(order => { if (order.customerEmail === email && !order.userId) { this.orders.set(order.id, { ...order, userId }); } }); }
-  async createAdminLog(log: InsertAdminLog): Promise<AdminLog> { 
-    const id = randomUUID(); 
-    const newLog: AdminLog = { 
-      id,
-      adminId: log.adminId,
-      actionType: log.actionType,
-      targetType: log.targetType,
-      targetId: log.targetId,
-      details: log.details ?? null,
-      ipAddress: log.ipAddress ?? null,
-      timestamp: new Date().toISOString()
-    }; 
-    this.adminLogs.set(id, newLog); 
-    return newLog; 
-  }
-  async getAdminLogs(limit?: number): Promise<AdminLog[]> { const logs = Array.from(this.adminLogs.values()); return limit ? logs.slice(0, limit) : logs; }
-  async getAdminLogsByAdmin(adminId: string): Promise<AdminLog[]> { return Array.from(this.adminLogs.values()).filter(log => log.adminId === adminId); }
-  async getAdminLogsByTarget(targetType: string, targetId: string): Promise<AdminLog[]> { return Array.from(this.adminLogs.values()).filter(log => log.targetType === targetType && log.targetId === targetId); }
-  async getAdminLogsWithPagination(filters: any): Promise<{ logs: AdminLog[], total: number }> { const logs = Array.from(this.adminLogs.values()); return { logs: logs.slice(filters.offset, filters.offset + filters.limit), total: logs.length }; }
-  async createReorderLog(log: any): Promise<ReorderLog> { const id = randomUUID(); const newLog: ReorderLog = { ...log, id, timestamp: new Date().toISOString() }; this.reorderLogs.set(id, newLog); return newLog; }
-  async getReorderLogs(options?: any): Promise<ReorderLog[]> { return Array.from(this.reorderLogs.values()); }
-  async getReorderLogsByOrderId(originalOrderId: string): Promise<ReorderLog[]> { return Array.from(this.reorderLogs.values()).filter(log => log.originalOrderId === originalOrderId); }
   async getDiscountCodes(): Promise<DiscountCode[]> { return Array.from(this.discountCodes.values()); }
   async getDiscountCodeByCode(code: string): Promise<DiscountCode | undefined> { return Array.from(this.discountCodes.values()).find(dc => dc.code === code); }
   async createDiscountCode(discountCode: InsertDiscountCode): Promise<DiscountCode> { 
@@ -822,42 +732,6 @@ export class MemStorage implements IStorage {
   async deleteDiscountCode(id: string): Promise<boolean> { return this.discountCodes.delete(id); }
   async validateDiscountCode(code: string): Promise<{ valid: boolean; discount?: DiscountCode; error?: string }> { const discount = await this.getDiscountCodeByCode(code); if (!discount) return { valid: false, error: 'Code not found' }; if (!discount.isActive) return { valid: false, error: 'Code inactive' }; if (discount.usageLimit && (discount.usageCount || 0) >= discount.usageLimit) return { valid: false, error: 'Usage limit exceeded' }; if (discount.expiresAt && new Date() > new Date(discount.expiresAt)) return { valid: false, error: 'Code expired' }; return { valid: true, discount }; }
   async incrementDiscountCodeUsage(id: string): Promise<void> { const code = this.discountCodes.get(id); if (code) { this.discountCodes.set(id, { ...code, usageCount: (code.usageCount ?? 0) + 1 }); } }
-  async getProductBundles(): Promise<ProductBundle[]> { return Array.from(this.productBundles.values()); }
-  async getProductBundleById(id: string): Promise<ProductBundle | undefined> { return this.productBundles.get(id); }
-  async createProductBundle(bundle: InsertProductBundle): Promise<ProductBundle> { 
-    const id = randomUUID(); 
-    const newBundle: ProductBundle = { 
-      id,
-      name: bundle.name,
-      description: bundle.description ?? null,
-      price: bundle.price,
-      originalPrice: bundle.originalPrice ?? null,
-      imageUrl: bundle.imageUrl ?? null,
-      isActive: bundle.isActive ?? null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }; 
-    this.productBundles.set(id, newBundle); 
-    return newBundle; 
-  }
-  async updateProductBundle(id: string, updates: Partial<ProductBundle>): Promise<ProductBundle | undefined> { const bundle = this.productBundles.get(id); if (!bundle) return undefined; const updated = { ...bundle, ...updates, updatedAt: new Date().toISOString() }; this.productBundles.set(id, updated); return updated; }
-  async deleteProductBundle(id: string): Promise<boolean> { return this.productBundles.delete(id); }
-  async getBundleItems(bundleId: string): Promise<BundleItem[]> { return Array.from(this.bundleItems.values()).filter(item => item.bundleId === bundleId); }
-  async createBundleItem(item: InsertBundleItem): Promise<BundleItem> { 
-    const id = randomUUID(); 
-    const newItem: BundleItem = { 
-      id,
-      bundleId: item.bundleId,
-      variantId: item.variantId,
-      quantity: item.quantity || 1,
-      createdAt: new Date().toISOString()
-    }; 
-    this.bundleItems.set(id, newItem); 
-    return newItem; 
-  }
-  async deleteBundleItem(id: string): Promise<boolean> { return this.bundleItems.delete(id); }
-  async getBundleWithItems(id: string): Promise<(ProductBundle & { items: (BundleItem & { variant: ProductVariant })[] }) | undefined> { const bundle = this.productBundles.get(id); if (!bundle) return undefined; const items = await this.getBundleItems(id); const itemsWithVariants = await Promise.all(items.map(async item => { const variant = await this.getProductVariant(item.variantId); return { ...item, variant: variant! }; })); return { ...bundle, items: itemsWithVariants }; }
-  async getVariantsExcludingTags(excludeTags: string[]): Promise<ProductVariant[]> { return Array.from(this.productVariants.values()); }
   async getUserSubscriptions(userId: string): Promise<Subscription[]> { return Array.from(this.subscriptions.values()).filter(sub => sub.userId === userId); }
   async getSubscription(id: string): Promise<Subscription | undefined> { return this.subscriptions.get(id); }
   async createSubscription(subscription: InsertSubscription): Promise<Subscription> { 
