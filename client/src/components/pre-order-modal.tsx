@@ -46,7 +46,6 @@ export function PreOrderModal({ isOpen, onClose, productName, productId }: PreOr
       toast({
         title: "Error",
         description: "Failed to submit pre-order. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);

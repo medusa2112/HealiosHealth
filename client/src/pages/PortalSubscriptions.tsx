@@ -42,7 +42,7 @@ export default function PortalSubscriptions() {
       queryClient.invalidateQueries({ queryKey: ['/api/subscriptions'] });
     },
     onError: () => {
-      toast({ title: "Error", description: "Failed to cancel subscription", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to cancel subscription" });
     }
   });
 
@@ -59,7 +59,7 @@ export default function PortalSubscriptions() {
       queryClient.invalidateQueries({ queryKey: ['/api/subscriptions'] });
     },
     onError: () => {
-      toast({ title: "Error", description: "Failed to reactivate subscription", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to reactivate subscription" });
     }
   });
 

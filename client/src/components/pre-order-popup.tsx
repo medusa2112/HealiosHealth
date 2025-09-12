@@ -65,7 +65,6 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
       toast({
         title: "Error submitting pre-order",
         description: "Please try again or contact support.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);

@@ -47,7 +47,6 @@ export default function ReferralsPage() {
       toast({
         title: "Failed to copy",
         description: "Please copy the link manually",
-        variant: "destructive",
       });
     }
   };

@@ -45,7 +45,6 @@ export function StockNotification() {
       toast({
         title: "Missing Information",
         description: "Please fill in both your first name and email address.",
-        variant: "destructive"
       });
       return;
     }
@@ -79,7 +78,6 @@ export function StockNotification() {
       toast({
         title: "Oops! Something went wrong",
         description: "Please try again or contact support if the issue persists.",
-        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);

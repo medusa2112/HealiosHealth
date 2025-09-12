@@ -39,7 +39,6 @@ const NewsletterForm = () => {
       toast({
         title: "Missing Information",
         description: "Please fill in your first name, last name, and email address.",
-        variant: "destructive"
       });
       return;
     }
@@ -74,7 +73,6 @@ const NewsletterForm = () => {
       toast({
         title: "Subscription Failed",
         description: error instanceof Error ? error.message : "Please try again later.",
-        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
@@ -349,7 +347,6 @@ export default function HomePage() {
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
-        variant: "destructive",
       });
     }
   };

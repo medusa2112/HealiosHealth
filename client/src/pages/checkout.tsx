@@ -87,7 +87,6 @@ const CheckoutForm = () => {
       toast({
         title: "Invalid Discount Code",
         description: error.message,
-        variant: "destructive",
       });
     } finally {
       setIsValidatingDiscount(false);
@@ -115,7 +114,6 @@ const CheckoutForm = () => {
       toast({
         title: "Invalid Address",
         description: "Please fill in all required address fields correctly.",
-        variant: "destructive",
       });
       return;
     }
@@ -221,7 +219,6 @@ const CheckoutForm = () => {
       toast({
         title: "Checkout Failed",
         description: "There was an error creating your payment session. Please try again.",
-        variant: "destructive",
       });
       setIsProcessing(false);
     }

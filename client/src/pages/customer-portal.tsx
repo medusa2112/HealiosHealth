@@ -65,7 +65,6 @@ export default function CustomerPortal() {
       toast({
         title: "Error",
         description: "Failed to create reorder. Please try again.",
-        variant: "destructive",
       });
     },
   });
@@ -92,7 +91,6 @@ export default function CustomerPortal() {
       toast({
         title: "Error",
         description: "Failed to save address. Please try again.",
-        variant: "destructive",
       });
     },
   });
@@ -118,7 +116,6 @@ export default function CustomerPortal() {
       toast({
         title: "Error",
         description: "Failed to update address. Please try again.",
-        variant: "destructive",
       });
     },
   });
@@ -142,7 +139,6 @@ export default function CustomerPortal() {
       toast({
         title: "Error",
         description: "Failed to delete address. Please try again.",
-        variant: "destructive",
       });
     },
   });

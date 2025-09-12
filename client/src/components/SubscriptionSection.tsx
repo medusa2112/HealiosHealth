@@ -37,7 +37,6 @@ export function SubscriptionSection({ variant, productName }: SubscriptionSectio
       toast({
         title: "Login required",
         description: "Please log in to set up a subscription",
-        variant: "destructive"
       });
       return;
     }
@@ -68,7 +67,6 @@ export function SubscriptionSection({ variant, productName }: SubscriptionSectio
       toast({
         title: "Error",
         description: "Failed to start subscription checkout. Please try again.",
-        variant: "destructive"
       });
     } finally {
       setIsLoading(false);

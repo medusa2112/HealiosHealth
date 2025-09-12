@@ -562,7 +562,6 @@ export default function ProductComprehensive() {
       toast({
         title: "Missing Information",
         description: "Please fill in your email address and agree to our contact terms.",
-        variant: "destructive"
       });
       return;
     }
@@ -600,7 +599,6 @@ export default function ProductComprehensive() {
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
-        variant: "destructive"
       });
     }
   };

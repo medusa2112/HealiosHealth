@@ -155,7 +155,6 @@ export default function QuizPage() {
       toast({
         title: "Booking Failed",
         description: "Sorry, we couldn't process your booking. Please try again.",
-        variant: "destructive"
       });
     }
   });
@@ -175,7 +174,6 @@ export default function QuizPage() {
       toast({
         title: "Something went wrong",
         description: error.message || "Please try again later.",
-        variant: "destructive"
       });
     }
   });
