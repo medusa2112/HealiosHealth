@@ -1,80 +1,71 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { UserPlus, Loader2, CheckCircle } from 'lucide-react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { UserPlus, Lock, Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react';
+import { RegisterSchema, type RegisterFormData } from '@/lib/validators/register';
+import { customerAuth } from '@/lib/authClient';
 
 export function RegisterForm() {
   const [, setLocation] = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    email: '',
-    firstName: '',
-    lastName: ''
+  const queryClient = useQueryClient();
+
+  const form = useForm<RegisterFormData>({
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      firstName: '',
+      lastName: ''
+    }
   });
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegisterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate form data
-    if (!formData.email.trim()) {
-      setError('Please enter your email address');
-      return;
-    }
-    if (!formData.firstName.trim()) {
-      setError('Please enter your first name');
-      return;
-    }
-    if (!formData.lastName.trim()) {
-      setError('Please enter your last name');
-      return;
-    }
-
+  const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
     try {
-      // Create user account directly
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: formData.email.trim(),
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim()
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 400 && data.message?.includes('already exists')) {
-          setError('An account with this email already exists. Redirecting to sign in...');
-          setTimeout(() => {
-            setLocation(`/login?email=${encodeURIComponent(formData.email.trim())}&message=${encodeURIComponent('Please sign in to your existing account')}`);
-          }, 2000);
-          return;
-        }
-        throw new Error(data.message || 'Failed to create account');
-      }
-
-      // Account created successfully
-      setSuccess(`Welcome to Healios, ${formData.firstName}! Your account has been created successfully.`);
+      const result = await customerAuth.register(
+        data.email,
+        data.password,
+        data.firstName || '',
+        data.lastName || ''
+      );
       
-      // Redirect to sign in page after 3 seconds
+      // Show success message
+      const firstName = data.firstName || 'there';
+      setSuccess(`Welcome to Healios, ${firstName}! Your account has been created successfully.`);
+      
+      // Redirect to login page after 3 seconds
       setTimeout(() => {
-        setLocation(`/login?email=${encodeURIComponent(formData.email.trim())}&message=${encodeURIComponent('Account created! Please sign in to access your account.')}`);
+        setLocation(`/login?email=${encodeURIComponent(data.email)}&message=${encodeURIComponent('Account created! Please sign in to access your account.')}`);
       }, 3000);
       
     } catch (error) {
-      console.error('Registration error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to create account. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Registration failed. Please try again.';
+      
+      if (errorMessage.includes('already exists')) {
+        setError('An account with this email already exists. Redirecting to sign in...');
+        setTimeout(() => {
+          setLocation(`/login?email=${encodeURIComponent(data.email)}&message=${encodeURIComponent('Please sign in to your existing account')}`);
+        }, 2000);
+        return;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -118,74 +109,169 @@ export function RegisterForm() {
           )}
 
           {!success && (
-            <form onSubmit={handleRegisterSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-black dark:text-white">
-                  First Name
-                </Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="Enter your first name"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  disabled={isLoading}
-                  className="w-full"
-                  data-testid="input-firstname"
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black dark:text-white">First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Enter your first name"
+                          disabled={isLoading}
+                          className="w-full"
+                          data-testid="input-firstname"
+                          autoComplete="given-name"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-black dark:text-white">
-                  Last Name
-                </Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Enter your last name"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  disabled={isLoading}
-                  className="w-full"
-                  data-testid="input-lastname"
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black dark:text-white">Last Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Enter your last name"
+                          disabled={isLoading}
+                          className="w-full"
+                          data-testid="input-lastname"
+                          autoComplete="family-name"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-black dark:text-white">
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  disabled={isLoading}
-                  className="w-full"
-                  data-testid="input-email"
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black dark:text-white">Email Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="Enter your email address"
+                          disabled={isLoading}
+                          className="w-full"
+                          data-testid="input-email"
+                          autoComplete="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <Button
-                type="submit"
-                disabled={isLoading || !formData.email.trim() || !formData.firstName.trim() || !formData.lastName.trim()}
-                className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                data-testid="button-create-account"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Creating Account...
-                  </>
-                ) : (
-                  <>
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Create Account
-                  </>
-                )}
-              </Button>
-            </form>
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black dark:text-white">Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Create a secure password"
+                            disabled={isLoading}
+                            className="w-full pr-10"
+                            data-testid="input-password"
+                            autoComplete="new-password"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            data-testid="toggle-password-visibility"
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Must be at least 8 characters with uppercase, lowercase, and number
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-black dark:text-white">Confirm Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            {...field}
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Confirm your password"
+                            disabled={isLoading}
+                            className="w-full pr-10"
+                            data-testid="input-confirm-password"
+                            autoComplete="new-password"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            data-testid="toggle-confirm-password-visibility"
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
+                  data-testid="button-create-account"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creating Account...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Create Account
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Form>
           )}
 
           <div className="text-center">
@@ -206,6 +292,7 @@ export function RegisterForm() {
               >
                 Privacy Policy
               </button>
+              .
             </p>
           </div>
         </CardContent>

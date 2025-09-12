@@ -1,134 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LogIn, Mail, Loader2 } from 'lucide-react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { LogIn, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { LoginSchema, type LoginFormData } from '@/lib/validators/login';
+import { customerAuth } from '@/lib/authClient';
 
 export function LoginForm() {
-
   const [, setLocation] = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<'email' | 'pin'>('email');
-  const [pin, setPin] = useState('');
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlEmail = urlParams.get('email');
-    const urlMessage = urlParams.get('message');
-    
-    if (urlEmail) {
-      setEmail(urlEmail);
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      remember: false
     }
-    if (urlMessage) {
-      setSuccess(urlMessage);
-    }
-  }, []);
+  });
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) {
-      setError('Please enter your email address');
-      return;
-    }
-
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/auth/send-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email: email.trim() })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to send PIN');
-      }
-
-      setSuccess('A one-time PIN has been sent to your email. Please check your inbox.');
-      setStep('pin');
-    } catch (error) {
-      // // console.error('Email login error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to send PIN. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePinVerification = async () => {
-
-    if (!pin.trim()) {
-      setError('Please enter the PIN from your email');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      
-      const response = await fetch('/api/auth/verify-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, pin: pin.trim() })
-      });
-
-      const data = await response.json();
-      
-      console.log('PIN verification response:', { success: response.ok });
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Invalid PIN');
-      }
-
-      // Successful authentication - redirect based on profile completion
-      const { user, needsProfileCompletion, redirectTo } = data;
-
-      if (needsProfileCompletion) {
-        // New user or incomplete profile - redirect to profile completion
-        const targetUrl = redirectTo || '/profile';
-        setSuccess(`Welcome${user.firstName ? `, ${user.firstName}` : ''}! Redirecting to profile completion...`);
-        
-        setLocation(targetUrl);
-        setTimeout(() => {
-          
-          window.location.href = targetUrl;
-        }, 100);
-        
-      } else {
-        // Existing user with complete profile - redirect to shopping
-        const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
-        
-        setLocation(returnUrl);
-        setTimeout(() => {
-          window.location.href = returnUrl;
-        }, 100);
-        
-      }
-    } catch (error) {
-      // // console.error('PIN verification error:', error);
-      setError(error instanceof Error ? error.message : 'Invalid PIN. Please try again.');
-    } finally {
-      
-      setIsLoading(false);
-    }
-  };
-
-  const handleBackToEmail = () => {
-    setStep('email');
-    setPin('');
     setError(null);
     setSuccess(null);
+
+    try {
+      const result = await customerAuth.login(data.email, data.password);
+      
+      // Invalidate auth queries to refresh user state
+      await queryClient.invalidateQueries({ queryKey: ['/api/auth/customer/me'] });
+      
+      // Show success message briefly
+      setSuccess(`Welcome back! Redirecting...`);
+      
+      // Get redirect URL from query params or use default
+      const returnUrl = new URLSearchParams(window.location.search).get('redirect') || '/';
+      
+      // Redirect after a brief delay
+      setTimeout(() => {
+        setLocation(returnUrl);
+      }, 1000);
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -137,21 +65,14 @@ export function LoginForm() {
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto mb-4">
             <div className="w-12 h-12 mx-auto mb-4 bg-black dark:bg-white flex items-center justify-center">
-              {step === 'email' ? (
-                <LogIn className="w-6 h-6 text-white dark:text-black" />
-              ) : (
-                <Mail className="w-6 h-6 text-white dark:text-black" />
-              )}
+              <LogIn className="w-6 h-6 text-white dark:text-black" />
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-black dark:text-white">
-            {step === 'email' ? 'Welcome back' : 'Enter PIN'}
+            Welcome back
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            {step === 'email' 
-              ? 'Sign in to your Healios account to access your wellness portal.' 
-              : 'We sent a PIN to your email. Enter it below to sign in.'
-            }
+            Sign in to your Healios account to access your wellness portal.
           </CardDescription>
         </CardHeader>
 
@@ -168,154 +89,86 @@ export function LoginForm() {
             </Alert>
           )}
 
-          {step === 'email' ? (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-black dark:text-white">
-                  Email address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      
-                      handleEmailSubmit(e);
-                      return false;
-                    }
-                  }}
-                  disabled={isLoading}
-                  className="w-full"
-                  data-testid="input-email"
-                  autoComplete="off"
-                />
-              </div>
-              
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-black dark:text-white">Email address</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder="Enter your email address"
+                        disabled={isLoading}
+                        className="w-full"
+                        data-testid="input-email"
+                        autoComplete="email"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-black dark:text-white">Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          disabled={isLoading}
+                          className="w-full pr-10"
+                          data-testid="input-password"
+                          autoComplete="current-password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          data-testid="toggle-password-visibility"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  
-                  handleEmailSubmit(e);
-                  return false;
-                }}
-                disabled={isLoading || !email.trim()}
+                type="submit"
+                disabled={isLoading}
                 className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                data-testid="button-send-pin"
+                data-testid="button-login"
               >
                 {isLoading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Sending PIN...
+                    Signing in...
                   </>
                 ) : (
                   <>
-                    <Mail className="w-4 h-4 mr-2" />
-                    Send PIN
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
                   </>
                 )}
               </Button>
-            </div>
-          ) : (
-            <div className="space-y-4" onSubmit={(e) => {  e.preventDefault(); e.stopPropagation(); return false; }}>
-              <div className="space-y-2">
-                <Label htmlFor="pin" className="text-black dark:text-white">
-                  Enter PIN
-                </Label>
-                <Input
-                  id="pin"
-                  type="text"
-                  placeholder="Enter the 6-digit PIN"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  onKeyDown={(e) => {
-                    
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      
-                      handlePinVerification();
-                      return false;
-                    }
-                  }}
-                  onKeyUp={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      return false;
-                    }
-                  }}
-                  disabled={isLoading}
-                  className="w-full text-center text-lg tracking-widest"
-                  maxLength={6}
-                  data-testid="input-pin"
-                  autoComplete="off"
-                />
-                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                  Sent to: {email}
-                </p>
-              </div>
-              
-              <div 
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-
-                  if (e.target === e.currentTarget) {
-                    
-                    return false;
-                  }
-                }}
-              >
-                <Button
-                  type="button"
-                  onMouseDown={(e) => {
-                    
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onClick={(e) => {
-                    
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    handlePinVerification();
-                    
-                    return false;
-                  }}
-                  disabled={isLoading || !pin.trim()}
-                  className="w-full h-12 bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200"
-                  data-testid="button-verify-pin"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Verifying...
-                    </>
-                  ) : (
-                    'Verify & Sign In'
-                  )}
-                </Button>
-              </div>
-              
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleBackToEmail}
-                disabled={isLoading}
-                className="w-full"
-                data-testid="button-back"
-              >
-                Back to Email
-              </Button>
-            </div>
-          )}
+            </form>
+          </Form>
 
           <div className="text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -347,6 +200,7 @@ export function LoginForm() {
               type="button"
               className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 transition-colors underline font-medium"
               onClick={() => setLocation('/register')}
+              data-testid="link-register"
             >
               Sign up
             </button>

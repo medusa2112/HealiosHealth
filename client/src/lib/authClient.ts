@@ -40,11 +40,26 @@ export async function initializeAdminCsrf(): Promise<void> {
   }
 }
 
-// Customer authentication functions - REPLIT OAUTH ONLY
+// Customer authentication functions - EMAIL/PASSWORD
 export const customerAuth = {
-  // DISABLED: Password login - use Replit OAuth
   async login(email: string, password: string) {
-    throw new Error('Password authentication is disabled. Please use Replit OAuth.');
+    const csrfToken = getCustCsrf();
+    const response = await fetch('/api/auth/customer/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
+      },
+      body: JSON.stringify({ email, password })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Login failed');
+    }
+    
+    return response.json();
   },
 
   async register(email: string, password: string, firstName: string, lastName: string) {
