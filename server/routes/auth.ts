@@ -47,29 +47,8 @@ const legacyLoginLimiter = process.env.NODE_ENV === 'test' || process.env.DISABL
       legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     });
 
-// Get current user info - this is what the frontend /auth/me expects
-router.get('/me', async (req, res) => {
-  try {
-    // Check if user is authenticated through Replit Auth or session
-    const userId = (req.session as any)?.userId || (req.user as any)?.claims?.sub || (req.user as any)?.userId;
-
-    if (!userId) {
-      
-      return res.json(null);
-    }
-
-    const user = await storage.getUserById(userId);
-    if (!user) {
-      
-      return res.json(null);
-    }
-
-    res.json(sanitizeUser(user));
-  } catch (error) {
-    // // console.error('Auth me error:', error);
-    res.json(null);
-  }
-});
+// REMOVED: General /me route - using customer-specific route instead
+// This router is mounted at /api/auth/customer so the customer-specific route handles /me
 
 // Legacy /user endpoint for backwards compatibility
 router.get('/user', isAuthenticated, async (req, res) => {
@@ -105,7 +84,7 @@ router.get('/user', isAuthenticated, async (req, res) => {
 
 // Customer-specific authentication routes under /customer namespace
 // POST /api/auth/customer/register - Customer registration with password
-router.post('/customer/register', loginLimiter, async (req, res) => {
+router.post('/register', loginLimiter, async (req, res) => {
   try {
     const result = customerRegisterSchema.safeParse(req.body);
     if (!result.success) {
@@ -174,7 +153,7 @@ router.post('/customer/register', loginLimiter, async (req, res) => {
 });
 
 // POST /api/auth/customer/login - Customer login returning user data
-router.post('/customer/login', loginLimiter, async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   try {
     const result = customerLoginSchema.safeParse(req.body);
     if (!result.success) {
@@ -261,7 +240,7 @@ router.post('/customer/login', loginLimiter, async (req, res) => {
 });
 
 // POST /api/auth/customer/logout - Customer logout (clear session)
-router.post('/customer/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
   try {
     const userId = (req.session as any)?.userId;
     
@@ -288,7 +267,7 @@ router.post('/customer/logout', async (req, res) => {
 });
 
 // GET /api/auth/customer/me - Get current customer data
-router.get('/customer/me', async (req, res) => {
+router.get('/me', async (req, res) => {
   try {
     const userId = (req.session as any)?.userId;
 
