@@ -9,7 +9,7 @@ export * from './alfr3d-schema';
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
-  password: text("password"), // Optional for OAuth users
+  passwordHash: text("password_hash"), // Hashed password for secure authentication
   role: text("role").notNull().default("guest"), // 'admin', 'customer', 'guest'
   firstName: text("first_name"),
   lastName: text("last_name"),
@@ -381,6 +381,26 @@ export const insertDiscountCodeSchema = createInsertSchema(discountCodes).omit({
   usageCount: true,
 });
 
+// Customer authentication schemas
+export const customerRegisterSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  firstName: z.string().min(1, "First name is required").max(100, "First name too long"),
+  lastName: z.string().min(1, "Last name is required").max(100, "Last name too long"),
+  password: z.string().min(8, "Password must be at least 8 characters")
+    .regex(/(?=.*[a-z])/, "Password must contain at least one lowercase letter")
+    .regex(/(?=.*[A-Z])/, "Password must contain at least one uppercase letter")
+    .regex(/(?=.*\d)/, "Password must contain at least one number"),
+});
+
+export const customerLoginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const customerProfileUpdateSchema = z.object({
+  firstName: z.string().min(1, "First name is required").max(100, "First name too long"),
+  lastName: z.string().min(1, "Last name is required").max(100, "Last name too long"),
+});
 
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -391,6 +411,11 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertProductVariant = z.infer<typeof insertProductVariantSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
+
+// Customer authentication types
+export type CustomerRegister = z.infer<typeof customerRegisterSchema>;
+export type CustomerLogin = z.infer<typeof customerLoginSchema>;
+export type CustomerProfileUpdate = z.infer<typeof customerProfileUpdateSchema>;
 
 // UpsertUser type for authentication - allows creating or updating with optional fields
 export type UpsertUser = {
