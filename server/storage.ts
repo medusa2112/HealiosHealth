@@ -210,8 +210,6 @@ export class MemStorage implements IStorage {
     this.orderItems = new Map();
     this.carts = new Map();
     this.discountCodes = new Map(); // Phase 15
-    this.productBundles = new Map(); // Phase 16
-    this.bundleItems = new Map(); // Phase 16
     this.subscriptions = new Map(); // Phase 18
     this.referrals = new Map(); // Phase 20
     this.referralClaims = new Map(); // Phase 20
