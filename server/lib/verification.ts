@@ -83,55 +83,26 @@ export async function sendVerificationEmail(email: string, code: string, firstNa
     </html>
   `;
 
-  // Send PIN authentication email using the centralized email service
+  // Send verification email using the centralized email service
   try {
     if (!resend) {
-
+      console.log('[VERIFICATION] Resend not configured, skipping email');
       return;
     }
 
-    // In development, send to admin emails with original user info
-    // In production, send to the actual user
-    const isDev = process.env.NODE_ENV === 'development';
-    const adminEmails = ['dn@thefourths.com', 'jv@thefourths.com'];
-    
-    const emailData = {
-      pin: code,
-      originalUserEmail: isDev ? email : undefined
-    };
-    
-    if (isDev && adminEmails.includes(email)) {
-      // Send to admin email in dev
-      
-      await sendPinEmail(email, emailData);
-    } else if (isDev) {
-      // Send to admin emails in dev mode but include original user info
-      
-      for (const adminEmail of adminEmails) {
-        await sendPinEmail(adminEmail, emailData);
-      }
-    } else {
-      // Production mode - send to actual user
-      
-      await sendPinEmail(email, emailData);
-    }
+    await resend.emails.send({
+      from: 'Healios <dn@thefourths.com>',
+      to: [email],
+      subject,
+      html,
+    });
 
+    console.log(`[VERIFICATION] ${type} email sent to ${email}`);
   } catch (error) {
-    // // console.error('[EMAIL ERROR] Failed to send PIN verification email:', error);
+    console.error('[EMAIL ERROR] Failed to send verification email:', error);
   }
 }
 
-// Helper function to send PIN emails using the centralized email system
-async function sendPinEmail(to: string, data: { pin: string; originalUserEmail?: string }) {
-  const { sendEmail } = await import('./email');
-  
-  return sendEmail(to, 'pin_auth', {
-    amount: 0, // Required by interface but not used for PIN emails
-    id: 'pin-auth',
-    pin: data.pin,
-    originalUserEmail: data.originalUserEmail
-  });
-}
 
 // Check rate limiting (max 5 attempts per hour)
 export function canAttemptVerification(attempts: number, lastAttemptTime?: Date): boolean {

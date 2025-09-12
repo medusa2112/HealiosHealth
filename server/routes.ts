@@ -51,7 +51,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static files from client/public directory (including hero videos)
   app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
-  // Setup session middleware for PIN authentication
+  // Setup session middleware
   const session = await import('express-session');
   const sessionStore = await import('memorystore');
   const MemoryStore = sessionStore.default(session.default);
@@ -86,9 +86,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ADMIN FUNCTIONALITY REMOVED
   // app.use('/api/admin', csrfRoutes.adminCsrfRouter);
   
-  // Register PIN authentication routes (replaces Replit Auth)
-  const pinAuthRoutes = await import('./routes/pin-auth');
-  app.use('/api/auth', pinAuthRoutes.default);
   
   // Register customer authentication routes
   app.use('/api/auth/customer', authRoutes);

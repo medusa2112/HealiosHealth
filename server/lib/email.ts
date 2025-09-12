@@ -1,11 +1,11 @@
 import { Resend } from "resend";
 
-// Email service is ENABLED for PIN authentication
-const isEmailEnabled = true; // ENABLED for PIN emails
+// Email service configuration
+const isEmailEnabled = true;
 
 export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "pin_auth";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert";
 
 interface EmailData {
   amount?: number;
@@ -61,7 +61,6 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     refund: "Your Healios Refund Has Been Processed",
     reorder: "Your Healios Reorder Is Complete",
     admin_alert: "⚠️ Healios Admin Alert",
-    pin_auth: "Your Healios Login PIN",
   };
 
   const healiosEmailTemplate = (title: string, content: string, footerNote?: string) => `
@@ -212,86 +211,6 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
       `,
       "This is an automated alert from the Healios system monitoring."
     ),
-    pin_auth: (data) => `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your Healios Login PIN</title>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        </style>
-      </head>
-      <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif; line-height: 1.6; color: #000000; background-color: #f8f9fa;">
-        <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);">
-          
-          <!-- Header with Healios brand gradient -->
-          <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 48px 40px; text-align: center;">
-            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.025em;">
-              Healios
-            </h1>
-            <p style="margin: 12px 0 0 0; color: #ffffff; font-size: 16px; opacity: 0.9; font-weight: 500;">
-              Your secure login PIN
-            </p>
-          </div>
-          
-          <!-- Content -->
-          <div style="padding: 48px 40px;">
-            <h2 style="margin: 0 0 24px 0; color: #000000; font-size: 28px; font-weight: 600; line-height: 1.3; letter-spacing: -0.025em;">
-              Welcome back!
-            </h2>
-          
-            ${data.originalUserEmail ? `
-            <div style="background: linear-gradient(135deg, hsl(220, 100%, 40%), hsl(260, 100%, 60%)); padding: 2px; border-radius: 8px; margin: 0 0 32px 0;">
-              <div style="background-color: #ffffff; padding: 20px; border-radius: 6px;">
-                <p style="margin: 0; font-size: 14px; color: #000000; font-weight: 500;">
-                  <strong>Development Mode:</strong> This PIN was generated for <strong>${data.originalUserEmail}</strong> but sent to this admin account for testing.
-                </p>
-              </div>
-            </div>
-            ` : ''}
-          
-            <p style="font-size: 18px; line-height: 1.6; color: #000000; margin: 0 0 40px 0;">
-              Use this PIN to complete your sign-in to Healios. Enter it on the login page to access your account.
-            </p>
-          
-            <!-- PIN Display with Healios branding -->
-            <div style="background: linear-gradient(135deg, hsl(160, 100%, 35%), hsl(30, 25%, 65%)); padding: 3px; border-radius: 12px; margin: 0 0 40px 0;">
-              <div style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-radius: 9px;">
-                <div style="font-size: 48px; font-weight: 700; letter-spacing: 12px; color: #000000; font-family: 'Inter', monospace; margin: 0 0 16px 0;">
-                  ${data.pin}
-                </div>
-                <div style="font-size: 16px; color: hsl(280, 100%, 35%); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">
-                  Expires in 5 minutes
-                </div>
-              </div>
-            </div>
-          
-            <div style="background-color: #f8f9fa; padding: 24px; border-radius: 8px; border-left: 4px solid hsl(320, 100%, 50%); margin: 0 0 32px 0;">
-              <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #000000;">
-                <strong>Security Note:</strong> If you didn't request this login PIN, please ignore this email. Your account security remains protected.
-              </p>
-            </div>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #666666; margin: 0; text-align: center;">
-              Need help? Simply reply to this email and we'll assist you right away.
-            </p>
-          </div>
-
-          <!-- Footer -->
-          <div style="background-color: #f8f9fa; padding: 32px 40px; text-align: center; border-top: 1px solid #e5e5e5;">
-            <p style="margin: 0 0 8px 0; color: #666666; font-size: 14px;">
-              This is an automated security message from Healios.
-            </p>
-            <p style="margin: 0; color: #999999; font-size: 12px;">
-              © ${new Date().getFullYear()} Healios - Premium wellness supplements for your health journey.
-            </p>
-          </div>
-        </div>
-      </body>
-      </html>
-    `
   };
 
   // Send email using Resend API
@@ -335,38 +254,6 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   }
 }
 
-// Send PIN authentication email
-export async function sendPinEmail(userEmail: string, pin: string): Promise<{ success: boolean; id?: string }> {
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  console.log(`[PIN_EMAIL] Sending PIN for ${userEmail}, isDevelopment: ${isDevelopment}, NODE_ENV: ${process.env.NODE_ENV}`);
-  
-  if (isDevelopment) {
-    // In development/testing: send to actual user email for testing PIN delivery
-    console.log(`[PIN_EMAIL] Development mode - sending directly to user email: ${userEmail}`);
-    
-    const result = await sendEmail(userEmail, "pin_auth", {
-      pin,
-      amount: 0,
-      id: 'pin-' + Date.now(),
-      originalUserEmail: userEmail // Include original email in the data
-    });
-    
-    console.log(`[PIN_EMAIL] Development send result:`, { success: result.success, id: result.id });
-    return result;
-  } else {
-    // In production: send to the actual user email
-    console.log(`[PIN_EMAIL] Production mode - sending to user email: ${userEmail}`);
-    
-    const result = await sendEmail(userEmail, "pin_auth", {
-      pin,
-      amount: 0,
-      id: 'pin-' + Date.now()
-    });
-    
-    console.log(`[PIN_EMAIL] Production send result:`, { success: result.success, id: result.id });
-    return result;
-  }
-}
 
 // Send admin alert emails for critical issues
 export async function sendAdminAlert(message: string, data?: any) {
