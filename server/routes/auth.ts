@@ -6,7 +6,7 @@ import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
 import { hashPassword, verifyPassword, validatePassword } from '../lib/password';
-import { insertUserSchema } from '@shared/schema';
+import { insertUserSchema, customerRegisterSchema, customerLoginSchema, type CustomerRegister, type CustomerLogin } from '@shared/schema';
 import { 
   generateVerificationCode, 
   hashVerificationCode, 
@@ -91,19 +91,23 @@ router.get('/user', isAuthenticated, async (req, res) => {
   }
 });
 
-// DISABLED: Password-based authentication - Using only Replit OAuth
-if (false) {
-  // Password-based registration DISABLED
-  router.post("/register", loginLimiter, async (req, res) => {
-    try {
-    const registerSchema = z.object({
-      email: z.string().email(),
-      password: z.string().min(8),
-      firstName: z.string().min(1).optional(),
-      lastName: z.string().min(1).optional()
-    });
+// SECURITY: Legacy non-namespaced routes DISABLED to prevent admin password auth bypass
+// All password authentication must use /customer/* namespaced routes only
+// This prevents admin accounts from bypassing OAuth requirements
 
-    const result = registerSchema.safeParse(req.body);
+// DISABLED: router.post("/register", ...) - Use /customer/register instead
+
+// DISABLED: router.post('/login', ...) - Use /customer/login instead
+
+// DISABLED: router.post('/verify', ...) - Legacy verification endpoint disabled
+
+// DISABLED: router.post('/resend-code', ...) - Legacy resend endpoint disabled
+
+// Customer-specific authentication routes under /customer namespace
+// POST /api/auth/customer/register - Customer registration with password
+router.post('/customer/register', loginLimiter, async (req, res) => {
+  try {
+    const result = customerRegisterSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ 
         message: 'Invalid input',
@@ -113,76 +117,66 @@ if (false) {
 
     const { email, password, firstName, lastName } = result.data;
 
-    // Validate password strength
-    const passwordValidation = validatePassword(password);
-    if (!passwordValidation.valid) {
-      return res.status(400).json({ message: passwordValidation.message });
+    // SECURITY: Check if email would be assigned admin role
+    const potentialRole = determineUserRole(email);
+    if (potentialRole === 'admin') {
+      return res.status(403).json({ 
+        message: 'Admin accounts cannot register via password. Please use OAuth authentication.' 
+      });
     }
 
-    // Check if user already exists
-    const existingUser = await storage.getUserByEmail(email);
-    if (existingUser) {
-      return res.status(409).json({ message: 'User already exists' });
-    }
-
-    // Hash password
-    const passwordHash = await hashPassword(password);
-
-    // Generate verification code
-    const verificationCode = generateVerificationCode();
-    const verificationCodeHash = await hashVerificationCode(verificationCode);
-    const verificationExpiresAt = generateExpiryTime();
-
-    // Create user with hashed password and verification data
-    const userData = {
-      email,
-      password: passwordHash,
-      firstName: firstName || null,
-      lastName: lastName || null,
-      role: 'customer' as const,
-      isActive: true,
-      emailVerified: null, // Not verified yet
-      verificationCodeHash,
-      verificationExpiresAt: verificationExpiresAt.toISOString(),
-      verificationAttempts: 0
-    };
-
-    const validatedUserData = insertUserSchema.parse(userData);
-    const user = await storage.createUser(validatedUserData);
-
-    // Send verification email
+    // Create user with new storage method - role is FORCED to customer
     try {
-      await sendVerificationEmail(email, verificationCode, firstName);
-    } catch (emailError) {
-      // // console.error('Failed to send verification email:', emailError);
-      // Continue registration even if email fails
+      const user = await storage.createUserWithPassword({
+        email,
+        firstName,
+        lastName,
+        password
+      });
+
+      // SECURITY: Regenerate session ID to prevent session fixation
+      await new Promise<void>((resolve, reject) => {
+        req.session.regenerate((err: any) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      // Set session for immediate login
+      req.session = req.session || {};
+      (req.session as any).userId = user.id;
+
+      // Log successful registration
+      await auditLogin(user.id, true, {
+        email: user.email,
+        role: user.role,
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent'),
+        action: 'customer_registration'
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Registration successful.',
+        user: sanitizeUser(user),
+        redirectUrl: '/portal'
+      });
+    } catch (error: any) {
+      if (error.message.includes('already exists')) {
+        return res.status(409).json({ message: 'User with this email already exists' });
+      }
+      throw error;
     }
+  } catch (error) {
+    // // console.error('Customer registration error:', error);
+    res.status(500).json({ message: 'Registration failed' });
+  }
+});
 
-    // Don't set session yet - user needs to verify email first
-    res.status(201).json({
-      success: true,
-      message: 'Registration successful. Please check your email for a verification code.',
-      requiresVerification: true,
-      email
-    });
-
-    } catch (error) {
-      // // console.error('Registration error:', error);
-      res.status(500).json({ message: 'Registration failed' });
-    }
-  });
-
-  // Password-based login
-  router.post('/login', loginLimiter, async (req, res) => {
-    try {
-    // Avoid logging sensitive information such as passwords or headers
-
-    const loginSchema = z.object({
-      email: z.string().email(),
-      password: z.string().min(1)
-    });
-
-    const result = loginSchema.safeParse(req.body);
+// POST /api/auth/customer/login - Customer login returning user data
+router.post('/customer/login', loginLimiter, async (req, res) => {
+  try {
+    const result = customerLoginSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({ 
         message: 'Invalid input',
@@ -192,38 +186,28 @@ if (false) {
 
     const { email, password } = result.data;
 
-    // Get user by email
-    
-    const user = await storage.getUserByEmail(email);
+    // Use new storage method for verification
+    const user = await storage.verifyUserPassword(email, password);
     
     if (!user) {
       await auditLogin(email, false, {
-        error: 'User not found',
+        error: 'Invalid credentials',
         ip: req.ip || req.connection.remoteAddress,
         userAgent: req.get('User-Agent')
       });
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Verify password if hash exists
-    if (user.password) {
-      const isValidPassword = await verifyPassword(password, user.password);
-      if (!isValidPassword) {
-        await auditLogin(user.id, false, {
-          error: 'Invalid password',
-          ip: req.ip || req.connection.remoteAddress,
-          userAgent: req.get('User-Agent')
-        });
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-    } else {
-      // For users without password hash (legacy/OAuth), deny password login
+    // SECURITY: Reject admin accounts from password login
+    if (user.role === 'admin') {
       await auditLogin(user.id, false, {
-        error: 'Password authentication not available for this account',
+        error: 'Admin password login blocked',
         ip: req.ip || req.connection.remoteAddress,
         userAgent: req.get('User-Agent')
       });
-      return res.status(401).json({ message: 'Please use OAuth login for this account' });
+      return res.status(403).json({ 
+        message: 'Admin accounts must use OAuth authentication. Password login is not permitted.' 
+      });
     }
 
     // Check if user is active
@@ -236,19 +220,13 @@ if (false) {
       return res.status(403).json({ message: 'Account is inactive' });
     }
 
-    // Check if email is verified (only for password-based auth)
-    if (user.password && !user.emailVerified) {
-      await auditLogin(user.id, false, {
-        error: 'Email not verified',
-        ip: req.ip || req.connection.remoteAddress,
-        userAgent: req.get('User-Agent')
+    // SECURITY: Regenerate session ID to prevent session fixation
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err: any) => {
+        if (err) reject(err);
+        else resolve();
       });
-      return res.status(403).json({ 
-        message: 'Please verify your email to continue',
-        error: 'email_unverified',
-        email: user.email
-      });
-    }
+    });
 
     // Set session
     req.session = req.session || {};
@@ -259,21 +237,17 @@ if (false) {
       email: user.email,
       role: user.role,
       ip: req.ip || req.connection.remoteAddress,
-      userAgent: req.get('User-Agent')
+      userAgent: req.get('User-Agent'),
+      action: 'customer_login'
     });
 
-    // Redirect based on role
-    const redirectUrl = user.role === 'admin' ? '/admin' : 
-                       user.role === 'customer' ? '/portal' : '/';
-    
     res.json({ 
       success: true, 
       user: sanitizeUser(user),
-      redirectUrl 
+      redirectUrl: '/portal'
     });
   } catch (error) {
-    // // console.error('Auth error:', error);
-    // Log failed login attempt
+    // // console.error('Customer login error:', error);
     const emailResult = z.object({ email: z.string().optional() }).safeParse(req.body);
     if (emailResult.success && emailResult.data.email) {
       await auditLogin(emailResult.data.email, false, {
@@ -282,157 +256,62 @@ if (false) {
         userAgent: req.get('User-Agent')
       });
     }
-      res.status(500).json({ message: 'Authentication failed' });
-    }
-  });
+    res.status(500).json({ message: 'Authentication failed' });
+  }
+});
 
-  // Email verification endpoint
-  router.post('/verify', loginLimiter, async (req, res) => {
-    try {
-    const verifySchema = z.object({
-      email: z.string().email(),
-      code: z.string().length(6)
-    });
-
-    const result = verifySchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({ 
-        message: 'Invalid input',
-        errors: result.error.errors
+// POST /api/auth/customer/logout - Customer logout (clear session)
+router.post('/customer/logout', async (req, res) => {
+  try {
+    const userId = (req.session as any)?.userId;
+    
+    if (userId) {
+      // Log logout action
+      await auditLogout(userId, {
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent'),
+        action: 'customer_logout'
       });
     }
 
-    const { email, code } = result.data;
-
-    // Get user by email
-    const user = await storage.getUserByEmail(email);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Check if already verified
-    if (user.emailVerified) {
-      return res.status(400).json({ message: 'Email already verified' });
-    }
-
-    // Check rate limiting
-    if (!canAttemptVerification(user.verificationAttempts || 0)) {
-      return res.status(429).json({ 
-        message: 'Too many verification attempts. Please try again in 1 hour.' 
-      });
-    }
-
-    // Update attempt count
-    await storage.updateUser(user.id, {
-      verificationAttempts: (user.verificationAttempts || 0) + 1
-    });
-
-    // Check if code expired
-    if (!user.verificationExpiresAt || isCodeExpired(user.verificationExpiresAt)) {
-      return res.status(400).json({ 
-        message: 'Verification code has expired. Please request a new one.' 
-      });
-    }
-
-    // Verify the code
-    if (!user.verificationCodeHash || !(await verifyCode(code, user.verificationCodeHash))) {
-      return res.status(400).json({ message: 'Invalid verification code' });
-    }
-
-    // Mark email as verified
-    await storage.updateUser(user.id, {
-      emailVerified: new Date().toISOString(),
-      verificationCodeHash: null,
-      verificationExpiresAt: null,
-      verificationAttempts: 0
-    });
-
-    // Set session
-    req.session = req.session || {};
-    (req.session as any).userId = user.id;
-
-    // Log successful verification
-    await auditLogin(user.id, true, {
-      email: user.email,
-      role: user.role,
-      ip: req.ip || req.connection.remoteAddress,
-      userAgent: req.get('User-Agent'),
-      verified: true
-    });
-
-    // Redirect based on role
-    const redirectUrl = user.role === 'admin' ? '/admin' : '/portal';
+    // Clear session
+    req.session = null;
 
     res.json({ 
-      success: true,
-      message: 'Email verified successfully',
-      user: sanitizeUser(user),
-      redirectUrl
+      success: true, 
+      message: 'Logged out successfully' 
     });
-    } catch (error) {
-      // // console.error('Verification error:', error);
-      res.status(500).json({ message: 'Verification failed' });
-    }
-  });
+  } catch (error) {
+    // // console.error('Customer logout error:', error);
+    res.status(500).json({ message: 'Logout failed' });
+  }
+});
 
-  // Resend verification code endpoint
-  router.post('/resend-code', loginLimiter, async (req, res) => {
-    try {
-    const resendSchema = z.object({
-      email: z.string().email()
-    });
+// GET /api/auth/customer/me - Get current customer data
+router.get('/customer/me', async (req, res) => {
+  try {
+    const userId = (req.session as any)?.userId;
 
-    const result = resendSchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({ 
-        message: 'Invalid input',
-        errors: result.error.errors
-      });
+    if (!userId) {
+      return res.json(null);
     }
 
-    const { email } = result.data;
-
-    // Get user by email
-    const user = await storage.getUserByEmail(email);
+    const user = await storage.getUserById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.json(null);
     }
 
-    // Check if already verified
-    if (user.emailVerified) {
-      return res.status(400).json({ message: 'Email already verified' });
+    // Ensure user is a customer
+    if (user.role !== 'customer') {
+      return res.json(null);
     }
 
-    // Generate new verification code
-    const verificationCode = generateVerificationCode();
-    const verificationCodeHash = await hashVerificationCode(verificationCode);
-    const verificationExpiresAt = generateExpiryTime();
-
-    // Update user with new verification data
-    await storage.updateUser(user.id, {
-      verificationCodeHash,
-      verificationExpiresAt: verificationExpiresAt.toISOString(),
-      verificationAttempts: 0 // Reset attempts for new code
-    });
-
-    // Send new verification email
-    try {
-      await sendVerificationEmail(email, verificationCode, user.firstName);
-    } catch (emailError) {
-      // // console.error('Failed to send verification email:', emailError);
-      return res.status(500).json({ message: 'Failed to send verification email' });
-    }
-
-    res.json({ 
-      success: true,
-      message: 'New verification code sent to your email'
-    });
-    } catch (error) {
-      // // console.error('Resend code error:', error);
-      res.status(500).json({ message: 'Failed to resend verification code' });
-    }
-  });
-}
+    res.json(sanitizeUser(user));
+  } catch (error) {
+    // // console.error('Customer me error:', error);
+    res.json(null);
+  }
+});
 
 // Customer profile update endpoint
 router.patch('/profile', async (req, res) => {
@@ -779,7 +658,7 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
 
     // Update user password and clear reset code
     await storage.updateUser(user.id, {
-      password: hashedPassword,
+      passwordHash: hashedPassword,
       verificationCodeHash: null,
       verificationExpiresAt: null,
       verificationAttempts: 0
