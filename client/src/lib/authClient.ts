@@ -115,6 +115,46 @@ export const customerAuth = {
     const data = await response.json();
     // API returns user object directly, not wrapped in a 'user' property
     return data;
+  },
+
+  async verifyRegistration(email: string, code: string) {
+    const csrfToken = getCustCsrf();
+    const response = await fetch('/api/auth/customer/verify-registration', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
+      },
+      body: JSON.stringify({ email, code })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Registration verification failed');
+    }
+    
+    return response.json();
+  },
+
+  async verifyLogin(email: string, code: string) {
+    const csrfToken = getCustCsrf();
+    const response = await fetch('/api/auth/customer/verify-login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(csrfToken && { 'X-CSRF-Token': csrfToken })
+      },
+      body: JSON.stringify({ email, code })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Login verification failed');
+    }
+    
+    return response.json();
   }
 };
 

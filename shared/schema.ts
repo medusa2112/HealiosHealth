@@ -398,6 +398,12 @@ export const customerLoginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+// PIN Verification schemas for 2-step authentication
+export const verifyPinSchema = z.object({
+  email: z.string().email("Please enter a valid email address").transform(v => v.trim().toLowerCase()),
+  code: z.string().length(6, "Verification code must be 6 digits").regex(/^\d{6}$/, "Verification code must contain only numbers"),
+});
+
 export const customerProfileUpdateSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100, "First name too long"),
   lastName: z.string().min(1, "Last name is required").max(100, "Last name too long"),

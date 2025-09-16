@@ -156,6 +156,20 @@ export interface IStorage {
   setPassword(userId: string, hash: string): Promise<User | undefined>;
   verifyUserPassword(email: string, password: string): Promise<User | null>;
   
+  // PIN Verification for 2-Step Authentication
+  // Store pending verification data (registration or login attempts)
+  setPendingVerification(email: string, codeHash: string, expiresAt: string, type: 'registration' | 'login', userData?: any): Promise<void>;
+  // Get pending verification data for code validation
+  getPendingVerification(email: string): Promise<{ codeHash: string; expiresAt: string; type: 'registration' | 'login'; userData?: any; attempts: number } | null>;
+  // Increment verification attempts for rate limiting
+  incrementVerificationAttempts(email: string): Promise<number>;
+  // Clear pending verification after successful completion
+  clearPendingVerification(email: string): Promise<void>;
+  // Complete user registration after PIN verification
+  completePendingRegistration(email: string): Promise<User>;
+  // Complete user login after PIN verification (returns user for existing accounts)
+  completePendingLogin(email: string): Promise<User | null>;
+  
   // Phase 20: Referral System
   createReferral(referral: { referrerId: string; code: string; rewardType: string; rewardValue: number; isActive: boolean; usedCount: number; maxUses: number; }): Promise<any>;
   getReferralByCode(code: string): Promise<any | undefined>;
@@ -202,6 +216,8 @@ export class MemStorage implements IStorage {
   private securityIssues: Map<string, SecurityIssue>; // ALFR3D
   private fixAttempts: Map<string, any>; // ALFR3D Fix Attempts
   private lastScanTimestamp: string | null = null; // ALFR3D
+  // PIN Verification Storage
+  private pendingVerifications: Map<string, { codeHash: string; expiresAt: string; type: 'registration' | 'login'; userData?: any; attempts: number }>;
 
   constructor() {
     this.products = new Map();
@@ -226,6 +242,7 @@ export class MemStorage implements IStorage {
     this.chatSessions = new Map(); // Phase 21
     this.securityIssues = new Map(); // ALFR3D
     this.fixAttempts = new Map(); // ALFR3D Fix Attempts
+    this.pendingVerifications = new Map(); // PIN Verification
     this.seedData();
     this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
@@ -894,6 +911,94 @@ export class MemStorage implements IStorage {
 
     const isValid = await verifyPassword(password, user.passwordHash);
     return isValid ? user : null; // Security: Return null for invalid credentials
+  }
+
+  // PIN Verification Methods Implementation for 2-Step Authentication
+  
+  // Store pending verification data for registration or login attempts
+  async setPendingVerification(email: string, codeHash: string, expiresAt: string, type: 'registration' | 'login', userData?: any): Promise<void> {
+    const normalizedEmail = email.toLowerCase(); // Security: Case-insensitive storage
+    this.pendingVerifications.set(normalizedEmail, {
+      codeHash,
+      expiresAt,
+      type,
+      userData,
+      attempts: 0
+    });
+  }
+
+  // Get pending verification data for code validation
+  async getPendingVerification(email: string): Promise<{ codeHash: string; expiresAt: string; type: 'registration' | 'login'; userData?: any; attempts: number } | null> {
+    const normalizedEmail = email.toLowerCase(); // Security: Case-insensitive lookup
+    return this.pendingVerifications.get(normalizedEmail) || null;
+  }
+
+  // Increment verification attempts for rate limiting
+  async incrementVerificationAttempts(email: string): Promise<number> {
+    const normalizedEmail = email.toLowerCase();
+    const pending = this.pendingVerifications.get(normalizedEmail);
+    if (!pending) return 0;
+    
+    pending.attempts++;
+    this.pendingVerifications.set(normalizedEmail, pending);
+    return pending.attempts;
+  }
+
+  // Clear pending verification after successful completion
+  async clearPendingVerification(email: string): Promise<void> {
+    const normalizedEmail = email.toLowerCase();
+    this.pendingVerifications.delete(normalizedEmail);
+  }
+
+  // Complete user registration after PIN verification
+  async completePendingRegistration(email: string): Promise<User> {
+    const normalizedEmail = email.toLowerCase();
+    const pending = this.pendingVerifications.get(normalizedEmail);
+    if (!pending || pending.type !== 'registration' || !pending.userData) {
+      throw new Error('No pending registration found');
+    }
+
+    // Create the user account
+    const userData = pending.userData;
+    const user = await this.createUserWithPassword({
+      email: normalizedEmail,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      password: userData.password
+    });
+
+    // Mark email as verified
+    const verifiedUser: User = {
+      ...user,
+      emailVerified: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    this.users.set(user.id, verifiedUser);
+
+    // Clear pending verification
+    this.pendingVerifications.delete(normalizedEmail);
+    
+    return verifiedUser;
+  }
+
+  // Complete user login after PIN verification (returns user for existing accounts)
+  async completePendingLogin(email: string): Promise<User | null> {
+    const normalizedEmail = email.toLowerCase();
+    const pending = this.pendingVerifications.get(normalizedEmail);
+    if (!pending || pending.type !== 'login') {
+      return null;
+    }
+
+    // Get the existing user
+    const user = await this.getUserByEmail(normalizedEmail);
+    if (!user) {
+      return null;
+    }
+
+    // Clear pending verification
+    this.pendingVerifications.delete(normalizedEmail);
+    
+    return user;
   }
 }
 

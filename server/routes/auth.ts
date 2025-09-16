@@ -6,7 +6,7 @@ import { setupAuth, isAuthenticated } from '../replitAuth';
 import { determineUserRole, sanitizeUser } from '../lib/auth';
 import { auditLogin, auditLogout } from '../lib/auditMiddleware';
 import { hashPassword, verifyPassword, validatePassword } from '../lib/password';
-import { insertUserSchema, customerRegisterSchema, customerLoginSchema, type CustomerRegister, type CustomerLogin } from '@shared/schema';
+import { insertUserSchema, customerRegisterSchema, customerLoginSchema, verifyPinSchema, type CustomerRegister, type CustomerLogin } from '@shared/schema';
 import { 
   generateVerificationCode, 
   hashVerificationCode, 
@@ -83,7 +83,7 @@ router.get('/user', isAuthenticated, async (req, res) => {
 // DISABLED: router.post('/resend-code', ...) - Legacy resend endpoint disabled
 
 // Customer-specific authentication routes under /customer namespace
-// POST /api/auth/customer/register - Customer registration with password
+// POST /api/auth/customer/register - Step 1: Send PIN verification email
 router.post('/register', loginLimiter, async (req, res) => {
   try {
     const result = customerRegisterSchema.safeParse(req.body);
@@ -104,55 +104,49 @@ router.post('/register', loginLimiter, async (req, res) => {
       });
     }
 
-    // Create user with new storage method - role is FORCED to customer
-    try {
-      const user = await storage.createUserWithPassword({
-        email,
-        firstName,
-        lastName,
-        password
-      });
-
-      // SECURITY: Regenerate session ID to prevent session fixation
-      await new Promise<void>((resolve, reject) => {
-        req.session.regenerate((err: any) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-
-      // Set session for immediate login
-      req.session = req.session || {};
-      (req.session as any).userId = user.id;
-
-      // Log successful registration
-      await auditLogin(user.id, true, {
-        email: user.email,
-        role: user.role,
-        ip: req.ip || req.connection.remoteAddress,
-        userAgent: req.get('User-Agent'),
-        action: 'customer_registration'
-      });
-
-      res.status(201).json({
-        success: true,
-        message: 'Registration successful.',
-        user: sanitizeUser(user),
-        redirectUrl: '/portal'
-      });
-    } catch (error: any) {
-      if (error.message.includes('already exists')) {
-        return res.status(409).json({ message: 'User with this email already exists' });
-      }
-      throw error;
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ message: 'User with this email already exists' });
     }
+
+    // Generate and send PIN verification code
+    const verificationCode = generateVerificationCode();
+    const codeHash = await hashVerificationCode(verificationCode);
+    const expiresAt = generateExpiryTime();
+
+    // Store pending registration data
+    await storage.setPendingVerification(
+      email, 
+      codeHash, 
+      expiresAt.toISOString(), 
+      'registration',
+      { email, password, firstName, lastName }
+    );
+
+    // Send verification email
+    await sendVerificationEmail(email, verificationCode, firstName, 'verification');
+
+    // Log registration attempt
+    await auditLogin(email, false, {
+      action: 'registration_pin_sent',
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent')
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Verification code sent to your email. Please check your inbox and enter the 6-digit code to complete registration.',
+      email: email,
+      step: 'verification'
+    });
   } catch (error) {
     // // console.error('Customer registration error:', error);
     res.status(500).json({ message: 'Registration failed' });
   }
 });
 
-// POST /api/auth/customer/login - Customer login returning user data
+// POST /api/auth/customer/login - Step 1: Send PIN verification email
 router.post('/login', loginLimiter, async (req, res) => {
   try {
     const result = customerLoginSchema.safeParse(req.body);
@@ -199,31 +193,35 @@ router.post('/login', loginLimiter, async (req, res) => {
       return res.status(403).json({ message: 'Account is inactive' });
     }
 
-    // SECURITY: Regenerate session ID to prevent session fixation
-    await new Promise<void>((resolve, reject) => {
-      req.session.regenerate((err: any) => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
+    // Generate and send PIN verification code for login
+    const verificationCode = generateVerificationCode();
+    const codeHash = await hashVerificationCode(verificationCode);
+    const expiresAt = generateExpiryTime();
 
-    // Set session
-    req.session = req.session || {};
-    (req.session as any).userId = user.id;
-    
-    // Log successful login
-    await auditLogin(user.id, true, {
+    // Store pending login verification
+    await storage.setPendingVerification(
+      email, 
+      codeHash, 
+      expiresAt.toISOString(), 
+      'login'
+    );
+
+    // Send verification email
+    await sendVerificationEmail(email, verificationCode, user.firstName, 'verification');
+
+    // Log login verification attempt
+    await auditLogin(user.id, false, {
+      action: 'login_pin_sent',
       email: user.email,
-      role: user.role,
       ip: req.ip || req.connection.remoteAddress,
-      userAgent: req.get('User-Agent'),
-      action: 'customer_login'
+      userAgent: req.get('User-Agent')
     });
 
     res.json({ 
       success: true, 
-      user: sanitizeUser(user),
-      redirectUrl: '/portal'
+      message: 'Verification code sent to your email. Please check your inbox and enter the 6-digit code to complete login.',
+      email: email,
+      step: 'verification'
     });
   } catch (error) {
     // // console.error('Customer login error:', error);
@@ -263,6 +261,172 @@ router.post('/logout', async (req, res) => {
   } catch (error) {
     // // console.error('Customer logout error:', error);
     res.status(500).json({ message: 'Logout failed' });
+  }
+});
+
+// POST /api/auth/customer/verify-registration - Step 2: Complete registration with PIN verification
+router.post('/verify-registration', loginLimiter, async (req, res) => {
+  try {
+    const result = verifyPinSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, code } = result.data;
+
+    // Get pending verification data
+    const pendingVerification = await storage.getPendingVerification(email);
+    if (!pendingVerification || pendingVerification.type !== 'registration') {
+      return res.status(400).json({ message: 'No pending registration found. Please start registration again.' });
+    }
+
+    // Check if verification attempts exceeded
+    if (!canAttemptVerification(pendingVerification.attempts)) {
+      await storage.clearPendingVerification(email);
+      return res.status(429).json({ message: 'Too many verification attempts. Please start registration again.' });
+    }
+
+    // Check if code expired
+    if (isCodeExpired(pendingVerification.expiresAt)) {
+      await storage.clearPendingVerification(email);
+      return res.status(400).json({ message: 'Verification code has expired. Please start registration again.' });
+    }
+
+    // Verify the PIN code
+    const isValidCode = await verifyCode(code, pendingVerification.codeHash);
+    if (!isValidCode) {
+      // Increment failed attempts
+      await storage.incrementVerificationAttempts(email);
+      await auditLogin(email, false, {
+        error: 'Invalid verification code',
+        action: 'registration_pin_failed',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(400).json({ message: 'Invalid verification code. Please try again.' });
+    }
+
+    // Complete registration
+    const user = await storage.completePendingRegistration(email);
+
+    // SECURITY: Regenerate session ID to prevent session fixation
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err: any) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
+    // Set session for automatic login
+    req.session = req.session || {};
+    (req.session as any).userId = user.id;
+
+    // Log successful registration
+    await auditLogin(user.id, true, {
+      email: user.email,
+      role: user.role,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent'),
+      action: 'customer_registration_verified'
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Registration completed successfully. Welcome to Healios!',
+      user: sanitizeUser(user),
+      redirectUrl: '/portal'
+    });
+  } catch (error) {
+    // // console.error('Registration verification error:', error);
+    res.status(500).json({ message: 'Registration verification failed' });
+  }
+});
+
+// POST /api/auth/customer/verify-login - Step 2: Complete login with PIN verification  
+router.post('/verify-login', loginLimiter, async (req, res) => {
+  try {
+    const result = verifyPinSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: 'Invalid input',
+        errors: result.error.errors
+      });
+    }
+
+    const { email, code } = result.data;
+
+    // Get pending verification data
+    const pendingVerification = await storage.getPendingVerification(email);
+    if (!pendingVerification || pendingVerification.type !== 'login') {
+      return res.status(400).json({ message: 'No pending login found. Please start login again.' });
+    }
+
+    // Check if verification attempts exceeded
+    if (!canAttemptVerification(pendingVerification.attempts)) {
+      await storage.clearPendingVerification(email);
+      return res.status(429).json({ message: 'Too many verification attempts. Please start login again.' });
+    }
+
+    // Check if code expired
+    if (isCodeExpired(pendingVerification.expiresAt)) {
+      await storage.clearPendingVerification(email);
+      return res.status(400).json({ message: 'Verification code has expired. Please start login again.' });
+    }
+
+    // Verify the PIN code
+    const isValidCode = await verifyCode(code, pendingVerification.codeHash);
+    if (!isValidCode) {
+      // Increment failed attempts
+      await storage.incrementVerificationAttempts(email);
+      await auditLogin(email, false, {
+        error: 'Invalid verification code',
+        action: 'login_pin_failed',
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent')
+      });
+      return res.status(400).json({ message: 'Invalid verification code. Please try again.' });
+    }
+
+    // Complete login
+    const user = await storage.completePendingLogin(email);
+    if (!user) {
+      await storage.clearPendingVerification(email);
+      return res.status(400).json({ message: 'User not found. Please register first.' });
+    }
+
+    // SECURITY: Regenerate session ID to prevent session fixation
+    await new Promise<void>((resolve, reject) => {
+      req.session.regenerate((err: any) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
+    // Set session
+    req.session = req.session || {};
+    (req.session as any).userId = user.id;
+    
+    // Log successful login
+    await auditLogin(user.id, true, {
+      email: user.email,
+      role: user.role,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent'),
+      action: 'customer_login_verified'
+    });
+
+    res.json({ 
+      success: true, 
+      message: 'Login completed successfully. Welcome back!',
+      user: sanitizeUser(user),
+      redirectUrl: '/portal'
+    });
+  } catch (error) {
+    // // console.error('Login verification error:', error);
+    res.status(500).json({ message: 'Login verification failed' });
   }
 });
 
