@@ -16,6 +16,9 @@ export interface CartItem {
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+// Export resend instance for use in other modules
+export { resend };
+
 interface OrderEmailData {
   order: Order;
   orderItems: CartItem[];

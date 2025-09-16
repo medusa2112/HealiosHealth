@@ -33,8 +33,8 @@ export class QuizRecommendationService {
     // Analyze sleep-related needs
     if (primaryGoal === 'Better sleep quality' || (improvementAreas && improvementAreas.includes('Sleep quality'))) {
       recommendations.push({
-        productId: 'magnesium',
-        productName: 'Magnesium (Citrate/Glycinate) Gummies',
+        productId: 'magnesium-bisglycinate-b6',
+        productName: 'Magnesium Complex Capsules — 375mg Magnesium + B6 (120 Vegan Capsules)',
         reason: 'Magnesium plays a crucial role in sleep regulation and muscle relaxation, helping you achieve deeper, more restorative sleep naturally.',
         medicalBasis: 'Clinical studies demonstrate that magnesium supplementation significantly improves sleep quality, reduces sleep onset time, and increases sleep efficiency. Magnesium regulates melatonin production and activates the parasympathetic nervous system.',
         researchCitations: [
@@ -67,8 +67,8 @@ export class QuizRecommendationService {
       // Check if they might benefit from Iron
       if (ageRange && (ageRange.includes('26-') || ageRange.includes('36-') || ageRange.includes('46-'))) {
         recommendations.push({
-          productId: 'iron-vitamin-c',
-          productName: 'Iron + Vitamin C Gummies',
+          productId: 'vitamin-d3',
+          productName: 'Vitamin D3 4000 IU Gummies (Natural Orange Flavour | 60 Gummies)',
           reason: 'Iron deficiency is a leading cause of fatigue, especially in women of childbearing age. Our gentle iron formula with vitamin C enhances absorption and energy production.',
           medicalBasis: 'Iron is essential for oxygen transport and cellular energy production. Vitamin C increases iron absorption by up to 67%. Clinical studies show iron supplementation significantly improves fatigue scores in individuals with low iron stores.',
           researchCitations: [
@@ -82,8 +82,8 @@ export class QuizRecommendationService {
       
       // Add B-vitamins for energy
       recommendations.push({
-        productId: 'probiotic-vitamins',
-        productName: 'Probiotic + Vitamins Gummies',
+        productId: 'probiotics',
+        productName: 'Probiotic Complex — 10 Billion CFU with FOS (6 Strains, Vegan, 60 Capsules)',
         reason: 'B vitamins are essential for converting food into cellular energy, while probiotics support nutrient absorption and overall vitality.',
         medicalBasis: 'B vitamins (particularly B12, B6, and folate) are crucial cofactors in energy metabolism and mitochondrial function. Research shows B-vitamin supplementation can significantly reduce fatigue and improve energy levels.',
         researchCitations: [
@@ -160,7 +160,7 @@ export class QuizRecommendationService {
       
       // Add biotin for hair, skin, nails
       recommendations.push({
-        productId: 'biotin-10000',
+        productId: 'biotin-5000',
         productName: 'Biotin 10,000 µg Strawberry Gummies',
         reason: 'High-potency biotin supports healthy hair growth, skin renewal, and nail strength through enhanced keratin production.',
         medicalBasis: 'Biotin is a crucial cofactor in fatty acid synthesis and amino acid metabolism essential for healthy hair, skin, and nails. Studies show high-dose biotin supplementation improves hair thickness and nail strength.',
