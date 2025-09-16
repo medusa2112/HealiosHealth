@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { FaInstagram, FaFacebook, FaGoogle } from "react-icons/fa";
 import { SiTrustpilot } from "react-icons/si";
+import { LogIn } from "lucide-react";
 
 export function Footer() {
   return (
@@ -36,6 +37,12 @@ export function Footer() {
           <div>
             <h3 className="text-white font-medium mb-6">Support</h3>
             <ul className="space-y-3 text-sm text-gray-300">
+              <li>
+                <Link href="/portal" className="hover:text-white transition-colors flex items-center gap-2">
+                  <LogIn className="w-4 h-4" />
+                  My Account
+                </Link>
+              </li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/quiz" className="hover:text-white transition-colors">Supplement Quiz</Link></li>
               <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
