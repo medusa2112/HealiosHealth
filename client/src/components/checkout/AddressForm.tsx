@@ -6,23 +6,9 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, AlertCircle, MapPin, Loader2 } from 'lucide-react';
 import { z } from 'zod';
+import googleMapsService from '@/lib/googleMapsService';
 
-// Google Maps type declarations
-declare global {
-  interface Window {
-    google?: {
-      maps: {
-        places: {
-          AutocompleteService: new () => any;
-          PlacesService: new (div: HTMLDivElement) => any;
-          PlacesServiceStatus: {
-            OK: string;
-          };
-        };
-      };
-    };
-  }
-}
+// Google Maps types are now handled by the centralized service
 
 // Address validation schema
 const addressSchema = z.object({
@@ -97,49 +83,70 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
   const [isValidatingAddress, setIsValidatingAddress] = useState(false);
   const [addressSuggestions, setAddressSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [useNewApi, setUseNewApi] = useState(false);
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
   
   const addressInputRef = useRef<HTMLInputElement>(null);
   const autocompleteService = useRef<any>(null);
   const placesService = useRef<any>(null);
+  const newApiLoaded = useRef<boolean>(false);
 
-  // Initialize Google Maps Places API
+  // Initialize Google Maps Places API using centralized service
   useEffect(() => {
     const initializePlacesAPI = () => {
-      if (typeof window !== 'undefined' && window.google && window.google.maps && window.google.maps.places) {
-        autocompleteService.current = new window.google.maps.places.AutocompleteService();
-        placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'));
+      try {
+        if (googleMapsService.isLoaded()) {
+          autocompleteService.current = googleMapsService.createAutocompleteService();
+          placesService.current = googleMapsService.createPlacesService(document.createElement('div'));
+          console.log('Google Maps Places API services initialized (Legacy)');
+        }
+      } catch (error) {
+        console.warn('Failed to initialize Places API services:', error);
       }
     };
 
-    // Load Google Maps JavaScript API
     const loadGoogleMapsAPI = async () => {
       try {
-        // Get the API key from the backend
-        const response = await fetch('/api/config/google-maps-key');
-        const { apiKey } = await response.json();
+        const loaded = await googleMapsService.load({
+          libraries: ['places'],
+          region: structuredAddress.country === 'South Africa' ? 'ZA' : 'US',
+          language: 'en'
+        });
         
-        if (!apiKey) {
+        if (loaded) {
+          setGoogleMapsLoaded(true);
+          console.log('Google Maps loaded successfully');
           
-          return;
-        }
-        
-        if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
-          const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-          script.async = true;
-          script.defer = true;
-          script.onload = initializePlacesAPI;
-          document.head.appendChild(script);
+          // Check if new API is supported and try to load it
+          if (googleMapsService.supportsNewApi() && !newApiLoaded.current) {
+            try {
+              await googleMapsService.loadNewPlacesLibrary();
+              newApiLoaded.current = true;
+              setUseNewApi(true);
+              console.log('New Places API will be used for autocomplete');
+            } catch (error) {
+              console.warn('Failed to load new Places API, using legacy:', error);
+              setUseNewApi(false);
+              initializePlacesAPI();
+            }
+          } else {
+            console.log('New Places API not available, using legacy');
+            setUseNewApi(false);
+            initializePlacesAPI();
+          }
         } else {
-          initializePlacesAPI();
+          const error = googleMapsService.getError();
+          console.warn('Google Maps failed to load:', error);
+          setGoogleMapsLoaded(false);
         }
       } catch (error) {
-        
+        console.error('Google Maps loading error:', error);
+        setGoogleMapsLoaded(false);
       }
     };
 
     loadGoogleMapsAPI();
-  }, []);
+  }, [structuredAddress.country]);
 
   // Parse existing address if it exists
   useEffect(() => {
@@ -214,9 +221,76 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
 
   // Get address suggestions from Google Places API
   const getAddressSuggestions = async (input: string) => {
-    if (!autocompleteService.current) return;
+    if (!googleMapsLoaded) return;
     
     try {
+      if (useNewApi && googleMapsService.supportsNewApi()) {
+        // Use new Autocomplete Data API
+        await getAddressSuggestionsNewApi(input);
+      } else if (autocompleteService.current && googleMapsService.isLoaded()) {
+        // Use legacy AutocompleteService
+        await getAddressSuggestionsLegacy(input);
+      }
+    } catch (error) {
+      console.warn('Error getting address suggestions:', error);
+      setAddressSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  // Get address suggestions using new API
+  const getAddressSuggestionsNewApi = async (input: string) => {
+    try {
+      console.log('Getting suggestions via new API for:', input);
+      
+      // Create session token for cost optimization
+      const sessionToken = googleMapsService.createAutocompleteSessionToken();
+      
+      const request = {
+        input,
+        sessionToken,
+        includedRegionCodes: [structuredAddress.country === 'South Africa' ? 'ZA' : 'US'],
+        includedPrimaryTypes: ['address']
+      };
+
+      // Import the new Places library if not already done
+      if (!window.google?.maps?.importLibrary) {
+        throw new Error('New Google Maps API not available');
+      }
+
+      const { AutocompleteSuggestion } = await window.google.maps.importLibrary('places') as any;
+      const response = await AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+      
+      if (response.suggestions && response.suggestions.length > 0) {
+        // Convert to format compatible with legacy API
+        const predictions = response.suggestions.slice(0, 5).map((suggestion: any) => ({
+          place_id: suggestion.placePrediction?.placeId || suggestion.placeId,
+          description: suggestion.placePrediction?.text?.text || suggestion.text?.text || suggestion.displayName,
+          structured_formatting: {
+            main_text: suggestion.placePrediction?.structuredFormat?.mainText?.text || suggestion.displayName,
+            secondary_text: suggestion.placePrediction?.structuredFormat?.secondaryText?.text || ''
+          },
+          // Store the original suggestion for later use
+          _newApiSuggestion: suggestion
+        }));
+        
+        setAddressSuggestions(predictions);
+        setShowSuggestions(true);
+      } else {
+        setAddressSuggestions([]);
+        setShowSuggestions(false);
+      }
+      
+    } catch (error) {
+      console.warn('New API failed, falling back to legacy:', error);
+      // Fallback to legacy API
+      await getAddressSuggestionsLegacy(input);
+    }
+  };
+
+  // Get address suggestions using legacy API
+  const getAddressSuggestionsLegacy = async (input: string) => {
+    return new Promise<void>((resolve) => {
       const request = {
         input,
         componentRestrictions: { country: structuredAddress.country === 'South Africa' ? 'za' : 'us' },
@@ -231,22 +305,102 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
           setAddressSuggestions([]);
           setShowSuggestions(false);
         }
+        resolve();
       });
-    } catch (error) {
-      // // console.error('Error getting address suggestions:', error);
-    }
+    });
   };
 
   // Select an address suggestion
-  const selectAddressSuggestion = async (placeId: string) => {
-    if (!placesService.current) return;
+  const selectAddressSuggestion = async (placeIdOrSuggestion: string | any) => {
+    if (!googleMapsLoaded) return;
     
     setIsValidatingAddress(true);
     setShowSuggestions(false);
     
     try {
+      if (useNewApi && googleMapsService.supportsNewApi()) {
+        // Use new Places API
+        await selectAddressSuggestionNewApi(placeIdOrSuggestion);
+      } else if (placesService.current && googleMapsService.isLoaded()) {
+        // Use legacy PlacesService
+        await selectAddressSuggestionLegacy(placeIdOrSuggestion);
+      }
+    } catch (error) {
+      console.warn('Error selecting address suggestion:', error);
+    } finally {
+      setIsValidatingAddress(false);
+    }
+  };
+
+  // Select address suggestion using new API
+  const selectAddressSuggestionNewApi = async (suggestionData: any) => {
+    try {
+      console.log('Processing place selection via new API:', suggestionData);
+      
+      // Check if this is a new API suggestion with the original data
+      const suggestion = typeof suggestionData === 'object' && suggestionData._newApiSuggestion 
+        ? suggestionData._newApiSuggestion 
+        : null;
+        
+      if (!suggestion?.placePrediction) {
+        throw new Error('Invalid new API suggestion data');
+      }
+      
+      // Convert prediction to Place and fetch fields
+      const place = suggestion.placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ['addressComponents', 'formattedAddress', 'displayName']
+      });
+      
+      console.log('Place details fetched via new API:', place);
+      
+      // Parse address components
+      const getAddressComponent = (types: string[]) => {
+        if (!place.addressComponents) return '';
+        
+        const component = place.addressComponents.find((comp: any) => 
+          types.some((type: string) => comp.types.includes(type))
+        );
+        return component ? component.longText : '';
+      };
+
+      const streetNumber = getAddressComponent(['street_number']);
+      const streetName = getAddressComponent(['route']);
+      const subpremise = getAddressComponent(['subpremise']);
+      const city = getAddressComponent(['locality', 'administrative_area_level_2']);
+      const state = getAddressComponent(['administrative_area_level_1']);
+      const postalCode = getAddressComponent(['postal_code']);
+      const country = getAddressComponent(['country']);
+      
+      // Build structured address
+      const line1 = [streetNumber, streetName].filter(Boolean).join(' ') || place.displayName;
+      const line2 = subpremise || '';
+      
+      setStructuredAddress(prev => ({
+        ...prev,
+        line1,
+        line2,
+        city: city || prev.city,
+        state: state || prev.state,
+        zipCode: postalCode || prev.zipCode,
+        country: country === 'South Africa' ? 'South Africa' : prev.country,
+      }));
+      
+    } catch (error) {
+      console.warn('New API place selection failed, falling back to legacy:', error);
+      // Fallback to legacy API using place_id
+      const placeId = typeof suggestionData === 'string' ? suggestionData : suggestionData.place_id;
+      if (placeId) {
+        await selectAddressSuggestionLegacy(placeId);
+      }
+    }
+  };
+
+  // Select address suggestion using legacy API
+  const selectAddressSuggestionLegacy = async (placeId: string) => {
+    return new Promise<void>((resolve) => {
       const request = {
-        placeId,
+        placeId: typeof placeId === 'string' ? placeId : placeId.place_id,
         fields: ['address_components', 'formatted_address', 'name']
       };
       
@@ -284,12 +438,9 @@ export const AddressForm = ({ customerInfo, onCustomerInfoChange, onValidationCh
             country: country === 'South Africa' ? 'South Africa' : prev.country,
           }));
         }
-        setIsValidatingAddress(false);
+        resolve();
       });
-    } catch (error) {
-      // // console.error('Error getting place details:', error);
-      setIsValidatingAddress(false);
-    }
+    });
   };
 
   // Validate address with server-side Google Maps API

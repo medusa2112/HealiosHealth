@@ -6,24 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, MapPin, AlertCircle, CheckCircle2 } from 'lucide-react';
+import googleMapsService from '@/lib/googleMapsService';
 
-// Extend window type for Google Places API
-declare global {
-  interface Window {
-    google?: {
-      maps?: {
-        places?: {
-          Autocomplete: new (input: HTMLInputElement, options: any) => any;
-          AutocompleteService: new () => any;
-          PlacesServiceStatus: {
-            OK: string;
-          };
-        };
-      };
-    };
-    initGoogleMaps?: () => void;
-  }
-}
+// Google Maps types are now handled by the centralized service
 
 // South African provinces
 const SA_PROVINCES = [
@@ -76,79 +61,48 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
   const [validationResult, setValidationResult] = useState<any>(null);
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
   const [showGoogleMapsError, setShowGoogleMapsError] = useState(false);
+  const [useNewApi, setUseNewApi] = useState(false);
   
   const autocompleteRef = useRef<any>(null);
   const addressInputRef = useRef<HTMLInputElement>(null);
+  const placeAutocompleteElementRef = useRef<any>(null);
+  const autocompleteContainerRef = useRef<HTMLDivElement>(null);
 
-  // Load Google Maps API for Places autocomplete
+  // Load Google Maps API using centralized service
   useEffect(() => {
     const loadGoogleMaps = async () => {
       try {
-        // Check if already loaded
-        if (window.google?.maps?.places?.Autocomplete) {
-          setGoogleMapsLoaded(true);
-          return;
-        }
-
-        const response = await fetch('/api/config/google-maps-key');
-        if (!response.ok) {
-          
-          setShowGoogleMapsError(true);
-          return;
-        }
-        
-        const { apiKey } = await response.json();
-        if (!apiKey) {
-          
-          setShowGoogleMapsError(true);
-          return;
-        }
-
-        console.log('Loading Google Maps API with key:', apiKey.substring(0, 10) + '...');
-
-        // Try direct script loading without callback first
-        const directScript = document.createElement('script');
-        directScript.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=ZA`;
-        directScript.async = true;
-        
-        const loadPromise = new Promise((resolve, reject) => {
-          directScript.onload = () => {
-            
-            let attempts = 0;
-            const checkPlaces = () => {
-              attempts++;
-              if (window.google?.maps?.places?.Autocomplete) {
-                
-                resolve(true);
-              } else if (attempts < 20) {
-                setTimeout(checkPlaces, 100);
-              } else {
-                
-                reject(new Error('Places API not available'));
-              }
-            };
-            checkPlaces();
-          };
-          
-          directScript.onerror = (error) => {
-            // // console.error('Google Maps direct load failed:', error);
-            reject(error);
-          };
+        const loaded = await googleMapsService.load({
+          libraries: ['places'],
+          region: 'ZA',
+          language: 'en'
         });
-
-        document.head.appendChild(directScript);
-
-        try {
-          await loadPromise;
+        
+        if (loaded) {
           setGoogleMapsLoaded(true);
+          console.log('Google Maps loaded successfully via service');
           
-        } catch (error) {
-
+          // Check if new API is supported and try to load it
+          if (googleMapsService.supportsNewApi()) {
+            try {
+              await googleMapsService.loadNewPlacesLibrary();
+              setUseNewApi(true);
+              console.log('New PlaceAutocompleteElement API will be used');
+            } catch (error) {
+              console.warn('Failed to load new Places API, using legacy:', error);
+              setUseNewApi(false);
+            }
+          } else {
+            console.log('New Places API not available, using legacy');
+            setUseNewApi(false);
+          }
+        } else {
+          const error = googleMapsService.getError();
+          console.warn('Google Maps failed to load:', error);
           setShowGoogleMapsError(true);
         }
-
       } catch (error) {
-        
+        console.error('Google Maps loading error:', error);
         setShowGoogleMapsError(true);
       }
     };
@@ -156,63 +110,31 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
     loadGoogleMaps();
   }, []);
 
-  // Initialize Google Places Autocomplete (when available)
+  // Initialize Google Places Autocomplete using centralized service
   useEffect(() => {
-    if (!googleMapsLoaded || !addressInputRef.current || autocompleteRef.current) {
+    if (!googleMapsLoaded || (autocompleteRef.current || placeAutocompleteElementRef.current)) {
       return;
     }
 
-    // Add delay and try to initialize autocomplete safely
+    // Add delay to ensure DOM is ready
     const initTimeout = setTimeout(() => {
       try {
-        const google = window.google;
-        
-        if (!google?.maps?.places?.Autocomplete) {
-          
+        if (!googleMapsService.isLoaded()) {
+          console.warn('Google Maps service not loaded, falling back to manual entry');
           setShowGoogleMapsError(true);
           return;
         }
 
-        // Test if we can create autocomplete without restrictions error
-        const testContainer = document.createElement('div');
-        const testInput = document.createElement('input');
-        testContainer.style.position = 'absolute';
-        testContainer.style.left = '-9999px';
-        testContainer.appendChild(testInput);
-        document.body.appendChild(testContainer);
-
-        const testAutocomplete = new google.maps.places.Autocomplete(testInput, {
-          componentRestrictions: { country: 'ZA' }
-        });
-
-        // If test passes, create the real one
-        if (addressInputRef.current) {
-          autocompleteRef.current = new google.maps.places.Autocomplete(
-            addressInputRef.current,
-            {
-              componentRestrictions: { country: 'ZA' },
-              fields: ['address_components', 'formatted_address', 'place_id'],
-              types: ['address'],
-            }
-          );
+        if (useNewApi && googleMapsService.supportsNewApi()) {
+          // Use new PlaceAutocompleteElement API
+          initializeNewApi();
+        } else {
+          // Fallback to legacy API
+          initializeLegacyApi();
         }
-
-        autocompleteRef.current.addListener('place_changed', () => {
-          try {
-            const place = autocompleteRef.current.getPlace();
-            if (place.address_components) {
-              parseGooglePlace(place);
-            }
-          } catch (error) {
-            // // console.error('Error processing place selection:', error);
-          }
-        });
-
-        document.body.removeChild(testContainer);
         
       } catch (error) {
-        // // console.error('Google Places API Error:', error);
-        console.warn('Google Places API is working but may need domain authorization');
+        console.warn('Google Places API initialization failed:', error);
         console.warn('Falling back to manual address entry for compatibility');
 
         setGoogleMapsLoaded(false);
@@ -228,17 +150,11 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
 
     return () => {
       clearTimeout(initTimeout);
-      if (autocompleteRef.current && window.google?.maps && 'event' in window.google.maps) {
-        try {
-          (window.google.maps as any).event.clearInstanceListeners(autocompleteRef.current);
-        } catch (error) {
-          // Ignore cleanup errors
-        }
-      }
+      cleanupAutocompleteInstances();
     };
-  }, [googleMapsLoaded]);
+  }, [googleMapsLoaded, useNewApi]);
 
-  // Parse Google Places result
+  // Parse Google Places result (Legacy API)
   const parseGooglePlace = (place: any) => {
     const components = place.address_components;
     const getComponent = (types: string[]) => {
@@ -260,6 +176,177 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
       postal_code: getComponent(['postal_code']),
       country: 'South Africa'
     }));
+  };
+
+  // Parse Google Places result (New API)
+  const parseNewApiPlace = (place: any) => {
+    try {
+      console.log('Parsing place from new API:', place);
+      
+      const getAddressComponent = (types: string[]) => {
+        if (!place.addressComponents) return '';
+        
+        const component = place.addressComponents.find((comp: any) => 
+          types.some((type: string) => comp.types.includes(type))
+        );
+        return component ? component.longText : '';
+      };
+
+      const streetNumber = getAddressComponent(['street_number']);
+      const route = getAddressComponent(['route']);
+      const line1 = `${streetNumber} ${route}`.trim();
+
+      setAddress(prev => ({
+        ...prev,
+        line1: line1 || place.formattedAddress,
+        city: getAddressComponent(['locality', 'administrative_area_level_2']),
+        region: getAddressComponent(['administrative_area_level_1']),
+        postal_code: getAddressComponent(['postal_code']),
+        country: 'South Africa'
+      }));
+    } catch (error) {
+      console.warn('Error parsing place from new API:', error);
+      // Fallback to formatted address if parsing fails
+      if (place.formattedAddress) {
+        setAddress(prev => ({
+          ...prev,
+          line1: place.formattedAddress,
+          country: 'South Africa'
+        }));
+      }
+    }
+  };
+
+  const initializeNewApi = () => {
+    try {
+      console.log('Initializing new PlaceAutocompleteElement API');
+      
+      placeAutocompleteElementRef.current = googleMapsService.createPlaceAutocompleteElement({
+        componentRestrictions: { country: 'ZA' },
+        types: ['address'],
+      });
+
+      // Style the element to match our design
+      placeAutocompleteElementRef.current.style.width = '100%';
+      placeAutocompleteElementRef.current.style.height = '40px';
+      placeAutocompleteElementRef.current.style.border = '1px solid #d1d5db';
+      placeAutocompleteElementRef.current.style.borderRadius = '6px';
+      placeAutocompleteElementRef.current.style.padding = '8px 12px';
+      placeAutocompleteElementRef.current.style.fontSize = '14px';
+      
+      // Add event listener for place selection
+      placeAutocompleteElementRef.current.addEventListener('gmp-select', async (event: any) => {
+        try {
+          const { placePrediction } = event;
+          if (placePrediction) {
+            console.log('Place selected via new API:', placePrediction);
+            
+            // Convert prediction to Place and fetch fields
+            const place = placePrediction.toPlace();
+            await place.fetchFields({
+              fields: ['addressComponents', 'formattedAddress', 'id']
+            });
+            
+            parseNewApiPlace(place);
+          }
+        } catch (error) {
+          console.warn('Error processing new API place selection:', error);
+        }
+      });
+
+      // Append to container if available, or hide the original input
+      if (autocompleteContainerRef.current) {
+        autocompleteContainerRef.current.appendChild(placeAutocompleteElementRef.current);
+        if (addressInputRef.current) {
+          addressInputRef.current.style.display = 'none';
+        }
+      }
+      
+      console.log('New PlaceAutocompleteElement initialized successfully');
+      
+    } catch (error) {
+      console.warn('Failed to initialize new API, falling back to legacy:', error);
+      setUseNewApi(false);
+      initializeLegacyApi();
+    }
+  };
+
+  const initializeLegacyApi = () => {
+    if (!addressInputRef.current) {
+      console.warn('Address input ref not available for legacy API');
+      return;
+    }
+
+    console.log('Initializing legacy Autocomplete API');
+
+    // Test autocomplete creation with a temporary input first
+    const testContainer = document.createElement('div');
+    const testInput = document.createElement('input');
+    testContainer.style.position = 'absolute';
+    testContainer.style.left = '-9999px';
+    testContainer.appendChild(testInput);
+    document.body.appendChild(testContainer);
+
+    try {
+      const testAutocomplete = googleMapsService.createAutocomplete(testInput, {
+        componentRestrictions: { country: 'ZA' }
+      });
+      
+      // If test passes, create the real autocomplete
+      autocompleteRef.current = googleMapsService.createAutocomplete(
+        addressInputRef.current,
+        {
+          componentRestrictions: { country: 'ZA' },
+          fields: ['address_components', 'formatted_address', 'place_id'],
+          types: ['address'],
+        }
+      );
+
+      autocompleteRef.current.addListener('place_changed', () => {
+        try {
+          const place = autocompleteRef.current.getPlace();
+          if (place.address_components) {
+            parseGooglePlace(place);
+          }
+        } catch (error) {
+          console.warn('Error processing legacy place selection:', error);
+        }
+      });
+      
+      document.body.removeChild(testContainer);
+      console.log('Legacy Autocomplete initialized successfully');
+      
+    } catch (testError) {
+      document.body.removeChild(testContainer);
+      throw testError;
+    }
+  };
+
+  const cleanupAutocompleteInstances = () => {
+    if (autocompleteRef.current) {
+      try {
+        googleMapsService.clearInstanceListeners(autocompleteRef.current);
+      } catch (error) {
+        console.warn('Error clearing legacy autocomplete listeners:', error);
+      }
+      autocompleteRef.current = null;
+    }
+
+    if (placeAutocompleteElementRef.current) {
+      try {
+        // Remove from DOM
+        if (placeAutocompleteElementRef.current.parentNode) {
+          placeAutocompleteElementRef.current.parentNode.removeChild(placeAutocompleteElementRef.current);
+        }
+        // Show original input again if hidden
+        if (addressInputRef.current) {
+          addressInputRef.current.style.display = '';
+        }
+      } catch (error) {
+        console.warn('Error cleaning up PlaceAutocompleteElement:', error);
+      }
+      placeAutocompleteElementRef.current = null;
+    }
   };
 
   // Validate address format (currently simplified due to API restrictions)
@@ -463,6 +550,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         <div className="space-y-3">
           <div>
             <Label htmlFor="line1">Street Address *</Label>
+            {/* Container for the new PlaceAutocompleteElement */}
+            <div ref={autocompleteContainerRef} className="w-full" />
             <Input
               ref={addressInputRef}
               id="line1"
@@ -487,7 +576,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
             {googleMapsLoaded && (
               <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                 <CheckCircle2 className="h-3 w-3" />
-                Powered by Google - Address autocomplete enabled
+                Powered by Google - Address autocomplete {useNewApi ? '(Enhanced)' : '(Legacy)'} enabled
               </p>
             )}
             {!googleMapsLoaded && !showGoogleMapsError && (
