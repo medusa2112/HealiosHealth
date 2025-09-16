@@ -22,6 +22,11 @@ export const corsMw = cors({
       return callback(null, true);
     }
     
+    // In development, allow Replit domains with port numbers
+    if (ENV.isDev && origin && origin.includes('.replit.dev')) {
+      return callback(null, true);
+    }
+    
     // Block disallowed origins
     
     callback(new Error(`CORS policy: Origin ${origin} not allowed`));
