@@ -171,13 +171,9 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <AuthProvider>
-            {/* ADMIN FUNCTIONALITY REMOVED - AdminAuthProvider */}
-            <>
-              <CartProvider>
-                <AppContent />
-              </CartProvider>
-            {/* ADMIN FUNCTIONALITY REMOVED - AdminAuthProvider */}
-            </>
+            <CartProvider>
+              <AppContent />
+            </CartProvider>
           </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
