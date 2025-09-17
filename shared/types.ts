@@ -17,7 +17,7 @@ export interface Order {
   customerEmail: string;
   customerName?: string;
   totalAmount: string;
-  currency: string;
+  currency: 'ZAR';
   paymentStatus: string;
   orderStatus: string;
   refundStatus?: string;
@@ -51,7 +51,7 @@ export interface CustomerPortalData {
   orders: Array<{
     id: string;
     totalAmount: string;
-    currency: string;
+    currency: 'ZAR';
     orderStatus: string;
     paymentStatus: string;
     createdAt: string;
@@ -127,7 +127,7 @@ export interface AbandonedCart {
   userEmail?: string;
   items: string | CartItem[];
   totalAmount: number | string | null;
-  currency?: string | null;
+  currency?: 'ZAR' | null;
   lastActivityAt?: string;
   lastUpdated?: string;
   createdAt: string;

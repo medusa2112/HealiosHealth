@@ -98,8 +98,8 @@ export const commonSchemas = {
   // Money amount (in cents)
   amount: z.number().int().positive(),
   
-  // Currency code
-  currency: z.enum(['USD', 'EUR', 'GBP', 'ZAR']).default('ZAR'),
+  // Currency code - ZAR only
+  currency: z.literal('ZAR').default('ZAR'),
   
   // Phone number
   phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format'),

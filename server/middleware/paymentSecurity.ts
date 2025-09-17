@@ -178,7 +178,7 @@ function recordPaymentAttempt(req: Request, amount: number, currency: string, em
  */
 export function paymentFraudDetection() {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { amount, currency = 'USD', email } = req.body;
+    const { amount, currency = 'ZAR', email } = req.body;
 
     if (!amount || !email) {
       return next(); // Let other validation handle missing required fields
@@ -319,11 +319,11 @@ export function securePaymentLogging() {
         const { amount, currency, email } = req.body;
         const fraudAnalysis = (req as any).fraudAnalysis;
         
-        recordPaymentAttempt(req, amount, currency || 'USD', email, true);
+        recordPaymentAttempt(req, amount, currency || 'ZAR', email, true);
         
         console.log('[Payment Success]', {
           amount,
-          currency: currency || 'USD',
+          currency: currency || 'ZAR',
           email: email ? email.substring(0, 3) + '***' : 'unknown', // Partially hide email
           riskScore: fraudAnalysis?.score || 0,
           ip: req.ip,

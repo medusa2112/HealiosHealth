@@ -66,8 +66,8 @@ export function Terms() {
             
             <h3>Pricing and Payment</h3>
             <p>
-              All prices are listed in the local currency (ZAR for South Africa, GBP for UK, EUR for Europe) 
-              and include applicable taxes. Prices are subject to change without notice.
+              All prices are listed in South African Rand (ZAR) and include applicable taxes. 
+              Prices are subject to change without notice.
             </p>
             
             <h3>Order Acceptance</h3>
