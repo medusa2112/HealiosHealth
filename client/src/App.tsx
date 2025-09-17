@@ -11,7 +11,6 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
-import { StockUpdateBanner } from "@/components/stock-update-banner";
 import { StockNotification } from "@/components/stock-notification";
 // ADMIN FUNCTIONALITY REMOVED
 // import { isAdminEnabled } from "@/config/adminConfig";
@@ -139,7 +138,6 @@ function AppContent() {
   // Full layout for all other pages
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
-      <StockUpdateBanner />
       <Header />
       <main className="flex-1">
         <Router />

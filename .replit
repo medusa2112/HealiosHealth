@@ -36,14 +36,11 @@ args = "npm run dev"
 waitForPort = 5000
 
 [agent]
+integrations = ["javascript_stripe:1.0.0", "javascript_log_in_with_replit:1.0.0"]
 
 [[ports]]
 localPort = 5000
 externalPort = 5000
-
-[[ports]]
-localPort = 45609
-externalPort = 3000
 
 [[ports]]
 localPort = 46085
