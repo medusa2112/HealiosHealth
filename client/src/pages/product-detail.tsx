@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 
 // Helper function to determine the correct unit for products
@@ -34,6 +34,17 @@ export default function ProductDetail() {
     queryKey: ["/api/products", params?.id],
     enabled: !!params?.id,
   });
+
+  // Determine if product is apparel (t-shirt) vs supplement
+  const isApparel = product?.categories?.includes('merchandise') || product?.id === 'healios-oversized-tee';
+
+  // Reset subscription state for apparel products
+  useEffect(() => {
+    if (isApparel) {
+      setSubscriptionMode(false);
+      setShowNotificationModal(false);
+    }
+  }, [params?.id, isApparel]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -104,7 +115,9 @@ export default function ProductDetail() {
     setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
   };
 
-  const nutritionalData = product?.id === 'apple-cider-vinegar' ? {
+  const nutritionalData = product?.id === 'healios-oversized-tee' ? {
+    nutrient: []
+  } : product?.id === 'apple-cider-vinegar' ? {
     nutrient: [
       { name: 'Apple Cider Vinegar (with the Mother)', amount: '500mg', nrv: '' },
       { name: 'Ginger Extract', amount: '10mg', nrv: '' },
@@ -147,7 +160,7 @@ export default function ProductDetail() {
     nutrient: []
   };
 
-  const faqs = product?.id === 'probiotics' ? [
+  const faqs = product?.id === 'healios-oversized-tee' ? [] : product?.id === 'probiotics' ? [
     {
       question: "What makes this probiotic different?",
       answer: "Healios Probiotic Complex uses a broad-spectrum blend of 6 well-studied bacterial strains with 10 billion live CFUs per capsule, plus FOS prebiotics to fuel their growth."
@@ -412,7 +425,7 @@ export default function ProductDetail() {
                 </div>
 
                 {/* Supply Information Badge - Only for supplements */}
-                {product.type === 'supplement' && product.bottleCount && (
+                {!isApparel && product.type === 'supplement' && product.bottleCount && (
                   <div className="bg-white border border-black text-black px-3 py-2 text-xs mb-4 inline-flex items-center gap-4">
                     <span>{product.bottleCount} {getProductUnit(product)}</span>
                     <span>•</span>
@@ -429,8 +442,8 @@ export default function ProductDetail() {
                   </div>
                 )}
 
-                {/* Reorder Notification Modal */}
-                {showNotificationModal && (
+                {/* Reorder Notification Modal - Only for supplements */}
+                {!isApparel && showNotificationModal && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
                     <div className="bg-white dark:bg-gray-800 p-6 max-w-sm w-full">
                       <h3 className="font-medium text-gray-900 dark:text-white mb-4">Reorder Reminder</h3>
@@ -461,7 +474,8 @@ export default function ProductDetail() {
                   </div>
                 )}
 
-                {/* Subscription Toggle */}
+                {/* Subscription Toggle - Only for supplements */}
+                {!isApparel && (
                 <div className="space-y-4 mb-6">
                   <div className={`border-2 p-4 cursor-pointer transition-colors ${
                     !subscriptionMode ? 'border-black bg-gray-50' : 'border-gray-200'
@@ -492,6 +506,7 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 </div>
+                )}
 
                 {/* Quantity Selector */}
                 <div className="flex items-center gap-4 mb-6">
@@ -599,94 +614,98 @@ export default function ProductDetail() {
           </div>
         )}
 
-        {/* How to take */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">How to take</h2>
-          <div className="bg-gray-50 dark:bg-gray-800 p-8">
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              {product?.id === 'probiotics' ? (
-                <>
-                  <strong>Recommended Use:</strong> 1–2 capsules, once or twice a day<br/>
-                  <strong>Max Daily Intake:</strong> 4 capsules<br/>
-                  <strong>Best taken:</strong> On an empty stomach with water<br/><br/>
-                  Do not take with hot drinks (may harm live cultures). Do not exceed the recommended dose.
-                </>
-              ) : product?.id === 'magnesium-bisglycinate-b6' ? (
-                <>
-                  <strong>Recommended Use:</strong> 1 capsule, 1–3 times daily<br/>
-                  <strong>With or after food</strong><br/><br/>
-                  <strong>Tip:</strong> Split across the day (morning and evening) for steady magnesium levels and better sleep support. Do not exceed the recommended dose.
-                </>
-              ) : product?.id === 'ashwagandha' ? (
-                <>
-                  <strong>Recommended Use:</strong> 1 capsule daily with food<br/>
-                  <strong>Best Time:</strong> Evening for relaxation and sleep support<br/><br/>
-                  Take consistently at the same time each day for optimal results. Do not exceed the recommended dose.
-                </>
-              ) : product?.id === 'apple-cider-vinegar' ? (
-                <>
-                  <strong>Recommended Use:</strong> Take 2 gummies daily<br/>
-                  <strong>Can be taken:</strong> With or without food<br/><br/>
-                  For best results, take consistently at the same time each day. Do not exceed the recommended dose.
-                </>
-              ) : product?.id === 'vitamin-d3' ? (
-                <>
-                  <strong>Recommended Use:</strong> Take 1 gummy daily<br/>
-                  <strong>Can be taken:</strong> With or without food<br/><br/>
-                  For optimal absorption, take with a meal containing some fat. Do not exceed the recommended dose.
-                </>
-              ) : (
-                <>
-                  Take 1-2 {getProductUnit(product)} daily with food, preferably with your main meal. Take consistently 
-                  at the same time each day. Do not exceed the recommended daily dose.
-                </>
-              )}
-            </p>
-          </div>
-        </div>
-
-        {/* FAQs Section */}
-        <div className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-light text-gray-900 dark:text-white">Have questions? We have answers</h2>
-            <div className="flex gap-4">
-              <Link href="/contact">
-                <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
-                  Ask a question
-                </button>
-              </Link>
-              <Link href="/contact">
-                <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
-                  Contact support
-                </button>
-              </Link>
+        {/* How to take - Only show for supplements */}
+        {product?.id !== 'healios-oversized-tee' && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">How to take</h2>
+            <div className="bg-gray-50 dark:bg-gray-800 p-8">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {product?.id === 'probiotics' ? (
+                  <>
+                    <strong>Recommended Use:</strong> 1–2 capsules, once or twice a day<br/>
+                    <strong>Max Daily Intake:</strong> 4 capsules<br/>
+                    <strong>Best taken:</strong> On an empty stomach with water<br/><br/>
+                    Do not take with hot drinks (may harm live cultures). Do not exceed the recommended dose.
+                  </>
+                ) : product?.id === 'magnesium-bisglycinate-b6' ? (
+                  <>
+                    <strong>Recommended Use:</strong> 1 capsule, 1–3 times daily<br/>
+                    <strong>With or after food</strong><br/><br/>
+                    <strong>Tip:</strong> Split across the day (morning and evening) for steady magnesium levels and better sleep support. Do not exceed the recommended dose.
+                  </>
+                ) : product?.id === 'ashwagandha' ? (
+                  <>
+                    <strong>Recommended Use:</strong> 1 capsule daily with food<br/>
+                    <strong>Best Time:</strong> Evening for relaxation and sleep support<br/><br/>
+                    Take consistently at the same time each day for optimal results. Do not exceed the recommended dose.
+                  </>
+                ) : product?.id === 'apple-cider-vinegar' ? (
+                  <>
+                    <strong>Recommended Use:</strong> Take 2 gummies daily<br/>
+                    <strong>Can be taken:</strong> With or without food<br/><br/>
+                    For best results, take consistently at the same time each day. Do not exceed the recommended dose.
+                  </>
+                ) : product?.id === 'vitamin-d3' ? (
+                  <>
+                    <strong>Recommended Use:</strong> Take 1 gummy daily<br/>
+                    <strong>Can be taken:</strong> With or without food<br/><br/>
+                    For optimal absorption, take with a meal containing some fat. Do not exceed the recommended dose.
+                  </>
+                ) : (
+                  <>
+                    Take 1-2 {getProductUnit(product)} daily with food, preferably with your main meal. Take consistently 
+                    at the same time each day. Do not exceed the recommended daily dose.
+                  </>
+                )}
+              </p>
             </div>
           </div>
+        )}
 
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div key={index} className="border border-gray-200 dark:border-gray-700">
-                <button
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800"
-                >
-                  <span className="font-medium text-gray-900 dark:text-white">{faq.question}</span>
-                  <Plus className={`w-5 h-5 transition-transform ${openFaq === index ? 'rotate-45' : ''}`} />
-                </button>
-                {openFaq === index && (
-                  <div className="px-6 pb-4">
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                )}
+        {/* FAQs Section - Only show if there are FAQs */}
+        {faqs.length > 0 && (
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-light text-gray-900 dark:text-white">Have questions? We have answers</h2>
+              <div className="flex gap-4">
+                <Link href="/contact">
+                  <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
+                    Ask a question
+                  </button>
+                </Link>
+                <Link href="/contact">
+                  <button className="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white underline">
+                    Contact support
+                  </button>
+                </Link>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* Better Together Section - Only for non-Children products */}
-        {!product.categories?.includes("Children") && (
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div key={index} className="border border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <span className="font-medium text-gray-900 dark:text-white">{faq.question}</span>
+                    <Plus className={`w-5 h-5 transition-transform ${openFaq === index ? 'rotate-45' : ''}`} />
+                  </button>
+                  {openFaq === index && (
+                    <div className="px-6 pb-4">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Better Together Section - Only for non-Children supplements */}
+        {!isApparel && !product.categories?.includes("Children") && (
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">
               Better <em className="italic">together</em>
