@@ -49,7 +49,7 @@ export function Header() {
       title: "Bestsellers",
       items: [
         { href: "/products/collagen-powder", label: "HALO Glow Collagen", isNew: true },
-        { href: "/products/magnesium", label: "Magnesium Complex" },
+        { href: "/products/magnesium-bisglycinate-b6", label: "Magnesium Complex" },
         { href: "/products/vitamin-d3", label: "Vitamin D3" },
         { href: "/products/probiotics", label: "Probiotic Complex" },
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar and Ginger Gummies" },
@@ -59,15 +59,15 @@ export function Header() {
     {
       title: "By Category", 
       items: [
-        { href: "/products?category=gummies", label: "Gummies" },
-        { href: "/products?category=vitamins", label: "Vitamins" },
-        { href: "/products?category=adaptogens", label: "Adaptogens" },
-        { href: "/products?category=probiotics", label: "Probiotics" },
-        { href: "/products?category=minerals", label: "Minerals" },
-        { href: "/products?category=womens", label: "Women's Health" },
-        { href: "/products?category=children", label: "Children's Health", comingSoon: true },
-        { href: "/products?category=beauty", label: "Beauty & Wellness" },
-        { href: "/products?category=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true },
+        { href: "/products?filter=gummies", label: "Gummies" },
+        { href: "/products?filter=vitamins", label: "Vitamins" },
+        { href: "/products?filter=adaptogens", label: "Adaptogens" },
+        { href: "/products?filter=probiotics", label: "Probiotics" },
+        { href: "/products?filter=minerals", label: "Minerals" },
+        { href: "/products?filter=prenatal", label: "Women's Health" },
+        { href: "/products?filter=children", label: "Children's Health", comingSoon: true },
+        { href: "/products?filter=beauty", label: "Beauty & Wellness" },
+        { href: "/products?filter=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true },
       ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
     },
     {
@@ -81,7 +81,9 @@ export function Header() {
         { href: "/products/magnesium", label: "Sleep & Muscle Support" },
         { href: "/products/vitamin-d3", label: "Immune Support" },
         { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
+        { href: "/products/collagen-powder", label: "Hair, Skin & Nails - HALO Glow Collagen" },
         { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
+        { href: "/products/collagen-powder", label: "Beauty & Anti-Aging - HALO Glow Collagen" },
         { href: "/products/childrens-multivitamin", label: "Children's Development", comingSoon: true },
         { href: "/products/apple-cider-vinegar", label: "Metabolic Support" },
       ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
