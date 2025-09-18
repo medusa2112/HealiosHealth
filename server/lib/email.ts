@@ -21,35 +21,92 @@ interface EmailData {
   [key: string]: any;
 }
 
-// Rate limiting for email sends (Resend allows 2 per second)
-// Thread-safe rate limiting using Map to avoid race conditions
-const userEmailLimits = new Map<string, number>();
-const EMAIL_RATE_LIMIT_MS = 600; // 600ms between emails (safer than 500ms)
+// EmailRateLimiter class with proper singleton pattern and cleanup
+class EmailRateLimiter {
+  private userEmailLimits = new Map<string, number>();
+  private readonly EMAIL_RATE_LIMIT_MS = 600; // 600ms between emails (safer than 500ms)
+  private sweepInterval: NodeJS.Timeout | null = null;
+  private isStarted = false;
 
-async function rateLimitedSend(fn: () => Promise<any>, userId: string = 'global'): Promise<any> {
-  const now = Date.now();
-  const lastTime = userEmailLimits.get(userId) || 0;
-  const timeSinceLastEmail = now - lastTime;
-  
-  if (timeSinceLastEmail < EMAIL_RATE_LIMIT_MS) {
-    const delay = EMAIL_RATE_LIMIT_MS - timeSinceLastEmail;
-    await new Promise(resolve => setTimeout(resolve, delay));
+  constructor() {
+    // Bind methods to preserve 'this' context
+    this.start = this.start.bind(this);
+    this.stop = this.stop.bind(this);
+    this.sweep = this.sweep.bind(this);
+    this.rateLimitedSend = this.rateLimitedSend.bind(this);
   }
-  
-  userEmailLimits.set(userId, Date.now());
-  
-  // Clean up old entries periodically to prevent memory leaks
-  if (userEmailLimits.size > 1000) {
-    const cutoff = Date.now() - (60 * 60 * 1000); // 1 hour ago
-    for (const [key, timestamp] of userEmailLimits.entries()) {
+
+  start(): void {
+    if (this.isStarted) {
+      return;
+    }
+
+    this.isStarted = true;
+    // Run cleanup every 5 minutes to prevent memory leaks
+    this.sweepInterval = setInterval(this.sweep, 5 * 60 * 1000);
+  }
+
+  stop(): void {
+    if (!this.isStarted) {
+      return;
+    }
+
+    this.isStarted = false;
+    
+    if (this.sweepInterval) {
+      clearInterval(this.sweepInterval);
+      this.sweepInterval = null;
+    }
+
+    // Clear all rate limit entries
+    this.userEmailLimits.clear();
+  }
+
+  private sweep(): void {
+    const now = Date.now();
+    const cutoff = now - (60 * 60 * 1000); // 1 hour ago
+    
+    for (const [key, timestamp] of this.userEmailLimits.entries()) {
       if (timestamp < cutoff) {
-        userEmailLimits.delete(key);
+        this.userEmailLimits.delete(key);
       }
     }
   }
-  
-  return fn();
+
+  async rateLimitedSend(fn: () => Promise<any>, userId: string = 'global'): Promise<any> {
+    // Auto-start if not started
+    if (!this.isStarted) {
+      this.start();
+    }
+
+    const now = Date.now();
+    const lastTime = this.userEmailLimits.get(userId) || 0;
+    const timeSinceLastEmail = now - lastTime;
+    
+    if (timeSinceLastEmail < this.EMAIL_RATE_LIMIT_MS) {
+      const delay = this.EMAIL_RATE_LIMIT_MS - timeSinceLastEmail;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+    
+    this.userEmailLimits.set(userId, Date.now());
+    
+    return fn();
+  }
 }
+
+// Dev-safe singleton pattern using globalThis
+declare global {
+  var __emailRateLimiter: EmailRateLimiter | undefined;
+}
+
+function getEmailRateLimiter(): EmailRateLimiter {
+  if (!globalThis.__emailRateLimiter) {
+    globalThis.__emailRateLimiter = new EmailRateLimiter();
+  }
+  return globalThis.__emailRateLimiter;
+}
+
+const emailRateLimiter = getEmailRateLimiter();
 
 export async function sendEmail(to: string, type: EmailType, data: EmailData) {
   if (!isEmailEnabled || !resend) {
@@ -254,7 +311,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
 
     console.log(`[EMAIL] From address: ${fromAddress}`);
 
-    const result = await rateLimitedSend(async () => {
+    const result = await emailRateLimiter.rateLimitedSend(async () => {
       return await resend!.emails.send({
         from: fromAddress,
         to: [to],
@@ -432,4 +489,10 @@ export async function sendSubscriptionCreated(data: {
   // EMAIL DISABLED - Subscription created email skipped
   
   return { id: 'disabled-' + Date.now(), success: false };
+}
+
+// Cleanup function for proper shutdown
+export function dispose(): void {
+  const rateLimiter = getEmailRateLimiter();
+  rateLimiter.stop();
 }
