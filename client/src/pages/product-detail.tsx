@@ -135,11 +135,11 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'magnesium-bisglycinate-b6' ? {
     nutrient: [
-      { name: 'Magnesium (total elemental)', amount: '375mg', nrv: '100' },
-      { name: 'Magnesium Bisglycinate', amount: '180mg', nrv: '' },
-      { name: 'Magnesium Malate', amount: '165mg', nrv: '' },
-      { name: 'Magnesium Taurate', amount: '30mg', nrv: '' },
-      { name: 'Vitamin B6 (Pyridoxine HCl)', amount: '1.4mg', nrv: '100' },
+      { name: 'Magnesium', amount: '375 mg', nrv: '100' },
+      { name: '- from Bisglycinate', amount: '180 mg', nrv: '' },
+      { name: '- from Malate', amount: '165 mg', nrv: '' },
+      { name: '- from Taurate', amount: '30 mg', nrv: '' },
+      { name: 'Vitamin B6', amount: '1.4 mg', nrv: '100' },
     ]
   } : product?.id === 'probiotics' ? {
     nutrient: [
@@ -187,28 +187,24 @@ export default function ProductDetail() {
     }
   ] : product?.id === 'magnesium-bisglycinate-b6' ? [
     {
-      question: "What makes this Magnesium Complex different?",
-      answer: "It combines three premium, highly bioavailable forms: bisglycinate (gentle on stomach), malate (energy), and taurate (cardiovascular and nervous system). Most supplements use cheaper, less absorbable forms like oxide or citrate."
+      question: "What makes this a 'complex'?",
+      answer: "It combines three forms of magnesium — bisglycinate, malate, and taurate — chosen for their high absorption and broad benefits, plus vitamin B6 for enhanced utilisation."
     },
     {
-      question: "Why is Vitamin B6 included?",
-      answer: "Vitamin B6 supports the absorption and cellular transport of magnesium, and contributes to energy metabolism, hormonal balance, and nervous system function."
+      question: "When should I take it?",
+      answer: "Magnesium can be taken any time of day, but many prefer it in the evening as it supports relaxation and muscle function."
     },
     {
-      question: "What benefits can I expect?",
-      answer: "Magnesium contributes to reduced fatigue and tiredness, normal muscle function and recovery, improved sleep quality, stress resilience and mood balance, and bone and teeth maintenance."
+      question: "Is it suitable for vegans?",
+      answer: "Yes. The capsules contain no animal-derived ingredients."
     },
     {
-      question: "Is this safe for sensitive stomachs?",
-      answer: "Yes. Magnesium bisglycinate and malate are buffered, gentle forms that are better tolerated than magnesium oxide or citrate, which can cause loose stools in some users."
+      question: "Can I take it alongside other supplements?",
+      answer: "Magnesium and B6 are generally well tolerated, but always check with a healthcare professional if you are on medication or under medical supervision."
     },
     {
-      question: "When should I take magnesium — morning or night?",
-      answer: "It depends on your goal: For energy and muscle recovery — morning. For relaxation or sleep — evening. Split dosing is often best."
-    },
-    {
-      question: "Is it suitable for vegans and people with intolerances?",
-      answer: "Yes — it's 100% vegan, gluten-free, dairy-free, and free from artificial preservatives."
+      question: "How long will one bottle last?",
+      answer: "At 3 capsules per day, one bottle provides a 40-day supply. If you take fewer capsules, it can last longer."
     }
   ] : product?.id === 'ashwagandha' ? [
     {
@@ -307,6 +303,21 @@ export default function ProductDetail() {
       answer: product?.id === 'vitamin-d3' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
     }
   ];
+
+  const ingredients = product?.id === 'magnesium-bisglycinate-b6' ? [
+    'Magnesium Malate',
+    'Magnesium Bisglycinate',
+    'Capsule Shell (Hydroxypropyl Methylcellulose)',
+    'Magnesium Taurine Chelate',
+    'Microcrystalline Cellulose (MCC 102)',
+    'Magnesium Stearate',
+    'Silicon Dioxide',
+    'Pyridoxine HCl (Vitamin B6)'
+  ] : [];
+
+  const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
+    "Adults: Take 1 capsule, 1–3 times per day with water. Do not exceed the recommended daily amount." 
+    : "";
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -659,6 +670,30 @@ export default function ProductDetail() {
                 )}
               </p>
             </div>
+          </div>
+        )}
+
+        {/* Ingredients Section */}
+        {ingredients.length > 0 && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">Ingredients</h2>
+            <ul className="space-y-2">
+              {ingredients.map((ingredient, index) => (
+                <li key={index} className="text-sm text-gray-700 dark:text-gray-300">
+                  {ingredient}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* How to Take Section */}
+        {howToTake && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">How to Take</h2>
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              {howToTake}
+            </p>
           </div>
         )}
 
