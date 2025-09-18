@@ -374,11 +374,12 @@ async function syncProductionDatabase() {
     console.log(`   - Total products: ${syncedCount + updatedCount}`);
     
     // Verify sync
-    const stockCounts = await db.execute(sql`
+    const stockCountsQuery = `
       SELECT COUNT(*) as total_products, 
              COUNT(*) FILTER (WHERE in_stock = false) as out_of_stock_count 
       FROM products
-    `);
+    `;
+    const stockCounts = await db.execute(stockCountsQuery);
     
     console.log(`\n📈 Current production state:`);
     console.log(`   - Total products: ${stockCounts.rows[0]?.total_products || 0}`);

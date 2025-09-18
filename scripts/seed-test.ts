@@ -42,9 +42,8 @@ async function seedTestData() {
     
     if (!existingCustomer.length) {
       await db.insert(schema.users).values({
-        id: 'qa-customer-001',
         email: testCustomerEmail,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         firstName: 'QA',
         lastName: 'Customer',
         role: 'customer',
@@ -64,9 +63,8 @@ async function seedTestData() {
     
     if (!existingAdmin.length) {
       await db.insert(schema.users).values({
-        id: 'qa-admin-001',
         email: testAdminEmail,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         firstName: 'QA',
         lastName: 'Admin',
         role: 'admin',
