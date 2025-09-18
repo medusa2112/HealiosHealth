@@ -124,8 +124,8 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'ashwagandha' ? {
     nutrient: [
-      { name: 'KSM-66® Ashwagandha Root Extract', amount: '500mg', nrv: '' },
-      { name: 'Withanolides (5%)', amount: '25mg', nrv: '' },
+      { name: 'Ashwagandha Root Extract (Withania somnifera)', amount: '500mg', nrv: '' },
+      { name: 'Standardised to 5% withanolides', amount: '', nrv: '' },
     ]
   } : product?.id === 'magnesium' ? {
     nutrient: [
@@ -216,28 +216,20 @@ export default function ProductDetail() {
     }
   ] : product?.id === 'ashwagandha' ? [
     {
-      question: "What makes KSM-66® different from other ashwagandha extracts?",
-      answer: "KSM-66® is the most clinically studied ashwagandha extract with over 20 human clinical trials. It's a full-spectrum extract produced using a unique extraction process that preserves the natural balance of active compounds found in the ashwagandha root."
+      question: "How long before I notice effects?",
+      answer: "Most people notice benefits such as reduced stress or improved sleep quality after 2–4 weeks of consistent use."
     },
     {
-      question: "How does ashwagandha help with stress?",
-      answer: "KSM-66® ashwagandha helps reduce cortisol levels (the stress hormone) by up to 27.9% according to clinical studies. This helps restore the body's natural stress response and promotes better overall health, sleep, and mood."
+      question: "Can I take this with other supplements?",
+      answer: "Yes, Ashwagandha is generally safe with other supplements, but avoid combining with sedatives or blood pressure medication without medical advice."
     },
     {
-      question: "When should I take ashwagandha?",
-      answer: "Take 1 capsule daily with food. Many people prefer taking it in the evening as it can promote relaxation and better sleep quality. For consistent results, take at the same time each day."
+      question: "Is Ashwagandha safe for long-term use?",
+      answer: "Yes — studies support daily use for up to 3 months continuously. Many people follow an 'on/off cycle' by taking breaks after several months."
     },
     {
-      question: "How long before I see results?",
-      answer: "Some people notice improvements in stress levels and sleep quality within 2-4 weeks of consistent use. For optimal benefits related to energy and mood, continue for 8-12 weeks as shown in clinical studies."
-    },
-    {
-      question: "Are there any side effects?",
-      answer: "KSM-66® ashwagandha is generally well-tolerated. Some people may experience mild drowsiness initially. If you're pregnant, nursing, or taking medications, consult your healthcare provider before use."
-    },
-    {
-      question: "Is this suitable for vegetarians and vegans?",
-      answer: "Yes, this product is 100% suitable for both vegetarians and vegans. The capsules are plant-based and contain no animal-derived ingredients."
+      question: "Will this make me drowsy?",
+      answer: "No — Ashwagandha is non-sedative. It supports calm and balance without causing daytime drowsiness."
     }
   ] : product?.id === 'apple-cider-vinegar' ? [
     {
@@ -333,12 +325,18 @@ export default function ProductDetail() {
     'Carnauba Wax (Anti-sticking Agent)',
     'Natural Orange Flavour',
     'Paprika Extract (Natural Colouring)'
+  ] : product?.id === 'ashwagandha' ? [
+    'KSM-66® Ashwagandha Root Extract (Withania somnifera, 5% withanolides)',
+    'Capsule Shell: Hydroxypropyl Methylcellulose (vegan)',
+    'Free from artificial colours, flavours, preservatives, and fillers.'
   ] : [];
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
     "Adults: Take 1 capsule, 1–3 times per day with water. Do not exceed the recommended daily amount." 
     : product?.id === 'vitamin-d3' ?
     "Adults: Take 1 gummy daily.\n\nChew thoroughly before swallowing (do not swallow whole).\n\nDo not exceed the recommended daily dose.\n\nBest taken consistently year-round, especially in winter months.\n\nNot recommended for children.\nThese are adult-strength gummies (4000 IU). The label only provides adult directions: 1 gummy daily"
+    : product?.id === 'ashwagandha' ?
+    "Adults (18+): Take 1 capsule daily, with water.\n\nBest taken in the morning or early evening, ideally with food\n\nConsistency is important — allow 2–4 weeks for effects to build\n\nSafe for long-term daily use up to 3 months, then take a break if needed\n\nNot suitable during pregnancy or breastfeeding\n\nConsult a doctor before use if taking thyroid medication, blood pressure medication, or psychoactive drugs\n\n❌ Not suitable for children.\nIntended for adults (18+). Not recommended during pregnancy or breastfeeding."
     : "";
 
   return (
@@ -719,39 +717,107 @@ export default function ProductDetail() {
           </div>
         )}
 
-        {/* Additional Information Section - Only for vitamin-d3 */}
-        {product?.id === 'vitamin-d3' && (
+        {/* Health Claims Section - Only for ashwagandha */}
+        {product?.id === 'ashwagandha' && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">The Clinically Proven Adaptogen</h2>
+            <div className="bg-gray-50 dark:bg-gray-800 p-8">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                KSM-66® is a premium full-spectrum Ashwagandha root extract, developed over 14 years of research and backed by 50+ clinical studies. Each capsule delivers 500mg daily, shown in studies to support stress resilience, balanced cortisol levels, cognitive performance, and overall wellbeing.
+              </p>
+              
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">At a Glance</h3>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <strong>500mg KSM-66® Ashwagandha per Capsule</strong> – full-spectrum root extract
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <strong>50+ Clinical Studies</strong> – researched for stress, cognition, sleep, and energy
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <strong>14 Years of Development</strong> – validated through rigorous testing
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <strong>Shown to Reduce Cortisol by ~27%</strong> – helping the body adapt to stress
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Additional Information Section - For vitamin-d3 and ashwagandha */}
+        {(product?.id === 'vitamin-d3' || product?.id === 'ashwagandha') && (
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">Other Key Information</h2>
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">Third-Party Tested</span>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">for purity, potency, and heavy metals.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">No Artificial Nasties</span>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">free from artificial colours, flavours, and preservatives.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">Sustainable Sourcing</span>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">responsibly sourced ingredients.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">Storage</span>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">Store in a cool, dry, dark place below 25°C. Keep out of reach of children.</p>
-                </div>
-              </div>
+              {product?.id === 'ashwagandha' ? (
+                <>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Third-Party Tested</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">for purity, potency, and heavy metals</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Vegan-Friendly</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">no animal-derived ingredients</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Traditional Use</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">Ashwagandha has over 3,000 years of use in Ayurvedic practice</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Third-Party Tested</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">for purity, potency, and heavy metals.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">No Artificial Nasties</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">free from artificial colours, flavours, and preservatives.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Sustainable Sourcing</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">responsibly sourced ingredients.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-medium text-gray-900 dark:text-white">Storage</span>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">Store in a cool, dry, dark place below 25°C. Keep out of reach of children.</p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             
             {/* Safety & Disclaimers Section */}
