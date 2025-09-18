@@ -1,20 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { X, Cookie, Shield, BarChart } from 'lucide-react';
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
+  const [marketingEnabled, setMarketingEnabled] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('healios-cookie-consent');
     if (!consent) {
       setIsVisible(true);
+    } else {
+      // Load existing preferences if they exist
+      try {
+        const parsed = JSON.parse(consent);
+        setAnalyticsEnabled(parsed.analytics || false);
+        setMarketingEnabled(parsed.marketing || false);
+      } catch (e) {
+        // If parsing fails, show consent again
+        setIsVisible(true);
+      }
     }
   }, []);
 
   const acceptAll = () => {
+    setAnalyticsEnabled(true);
+    setMarketingEnabled(true);
     localStorage.setItem('healios-cookie-consent', JSON.stringify({
       necessary: true,
       analytics: true,
@@ -27,6 +43,8 @@ export function CookieConsent() {
   };
 
   const acceptNecessary = () => {
+    setAnalyticsEnabled(false);
+    setMarketingEnabled(false);
     localStorage.setItem('healios-cookie-consent', JSON.stringify({
       necessary: true,
       analytics: false,
@@ -36,6 +54,28 @@ export function CookieConsent() {
     setIsVisible(false);
     // Only enable necessary cookies
     enableCookies(['necessary']);
+  };
+
+  const savePreferences = () => {
+    const enabledTypes = ['necessary'];
+    
+    if (analyticsEnabled) {
+      enabledTypes.push('analytics');
+    }
+    
+    if (marketingEnabled) {
+      enabledTypes.push('marketing');
+    }
+    
+    localStorage.setItem('healios-cookie-consent', JSON.stringify({
+      necessary: true,
+      analytics: analyticsEnabled,
+      marketing: marketingEnabled,
+      timestamp: Date.now()
+    }));
+    
+    setIsVisible(false);
+    enableCookies(enabledTypes);
   };
 
   const enableCookies = (types: string[]) => {
@@ -116,10 +156,13 @@ export function CookieConsent() {
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                   <Shield className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white">
-                      Essential Cookies <span className="text-green-600">(Always Active)</span>
-                    </h4>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-gray-900 dark:text-white">
+                        Essential Cookies <span className="text-green-600">(Always Active)</span>
+                      </h4>
+                      <Switch checked={true} disabled className="ml-2" data-testid="switch-essential" />
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                       These cookies are necessary for the website to function and cannot be disabled. 
                       They include session cookies, security tokens, and shopping cart functionality.
@@ -129,10 +172,19 @@ export function CookieConsent() {
                 
                 <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                   <BarChart className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white">
-                      Analytics Cookies
-                    </h4>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="analytics-toggle" className="font-medium text-gray-900 dark:text-white cursor-pointer">
+                        Analytics Cookies
+                      </Label>
+                      <Switch 
+                        id="analytics-toggle"
+                        checked={analyticsEnabled}
+                        onCheckedChange={setAnalyticsEnabled}
+                        className="ml-2"
+                        data-testid="switch-analytics"
+                      />
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                       Help us understand how visitors interact with our website by collecting anonymous information.
                       This helps us improve our service and user experience.
@@ -142,10 +194,19 @@ export function CookieConsent() {
                 
                 <div className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                   <Cookie className="h-5 w-5 text-purple-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white">
-                      Marketing Cookies
-                    </h4>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="marketing-toggle" className="font-medium text-gray-900 dark:text-white cursor-pointer">
+                        Marketing Cookies
+                      </Label>
+                      <Switch 
+                        id="marketing-toggle"
+                        checked={marketingEnabled}
+                        onCheckedChange={setMarketingEnabled}
+                        className="ml-2"
+                        data-testid="switch-marketing"
+                      />
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                       Used to deliver personalized advertisements and track the effectiveness of our marketing campaigns.
                     </p>
@@ -158,15 +219,25 @@ export function CookieConsent() {
                   variant="outline"
                   size="sm"
                   onClick={acceptNecessary}
+                  data-testid="button-essential-only"
                 >
                   Essential Only
                 </Button>
                 <Button
+                  variant="outline"
                   size="sm"
                   onClick={acceptAll}
-                  className="bg-black text-white hover:bg-gray-800"
+                  data-testid="button-accept-all"
                 >
                   Accept All
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={savePreferences}
+                  className="bg-black text-white hover:bg-gray-800"
+                  data-testid="button-save-preferences"
+                >
+                  Save Preferences
                 </Button>
               </div>
             </div>
