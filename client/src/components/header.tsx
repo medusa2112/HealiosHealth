@@ -117,10 +117,10 @@ export function Header() {
     {
       title: "Healios Journal",
       items: [
-        { href: "/journal/magnesium-for-sleep-clinical-evidence-and-benefits-20250803", label: "Magnesium for Sleep: Clinical Evidence" },
+        { href: "/journal/magnesium-for-sleep-clinical-evidence-benefits", label: "Magnesium for Sleep: Clinical Evidence" },
         { href: "/journal/ashwagandha-ancient-medicine-meets-modern-science-20250803", label: "Ashwagandha: Ancient Medicine Meets Modern Science" },
-        { href: "/journal/collagen-benefits-backed-by-research-20250803", label: "Collagen Benefits Backed by Research" },
-        { href: "/journal/vitamin-d-and-mood-what-research-shows-20250803", label: "Vitamin D and Mood: What Research Shows" },
+        { href: "/journal/collagen-benefits-backed-by-research", label: "Collagen Benefits Backed by Research" },
+        { href: "/journal/vitamin-d-and-mood-what-research-shows", label: "Vitamin D and Mood: What Research Shows" },
         { href: "/journal/probiotic-benefits-evidence-based-health-support-20250803", label: "Probiotic Benefits: Evidence-Based Support" },
         { href: "/journal/all", label: "All Evidence-Based Articles" },
       ]
@@ -530,9 +530,9 @@ export function Header() {
                     Best Seller
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Magnesium
+                    Magnesium Complex
                   </p>
-                  <Link href="/products/magnesium">
+                  <Link href="/products/magnesium-bisglycinate-b6">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
                       Shop Now →
                     </button>
@@ -551,7 +551,7 @@ export function Header() {
                     New Product Alert
                   </h3>
                   <p className="text-xs text-gray-300 mb-3">
-                    Marine Collagen Powder
+                    HALO Glow Collagen Powder
                   </p>
                   <Link href="/products/collagen-powder">
                     <button className="text-healios-cyan text-xs font-medium hover:text-healios-cyan/80 transition-colors">
