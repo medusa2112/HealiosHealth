@@ -88,7 +88,7 @@ export class ArticleBot {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'gpt-5', // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
+          model: 'gpt-4o', // Use gpt-4o which is the current available OpenAI model
           messages: [
             {
               role: 'system',
@@ -99,8 +99,8 @@ export class ArticleBot {
               content: prompt
             }
           ],
-          max_completion_tokens: 2000
-          // Note: temperature parameter not supported in gpt-5
+          max_completion_tokens: 2000,
+          temperature: 0.1 // Use low temperature for more consistent output
         })
       });
 
