@@ -50,6 +50,7 @@ import Profile from "@/pages/profile";
 import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import { CookieConsent } from "@/components/cookie-consent";
+import { MaintenanceModal } from "@/components/maintenance-modal";
 
 // ADMIN FUNCTIONALITY REMOVED
 // Import admin components conditionally
@@ -127,13 +128,28 @@ function Router() {
 function AppContent() {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
+  const [hasMaintenanceAccess, setHasMaintenanceAccess] = useState(false);
   const [location] = useLocation();
+  
+  const handleMaintenanceAccessGranted = () => {
+    setHasMaintenanceAccess(true);
+  };
   
   // ADMIN FUNCTIONALITY REMOVED
   // Check if current route should bypass layout (only admin/login)
   // const isStandaloneRoute = isAdminEnabled() && location === '/admin/login';
 
   // All standalone admin route handling removed
+  
+  // Show maintenance modal if access hasn't been granted
+  if (!hasMaintenanceAccess) {
+    return (
+      <MaintenanceModal
+        isOpen={true}
+        onAccessGranted={handleMaintenanceAccessGranted}
+      />
+    );
+  }
 
   // Full layout for all other pages
   return (
