@@ -733,18 +733,18 @@ export default function ProductComprehensive() {
           stat2Text: 'Clinical Studies\nCompleted',
           stat3Number: '14',
           stat3Text: 'Years Research\n& Development',
-          stat4Number: '27%',
-          stat4Text: 'Cortisol Reduction\nClinically Proven',
+          stat4Number: '500mg',
+          stat4Text: 'Daily Dose\nKSM-66®',
           testimonial: '"KSM-66® is the gold standard of ashwagandha extracts. The extensive clinical research demonstrates significant stress reduction and cognitive enhancement benefits. This 500mg dose provides therapeutic-level support."',
           testimonialAuthor: 'DR. SARAH MARTINEZ',
           testimonialTitle: 'Clinical Psychologist & Stress Management Specialist',
           benefitTitle: 'Clinically proven stress relief & cognitive enhancement',
-          benefitDescription: '500mg KSM-66® Ashwagandha extract is clinically proven to reduce cortisol levels by up to 27%, supporting stress management, cognitive function, and overall mental wellness.',
+          benefitDescription: '500mg KSM-66® Ashwagandha extract is a traditional adaptogenic herb. No EFSA health claims are authorised for Ashwagandha – general wellbeing support only.',
           ingredientSource: 'KSM-66® Ashwagandha root extract (Withania somnifera)',
           ingredientForm: 'Vegetarian capsules',
           ingredientOrigin: 'Full-spectrum root extract with 14 years of clinical validation',
           sleepBenefit: true,
-          primaryBenefit: 'Clinically proven to reduce stress, support cognitive function, and enhance overall well-being'
+          primaryBenefit: 'Traditional adaptogenic herb for general wellbeing support'
         };
       case 'probiotics':
         return {

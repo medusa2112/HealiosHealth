@@ -124,8 +124,9 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'ashwagandha' ? {
     nutrient: [
-      { name: 'Ashwagandha Root Extract (Withania somnifera)', amount: '500mg', nrv: '' },
-      { name: 'Standardised to 5% withanolides', amount: '', nrv: '' },
+      { name: 'Per Capsule:', amount: '', nrv: '' },
+      { name: 'Ashwagandha Root Extract (KSM-66®)', amount: '500mg', nrv: '' },
+      { name: '(equivalent to 6250mg Ashwagandha Root)', amount: '', nrv: '' },
     ]
   } : product?.id === 'magnesium' ? {
     nutrient: [
@@ -320,9 +321,7 @@ export default function ProductDetail() {
     'Natural Orange Flavour',
     'Paprika Extract (Natural Colouring)'
   ] : product?.id === 'ashwagandha' ? [
-    'KSM-66® Ashwagandha Root Extract (Withania somnifera, 5% withanolides)',
-    'Capsule Shell: Hydroxypropyl Methylcellulose (vegan)',
-    'Free from artificial colours, flavours, preservatives, and fillers.'
+    'Ashwagandha Root Extract (KSM-66®), Rice Bran, Capsule Shell: Hydroxypropyl Methylcellulose'
   ] : [];
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
