@@ -1011,26 +1011,26 @@ export default function ProductComprehensive() {
           bundleWith: 'Biotin 10,000 µg Strawberry Gummies',
           bundlePrice: 'R759.99',
           bundleOriginalPrice: 'R959.97',
-          sectionTitle: 'THE BEAUTY FOUNDATION',
-          sectionHeading: 'Pure marine collagen powder\nfor skin elasticity, hair strength\nand nail vitality from within.',
-          stat1Number: '10g',
-          stat1Text: 'Pure Collagen\nPer Serving',
-          stat2Number: 'Type I & III',
-          stat2Text: 'Marine Collagen\nPeptides',
-          stat3Number: '90%',
-          stat3Text: 'Absorption\nRate',
-          stat4Number: '100%',
-          stat4Text: 'Unflavoured\n& Dissolves',
-          testimonial: '"Marine collagen provides the highest bioavailability of Type I and III collagen peptides. This unflavoured powder dissolves completely in any beverage for convenient daily beauty support."',
-          testimonialAuthor: 'DR. AMANDA FOSTER',
-          testimonialTitle: 'Dermatologist & Anti-Aging Specialist',
-          benefitTitle: 'Pure marine collagen for beauty support',
-          benefitDescription: '10g pure hydrolysed marine collagen peptides support skin elasticity, hair strength, nail vitality and joint health. Unflavoured powder dissolves easily in hot or cold drinks.',
-          ingredientSource: 'Hydrolysed marine collagen peptides (Type I & III)',
+          sectionTitle: 'THE COLLAGEN FOUNDATION',
+          sectionHeading: 'Pure Type I collagen peptides\nfor skin elasticity, nail strength\nand hair health support.',
+          stat1Number: '2.5g',
+          stat1Text: 'Type I Collagen\nPeptides per Serving',
+          stat2Number: '100%',
+          stat2Text: 'Pure & Clean\nLabel',
+          stat3Number: 'Unflavoured',
+          stat3Text: 'Easy to Mix\n& Dissolves',
+          stat4Number: 'Third-Party',
+          stat4Text: 'Tested for\nPurity',
+          testimonial: '"Collagen is the body\'s most abundant protein and plays a vital role in skin, hair, nails, and connective tissue. Our pure hydrolysed collagen powder provides 2.5g Type I collagen peptides per serving, helping support skin elasticity, nail strength, and hair health."',
+          testimonialAuthor: 'THE COLLAGEN FOUNDATION',
+          testimonialTitle: 'Research & Development Team',
+          benefitTitle: 'Pure Type I collagen peptides for beauty support',
+          benefitDescription: 'A premium hydrolysed collagen powder designed to support skin elasticity, smoothness, nail strength, and hair health. Each serving provides 2500mg pure Type I collagen peptides in an unflavoured, easy-to-mix powder that dissolves completely in water, coffee, juice, or smoothies. Free from artificial additives, non-GMO, and tested for purity.',
+          ingredientSource: 'Hydrolysed Collagen Peptides (from bovine origin)',
           ingredientForm: 'Unflavoured powder',
-          ingredientOrigin: 'Sustainably sourced marine collagen with high bioavailability',
+          ingredientOrigin: 'No additives, flavourings, preservatives, or fillers. Non-GMO. Neutral in taste and odour.',
           sleepBenefit: false,
-          primaryBenefit: 'Supports skin elasticity, hair strength, nail vitality and joint health'
+          primaryBenefit: 'Supports skin elasticity, smoothness, nail strength, and hair health'
         };
       case 'bio-cultures-vitamin-plus':
         return {
@@ -1645,47 +1645,14 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
-                              <p className="font-medium mb-3">Nutritional Information (Per 2.5g serving):</p>
-                              <div className="overflow-x-auto">
-                                <table className="w-full text-sm border-collapse">
-                                  <thead>
-                                    <tr className="border-b">
-                                      <th className="text-left py-2 font-medium">Nutrient</th>
-                                      <th className="text-right py-2 font-medium">Amount</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody className="space-y-1">
-                                    <tr className="border-b border-gray-100">
-                                      <td className="py-2">Hydrolysed collagen peptides</td>
-                                      <td className="text-right py-2 font-medium">2500mg</td>
-                                    </tr>
-                                    <tr className="border-b border-gray-100">
-                                      <td className="py-2">Energy</td>
-                                      <td className="text-right py-2 font-medium">36 kJ / 9 kcal</td>
-                                    </tr>
-                                    <tr className="border-b border-gray-100">
-                                      <td className="py-2">Protein</td>
-                                      <td className="text-right py-2 font-medium">2.25g</td>
-                                    </tr>
-                                    <tr className="border-b border-gray-100">
-                                      <td className="py-2">Fat</td>
-                                      <td className="text-right py-2 font-medium">0g</td>
-                                    </tr>
-                                    <tr className="border-b border-gray-100">
-                                      <td className="py-2">Carbohydrates</td>
-                                      <td className="text-right py-2 font-medium">0g</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="py-2">Salt</td>
-                                      <td className="text-right py-2 font-medium">0g</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <div className="mt-4">
-                                <p className="font-medium mb-2">Ingredients:</p>
-                                <p className="text-sm text-gray-600">Hydrolysed collagen peptides (from bovine origin).</p>
-                                <p className="text-xs text-gray-500 mt-1">Allergens: None declared. Manufactured in a facility with validated allergen controls.</p>
+                              <p className="font-medium mb-3">Nutritional Information (per 2.5g serving)</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Hydrolysed Collagen Peptides: 2500 mg</div>
+                                <div className="font-medium">Energy: 36 kJ / 9 kcal</div>
+                                <div className="font-medium">Protein: 2.25 g</div>
+                                <div className="font-medium">Fat: 0 g</div>
+                                <div className="font-medium">Carbohydrates: 0 g</div>
+                                <div className="font-medium">Salt: 0 g</div>
                               </div>
                             </div>
                           ) : (
@@ -1845,8 +1812,22 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Allergens: None declared. Manufactured under strict allergen control protocols. 100% vegan formulation.</p>
                             </div>
+                          ) : product.id === 'collagen-powder' ? (
+                            <div>
+                              <p className="font-medium mb-2">Ingredient List:</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Hydrolysed Collagen Peptides (from bovine origin)</div>
+                              </div>
+                              <div className="mt-3 space-y-1 text-sm text-gray-600">
+                                <p>• No additives, flavourings, preservatives, or fillers</p>
+                                <p>• Non-GMO</p>
+                                <p>• Neutral in taste and odour</p>
+                                <p>• Third-Party Tested for purity and heavy metals</p>
+                                <p>• Clean Label — no unnecessary fillers</p>
+                              </div>
+                            </div>
                           ) : (
-                            <p>Ingredients Hydrolysed Bovine Collagen Peptides (100%) • No additives, flavourings, preservatives or fillers • Non-GMO | Clean label | Neutral in taste and odour  Allergens: None declared. Manufactured in a facility with strict allergen control procedures</p>
+                            <p>Premium quality ingredients clearly listed with no artificial additives.</p>
                           )}
                         </div>
                       )}
@@ -1974,14 +1955,18 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
-                              <p className="font-medium mb-2">Daily dosing for adults:</p>
+                              <p className="font-medium mb-2">How to Take:</p>
                               <ul className="space-y-1 text-sm">
-                                <li>• <strong>Mix one 2.5g scoop with water, juice, coffee or your smoothie</strong></li>
-                                <li>• <strong>Take once daily, with or without food</strong></li>
-                                <li>• Dissolves completely with no taste or texture</li>
-                                <li>• Store in a cool, dry place</li>
+                                <li>• <strong>Adults:</strong> Take one 2.5g scoop daily, mixed into water, juice, coffee, or smoothies</li>
+                                <li>• <strong>Can be taken with or without food</strong></li>
+                                <li>• <strong>Consistency is key</strong> — use daily for best results</li>
+                                <li>• <strong>Store in a cool, dry place</strong></li>
                               </ul>
-                              <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for vegetarians or vegans. Consult healthcare provider if pregnant, breastfeeding, or taking medication.</p>
+                              <div className="mt-4 bg-red-50 border border-red-200 p-3">
+                                <p className="font-medium text-red-800 mb-1">Can Children Take It?</p>
+                                <p className="text-sm text-red-700">❌ <strong>Not recommended for children.</strong></p>
+                                <p className="text-sm text-red-600 mt-2">This product is for adults only. Always consult a healthcare professional before use during pregnancy, breastfeeding, or if taking medication.</p>
+                              </div>
                             </div>
                           ) : (
                             <p>Add one scoop (2.5g) to a glass of water, coffee, smoothie, or yoghurt. Consume once daily. Do not exceed the stated dose. Best results occur with daily use for 8–12 weeks.</p>
@@ -2129,33 +2114,28 @@ export default function ProductComprehensive() {
                             <div>
                               <div className="space-y-4">
                                 <div>
-                                  <p className="font-medium mb-2">What's the benefit of collagen peptides over regular collagen?</p>
-                                  <p className="text-sm text-gray-600">Collagen peptides are short-chain amino acids that are easier to absorb and clinically shown to stimulate fibroblasts — the cells responsible for producing new skin collagen.</p>
+                                  <p className="font-medium mb-2">Q: How long before I see results?</p>
+                                  <p className="text-sm text-gray-600">A: Clinical research shows visible improvements in skin elasticity within 4 weeks, with continued benefits for wrinkles, nails, and hair after 8–12 weeks of consistent use.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">How long before I see results?</p>
-                                  <p className="text-sm text-gray-600">Clinical studies show visible skin elasticity improvement and wrinkle reduction in as little as 4–8 weeks with daily use.</p>
+                                  <p className="font-medium mb-2">Q: Is this suitable for vegetarians or vegans?</p>
+                                  <p className="text-sm text-gray-600">A: ❌ <strong>No</strong> — collagen is sourced from bovine origin, so it is not suitable for vegetarians or vegans.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Is this suitable for vegetarians or vegans?</p>
-                                  <p className="text-sm text-gray-600">No — this product contains bovine-derived collagen peptides and is not suitable for vegetarians or vegans.</p>
+                                  <p className="font-medium mb-2">Q: Does it help with nails and hair?</p>
+                                  <p className="text-sm text-gray-600">A: Yes — studies show 42% fewer broken nails and improved nail growth, as well as increased hair follicle density.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Does this help with cellulite?</p>
-                                  <p className="text-sm text-gray-600">Yes. In studies, consistent use of 2.5g daily was associated with improved skin smoothness and reduced waviness related to cellulite.</p>
+                                  <p className="font-medium mb-2">Q: Does it support skin appearance?</p>
+                                  <p className="text-sm text-gray-600">A: Yes — regular intake is associated with smoother skin, fewer wrinkles, and improved firmness.</p>
                                 </div>
                                 
                                 <div>
-                                  <p className="font-medium mb-2">Will this support nail and hair health too?</p>
-                                  <p className="text-sm text-gray-600">Yes — participants in clinical trials experienced 42% fewer broken nails and improved hair follicle density after daily use.</p>
-                                </div>
-                                
-                                <div>
-                                  <p className="font-medium mb-2">Can men use HALO Glow Collagen?</p>
-                                  <p className="text-sm text-gray-600">Absolutely — collagen is a structural protein essential to skin and connective tissue in all genders.</p>
+                                  <p className="font-medium mb-2">Q: Can men take this too?</p>
+                                  <p className="text-sm text-gray-600">A: Absolutely. Collagen is a structural protein essential for skin, hair, nails, joints, and connective tissues in all genders.</p>
                                 </div>
                               </div>
                             </div>
