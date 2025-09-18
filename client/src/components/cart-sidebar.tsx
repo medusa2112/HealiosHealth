@@ -77,9 +77,11 @@ export function CartSidebar() {
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
               <p className="text-gray-500 mb-6">Add some products to get started</p>
-              <Button onClick={toggleCart} className="bg-black hover:bg-gray-800 text-white">
-                Continue Shopping
-              </Button>
+              <Link href="/products">
+                <Button onClick={toggleCart} className="bg-black hover:bg-gray-800 text-white">
+                  Continue Shopping
+                </Button>
+              </Link>
             </div>
           ) : (
             <>
@@ -121,7 +123,7 @@ export function CartSidebar() {
                           {/* Category & Stock Status */}
                           <div className="flex items-center gap-2 mb-3">
                             <Badge variant="outline" className="text-xs">
-                              {item.product.category}
+                              {item.product.categories?.[0] || 'Uncategorized'}
                             </Badge>
                             <Badge variant={item.product.inStock ? "default" : "secondary"} className="text-xs">
                               {item.product.inStock ? "In Stock" : "Pre-order"}
@@ -226,13 +228,15 @@ export function CartSidebar() {
                 </Link>
 
                 {/* Continue Shopping */}
-                <Button 
-                  variant="ghost" 
-                  className="w-full mt-2 text-gray-600 hover:text-gray-900 mb-0"
-                  onClick={toggleCart}
-                >
-                  Continue Shopping
-                </Button>
+                <Link href="/products">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full mt-2 text-gray-600 hover:text-gray-900 mb-0"
+                    onClick={toggleCart}
+                  >
+                    Continue Shopping
+                  </Button>
+                </Link>
               </div>
             </>
           )}
