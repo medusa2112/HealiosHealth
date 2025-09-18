@@ -70,11 +70,12 @@ export function Footer() {
           <div className="flex justify-center mb-6">
             <div className="flex items-center space-x-4">
               <a
-                href="https://g.co/kgs/EpVioa6"
+                href="https://www.google.com/maps/place/The+Healios+Health+Ltd.+South+Africa/@-29.7125,-31.0125,17z/data=!4m6!3m5!1s0x1ef7a9ba9b5c2915:0x401cf31a9b81d796!8m2!3d-29.7125!4d-31.0125!16s%2Fg%2F11xdp_jh59"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-[#4285F4] transition-colors duration-200 p-2"
                 title="Google Reviews"
+                data-testid="link-google-reviews"
               >
                 <FaGoogle className="h-5 w-5" />
               </a>
