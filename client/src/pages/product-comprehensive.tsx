@@ -1611,7 +1611,7 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'ashwagandha' ? (
                             <div>
-                              <p className="font-medium mb-3">Per Gummy:</p>
+                              <p className="font-medium mb-3">Per Capsule:</p>
                               <div className="text-sm space-y-1">
                                 <div className="font-medium">Ashwagandha Root Extract: 300mg</div>
                                 <div className="text-sm text-gray-600">(Withania somnifera, standardized to 5% withanolides)</div>
@@ -1942,7 +1942,7 @@ export default function ProductComprehensive() {
                             <div>
                               <p className="font-medium mb-2">Adult dosing (18+ years only):</p>
                               <ul className="space-y-1 text-sm">
-                                <li>• <strong>Take 1 gummy daily</strong> - consistent timing recommended</li>
+                                <li>• <strong>Take 1 capsule daily</strong> - consistent timing recommended</li>
                                 <li>• Best taken in morning or early evening with food</li>
                                 <li>• Effects may take 2-4 weeks to manifest</li>
                                 <li>• Safe for long-term daily use up to 3 months, then cycle if needed</li>
@@ -2096,7 +2096,7 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'ashwagandha' ? (
                             <div>
-                              <p className="font-medium mb-2">Common questions about Ashwagandha Gummies:</p>
+                              <p className="font-medium mb-2">Common questions about Ashwagandha Capsules:</p>
                               <ul className="mt-2 space-y-2">
                                 <li>• <strong>How long before I notice effects?</strong> Most people notice benefits after 2-4 weeks of consistent daily use, especially for stress resilience and sleep quality.</li>
                                 <li>• <strong>Can I take this with other supplements?</strong> Generally yes, but avoid taking with sedatives or blood pressure medications without medical supervision.</li>
