@@ -135,11 +135,12 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'magnesium-bisglycinate-b6' ? {
     nutrient: [
-      { name: 'Magnesium', amount: '375 mg', nrv: '100' },
-      { name: '- from Bisglycinate', amount: '180 mg', nrv: '' },
-      { name: '- from Malate', amount: '165 mg', nrv: '' },
-      { name: '- from Taurate', amount: '30 mg', nrv: '' },
+      { name: 'Per 3-capsule serving:', amount: '', nrv: '' },
       { name: 'Vitamin B6', amount: '1.4 mg', nrv: '100' },
+      { name: 'Magnesium', amount: '375 mg', nrv: '100' },
+      { name: '• Bisglycinate', amount: '180 mg', nrv: '' },
+      { name: '• Malate', amount: '165 mg', nrv: '' },
+      { name: '• Taurine Chelate', amount: '30 mg', nrv: '' },
     ]
   } : product?.id === 'probiotics' ? {
     nutrient: [
@@ -211,8 +212,8 @@ export default function ProductDetail() {
       answer: "Magnesium and B6 are generally well tolerated, but always check with a healthcare professional if you are on medication or under medical supervision."
     },
     {
-      question: "How long will one bottle last?",
-      answer: "At 3 capsules per day, one bottle provides a 40-day supply. If you take fewer capsules, it can last longer."
+      question: "When will I see results?",
+      answer: "Results vary between individuals. For best results, take consistently as part of a balanced diet and healthy lifestyle. Not suitable for children, pregnant or breastfeeding women. Always consult a healthcare professional if taking medication or under supervision."
     }
   ] : product?.id === 'ashwagandha' ? [
     {
@@ -305,14 +306,7 @@ export default function ProductDetail() {
   ];
 
   const ingredients = product?.id === 'magnesium-bisglycinate-b6' ? [
-    'Magnesium Malate',
-    'Magnesium Bisglycinate',
-    'Capsule Shell (Hydroxypropyl Methylcellulose)',
-    'Magnesium Taurine Chelate',
-    'Microcrystalline Cellulose (MCC 102)',
-    'Magnesium Stearate',
-    'Silicon Dioxide',
-    'Pyridoxine HCl (Vitamin B6)'
+    'Magnesium Malate, Magnesium Bisglycinate, Capsule Shell (Hydroxypropyl Methylcellulose), Magnesium Taurine Chelate, Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide, Pyridoxine HCl (Vitamin B6).'
   ] : product?.id === 'vitamin-d3' ? [
     'Glucose Syrup',
     'Sugar',
@@ -332,7 +326,7 @@ export default function ProductDetail() {
   ] : [];
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
-    "Adults: Take 1 capsule, 1–3 times per day with water. Do not exceed the recommended daily amount." 
+    "Adults: Take 1 capsule, 1–3 times daily with water. Do not exceed the recommended daily amount." 
     : product?.id === 'vitamin-d3' ?
     "Adults: Take 1 gummy daily.\n\nChew thoroughly before swallowing (do not swallow whole).\n\nDo not exceed the recommended daily dose.\n\nBest taken consistently year-round, especially in winter months.\n\nNot recommended for children.\nThese are adult-strength gummies (4000 IU). The label only provides adult directions: 1 gummy daily"
     : product?.id === 'ashwagandha' ?

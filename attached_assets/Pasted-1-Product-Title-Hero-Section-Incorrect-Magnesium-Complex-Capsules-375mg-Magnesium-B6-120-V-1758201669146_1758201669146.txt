@@ -1,0 +1,66 @@
+1. Product Title / Hero Section
+Incorrect: “Magnesium Complex Capsules — 375mg Magnesium + B6 (120 Vegan Capsules)”
+Corrected: “Magnesium Complex — Triple Magnesium Blend with Vitamin B6 (120 Capsules)”
+(Highlights the blend + B6, removes misleading “375 mg per capsule” and “vegan”).
+
+
+
+2. Badges
+
+Incorrect: “1 capsules”, “30 per day”, “30-day supply”
+Corrected: “1–3 Capsules Daily | Flexible Dosing | 120-Capsule Bottle”
+
+3.  Description
+
+Incorrect:
+“Premium magnesium bisglycinate combined with vitamin B6 for enhanced absorption and efficacy. Supports muscle function, nervous system health, and energy metabolism.”
+
+Corrected :
+“Our Magnesium Complex combines three bioavailable forms — bisglycinate, malate, and taurine chelate — with Vitamin B6. This balanced formula supports:
+
+Reduced tiredness and fatigue
+
+Healthy energy metabolism
+
+Nervous system and muscle function
+
+Strong bones and teeth”
+(Removes unapproved “enhanced absorption” and keeps to legal EFSA claims.)
+
+
+4. Nutritional Information
+Incorrect: Placeholder text.
+Corrected (SEO/AEO):
+“Per 3-capsule serving:
+• Vitamin B6 — 1.4 mg (100% NRV)
+• Magnesium — 375 mg (100% NRV)
+ • Bisglycinate — 180 mg
+ • Malate — 165 mg
+ • Taurine Chelate — 30 mg”
+
+5. Ingredients
+
+Incorrect: “Premium quality ingredients clearly listed with no artificial additives.”
+
+Corrected (SEO/AEO):
+“Ingredients: Magnesium Malate, Magnesium Bisglycinate, Capsule Shell (Hydroxypropyl Methylcellulose), Magnesium Taurine Chelate, Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide, Pyridoxine HCl (Vitamin B6).”
+
+6. How to Take
+
+Incorrect: “Add one scoop (2.5 g) to a glass of water…”
+Corrected (SEO/AEO):
+“Adults: Take 1 capsule, 1–3 times daily with water. Do not exceed the recommended daily amount.”
+
+7. FAQs (only update the incorrect FAQ)
+
+Incorrect: “When will I see results? … typically 2–4 weeks.”
+Corrected (SEO/AEO):
+“Results vary between individuals. For best results, take consistently as part of a balanced diet and healthy lifestyle. Not suitable for children, pregnant or breastfeeding women. Always consult a healthcare professional if taking medication or under supervision."
+
+8. Hero Banner
+
+Incorrect: “Advanced magnesium bisglycinate with vitamin B6 for enhanced sleep quality and muscle recovery. 18% BETTER ABSORPTION. B6 — SLEEP ENHANCER.”
+Corrected (SEO/AEO):
+“Triple Magnesium Complex with Vitamin B6. Designed to support energy, nervous system balance, muscle function, and bone health.”
+(Removes sleep/absorption claims that aren’t approved.)
+
