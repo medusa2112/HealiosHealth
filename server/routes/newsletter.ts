@@ -1,20 +1,18 @@
 import express from 'express';
 import { z } from 'zod';
 import { sendEmail } from '../lib/email';
+import { storage } from '../storage';
+import { insertNewsletterSchema } from '@shared/schema';
+import { newsletterLimiter } from '../middleware/rate-limiter';
 
 const router = express.Router();
 
-const newsletterSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Valid email address required'),
-  birthday: z.string().optional()
-});
+// Use the schema from shared/schema.ts for consistency
 
-// Newsletter subscription endpoint
-router.post('/subscribe', async (req, res) => {
+// Newsletter subscription endpoint with rate limiting and bot protection
+router.post('/subscribe', newsletterLimiter, async (req, res) => {
     try {
-      const result = newsletterSchema.safeParse(req.body);
+      const result = insertNewsletterSchema.safeParse(req.body);
       
       if (!result.success) {
         return res.status(400).json({
@@ -23,23 +21,60 @@ router.post('/subscribe', async (req, res) => {
         });
       }
       
-      const { firstName, lastName, email, birthday } = result.data;
+      const { firstName, lastName, email, birthday, website } = result.data;
       
-      // For now, just log the subscription (no database storage needed)
-      console.log(`[NEWSLETTER] New subscription: ${firstName} ${lastName} <${email}>`);
+      // Honeypot protection - if 'website' field is filled, it's likely a bot
+      if (website && website.trim() !== '') {
+        console.log(`[NEWSLETTER] Bot detected - honeypot triggered: ${email}`);
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid submission. Please try again.'
+        });
+      }
       
-      console.log(`[NEWSLETTER] New subscription: ${email}`);
+      // Check for duplicate email subscription
+      const existingSubscription = await storage.getNewsletterSubscription(email);
+      if (existingSubscription) {
+        return res.status(409).json({
+          success: false,
+          message: 'This email address is already subscribed to our newsletter.'
+        });
+      }
       
-      // Note: Newsletter subscriptions are stored for manual processing
-      // No automated welcome emails are sent per business requirements
+      // Store subscription in database (exclude honeypot field)
+      const subscriptionData = { firstName, lastName, email, birthday };
+      const subscription = await storage.subscribeToNewsletter(subscriptionData);
+      console.log(`[NEWSLETTER] New subscription stored: ${firstName} ${lastName} <${email}>`);
+      
+      // Send confirmation email
+      try {
+        await sendEmail(email, 'newsletter_confirmation', {
+          firstName,
+          lastName,
+          email
+        });
+        console.log(`[NEWSLETTER] Confirmation email sent to: ${email}`);
+      } catch (emailError) {
+        console.error('[NEWSLETTER] Failed to send confirmation email:', emailError);
+        // Don't fail the subscription if email fails
+      }
       
       res.json({
         success: true,
-        message: 'Successfully subscribed to newsletter!'
+        message: 'Successfully subscribed to newsletter! Please check your email for confirmation.'
       });
       
     } catch (error) {
       console.error('[NEWSLETTER] Subscription error:', error);
+      
+      // Handle database constraint errors (duplicate email)
+      if (error.code === '23505' || error.message?.includes('unique constraint')) {
+        return res.status(409).json({
+          success: false,
+          message: 'This email address is already subscribed to our newsletter.'
+        });
+      }
+      
       res.status(500).json({
         success: false,
         message: 'Failed to subscribe. Please try again.'

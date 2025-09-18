@@ -323,6 +323,9 @@ export type InsertCart = z.infer<typeof insertCartSchema>;
 export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions).omit({
   id: true,
   subscribedAt: true,
+}).extend({
+  // Honeypot field for bot protection
+  website: z.string().optional().default(""), // This should be empty for humans
 });
 
 export const insertPreOrderSchema = createInsertSchema(preOrders).omit({

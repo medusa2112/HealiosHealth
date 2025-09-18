@@ -27,7 +27,8 @@ const NewsletterForm = () => {
     firstName: '',
     lastName: '',
     email: '',
-    birthday: ''
+    birthday: '',
+    website: '' // Honeypot field - should remain empty
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -63,7 +64,8 @@ const NewsletterForm = () => {
           firstName: '',
           lastName: '',
           email: '',
-          birthday: ''
+          birthday: '',
+          website: '' // Reset honeypot field
         });
       } else {
         const errorData = await response.json();
@@ -120,6 +122,17 @@ const NewsletterForm = () => {
         />
         <label className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">Birthday (Optional)</label>
       </div>
+
+      {/* Honeypot field - hidden from humans but visible to bots */}
+      <input
+        type="text"
+        name="website"
+        value={formData.website}
+        onChange={(e) => setFormData({...formData, website: e.target.value})}
+        style={{ display: 'none' }}
+        tabIndex={-1}
+        autoComplete="off"
+      />
 
       <button
         type="submit"
@@ -206,9 +219,50 @@ export default function HomePage() {
   const [rightHasReachedCenter, setRightHasReachedCenter] = useState(false);
   const rightImageRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to top when component mounts
+  // Handle hash navigation and scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Check if we need to scroll to a specific section
+    const hash = window.location.hash;
+    
+    if (hash === '#about') {
+      // Small delay to ensure the component has fully rendered
+      setTimeout(() => {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+          aboutSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }, 100);
+    } else {
+      // Default behavior: scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Listen for hash changes while on the page
+    const handleHashChange = () => {
+      const newHash = window.location.hash;
+      if (newHash === '#about') {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+          aboutSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      }
+    };
+
+    // Add hash change listener
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
   }, []);
 
   // Removed intersection observer for fitness video animation - now static display
@@ -902,7 +956,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* The Healios Science Section */}
-      <section className="bg-white dark:bg-gray-900">
+      <section id="about" className="bg-white dark:bg-gray-900" data-testid="section-about">
         <div className="lg:grid lg:grid-cols-2 lg:items-stretch min-h-[600px]">
           {/* Content */}
           <div className="py-24 px-6 lg:px-16 flex items-center">

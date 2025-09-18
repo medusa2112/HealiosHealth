@@ -69,3 +69,12 @@ export const checkoutLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+// Newsletter subscription rate limit
+export const newsletterLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 newsletter subscriptions per 15 minutes
+  message: 'Too many newsletter subscription attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});

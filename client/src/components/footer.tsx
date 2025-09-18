@@ -27,7 +27,23 @@ export function Footer() {
           <div>
             <h3 className="text-white font-medium mb-6">Learn</h3>
             <ul className="space-y-3 text-sm text-gray-300">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Healios</Link></li>
+              <li>
+                <Link 
+                  href="/#about" 
+                  className="hover:text-white transition-colors"
+                  data-testid="link-about-healios"
+                  onClick={(e) => {
+                    // If we're already on the home page, scroll to the about section
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    // Otherwise, navigate to home page with hash (handled by browser)
+                  }}
+                >
+                  About Healios
+                </Link>
+              </li>
               <li><Link href="/science" className="hover:text-white transition-colors">The Science</Link></li>
               <li><Link href="/journal/all" className="hover:text-white transition-colors">Healios Journal</Link></li>
             </ul>
@@ -55,7 +71,23 @@ export function Footer() {
           <div>
             <h3 className="text-white font-medium mb-6">Company</h3>
             <ul className="space-y-3 text-sm text-gray-300">
-              <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
+              <li>
+                <Link 
+                  href="/#about" 
+                  className="hover:text-white transition-colors"
+                  data-testid="link-our-story"
+                  onClick={(e) => {
+                    // If we're already on the home page, scroll to the about section
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    // Otherwise, navigate to home page with hash (handled by browser)
+                  }}
+                >
+                  Our Story
+                </Link>
+              </li>
               <li><Link href="/planet" className="hover:text-white transition-colors">Our Ocean Impact</Link></li>
               <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>

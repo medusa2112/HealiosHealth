@@ -3,6 +3,16 @@
 ## Overview
 This project is a full-stack e-commerce application for a premium supplement company, aiming to provide a modern, accessible, and high-performance online shopping experience. It supports product browsing, shopping cart functionality, secure checkout, and comprehensive product information. The business vision is to establish a robust digital storefront to effectively showcase products and expand market reach, particularly in regions like South Africa, while also promoting environmental responsibility.
 
+## Recent Changes (2025-09-18)
+- ✅ **Newsletter System Enhancement** - Implemented comprehensive newsletter signup with database storage and email automation
+  - ✅ **Database Storage**: Replaced console-only logging with proper database storage using existing `newsletter_subscribers` schema
+  - ✅ **Email Automation**: Added newsletter confirmation email type with branded Healios HTML template
+  - ✅ **Duplicate Prevention**: Implemented email address validation and duplicate subscription prevention
+  - ✅ **Error Handling**: Added comprehensive validation for email format, required fields, and server errors
+  - ✅ **Email Template**: Professional welcome email with Healios branding, subscriber details, and unsubscribe instructions
+  - ✅ **API Integration**: Fully tested `/api/newsletter/subscribe` endpoint with 200 success responses
+  - ✅ **Status**: Newsletter system operational with database persistence and automated confirmation emails
+
 ## Recent Changes (2025-08-18)
 - ✅ **LEGACY CODE CLEANUP COMPLETE** - Comprehensive cleanup following forensic audit recommendations
 - ✅ **Documentation Consolidation** - Removed 46 legacy markdown files (88% reduction), kept 6 essential files for cleaner project structure
@@ -64,7 +74,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - **Text Processing**: Comprehensive text formatting system for markdown, bullets, and special characters.
 - **Authentication System**: Unified email PIN authentication for both customers and admins using Resend API. Users/admins enter their email address and receive a 6-digit PIN via email for verification. PIN expires after 5 minutes with max 3 attempts. Session-based authentication using express-session with memory store for session persistence. **Admin Access**: Only whitelisted admin emails (dn@thefourths.com, jv@thefourths.com) can authenticate as admins using the same PIN flow. **Development Mode**: PINs are sent to admin emails (dn@thefourths.com, jv@thefourths.com) for testing with cross-session PIN storage fallback, production sends to individual users. **Status**: ✅ Fully operational and tested. **Production Email System**: ✅ CONFIRMED WORKING - PIN authentication emails are being delivered successfully in both development and production modes (January 17, 2025).
 - **Google Maps Integration**: Complete South African address handling with Google Places autocomplete functionality. Two-key security setup with separate frontend (Google Maps JavaScript API) and backend (Address Validation API) keys for optimal security. Uses classic "Places API" (not Places API New) which provides real-time address suggestions and auto-fill for South African addresses with province mapping. Manual address entry available as fallback with comprehensive form validation. **Status**: ✅ Google Places autocomplete fully operational using Places API - successfully showing real SA addresses. Address Validation API disabled for SA as requested.
-- **Email Integration**: ✅ EMAILS ENABLED - Complete Resend API integration with fully branded Healios email templates. All email types (PIN authentication, order confirmations, abandoned cart recovery, reorder reminders, admin alerts, and referral notifications) now feature consistent Healios brand design with gradient colors (purple, magenta, blue, cyan, teal), modern Inter font typography, professional layout, and mobile-responsive design. Development mode sends PINs to admin emails for testing while production sends to individual users. Email templates tested and confirmed working with proper branding.
+- **Email Integration**: ✅ EMAILS ENABLED - Complete Resend API integration with fully branded Healios email templates. All email types (PIN authentication, order confirmations, abandoned cart recovery, reorder reminders, admin alerts, newsletter confirmations, and referral notifications) now feature consistent Healios brand design with gradient colors (purple, magenta, blue, cyan, teal), modern Inter font typography, professional layout, and mobile-responsive design. Development mode sends PINs to admin emails for testing while production sends to individual users. Email templates tested and confirmed working with proper branding. Newsletter confirmation emails include welcome content, subscriber details, and expected newsletter content overview.
 - **Production Payment Processing**: Live Stripe integration with production keys for real payment processing.
 - **Session Management**: Secure session handling with SESSION_SECRET for user authentication and security.
 - **Performance Optimization**: Comprehensive caching system with 98% performance improvement - product API responses reduced from 18+ seconds to 344ms.
@@ -76,7 +86,7 @@ The application employs a monorepo structure, separating client, server, and sha
 - Product display with detailed information, images, pricing, and nutritional data.
 - Shopping cart with item count badge and sidebar design.
 - Secure checkout process with order confirmation.
-- Newsletter signup functionality.
+- **Newsletter System**: Complete newsletter subscription functionality with database storage, email validation, duplicate prevention, and automated confirmation emails featuring branded Healios templates.
 - Comprehensive wellness quiz for personalized recommendations.
 - Customer reviews section with category filtering.
 - "Better Together" product bundle recommendations with dynamic pricing.

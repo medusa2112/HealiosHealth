@@ -5,7 +5,7 @@ const isEmailEnabled = true;
 
 export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "newsletter_confirmation";
 
 interface EmailData {
   amount?: number;
@@ -61,6 +61,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     refund: "Your Healios Refund Has Been Processed",
     reorder: "Your Healios Reorder Is Complete",
     admin_alert: "⚠️ Healios Admin Alert",
+    newsletter_confirmation: "Welcome to Healios Newsletter! 🌟",
   };
 
   const healiosEmailTemplate = (title: string, content: string, footerNote?: string) => `
@@ -210,6 +211,38 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         <p style="margin: 24px 0 0 0; font-size: 16px; color: #000000;">Please review this alert immediately and take appropriate action if necessary.</p>
       `,
       "This is an automated alert from the Healios system monitoring."
+    ),
+    newsletter_confirmation: (data) => healiosEmailTemplate(
+      "Welcome to Healios Newsletter!",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">Hi ${data.firstName},</p>
+        
+        <p style="margin: 0 0 24px 0; font-size: 16px; color: #000000;">Thank you for subscribing to the Healios newsletter! 🌟 We're excited to have you join our wellness community.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #000000;">🎉 Welcome to Healios!</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Subscriber:</strong> ${data.firstName} ${data.lastName}</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Email:</strong> ${data.email}</p>
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Status:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 500;">✅ Confirmed</span></p>
+          </div>
+        </div>
+        
+        <div style="background-color: #f0f9ff; border: 2px solid #38bdf8; border-radius: 8px; padding: 20px; margin: 24px 0;">
+          <p style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #000000;">What to expect from our newsletter:</p>
+          <ul style="margin: 0; padding-left: 20px; color: #000000;">
+            <li style="margin-bottom: 8px; font-size: 15px;">💊 Latest product launches and wellness insights</li>
+            <li style="margin-bottom: 8px; font-size: 15px;">🔬 Science-backed health tips and research updates</li>
+            <li style="margin-bottom: 8px; font-size: 15px;">🎁 Exclusive offers and subscriber-only discounts</li>
+            <li style="margin-bottom: 0; font-size: 15px;">📚 Educational content about supplements and nutrition</li>
+          </ul>
+        </div>
+        
+        <p style="margin: 24px 0; font-size: 16px; color: #000000;">Keep an eye on your inbox for our next newsletter featuring exciting updates about premium wellness supplements designed to support your health journey.</p>
+        
+        <p style="margin: 0; font-size: 16px; color: #000000;">Thank you for choosing Healios for your wellness needs! 💚</p>
+      `,
+      "You can unsubscribe from our newsletter at any time by replying to this email with 'UNSUBSCRIBE' in the subject line."
     ),
   };
 

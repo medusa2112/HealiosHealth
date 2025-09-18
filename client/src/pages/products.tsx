@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { type Product } from "@shared/schema";
 import { ProductCard } from "@/components/product-card";
 import { SEOHead } from "@/components/seo-head";
@@ -9,15 +10,70 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 
 export default function Products() {
+  const [location] = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("name");
+
+  // Map URL filter parameters to database category names
+  const mapFilterToCategory = (filterParam: string): string => {
+    const categoryMap: Record<string, string> = {
+      'gummies': 'gummies',
+      'vitamins': 'vitamins', 
+      'adaptogens': 'adaptogens',
+      'probiotics': 'probiotics',
+      'minerals': 'minerals',
+      'beauty': 'beauty',
+      'womens-health': 'prenatal' // Map women's health to prenatal category
+    };
+    
+    return categoryMap[filterParam] || filterParam;
+  };
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
     staleTime: 5 * 60 * 1000, // 5 minutes cache for products
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
+
+  // Parse URL parameters reliably using window.location.search
+  const parseUrlParameters = useCallback(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    
+    if (filterParam) {
+      const mappedCategory = mapFilterToCategory(filterParam);
+      setSelectedCategory(mappedCategory);
+    } else {
+      setSelectedCategory('All');
+    }
+  }, []);
+
+  // Process URL parameters on component mount and handle navigation changes
+  useEffect(() => {
+    // Initial parse of URL parameters
+    parseUrlParameters();
+
+    // Listen for browser navigation changes (back/forward buttons)
+    const handlePopState = () => {
+      parseUrlParameters();
+    };
+
+    // Listen for hash changes (though this is more for future extensibility)
+    const handleHashChange = () => {
+      parseUrlParameters();
+    };
+
+    // Add event listeners
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [parseUrlParameters]);
 
   // Dynamically generate categories from actual products in database - memoized for performance
   const categories = useMemo(() => {
