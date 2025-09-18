@@ -154,7 +154,15 @@ export default function ProductDetail() {
     ]
   } : product?.id === 'vitamin-d3' ? {
     nutrient: [
-      { name: 'Vitamin D3 (Cholecalciferol)', amount: '4000 IU (100μg)', nrv: '2000' },
+      { name: 'Vitamin D3 (cholecalciferol)', amount: '100 µg (4000 IU)', nrv: '2000' },
+      { name: 'Energy', amount: '8 kcal (34.07 kJ)', nrv: '' },
+      { name: 'Carbohydrates', amount: '2.02 g', nrv: '' },
+      { name: '- of which sugars', amount: '1.63 g', nrv: '' },
+      { name: 'Protein', amount: '0.01 g', nrv: '' },
+      { name: 'Fat', amount: '0.01 g', nrv: '' },
+      { name: '- of which saturates', amount: '0 g', nrv: '' },
+      { name: 'Fibre', amount: '0.05 g', nrv: '' },
+      { name: 'Salt', amount: '0.01 g', nrv: '' },
     ]
   } : {
     nutrient: []
@@ -258,28 +266,28 @@ export default function ProductDetail() {
     }
   ] : product?.id === 'vitamin-d3' ? [
     {
-      question: "Why do I need vitamin D3 supplementation?",
-      answer: "In the UK, limited sunlight exposure from October to March makes it difficult to maintain adequate vitamin D levels naturally. The NHS recommends supplementation for most people during these months to support immune function and bone health."
+      question: "Why 4000 IU?",
+      answer: "This is a high-strength therapeutic dose (2000% NRV), ideal for maintaining healthy vitamin D levels in adults, especially where sunlight exposure is limited."
     },
     {
-      question: "What's the difference between D2 and D3?",
-      answer: "Vitamin D3 (cholecalciferol) is the same form your skin produces from sunlight and is more effective at raising and maintaining vitamin D blood levels compared to D2 (ergocalciferol)."
+      question: "Can children take these gummies?",
+      answer: "No, these gummies are formulated for adults only. For children, seek age-appropriate vitamin D supplements."
     },
     {
-      question: "Is 4000 IU safe for daily use?",
-      answer: "Yes, 4000 IU is well within safe limits for adults and teens 12+. The tolerable upper limit is 10,000 IU daily. Our dosage provides therapeutic benefits while maintaining a wide safety margin."
+      question: "When is the best time to take Vitamin D3?",
+      answer: "Any time of day, with or without food. Consistency matters more than timing."
     },
     {
-      question: "When should I take vitamin D3?",
-      answer: "Take with a meal containing some fat for optimal absorption, as vitamin D is fat-soluble. Morning or lunch is ideal, as taking it late in the day may interfere with sleep for some people."
+      question: "Are these suitable for vegetarians?",
+      answer: "Suitable for vegetarians; not suitable for vegans. Vitamin D3 is sourced from lanolin (sheep's wool)."
     },
     {
-      question: "How long before I see benefits?",
-      answer: "Vitamin D levels typically improve within 4-6 weeks of consistent supplementation. Immune and mood benefits may be noticed within 2-4 weeks, while bone health benefits occur over months of consistent use."
+      question: "Can I take this with a multivitamin?",
+      answer: "Yes, but check your multivitamin's vitamin D content to avoid exceeding 4000 IU daily. Consult your healthcare provider if unsure."
     },
     {
-      question: "Should I get my vitamin D levels tested?",
-      answer: "While not essential, testing can help confirm your starting levels and track improvement. Optimal blood levels are generally considered to be 75-125 nmol/L (30-50 ng/mL)."
+      question: "Are they safe for long-term use?",
+      answer: "Yes, when taken at the recommended dose. Always consult your healthcare professional if taking other supplements or medications."
     }
   ] : [
     {
@@ -313,10 +321,24 @@ export default function ProductDetail() {
     'Magnesium Stearate',
     'Silicon Dioxide',
     'Pyridoxine HCl (Vitamin B6)'
+  ] : product?.id === 'vitamin-d3' ? [
+    'Glucose Syrup',
+    'Sugar',
+    'Water',
+    'Pectin (Gelling Agent)',
+    'Citric Acid (Acid)',
+    'Sodium Citrate (Acidity Regulator)',
+    'Cholecalciferol (Vitamin D3, from lanolin)',
+    'Coconut Oil',
+    'Carnauba Wax (Anti-sticking Agent)',
+    'Natural Orange Flavour',
+    'Paprika Extract (Natural Colouring)'
   ] : [];
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
     "Adults: Take 1 capsule, 1–3 times per day with water. Do not exceed the recommended daily amount." 
+    : product?.id === 'vitamin-d3' ?
+    "Adults: Take 1 gummy daily.\n\nChew thoroughly before swallowing (do not swallow whole).\n\nDo not exceed the recommended daily dose.\n\nBest taken consistently year-round, especially in winter months.\n\nNot recommended for children.\nThese are adult-strength gummies (4000 IU). The label only provides adult directions: 1 gummy daily"
     : "";
 
   return (
@@ -694,6 +716,63 @@ export default function ProductDetail() {
             <p className="text-sm text-gray-700 dark:text-gray-300">
               {howToTake}
             </p>
+          </div>
+        )}
+
+        {/* Additional Information Section - Only for vitamin-d3 */}
+        {product?.id === 'vitamin-d3' && (
+          <div className="mb-16">
+            <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">Other Key Information</h2>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium text-gray-900 dark:text-white">Third-Party Tested</span>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">for purity, potency, and heavy metals.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium text-gray-900 dark:text-white">No Artificial Nasties</span>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">free from artificial colours, flavours, and preservatives.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium text-gray-900 dark:text-white">Sustainable Sourcing</span>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">responsibly sourced ingredients.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-medium text-gray-900 dark:text-white">Storage</span>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">Store in a cool, dry, dark place below 25°C. Keep out of reach of children.</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Safety & Disclaimers Section */}
+            <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 border-l-4 border-gray-300 dark:border-gray-600">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Safety & Disclaimers</h3>
+              <div className="space-y-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p>
+                  <span className="font-medium">Important:</span> This product is not intended to diagnose, treat, cure, or prevent any disease. 
+                  Food supplements should not be used as a substitute for a varied, balanced diet and healthy lifestyle.
+                </p>
+                <p>
+                  <span className="font-medium">Keep out of reach of children.</span>
+                </p>
+                <p>
+                  <span className="font-medium">Consult a healthcare professional</span> if pregnant, breastfeeding, or taking medication.
+                </p>
+                <p>
+                  <span className="font-medium">Do not exceed a total of 100 µg/day vitamin D without medical advice.</span>
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
