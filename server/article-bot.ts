@@ -179,7 +179,7 @@ export class ArticleBot {
     
     while (attempts < maxRetries) {
       try {
-        `);
+        console.log(`Generating article for topic: ${topic}`);
         
         // Step 1: Gather research
         const research = await this.gatherResearch(topic);
@@ -193,7 +193,7 @@ export class ArticleBot {
         }
         
         if (research.content.length < 100) {
-          
+          console.warn('Limited research data available');
         }
         
         // Step 4: Extract metadata
@@ -213,7 +213,7 @@ export class ArticleBot {
         
       } catch (error) {
         attempts++;
-        // // console.error(`Article generation attempt ${attempts} failed:`, error);
+        console.error(`Article generation attempt ${attempts} failed:`, error);
         
         if (attempts >= maxRetries) {
           throw new Error(`Failed to generate article after ${maxRetries} attempts: ${error}`);
@@ -242,11 +242,11 @@ export class ArticleBot {
         
         // Rate limit: wait 30 seconds between articles
         if (articles.length < maxCount) {
-          
+          console.log('Waiting 30 seconds before next article...');
           await new Promise(resolve => setTimeout(resolve, 30000));
         }
       } catch (error) {
-        // // console.error(`Failed to create article for topic: ${topic}`, error);
+        console.error(`Failed to create article for topic: ${topic}`, error);
         // Continue with next topic
       }
     }
