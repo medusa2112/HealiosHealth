@@ -103,7 +103,7 @@ const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURICom
     
     <!-- Strength highlight -->
     <rect x="38" y="215" width="44" height="18" rx="9" fill="#8b5cf6" opacity="0.1"/>
-    <text x="60" y="227" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#374151">600mg</text>
+    <text x="60" y="227" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#374151">500mg</text>
     
     <!-- Count and supply info -->
     <text x="60" y="250" font-family="system-ui, sans-serif" font-size="8" font-weight="600" text-anchor="middle" fill="#8b5cf6">60 CAPSULES</text>
@@ -774,7 +774,7 @@ export default function ProductComprehensive() {
         };
       case 'magnesium':
         return {
-          bundleWith: 'Ashwagandha 300mg Gummies (Strawberry Flavour)',
+          bundleWith: 'Ashwagandha KSM-66 500mg Vegetarian Capsules',
           bundlePrice: 'R1003.38',
           bundleOriginalPrice: 'R1385.62',
           sectionTitle: 'THE RELAXATION MINERAL',
@@ -1788,15 +1788,14 @@ export default function ProductComprehensive() {
                             </div>
                           ) : product.id === 'ashwagandha' ? (
                             <div>
-                              <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
+                              <p className="font-medium mb-2">Per capsule ingredients:</p>
                               <ul className="space-y-1 text-sm">
-                                <li>• Ashwagandha root extract (Withania somnifera) - 300mg standardized to 5% withanolides</li>
-                                <li>• Natural strawberry flavoring</li>
-                                <li>• Pectin (vegan gelling agent)</li>
-                                <li>• Natural colors and sweeteners</li>
-                                <li>• Gluten-free, gelatin-free formulation</li>
+                                <li>• KSM-66® Ashwagandha root extract (Withania somnifera) - 500mg</li>
+                                <li>• Rice bran (bulking agent)</li>
+                                <li>• Capsule shell: Hydroxypropyl Methylcellulose (HPMC)</li>
+                                <li>• No artificial colors, flavors, or preservatives</li>
                               </ul>
-                              <p className="mt-2 text-sm text-gray-600">Vegan formulation suitable for daily use. Traditional Ayurvedic herb with 3,000+ years of traditional wellness use.</p>
+                              <p className="mt-2 text-sm text-gray-600">Vegan capsule formulation. Traditional adaptogenic herb. No EFSA health claims are authorised for Ashwagandha – general wellbeing support only.</p>
                             </div>
                           ) : product.id === 'apple-cider-vinegar' ? (
                             <div>
