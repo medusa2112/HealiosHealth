@@ -34,7 +34,7 @@ export class QuizRecommendationService {
     if (primaryGoal === 'Better sleep quality' || (improvementAreas && improvementAreas.includes('Sleep quality'))) {
       recommendations.push({
         productId: 'magnesium-bisglycinate-b6',
-        productName: 'Magnesium Complex Capsules — 375mg Magnesium + B6 (120 Vegan Capsules)',
+        productName: 'Magnesium Complex with B6 — Bisglycinate, Malate & Taurate (120 Vegan Capsules)',
         reason: 'Magnesium plays a crucial role in sleep regulation and muscle relaxation, helping you achieve deeper, more restorative sleep naturally.',
         medicalBasis: 'Clinical studies demonstrate that magnesium supplementation significantly improves sleep quality, reduces sleep onset time, and increases sleep efficiency. Magnesium regulates melatonin production and activates the parasympathetic nervous system.',
         researchCitations: [
