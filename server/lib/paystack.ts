@@ -1,11 +1,207 @@
 import fetch from 'node-fetch';
 import crypto from 'crypto';
+import { ENV } from '../config/env';
+
+// PayStack API response interfaces
+interface PayStackBaseResponse {
+  status: boolean;
+  message: string;
+  data?: any;
+}
+
+interface PayStackTransactionResponse extends PayStackBaseResponse {
+  data: {
+    authorization_url: string;
+    access_code: string;
+    reference: string;
+  };
+}
+
+interface PayStackVerificationResponse extends PayStackBaseResponse {
+  data: {
+    id: number;
+    domain: string;
+    status: string;
+    reference: string;
+    amount: number;
+    message: string | null;
+    gateway_response: string;
+    paid_at: string;
+    created_at: string;
+    channel: string;
+    currency: string;
+    ip_address: string;
+    metadata: any;
+    log: any;
+    fees: number;
+    fees_split: any;
+    authorization: {
+      authorization_code: string;
+      bin: string;
+      last4: string;
+      exp_month: string;
+      exp_year: string;
+      channel: string;
+      card_type: string;
+      bank: string;
+      country_code: string;
+      brand: string;
+      reusable: boolean;
+      signature: string;
+    };
+    customer: {
+      id: number;
+      first_name: string | null;
+      last_name: string | null;
+      email: string;
+      customer_code: string;
+      phone: string | null;
+      metadata: any;
+      risk_action: string;
+    };
+    plan: any;
+    subaccount: any;
+  };
+}
+
+interface PayStackPlanResponse extends PayStackBaseResponse {
+  data: {
+    name: string;
+    amount: number;
+    interval: string;
+    integration: number;
+    domain: string;
+    plan_code: string;
+    send_invoices: boolean;
+    send_sms: boolean;
+    currency: string;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+interface PayStackSubscriptionResponse extends PayStackBaseResponse {
+  data: {
+    customer: number;
+    plan: number;
+    integration: number;
+    domain: string;
+    start: number;
+    status: string;
+    quantity: number;
+    amount: number;
+    subscription_code: string;
+    email_token: string;
+    authorization: {
+      authorization_code: string;
+      bin: string;
+      last4: string;
+      exp_month: string;
+      exp_year: string;
+      channel: string;
+      card_type: string;
+      bank: string;
+      country_code: string;
+      brand: string;
+      reusable: boolean;
+      signature: string;
+    };
+    easy_cron_id: string | null;
+    cron_expression: string;
+    next_payment_date: string;
+    open_invoice: string | null;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+interface PayStackCustomerResponse extends PayStackBaseResponse {
+  data: {
+    email: string;
+    integration: number;
+    domain: string;
+    customer_code: string;
+    id: number;
+    identified: boolean;
+    identifications: any;
+    createdAt: string;
+    updatedAt: string;
+    first_name: string | null;
+    last_name: string | null;
+    phone: string | null;
+    metadata: any;
+  };
+}
+
+interface PayStackRefundResponse extends PayStackBaseResponse {
+  data: {
+    transaction: {
+      id: number;
+      domain: string;
+      reference: string;
+      amount: number;
+      paid_at: string;
+      channel: string;
+      currency: string;
+      authorization: any;
+      customer: any;
+      plan: any;
+    };
+    integration: number;
+    deducted_amount: number;
+    channel: string | null;
+    merchant_note: string;
+    customer_note: string;
+    status: string;
+    refunded_by: string;
+    expected_at: string;
+    currency: string;
+    domain: string;
+    amount: number;
+    fully_deducted: boolean;
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+interface PayStackTransactionListResponse extends PayStackBaseResponse {
+  data: Array<{
+    id: number;
+    domain: string;
+    status: string;
+    reference: string;
+    amount: number;
+    message: string | null;
+    gateway_response: string;
+    paid_at: string;
+    created_at: string;
+    channel: string;
+    currency: string;
+    ip_address: string;
+    metadata: any;
+    log: any;
+    fees: number;
+    customer: any;
+    authorization: any;
+    plan: any;
+  }>;
+  meta: {
+    total: number;
+    skipped: number;
+    perPage: number;
+    page: number;
+    pageCount: number;
+  };
+}
 
 // PayStack API configuration
 const PAYSTACK_BASE_URL = 'https://api.paystack.co';
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || '';
+const PAYSTACK_SECRET_KEY = ENV.PAYSTACK_SECRET;
 
-if (!PAYSTACK_SECRET_KEY && process.env.NODE_ENV === 'production') {
+if (!PAYSTACK_SECRET_KEY && ENV.isProd) {
   console.warn('PayStack Secret Key not configured. Payment processing will not work.');
 }
 
@@ -43,7 +239,7 @@ export class PayStackAPI {
       })
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackTransactionResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to initialize transaction');
@@ -59,7 +255,7 @@ export class PayStackAPI {
       headers: this.getHeaders()
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackVerificationResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to verify transaction');
@@ -81,7 +277,7 @@ export class PayStackAPI {
       body: JSON.stringify(params)
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackPlanResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to create plan');
@@ -102,7 +298,7 @@ export class PayStackAPI {
       body: JSON.stringify(params)
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackSubscriptionResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to create subscription');
@@ -118,7 +314,7 @@ export class PayStackAPI {
       headers: this.getHeaders()
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackSubscriptionResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to get subscription');
@@ -138,7 +334,7 @@ export class PayStackAPI {
       })
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackBaseResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to cancel subscription');
@@ -161,7 +357,7 @@ export class PayStackAPI {
       body: JSON.stringify(params)
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackCustomerResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to create customer');
@@ -177,7 +373,7 @@ export class PayStackAPI {
       headers: this.getHeaders()
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackCustomerResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to get customer');
@@ -200,7 +396,7 @@ export class PayStackAPI {
       body: JSON.stringify(params)
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackRefundResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to process refund');
@@ -245,7 +441,7 @@ export class PayStackAPI {
       headers: this.getHeaders()
     });
     
-    const data = await response.json();
+    const data = await response.json() as PayStackTransactionListResponse;
     
     if (!response.ok) {
       throw new Error(data.message || 'Failed to list transactions');

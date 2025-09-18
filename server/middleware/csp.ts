@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import { ENV } from '../config/env';
 
 /**
  * Content Security Policy middleware for production security
  */
 export function contentSecurityPolicy(req: Request, res: Response, next: NextFunction) {
   // Development CSP - more permissive for hot reload
-  if (process.env.NODE_ENV === 'development') {
+  if (ENV.isDev) {
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://replit.com https://maps.googleapis.com ws: wss:",

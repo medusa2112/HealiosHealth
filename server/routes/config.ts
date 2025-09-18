@@ -1,11 +1,12 @@
 import express from 'express';
+import { ENV } from '../config/env';
 
 const router = express.Router();
 
 // Get Google Maps API key for frontend  
 router.get('/google-maps-key', (req, res) => {
-  // Use the browser key for frontend JavaScript API (Maps JavaScript API)
-  const apiKey = process.env.GOOGLE_MAPS_BROWSER_KEY || process.env.ENV_GOOGLE_MAPS_API_KEY;
+  // Use the centralized configuration for Google Maps API key
+  const apiKey = ENV.GOOGLE_MAPS_BROWSER_KEY;
   
   if (!apiKey) {
     

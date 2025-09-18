@@ -1,9 +1,10 @@
 import { Resend } from "resend";
+import { ENV } from '../config/env';
 
 // Email service configuration
 const isEmailEnabled = true;
 
-export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+export const resend = ENV.RESEND_API_KEY ? new Resend(ENV.RESEND_API_KEY) : null;
 
 export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "newsletter_confirmation";
 
