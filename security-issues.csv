@@ -1,0 +1,67 @@
+ID,Type,Description,Severity,File,Line,Snippet,Fixed
+wzb5EbdT7OM7vQ,unvalidatedInput,Request data destructured without validation,critical,server/middleware/paymentSecurity.ts,181,"const { amount, currency = 'ZAR', email } = req.body;",false
+3yK14eypc0TbDQ,unvalidatedInput,Request data destructured without validation,critical,server/middleware/paymentSecurity.ts,319,"const { amount, currency, email } = req.body;",false
+s5myApkTyu8E1w,unauthRoute,Route missing authentication middleware,high,server/routes/addressValidation.ts,36,"router.post('/validate', bypassCSRFForDev);",false
+tOCMcxyh4UK29w,unauthRoute,Route missing authentication middleware,high,server/routes/addressValidation.ts,39,"router.post('/validate', async (req, res) => {",false
+VM3H3shBpnPG_Q,unauthRoute,Route missing authentication middleware,high,server/routes/addressValidation.ts,74,"router.post('/validate-postal', bypassCSRF, async (req, res) => {",false
+2f7Ft6ZEGlI7kg,unvalidatedInput,Request data destructured without validation,critical,server/routes/addressValidation.ts,76,"const { postalCode, country } = req.body;",false
+W1bDIAsIVwARvA,duplicateRoute,Duplicate route definition,medium,server/routes/addressValidation.ts,39,"router.post('/validate', async (req, res) => {",false
+oaQ2OxH_09OFHg,unauthRoute,Route missing authentication middleware,high,server/routes/aiAssistant.ts,35,"router.post(""/chat"", async (req, res) => {",false
+8Y6D8iV2QY2FqQ,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,87,"router.post('/register', loginLimiter, async (req, res) => {",false
+XDk0-nSIch_OSw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,150,"router.post('/login', loginLimiter, async (req, res) => {",false
+Qv5XPHXMPqUGVw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,241,"router.post('/logout', async (req, res) => {",false
+dNDObsxH2LPJYQ,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,268,"router.post('/verify-registration', loginLimiter, async (req, res) => {",false
+_07X-l_VFjWa0g,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,349,"router.post('/verify-login', loginLimiter, async (req, res) => {",false
+zbkIQ0b_SiFLpg,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,434,"router.get('/me', async (req, res) => {",false
+PqHeRm2gTyHJdw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,514,"router.post('/logout', async (req, res) => {",false
+F95ISYBPFG4cIQ,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,540,"router.post('/mock-login', loginLimiter, async (req, res) => {",false
+A13WcZRfJVPgYA,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,614,"router.get('/callback', async (req, res) => {",false
+qP5bSX8QjtvXqw,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,633,"router.post('/demo-admin-login', loginLimiter, async (req, res) => {",false
+C7RlBSB2W2EO9g,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,676,"router.post('/forgot-password', loginLimiter, async (req, res) => {",false
+FrvMazpju1Rkdg,unauthRoute,Route missing authentication middleware,high,server/routes/auth.ts,738,"router.post('/reset-password', loginLimiter, async (req, res) => {",false
+QyGHqYSmAloOAQ,duplicateRoute,Duplicate route definition,medium,server/routes/auth.ts,87,"router.post('/register', loginLimiter, async (req, res) => {",false
+kUjIPCzuSH9mKQ,duplicateRoute,Duplicate route definition,medium,server/routes/auth.ts,150,"router.post('/login', loginLimiter, async (req, res) => {",false
+blZWN4NDlCBwoQ,duplicateRoute,Duplicate route definition,medium,server/routes/auth.ts,514,"router.post('/logout', async (req, res) => {",false
+9Y3tst94AgZM7w,unauthRoute,Route missing authentication middleware,high,server/routes/cart.ts,9,"router.post(""/sync"", rateLimit(20, 60000), async (req, res) => {",false
+OMr_pNhxfYZdAQ,unauthRoute,Route missing authentication middleware,high,server/routes/config.ts,6,"router.get('/google-maps-key', (req, res) => {",false
+nV_DRu7hkMWfjg,unauthRoute,Route missing authentication middleware,high,server/routes/contact.ts,17,"router.post('/', rateLimit(5, 300000), async (req, res) => {",false
+mNOQe1w3dWrk1Q,unauthRoute,Route missing authentication middleware,high,server/routes/csrf.ts,38,"router.get('/', (req: CSRFRequest, res: Response) => {",false
+bsYWgsLLas8_Jw,unauthRoute,Route missing authentication middleware,high,server/routes/csrf.ts,60,"router.get('/token', (req: CSRFRequest, res: Response) => {",false
+0CtqiO9H6XTKEw,unauthRoute,Route missing authentication middleware,high,server/routes/documentation.ts,7,"router.post('/email-guide', async (req, res) => {",false
+Ps-CyMKDkKFllw,unvalidatedInput,Request data destructured without validation,critical,server/routes/documentation.ts,9,"const { recipients, documentPath, subject, description } = req.body;",false
+VRmsKqap0MSt0g,unvalidatedInput,Request data destructured without validation,critical,server/routes/email-test.ts,10,"const { type, email, testData } = req.body;",false
+WTEw_sB-5oc7CQ,unauthRoute,Route missing authentication middleware,high,server/routes/health.ts,6,"router.get('/health/auth', (req, res) => {",false
+oDmujqbWdmEvbw,unauthRoute,Route missing authentication middleware,high,server/routes/health.ts,61,"router.get('/health', (req, res) => {",false
+5MSxa3OUK992Uw,unauthRoute,Route missing authentication middleware,high,server/routes/newsletter.ts,13,"router.post('/subscribe', newsletterLimiter, async (req, res) => {",false
+NrWrI94ZpADJTw,unauthRoute,Route missing authentication middleware,high,server/routes/orderClaim.ts,19,"router.post('/claim', requireCustomer, async (req, res) => {",false
+MB-karPF-2ketg,unauthRoute,Route missing authentication middleware,high,server/routes/paystack.ts,25,"router.post(""/webhook"",",false
+19zutPvXl9C72w,unauthRoute,Route missing authentication middleware,high,server/routes/paystack.ts,370,"router.post(""/create-checkout"",",false
+WU2BuDreqowc1g,unauthRoute,Route missing authentication middleware,high,server/routes/paystack.ts,434,"router.get(""/verify/:reference"",",false
+_1cf3KCDXkhtZw,unauthRoute,Route missing authentication middleware,high,server/routes/paystack.ts,480,"router.post(""/refund"",",false
+qH0Jos_ZvrpIhw,unvalidatedInput,Request data destructured without validation,critical,server/routes/paystack.ts,438,"const { reference } = req.params;",false
+1M6Kq1tiszmShw,unvalidatedInput,Request data destructured without validation,critical,server/routes/paystack.ts,484,"const { reference, amount, reason } = req.body;",false
+UA73mXT9J5NuBw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,14,"router.get(""/orders"", async (req, res) => {",false
+M51aH-hHhIZCYA,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,38,"router.get(""/orders/:id"", async (req, res) => {",false
+EI4Z_PDoCRVSpw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,73,"router.post(""/orders/:id/reorder"", async (req, res) => {",false
+CDM_fYMfk9MzbQ,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,209,"router.get(""/addresses"", async (req, res) => {",false
+cszHfQjD6fwvRQ,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,221,"router.post(""/addresses"", async (req, res) => {",false
+nr_DWvwDgiLOHQ,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,259,"router.put(""/addresses/:id"", async (req, res) => {",false
+5POzJnCgZC3wMw,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,307,"router.delete(""/addresses/:id"", async (req, res) => {",false
+OBsV7OsmHAfJVA,unauthRoute,Route missing authentication middleware,high,server/routes/portal.ts,341,"router.get(""/"", async (req, res) => {",false
+ZqhAoDL8otsN7Q,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,221,"router.post(""/addresses"", async (req, res) => {",false
+IJSNu7dA9AHYMA,duplicateRoute,Duplicate route definition,medium,server/routes/portal.ts,307,"router.delete(""/addresses/:id"", async (req, res) => {",false
+ISKoxb0Z5SN0zw,unauthRoute,Route missing authentication middleware,high,server/routes/restock-notifications.ts,18,"router.post('/', async (req, res) => {",false
+TYawQUf0YFt8ow,unauthRoute,Route missing authentication middleware,high,server/routes/reviews.ts,20,"router.post('/', rateLimit(3, 300000), async (req, res) => {",false
+66Cd4r0T-m_zLA,unauthRoute,Route missing authentication middleware,high,server/routes/reviews.ts,61,"router.get('/product/:productId', async (req, res) => {",false
+9C45j90-ZuDibg,unvalidatedInput,Request data destructured without validation,critical,server/routes/reviews.ts,63,"const { productId } = req.params;",false
+rVfmag32nKPGWg,unauthRoute,Route missing authentication middleware,high,server/routes/security-audit.ts,13,"router.get('/audit', requireAdmin, async (req, res) => {",false
+CYESPTnYXfY77A,unauthRoute,Route missing authentication middleware,high,server/routes/security-audit.ts,41,"router.post('/fix-log', requireAdmin, async (req, res) => {",false
+_i_l4FFhjTmE6g,unauthRoute,Route missing authentication middleware,high,server/routes/seo.ts,8,"router.get(""/sitemap.xml"", async (req, res) => {",false
+QoBTcYWUiBOGuA,unauthRoute,Route missing authentication middleware,high,server/routes/seo.ts,55,"router.get(""/robots.txt"", (req, res) => {",false
+a-SM9tcNcHpqsQ,unauthRoute,Route missing authentication middleware,high,server/routes/subscriptions.ts,24,"router.post(""/checkout"",",false
+V4ElH7v6jds4yQ,unvalidatedInput,Request data destructured without validation,critical,server/routes/subscriptions.ts,127,"const { id } = req.params;",false
+5aDzlh_EDdkW5Q,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,439,"const { id } = req.params;",false
+d84ZnDdWIj9vjg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,450,"const { id } = req.params;",false
+UmuuhcdnqhfCdg,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,464,"const { id } = req.params;",false
+Y4DO0_CTPl-tuQ,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,689,"const { items } = req.query;",false
+OImFrTyf_GV85A,unvalidatedInput,Request data destructured without validation,critical,server/routes.ts,1219,"const { returnUrl } = req.body;",false

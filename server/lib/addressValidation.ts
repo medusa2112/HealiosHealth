@@ -1,5 +1,12 @@
-import fetch from 'node-fetch';
+import fetch, { AbortError } from 'node-fetch';
 import { logger } from './logger';
+
+// Network error types for better error handling
+interface NetworkError extends Error {
+  code?: string;
+  status?: number;
+  type?: string;
+}
 
 interface GoogleAddressValidationResponse {
   result: {
@@ -77,6 +84,8 @@ interface AddressValidationResult {
 export class AddressValidationService {
   private apiKey: string;
   private baseUrl = 'https://addressvalidation.googleapis.com/v1:validateAddress';
+  private readonly defaultTimeout = 10000; // 10 seconds timeout
+  private readonly retryAttempts = 2;
 
   constructor() {
     // Use server key for backend Address Validation API calls
@@ -117,6 +126,12 @@ export class AddressValidationService {
       };
     }
 
+    // Create AbortController for timeout protection
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => {
+      abortController.abort();
+    }, this.defaultTimeout);
+
     try {
       // Google Address Validation API for non-ZA countries
       const requestBody = {
@@ -132,15 +147,25 @@ export class AddressValidationService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
+        signal: abortController.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.status}`);
+        const errorMessage = `API request failed with status ${response.status}: ${response.statusText}`;
+        logger.warn('ADDRESS_VALIDATION', errorMessage, { 
+          status: response.status, 
+          statusText: response.statusText,
+          addressLines 
+        });
+        throw new Error(errorMessage);
       }
 
       const data = await response.json() as GoogleAddressValidationResponse;
 
       if (!data.result) {
+        logger.warn('ADDRESS_VALIDATION', 'No result returned from API', { addressLines });
         return {
           isValid: false,
           confidence: 'low',
@@ -155,7 +180,7 @@ export class AddressValidationService {
       // Determine confidence based on validation granularity and completeness
       const confidence = this.determineConfidence(verdict);
 
-      // Map address components to structured format for South Africa
+      // Map address components to structured format
       const structuredAddress = this.mapToStructuredAddress(address);
 
       return {
@@ -170,11 +195,40 @@ export class AddressValidationService {
       };
 
     } catch (error) {
-      logger.error('ADDRESS_VALIDATION', 'Failed to validate address', { error, addressLines });
+      clearTimeout(timeoutId);
+      
+      const networkError = error as NetworkError;
+      let errorMessage = 'Address validation service temporarily unavailable';
+      let logLevel: 'error' | 'warn' = 'error';
+      
+      if (error instanceof AbortError || networkError.name === 'AbortError') {
+        errorMessage = 'Address validation request timed out';
+        logLevel = 'warn';
+        logger.warn('ADDRESS_VALIDATION', 'Request timeout', { timeout: this.defaultTimeout, addressLines });
+      } else if (networkError.code === 'ENOTFOUND' || networkError.code === 'EAI_AGAIN') {
+        errorMessage = 'Network connectivity issue';
+        logLevel = 'warn';
+        logger.warn('ADDRESS_VALIDATION', 'DNS/Network error', { code: networkError.code, addressLines });
+      } else if (networkError.code === 'ECONNREFUSED') {
+        errorMessage = 'Address validation service unavailable';
+        logLevel = 'warn';
+        logger.warn('ADDRESS_VALIDATION', 'Connection refused', { addressLines });
+      } else if (networkError.code === 'ETIMEDOUT') {
+        errorMessage = 'Address validation request timed out';
+        logLevel = 'warn';
+        logger.warn('ADDRESS_VALIDATION', 'Connection timeout', { addressLines });
+      } else {
+        logger.error('ADDRESS_VALIDATION', 'Unexpected error validating address', { 
+          error: networkError.message,
+          code: networkError.code,
+          addressLines 
+        });
+      }
+      
       return {
         isValid: false,
         confidence: 'low',
-        errors: ['Address validation service temporarily unavailable']
+        errors: [errorMessage]
       };
     }
   }
@@ -209,24 +263,171 @@ export class AddressValidationService {
   }
 
   async validatePostalCode(postalCode: string, country: string): Promise<boolean> {
-    if (!this.apiKey) return false;
-
-    try {
-      const params = new URLSearchParams({
-        address: postalCode,
-        key: this.apiKey,
-        region: country === 'South Africa' ? 'za' : 'us',
-        components: `country:${country === 'South Africa' ? 'ZA' : 'US'}`
-      });
-
-      const response = await fetch(`${this.baseUrl}?${params}`);
-      const data = await response.json() as any;
-
-      return data.status === 'OK' && data.results && data.results.length > 0;
-    } catch (error) {
-      logger.error('ADDRESS_VALIDATION', 'Failed to validate postal code', { error, postalCode });
+    if (!this.apiKey) {
+      logger.warn('ADDRESS_VALIDATION', 'API key not configured for postal code validation');
       return false;
     }
+
+    // Skip validation for South Africa postal codes
+    if (country === 'South Africa') {
+      logger.info('ADDRESS_VALIDATION', 'Skipping postal code validation for South Africa', { postalCode });
+      return true;
+    }
+
+    let attempt = 0;
+    while (attempt < this.retryAttempts) {
+      // Create AbortController for timeout protection
+      const abortController = new AbortController();
+      const timeoutId = setTimeout(() => {
+        abortController.abort();
+      }, this.defaultTimeout);
+
+      try {
+        const requestBody = {
+          address: {
+            regionCode: country === 'South Africa' ? 'ZA' : 'US',
+            addressLines: [postalCode.trim()]
+          }
+        };
+
+        const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+          signal: abortController.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          if (response.status === 400) {
+            logger.warn('ADDRESS_VALIDATION', 'Invalid postal code format', { 
+              postalCode, 
+              country, 
+              status: response.status 
+            });
+            return false;
+          }
+          if (response.status === 401 || response.status === 403) {
+            logger.error('ADDRESS_VALIDATION', 'API authentication failed', { 
+              status: response.status,
+              postalCode 
+            });
+            return false;
+          }
+          if (response.status === 429) {
+            logger.warn('ADDRESS_VALIDATION', 'Rate limit exceeded', { postalCode, attempt });
+            if (attempt < this.retryAttempts - 1) {
+              // Wait before retrying
+              await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+              attempt++;
+              continue;
+            }
+            return false;
+          }
+          if (response.status >= 500) {
+            logger.warn('ADDRESS_VALIDATION', 'Server error, will retry', { 
+              status: response.status,
+              postalCode,
+              attempt 
+            });
+            if (attempt < this.retryAttempts - 1) {
+              // Wait before retrying server errors
+              await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
+              attempt++;
+              continue;
+            }
+            return false;
+          }
+          
+          throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json() as GoogleAddressValidationResponse;
+        
+        if (!data.result) {
+          logger.warn('ADDRESS_VALIDATION', 'No result returned for postal code validation', { postalCode });
+          return false;
+        }
+
+        // Consider postal code valid if API returns a result with reasonable confidence
+        const verdict = data.result.verdict;
+        const isValid = verdict.addressComplete || !verdict.hasUnconfirmedComponents;
+        
+        logger.info('ADDRESS_VALIDATION', 'Postal code validation completed', {
+          postalCode,
+          country,
+          isValid,
+          confidence: this.determineConfidence(verdict)
+        });
+        
+        return isValid;
+
+      } catch (error) {
+        clearTimeout(timeoutId);
+        
+        const networkError = error as NetworkError;
+        
+        if (error instanceof AbortError || networkError.name === 'AbortError') {
+          logger.warn('ADDRESS_VALIDATION', 'Postal code validation timed out', { 
+            postalCode, 
+            timeout: this.defaultTimeout,
+            attempt 
+          });
+          if (attempt < this.retryAttempts - 1) {
+            attempt++;
+            continue;
+          }
+          return false;
+        }
+        
+        if (networkError.code === 'ENOTFOUND' || networkError.code === 'EAI_AGAIN') {
+          logger.warn('ADDRESS_VALIDATION', 'DNS/Network error validating postal code', { 
+            postalCode,
+            code: networkError.code,
+            attempt 
+          });
+          if (attempt < this.retryAttempts - 1) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+            attempt++;
+            continue;
+          }
+          return false;
+        }
+        
+        if (networkError.code === 'ECONNREFUSED' || networkError.code === 'ETIMEDOUT') {
+          logger.warn('ADDRESS_VALIDATION', 'Connection error validating postal code', { 
+            postalCode,
+            code: networkError.code,
+            attempt 
+          });
+          if (attempt < this.retryAttempts - 1) {
+            await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
+            attempt++;
+            continue;
+          }
+          return false;
+        }
+        
+        logger.error('ADDRESS_VALIDATION', 'Unexpected error validating postal code', { 
+          error: networkError.message,
+          code: networkError.code,
+          postalCode,
+          attempt
+        });
+        
+        // Don't retry on unexpected errors
+        return false;
+      }
+    }
+    
+    logger.warn('ADDRESS_VALIDATION', 'Postal code validation failed after all retry attempts', { 
+      postalCode,
+      attempts: this.retryAttempts 
+    });
+    return false;
   }
 }
 

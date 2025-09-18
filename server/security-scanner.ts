@@ -1,8 +1,14 @@
 #!/usr/bin/env tsx
 
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync, accessSync, constants } from 'fs';
 import { join, extname } from 'path';
 import { randomBytes } from 'crypto';
+
+// Define error types for better error handling
+interface FileSystemError extends Error {
+  code?: string;
+  path?: string;
+}
 
 // Generate unique IDs
 function generateId(): string {
@@ -53,14 +59,66 @@ const trackedFiles = ['.ts', '.tsx', '.js'];
 const srcPath = './server';
 
 function findAllFiles(dir: string): string[] {
+  const files: string[] = [];
+  
   try {
-    return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
-      entry.isDirectory()
-        ? findAllFiles(join(dir, entry.name))
-        : trackedFiles.includes(extname(entry.name)) ? [join(dir, entry.name)] : []
-    );
-  } catch (error) {
+    // Check if directory is accessible before attempting to read
+    accessSync(dir, constants.R_OK);
     
+    const entries = readdirSync(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath = join(dir, entry.name);
+      
+      if (entry.isDirectory()) {
+        // Recursively scan subdirectories with individual error handling
+        try {
+          const subFiles = findAllFiles(fullPath);
+          files.push(...subFiles);
+        } catch (error) {
+          const fsError = error as FileSystemError;
+          if (fsError.code === 'EACCES') {
+            console.warn(`⚠️ Permission denied accessing directory: ${fullPath}`);
+          } else if (fsError.code === 'ENOENT') {
+            console.warn(`⚠️ Directory not found: ${fullPath}`);
+          } else {
+            console.warn(`⚠️ Error accessing directory ${fullPath}: ${fsError.message}`);
+          }
+          // Continue scanning other directories instead of failing completely
+          continue;
+        }
+      } else if (entry.isFile() && trackedFiles.includes(extname(entry.name))) {
+        // Verify file is readable before adding to scan list
+        try {
+          accessSync(fullPath, constants.R_OK);
+          files.push(fullPath);
+        } catch (error) {
+          const fsError = error as FileSystemError;
+          if (fsError.code === 'EACCES') {
+            console.warn(`⚠️ Permission denied accessing file: ${fullPath}`);
+          } else {
+            console.warn(`⚠️ Error accessing file ${fullPath}: ${fsError.message}`);
+          }
+          // Skip this file but continue with others
+        }
+      }
+    }
+    
+    return files;
+  } catch (error) {
+    const fsError = error as FileSystemError;
+    
+    if (fsError.code === 'EACCES') {
+      console.warn(`⚠️ Permission denied accessing directory: ${dir}`);
+    } else if (fsError.code === 'ENOENT') {
+      console.warn(`⚠️ Directory not found: ${dir}`);
+    } else if (fsError.code === 'ENOTDIR') {
+      console.warn(`⚠️ Path is not a directory: ${dir}`);
+    } else {
+      console.warn(`⚠️ Unexpected error scanning directory ${dir}: ${fsError.message}`);
+    }
+    
+    // Return empty array to gracefully continue execution
     return [];
   }
 }
@@ -91,6 +149,9 @@ function isInCommentOrString(line: string, position: number): boolean {
 
 async function scanFile(path: string): Promise<SecurityIssue[]> {
   try {
+    // Check if file is readable before attempting to scan
+    accessSync(path, constants.R_OK);
+    
     const content = readFileSync(path, 'utf8');
     const lines = content.split('\n');
     const results: SecurityIssue[] = [];
@@ -154,17 +215,35 @@ async function scanFile(path: string): Promise<SecurityIssue[]> {
 
     return results;
   } catch (error) {
-    );
+    const fsError = error as FileSystemError;
+    
+    if (fsError.code === 'EACCES') {
+      console.warn(`⚠️ Permission denied reading file: ${path}`);
+    } else if (fsError.code === 'ENOENT') {
+      console.warn(`⚠️ File not found: ${path}`);
+    } else if (fsError.code === 'EISDIR') {
+      console.warn(`⚠️ Path is a directory, not a file: ${path}`);
+    } else if (fsError.code === 'EMFILE' || fsError.code === 'ENFILE') {
+      console.warn(`⚠️ Too many open files, skipping: ${path}`);
+    } else {
+      console.warn(`⚠️ Error reading file ${path}: ${fsError.message}`);
+    }
+    
+    // Return empty array to continue scanning other files
     return [];
   }
 }
 
 function outputResults(issues: SecurityIssue[], files: string[]) {
-
+  console.log(`\n📊 Security Scan Results`);
+  console.log(`📁 Files scanned: ${files.length}`);
+  
   if (issues.length === 0) {
-    
+    console.log('✅ No security issues found!');
     return;
   }
+  
+  console.log(`⚠️  Total issues found: ${issues.length}`);
 
   // Group by severity
   const bySeverity = issues.reduce((acc, issue) => {
@@ -176,7 +255,7 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
   for (const severity of severityOrder) {
     if (bySeverity[severity]) {
       const emoji = severity === 'critical' ? '🚨' : severity === 'high' ? '⚠️' : '📋';
-      
+      console.log(`${emoji} ${severity.toUpperCase()}: ${bySeverity[severity]}`);
     }
   }
 
@@ -195,7 +274,7 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
   };
   
   for (const [type, count] of Object.entries(byType)) {
-    
+    console.log(`📋 ${typeLabels[type] || type}: ${count}`);
   }
 
   // Show top 10 critical/high issues
@@ -204,10 +283,9 @@ function outputResults(issues: SecurityIssue[], files: string[]) {
     .slice(0, 10);
 
   if (criticalIssues.length > 0) {
-    
+    console.log('\n🎯 Top Critical/High Issues:');
     criticalIssues.forEach((issue, index) => {
-      }] ${issue.description}`);
-
+      console.log(`  ${index + 1}. [${issue.severity.toUpperCase()}] ${issue.description} (${issue.filePath}:${issue.line})`);
     });
   }
 }
@@ -229,12 +307,12 @@ function exportToCSV(issues: SecurityIssue[], filename = 'security-issues.csv') 
   }).join('\n');
   
   writeFileSync(filename, headers + rows);
-  
+  console.log(`📄 Security issues exported to ${filename}`);
 }
 
 async function run() {
-
-  ');
+  console.log('🔍 Starting security scan...');
+  console.log(`📂 Scanning directory: ${srcPath}`);
 
   const files = findAllFiles(srcPath);
 
