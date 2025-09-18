@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { X, Package, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { OptimizedImage } from "@/components/image-optimization";
 import type { Product } from "@shared/schema";
 
 interface PreOrderPopupProps {
@@ -106,10 +107,16 @@ export function PreOrderPopup({ product, isOpen, onClose }: PreOrderPopupProps) 
             {/* Product Info */}
             <div id="preorder-description" className="p-4 border-b bg-gray-50">
               <div className="flex items-center space-x-3">
-                <img 
+                <OptimizedImage
                   src={product.imageUrl} 
                   alt={product.name}
-                  className="w-12 h-12 object-cover bg-gray-100"
+                  className="w-12 h-12 object-cover bg-gray-100 rounded-lg"
+                  width={48}
+                  height={48}
+                  loading="eager"
+                  quality={90}
+                  sizes="48px"
+                  data-testid={`img-product-${product.id}`}
                 />
                 <div>
                   <h4 className="font-medium text-black text-sm">{product.name}</h4>
