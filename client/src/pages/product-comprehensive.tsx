@@ -752,23 +752,23 @@ export default function ProductComprehensive() {
           bundlePrice: 'R1385.62',
           bundleOriginalPrice: 'R1576.74',
           sectionTitle: 'THE GUT-IMMUNITY CONNECTION',
-          sectionHeading: 'Advanced 10 billion CFU\nprobiotic complex with delayed-release\ntechnology for optimal gut health.',
+          sectionHeading: 'Advanced 10 billion CFU\nprobiotic complex with acid-resistant\nvegan shell for optimal gut health.',
           stat1Number: '10B',
           stat1Text: 'Live Cultures\nPer Capsule',
           stat2Number: '70%',
           stat2Text: 'Immune System\nin Gut',
-          stat3Number: '5',
+          stat3Number: '6',
           stat3Text: 'Targeted\nStrains',
           stat4Number: '100%',
           stat4Text: 'Survivability\nGuaranteed',
-          testimonial: '"This 10 billion CFU probiotic complex has completely transformed my digestive health. The delayed-release capsules ensure maximum potency and effectiveness."',
-          testimonialAuthor: 'RACHEL THOMPSON',
-          testimonialTitle: 'Registered Nutritionist',
+          testimonial: '"Your gut is home to around 70% of the immune system. Supporting it with the right probiotics can help strengthen overall health and balance digestion."',
+          testimonialAuthor: 'DR. SARAH MARTINEZ',
+          testimonialTitle: 'Digestive Health Specialist',
           benefitTitle: 'Advanced gut health support',
-          benefitDescription: '10 Billion CFU multi-strain probiotic complex in advanced capsule format with delayed-release technology supports digestive health, immune function, and gut microbiome balance.',
-          ingredientSource: 'Multi-strain probiotic blend (10 billion CFU)',
-          ingredientForm: 'Advanced delayed-release capsules',
-          ingredientOrigin: 'Laboratory cultured probiotic strains with survivability guarantee',
+          benefitDescription: 'Healios Probiotic Complex delivers 10 billion CFU per capsule from six targeted bacterial strains, with added FOS prebiotic to fuel beneficial gut bacteria. Each capsule is designed with an acid-resistant vegan shell to help probiotics survive stomach acid and reach the gut where they\'re most effective.',
+          ingredientSource: '6-strain probiotic blend with FOS prebiotic (10 billion CFU)',
+          ingredientForm: 'Acid-resistant vegan capsules',
+          ingredientOrigin: 'Laboratory cultured probiotic strains with acid-resistant delivery',
           sleepBenefit: false,
           primaryBenefit: 'Supports digestive health, immune function, and gut microbiome balance'
         };
@@ -1643,6 +1643,22 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*200mg of 10:1 extract provides the equivalent of 2000mg dried Lion's Mane mushroom. Clinically relevant dosage for cognitive support.</p>
                             </div>
+                          ) : product.id === 'probiotics' ? (
+                            <div>
+                              <p className="font-medium mb-3">Nutritional Information (per capsule)</p>
+                              <div className="text-sm space-y-1">
+                                <div className="font-medium">Fructooligosaccharides (FOS): 40 mg</div>
+                                <div className="font-medium">Active Live Culture Blend: 10 Billion CFU, including:</div>
+                                <div className="ml-4 text-sm space-y-1">
+                                  <div>• Bifidobacterium lactis</div>
+                                  <div>• Bifidobacterium bifidum</div>
+                                  <div>• Bifidobacterium longum</div>
+                                  <div>• Lactobacillus acidophilus</div>
+                                  <div>• Lactobacillus casei rhamnosus</div>
+                                  <div>• Streptococcus thermophilus</div>
+                                </div>
+                              </div>
+                            </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
                               <p className="font-medium mb-3">Nutritional Information (per 2.5g serving)</p>
@@ -1812,6 +1828,23 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Allergens: None declared. Manufactured under strict allergen control protocols. 100% vegan formulation.</p>
                             </div>
+                          ) : product.id === 'probiotics' ? (
+                            <div>
+                              <p className="font-medium mb-2">Ingredients</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• Bulking Agent: Brown Rice Flour</li>
+                                <li>• Capsule Shell (Hydroxypropyl Methylcellulose, Gellan Gum)</li>
+                                <li>• Active Live Culture Blend (Bifidobacterium longum, Bifidobacterium bifidum, Lactobacillus acidophilus, Streptococcus thermophilus, Lactobacillus casei rhamnosus, Bifidobacterium animalis lactis)</li>
+                                <li>• Chicory Inulin (Fructooligosaccharides)</li>
+                                <li>• Anti-Caking Agent: Magnesium Stearate</li>
+                              </ul>
+                              <div className="mt-3 space-y-1 text-sm text-gray-600">
+                                <p>• Third-Party Tested for potency, purity, and absence of heavy metals</p>
+                                <p>• Free From Artificial Nasties: No artificial colours, flavours, or preservatives</p>
+                                <p>• Sustainable Sourcing: Ingredients sourced responsibly</p>
+                                <p>• Storage: Keep in a cool, dry, dark place below 25°C</p>
+                              </div>
+                            </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
                               <p className="font-medium mb-2">Ingredient List:</p>
@@ -1952,6 +1985,20 @@ export default function ProductComprehensive() {
                                 <li>• Consistent daily use recommended for best results</li>
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for children. Some benefits may be noticed within weeks, but optimal cognitive support typically develops over 4-6 weeks of consistent use.</p>
+                            </div>
+                          ) : product.id === 'probiotics' ? (
+                            <div>
+                              <p className="font-medium mb-2">How to Take:</p>
+                              <ul className="space-y-1 text-sm">
+                                <li>• <strong>Adults:</strong> Take 1–2 capsules, once or twice daily on an empty stomach with water (1–4 capsules per day)</li>
+                                <li>• <strong>Do not swallow with hot drinks</strong></li>
+                                <li>• <strong>Do not exceed the recommended daily dose</strong></li>
+                              </ul>
+                              <div className="mt-4 bg-red-50 border border-red-200 p-3">
+                                <p className="font-medium text-red-800 mb-1">Can Children Take It?</p>
+                                <p className="text-sm text-red-700">❌ <strong>This product is intended for adults only.</strong></p>
+                                <p className="text-sm text-red-600 mt-2">For children, consult a healthcare professional before use.</p>
+                              </div>
                             </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
@@ -2109,6 +2156,30 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Will it make me feel more focused right away?</strong> Some people notice short-term effects, but the strongest benefits are typically seen after consistent daily use over 4–6 weeks.</li>
                                 <li>• <strong>Are these gummies vegan and sugar-free?</strong> They're 100% vegan. While not sugar-free, each serving contains 3.64g of sugar — similar to a small piece of fruit.</li>
                               </ul>
+                            </div>
+                          ) : product.id === 'probiotics' ? (
+                            <div>
+                              <div className="space-y-4">
+                                <div>
+                                  <p className="font-medium mb-2">Q: Can I take this with other supplements?</p>
+                                  <p className="text-sm text-gray-600">A: Yes, probiotics are generally safe to combine with most supplements. Always consult your healthcare provider if taking medication.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: When will I see results?</p>
+                                  <p className="text-sm text-gray-600">A: Individual results vary, but consistent use for 2–4 weeks typically supports noticeable improvements in digestion and gut balance.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: Is it vegan?</p>
+                                  <p className="text-sm text-gray-600">A: Yes — the capsules are made with plant-based materials and contain no animal ingredients.</p>
+                                </div>
+                                
+                                <div>
+                                  <p className="font-medium mb-2">Q: Can children take this?</p>
+                                  <p className="text-sm text-gray-600">A: ❌ <strong>This product is intended for adults only.</strong> For children, consult a healthcare professional before use.</p>
+                                </div>
+                              </div>
                             </div>
                           ) : product.id === 'collagen-powder' ? (
                             <div>
