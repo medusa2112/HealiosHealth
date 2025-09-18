@@ -557,3 +557,173 @@ export type SupportTicket = typeof supportTickets.$inferSelect;
 export type ChatSession = typeof chatSessions.$inferSelect;
 export type InsertSupportTicket = z.infer<typeof insertSupportTicketSchema>;
 export type InsertChatSession = z.infer<typeof insertChatSessionSchema>;
+
+// Webhook events table for idempotency tracking
+export const webhookEvents = pgTable("webhook_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id", { length: 128 }).notNull().unique(), // PayStack event ID
+  eventType: varchar("event_type", { length: 64 }).notNull(), // e.g., "charge.success"
+  processedAt: text("processed_at").default(sql`CURRENT_TIMESTAMP`),
+  payload: text("payload").notNull(), // JSON payload for debugging
+  processingStatus: varchar("processing_status", { length: 32 }).default("processed"), // "processed", "failed", "skipped"
+  errorMessage: text("error_message"), // If processing failed
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const insertWebhookEventSchema = createInsertSchema(webhookEvents).omit({
+  id: true,
+  processedAt: true,
+  createdAt: true,
+});
+
+export type WebhookEvent = typeof webhookEvents.$inferSelect;
+export type InsertWebhookEvent = z.infer<typeof insertWebhookEventSchema>;
+
+// PayStack webhook payload schemas
+export const paystackCustomerSchema = z.object({
+  id: z.number(),
+  first_name: z.string().nullable(),
+  last_name: z.string().nullable(),
+  email: z.string().email(),
+  customer_code: z.string(),
+  phone: z.string().nullable(),
+  metadata: z.record(z.any()).optional(),
+  risk_action: z.string().optional(),
+  international_format_phone: z.string().nullable().optional(),
+});
+
+export const paystackTransactionSchema = z.object({
+  id: z.number(),
+  domain: z.string(),
+  status: z.string(),
+  reference: z.string(),
+  amount: z.number(),
+  message: z.string().nullable(),
+  gateway_response: z.string(),
+  paid_at: z.string(),
+  created_at: z.string(),
+  channel: z.string(),
+  currency: z.string(),
+  ip_address: z.string().nullable(),
+  metadata: z.record(z.any()).optional(),
+  fees_breakdown: z.any().optional(),
+  log: z.any().optional(),
+  fees: z.number().optional(),
+  fees_split: z.any().optional(),
+  authorization: z.any().optional(),
+  customer: paystackCustomerSchema,
+  plan: z.any().optional(),
+  split: z.any().optional(),
+  order_id: z.any().optional(),
+  paidAt: z.string().optional(),
+  createdAt: z.string().optional(),
+  requested_amount: z.number().optional(),
+  pos_transaction_data: z.any().optional(),
+  source: z.any().optional(),
+  fees_breakdown_v2: z.any().optional(),
+});
+
+export const paystackSubscriptionSchema = z.object({
+  id: z.number(),
+  domain: z.string(),
+  status: z.string(),
+  subscription_code: z.string(),
+  email_token: z.string(),
+  amount: z.number(),
+  cron_expression: z.string(),
+  next_payment_date: z.string(),
+  open_invoice: z.string().nullable(),
+  integration: z.number(),
+  plan: z.object({
+    id: z.number(),
+    name: z.string(),
+    plan_code: z.string(),
+    description: z.string().nullable(),
+    amount: z.number(),
+    interval: z.string(),
+    send_invoices: z.boolean(),
+    send_sms: z.boolean(),
+    currency: z.string(),
+    metadata: z.record(z.any()).optional(),
+  }),
+  authorization: z.any(),
+  customer: paystackCustomerSchema,
+  created_at: z.string(),
+  quantity: z.number().optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+export const paystackRefundSchema = z.object({
+  transaction: z.number(),
+  dispute: z.number().optional(),
+  settlement: z.number().optional(),
+  domain: z.string(),
+  amount: z.number(),
+  currency: z.string(),
+  status: z.string(),
+  refunded_by: z.string().optional(),
+  refunded_at: z.string(),
+  customer_note: z.string().nullable(),
+  merchant_note: z.string().nullable(),
+  created_at: z.string(),
+  integration: z.number(),
+  transaction_reference: z.string(),
+  fully_deducted: z.boolean().optional(),
+});
+
+// Webhook event schemas for different PayStack events
+export const chargeSuccessWebhookSchema = z.object({
+  event: z.literal("charge.success"),
+  data: paystackTransactionSchema,
+});
+
+export const refundProcessedWebhookSchema = z.object({
+  event: z.literal("refund.processed"),
+  data: paystackRefundSchema,
+});
+
+export const subscriptionCreateWebhookSchema = z.object({
+  event: z.literal("subscription.create"),
+  data: paystackSubscriptionSchema,
+});
+
+export const subscriptionDisableWebhookSchema = z.object({
+  event: z.literal("subscription.disable"),
+  data: paystackSubscriptionSchema,
+});
+
+export const invoicePaymentFailedWebhookSchema = z.object({
+  event: z.literal("invoice.payment_failed"),
+  data: z.object({
+    domain: z.string(),
+    invoice_code: z.string(),
+    amount: z.number(),
+    period_start: z.string(),
+    period_end: z.string(),
+    status: z.string(),
+    paid: z.boolean(),
+    paid_at: z.string().nullable(),
+    description: z.string().nullable(),
+    authorization: z.any(),
+    subscription: paystackSubscriptionSchema,
+    customer: paystackCustomerSchema,
+    transaction: paystackTransactionSchema.optional(),
+    created_at: z.string(),
+    subscription_code: z.string(),
+  }),
+});
+
+// Union schema for all supported webhook events
+export const paystackWebhookSchema = z.union([
+  chargeSuccessWebhookSchema,
+  refundProcessedWebhookSchema,
+  subscriptionCreateWebhookSchema,
+  subscriptionDisableWebhookSchema,
+  invoicePaymentFailedWebhookSchema,
+]);
+
+// Generic webhook event schema for unknown events
+export const genericWebhookSchema = z.object({
+  event: z.string(),
+  data: z.record(z.any()),
+});

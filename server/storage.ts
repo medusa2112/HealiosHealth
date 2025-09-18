@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue, type WebhookEvent, type InsertWebhookEvent } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { mockSecurityIssues } from "./security-seed";
 import { hashPassword, verifyPassword } from "./lib/password";
@@ -123,6 +123,10 @@ export interface IStorage {
   updateSubscriptionStatus(id: string, status: string): Promise<Subscription | undefined>;
   getAllSubscriptions(): Promise<Subscription[]>;
   getSubscriptionByPaystackId(paystackSubscriptionId: string): Promise<Subscription | undefined>;
+
+  // Webhook Events (for idempotency tracking)
+  getWebhookEventByEventId(eventId: string): Promise<WebhookEvent | undefined>;
+  createWebhookEvent(webhookEvent: InsertWebhookEvent): Promise<WebhookEvent>;
   
   // ALFR3D Security Dashboard
   getSecurityIssues(): Promise<SecurityIssue[]>;
@@ -216,6 +220,7 @@ export class MemStorage implements IStorage {
   private securityIssues: Map<string, SecurityIssue>; // ALFR3D
   private fixAttempts: Map<string, any>; // ALFR3D Fix Attempts
   private lastScanTimestamp: string | null = null; // ALFR3D
+  private webhookEvents: Map<string, WebhookEvent>; // Webhook idempotency tracking
   // PIN Verification Storage
   private pendingVerifications: Map<string, { codeHash: string; expiresAt: string; type: 'registration' | 'login'; userData?: any; attempts: number }>;
 
@@ -242,6 +247,7 @@ export class MemStorage implements IStorage {
     this.chatSessions = new Map(); // Phase 21
     this.securityIssues = new Map(); // ALFR3D
     this.fixAttempts = new Map(); // ALFR3D Fix Attempts
+    this.webhookEvents = new Map(); // Webhook idempotency tracking
     this.pendingVerifications = new Map(); // PIN Verification
     this.seedData();
     this.seedUsers(); // Add test users
@@ -847,6 +853,31 @@ export class MemStorage implements IStorage {
   async getChatSessionByToken(token: string): Promise<any | undefined> { return Array.from(this.chatSessions.values()).find(session => session.sessionToken === token); }
   async getChatSessionsByUserId(userId: string): Promise<any[]> { return Array.from(this.chatSessions.values()).filter(session => session.userId === userId); }
   async updateChatSession(id: string, updates: any): Promise<any | undefined> { const session = this.chatSessions.get(id); if (!session) return undefined; const updated = { ...session, ...updates, updatedAt: new Date().toISOString() }; this.chatSessions.set(id, updated); return updated; }
+
+  // Webhook Events Implementation (for idempotency tracking)
+  async getWebhookEventByEventId(eventId: string): Promise<WebhookEvent | undefined> {
+    for (const event of this.webhookEvents.values()) {
+      if (event.eventId === eventId) {
+        return event;
+      }
+    }
+    return undefined;
+  }
+
+  async createWebhookEvent(webhookEvent: InsertWebhookEvent): Promise<WebhookEvent> {
+    const id = randomUUID();
+    const now = new Date().toISOString();
+    const event: WebhookEvent = {
+      id,
+      ...webhookEvent,
+      processingStatus: webhookEvent.processingStatus ?? null,
+      errorMessage: webhookEvent.errorMessage ?? null,
+      processedAt: now,
+      createdAt: now,
+    };
+    this.webhookEvents.set(id, event);
+    return event;
+  }
 
   // Password Authentication Methods Implementation
   async createUserWithPassword(data: { email: string; firstName: string; lastName: string; password: string }): Promise<User> {
