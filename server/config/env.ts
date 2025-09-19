@@ -14,14 +14,14 @@ const schema = z.object({
   SESSION_SECRET_ADMIN: z.string().min(32).optional(), // Preferred for admin sessions
   
   // Required configuration (new)
-  PAYSTACK_SECRET: z.string().min(10, 'PAYSTACK_SECRET must be at least 10 characters'),
+  PAYSTACK_SECRET: z.string().min(10, 'PAYSTACK_SECRET must be at least 10 characters').optional(),
   ADMIN_EMAILS: z.string().min(1, 'ADMIN_EMAILS is required').transform((val) => 
     val.split(',').map(email => email.trim()).filter(Boolean)
   ),
   PUBLIC_BASE_URL: z.string().url('PUBLIC_BASE_URL must be a valid URL'),
   
   // Payment providers (maintain backward compatibility)
-  PAYSTACK_SECRET_KEY: z.string().optional(), // Legacy support
+  PAYSTACK_SECRET_KEY: z.string().min(10, 'PAYSTACK_SECRET_KEY must be at least 10 characters').optional(), // Legacy support
   
   // Email services (optional)
   RESEND_API_KEY: z.string().optional(),
