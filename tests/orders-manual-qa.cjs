@@ -58,9 +58,9 @@ assert(
 );
 
 assert(
-  schemaContent.includes('stripePaymentIntentId:'),
-  'Stripe payment intent field exists',
-  'Stripe payment intent field missing'
+  schemaContent.includes('paystackReference:'),
+  'PayStack payment reference field exists',
+  'PayStack payment reference field missing'
 );
 
 assert(

@@ -9,7 +9,7 @@ Branch: main (unable to create new branch due to git lock)
 - **Styling**: Tailwind CSS 3 + Radix UI
 - **State Management**: TanStack Query v5 + React Context
 - **Authentication**: PIN-based email auth (Resend API) + Admin OAuth
-- **Payment**: Stripe integration (live production keys)
+- **Payment**: PayStack integration (live production keys)
 - **Package Manager**: npm
 - **Node Version**: Not specified (requires verification)
 
@@ -31,7 +31,7 @@ Branch: main (unable to create new branch due to git lock)
 - `SESSION_SECRET_ADMIN` - Admin session secret
 
 ### API Keys & Services
-- `STRIPE_SECRET_KEY` - Payment processing
+- `PAYSTACK_SECRET` - Payment processing
 - `RESEND_API_KEY` - Email delivery
 - `OPENAI_API_KEY` - AI chatbot
 - `GOOGLE_MAPS_API_KEY` - Address validation
@@ -59,7 +59,7 @@ Branch: main (unable to create new branch due to git lock)
 
 ## Dependencies Summary
 - **Total npm packages**: 200+ dependencies
-- **Critical dependencies**: Express, React, Drizzle, Stripe, Resend
+- **Critical dependencies**: Express, React, Drizzle, PayStack, Resend
 - **Build tools**: Vite, ESBuild, TypeScript, Tailwind
 - **Testing**: Vitest configured but minimal test coverage
 

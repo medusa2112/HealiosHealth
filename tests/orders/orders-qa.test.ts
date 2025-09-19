@@ -100,21 +100,19 @@ async function createOrder(
 async function simulatePaymentWebhook(
   orderId: string,
   status: 'succeeded' | 'failed' | 'canceled',
-  paymentIntentId?: string
+  paymentReference?: string
 ): Promise<void> {
   const webhookPayload = {
-    type: `payment_intent.${status}`,
+    event: `payment.${status}`,
     data: {
-      object: {
-        id: paymentIntentId || `pi_test_${crypto.randomBytes(8).toString('hex')}`,
-        metadata: { orderId }
-      }
+      reference: paymentReference || `paystack_test_${crypto.randomBytes(8).toString('hex')}`,
+      metadata: { orderId }
     }
   };
 
   const response = await request(API_URL)
-    .post('/api/webhooks/stripe')
-    .set('stripe-signature', 'test_signature')
+    .post('/api/paystack/webhook')
+    .set('x-paystack-signature', 'test_signature')
     .send(webhookPayload);
   
   expect([200, 201]).toContain(response.status);
@@ -202,7 +200,7 @@ describe('Orders System QA Suite', () => {
 
   describe('B. Payment Lifecycle & Idempotency', () => {
     let testOrderId: string;
-    let paymentIntentId: string;
+    let paymentReference: string;
 
     beforeEach(async () => {
       // Create a test order
@@ -215,12 +213,12 @@ describe('Orders System QA Suite', () => {
           country: 'South Africa'
         }
       );
-      paymentIntentId = `pi_test_${crypto.randomBytes(8).toString('hex')}`;
+      paymentReference = `paystack_test_${crypto.randomBytes(8).toString('hex')}`;
     });
 
     it('should transition order to paid on payment success', async () => {
       // Simulate successful payment
-      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentIntentId);
+      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentReference);
       
       // Verify order status
       const order = await db.select().from(schema.orders)
@@ -229,12 +227,12 @@ describe('Orders System QA Suite', () => {
       
       expect(order[0].paymentStatus).toBe('completed');
       expect(order[0].paidAt).toBeTruthy();
-      expect(order[0].stripePaymentIntentId).toBe(paymentIntentId);
+      expect(order[0].paystackReference).toBe(paymentReference);
     });
 
     it('should handle idempotent payment webhooks', async () => {
       // First webhook
-      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentIntentId);
+      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentReference);
       
       // Get initial state
       const orderBefore = await db.select().from(schema.orders)
@@ -242,7 +240,7 @@ describe('Orders System QA Suite', () => {
         .limit(1);
       
       // Second identical webhook (idempotency test)
-      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentIntentId);
+      await simulatePaymentWebhook(testOrderId, 'succeeded', paymentReference);
       
       // Verify no duplicate processing
       const orderAfter = await db.select().from(schema.orders)
