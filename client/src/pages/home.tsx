@@ -886,8 +886,8 @@ export default function HomePage() {
                 }
               }}
             >
-              <source src="/assets/TheFourths_1753620348483.mov" type="video/mp4" />
-              <source src="/assets/TheFourths_1753620348483.mov" type="video/quicktime" />
+              <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/webm" />
+              <source src="/assets/home-header-1080p-v3_1753639749380.webm" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             

@@ -521,7 +521,7 @@ export function Header() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/@assets/young-woman-sleeping-peacefully-in-bed-enjoying-a-2025-06-25-09-17-06-utc (2)_1754745777161.jpg" 
+                  src="/@assets/healios-health44.png" 
                   alt="Best Seller - Magnesium" 
                   className="w-full h-24 object-cover"
                 />
@@ -542,7 +542,7 @@ export function Header() {
               
               <div className="bg-gray-900 overflow-hidden">
                 <img 
-                  src="/@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png" 
+                  src="/@assets/healios-health11.png" 
                   alt="New Product Alert - Collagen Powder" 
                   className="w-full h-24 object-cover"
                 />

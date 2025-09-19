@@ -25,20 +25,21 @@ import energyVitalityImg from '@assets/healios-health127.png';
 import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
-import marineCollagenImg from '@assets/studio-shot-of-a-beautiful-young-woman-posing-agai-2025-04-05-20-57-59-utc_1754676717677.jpg';
+// Use appropriate product images from existing healios-health assets
+import marineCollagenImg from '@assets/healios-health11.png'; // Collagen product
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
-import biotinHairImg from '@assets/woman-hair-and-beauty-cosmetics-for-healthy-salon-2025-04-06-07-33-29-utc (1) (1)_1754676479670.jpg';
-import prenatalWellnessPortraitImg from '@assets/portrait-hug-or-sitting-pregnancy-friends-in-unde-2025-04-06-07-18-00-utc (1) (1)_1754677156689.jpg';
-import collagenTextureImg from '@assets/W_Collagen_500_Plus_PDP_1600_x_900_1754744751477.webp';
-import lionsManeMushroomImg from '@assets/lion-s-mane-mushroom-growing-on-a-tree-trunk-2025-01-10-03-08-35-utc (2)_1754742941586.jpg';
-import probioticLabImg from '@assets/interracial-pharmacists-are-working-on-a-cure-disc-2025-04-01-13-21-45-utc (1) (1)_1754743224564.jpg';
+import biotinHairImg from '@assets/healios-health8.png'; // Biotin product
+import prenatalWellnessPortraitImg from '@assets/healios-health128.png'; // Prenatal wellness
+import collagenTextureImg from '@assets/healios-health11.png'; // Collagen product image
+import lionsManeMushroomImg from '@assets/healios-health53.png'; // Appropriate product image
+import probioticLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png'; // Lab scene
 import ironVitaminCImg from '@assets/generated_images/Active_diverse_group_exercising_2ea18caa.png';
-import beautyPortraitImg from '@assets/Screenshot 2025-08-09 at 14.43.41_1754744397213.png';
-import ashwagandhaLabImg from '@assets/male-biochemist-performing-lab-test-on-sample-of-p-2025-03-09-23-29-26-utc (1) (1)_1754745532835.jpg';
-import magnesiumSleepImg from '@assets/young-woman-sleeping-peacefully-in-bed-enjoying-a-2025-06-25-09-17-06-utc (2)_1754745777161.jpg';
-import probioticVitaminsImg from '@assets/happy-tailor-taking-measurements-2024-09-22-20-26-57-utc (1) (1)_1754746253546.jpg';
-import probioticsImg from '@assets/these-abs-were-made-with-love-2025-04-06-08-16-40-utc_1754746612142.jpg';
-import vitaminD3Img from '@assets/nominated-already-2025-02-25-00-27-06-utc_1754746917299.jpg';
+import beautyPortraitImg from '@assets/healios-health125.png'; // Beauty wellness image
+import ashwagandhaLabImg from '@assets/healios-health3.png'; // Ashwagandha product
+import magnesiumSleepImg from '@assets/healios-health44.png'; // Magnesium product
+import probioticVitaminsImg from '@assets/healios-health75.png'; // Probiotic product
+import probioticsImg from '@assets/healios-health74.png'; // Probiotics product
+import vitaminD3Img from '@assets/healios-health127.png'; // Vitamin D3 product
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
 const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
