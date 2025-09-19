@@ -29,6 +29,7 @@ const schema = z.object({
   
   // Google Maps API (optional - multiple key names for compatibility)
   GOOGLE_MAPS_BROWSER_KEY: z.string().optional(),
+  GOOGLE_MAPS_SERVER_KEY: z.string().optional(),
   ENV_GOOGLE_MAPS_API_KEY: z.string().optional(),
   
   // AI Services (optional)
@@ -127,8 +128,9 @@ export const ENV = {
   RESEND_API_KEY: config.RESEND_API_KEY,
   SENDGRID_API_KEY: config.SENDGRID_API_KEY,
   
-  // Google Maps API (prefer GOOGLE_MAPS_BROWSER_KEY, fallback to ENV_GOOGLE_MAPS_API_KEY)
-  GOOGLE_MAPS_BROWSER_KEY: config.GOOGLE_MAPS_BROWSER_KEY || config.ENV_GOOGLE_MAPS_API_KEY,
+  // Google Maps API (prefer GOOGLE_MAPS_BROWSER_KEY, fallback to ENV_GOOGLE_MAPS_API_KEY or GOOGLE_MAPS_SERVER_KEY)
+  GOOGLE_MAPS_BROWSER_KEY: config.GOOGLE_MAPS_BROWSER_KEY || config.ENV_GOOGLE_MAPS_API_KEY || config.GOOGLE_MAPS_SERVER_KEY,
+  GOOGLE_MAPS_SERVER_KEY: config.GOOGLE_MAPS_SERVER_KEY || config.ENV_GOOGLE_MAPS_API_KEY,
   ENV_GOOGLE_MAPS_API_KEY: config.ENV_GOOGLE_MAPS_API_KEY, // Keep for backward compatibility
   
   // AI Services
