@@ -62,7 +62,7 @@ export function Privacy() {
 
             <h3>Information from Third Parties</h3>
             <ul>
-              <li><strong>Payment Processors:</strong> Transaction confirmations from Stripe</li>
+              <li><strong>Payment Processors:</strong> Transaction confirmations from PayStack</li>
               <li><strong>Analytics Services:</strong> Aggregated usage statistics</li>
               <li><strong>Social Media:</strong> If you interact with our social media accounts</li>
             </ul>

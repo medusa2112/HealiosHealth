@@ -98,7 +98,7 @@ assert(
 console.log('\n📋 TEST SUITE C: Storage Implementation');
 console.log('-'.repeat(40));
 
-const storagePath = path.join(__dirname, '../server/drizzleStorage.ts');
+const storagePath = path.join(__dirname, '../server/storage.ts');
 const storageContent = fs.readFileSync(storagePath, 'utf8');
 
 assert(
@@ -147,9 +147,9 @@ console.log('\n📋 TEST SUITE E: Payment Processing');
 console.log('-'.repeat(40));
 
 assert(
-  routesContent.includes('stripe') || storageContent.includes('stripe'),
-  'Stripe integration exists',
-  'Stripe integration not found'
+  routesContent.includes('paystack') || routesContent.includes('PayStack') || storageContent.includes('paystack'),
+  'PayStack integration exists',
+  'PayStack integration not found'
 );
 
 assert(
@@ -302,7 +302,7 @@ ${results.failed.filter(f => f.test.includes('method')).map(f => `- ❌ ${f.test
 ${results.passed.filter(t => t.includes('status') || t.includes('Pre-order')).map(t => `- ✅ ${t}`).join('\n')}
 
 ### E. Payment Processing
-${results.passed.filter(t => t.includes('Stripe') || t.includes('Refund')).map(t => `- ✅ ${t}`).join('\n')}
+${results.passed.filter(t => t.includes('PayStack') || t.includes('Refund')).map(t => `- ✅ ${t}`).join('\n')}
 
 ### F. Security Features
 ${results.passed.filter(t => t.includes('Authentication') || t.includes('CSRF')).map(t => `- ✅ ${t}`).join('\n')}
