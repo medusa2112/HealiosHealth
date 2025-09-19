@@ -565,6 +565,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const discount = validation.discount!;
       let discountAmount = 0;
 
+      // Check minimum purchase requirement
+      if (discount.minimumPurchase && total !== undefined) {
+        const minPurchase = parseFloat(discount.minimumPurchase);
+        if (total < minPurchase) {
+          return res.status(400).json({ 
+            error: `Minimum purchase of R${minPurchase.toFixed(2)} required for this discount code` 
+          });
+        }
+      }
+
       if (total && total > 0) {
         if (discount.type === "percent") {
           discountAmount = total * (parseFloat(discount.value) / 100);

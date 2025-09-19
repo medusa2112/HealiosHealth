@@ -370,6 +370,8 @@ export const discountCodes = pgTable("discount_codes", {
   code: varchar("code", { length: 64 }).notNull().unique(), // e.g. "WELCOME10"
   type: varchar("type", { length: 16 }).notNull(), // "percent" | "fixed"
   value: decimal("value", { precision: 10, scale: 2 }).notNull(), // 10 = 10% or $10
+  description: text("description"), // User-friendly description of the discount
+  minimumPurchase: decimal("minimum_purchase", { precision: 10, scale: 2 }), // Minimum purchase amount required
   usageLimit: integer("usage_limit"), // null = unlimited
   usageCount: integer("usage_count").default(0),
   expiresAt: text("expires_at"), // ISO date string
