@@ -44,7 +44,20 @@ function verifyCSRFToken(sessionId: string, token: string): boolean {
   if (!stored || stored.expires < Date.now()) {
     return false;
   }
-  return crypto.timingSafeEqual(Buffer.from(stored.token), Buffer.from(token));
+  
+  // Harden against mismatched buffer lengths
+  try {
+    const storedBuffer = Buffer.from(stored.token);
+    const tokenBuffer = Buffer.from(token);
+    
+    if (storedBuffer.length !== tokenBuffer.length) {
+      return false;
+    }
+    
+    return crypto.timingSafeEqual(storedBuffer, tokenBuffer);
+  } catch {
+    return false; // Return false on any error to maintain deterministic 403 responses
+  }
 }
 
 /**
@@ -108,10 +121,9 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
   // These routes must now include proper CSRF tokens in production AND development
 
   // For authenticated admin routes, use a more lenient approach in development
-  if (req.path.includes('/admin/')) {
-    console.log('[CSRF] Admin route detected:', req.path, 'session:', { 
-      adminId: (req.session as any)?.adminId, 
-      sessionID: req.sessionID,
+  if (req.path.includes('/admin/') && process.env.NODE_ENV !== 'production') {
+    console.log('[CSRF] Admin route detected:', { 
+      path: req.path, 
       hasSession: !!req.session,
       isAuthenticated: !!(req.session as any)?.adminId
     });
@@ -125,7 +137,7 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     
     // In development, be more lenient for authenticated admin users
     if (process.env.NODE_ENV === 'development') {
-      console.log('[CSRF] Development mode - allowing authenticated admin request to:', req.path, 'adminId:', (req.session as any)?.adminId);
+      console.log('[CSRF] Development mode - allowing authenticated admin request to:', req.path);
       return next();
     }
     
@@ -156,7 +168,13 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
     }
     
     if (!tokenValid) {
-      console.log('[CSRF] Token validation failed for admin route:', req.path, 'sessionIds tried:', possibleSessionIds, 'token:', token?.substring(0, 10) + '...');
+      // Only log detailed info in non-production environments (no token data)
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[CSRF] Admin token validation failed:', { 
+          path: req.path, 
+          sessionIdsTried: possibleSessionIds.length 
+        });
+      }
       return res.status(403).json({ 
         error: 'Invalid CSRF token',
         code: 'CSRF_TOKEN_MISMATCH'

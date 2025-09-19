@@ -122,8 +122,16 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      
+      // Security: Never log response bodies in production
+      // In development, exclude sensitive endpoints that contain tokens/PII
+      if (process.env.NODE_ENV !== 'production' && capturedJsonResponse) {
+        const sensitiveEndpoints = ['/api/csrf', '/api/auth/', '/api/admin/'];
+        const isSensitive = sensitiveEndpoints.some(endpoint => path.includes(endpoint));
+        
+        if (!isSensitive) {
+          logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+        }
       }
 
       if (logLine.length > 80) {

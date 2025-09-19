@@ -10,6 +10,7 @@ import { QuizRecommendationService } from "./quiz-service";
 import { z } from "zod";
 import express from "express";
 import path from "path";
+import { randomBytes } from "crypto";
 import passport from "passport";
 import session from "express-session";
 import createMemoryStore from "memorystore";
@@ -53,16 +54,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup session middleware
   const MemoryStore = createMemoryStore(session);
   
+  // Ensure SESSION_SECRET is required in production
+  if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET is required in production');
+  }
+
+  // Generate ephemeral secret for non-production environments only
+  const sessionSecret = process.env.SESSION_SECRET ?? 
+    (process.env.NODE_ENV !== 'production' ? 
+      randomBytes(64).toString('hex') : // Sessions reset on restart in dev
+      undefined
+    ) as string;
+
   const sessionConfig = {
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
-    secret: process.env.SESSION_SECRET || 'fallback-secret-key-change-in-production',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
+      sameSite: 'lax' as const, // Additional CSRF protection
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     },
   };
