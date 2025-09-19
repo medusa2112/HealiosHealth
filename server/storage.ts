@@ -86,7 +86,6 @@ export interface IStorage {
   
   // Admin Order methods
   getAllOrders(): Promise<Order[]>;
-  // DEPRECATED - Stripe methods removed for PayStack migration
   getOrderByPaystackReference(reference: string): Promise<Order | undefined>;
   updateOrderRefundStatus(orderId: string, status: string): Promise<Order | undefined>;
   
@@ -307,7 +306,6 @@ export class MemStorage implements IStorage {
         lastName: 'Demo',
         paystackCustomerCode: null,
         paystackCustomerId: null,
-        // DEPRECATED: stripeCustomerId removed for PayStack migration
         emailVerified: null,
         verificationCodeHash: null,
         verificationExpiresAt: null,
@@ -495,8 +493,6 @@ export class MemStorage implements IStorage {
       orderStatus: order.orderStatus ?? null,
       refundStatus: order.refundStatus ?? null,
       disputeStatus: order.disputeStatus ?? null,
-      // DEPRECATED: Stripe fields removed for PayStack migration
-      stripeSessionId: null,
       paymentMethod: order.paymentMethod ?? null,
       paystackReference: order.paystackReference ?? null,
       paystackAccessCode: order.paystackAccessCode ?? null,
@@ -733,7 +729,6 @@ export class MemStorage implements IStorage {
       currency: cart.currency || 'ZAR',
       paystackReference: cart.paystackReference ?? null,
       convertedToOrder: false,
-      stripeSessionId: null,
       createdAt: new Date().toISOString(), 
       lastUpdated: new Date().toISOString() 
     }; 
@@ -778,8 +773,6 @@ export class MemStorage implements IStorage {
       paystackSubscriptionId: subscription.paystackSubscriptionId ?? null,
       paystackCustomerId: subscription.paystackCustomerId ?? null,
       paystackPlanId: subscription.paystackPlanId ?? null,
-      stripeSubscriptionId: subscription.stripeSubscriptionId ?? null,
-      stripeCustomerId: subscription.stripeCustomerId ?? null,
       status: subscription.status ?? null,
       quantity: subscription.quantity ?? null,
       interval: subscription.interval ?? null,

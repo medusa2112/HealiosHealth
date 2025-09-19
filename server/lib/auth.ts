@@ -63,7 +63,7 @@ export function sanitizeUser(user: any): any {
     'access_token', 'refresh_token', 'token',
     'secret', 'key', 'privateKey',
     'claims', 'expires_at', 'sessionId',
-    'internalId', 'stripeCustomerId'
+    'internalId'
   ];
   
   // Explicitly exclude sensitive fields

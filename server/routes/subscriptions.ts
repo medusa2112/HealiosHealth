@@ -2,7 +2,6 @@
 import { Router } from "express";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
-// import Stripe from "stripe"; // DEPRECATED - removed for PayStack migration
 import { db } from "../db";
 import { subscriptions, productVariants, insertSubscriptionSchema } from "@shared/schema";
 import { eq } from "drizzle-orm";
@@ -17,8 +16,6 @@ import {
 import { securityEventLogger } from "../middleware/securityMonitoring";
 
 const router = Router();
-// const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2025-06-30.basil' }) : null; // DEPRECATED - removed for PayStack migration
-const stripe = null;
 
 // Phase 3 Security: Enhanced subscription checkout with fraud detection
 router.post("/checkout", 
@@ -55,48 +52,8 @@ router.post("/checkout",
       return res.status(404).json({ error: "Product variant not found" });
     }
 
-    if (!variant.subscriptionEnabled || !variant.subscriptionPriceId) {
-      return res.status(400).json({ error: "Subscription not available for this product" });
-    }
-
-    // Check if Stripe is configured
-    if (!stripe) {
-      return res.status(500).json({ error: "Payment processing not configured" });
-    }
-
-    // Create or get Stripe customer
-    const user = await storage.getUser(userId);
-    let stripeCustomerId = user?.stripeCustomerId;
-
-    if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: user?.email,
-        metadata: { userId },
-      });
-      stripeCustomerId = customer.id;
-
-      // Update user with Stripe customer ID
-      await storage.updateUser(userId, { stripeCustomerId });
-    }
-
-    // Create subscription checkout session  
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      customer: stripeCustomerId,
-      line_items: [{
-        price: variant.subscriptionPriceId,
-        quantity,
-      }],
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:5000'}/portal/subscriptions?success=true`,
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5000'}/products/${variant.productId}`,
-      metadata: {
-        userId,
-        variantId,
-        quantity: quantity.toString(),
-      },
-    });
-
-    res.json({ url: session.url });
+    // PayStack subscription functionality not yet implemented
+    return res.status(501).json({ error: "Subscription functionality not yet available with PayStack" });
 
   } catch (error) {
     // // console.error("Subscription checkout error:", error);
@@ -140,15 +97,8 @@ router.post("/:id/cancel", protectRoute(["customer", "admin"]), async (req, res)
       return res.status(403).json({ error: "Unauthorized" });
     }
 
-    // Check if Stripe is configured
-    if (!stripe) {
-      return res.status(500).json({ error: "Payment processing not configured" });
-    }
-
-    // Cancel at period end in Stripe
-    await stripe.subscriptions.update(subscription.stripeSubscriptionId, {
-      cancel_at_period_end: true,
-    });
+    // PayStack subscription cancellation not yet implemented
+    return res.status(501).json({ error: "Subscription cancellation not yet available with PayStack" });
 
     // Update local subscription record
     await storage.updateSubscription(id, {
@@ -192,15 +142,8 @@ router.post("/:id/reactivate", protectRoute(["customer", "admin"]), async (req, 
       return res.status(403).json({ error: "Unauthorized" });
     }
 
-    // Check if Stripe is configured
-    if (!stripe) {
-      return res.status(500).json({ error: "Payment processing not configured" });
-    }
-
-    // Reactivate in Stripe
-    await stripe.subscriptions.update(subscription.stripeSubscriptionId, {
-      cancel_at_period_end: false,
-    });
+    // PayStack subscription reactivation not yet implemented
+    return res.status(501).json({ error: "Subscription reactivation not yet available with PayStack" });
 
     // Update local subscription record
     await storage.updateSubscription(id, {

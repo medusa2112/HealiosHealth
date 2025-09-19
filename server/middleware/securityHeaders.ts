@@ -25,12 +25,12 @@ export function enhancedSecurityHeaders(req: Request, res: Response, next: NextF
   // Strict policy to prevent XSS attacks
   const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' https://js.stripe.com https://checkout.stripe.com`,
+    `script-src 'self' 'nonce-${nonce}'`
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // unsafe-inline needed for Tailwind
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://api.stripe.com https://checkout.stripe.com https://maps.googleapis.com",
-    "frame-src 'self' https://js.stripe.com https://checkout.stripe.com",
+    "connect-src 'self' https://maps.googleapis.com",
+    "frame-src 'self'"
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -55,7 +55,7 @@ export function enhancedSecurityHeaders(req: Request, res: Response, next: NextF
     'camera=()',
     'microphone=()',
     'geolocation=(self)',
-    'payment=(self https://checkout.stripe.com)',
+    'payment=(self)',
     'usb=()',
     'magnetometer=()',
     'gyroscope=()',

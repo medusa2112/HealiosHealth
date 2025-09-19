@@ -1223,7 +1223,6 @@ The Healios Team
           paymentMethod: 'paystack',
           paystackReference: 'test-ref-123',
           paystackAccessCode: 'test-access-123',
-          stripeSessionId: null,
           trackingNumber: null,
           notes: null,
           createdAt: new Date().toISOString(),

@@ -1,6 +1,5 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-// import Stripe from "stripe"; // DEPRECATED - removed for PayStack migration
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
 import type { CartItem } from "./email";
@@ -32,8 +31,6 @@ import cartRoutes from "./routes/cart";
 import emailTestRoutes from "./routes/email-test";
 import documentationRoutes from "./routes/documentation";
 
-// Stripe imports moved to dedicated service
-// import { stripe } from "./lib/stripe"; // DEPRECATED - removed for PayStack migration
 // Availability imports
 import { deriveAvailability, isOrderable, availabilityRank } from "../lib/availability";
 
@@ -73,8 +70,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register PayStack routes BEFORE body parsing middleware (for webhook signature)
   app.use('/api/paystack', paystackRoutes);
   
-  // DEPRECATED: Stripe routes - to be removed
-  // app.use('/stripe', stripeRoutes);
 
   // Register health check routes - must be early for monitoring
   const healthRoutes = await import('./routes/health');
@@ -523,11 +518,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // DEPRECATED - Stripe checkout session removed for PayStack migration
-  app.post("/api/create-checkout-session", async (req: express.Request, res: express.Response) => {
-    console.warn('DEPRECATED: Stripe checkout called - use PayStack instead');
-    res.status(410).json({ error: 'Stripe integration deprecated - use PayStack' });
-  });
 
   // Create Shopify redirect endpoint
   // DEPRECATED - Shopify checkout removed for PayStack migration

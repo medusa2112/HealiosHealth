@@ -16,7 +16,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https:",  // Allow images from any HTTPS source
     "media-src 'self' blob: data:",  // Allow video/audio
-    "connect-src 'self' https://api.stripe.com https://api.openai.com", // API connections
+    "connect-src 'self' https://api.openai.com", // API connections
     "frame-ancestors 'none'",  // Prevent clickjacking
     "base-uri 'self'",
     "form-action 'self'",

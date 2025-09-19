@@ -15,7 +15,6 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   paystackCustomerCode: text("paystack_customer_code"), // PayStack customer code
   paystackCustomerId: text("paystack_customer_id"), // PayStack customer ID
-  // DEPRECATED: stripeCustomerId removed for PayStack migration
   emailVerified: text("email_verified"), // Timestamp when email was verified
   verificationCodeHash: text("verification_code_hash"), // Hashed verification code
   verificationExpiresAt: text("verification_expires_at"), // When code expires
