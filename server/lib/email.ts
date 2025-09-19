@@ -6,7 +6,7 @@ const isEmailEnabled = true;
 
 export const resend = ENV.RESEND_API_KEY ? new Resend(ENV.RESEND_API_KEY) : null;
 
-export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "newsletter_confirmation";
+export type EmailType = "order_confirm" | "refund" | "reorder" | "admin_alert" | "newsletter_confirmation" | "newsletter_admin_notification";
 
 interface EmailData {
   amount?: number;
@@ -120,6 +120,7 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
     reorder: "Your Healios Reorder Is Complete",
     admin_alert: "⚠️ Healios Admin Alert",
     newsletter_confirmation: "Welcome to Healios Newsletter! 🌟",
+    newsletter_admin_notification: "📧 New Newsletter Subscription - Healios",
   };
 
   const healiosEmailTemplate = (title: string, content: string, footerNote?: string) => `
@@ -301,6 +302,27 @@ export async function sendEmail(to: string, type: EmailType, data: EmailData) {
         <p style="margin: 0; font-size: 16px; color: #000000;">Thank you for choosing Healios for your wellness needs! 💚</p>
       `,
       "You can unsubscribe from our newsletter at any time by replying to this email with 'UNSUBSCRIBE' in the subject line."
+    ),
+    newsletter_admin_notification: (data) => healiosEmailTemplate(
+      "New Newsletter Subscription",
+      `
+        <p style="margin: 0 0 20px 0; font-size: 16px; color: #000000;">A new user has subscribed to the Healios newsletter.</p>
+        
+        <div style="background: linear-gradient(135deg, hsl(280, 100%, 35%), hsl(320, 100%, 50%)); padding: 20px; border-radius: 8px; margin: 24px 0;">
+          <div style="background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 6px;">
+            <p style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #000000;">📧 New Subscriber Details</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Name:</strong> ${data.firstName} ${data.lastName}</p>
+            <p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Email:</strong> ${data.email}</p>
+            ${data.birthday ? `<p style="margin: 0 0 8px 0; font-size: 16px; color: #000000;"><strong>Birthday:</strong> ${data.birthday}</p>` : ''}
+            <p style="margin: 0; font-size: 16px; color: #000000;"><strong>Subscribed:</strong> <span style="color: hsl(160, 100%, 35%); font-weight: 500;">${new Date().toLocaleDateString()}</span></p>
+          </div>
+        </div>
+        
+        <p style="margin: 24px 0; font-size: 16px; color: #000000;">The subscriber has been automatically added to the newsletter database and will receive future communications.</p>
+        
+        <p style="margin: 0; font-size: 16px; color: #000000;">This notification was sent automatically from the Healios newsletter system.</p>
+      `,
+      "This is an automated notification from the Healios newsletter system."
     ),
   };
 

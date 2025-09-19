@@ -1,5 +1,5 @@
 import { Switch, Route, useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -51,6 +51,7 @@ import NotFound from "@/pages/not-found";
 import { AIAssistant, ChatBubble } from "@/components/AIAssistant";
 import { CookieConsent } from "@/components/cookie-consent";
 import { MaintenanceModal } from "@/components/maintenance-modal";
+import { NewsletterPopup } from "@/components/newsletter-popup";
 
 // ADMIN FUNCTIONALITY REMOVED
 // Import admin components conditionally
@@ -129,10 +130,36 @@ function AppContent() {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isAIAssistantMinimized, setIsAIAssistantMinimized] = useState(false);
   const [hasMaintenanceAccess, setHasMaintenanceAccess] = useState(false);
+  const [isNewsletterPopupOpen, setIsNewsletterPopupOpen] = useState(false);
+  const [hasShownNewsletterThisSession, setHasShownNewsletterThisSession] = useState(false);
   const [location] = useLocation();
   
   const handleMaintenanceAccessGranted = () => {
     setHasMaintenanceAccess(true);
+  };
+  
+  // Newsletter popup logic
+  useEffect(() => {
+    // Check if user has already subscribed or seen popup this session
+    const hasSubscribed = localStorage.getItem('healios_newsletter_subscribed') === 'true';
+    
+    if (hasSubscribed || hasShownNewsletterThisSession) {
+      return;
+    }
+    
+    // Set 5-second timer to show newsletter popup
+    const timer = setTimeout(() => {
+      if (!hasShownNewsletterThisSession) {
+        setIsNewsletterPopupOpen(true);
+        setHasShownNewsletterThisSession(true);
+      }
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, [hasShownNewsletterThisSession]);
+  
+  const handleNewsletterClose = () => {
+    setIsNewsletterPopupOpen(false);
   };
   
   // ADMIN FUNCTIONALITY REMOVED
@@ -173,6 +200,13 @@ function AppContent() {
         isMinimized={isAIAssistantMinimized}
         onMinimize={() => setIsAIAssistantMinimized(!isAIAssistantMinimized)}
       />
+      
+      {/* Newsletter Popup */}
+      <NewsletterPopup 
+        isOpen={isNewsletterPopupOpen}
+        onClose={handleNewsletterClose}
+      />
+      
       <Toaster />
       <CookieConsent />
     </div>

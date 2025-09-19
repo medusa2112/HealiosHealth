@@ -42,7 +42,7 @@ router.post('/subscribe', newsletterLimiter, async (req, res) => {
       }
       
       // Store subscription in database (exclude honeypot field)
-      const subscriptionData = { firstName, lastName, email, birthday };
+      const subscriptionData = { firstName, lastName, email, birthday, website: "" };
       const subscription = await storage.subscribeToNewsletter(subscriptionData);
       console.log(`[NEWSLETTER] New subscription stored: ${firstName} ${lastName} <${email}>`);
       
@@ -59,16 +59,33 @@ router.post('/subscribe', newsletterLimiter, async (req, res) => {
         // Don't fail the subscription if email fails
       }
       
+      // Send admin notification emails
+      const adminEmails = ['ms@thefourths.com', 'dn@thefourths.com'];
+      for (const adminEmail of adminEmails) {
+        try {
+          await sendEmail(adminEmail, 'newsletter_admin_notification', {
+            firstName,
+            lastName,
+            email,
+            birthday
+          });
+          console.log(`[NEWSLETTER] Admin notification sent to: ${adminEmail}`);
+        } catch (adminEmailError) {
+          console.error(`[NEWSLETTER] Failed to send admin notification to ${adminEmail}:`, adminEmailError);
+          // Don't fail the subscription if admin email fails
+        }
+      }
+      
       res.json({
         success: true,
         message: 'Successfully subscribed to newsletter! Please check your email for confirmation.'
       });
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('[NEWSLETTER] Subscription error:', error);
       
       // Handle database constraint errors (duplicate email)
-      if (error.code === '23505' || error.message?.includes('unique constraint')) {
+      if (error?.code === '23505' || error?.message?.includes('unique constraint')) {
         return res.status(409).json({
           success: false,
           message: 'This email address is already subscribed to our newsletter.'
