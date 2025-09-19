@@ -8,6 +8,7 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 import { EmailService } from "./email";
+import { ENV } from "./config/env";
 
 if (!process.env.REPLIT_DOMAINS) {
   throw new Error("Environment variable REPLIT_DOMAINS not provided");
@@ -266,7 +267,7 @@ export async function setupAuth(app: Express) {
       const userEmail = (req.user as any).email;
       const userRole = (req.user as any).role;
 
-      const adminEmails = (process.env.ALLOWED_ADMIN_EMAILS || '').split(',').map(e => e.trim());
+      const adminEmails = ENV.ADMIN_EMAILS;
       const isAdmin = userRole === 'admin' || adminEmails.includes(userEmail);
       
       if (isAdminLogin && isAdmin) {
