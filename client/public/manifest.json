@@ -1,7 +1,7 @@
 {
-  "name": "WildClone - Food-Grown® Supplements",
-  "short_name": "WildClone",
-  "description": "Premium Food-Grown® supplements with 113% better absorption. Natural vitamins for every life stage and health goal.",
+  "name": "Healios - Science-Backed Supplement Gummies",
+  "short_name": "Healios",
+  "description": "Premium science-backed supplement gummies with superior bioavailability. Natural vitamins for immunity, energy, and wellness.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -22,6 +22,10 @@
     }
   ],
   "categories": ["health", "shopping", "lifestyle"],
+  "developer": {
+    "name": "THE FOURTHS DIGITAL AGENCY",
+    "url": "mailto:hello@thefourths.com"
+  },
   "lang": "en",
   "dir": "ltr"
 }
