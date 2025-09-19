@@ -31,8 +31,8 @@ const addressSchema = z.object({
   line1: z.string().min(5, "Street address must be at least 5 characters"),
   line2: z.string().optional(),
   city: z.string().min(2, "City is required"),
-  region: z.string().min(2, "Province is required"),
-  postal_code: z.string().min(4, "Postal code must be at least 4 characters"),
+  state: z.string().min(2, "Province is required"),
+  zipCode: z.string().min(4, "Postal code must be at least 4 characters"),
   country: z.literal("South Africa"),
 });
 
@@ -50,8 +50,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
     line1: '',
     line2: '',
     city: '',
-    region: '',
-    postal_code: '',
+    state: '',
+    zipCode: '',
     country: 'South Africa',
   });
   
@@ -172,8 +172,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
       ...prev,
       line1: line1 || place.formatted_address,
       city: getComponent(['locality', 'administrative_area_level_2']),
-      region: getComponent(['administrative_area_level_1']),
-      postal_code: getComponent(['postal_code']),
+      state: getComponent(['administrative_area_level_1']),
+      zipCode: getComponent(['postal_code']),
       country: 'South Africa'
     }));
   };
@@ -200,8 +200,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         ...prev,
         line1: line1 || place.formattedAddress,
         city: getAddressComponent(['locality', 'administrative_area_level_2']),
-        region: getAddressComponent(['administrative_area_level_1']),
-        postal_code: getAddressComponent(['postal_code']),
+        state: getAddressComponent(['administrative_area_level_1']),
+        zipCode: getAddressComponent(['postal_code']),
         country: 'South Africa'
       }));
     } catch (error) {
@@ -351,7 +351,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
 
   // Validate address format (currently simplified due to API restrictions)
   const validateWithGoogle = async () => {
-    if (!address.line1 || !address.city || !address.region) {
+    if (!address.line1 || !address.city || !address.state) {
       setValidationErrors(prev => ({ 
         ...prev, 
         addressValidation: 'Please fill in address, city, and province first' 
@@ -367,8 +367,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         address.line1,
         address.line2,
         address.city,
-        address.region,
-        address.postal_code,
+        address.state,
+        address.zipCode,
         'South Africa'
       ].filter(line => line && line.trim());
 
@@ -401,8 +401,8 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         // Fallback to local validation if API fails
         const hasStreetNumber = /\d+/.test(address.line1);
         const isValidCity = address.city.length >= 2;
-        const isValidProvince = SA_PROVINCES.includes(address.region);
-        const hasPostalCode = address.postal_code && /^\d{4}$/.test(address.postal_code);
+        const isValidProvince = SA_PROVINCES.includes(address.state);
+        const hasPostalCode = address.zipCode && /^\d{4}$/.test(address.zipCode);
 
         if (hasStreetNumber && isValidCity && isValidProvince) {
           setValidationResult({
@@ -464,12 +464,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
     if (result.success) {
       setIsValid(true);
       setValidationErrors({});
-      // Map region to state for Stripe compatibility
-      const stripeCompatibleAddress = {
-        ...result.data,
-        state: result.data.region // Map region to state for Stripe
-      };
-      onValidationChange(true, stripeCompatibleAddress as AddressData);
+      onValidationChange(true, result.data);
     } else {
       setIsValid(false);
       const errors: Record<string, string> = {};
@@ -635,22 +630,22 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
             </div>
 
             <div>
-              <Label htmlFor="postal_code">Postal Code *</Label>
+              <Label htmlFor="zipCode">Postal Code *</Label>
               <Input
-                id="postal_code"
+                id="zipCode"
                 type="text"
                 placeholder="8001"
-                value={address.postal_code || ''}
-                onChange={(e) => handleFieldChange('postal_code', e.target.value)}
-                className={hasFieldError('postal_code') ? 'border-red-500' : ''}
-                data-testid="input-postal-code"
+                value={address.zipCode || ''}
+                onChange={(e) => handleFieldChange('zipCode', e.target.value)}
+                className={hasFieldError('zipCode') ? 'border-red-500' : ''}
+                data-testid="input-zipcode"
                 required
               />
-              {hasFieldError('postal_code') && (
+              {hasFieldError('zipCode') && (
                 <Alert className="mt-1 py-2">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription className="text-sm">
-                    {getFieldError('postal_code')}
+                    {getFieldError('zipCode')}
                   </AlertDescription>
                 </Alert>
               )}
@@ -658,12 +653,12 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
           </div>
 
           <div>
-            <Label htmlFor="region">Province *</Label>
+            <Label htmlFor="state">Province *</Label>
             <Select 
-              value={address.region || ''} 
-              onValueChange={(value) => handleFieldChange('region', value)}
+              value={address.state || ''} 
+              onValueChange={(value) => handleFieldChange('state', value)}
             >
-              <SelectTrigger className={hasFieldError('region') ? 'border-red-500' : ''}>
+              <SelectTrigger className={hasFieldError('state') ? 'border-red-500' : ''}>
                 <SelectValue placeholder="Select province" />
               </SelectTrigger>
               <SelectContent>
@@ -674,11 +669,11 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
                 ))}
               </SelectContent>
             </Select>
-            {hasFieldError('region') && (
+            {hasFieldError('state') && (
               <Alert className="mt-1 py-2">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="text-sm">
-                  {getFieldError('region')}
+                  {getFieldError('state')}
                 </AlertDescription>
               </Alert>
             )}
@@ -686,7 +681,7 @@ export const SouthAfricaAddressForm = ({ onValidationChange }: SouthAfricaAddres
         </div>
 
         {/* Address Validation */}
-        {address.line1 && address.city && address.region && (
+        {address.line1 && address.city && address.state && (
           <div className="space-y-2 pt-3 border-t border-gray-100 dark:border-gray-800">
             <div className="flex items-center gap-2">
               <Button
