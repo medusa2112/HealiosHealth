@@ -11,6 +11,8 @@ import { z } from "zod";
 import express from "express";
 import path from "path";
 import passport from "passport";
+import session, { SessionOptions } from "express-session";
+import createMemoryStore from "memorystore";
 import { protectRoute, requireAuth, rateLimit, secureHeaders, validateOrderAccess, validateCustomerEmail } from "./lib/auth";
 // import { setupAuth } from "./replitAuth"; // Quarantined
 import authRoutes from "./routes/auth";
@@ -49,11 +51,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(express.static(path.resolve(process.cwd(), 'client/public')));
   
   // Setup session middleware
-  const session = await import('express-session');
-  const sessionStore = await import('memorystore');
-  const MemoryStore = sessionStore.default(session.default);
+  const MemoryStore = createMemoryStore(session);
   
-  app.use(session.default({
+  const sessionConfig: SessionOptions = {
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
@@ -65,7 +65,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     },
-  }));
+  };
+  
+  app.use(session(sessionConfig));
 
   // Register PayStack routes BEFORE body parsing middleware (for webhook signature)
   app.use('/api/paystack', paystackRoutes);
