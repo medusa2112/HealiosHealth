@@ -118,8 +118,8 @@ export function MaintenanceModal({ isOpen, onAccessGranted }: MaintenanceModalPr
         <div className="mt-6 pt-6 border-t border-white/20">
           <p className="text-xs text-white/60 text-center">
             For urgent matters, please contact support at{" "}
-            <a href="mailto:support@healios.com" className="text-white hover:underline">
-              support@healios.com
+            <a href="mailto:hello@thehealios.com" className="text-white hover:underline">
+              hello@thehealios.com
             </a>
           </p>
         </div>
