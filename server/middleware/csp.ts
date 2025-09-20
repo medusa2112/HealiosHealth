@@ -22,6 +22,10 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
     ].join('; '));
   } else {
     // Production CSP - balanced security policy
+    // Get current protocol and host for dynamic CSP
+    const protocol = req.protocol || 'https';
+    const currentOrigin = `${protocol}://${req.get('host')}`;
+    
     res.setHeader('Content-Security-Policy', [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://replit.com https://maps.googleapis.com",
@@ -29,7 +33,7 @@ export function contentSecurityPolicy(req: Request, res: Response, next: NextFun
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' data: https: blob:",
-      "connect-src 'self' https://healios-health-dominic96.replit.app https://ipapi.co https://maps.googleapis.com",
+      `connect-src 'self' ${currentOrigin} https://ipapi.co https://maps.googleapis.com`,
       "frame-src 'self'",
       "object-src 'none'",
       "base-uri 'self'",
