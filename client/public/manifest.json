@@ -3,7 +3,7 @@
   "short_name": "Healios",
   "description": "Premium science-backed supplement gummies with superior bioavailability. Natural vitamins for immunity, energy, and wellness.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#ffffff",
   "theme_color": "#FFD700",
   "orientation": "portrait-primary",
@@ -21,7 +21,6 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["health", "shopping", "lifestyle"],
   "developer": {
     "name": "THE FOURTHS DIGITAL AGENCY",
     "url": "mailto:hello@thefourths.com"
