@@ -1,4 +1,4 @@
-import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue, type WebhookEvent, type InsertWebhookEvent } from "@shared/schema";
+import { type Product, type InsertProduct, type ProductVariant, type InsertProductVariant, type Newsletter, type InsertNewsletter, type PreOrder, type InsertPreOrder, type Article, type InsertArticle, type Order, type InsertOrder, type StockAlert, type InsertStockAlert, type QuizResult, type InsertQuizResult, type ConsultationBooking, type InsertConsultationBooking, type RestockNotification, type InsertRestockNotification, type User, type InsertUser, type UpsertUser, type Address, type InsertAddress, type OrderItem, type InsertOrderItem, type Cart, type InsertCart, type DiscountCode, type InsertDiscountCode, type Subscription, type InsertSubscription, type SecurityIssue, type InsertSecurityIssue, type WebhookEvent, type InsertWebhookEvent, type SelectAdmin, type InsertAdmin } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { mockSecurityIssues } from "./security-seed";
 import { hashPassword, verifyPassword } from "./lib/password";
@@ -69,6 +69,17 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, user: Partial<User>): Promise<User | undefined>;
+  
+  // Admins (2FA and admin management)
+  getAdminByEmail(email: string): Promise<SelectAdmin | undefined>;
+  getAdminById(id: number): Promise<SelectAdmin | undefined>;
+  createAdmin(admin: InsertAdmin): Promise<SelectAdmin>;
+  updateAdmin(id: number, admin: Partial<SelectAdmin>): Promise<SelectAdmin | undefined>;
+  updateAdminTotpSecret(id: number, totpSecret: string | null): Promise<SelectAdmin | undefined>;
+  updateAdminTotpEnabled(id: number, enabled: boolean): Promise<SelectAdmin | undefined>;
+  updateAdminBackupCodes(id: number, backupCodes: string[]): Promise<SelectAdmin | undefined>;
+  updateAdminLastLogin(id: number): Promise<SelectAdmin | undefined>;
+  updateAdminLastTotpTimestep(id: number, timestep: number | null): Promise<SelectAdmin | undefined>;
   
   // Addresses (Customer Portal)
   getAddressesByUserId(userId: string): Promise<Address[]>;
@@ -222,6 +233,7 @@ export class MemStorage implements IStorage {
   private webhookEvents: Map<string, WebhookEvent>; // Webhook idempotency tracking
   // PIN Verification Storage
   private pendingVerifications: Map<string, { codeHash: string; expiresAt: string; type: 'registration' | 'login'; userData?: any; attempts: number }>;
+  private admins: Map<number, SelectAdmin>; // Admin 2FA management
 
   constructor() {
     this.products = new Map();
@@ -248,6 +260,7 @@ export class MemStorage implements IStorage {
     this.fixAttempts = new Map(); // ALFR3D Fix Attempts
     this.webhookEvents = new Map(); // Webhook idempotency tracking
     this.pendingVerifications = new Map(); // PIN Verification
+    this.admins = new Map(); // Admin 2FA management
     this.seedData();
     this.seedUsers(); // Add test users
     this.seedProductVariants(); // Phase 14
@@ -1029,6 +1042,66 @@ export class MemStorage implements IStorage {
     this.pendingVerifications.delete(normalizedEmail);
     
     return user;
+  }
+
+  // Admin 2FA management methods
+  async getAdminByEmail(email: string): Promise<SelectAdmin | undefined> {
+    for (const admin of this.admins.values()) {
+      if (admin.email.toLowerCase() === email.toLowerCase()) {
+        return admin;
+      }
+    }
+    return undefined;
+  }
+
+  async getAdminById(id: number): Promise<SelectAdmin | undefined> {
+    return this.admins.get(id);
+  }
+
+  async createAdmin(admin: InsertAdmin): Promise<SelectAdmin> {
+    const id = Math.max(0, ...Array.from(this.admins.keys())) + 1;
+    const newAdmin: SelectAdmin = {
+      id,
+      email: admin.email,
+      passwordHash: admin.passwordHash || null,
+      createdAt: new Date(),
+      lastLoginAt: null,
+      totpSecret: admin.totpSecret || null,
+      totpEnabled: admin.totpEnabled || false,
+      backupCodes: admin.backupCodes || null,
+      active: admin.active !== undefined ? admin.active : true,
+    };
+    this.admins.set(id, newAdmin);
+    return newAdmin;
+  }
+
+  async updateAdmin(id: number, admin: Partial<SelectAdmin>): Promise<SelectAdmin | undefined> {
+    const existingAdmin = this.admins.get(id);
+    if (!existingAdmin) return undefined;
+    
+    const updatedAdmin: SelectAdmin = { ...existingAdmin, ...admin };
+    this.admins.set(id, updatedAdmin);
+    return updatedAdmin;
+  }
+
+  async updateAdminTotpSecret(id: number, totpSecret: string | null): Promise<SelectAdmin | undefined> {
+    return this.updateAdmin(id, { totpSecret });
+  }
+
+  async updateAdminTotpEnabled(id: number, enabled: boolean): Promise<SelectAdmin | undefined> {
+    return this.updateAdmin(id, { totpEnabled: enabled });
+  }
+
+  async updateAdminBackupCodes(id: number, backupCodes: string[]): Promise<SelectAdmin | undefined> {
+    return this.updateAdmin(id, { backupCodes });
+  }
+
+  async updateAdminLastLogin(id: number): Promise<SelectAdmin | undefined> {
+    return this.updateAdmin(id, { lastLoginAt: new Date() });
+  }
+
+  async updateAdminLastTotpTimestep(id: number, timestep: number | null): Promise<SelectAdmin | undefined> {
+    return this.updateAdmin(id, { lastTotpTimestep: timestep });
   }
 }
 

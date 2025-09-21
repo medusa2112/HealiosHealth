@@ -6,6 +6,30 @@ import { z } from "zod";
 // Import ALFR3D security issues schema
 export * from './alfr3d-schema';
 
+// Separate admins table for enhanced security
+export const admins = pgTable('admins', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash'), // Optional for OAuth-only admins
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  lastLoginAt: timestamp('last_login_at'),
+  totpSecret: text('totp_secret'), // TOTP secret for 2FA
+  totpEnabled: boolean('totp_enabled').default(false).notNull(),
+  backupCodes: text('backup_codes').array(), // Recovery codes
+  lastTotpTimestep: integer('last_totp_timestep'), // For replay protection (30s timesteps)
+  active: boolean('active').default(true).notNull(),
+});
+
+// Admin table schema and types
+export const insertAdminSchema = createInsertSchema(admins).omit({
+  id: true,
+  createdAt: true,
+  lastLoginAt: true,
+});
+
+export type InsertAdmin = z.infer<typeof insertAdminSchema>;
+export type SelectAdmin = typeof admins.$inferSelect;
+
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),

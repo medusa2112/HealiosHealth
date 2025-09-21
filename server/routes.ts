@@ -28,6 +28,8 @@ import { requireCustomer } from "./mw/requireCustomer";
 // ADMIN FUNCTIONALITY REMOVED
 // import { requireAdmin } from "./mw/requireAdmin";
 import portalRoutes from "./routes/portal";
+import admin2faRoutes from "./routes/admin2fa";
+import adminTestRoutes from "./routes/adminTest";
 
 import paystackRoutes from "./routes/paystack";
 import cartRoutes from "./routes/cart";
@@ -179,6 +181,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register review routes  
   const reviewRoutes = await import('./routes/reviews');
   app.use('/api/reviews', reviewRoutes.default);
+  
+  // Register admin 2FA routes
+  app.use('/api/admin/2fa', admin2faRoutes);
+  
+  // Register admin test routes (always require admin auth, optionally require 2FA)
+  const { requireAdminAuth, optionalRequire2FA } = await import('./middleware/admin2fa');
+  app.use('/api/admin', requireAdminAuth, optionalRequire2FA, adminTestRoutes);
   
   // ADMIN FUNCTIONALITY REMOVED
   // Register admin cart analytics routes
