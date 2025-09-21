@@ -138,7 +138,7 @@ export const ENV = {
   PERPLEXITY_API_KEY: config.PERPLEXITY_API_KEY,
   
   // CORS and security
-  PROD_ORIGINS: (config.PROD_ORIGINS ?? 'https://healios-health-dominic96.replit.app').split(',').filter(Boolean),
+  PROD_ORIGINS: (config.PROD_ORIGINS ?? 'https://www.thehealios.com,https://thehealios.com').split(',').filter(Boolean),
   DEV_ORIGINS: [
     ...((config.DEV_ORIGINS ?? 'http://localhost:5000,http://127.0.0.1:5000').split(',').filter(Boolean)),
     ...replitDomains // Include Replit domains in development

@@ -8,6 +8,7 @@ import { contentSecurityPolicy } from "./middleware/csp";
 import { logger } from "./lib/logger";
 import { ENV } from "./config/env";
 import { corsMw } from "./security/cors";
+import { domainRedirectMiddleware } from "./middleware/domainRedirect";
 import { healthRouter } from "./health";
 // DISABLED: Custom session middlewares - using Replit Auth only
 // import { customerSession } from "./auth/sessionCustomer";
@@ -66,6 +67,9 @@ app.use(auditAuthEvents);
 
 // Use the new hardened CORS middleware
 app.use(corsMw);
+
+// Domain redirect middleware - redirect apex domain to www subdomain in production
+app.use(domainRedirectMiddleware);
 
 // Mount health endpoints early (before auth) under /api prefix
 app.use('/api', healthRouter());
