@@ -78,9 +78,12 @@ export function csrfProtection(req: CSRFRequest, res: Response, next: NextFuncti
   // Phase 2 Security: Remove development bypasses for stronger protection
   // Only skip CSRF for specific public endpoints that genuinely don't need it
 
-  // Skip CSRF for auth endpoints during initial login/register/password reset/verification
+  // Skip CSRF for health endpoints, webhooks, and public endpoints
   const fullPath = req.originalUrl || req.url || req.path;
-  if (fullPath.includes('/auth/login') || 
+  if (fullPath.includes('/api/health') ||  // Health check endpoints
+      fullPath.includes('/api/status') ||  // Status endpoints  
+      fullPath.includes('/api/csrf') ||   // CSRF token endpoints
+      fullPath.includes('/auth/login') || 
       fullPath.includes('/auth/register') ||
       fullPath.includes('/auth/customer/login') ||  // Phase 8: Customer login
       fullPath.includes('/auth/customer/register') || // Phase 8: Customer register

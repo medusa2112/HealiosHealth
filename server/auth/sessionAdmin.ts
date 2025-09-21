@@ -17,7 +17,7 @@ export const adminSession = session({
     path: '/', // Available to all endpoints
     secure: ENV.isProd, // HTTPS only in production
     maxAge: 2 * 60 * 60 * 1000, // Reduced to 2 hours for admin sessions (more secure)
-    domain: undefined, // Let browser handle domain
+    domain: ENV.isProd ? '.thehealios.com' : undefined, // Production domain hardening
   },
   store: ENV.isProd ? new PgSession({
     tableName: 'session_admins',
@@ -27,7 +27,3 @@ export const adminSession = session({
   }) : undefined, // Use memory store in development
 });
 
-' : 'Memory',
-  ttl: '4 hours',
-  path: '/', // Fixed to reflect actual configuration
-});

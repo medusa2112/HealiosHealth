@@ -17,7 +17,7 @@ export const customerSession = session({
     path: '/',
     secure: ENV.isProd, // HTTPS only in production
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days for customer convenience
-    domain: undefined, // Let browser handle domain
+    domain: ENV.isProd ? '.thehealios.com' : undefined, // Production domain hardening
   },
   store: ENV.isProd ? new PgSession({
     tableName: 'session_customers',
@@ -27,6 +27,3 @@ export const customerSession = session({
   }) : undefined, // Use memory store in development
 });
 
-' : 'Memory',
-  ttl: '7 days',
-});

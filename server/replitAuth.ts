@@ -250,7 +250,7 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     passport.authenticate(`replitauth:${req.hostname}`, {
       failureRedirect: "/api/login",
-    })(req, res, (err: any) => {
+    })(req, res, async (err: any) => {
       if (err) {
         // // console.error('[OAUTH_CALLBACK] Authentication error:', err);
         return res.redirect('/api/login');
@@ -271,6 +271,22 @@ export async function setupAuth(app: Express) {
       const isAdmin = userRole === 'admin' || adminEmails.includes(userEmail);
       
       if (isAdminLogin && isAdmin) {
+        
+        // SECURITY: Regenerate session ID to prevent session fixation for admin OAuth login
+        await new Promise<void>((resolve, reject) => {
+          req.session.regenerate((err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+        
+        // Re-establish Passport session after regeneration
+        await new Promise<void>((resolve, reject) => {
+          req.login(req.user as any, (err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
         
         delete (req.session as any).adminLoginAttempt;
         delete (req.session as any).adminLoginRedirect;
@@ -297,6 +313,22 @@ export async function setupAuth(app: Express) {
         });
       } else if (userRole === 'admin') {
         
+        // SECURITY: Regenerate session ID to prevent session fixation for admin OAuth login
+        await new Promise<void>((resolve, reject) => {
+          req.session.regenerate((err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+        
+        // Re-establish Passport session after regeneration
+        await new Promise<void>((resolve, reject) => {
+          req.login(req.user as any, (err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+        
         (req.session as any).adminId = (req.user as any).id;
         (req.session as any).adminEmail = userEmail; // Also set email for status endpoint
         
@@ -310,6 +342,22 @@ export async function setupAuth(app: Express) {
 
         return res.redirect('/admin');
       } else {
+        
+        // SECURITY: Regenerate session ID to prevent session fixation for customer OAuth login
+        await new Promise<void>((resolve, reject) => {
+          req.session.regenerate((err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
+        
+        // Re-establish Passport session after regeneration
+        await new Promise<void>((resolve, reject) => {
+          req.login(req.user as any, (err: any) => {
+            if (err) reject(err);
+            else resolve();
+          });
+        });
         
         const returnUrl = (req.session as any)?.customer_return_url || '/portal';
         delete (req.session as any).customer_return_url;

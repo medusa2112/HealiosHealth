@@ -2,8 +2,15 @@ import { Router } from 'express';
 
 const router = Router();
 
-// Health check endpoint with auth status
+// Comprehensive auth status check (richer than cookie-only check)
 router.get('/health/auth', (req, res) => {
+  // Set no-cache headers for health checks
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  
   const authStatus = {
     nodeEnv: process.env.NODE_ENV,
     timestamp: new Date().toISOString(),
@@ -23,6 +30,12 @@ router.get('/health/auth', (req, res) => {
       originsConfigured: process.env.NODE_ENV === 'production' 
         ? !!process.env.PROD_ORIGINS 
         : true,
+      // Include cookie presence for comprehensive status
+      cookieStatus: {
+        custCookie: req.cookies?.['hh_cust_sess'] ? 'present' : 'absent',
+        adminCookie: req.cookies?.['hh_admin_sess'] ? 'present' : 'absent',
+        legacyCookie: req.cookies?.['healios.sid'] ? 'present' : 'absent'
+      }
     }
   };
   
@@ -57,8 +70,15 @@ router.get('/health/auth', (req, res) => {
   });
 });
 
-// Basic health check
+// Basic health check with no-cache headers
 router.get('/health', (req, res) => {
+  // Set no-cache headers for health checks
+  res.set({
+    'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),

@@ -244,15 +244,15 @@ router.post('/logout', async (req, res) => {
     
     if (userId) {
       // Log logout action
-      await auditLogout(userId, {
-        ip: req.ip || req.connection.remoteAddress,
-        userAgent: req.get('User-Agent'),
-        action: 'customer_logout'
-      });
+      await auditLogout(userId);
     }
 
-    // Clear session
-    req.session = null;
+    // Clear session properly
+    req.session.destroy((err: any) => {
+      if (err) {
+        console.error('Session destroy error:', err);
+      }
+    });
 
     res.json({ 
       success: true, 

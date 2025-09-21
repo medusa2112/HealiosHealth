@@ -67,9 +67,9 @@ app.use(auditAuthEvents);
 // Use the new hardened CORS middleware
 app.use(corsMw);
 
-// Mount health endpoints early (before auth)
-app.use(healthRouter());
-app.use(healthRoutes); // Add the new health routes with auth status
+// Mount health endpoints early (before auth) under /api prefix
+app.use('/api', healthRouter());
+app.use('/api', healthRoutes); // Add the new health routes with auth status
 
 // Phase 3 Security: Setup uncaught exception handlers
 setupUncaughtExceptionHandlers();
