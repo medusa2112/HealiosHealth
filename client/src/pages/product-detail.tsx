@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "wouter";
 import { Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight, Plus, Minus, Check, Bell, Calendar } from "lucide-react";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 
 // Helper function to determine the correct unit for products
-const getProductUnit = (product: Product): string => {
+const getProductUnit = (product: ProductWithAvailability): string => {
   const name = product.name.toLowerCase();
   if (name.includes('gummies')) return 'gummies';
   if (name.includes('powder')) return 'servings';
@@ -30,7 +30,7 @@ export default function ProductDetail() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
 
-  const { data: product, isLoading, error } = useQuery<Product>({
+  const { data: product, isLoading, error } = useQuery<ProductWithAvailability>({
     queryKey: ["/api/products", params?.id],
     enabled: !!params?.id});
 
@@ -293,7 +293,7 @@ export default function ProductDetail() {
     },
     {
       question: "Is this suitable for vegetarians/vegans?",
-      answer: false "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
+      answer: product?.id === 'vitamin-d3-gummies' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
     }
   ];
 
@@ -317,7 +317,7 @@ export default function ProductDetail() {
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
     "Adults: Take 1 capsule, 1–3 times daily with water. Do not exceed the recommended daily amount." 
-    : false
+    : product?.id === 'vitamin-d3-gummies' ?
     "Adults: Take 1 gummy daily.\n\nChew thoroughly before swallowing (do not swallow whole).\n\nDo not exceed the recommended daily dose.\n\nBest taken consistently year-round, especially in winter months.\n\nNot recommended for children.\nThese are adult-strength gummies (4000 IU). The label only provides adult directions: 1 gummy daily"
     : product?.id === 'ashwagandha' ?
     "Adults (18+): Take 1 capsule daily, with water.\n\nBest taken in the morning or early evening, ideally with food\n\nConsistency is important — allow 2–4 weeks for effects to build\n\nSafe for long-term daily use up to 3 months, then take a break if needed\n\nNot suitable during pregnancy or breastfeeding\n\nConsult a doctor before use if taking thyroid medication, blood pressure medication, or psychoactive drugs\n\n❌ Not suitable for children.\nIntended for adults (18+). Not recommended during pregnancy or breastfeeding."

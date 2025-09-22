@@ -143,3 +143,39 @@ export interface User {
   lastName?: string | null;
   role: string;
 }
+
+// Extended Product type that includes computed fields from API
+export interface ProductWithAvailability {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  originalPrice: string | null;
+  imageUrl: string;
+  categories: string[];
+  rating: string | null;
+  reviewCount: number | null;
+  inStock: boolean | null;
+  stockQuantity: number | null;
+  featured: boolean | null;
+  sizes: string[] | null;
+  colors: string[] | null;
+  gender: string | null;
+  type: string | null;
+  bottleCount: number | null;
+  dailyDosage: number | null;
+  supplyDays: number | null;
+  tags: string[] | null;
+  allowPreorder: boolean | null;
+  preorderCap: number | null;
+  preorderCount: number | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoKeywords: string[] | null;
+  version: number;
+  createdAt: string | null;
+  updatedAt: string | null;
+  // Computed fields added by API
+  availability: 'in_stock' | 'preorder_open' | 'out_of_stock';
+  isOrderable: boolean;
+}

@@ -1,9 +1,9 @@
 // SEO Sitemap Generation for Search Engine Optimization
 import { useQuery } from "@tanstack/react-query";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@/types/product";
 
 export default function Sitemap() {
-  const { data: products } = useQuery<Product[]>({
+  const { data: products } = useQuery<ProductWithAvailability[]>({
     queryKey: ["/api/products"],
     staleTime: 10 * 60 * 1000, // 10 minutes cache
   });

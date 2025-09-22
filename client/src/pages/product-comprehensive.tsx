@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute } from "wouter";
 import { Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight, Plus, Minus, Check, ArrowRight, CheckCircle, Bell } from "lucide-react";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@/types/product";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
@@ -26,19 +26,19 @@ import prenatalWellnessImg from '@assets/healios-health128.png';
 import cognitiveHealthImg from '@assets/healios-health129.jpg';
 import appleVinegarEditorialImg from '@assets/generated_images/Apple_cider_vinegar_editorial_lifestyle_8105f334.png';
 // Use appropriate product images from existing healios-health assets
-import marineCollagenImg from '@assets/healios-health11.png'; // Collagen product
+import marineCollagenImg from '@assets/healios-health27.png'; // Collagen product
 import ksm66EditorialImg from '@assets/generated_images/KSM-66_Ashwagandha_premium_editorial_d5e83dc6.png';
 import biotinHairImg from '@assets/healios-health8.png'; // Biotin product
 import prenatalWellnessPortraitImg from '@assets/healios-health128.png'; // Prenatal wellness
-import collagenTextureImg from '@assets/healios-health11.png'; // Collagen product image
+import collagenTextureImg from '@assets/healios-health27.png'; // Collagen product image
 import lionsManeMushroomImg from '@assets/healios-health53.png'; // Appropriate product image
 import probioticLabImg from '@assets/generated_images/Clean_supplement_laboratory_scene_a59ff8f9.png'; // Lab scene
 import ironVitaminCImg from '@assets/generated_images/Active_diverse_group_exercising_2ea18caa.png';
 import beautyPortraitImg from '@assets/healios-health125.png'; // Beauty wellness image
 import ashwagandhaLabImg from '@assets/healios-health3.png'; // Ashwagandha product
 import magnesiumSleepImg from '@assets/healios-health44.png'; // Magnesium product
-import probioticVitaminsImg from '@assets/healios-health75.png'; // Probiotic product
-import probioticsImg from '@assets/healios-health74.png'; // Probiotics product
+import probioticVitaminsImg from '@assets/healios-health53.png'; // Probiotic product
+import probioticsImg from '@assets/healios-health53.png'; // Probiotics product
 import vitaminD3Img from '@assets/healios-health127.png'; // Vitamin D3 product
 
 // KSM-66 Ashwagandha Editorial SVG - Professional Product Photography Style
@@ -200,7 +200,7 @@ const ashwagandhaEditorialSVG = `data:image/svg+xml;charset=utf-8,${encodeURICom
 const marineCollagenEditorialSVG = appleVinegarEditorialImg;
 
 // Helper function to determine the correct unit for products
-const getProductUnit = (product: Product): string => {
+const getProductUnit = (product: ProductWithAvailability): string => {
   const name = product.name.toLowerCase();
   if (name.includes('gummies')) return 'gummies';
   if (name.includes('powder')) return 'servings';
@@ -222,7 +222,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'ksm-66-ashwagandha' || productId === 'ashwagandha') {
     return ashwagandhaLabImg;
   }
-  if (productId === || productId === 'biotin') {
+  if (productId === 'biotin-hair' || productId === 'biotin') {
     return biotinHairImg;
   }
   if (productId === 'collagen-complex') {
@@ -234,7 +234,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'mind-memory-mushroom') {
     return lionsManeMushroomImg;
   }
-  if (productId === 'marine-collagen' || productId === ) {
+  if (productId === 'marine-collagen' || productId === 'collagen-complex') {
     return collagenTextureImg;
   }
   if (productId === 'bio-cultures-vitamin-plus') {
@@ -246,7 +246,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'probiotics') {
     return probioticsImg;
   }
-  if (productId === ) {
+  if (productId === 'vitamin-d3') {
     return vitaminD3Img;
   }
   if (productId === 'iron-vitamin-c') {
@@ -297,7 +297,7 @@ const createProductSVG = (productId: string): string => {
       </svg>
     `)}`,
     
-    : `data:image/svg+xml;base64,${btoa(`
+    'immune-health': `data:image/svg+xml;base64,${btoa(`
       <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="immuneGrad" cx="50%" cy="30%" r="50%">
@@ -498,11 +498,11 @@ export default function ProductComprehensive() {
   });
   const [bundleAdded, setBundleAdded] = useState(false);
 
-  const { data: product, isLoading, error } = useQuery<Product>({
+  const { data: product, isLoading, error } = useQuery<ProductWithAvailability>({
     queryKey: ["/api/products", params?.id],
     enabled: !!params?.id});
 
-  const { data: allProducts } = useQuery<Product[]>({
+  const { data: allProducts } = useQuery<ProductWithAvailability[]>({
     queryKey: ["/api/products"]});
 
   const handleAddToCart = () => {
@@ -686,7 +686,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports digestion, energy metabolism, and appetite management'
         };
-      case :
+      case 'vitamin-d3':
         return {
           bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1552.85',
@@ -894,7 +894,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports healthy skin, hair, nails, and connective tissues'
         };
-      case :
+      case 'biotin':
         return {
           bundleWith: 'Collagen + C + Zinc + Selenium Gummies (Orange Flavour)',
           bundlePrice: 'R1003.38',
@@ -1358,11 +1358,11 @@ export default function ProductComprehensive() {
                       </div>
                       <p className="text-xs text-green-700">
                         {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
-                        {product.id === && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
+                        {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
                         {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
                         {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
                         {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
-                        {product.id === && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
+                        {product.id === 'biotin' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
                         {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
                         {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
                         {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
@@ -1533,7 +1533,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'vitamin-d3' ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
@@ -1568,7 +1568,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'biotin' ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy (One daily dose):</p>
                               <div className="text-sm space-y-1">
@@ -1691,7 +1691,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'vitamin-d3' ? (
                             <div>
                               <p className="font-medium mb-2">Lemon-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1732,7 +1732,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'biotin' ? (
                             <div>
                               <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1866,7 +1866,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Take with or without food. Do not exceed recommended dosage. Keep out of reach of children under 3 years.</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'biotin' ? (
                             <div>
                               <p className="font-medium mb-2">Daily dosing for adults and teens 12+:</p>
                               <ul className="space-y-1 text-sm">
@@ -1899,7 +1899,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for pregnant or breastfeeding unless advised by healthcare provider. Contains bovine collagen.</p>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'biotin' ? (
                             <div>
                               <p className="font-medium mb-2">Adult dosing (18+ years):</p>
                               <ul className="space-y-1 text-sm">
@@ -2047,7 +2047,7 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Are there any allergens?</strong> These are gelatin-free, lactose-free, gluten-free and suitable for vegetarians.</li>
                               </ul>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'biotin' ? (
                             <div>
                               <p className="font-medium mb-2">Common questions about Vitamin D3:</p>
                               <ul className="mt-2 space-y-2">
@@ -2077,7 +2077,7 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this with other beauty supplements?</strong> Yes, but check total vitamin intake to avoid exceeding recommended daily amounts, especially for vitamins A and E.</li>
                               </ul>
                             </div>
-                          ) : product.id === ? (
+                          ) : product.id === 'vitamin-d3' ? (
                             <div>
                               <p className="font-medium mb-2">Common questions about Biotin 5000µg:</p>
                               <ul className="mt-2 space-y-2">

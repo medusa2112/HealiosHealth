@@ -8,7 +8,7 @@ import { SEOHead } from '@/components/seo-head';
 import appleCiderVinegarImg from '@assets/healios-health2.png';
 import vitaminD3Img from '@assets/healios-health127.png';
 import ashwagandhaImg from '@assets/healios-health3.png';
-import probioticsImg from '@assets/healios-health75.png';
+import probioticsImg from '@assets/healios-health53.png';
 import magnesiumImg from '@assets/healios-health44.png';
 import wellnessVideoSrc from '@assets/Healios (3)_1753504393390.mov';
 import nutritionistImg from '@assets/healios-health31.jpg';
@@ -16,8 +16,8 @@ import pharmacistsImg from '@assets/healios-health48.jpg';
 // Using direct path to public assets
 const probioticVitaminsImg = '/probiotic-vitamins.png';
 import childrenMultivitaminImg from '@assets/healios-health49.png';
-import collagenComplexImg from '@assets/healios-health11.png';
-import haloGlowTextImg from '@assets/halo-glow.png';
+import collagenComplexImg from '@assets/healios-health27.png';
+import haloGlowTextImg from '@assets/Product/images/HaloGlow.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
@@ -537,9 +537,10 @@ export default function HomePage() {
                   </div>
                   <h2 className="text-3xl lg:text-4xl font-normal text-gray-900 dark:text-white mb-4 flex items-center gap-3">
                     <img 
-                      src={haloGlowTextImg} 
+                      src="/assets/halo-glow-product-new.png" 
                       alt="HALO Glow Collagen Product" 
                       className="h-12 lg:h-16 object-contain"
+                      key="halo-glow-product-image-new"
                     />
                     <span className="flex items-center">Collagen Powder</span>
                   </h2>
@@ -721,7 +722,6 @@ export default function HomePage() {
 
                   const productGradients = {
                     'apple-cider-vinegar': 'from-orange-100 to-yellow-200',
-                    : 'from-yellow-100 to-orange-200',
                     'ashwagandha': 'from-green-100 to-teal-200',
                     'probiotics': 'from-blue-100 to-purple-200',
                     'magnesium': 'from-purple-100 to-pink-200',
@@ -733,7 +733,6 @@ export default function HomePage() {
 
                   const productBadges = {
                     'apple-cider-vinegar': 'Bestseller',
-                    : 'Popular',
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
                     'magnesium': 'Sleep',
@@ -742,7 +741,6 @@ export default function HomePage() {
                     'childrens-multivitamin': 'Kids',
                     'probiotic-vitamins': 'Immunity',
                     'collagen-complex': 'Beauty',
-                    : 'Hair & Skin',
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
                     'mind-memory-mushroom': 'Focus',

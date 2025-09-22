@@ -65,7 +65,7 @@ export default function JournalAll() {
     if (titleLower.includes('vitamin d')) return '/assets/healios-health127.png';
     if (titleLower.includes('collagen')) return '/assets/healios-health10.webp';
     if (titleLower.includes('ashwagandha')) return '/assets/healios-health3.png';
-    if (titleLower.includes('probiotic')) return '/assets/healios-health74.png';
+    if (titleLower.includes('probiotic')) return '/assets/healios-health53.png';
     if (titleLower.includes('biotin')) return '/assets/healios-health8.png';
     if (titleLower.includes('iron')) return '/assets/healios-health39.png';
     if (titleLower.includes('folic acid')) return '/assets/healios-health14.png';

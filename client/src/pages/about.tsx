@@ -1,8 +1,8 @@
 import { Link } from 'wouter';
 import { Microscope, TestTube, Lightbulb, Award, Shield, Users, FlaskConical, CheckCircle, Target, Heart, Zap, Brain, Check } from "lucide-react";
 import { SEOHead } from '@/components/seo-head';
-import vitaminD3Img from '@assets/healios-health51.png';
-import teamCelebrationImg from '@assets/healios-health130.jpg';
+import vitaminD3Img from '@assets/healios-health121.jpg';
+import teamCelebrationImg from '@assets/healios-health129.jpg';
 import nutritionistImg from '@assets/healios-health31.jpg';
 
 export default function About() {

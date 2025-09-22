@@ -7,11 +7,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
 import { ArrowLeft, Package, Calendar, CreditCard, X, RotateCcw } from "lucide-react";
-import type { Subscription, ProductVariant, Product } from "@shared/schema";
+import type { Subscription, ProductVariant } from "@shared/schema";
+import { type ProductWithAvailability } from "@/types/product";
 
 interface SubscriptionWithDetails extends Subscription {
   variant: ProductVariant & {
-    product: Product;
+    product: ProductWithAvailability;
   };
 }
 

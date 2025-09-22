@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@shared/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
@@ -9,7 +9,7 @@ import { PreOrderPopup } from "@/components/pre-order-popup";
 import { useState, memo } from "react";
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductWithAvailability;
 }
 
 export const ProductCard = memo(({ product }: ProductCardProps) => {

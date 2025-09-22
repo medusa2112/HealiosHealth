@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@shared/types";
 import { ProductCard } from "@/components/product-card";
 import { SEOHead } from "@/components/seo-head";
 import { Breadcrumb } from "@/components/breadcrumb";
@@ -30,11 +30,13 @@ export default function Products() {
     return categoryMap[filterParam] || filterParam;
   };
 
-  const { data: products, isLoading } = useQuery<Product[]>({
+  const { data: products, isLoading, error } = useQuery<ProductWithAvailability[]>({
     queryKey: ["/api/products"],
     staleTime: 5 * 60 * 1000, // 5 minutes cache for products
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
+
+
 
   // Parse URL parameters reliably using window.location.search
   const parseUrlParameters = useCallback(() => {
@@ -135,10 +137,10 @@ export default function Products() {
     if (!filteredProducts.length) return [];
     
     return [...filteredProducts].sort((a, b) => {
-      // First priority: availability (already computed on server)
+      // First priority: availability (in_stock > preorder_open > out_of_stock)
       if (a.availability !== b.availability) {
-        const order = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
-        return order[a.availability] - order[b.availability];
+        const availOrder = { 'in_stock': 0, 'preorder_open': 1, 'out_of_stock': 2 };
+        return availOrder[a.availability] - availOrder[b.availability];
       }
       
       // Second priority: apply the selected sort criteria

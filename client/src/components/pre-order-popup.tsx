@@ -7,10 +7,10 @@ import { X, Package, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { OptimizedImage } from "@/components/image-optimization";
-import type { Product } from "@shared/schema";
+import type { ProductWithAvailability } from "@shared/types";
 
 interface PreOrderPopupProps {
-  product: Product;
+  product: ProductWithAvailability;
   isOpen: boolean;
   onClose: () => void;
 }

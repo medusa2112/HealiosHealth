@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@shared/types";
 import { type CartItem, type CartState } from "@/lib/types";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -12,7 +12,7 @@ declare global {
 
 interface CartContextType {
   cart: CartState;
-  addToCart: (product: Product) => void;
+  addToCart: (product: ProductWithAvailability) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -75,7 +75,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: ProductWithAvailability) => {
     setCart((prev) => {
       const existingItem = prev.items.find((item) => item.product.id === product.id);
       

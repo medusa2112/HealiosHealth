@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import haloGlowImage from '@assets/healios-health20.png';
+import haloGlowImage from '@assets/HaloGlow_1754394641788.png';
 
 export function StockNotification() {
   const [isVisible, setIsVisible] = useState(false);

@@ -1,7 +1,7 @@
-import { type Product } from "@shared/schema";
+import { type ProductWithAvailability } from "@shared/types";
 
 export interface CartItem {
-  product: Product;
+  product: ProductWithAvailability;
   quantity: number;
 }
 

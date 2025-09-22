@@ -1224,7 +1224,13 @@ The Healios Team
           shippingCost: '0.00',
           taxAmount: '0.00'},
         orderItems: [
-          
+          {
+            product: {
+              id: 'test-product',
+              name: 'Test Product',
+              price: '29.99',
+              imageUrl: 'https://via.placeholder.com/120x120'
+            },
             quantity: 2
           }
         ]
