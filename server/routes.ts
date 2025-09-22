@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertNewsletterSchema, insertPreOrderSchema, insertArticleSchema, insertOrderSchema, insertQuizResultSchema, insertConsultationBookingSchema, insertRestockNotificationSchema, type Article, type QuizResult, type ConsultationBooking, type RestockNotification, products } from "@shared/schema";
 import type { CartItem } from "./email";
@@ -39,7 +38,7 @@ import documentationRoutes from "./routes/documentation";
 // Availability imports
 import { deriveAvailability, isOrderable, availabilityRank } from "../lib/availability";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express): Promise<void> {
   // Apply secure headers to all routes
   app.use(secureHeaders);
   
@@ -1264,11 +1263,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  const httpServer = createServer(app);
-
   // Note: Email scheduler removed per business requirements
   // Automated email marketing features have been disabled
-
-  return httpServer;
 }
 

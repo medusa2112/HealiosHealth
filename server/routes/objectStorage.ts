@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
 import { z } from "zod";
 import { requireAuth } from "../lib/auth";
 import {
@@ -8,7 +7,7 @@ import {
 } from "../objectStorage";
 import { ObjectPermission } from "../objectAcl";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express): Promise<void> {
   // This endpoint is used to serve public assets.
   // IMPORTANT: always provide this endpoint.
   app.get("/public-objects/:filePath(*)", async (req, res) => {
@@ -93,6 +92,4 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  const httpServer = createServer(app);
-  return httpServer;
 }
