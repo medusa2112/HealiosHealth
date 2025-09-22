@@ -25,7 +25,3 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     });
   });
 }
-
-export const config = {
-  runtime: "nodejs18.x",
-};
