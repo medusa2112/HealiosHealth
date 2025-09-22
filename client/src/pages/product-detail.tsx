@@ -21,7 +21,7 @@ const getProductUnit = (product: Product): string => {
 };
 
 export default function ProductDetail() {
-  const [, params] = useRoute("/products/:id");
+  const [ params] = useRoute("/products/:id");
   const { addToCart } = useCart();
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -32,8 +32,7 @@ export default function ProductDetail() {
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
-    enabled: !!params?.id,
-  });
+    enabled: !!params?.id});
 
   // Determine if product is apparel (t-shirt) vs supplement
   const isApparel = product?.categories?.includes('merchandise') || product?.id === 'healios-oversized-tee';
@@ -51,8 +50,7 @@ export default function ProductDetail() {
       addToCart(product);
       toast({
         title: "Added to cart!",
-        description: `${product.name} has been added to your cart.`,
-      });
+        description: `${product.name} has been added to your cart.`});
     }
   };
 
@@ -104,8 +102,7 @@ export default function ProductDetail() {
     product.imageUrl,
     product.imageUrl,
     product.imageUrl,
-    product.imageUrl,
-  ] : [];
+    product.imageUrl] : [];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
@@ -120,20 +117,17 @@ export default function ProductDetail() {
   } : product?.id === 'apple-cider-vinegar' ? {
     nutrient: [
       { name: 'Apple Cider Vinegar (with the Mother)', amount: '500mg', nrv: '' },
-      { name: 'Ginger Extract', amount: '10mg', nrv: '' },
-    ]
+      { name: 'Ginger Extract', amount: '10mg', nrv: '' }]
   } : product?.id === 'ashwagandha' ? {
     nutrient: [
       { name: 'Per Capsule:', amount: '', nrv: '' },
       { name: 'Ashwagandha Root Extract (KSM-66®)', amount: '500mg', nrv: '' },
-      { name: '(equivalent to 6250mg Ashwagandha Root)', amount: '', nrv: '' },
-    ]
+      { name: '(equivalent to 6250mg Ashwagandha Root)', amount: '', nrv: '' }]
   } : product?.id === 'magnesium' ? {
     nutrient: [
       { name: 'Magnesium Glycinate', amount: '400mg', nrv: '107' },
       { name: 'Magnesium Taurate', amount: '100mg', nrv: '27' },
-      { name: 'Vitamin B6', amount: '1.4mg', nrv: '100' },
-    ]
+      { name: 'Vitamin B6', amount: '1.4mg', nrv: '100' }]
   } : product?.id === 'magnesium-bisglycinate-b6' ? {
     nutrient: [
       { name: 'Per 3-capsule serving:', amount: '', nrv: '' },
@@ -141,8 +135,7 @@ export default function ProductDetail() {
       { name: 'Magnesium', amount: '375 mg', nrv: '100' },
       { name: '• Bisglycinate', amount: '180 mg', nrv: '' },
       { name: '• Malate', amount: '165 mg', nrv: '' },
-      { name: '• Taurine Chelate', amount: '30 mg', nrv: '' },
-    ]
+      { name: '• Taurine Chelate', amount: '30 mg', nrv: '' }]
   } : product?.id === 'probiotics' ? {
     nutrient: [
       { name: 'Active Live Culture Blend', amount: '10 Billion CFU', nrv: '' },
@@ -152,9 +145,8 @@ export default function ProductDetail() {
       { name: 'Bifidobacterium longum', amount: '1.67 Billion CFU', nrv: '' },
       { name: 'Lactobacillus acidophilus', amount: '1.67 Billion CFU', nrv: '' },
       { name: 'Lactobacillus casei rhamnosus', amount: '1.67 Billion CFU', nrv: '' },
-      { name: 'Streptococcus thermophilus', amount: '1.65 Billion CFU', nrv: '' },
-    ]
-  } : product?.id === 'vitamin-d3' ? {
+      { name: 'Streptococcus thermophilus', amount: '1.65 Billion CFU', nrv: '' }]
+  } : {
     nutrient: [
       { name: 'Vitamin D3 (cholecalciferol)', amount: '100 µg (4000 IU)', nrv: '2000' },
       { name: 'Energy', amount: '8 kcal (34.07 kJ)', nrv: '' },
@@ -164,8 +156,7 @@ export default function ProductDetail() {
       { name: 'Fat', amount: '0.01 g', nrv: '' },
       { name: '- of which saturates', amount: '0 g', nrv: '' },
       { name: 'Fibre', amount: '0.05 g', nrv: '' },
-      { name: 'Salt', amount: '0.01 g', nrv: '' },
-    ]
+      { name: 'Salt', amount: '0.01 g', nrv: '' }]
   } : {
     nutrient: []
   };
@@ -258,7 +249,7 @@ export default function ProductDetail() {
       question: "Can I take these if I'm diabetic or watching my weight?",
       answer: "Our ACV gummies have a minimal impact on blood sugar. However, if you have diabetes or specific dietary restrictions, consult your healthcare provider before starting any new supplement."
     }
-  ] : product?.id === 'vitamin-d3' ? [
+  ] : [
     {
       question: "Why 4000 IU?",
       answer: "This is a high-strength therapeutic dose (2000% NRV), ideal for maintaining healthy vitamin D levels in adults, especially where sunlight exposure is limited."
@@ -302,13 +293,13 @@ export default function ProductDetail() {
     },
     {
       question: "Is this suitable for vegetarians/vegans?",
-      answer: product?.id === 'vitamin-d3' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
+      answer: false "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
     }
   ];
 
   const ingredients = product?.id === 'magnesium-bisglycinate-b6' ? [
     'Magnesium Malate, Magnesium Bisglycinate, Capsule Shell (Hydroxypropyl Methylcellulose), Magnesium Taurine Chelate, Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide, Pyridoxine HCl (Vitamin B6).'
-  ] : product?.id === 'vitamin-d3' ? [
+  ] : [
     'Glucose Syrup',
     'Sugar',
     'Water',
@@ -326,7 +317,7 @@ export default function ProductDetail() {
 
   const howToTake = product?.id === 'magnesium-bisglycinate-b6' ? 
     "Adults: Take 1 capsule, 1–3 times daily with water. Do not exceed the recommended daily amount." 
-    : product?.id === 'vitamin-d3' ?
+    : false
     "Adults: Take 1 gummy daily.\n\nChew thoroughly before swallowing (do not swallow whole).\n\nDo not exceed the recommended daily dose.\n\nBest taken consistently year-round, especially in winter months.\n\nNot recommended for children.\nThese are adult-strength gummies (4000 IU). The label only provides adult directions: 1 gummy daily"
     : product?.id === 'ashwagandha' ?
     "Adults (18+): Take 1 capsule daily, with water.\n\nBest taken in the morning or early evening, ideally with food\n\nConsistency is important — allow 2–4 weeks for effects to build\n\nSafe for long-term daily use up to 3 months, then take a break if needed\n\nNot suitable during pregnancy or breastfeeding\n\nConsult a doctor before use if taking thyroid medication, blood pressure medication, or psychoactive drugs\n\n❌ Not suitable for children.\nIntended for adults (18+). Not recommended during pregnancy or breastfeeding."
@@ -669,7 +660,7 @@ export default function ProductDetail() {
                     <strong>Can be taken:</strong> With or without food<br/><br/>
                     For best results, take consistently at the same time each day. Do not exceed the recommended dose.
                   </>
-                ) : product?.id === 'vitamin-d3' ? (
+                ) : (
                   <>
                     <strong>Recommended Use:</strong> Take 1 gummy daily<br/>
                     <strong>Can be taken:</strong> With or without food<br/><br/>
@@ -750,8 +741,8 @@ export default function ProductDetail() {
           </div>
         )}
 
-        {/* Additional Information Section - For vitamin-d3 and ashwagandha */}
-        {(product?.id === 'vitamin-d3' || product?.id === 'ashwagandha') && (
+        {/* Additional Information Section - For ashwagandha */}
+        {(product?.id === 'ashwagandha') && (
           <div className="mb-16">
             <h2 className="text-2xl font-light text-gray-900 dark:text-white mb-6">Other Key Information</h2>
             <div className="space-y-4">

@@ -175,8 +175,7 @@ export class EmailService {
         from: this.FROM_EMAIL,
         to: newsletter.email,
         subject: 'Welcome to the Healios Community!',
-        html,
-      });
+        html});
 
       return true;
     } catch (error) {
@@ -255,8 +254,7 @@ export class EmailService {
         from: this.FROM_EMAIL,
         to: order.customerEmail,
         subject: `Order Confirmation #${order.id.slice(-8)} - Healios`,
-        html,
-      });
+        html});
 
       return true;
     } catch (error) {
@@ -362,8 +360,7 @@ export class EmailService {
             from: this.FROM_EMAIL,
             to: adminEmail,
             subject: `🎯 New Pre-Order: ${preOrder.productName} - ${preOrder.customerName}`,
-            html: adminHtml,
-          });
+            html: adminHtml});
           
         } catch (error) {
           // // console.error(`❌ Failed to send admin email to ${adminEmail}:`, error);
@@ -438,8 +435,7 @@ export class EmailService {
           from: this.FROM_EMAIL,
           to: preOrder.customerEmail,
           subject: `Pre-Order Confirmation: ${preOrder.productName} - Healios`,
-          html: customerHtml,
-        });
+          html: customerHtml});
         
       } catch (error) {
         // // console.error('❌ Failed to send customer email:', error);
@@ -582,8 +578,7 @@ export class EmailService {
             from: this.FROM_EMAIL,
             to: adminEmail,
             subject: `📦 Restock Request: ${product} - ${firstName}`,
-            html: adminHtml,
-          });
+            html: adminHtml});
           
         } catch (error) {
           // // console.error(`❌ Failed to send admin restock email to ${adminEmail}:`, error);
@@ -602,8 +597,7 @@ export class EmailService {
           from: this.FROM_EMAIL,
           to: email,
           subject: `Restock Notification Set: ${product} - Healios`,
-          html: customerHtml,
-        });
+          html: customerHtml});
         
       } catch (error) {
         // // console.error('❌ Failed to send customer restock email:', error);
@@ -685,8 +679,7 @@ export class EmailService {
             from: this.FROM_EMAIL,
             to: adminEmail,
             subject: `⚠️ Low Stock Alert: ${productName}`,
-            html,
-          });
+            html});
         } catch (error) {
           // // console.error(`Failed to send low stock alert to ${adminEmail}:`, error);
         }
@@ -802,8 +795,7 @@ export class EmailService {
         from: this.FROM_EMAIL,
         to: email,
         subject: '🔐 Admin Login Alert - Healios',
-        html,
-      });
+        html});
 
       return true;
     } catch (error) {
@@ -920,8 +912,7 @@ The Healios Team
         to: [email],
         subject,
         html,
-        text,
-      });
+        text});
 
     } catch (error) {
       // // console.error('❌ Failed to send consultation booking confirmation email:', error);
@@ -1087,8 +1078,7 @@ The Healios Team
         from: this.FROM_EMAIL,
         to: [quizResult.email],
         subject: `Your Personalized Wellness Recommendations from Healios`,
-        html,
-      });
+        html});
 
       return result.error ? false : true;
     } catch (error) {
@@ -1184,8 +1174,7 @@ The Healios Team
         from: this.FROM_EMAIL,
         to: ['dn@thefourths.com'],
         subject: `New Quiz Completion: ${quizResult.firstName} ${quizResult.lastName}`,
-        html,
-      });
+        html});
 
       return result.error ? false : true;
     } catch (error) {
@@ -1203,8 +1192,7 @@ The Healios Team
         lastName: 'Doe',
         email: 'test@example.com',
         birthday: '1990-01-01',
-        subscribedAt: new Date().toISOString(),
-      };
+        subscribedAt: new Date().toISOString()};
 
       const testOrderData: OrderEmailData = {
         order: {
@@ -1234,16 +1222,9 @@ The Healios Team
           discountCode: null,
           discountAmount: null,
           shippingCost: '0.00',
-          taxAmount: '0.00',
-        },
+          taxAmount: '0.00'},
         orderItems: [
-          {
-            product: {
-              id: 'vitamin-d3',
-              name: 'Vitamin D3 4000 IU Gummies',
-              price: '1000.00',
-              imageUrl: '/assets/vitamin-d3.png'
-            },
+          
             quantity: 2
           }
         ]
@@ -1260,8 +1241,7 @@ The Healios Team
         notes: 'Please notify me as soon as available!',
         productPrice: '1000.00',
         status: 'pending',
-        createdAt: new Date().toISOString(),
-      };
+        createdAt: new Date().toISOString()};
 
       // Send test emails
       await this.sendNewsletterConfirmation(testNewsletterData);
@@ -1364,8 +1344,7 @@ The Healios Team
             </div>
           </body>
         </html>
-        `,
-      });
+        `});
 
       if (error) {
         // // console.error('Resend error:', error);

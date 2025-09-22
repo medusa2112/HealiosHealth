@@ -12,9 +12,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import healiosLogo from "@assets/healios-health27.png";
+  DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import healiosLogo from "@assets/healios_logo.png";
 
 export function Header() {
   const [location, setLocation] = useLocation();
@@ -50,11 +49,10 @@ export function Header() {
       items: [
         { href: "/products/collagen-powder", label: "HALO Glow Collagen", isNew: true },
         { href: "/products/magnesium-bisglycinate-b6", label: "Magnesium Complex" },
-        { href: "/products/vitamin-d3", label: "Vitamin D3" },
+        
         { href: "/products/probiotics", label: "Probiotic Complex" },
         { href: "/products/apple-cider-vinegar", label: "Apple Cider Vinegar and Ginger Gummies" },
-        { href: "/products/ashwagandha", label: "Ashwagandha" },
-      ]
+        { href: "/products/ashwagandha", label: "Ashwagandha" }]
     },
     {
       title: "By Category", 
@@ -67,8 +65,7 @@ export function Header() {
         { href: "/products?filter=prenatal", label: "Women's Health" },
         { href: "/products?filter=children", label: "Children's Health", comingSoon: true },
         { href: "/products?filter=beauty", label: "Beauty & Wellness" },
-        { href: "/products?filter=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true },
-      ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
+        { href: "/products?filter=prenatal", label: "Pregnancy & Pre-natal", comingSoon: true }] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
     },
     {
       title: "Wellness Goals",
@@ -79,22 +76,19 @@ export function Header() {
         { href: "/products/folic-acid-400", label: "Pre-pregnancy support", comingSoon: true },
         { href: "/products/ashwagandha", label: "Stress Management" },
         { href: "/products/magnesium", label: "Sleep & Muscle Support" },
-        { href: "/products/vitamin-d3", label: "Immune Support" },
-        { href: "/products/biotin-5000", label: "Hair, Skin & Nails" },
+        
+        
         { href: "/products/collagen-powder", label: "Hair, Skin & Nails - HALO Glow Collagen" },
         { href: "/products/collagen-complex", label: "Beauty & Anti-Aging" },
         { href: "/products/collagen-powder", label: "Beauty & Anti-Aging - HALO Glow Collagen" },
         { href: "/products/childrens-multivitamin", label: "Children's Development", comingSoon: true },
-        { href: "/products/apple-cider-vinegar", label: "Metabolic Support" },
-      ] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
+        { href: "/products/apple-cider-vinegar", label: "Metabolic Support" }] as Array<{ href: string; label: string; isNew?: boolean; comingSoon?: boolean }>
     },
     {
       title: "All Products",
       items: [
         { href: "/products", label: "Shop All Products" },
-        { href: "/quiz", label: "Take Our Wellness Quiz" },
-
-      ]
+        { href: "/quiz", label: "Take Our Wellness Quiz" }]
     }
   ];
 
@@ -104,14 +98,12 @@ export function Header() {
       items: [
         { href: "/about", label: "Our Story" },
         { href: "/science", label: "The Science-Backed difference" },
-        { href: "/planet", label: "Healing our Planet Partnerships" },
-      ]
+        { href: "/planet", label: "Healing our Planet Partnerships" }]
     },
     {
       title: "The Science",
       items: [
-        { href: "/science/research", label: "Research & Clinical Studies" },
-      ]
+        { href: "/science/research", label: "Research & Clinical Studies" }]
     },
 
     {
@@ -122,11 +114,8 @@ export function Header() {
         { href: "/journal/collagen-benefits-backed-by-research", label: "Collagen Benefits Backed by Research" },
         { href: "/journal/vitamin-d-and-mood-what-research-shows", label: "Vitamin D and Mood: What Research Shows" },
         { href: "/journal/probiotic-benefits-evidence-based-health-support-20250803", label: "Probiotic Benefits: Evidence-Based Support" },
-        { href: "/journal/all", label: "All Evidence-Based Articles" },
-      ]
-    },
-
-  ];
+        { href: "/journal/all", label: "All Evidence-Based Articles" }]
+    }];
 
   const isActiveLink = (href: string) => location === href;
 

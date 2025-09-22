@@ -67,8 +67,7 @@ export class QuizRecommendationService {
       // Check if they might benefit from Iron
       if (ageRange && (ageRange.includes('26-') || ageRange.includes('36-') || ageRange.includes('46-'))) {
         recommendations.push({
-          productId: 'vitamin-d3',
-          productName: 'Vitamin D3 4000 IU Gummies (Natural Orange Flavour | 60 Gummies)',
+          productId: productName: 'Vitamin D3 4000 IU Gummies (Natural Orange Flavour | 60 Gummies)',
           reason: 'Iron deficiency is a leading cause of fatigue, especially in women of childbearing age. Our gentle iron formula with vitamin C enhances absorption and energy production.',
           medicalBasis: 'Iron is essential for oxygen transport and cellular energy production. Vitamin C increases iron absorption by up to 67%. Clinical studies show iron supplementation significantly improves fatigue scores in individuals with low iron stores.',
           researchCitations: [
@@ -98,8 +97,7 @@ export class QuizRecommendationService {
     // Analyze immune support needs
     if (primaryGoal === 'Immune system support' || (improvementAreas && improvementAreas.includes('Immune function'))) {
       recommendations.push({
-        productId: 'vitamin-d3',
-        productName: 'Vitamin D3 4000 IU Gummies',
+        productId: productName: 'Vitamin D3 4000 IU Gummies',
         reason: 'Vitamin D3 is crucial for immune system regulation and defense against infections. Most people in the UK have insufficient vitamin D levels, especially during winter months.',
         medicalBasis: 'Vitamin D3 modulates both innate and adaptive immune responses. Clinical trials show vitamin D supplementation reduces respiratory tract infection risk by 12% and severity by 40%. The 4000 IU dose is optimal for immune function.',
         researchCitations: [
@@ -160,8 +158,7 @@ export class QuizRecommendationService {
       
       // Add biotin for hair, skin, nails
       recommendations.push({
-        productId: 'biotin-5000',
-        productName: 'Biotin 10,000 µg Strawberry Gummies',
+        productId: productName: 'Biotin 10,000 µg Strawberry Gummies',
         reason: 'High-potency biotin supports healthy hair growth, skin renewal, and nail strength through enhanced keratin production.',
         medicalBasis: 'Biotin is a crucial cofactor in fatty acid synthesis and amino acid metabolism essential for healthy hair, skin, and nails. Studies show high-dose biotin supplementation improves hair thickness and nail strength.',
         researchCitations: [

@@ -222,7 +222,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'ksm-66-ashwagandha' || productId === 'ashwagandha') {
     return ashwagandhaLabImg;
   }
-  if (productId === 'biotin-5000' || productId === 'biotin') {
+  if (productId === || productId === 'biotin') {
     return biotinHairImg;
   }
   if (productId === 'collagen-complex') {
@@ -234,7 +234,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'mind-memory-mushroom') {
     return lionsManeMushroomImg;
   }
-  if (productId === 'marine-collagen' || productId === 'collagen-peptides') {
+  if (productId === 'marine-collagen' || productId === ) {
     return collagenTextureImg;
   }
   if (productId === 'bio-cultures-vitamin-plus') {
@@ -246,7 +246,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'probiotics') {
     return probioticsImg;
   }
-  if (productId === 'vitamin-d3') {
+  if (productId === ) {
     return vitaminD3Img;
   }
   if (productId === 'iron-vitamin-c') {
@@ -297,7 +297,7 @@ const createProductSVG = (productId: string): string => {
       </svg>
     `)}`,
     
-    'vitamin-d3': `data:image/svg+xml;base64,${btoa(`
+    : `data:image/svg+xml;base64,${btoa(`
       <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="immuneGrad" cx="50%" cy="30%" r="50%">
@@ -480,7 +480,7 @@ const createProductSVG = (productId: string): string => {
 };
 
 export default function ProductComprehensive() {
-  const [, params] = useRoute("/products/:id");
+  const [ params] = useRoute("/products/:id");
   const { addToCart, removeFromCart } = useCart();
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -500,12 +500,10 @@ export default function ProductComprehensive() {
 
   const { data: product, isLoading, error } = useQuery<Product>({
     queryKey: ["/api/products", params?.id],
-    enabled: !!params?.id,
-  });
+    enabled: !!params?.id});
 
   const { data: allProducts } = useQuery<Product[]>({
-    queryKey: ["/api/products"],
-  });
+    queryKey: ["/api/products"]});
 
   const handleAddToCart = () => {
     if (product) {
@@ -528,8 +526,7 @@ export default function ProductComprehensive() {
       const bundleInfo = bundleAdded ? ' with bundle' : '';
       toast({
         title: "Added to cart!",
-        description: `${quantity}x ${product.name}${bundleInfo} has been added to your cart.`,
-      });
+        description: `${quantity}x ${product.name}${bundleInfo} has been added to your cart.`});
     }
   };
 
@@ -544,14 +541,12 @@ export default function ProductComprehensive() {
         setBundleAdded(false);
         toast({
           title: "Bundle removed",
-          description: `${bundleProduct.name} has been removed from your bundle selection.`,
-        });
+          description: `${bundleProduct.name} has been removed from your bundle selection.`});
       } else {
         setBundleAdded(true);
         toast({
           title: "Bundle added!",
-          description: `${bundleProduct.name} has been added to your bundle selection.`,
-        });
+          description: `${bundleProduct.name} has been added to your bundle selection.`});
       }
     }
   };
@@ -562,8 +557,7 @@ export default function ProductComprehensive() {
     if (!notificationFormData.email || !notificationFormData.agreeToContact) {
       toast({
         title: "Missing Information",
-        description: "Please fill in your email address and agree to our contact terms.",
-      });
+        description: "Please fill in your email address and agree to our contact terms."});
       return;
     }
 
@@ -571,15 +565,13 @@ export default function ProductComprehensive() {
       const response = await fetch('/api/restock-notifications', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'},
         body: JSON.stringify({
           ...notificationFormData,
           productId: product?.id,
           productName: product?.name,
           requestedAt: new Date().toISOString()
-        }),
-      });
+        })});
 
       if (response.ok) {
         toast({
@@ -599,8 +591,7 @@ export default function ProductComprehensive() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
-      });
+        description: "Something went wrong. Please try again."});
     }
   };
 
@@ -695,7 +686,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports digestion, energy metabolism, and appetite management'
         };
-      case 'vitamin-d3':
+      case :
         return {
           bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
           bundlePrice: 'R1552.85',
@@ -903,7 +894,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports healthy skin, hair, nails, and connective tissues'
         };
-      case 'biotin-5000':
+      case :
         return {
           bundleWith: 'Collagen + C + Zinc + Selenium Gummies (Orange Flavour)',
           bundlePrice: 'R1003.38',
@@ -1367,15 +1358,15 @@ export default function ProductComprehensive() {
                       </div>
                       <p className="text-xs text-green-700">
                         {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
-                        {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
+                        {product.id === && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
                         {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
                         {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
                         {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
-                        {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
+                        {product.id === && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
                         {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
                         {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
                         {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
-                        {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
+                        {(!['apple-cider-vinegar', 'ashwagandha', 'magnesium', 'collagen-complex', 'iron-vitamin-c', 'folic-acid-400', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
                       </p>
                     </div>
 
@@ -1542,7 +1533,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
@@ -1577,7 +1568,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy (One daily dose):</p>
                               <div className="text-sm space-y-1">
@@ -1700,7 +1691,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Lemon-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1741,7 +1732,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1875,7 +1866,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Take with or without food. Do not exceed recommended dosage. Keep out of reach of children under 3 years.</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Daily dosing for adults and teens 12+:</p>
                               <ul className="space-y-1 text-sm">
@@ -1908,7 +1899,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for pregnant or breastfeeding unless advised by healthcare provider. Contains bovine collagen.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Adult dosing (18+ years):</p>
                               <ul className="space-y-1 text-sm">
@@ -2056,7 +2047,7 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Are there any allergens?</strong> These are gelatin-free, lactose-free, gluten-free and suitable for vegetarians.</li>
                               </ul>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Common questions about Vitamin D3:</p>
                               <ul className="mt-2 space-y-2">
@@ -2086,7 +2077,7 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Can I take this with other beauty supplements?</strong> Yes, but check total vitamin intake to avoid exceeding recommended daily amounts, especially for vitamins A and E.</li>
                               </ul>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Common questions about Biotin 5000µg:</p>
                               <ul className="mt-2 space-y-2">

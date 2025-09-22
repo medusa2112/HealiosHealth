@@ -17,7 +17,7 @@ import pharmacistsImg from '@assets/healios-health48.jpg';
 const probioticVitaminsImg = '/probiotic-vitamins.png';
 import childrenMultivitaminImg from '@assets/healios-health49.png';
 import collagenComplexImg from '@assets/healios-health11.png';
-import haloGlowTextImg from '@assets/HaloGlow_1754394641788.png';
+import haloGlowTextImg from '@assets/halo-glow.png';
 
 import { PreOrderModal } from '@/components/pre-order-modal';
 
@@ -39,8 +39,7 @@ const NewsletterForm = () => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
       toast({
         title: "Missing Information",
-        description: "Please fill in your first name, last name, and email address.",
-      });
+        description: "Please fill in your first name, last name, and email address."});
       return;
     }
 
@@ -49,10 +48,8 @@ const NewsletterForm = () => {
       const response = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+          'Content-Type': 'application/json'},
+        body: JSON.stringify(formData)});
 
       if (response.ok) {
         toast({
@@ -74,8 +71,7 @@ const NewsletterForm = () => {
     } catch (error) {
       toast({
         title: "Subscription Failed",
-        description: error instanceof Error ? error.message : "Please try again later.",
-      });
+        description: error instanceof Error ? error.message : "Please try again later."});
     } finally {
       setIsSubmitting(false);
     }
@@ -328,21 +324,19 @@ export default function HomePage() {
   }, [rightHasReachedCenter]);
 
   const { data: allProducts, isLoading } = useQuery({
-    queryKey: ['/api/products'],
-  });
+    queryKey: ['/api/products']});
 
   // Category filtering logic for authentic Healios products only
   const categories = {
     BESTSELLERS: 'all',
-    GUMMIES: ['apple-cider-vinegar', 'vitamin-d3', 'collagen-complex', 'biotin-5000', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom', 'bio-cultures-vitamin-plus'],
-    VITAMINS: ['vitamin-d3', 'folic-acid-400', 'bio-cultures-vitamin-plus', 'iron-vitamin-c'],
+    GUMMIES: ['apple-cider-vinegar', 'collagen-complex', 'folic-acid-400', 'magnesium', 'iron-vitamin-c', 'probiotic-vitamins', 'mind-memory-mushroom', 'bio-cultures-vitamin-plus'],
+    VITAMINS: ['folic-acid-400', 'bio-cultures-vitamin-plus', 'iron-vitamin-c'],
     ADAPTOGENS: ['ashwagandha', 'mind-memory-mushroom'],
     PROBIOTICS: ['probiotics', 'probiotic-vitamins', 'bio-cultures-vitamin-plus'],
     MINERALS: ['magnesium', 'magnesium-bisglycinate-b6', 'iron-vitamin-c'],
-    BEAUTY: ['collagen-complex', 'biotin-5000', 'collagen-powder'],
+    BEAUTY: ['collagen-complex', 'collagen-powder'],
     PRENATAL: ['folic-acid-400'],
-    APPAREL: ['healios-oversized-tee'],
-  };
+    APPAREL: ['healios-oversized-tee']};
 
   const handleCategoryChange = async (category: string) => {
     if (category === selectedCategory) return;
@@ -385,14 +379,12 @@ export default function HomePage() {
       const response = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+        body: JSON.stringify({ email })});
 
       if (response.ok) {
         toast({
           title: "Success!",
-          description: "You've been subscribed to our newsletter.",
-        });
+          description: "You've been subscribed to our newsletter."});
         (e.target as HTMLFormElement).reset();
       } else {
         throw new Error('Subscription failed');
@@ -400,8 +392,7 @@ export default function HomePage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
-      });
+        description: "Something went wrong. Please try again."});
     }
   };
 
@@ -730,7 +721,7 @@ export default function HomePage() {
 
                   const productGradients = {
                     'apple-cider-vinegar': 'from-orange-100 to-yellow-200',
-                    'vitamin-d3': 'from-yellow-100 to-orange-200',
+                    : 'from-yellow-100 to-orange-200',
                     'ashwagandha': 'from-green-100 to-teal-200',
                     'probiotics': 'from-blue-100 to-purple-200',
                     'magnesium': 'from-purple-100 to-pink-200',
@@ -742,7 +733,7 @@ export default function HomePage() {
 
                   const productBadges = {
                     'apple-cider-vinegar': 'Bestseller',
-                    'vitamin-d3': 'Popular',
+                    : 'Popular',
                     'ashwagandha': 'Adaptogen',
                     'probiotics': 'Gut Health',
                     'magnesium': 'Sleep',
@@ -751,14 +742,13 @@ export default function HomePage() {
                     'childrens-multivitamin': 'Kids',
                     'probiotic-vitamins': 'Immunity',
                     'collagen-complex': 'Beauty',
-                    'biotin-5000': 'Hair & Skin',
+                    : 'Hair & Skin',
                     'iron-vitamin-c': 'Energy',
                     'folic-acid-400': 'Prenatal',
                     'mind-memory-mushroom': 'Focus',
                     'collagen-powder': 'Premium',
                     'bio-cultures-vitamin-plus': 'Multi-Benefit',
-                    'healios-oversized-tee': 'Lifestyle',
-                  };
+                    'healios-oversized-tee': 'Lifestyle'};
 
                   return (
                     <Link key={product.id} href={`/products/${product.id}`}>

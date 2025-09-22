@@ -46,24 +46,6 @@ const developmentProducts = [
     type: 'supplement'
   },
   {
-    id: 'biotin-5000',
-    name: 'Biotin 10,000 µg Strawberry Gummies',
-    description: 'High-strength biotin gummies for comprehensive beauty support. Each delicious strawberry-flavoured gummy provides 10,000 µg of biotin to support healthy hair growth, strengthen nails, and maintain radiant skin.',
-    price: '449.00',
-    originalPrice: '599.00',
-    imageUrl: '/objects/uploads/a7736b5f-803d-4464-b5ce-0dbfa19b88b6',
-    categories: ['beauty', 'vitamins'],
-    rating: '5.0',
-    reviewCount: 0,
-    inStock: false,
-    stockQuantity: 0,
-    featured: false,
-    allowPreorder: true,
-    preorderCap: 100,
-    preorderCount: 0,
-    type: 'supplement'
-  },
-  {
     id: 'collagen-complex',
     name: 'Collagen + C + Zinc Gummies',
     description: 'Marine collagen enhanced with vitamin C and zinc for superior absorption and efficacy. This powerful combination supports skin elasticity, joint health, and overall wellness.',
@@ -278,26 +260,7 @@ const developmentProducts = [
     preorderCap: null,
     preorderCount: 0,
     type: 'supplement'
-  },
-  {
-    id: 'vitamin-d3',
-    name: 'Vitamin D3 4000 IU Gummies — Natural Orange Flavour | 60 Gummies (Vegetarian)',
-    description: 'A high-strength daily Vitamin D3 gummy providing 4000 IU (100 µg) per serving. With a natural orange flavour, these gummies are an easy, enjoyable way to support:\n\nNormal immune system function\n\nMaintenance of bones, muscles, and teeth\n\nHealthy vitamin D levels year-round, especially when sunlight exposure is limited\n\nFormulated with clean-label ingredients, free from artificial colours, flavours, and preservures. Suitable for vegetarians.',
-    price: '449.00',
-    originalPrice: '599.00',
-    imageUrl: '/objects/uploads/3300a456-b1a5-49e7-a81e-e29a99086971',
-    categories: ['vitamins', 'immune'],
-    rating: '5.0',
-    reviewCount: 0,
-    inStock: true,
-    stockQuantity: 100,
-    featured: true,
-    allowPreorder: false,
-    preorderCap: null,
-    preorderCount: 0,
-    type: 'supplement'
-  }
-];
+  }];
 
 async function syncProductionDatabase() {
   try {

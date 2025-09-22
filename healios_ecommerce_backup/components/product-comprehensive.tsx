@@ -221,10 +221,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'ksm-66-ashwagandha' || productId === 'ashwagandha') {
     return ashwagandhaLabImg;
   }
-  if (productId === 'biotin-5000' || productId === 'biotin') {
-    return biotinHairImg;
-  }
-  if (productId === 'collagen-complex') {
+if (productId === 'collagen-complex') {
     return collagenTextureImg;
   }
   if (productId === 'folic-acid-400' || productId === 'folic-acid') {
@@ -233,10 +230,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'mind-memory-mushroom') {
     return lionsManeMushroomImg;
   }
-  if (productId === 'marine-collagen' || productId === 'collagen-peptides') {
-    return collagenTextureImg;
-  }
-  if (productId === 'bio-cultures-vitamin-plus') {
+if (productId === 'bio-cultures-vitamin-plus') {
     return probioticLabImg;
   }
   if (productId === 'probiotic-vitamins') {
@@ -245,10 +239,7 @@ const createProductSVG = (productId: string): string => {
   if (productId === 'probiotics') {
     return probioticsImg;
   }
-  if (productId === 'vitamin-d3') {
-    return vitaminD3Img;
-  }
-  if (productId === 'iron-vitamin-c') {
+if (productId === 'iron-vitamin-c') {
     return ironVitaminCImg;
   }
   if (productId === 'magnesium' || productId === 'magnesium-bisglycinate-b6') {
@@ -296,8 +287,7 @@ const createProductSVG = (productId: string): string => {
       </svg>
     `)}`,
     
-    'vitamin-d3': `data:image/svg+xml;base64,${btoa(`
-      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="immuneGrad" cx="50%" cy="30%" r="50%">
             <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
@@ -479,7 +469,7 @@ const createProductSVG = (productId: string): string => {
 };
 
 export default function ProductComprehensive() {
-  const [, params] = useRoute("/products/:id");
+  const [ params] = useRoute("/products/:id");
   const { addToCart, removeFromCart } = useCart();
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -696,33 +686,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports digestion, energy metabolism, and appetite management'
         };
-      case 'vitamin-d3':
-        return {
-          bundleWith: 'Magnesium (Citrate/Glycinate) Gummies (Berry Flavour)',
-          bundlePrice: 'R1552.85',
-          bundleOriginalPrice: 'R1743.97',
-          sectionTitle: 'THE SUNSHINE VITAMIN',
-          sectionHeading: 'High-potency 4000 IU vitamin D3\nfor maximum immunity, bone strength\nand muscle function support.',
-          stat1Number: '4000 IU',
-          stat1Text: 'High-Potency\nDaily Dose',
-          stat2Number: '42%',
-          stat2Text: 'UK Adults\nDeficient',
-          stat3Number: '365',
-          stat3Text: 'Days Annual\nSupport',
-          stat4Number: 'D3',
-          stat4Text: 'Superior\nAbsorption',
-          testimonial: '"4000 IU is the optimal therapeutic dose for maintaining healthy vitamin D levels year-round. This high-potency formula is our bestselling vitamin D supplement for good reason."',
-          testimonialAuthor: 'DR. SARAH WINTERS',
-          testimonialTitle: 'Endocrinologist',
-          benefitTitle: 'High-potency immune and bone support',
-          benefitDescription: '4000 IU of vitamin D3 provides therapeutic-level support for immune system function, calcium absorption, muscle function, and maintains healthy bones and teeth.',
-          ingredientSource: 'Cholecalciferol (Vitamin D3) 100 μg',
-          ingredientForm: 'Lemon-flavored chewable gummies',
-          ingredientOrigin: 'Bioidentical to sunlight-produced vitamin D',
-          sleepBenefit: false,
-          primaryBenefit: 'Supports immune function, bone health, and muscle function'
-        };
-      case 'ashwagandha':
+case 'ashwagandha':
         return {
           bundleWith: 'Magnesium Complex Capsules — 375mg Magnesium + B6 (120 Vegan Capsules)',
           bundlePrice: 'R858.00',
@@ -904,33 +868,7 @@ export default function ProductComprehensive() {
           sleepBenefit: false,
           primaryBenefit: 'Supports healthy skin, hair, nails, and connective tissues'
         };
-      case 'biotin-5000':
-        return {
-          bundleWith: 'Collagen + C + Zinc + Selenium Gummies (Orange Flavour)',
-          bundlePrice: 'R1003.38',
-          bundleOriginalPrice: 'R1290.06',
-          sectionTitle: 'THE KERATIN CATALYST',
-          sectionHeading: 'Therapeutic-strength biotin\nfor enhanced hair growth,\nstronger nails, and healthy skin.',
-          stat1Number: '5000µg',
-          stat1Text: 'High-Potency\nBiotin',
-          stat2Number: '10000%',
-          stat2Text: 'Daily Value\nNRV',
-          stat3Number: '8-12',
-          stat3Text: 'Weeks Visible\nResults',
-          stat4Number: 'B7',
-          stat4Text: 'Essential\nVitamin',
-          testimonial: '"High-strength biotin supports keratin production for healthy hair and nails. Consistency is key for visible results within 8-12 weeks."',
-          testimonialAuthor: 'DR. SOPHIA CHEN',
-          testimonialTitle: 'Trichologist & Hair Health Specialist',
-          benefitTitle: 'High-potency beauty support',
-          benefitDescription: '5000µg pure biotin (vitamin B7) supports healthy hair strength, skin resilience, and nail integrity with just one daily gummy.',
-          ingredientSource: 'Pure biotin (vitamin B7) 5000µg',
-          ingredientForm: 'Strawberry-flavored chewable gummies',
-          ingredientOrigin: 'High-purity biotin with therapeutic potency',
-          sleepBenefit: false,
-          primaryBenefit: 'Supports hair strength, skin health, and nail integrity'
-        };
-      case 'iron-vitamin-c':
+case 'iron-vitamin-c':
         return {
           bundleWith: 'Vitamin D3 4000 IU Gummies (Lemon Flavour)',
           bundlePrice: 'R764.48',
@@ -1368,15 +1306,13 @@ export default function ProductComprehensive() {
                       </div>
                       <p className="text-xs text-green-700">
                         {product.id === 'apple-cider-vinegar' && 'ACV supports metabolism while probiotics enhance gut health for comprehensive digestive wellness.'}
-                        {product.id === 'vitamin-d3' && 'Vitamin D aids calcium absorption while magnesium supports muscle function and bone health.'}
                         {product.id === 'ashwagandha' && 'Ashwagandha calms the mind while magnesium relaxes muscles for complete stress relief.'}
                         {product.id === 'magnesium' && 'Magnesium supports muscle function while ashwagandha helps manage stress for better recovery.'}
                         {product.id === 'collagen-complex' && 'Collagen supports skin structure while biotin enhances hair and nail strength.'}
-                        {product.id === 'biotin-5000' && 'High-dose biotin for hair while collagen supports skin elasticity and nail strength.'}
                         {product.id === 'iron-vitamin-c' && 'Iron supports energy while vitamin D maintains immune function for vitality.'}
                         {product.id === 'folic-acid-400' && 'Folic acid supports neural development while vitamin D aids calcium absorption during pregnancy.'}
                         {product.id === 'probiotic-vitamins' && 'Probiotics for gut health combined with ACV for metabolism creates complete digestive support.'}
-                        {(!['apple-cider-vinegar', 'vitamin-d3', 'ashwagandha', 'magnesium', 'collagen-complex', 'biotin-5000', 'iron-vitamin-c', 'folic-acid-400', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
+                        {(!['apple-cider-vinegar', 'ashwagandha', 'magnesium', 'collagen-complex', 'iron-vitamin-c', 'folic-acid-400', 'probiotic-vitamins'].includes(product.id)) && 'These products work synergistically to support your wellness goals.'}
                       </p>
                     </div>
 
@@ -1543,7 +1479,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy:</p>
                               <div className="text-sm space-y-1">
@@ -1578,7 +1514,7 @@ export default function ProductComprehensive() {
                               </div>
                               <p className="mt-3 text-sm text-gray-600">*NRV = Nutrient Reference Value. EFSA health claims apply to vitamin content only. Collagen benefits require consistent 60+ day use.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-3">Per Gummy (One daily dose):</p>
                               <div className="text-sm space-y-1">
@@ -1718,7 +1654,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Gelatin-free, lactose-free, gluten-free formulation suitable for vegetarians.</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Lemon-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1759,7 +1695,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Contains bovine-derived collagen. Not suitable for vegans but suitable for vegetarians. Non-gelatin formulation.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Strawberry-flavored gummy base with:</p>
                               <ul className="space-y-1 text-sm">
@@ -1863,17 +1799,6 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Take with or without food. Do not exceed recommended dosage. Keep out of reach of children under 3 years.</p>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
-                            <div>
-                              <p className="font-medium mb-2">Daily dosing for adults and teens 12+:</p>
-                              <ul className="space-y-1 text-sm">
-                                <li>• <strong>Take 1 gummy per day</strong></li>
-                                <li>• Can be taken with or without food</li>
-                                <li>• Ideal for daily use year-round</li>
-                                <li>• Do not exceed recommended dose unless advised by healthcare provider</li>
-                              </ul>
-                              <p className="mt-2 text-sm text-gray-600">Not suitable for children under 12 unless supervised by a healthcare provider. Consult your GP if taking other vitamin D supplements.</p>
-                            </div>
                           ) : product.id === 'probiotic-vitamins' ? (
                             <div>
                               <p className="font-medium mb-2">Age-specific dosing:</p>
@@ -1896,7 +1821,7 @@ export default function ProductComprehensive() {
                               </ul>
                               <p className="mt-2 text-sm text-gray-600">Adults only. Not suitable for pregnant or breastfeeding unless advised by healthcare provider. Contains bovine collagen.</p>
                             </div>
-                          ) : product.id === 'biotin-5000' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Adult dosing (18+ years):</p>
                               <ul className="space-y-1 text-sm">
@@ -2026,7 +1951,7 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Are there any allergens?</strong> These are gelatin-free, lactose-free, gluten-free and suitable for vegetarians.</li>
                               </ul>
                             </div>
-                          ) : product.id === 'vitamin-d3' ? (
+                          ) : product.id === ? (
                             <div>
                               <p className="font-medium mb-2">Common questions about Vitamin D3:</p>
                               <ul className="mt-2 space-y-2">
@@ -2054,16 +1979,6 @@ export default function ProductComprehensive() {
                                 <li>• <strong>Is this suitable for vegans?</strong> No, the collagen is bovine-derived. However, the formulation is non-gelatin and suitable for vegetarians.</li>
                                 <li>• <strong>Why is vitamin C included?</strong> Vitamin C is essential for natural collagen formation in the body and enhances the effectiveness of supplemental collagen.</li>
                                 <li>• <strong>Can I take this with other beauty supplements?</strong> Yes, but check total vitamin intake to avoid exceeding recommended daily amounts, especially for vitamins A and E.</li>
-                              </ul>
-                            </div>
-                          ) : product.id === 'biotin-5000' ? (
-                            <div>
-                              <p className="font-medium mb-2">Common questions about Biotin 5000µg:</p>
-                              <ul className="mt-2 space-y-2">
-                                <li>• <strong>Why such a high dose of biotin?</strong> 5000µg is a therapeutic dose commonly used in beauty supplements for optimal hair and nail support, especially for those with brittle nails or hair concerns.</li>
-                                <li>• <strong>Will this interfere with blood tests?</strong> Yes, high-dose biotin can affect lab results including thyroid function and heart markers. Inform your doctor before any blood tests.</li>
-                                <li>• <strong>How long before I see improvements?</strong> Hair and nail changes take time. Most people notice benefits after 8-12 weeks of consistent daily use.</li>
-                                <li>• <strong>Can I take this with other B vitamins?</strong> Yes, biotin is water-soluble so excess is naturally excreted. However, check total B-vitamin intake to avoid unnecessary excess.</li>
                               </ul>
                             </div>
                           ) : product.id === 'magnesium' ? (

@@ -24,8 +24,7 @@ export default function ProductPage() {
       if (!res.ok) throw new Error('Product not found');
       return res.json();
     }),
-    enabled: !!id,
-  });
+    enabled: !!id});
 
   const handleAddToCart = () => {
     if (product) {
@@ -33,8 +32,7 @@ export default function ProductPage() {
       toggleCart(); // Open the cart sidebar to show the added item
       toast({
         title: "Added to cart!",
-        description: `${product.name} has been added to your cart.`,
-      });
+        description: `${product.name} has been added to your cart.`});
     }
   };
 
@@ -164,22 +162,7 @@ export default function ProductPage() {
                         </div>
                       </>
                     )}
-                    {id === 'vitamin-d3' && (
-                      <>
-                        <div className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 bg-healios-cyan flex-shrink-0 mt-2"></div>
-                          <span className="text-gray-600 dark:text-gray-400">Supports immune system function</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 bg-healios-cyan flex-shrink-0 mt-2"></div>
-                          <span className="text-gray-600 dark:text-gray-400">Essential for bone and teeth health</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 bg-healios-cyan flex-shrink-0 mt-2"></div>
-                          <span className="text-gray-600 dark:text-gray-400">May help regulate mood and energy</span>
-                        </div>
-                      </>
-                    )}
+                    
                     {id === 'ashwagandha' && (
                       <>
                         <div className="flex items-center gap-3">
@@ -289,13 +272,7 @@ export default function ProductPage() {
                     <p>Can be taken with or without food.</p>
                   </>
                 )}
-                {id === 'vitamin-d3' && (
-                  <>
-                    <p>Take 1 gummy daily, preferably with a meal containing fat.</p>
-                    <p>Best absorbed when taken with food.</p>
-                    <p>Consistent daily use recommended for optimal benefits.</p>
-                  </>
-                )}
+                
                 {id === 'ashwagandha' && (
                   <>
                     <p>Take 1-2 capsules daily with water.</p>
@@ -329,12 +306,7 @@ export default function ProductPage() {
                     <p><strong>Other Ingredients:</strong> Organic Cane Sugar, Organic Tapioca Syrup, Pectin, Natural Flavors, Citric Acid</p>
                   </>
                 )}
-                {id === 'vitamin-d3' && (
-                  <>
-                    <p><strong>Active Ingredients:</strong> Vitamin D3 (Cholecalciferol) 4000 IU</p>
-                    <p><strong>Other Ingredients:</strong> Organic Cane Sugar, Organic Tapioca Syrup, Pectin, Natural Orange Flavor, Citric Acid</p>
-                  </>
-                )}
+                
                 {id === 'ashwagandha' && (
                   <>
                     <p><strong>Active Ingredients:</strong> KSM-66 Ashwagandha Root Extract (600mg)</p>

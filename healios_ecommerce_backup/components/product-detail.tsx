@@ -139,8 +139,7 @@ export default function ProductDetail() {
       { name: 'Lactobacillus casei rhamnosus', amount: '1.67 Billion CFU', nrv: '' },
       { name: 'Streptococcus thermophilus', amount: '1.65 Billion CFU', nrv: '' },
     ]
-  } : product?.id === 'vitamin-d3' ? {
-    nutrient: [
+  } :  [
       { name: 'Vitamin D3 (Cholecalciferol)', amount: '4000 IU (100μg)', nrv: '2000' },
     ]
   } : {
@@ -247,9 +246,7 @@ export default function ProductDetail() {
       question: "Can I take these if I'm diabetic or watching my weight?",
       answer: "Our ACV gummies have a minimal impact on blood sugar. However, if you have diabetes or specific dietary restrictions, consult your healthcare provider before starting any new supplement."
     }
-  ] : product?.id === 'vitamin-d3' ? [
-    {
-      question: "Why do I need vitamin D3 supplementation?",
+  ] :  "Why do I need vitamin D3 supplementation?",
       answer: "In the UK, limited sunlight exposure from October to March makes it difficult to maintain adequate vitamin D levels naturally. The NHS recommends supplementation for most people during these months to support immune function and bone health."
     },
     {
@@ -291,7 +288,7 @@ export default function ProductDetail() {
     },
     {
       question: "Is this suitable for vegetarians/vegans?",
-      answer: product?.id === 'vitamin-d3' ? "This product is suitable for vegetarians but not vegans as it contains Vitamin D3 from lanolin (sheep's wool)." : "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
+      answer: "Yes, this product is suitable for both vegetarians and vegans. All ingredients are plant-based and ethically sourced."
     }
   ];
 
@@ -629,9 +626,7 @@ export default function ProductDetail() {
                   <strong>Can be taken:</strong> With or without food<br/><br/>
                   For best results, take consistently at the same time each day. Do not exceed the recommended dose.
                 </>
-              ) : product?.id === 'vitamin-d3' ? (
-                <>
-                  <strong>Recommended Use:</strong> Take 1 gummy daily<br/>
+              ) : </strong> Take 1 gummy daily<br/>
                   <strong>Can be taken:</strong> With or without food<br/><br/>
                   For optimal absorption, take with a meal containing some fat. Do not exceed the recommended dose.
                 </>
