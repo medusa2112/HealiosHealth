@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
+import { z } from 'zod';
 
 /**
  * Phase 3 Security: Enhanced Payment Security
@@ -173,15 +174,43 @@ function recordPaymentAttempt(req: Request, amount: number, currency: string, em
   return attempt;
 }
 
+// Validation schema for payment fraud detection
+const paymentFraudSchema = z.object({
+  amount: z.number().positive('Amount must be positive'),
+  currency: z.string().default('ZAR'),
+  email: z.string().email('Invalid email format')
+});
+
 /**
  * Fraud detection middleware for payment endpoints
  */
 export function paymentFraudDetection() {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const { amount, currency = 'ZAR', email } = req.body;
+    let amount: number;
+    let currency: string;
+    let email: string;
 
-    if (!amount || !email) {
-      return next(); // Let other validation handle missing required fields
+    try {
+      // Validate input data before processing
+      const validationResult = paymentFraudSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({
+          error: 'Invalid payment data',
+          details: validationResult.error.errors
+        });
+      }
+
+      ({ amount, currency, email } = validationResult.data);
+
+      if (!amount || !email) {
+        return next(); // Let other validation handle missing required fields
+      }
+    } catch (error) {
+      return res.status(400).json({
+        error: 'Payment validation failed',
+        message: 'Invalid request data'
+      });
     }
 
     // Create a temporary attempt to check risk
@@ -316,7 +345,13 @@ export function securePaymentLogging() {
     res.json = function(body) {
       // Log successful payments (without sensitive data)
       if (res.statusCode === 200 && req.body?.amount) {
-        const { amount, currency, email } = req.body;
+        // Validate payment data before logging
+        const validationResult = paymentFraudSchema.safeParse(req.body);
+        if (!validationResult.success) {
+          return originalJson.call(this, body);
+        }
+        
+        const { amount, currency, email } = validationResult.data;
         const fraudAnalysis = (req as any).fraudAnalysis;
         
         recordPaymentAttempt(req, amount, currency || 'ZAR', email, true);

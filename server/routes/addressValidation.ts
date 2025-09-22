@@ -1,7 +1,8 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { z } from 'zod';
 import { addressValidation } from '../lib/addressValidation';
 import { logger } from '../lib/logger';
+import { protectRoute } from '../lib/auth';
 
 const router = express.Router();
 
@@ -23,6 +24,12 @@ const addressValidationSchema = z.object({
   regionCode: z.string().optional().default('ZA')
 });
 
+// Postal code validation schema
+const postalValidationSchema = z.object({
+  postalCode: z.string().min(1, 'Postal code is required'),
+  country: z.string().min(2, 'Country code is required')
+});
+
 // CSRF bypass middleware for address validation in development
 const bypassCSRFForDev = (req: any, res: any, next: any) => {
   if (process.env.NODE_ENV === 'development') {
@@ -33,10 +40,10 @@ const bypassCSRFForDev = (req: any, res: any, next: any) => {
 };
 
 // Validate complete address using Google Address Validation API
-router.post('/validate', bypassCSRFForDev);
+router.post('/validate', protectRoute, bypassCSRFForDev);
 
 // Development route (no CSRF)
-router.post('/validate', async (req, res) => {
+router.post('/validate', protectRoute, async (req: Request, res: Response) => {
   try {
     const validationResult = addressValidationSchema.safeParse(req.body);
     
@@ -71,16 +78,18 @@ router.post('/validate', async (req, res) => {
 });
 
 // Validate postal code only
-router.post('/validate-postal', bypassCSRF, async (req, res) => {
+router.post('/validate-postal', protectRoute, bypassCSRF, async (req: Request, res: Response) => {
   try {
-    const { postalCode, country } = req.body;
+    const validationResult = postalValidationSchema.safeParse(req.body);
     
-    if (!postalCode || !country) {
+    if (!validationResult.success) {
       return res.status(400).json({
         success: false,
-        errors: ['Postal code and country are required']
+        errors: validationResult.error.errors.map(e => e.message)
       });
     }
+
+    const { postalCode, country } = validationResult.data;
 
     const isValid = await addressValidation.validatePostalCode(postalCode, country);
 

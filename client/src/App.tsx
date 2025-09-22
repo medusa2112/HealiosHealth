@@ -11,7 +11,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CartSidebar } from "@/components/cart-sidebar";
-import { StockNotification } from "@/components/stock-notification";
+
 // ADMIN FUNCTIONALITY REMOVED
 // import { isAdminEnabled } from "@/config/adminConfig";
 // import { AdminLayout } from "@/components/AdminLayout";
@@ -187,7 +187,6 @@ function AppContent() {
       </main>
       <Footer />
       <CartSidebar />
-      <StockNotification />
       
       {/* AI Assistant */}
       {!isAIAssistantOpen && (
